@@ -120,7 +120,7 @@ Task 2: is; are; an ← một dòng, các đáp án cách nhau bằng dấu ;
 - Trường không hiểu, `Trả lời:` không hợp nội dung, `Mẫu:` không có: app giữ cấu hình đoán và ghi chú ngay ở dòng Task đó.
 - Task không dựng được thì dòng đỏ: + Task bỏ qua Task đó, + Phiếu không cho tạo (sửa file rồi nạp lại). Phiếu đang mở không bao giờ bị đổi khi có lỗi.
 - **+ Task** nhập một lô mà phần nối đứng đầu lô: app bỏ trạng thái nối của nó (không dính vào Task cuối của phiếu đang mở).
-- Hàm `sheetToMd(ws)` / `taskToMd(t)` trong app xuất phiếu đang mở ra MD theo đúng quy ước này, phần nối xuất thành `### Phần:` (chưa có nút; dùng cho kiểm thử và làm mẫu). Khứ hồi 18 Task mẫu: MD → app giữ đúng 18/18 cấu hình (mô tả, số câu, loại đáp án, bố cục).
+- Hàm `sheetToMd(ws)` / `taskToMd(t)` trong app xuất phiếu đang mở ra MD theo đúng quy ước này, phần nối xuất thành `### Phần:` (nút **Xuất MD** ở thanh trên từ v70; dùng làm mẫu). Khứ hồi 18 Task mẫu: MD → app giữ đúng 18/18 cấu hình (mô tả, số câu, loại đáp án, bố cục).
 
 ---
 

@@ -1,9 +1,9 @@
-# WS Editor — Đặc tả (bản v36 + kế hoạch mục 15, 24/10/2026; cập nhật mục 16 ngày 25/10/2026, v68)
+# WS Editor — Đặc tả (bản v36 + kế hoạch mục 15, 24/10/2026; cập nhật mục 16 ngày 25/10/2026, v70)
 
 > File này là nguồn sự thật duy nhất cho WS Editor. Nó thay thế bản MASTER_SPEC v10 (quá nặng) và Claude Doc "Đặc tả Layout Task & Answer" (cũ hơn bản này).
 > Prototype chạy được: `ws-editor-prototype.html` (một file HTML, mở bằng trình duyệt). Dữ liệu mẫu: `ws-sample.json` (schema 0.2).
 > Khi bản prototype và file này lệch nhau, prototype là bản đúng hơn về hành vi; hãy báo để cập nhật file này.
-> **Cập nhật 25/10/2026 (tối, lần 2):** prototype hiện là **v69** (v68 + chọn font chữ phiếu, mục 16.10). v68 = (v67 + Task nhiều phần "Nối vào Task trên", MD `### Phần:`, nhãn A. B. C. giữ chữ hoa, câu duy nhất không đánh số; mục 16.9). v67 = v66 + sửa bộ đọc MD theo phiếu thật đầu tiên, A4 có nhãn ô tick (mục 16.8). v66 = v65 + font nhúng sẵn trong `fonts/` (mục 16.7). Thay đổi v37–v68 ghi chi tiết ở `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục cuối "BÀN GIAO"). Nhập file (P0–P2) tóm tắt ở **mục 16**; quy ước MD ở `claude/QUY_UOC_MD.md`.
+> **Cập nhật 25/10/2026 (lần 4):** prototype hiện là **v70** (v69 + Đúng/Sai mặc định 80/20, hướng A4 "Tự động" quyết theo cả Task, nút Xuất MD; mục 16.11). v69 = v68 + chọn font chữ phiếu (mục 16.10). v68 = (v67 + Task nhiều phần "Nối vào Task trên", MD `### Phần:`, nhãn A. B. C. giữ chữ hoa, câu duy nhất không đánh số; mục 16.9). v67 = v66 + sửa bộ đọc MD theo phiếu thật đầu tiên, A4 có nhãn ô tick (mục 16.8). v66 = v65 + font nhúng sẵn trong `fonts/` (mục 16.7). Thay đổi v37–v68 ghi chi tiết ở `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục cuối "BÀN GIAO"). Nhập file (P0–P2) tóm tắt ở **mục 16**; quy ước MD ở `claude/QUY_UOC_MD.md`.
 
 ---
 
@@ -82,9 +82,9 @@ Chọn kiểu đáp án và chế độ gắn (Trong câu / Theo item / Khối r
 | A1 | Dòng kẻ viết | số dòng; chiều cao dòng `lineMm` (≥ tối thiểu theo tuổi); độ rộng `w` 40–100% | |
 | A2 | Ô trống | trong câu: `lenMode` fill/fixed, `lenMm`, `lines`; theo item: `width` (ký tự) | `start` inline/below |
 | A3 | Ô chữ cái | cỡ ô `boxW` 5–12 mm (cao = 1,15 × rộng) | |
-| A4 | Lựa chọn | khoảng cách `gap` 2–20 mm | `dir` (Tự động/Ngang/2 cột/Dọc/Tự xuống dòng), `autoMax`, `lab` (Ⓐ / A. / ☐ ô tick, từ v67), `upper` (chữ hoa A B C; ẩn khi ô tick; từ v68 MD viết `A. B. C.` chữ hoa thì tự đặt `upper: true`) |
+| A4 | Lựa chọn | khoảng cách `gap` 2–20 mm | `dir` (Tự động/Ngang/2 cột/Dọc/Tự xuống dòng; **Tự động quyết một lần cho cả Task** từ v70: mọi câu đều ngắn thì Ngang, chỉ cần một câu dài thì cả Task Dọc), `autoMax`, `lab` (Ⓐ / A. / ☐ ô tick, từ v67), `upper` (chữ hoa A B C; ẩn khi ô tick; từ v68 MD viết `A. B. C.` chữ hoa thì tự đặt `upper: true`) |
 | A5 | Tick | cỡ ô `size` 4–12 mm | |
-| A6 | Cột T/F | cỡ ô `size` 5–12 mm | |
+| A6 | Cột T/F | cỡ ô `size` 5–12 mm | Trong Hai cột (T4) tỉ lệ nội dung / đáp án mặc định **80 / 20**, kéo được 50–90 (từ v70) |
 | A7 | Chấm nối | cỡ chấm `size` 1,5–6 mm | |
 | A8 | Dòng tô | số lần `repeat`; `lineMm`; `w` | |
 
@@ -200,8 +200,8 @@ items (kind 'items'): { id, img | imgs[], text?, len?, lines?[] }   lines[]: có
 - A4 trong câu: kiểu hiển thị khác (khung tròn, `(a / b)`), ký tự thoát `{` `}`.
 - Item nhiều dòng (`lines[]`) ở T6.
 - Gộp layout thành 6 họ trên giao diện (Hai cột gồm T2/T3/T4/T6 + nút Trái/Phải): chưa làm; hiện vẫn hiện từng layout hợp lệ.
-- Nhập file: P3 (thử PDF thật; đã thử 2 phiếu ở v67–v68, còn 3–8), P4 (mẫu Ô chữ, đáp án ô chữ, phiếu nhiều nhóm), nút "Xuất MD", bản in đáp án từ `key` (mục 16).
-- Đang chờ người dùng quyết (chưa làm ở v68): cột T/F mặc định 80/20 (đổi bố cục Task 13 của phiếu mẫu); hướng lựa chọn khoanh A/B/C thống nhất cả Task (đổi Task 5 của phiếu mẫu); công tắc "Name / Class" ở đầu phiếu (phiếu thật có dòng này ở chân trang, hiện không chép).
+- Nhập file: P3 (thử PDF thật; đã thử 1 phiếu PDF qua 2 vòng ở v67–v68, còn 4–9), P4 (mẫu Ô chữ, đáp án ô chữ, phiếu nhiều nhóm), bản in đáp án từ `key` (mục 16).
+- Đã quyết, làm ở v70: cột T/F mặc định 80/20; hướng lựa chọn A/B/C thống nhất cả Task. Người dùng hoãn: công tắc "Name / Class" ở đầu phiếu (phiếu thật có dòng này ở chân trang, hiện không chép).
 
 ## 14. Chuẩn hóa (kế hoạch chốt 24/10/2026, **đã làm xong cả 3 giai đoạn**)
 
@@ -381,13 +381,13 @@ Các Task còn lại chỉ có 1 kiểu A (2: A7, 3: A5, 4/5/18: A4, 13: A6, 16:
 - **Mỗi file một phiếu**; phiếu nhiều nhóm tách thành nhiều file. Chưa nạp thẳng PDF trong app (không có hook thì báo gửi PDF cho Claude).
 
 ### 16.4 MD trung gian (tóm tắt, đủ ở `claude/QUY_UOC_MD.md`)
-`## Task: <tiêu đề>` mở mỗi bài của PDF; `### Phần: <tên>` mở một phần tiếp của bài đó (v68); trường `Hướng dẫn:`, `Track:`, `Trả lời:`, `Dòng viết:`, `Khung từ:`, `Ảnh:`, `Lời dẫn:`, `Mẫu:`, `Ghi chú:`; khối `Bài đọc:`, `Hội thoại:`, `Ô chữ:`; câu đánh số và ký hiệu sẵn có; câu nhiều dòng bằng dòng thụt lề; `## Đáp án` riêng ở cuối → `key` từng câu (`### Task n` chạy liền qua các phần của bài n). Xuất: `taskToMd` / `sheetToMd` (chưa có nút; phần nối xuất thành `### Phần:`).
+`## Task: <tiêu đề>` mở mỗi bài của PDF; `### Phần: <tên>` mở một phần tiếp của bài đó (v68); trường `Hướng dẫn:`, `Track:`, `Trả lời:`, `Dòng viết:`, `Khung từ:`, `Ảnh:`, `Lời dẫn:`, `Mẫu:`, `Ghi chú:`; khối `Bài đọc:`, `Hội thoại:`, `Ô chữ:`; câu đánh số và ký hiệu sẵn có; câu nhiều dòng bằng dòng thụt lề; `## Đáp án` riêng ở cuối → `key` từng câu (`### Task n` chạy liền qua các phần của bài n). Xuất: `taskToMd` / `sheetToMd` (nút **Xuất MD** ở thanh trên từ v70; phần nối xuất thành `### Phần:`).
 
 ### 16.5 Kiểm thử (v65)
 test12 (P0), test13 (P1), test14 (P2) cùng test1–11, audit, audit2, `cmp_paste.py`, `ws_sea.py`: đạt; 0 lỗi console, 0 lỗi tràn. Phiếu Sea: JSON 6 Task 3 trang; `sea.md` ra đúng 3 Task đầu của JSON và cùng số trang.
 
 ### 16.6 Còn lại
-P3 (thử 5–10 PDF thật qua đường chat, đo số Task đúng và chỗ phải sửa tay; đã thử 2); P4 (mẫu "Ô chữ" khi dán một khối chữ, đáp án ô chữ, phiếu nhiều nhóm); nút "Xuất MD"; bản in đáp án từ `key`; "Mặc định theo dạng bài" cho Task `custom`.
+P3 (thử 5–10 PDF thật qua đường chat, đo số Task đúng và chỗ phải sửa tay; đã thử 1 PDF qua 2 vòng); P4 (mẫu "Ô chữ" khi dán một khối chữ, đáp án ô chữ, phiếu nhiều nhóm); bản in đáp án từ `key`; "Mặc định theo dạng bài" cho Task `custom`.
 
 ### 16.7 Font nhúng sẵn (v66, 25/10/2026)
 - Andika (phiếu) và Be Vietnam Pro (giao diện) nhúng bằng `@font-face` trỏ tới thư mục `fonts/` cạnh file HTML (woff2 các nhóm latin, latin-ext, vietnamese; giấy phép SIL OFL kèm theo). Không còn gọi Google Fonts: chạy offline vẫn dàn trang giống nhau.
@@ -417,7 +417,7 @@ P3 (thử 5–10 PDF thật qua đường chat, đo số Task đúng và chỗ p
 - **Nhãn lựa chọn chữ hoa:** MD có lựa chọn viết `A. … B. …` (chữ hoa) → `answer.params.upper = true` (nhãn A B C); viết thường giữ a b c. Không áp cho ô tick. JSON: tự đặt `params.upper`.
 - **Câu duy nhất không đánh số:** danh sách câu (câu hỏi, bài đọc + câu hỏi, T4) chỉ có đúng 1 câu thì ẩn số "1" nhưng **vẫn giữ lề số** (chữ thẳng đường dóng như các Task khác). Quy tắc tự động, không có công tắc (số "1" lẻ loi không có ý nghĩa; đổi lại nếu cần công tắc). Không áp cho T5 (lưới ảnh) và bảng.
 - **Prompt / quy ước:** `claude/PROMPT_PDF_SANG_PHIEU.md` và `claude/QUY_UOC_MD.md` viết lại: một bài của PDF = một `## Task`, tự kiểm tra số Task bằng số bài của PDF, không chép lặp hướng dẫn, `### Phần:` cho các phần phụ; JSON dùng `layout.break: "join"`. Ví dụ đầy đủ = chính phiếu này (6 bài).
-- **Chưa làm, chờ người dùng quyết (ghi ở mục 13):** cột T/F mặc định 80/20; hướng lựa chọn khoanh thống nhất cả Task; công tắc "Name / Class" ở cấp phiếu.
+- **Ghi chú (đã làm ở v70, mục 16.11):** cột T/F mặc định 80/20; hướng lựa chọn khoanh thống nhất cả Task. Công tắc "Name / Class" ở cấp phiếu: người dùng hoãn.
 - **Kiểm thử v68:** test17 mới (35 phép kiểm: MD cũ 8 khối vẫn đọc, MD mới 8 khối với 2 phần nối, nhãn 6a–6c, G0 không số / tiêu đề ở phần nối, hướng dẫn phần nối thẳng đường dóng, khoảng cách 6a→6b = 4 mm và Task→Task = 8 mm, số câu duy nhất ẩn mà chữ vẫn thẳng lề, nhãn A B C hoa, công tắc ↳ + Inspector + hoàn tác + Task đầu bị khóa, phân trang 0–8 Task đệm không bao giờ tách phần nối khỏi Task trên, khứ hồi MD, đáp án chạy liền, + Task bỏ nối ở đầu lô, Task đầu đánh dấu nối, phiếu mẫu 18 Task không đổi) đạt; các test còn lại: xem bàn giao.
 
 ### 16.10 Font chữ phiếu (v69, 25/10/2026 tối, lần 3)
@@ -429,5 +429,13 @@ P3 (thử 5–10 PDF thật qua đường chat, đo số Task đúng và chỗ p
 - Chỉ đổi font của **trang A4** (biến `--f-sheet`), giao diện giữ nguyên. Thêm font = thêm một dòng vào bảng `FONTS` (tên, danh sách font CSS, mô tả).
 - Đổi font thì nạp trước các nhóm ký tự tiếng Việt, rồi **dàn lại trang** (số trang có thể đổi vì độ rộng chữ khác). Hoàn tác / làm lại và nạp phiếu đều áp đúng font.
 - Lưu ở `ws.font`; JSON / khứ hồi giữ nguyên; `fillSheet` bỏ font lạ và báo "font không có trong danh sách". `font` không nằm trong khóa nhận diện "phiếu" khi nạp JSON.
-- **Chưa kiểm:** hình dạng thật của Be Vietnam Pro và Lexend trong môi trường test (không tải được font, chỉ kiểm cơ chế: biến CSS đổi, dàn lại, 0 lỗi, khứ hồi). Bản artifact tải 3 font từ Google Fonts; bản trong repo cần thêm woff2 Lexend (latin, latin-ext, vietnamese; 400 và 700) và Be Vietnam Pro 700 vào `fonts/` kèm `@font-face`, nếu không máy offline sẽ dùng font dự phòng.
+- **Chưa kiểm:** hình dạng thật của Be Vietnam Pro và Lexend trong môi trường test (không tải được font, chỉ kiểm cơ chế: biến CSS đổi, dàn lại, 0 lỗi, khứ hồi). Bản repo đã nhúng sẵn font trong `fonts/` nên chạy offline vẫn đúng.
 - Kiểm thử: `test18.py` (19 phép kiểm).
+
+### 16.11 Đúng/Sai 80/20, hướng A4 theo Task, nút Xuất MD (v70, 25/10/2026, lần 4)
+- **Quy trình:** cả ba là chỉnh mặc định / thêm lối ra cho cấu hình có sẵn, không thêm format.
+- **Đúng/Sai 80/20:** Hai cột (T4) khi đáp án là A6 (cột T/F) có tỉ lệ nội dung / đáp án mặc định **80 / 20**, khoảng kéo 50–90 (hàm `rmeta`). T4 với đáp án khác giữ 60 / 40 (40–70). Giá trị người dùng đã kéo (`layout.split`) vẫn thắng. Phiếu mẫu: Task 13 đổi độ rộng cột.
+- **Hướng A4 "Tự động" theo Task:** `a4dir` lấy đáp án dài nhất của **mọi câu trong Task** so với ngưỡng `autoMax`; ngắn hết thì Ngang, chỉ cần một câu dài thì cả Task Dọc. Hướng riêng theo câu (`perItem`) và các chế độ khác không đổi. Phiếu mẫu: Task 5 (câu A/B/C ngắn lẫn dài) nay xếp dọc cả Task.
+- **Nút Xuất MD** cạnh "Xem JSON": mở cùng hộp thoại với `sheetToMd(ws)`, có nút Sao chép, ghi chú MD không giữ chỉnh layout, kích thước hay ảnh đã tải lên (muốn giữ đủ dùng JSON).
+- **Hoãn theo người dùng:** công tắc Name / Class ở đầu phiếu.
+- Kiểm thử: `test19.py` (badge v70; T4+A6 = 80 và khoảng 50–90; T4 khác vẫn 60; kẹp 90; A4 toàn ngắn → ngang cả Task, một câu dài → dọc cả Task; Xuất MD mở/đọc lại được; Xem JSON vẫn đúng tiêu đề; 0 lỗi console).

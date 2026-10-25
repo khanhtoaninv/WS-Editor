@@ -220,7 +220,7 @@ Trong khung Task **không dùng màu nhấn** (teal, cam, xanh, tím); mọi c�
 - **Trường trong Task:** `Hướng dẫn:`, `Track:`, `Trả lời:` (viết từ · điền chỗ trống · viết câu · khoanh A/B/C · chọn trong câu · tick · đúng/sai · nối · tô chữ · không), `Dòng viết:`, `Khung từ:`, `Ảnh:`, `Lời dẫn:`, `Mẫu:` (ép theo mẫu có sẵn). **Khối:** `Bài đọc:`, `Hội thoại:` (`Tên: lời`, tên được có số), `Ô chữ:` (mỗi dòng một hàng chữ cái → bảng như phiếu Sea). Còn lại: câu đánh số / dòng bảng `|` / ký hiệu `___`, `{a|b}`, `A. B. C.`, `[ảnh: x]`, `trái - phải`. **Câu nhiều dòng:** dòng thụt lề ngay dưới câu đánh số.
 - **Đáp án riêng** ở `## Đáp án` cuối file (`### Task n` + dòng đánh số, hoặc `Task n: a; b; c`) → ghi vào `key` của từng câu, không hiện trên phiếu học sinh. Chưa nhận đáp án cho bảng / ô chữ (bỏ qua, có ghi chú).
 - **Code:** `readMd(raw)` → lô Task cùng dạng với `readJson` (đi qua cùng bảng nhận diện, cùng + Task / + Phiếu); `mdTask(block, keys)` dựng từng Task bằng `parseTask(body, mẫu, pre)` — tham số mới `pre = {title, instruction, audio, passage, match}` để bỏ qua phần đoán tiêu đề / hướng dẫn / bài đọc; sau đó áp các khối và trường nói rõ. Có `Trả lời:` / `Mẫu:` / khối → độ chắc "cao"; không có mà bộ đoán chưa chắc → ghi chú "loại đáp án do hệ thống đoán… thêm dòng “Trả lời: …”". Trường lạ, `Trả lời:` không hợp nội dung, `Mẫu:` không có → ghi chú ở dòng Task, giữ cấu hình đoán.
-- **Xuất MD:** `taskToMd(t)` / `sheetToMd(w)` (chưa có nút, dùng cho kiểm thử và làm mẫu). Khứ hồi 18 Task mẫu qua MD: **18/18** giữ mô tả, số câu, loại đáp án, cách gắn, bố cục.
+- **Xuất MD:** `taskToMd(t)` / `sheetToMd(w)` (nút Xuất MD từ v70). Khứ hồi 18 Task mẫu qua MD: **18/18** giữ mô tả, số câu, loại đáp án, cách gắn, bố cục.
 - Sửa kèm trong bộ đoán chữ (không đổi 20 bài dán thử): cặp nối vế trái là ảnh `[ảnh: apple] - pear`; dòng bảng bắt đầu bằng `[ảnh: …]` không còn bị nhầm là khung từ.
 - **Kiểm thử v65:** test1–13 đạt; test14 mới (P2, 34 phép kiểm: nhận ra MD, Sea MD = 3 Task đầu của `ws-sea-sample.json` và cùng số trang, + Phiếu từ MD, 2 ví dụ còn lại đúng cấu hình / số câu / đáp án / cấp phiếu, câu nhiều dòng, `Mẫu:`, `Trả lời:` lạ, chèn file .md 1 Task, khứ hồi 18 Task) đạt; audit ảnh 0 vấn đề; audit2 số trang giống v62 (1:1 13 trang, 3:4 14 trang, 16:9 11 trang, 0 tràn); `cmp_paste.py` 20/20 giống v62; `ws_sea.py` dựng lại `ws-sea-sample.json` giống hệt; màn hình 390 px không tràn ngang; 0 lỗi console.
 
@@ -244,13 +244,18 @@ Chi tiết ở spec chính mục 16.8. Tóm tắt:
 - Code: bảng `FONTS`, `applyFont()` đặt biến `--f-sheet`, nạp trước chữ thường + đậm (có tiếng Việt) rồi **dàn lại trang**; `--f-ui` (giao diện) giữ Be Vietnam Pro, không đổi.
 - Spec chính: mục 16.10. Test: `test18.py` (19 phép kiểm).
 - **Chưa kiểm:** hình dạng chữ thật của Be Vietnam Pro / Lexend (sandbox không tải được font); chỉ kiểm cơ chế (biến CSS, dàn lại, lưu/nạp). Giả định "font trong ảnh" = Be Vietnam Pro.
-- **Bản repo cần thêm:** woff2 Lexend (latin, latin-ext, vietnamese; 400 và 700) và Be Vietnam Pro 700 vào `fonts/` + khối `@font-face`; bản artifact đã dùng link Google Fonts (Andika, Be Vietnam Pro, Lexend).
+- **Bản repo:** đã nhúng đủ font trong `fonts/`.
 
-## D. Còn mở (cập nhật 25/10/2026 tối, bản v69)
-- **Nhập file:** P0, P1, P2 xong; v67 sửa theo phiếu thật thứ nhất (mục AF). Còn **P3** (đã thử 1/5–10 PDF) (thử 5–10 PDF thật qua đường chat: Claude đọc PDF → JSON/MD → nạp; đo số Task đúng, số chỗ phải sửa tay) và **P4** (mẫu có sẵn "Ô chữ" khi dán một khối chữ; đáp án ô chữ; phiếu nhiều nhóm).
+## AI. v70 — Đúng/Sai 80/20, hướng A4 theo Task, nút Xuất MD
+- Chi tiết ở spec chính mục 16.11. Test mới: `test19.py` (12 phép kiểm). Phiếu mẫu đổi: Task 13 (T/F) cột đáp án hẹp hơn; Task 5 (A/B/C) xếp dọc cả Task, cao 764→924 mm, số trang không đổi.
+- `test2` so với v69 sẽ FAIL đúng một chỗ này (t11); các Task khác y hệt. Từ v70 dùng bản v70 làm bản so sánh.
+- Hoãn theo người dùng: công tắc Họ tên / Lớp.
+
+## D. Còn mở (cập nhật 25/10/2026, bản v70)
+- **Nhập file:** P0, P1, P2 xong; v67 sửa theo phiếu thật thứ nhất (mục AF). Còn **P3** (đã thử 1 PDF qua 2 vòng / 5–10) (thử 5–10 PDF thật qua đường chat: Claude đọc PDF → JSON/MD → nạp; đo số Task đúng, số chỗ phải sửa tay) và **P4** (mẫu có sẵn "Ô chữ" khi dán một khối chữ; đáp án ô chữ; phiếu nhiều nhóm).
 - Bộ đoán chữ thô vẫn yếu với chữ copy từ PDF 2 cột / lưới (chỉ mới nhận thêm số hoạt động trần). Đường chính là JSON hoặc MD.
 - "Mặc định theo dạng bài" khóa theo `typeId`: mọi Task nhập/dán có `typeId = custom` dùng chung một mặc định. Cần xem lại khi dùng nhiều Task tùy biến.
-- Chưa có nút "Xuất MD" (hàm đã có). Đáp án (`key`) chưa có bản in đáp án cho giáo viên.
+- Nút "Xuất MD" đã có từ v70. Đáp án (`key`) chưa có bản in đáp án cho giáo viên.
 - Tải "JSON phiếu cũ" chỉ đã thử trên Chromium chạy file trực tiếp; trong khung artifact của claude.ai trình duyệt có thể chặn tải xuống (chưa thử).
 - **Tối ưu công thức** theo `claude/PHUONG_AN_CONG_THUC.md`: xong cả 4 bước (v57–v60). Đo lại các phép kiểm 15.8 vẫn chưa làm.
 - Gen ảnh chưa nối dịch vụ thật: hook `window.WSImageGen.generate({prompt, refs, ar}) → {src}` (mục I). Chưa lưu prompt vào dữ liệu phiếu.
@@ -267,14 +272,10 @@ python3 -c "from PIL import Image; Image.new('RGB',(64,48),(200,200,200)).save('
 - test1: cột trái, khu vực, độ rộng · test2: bố cục 18 Task, thao tác soạn, cột trái chỉ có + Task / + Phiếu · test3: popup ảnh · test4: ô ảnh, khung trong popup · test5: bảng khung cố định · test6: khung cố định mọi bài ảnh · test7: mã QR · test8: Danh sách câu tắt/bật · test9: Áp mẫu, mô tả thành phần · test10: 13 mẫu · test11: dán bài → cấu hình · **test12: P0 (bù trường, nạp lỗi không đổi phiếu, Task không tên, nhận JSON, tự chọn Cả đề, cảnh báo dán dài, vị trí chèn)** · **test13: P1 (+ Task / + Phiếu, chèn cuối, chọn file, bảng nhận diện, ước tính trang, xác nhận + tải JSON cũ, lỗi, ID, Ctrl+V, PDF + hook)** · **test14: P2 (MD)** · cmp_paste.py: so kết quả đoán của 20 bài dán giữa hai bản · audit.py / audit2.py: tải ảnh dọc/ngang vào mọi ô, mọi tỉ lệ · ws_sea.py: dựng phiếu Sea, xuất `ws-sea-sample.json` · shot.py: chụp màn hình.
 - Bản cũ để so sánh: lấy từ artifact (đọc `index.html`, bỏ dòng khung `<!doctype…><body>` đầu và `</body></html>` cuối), hoặc giữ bản `ws-editor-prototype.html` cũ trước khi sửa.
 
-## AB. BÀN GIAO (2026-10-25 tối, bản v69) — đọc mục này đầu tiên khi mở thread mới
-- **Artifact:** https://claude.ai/artifact/7Ndsf8tt5xjidREi99Frf9 (v69, version 3).
-- **Đã chạy trên bản cuối:** test1–14, 16, 17, 18 và audit đạt, 0 lỗi console, 0 tràn trang. `test15` có 3 FAIL do môi trường (bản artifact dùng link Google Fonts, sandbox không có mạng); cùng 3 FAIL trên v67 nên không phải lỗi mới. `run_all.sh` mặc định: `... test16 test17 test18 audit`.
-- **Không chạy lại ở v69:** audit2, cmp_paste, ws_sea.
-- **Việc tiếp theo:** P3 (thêm phiếu thật vào `tests/real/`), P4 (Ô chữ), nút "Xuất MD".
-- **Còn hỏi người dùng:** cột Đúng/Sai 80/20; hướng A4 thống nhất theo Task; công tắc Họ tên/Lớp ở đầu phiếu.
-- **Quy tắc đăng lại:** đọc trọn artifact (action read) trước khi publish cùng URL; nếu bị từ chối lần đầu, đọc xong thì publish lại nguyên bản.
-- **Cách nhập:** như v65 (+ Task / + Phiếu; JSON chính, MD theo `QUY_UOC_MD.md`, chữ thô là đoán). Prompt cho AI: `PROMPT_PDF_SANG_PHIEU.md` (cách B).
-- **Bản repo:** font nhúng `fonts/` (Andika, Be Vietnam Pro, Lexend); bản artifact = repo với khối `@font-face` thay bằng link Google Fonts. Repo: khanhtoaninv/WS-Editor, nhánh main.
-- test15 chạy bản repo thì qua đủ; 3 FAIL chỉ xuất hiện ở bản artifact (không có mạng trong sandbox).
+## AB. BÀN GIAO (2026-10-25, bản v70) — đọc mục này đầu tiên khi mở thread mới
+- **Không còn dùng artifact.** Xong việc thì commit và đẩy lên GitHub `khanhtoaninv/WS-Editor`, nhánh main (người dùng yêu cầu). Repo: file chính `ws-editor-prototype.html`, `docs/`, `tests/`, `fonts/`, `samples/`.
+- **Đã chạy trên bản cuối v70:** test1, 3–19, audit (0 vấn đề), audit2 (không tràn), cmp_paste (20 bài dán giống v69), ws_sea (3 trang, 0 lỗi) đạt, 0 lỗi console. `test2` so với v69: 31/32, chỗ lệch duy nhất là Task 5 phiếu mẫu (đã định, xem mục AI).
+- **Cách chạy:** `bash tests/run_all.sh <mới.html> <cũ.html>`; `cmp_paste.py <mới> <cũ>`; `ws_sea.py` ghi ra `/home/claude/ws/ws-sea-sample.json` (cần tạo thư mục), bản đó khác `ws-sea-sample.json` trong repo ở trường `part:""` từ v68 (không phải lỗi v70, chưa tái xuất mẫu).
+- **Việc tiếp theo:** P3 (người dùng gửi PDF thật + MD do AI tạo + ảnh sau khi nạp, thêm vào `tests/real/`), P4 (Ô chữ), công tắc Họ tên / Lớp (hoãn). `real/birthday.pdf` không có trong repo.
+- **Cách nhập:** như v65 (+ Task / + Phiếu; JSON chính, MD theo `QUY_UOC_MD.md`, chữ thô là đoán). Prompt cho AI: `PROMPT_PDF_SANG_PHIEU.md`.
 - Chỉ báo "đạt" cho test đã chạy trên bản cuối; mẫu do Claude tự viết không thay được phiếu do AI khác viết.

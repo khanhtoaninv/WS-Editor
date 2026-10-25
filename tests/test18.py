@@ -1,6 +1,6 @@
-import json
+import json, sys
 from playwright.sync_api import sync_playwright
-F='file:///home/claude/ws/ws-editor-prototype.html'; ok=True
+F='file://'+sys.argv[1]; ok=True
 def chk(n,c,x=''):
     global ok; print(('OK  ' if c else 'FAIL'),n,x); ok&=bool(c)
 with sync_playwright() as p:

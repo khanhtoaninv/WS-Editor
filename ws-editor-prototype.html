@@ -1,5 +1,6 @@
 <meta charset="utf-8">
 <title>WS Editor</title>
+<!-- v70: Đáp án Đúng/Sai (A6) trong Hai cột mặc định 80/20; A4 "Tự động" quyết một lần cho cả Task; nút Xuất MD -->
 <!-- v69: Font chữ phiếu (Andika / Be Vietnam Pro / Lexend) ở panel Phiếu, lưu ở ws.font -->
 <!-- v68: Task nối vào Task trên (một Task của phiếu gốc có nhiều phần, mỗi phần giữ đáp án riêng): lựa chọn thứ 4 của mục Ngắt trang, không số / tiêu đề, giữ liền Task trên, cách trên bằng khoảng cách giữa các nhóm; MD: "### Phần: …" trong "## Task"; nhãn lựa chọn A. B. C. giữ chữ hoa; câu duy nhất không đánh số. v67: nhập MD theo phiếu thật đầu tiên — lựa chọn A/B/C mỗi dòng một lựa chọn, ô tick ☐ thành Lựa chọn (A4) nhãn ô tick, bỏ dòng "Nội dung:" / "My answer" / dòng kẻ / gạch ___ thừa, lời nhắc cuối bài và "Ghi chú:" vào hướng dẫn, bài đọc giữ đoạn, hội thoại chỉ qua khối "Hội thoại:", dòng nhãn lạ có ghi chú; cảnh báo mới (lỗi chữ, câu giống tiêu đề, chỗ trả lời trùng, ký hiệu ô tick sót). v66: font Andika + Be Vietnam Pro nhúng sẵn (thư mục fonts/), nạp trước nhóm ký tự tiếng Việt, đổi font không dựng lại cột trái. v65: P2 nhập file — quy ước MD trung gian ("## Task: …", trường "Tên: giá trị", khối Bài đọc / Hội thoại / Ô chữ, "## Đáp án" riêng), bộ đọc readMd dùng chung lớp nhập. v64: P1 nhập file — cột trái chỉ còn "+ Task" (thẻ Mẫu có sẵn | Từ file / dán, Task luôn vào cuối phiếu) và "+ Phiếu" (từ file / dán, để trống = phiếu rỗng, xác nhận + tải JSON cũ trước khi thay); bỏ nút "Dán…"; bảng nhận diện sơ bộ (số theo file, tiêu đề, mô tả, số câu, cảnh báo, ước tính số trang); một lần nhập = một bước hoàn tác. v63: P0 nhập file — nạp JSON thiếu trường tự bù (fillSheet/fillTask), nạp lỗi không đổi phiếu đang mở, Task không tên lấy tiêu đề/mô tả, hộp Dán nhận ra JSON, tự chọn "Cả đề", cảnh báo dán dài, báo vị trí chèn. v62: bảng có thể kèm khung từ (ô chữ = bảng chữ cái + khung từ). v61: mở Task nào cũng chỉ mở khu vực 3 Nội dung (1, 2, 4 thu lại), bất kể lần trước mở gì. v60: dán bài — bộ đoán trả về cấu hình (khung + thành phần + loại đáp án), mẫu chỉ áp khi người dùng chọn. v59: gọn mẫu 15 → 13 (gộp 3 mẫu bảng thành "Bảng", "Tranh" → "Tô màu / vẽ"). v58: "Công thức" → "Áp mẫu…" (áp một lần, mẫu chia nhóm); thẻ dạng bài và tóm tắt hiện mô tả thành phần (descOf). v57: bỏ dạng "Tranh" — Task chỉ có ảnh = Danh sách câu 0 câu + Ảnh chung; công tắc "Danh sách câu" (tắt = ẩn, giữ câu + đáp án). v56: QR bo góc. v55: mã QR nghe cho bài có Track. v54: thẻ câu không tô đậm lề trái. v53: viền Task xám, đệm hai bên rộng hơn, thanh tên Task cao bằng thanh khu vực và nền xanh. v52: Task mở nằm trong một thẻ có viền; Task đang thao tác được đánh dấu trên trang; cột trái rộng 360. v51: mặc định chỉ mở thẻ Nội dung. v50: bảng — chiều cao hàng mặc định 14 mm (cả hàng tiêu đề). v49: ảnh chung giữ khung cố định, ảnh thật nằm trong khung; T5 Fit dọc giữ tỉ lệ. v48: khung ảnh cố định cho mọi bài ảnh từng câu (bảng, danh sách, lưới T5). v47: Dùng ảnh này không còn qua fetch/blob. v46: popup ảnh — chỉnh nháp, chỉ lưu khi bấm Dùng ảnh này -->
 <!-- v37: cột trái dạng accordion + khu vực + kéo độ rộng -->
@@ -682,7 +683,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 
 <div class="app">
   <header class="top">
-    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v69</span> <small id="wsTitle"></small></div>
+    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v70</span> <small id="wsTitle"></small></div>
     <div class="tb">
       <label for="age" class="hint" style="margin:0">Độ tuổi</label>
       <select id="age"><option value="5-6">5–6</option><option value="7-9">7–9</option><option value="10-12">10–12</option></select>
@@ -701,6 +702,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
     <span class="badge" id="pageBadge">–</span>
     <span class="badge" id="diagBadge">–</span>
     <button class="btn ghost" id="jsonBtn">Xem JSON</button>
+    <button class="btn ghost" id="mdBtn">Xuất MD</button>
     <button class="btn ghost" id="helpBtn" aria-haspopup="dialog" aria-expanded="false" title="Thao tác nhanh">?</button>
   </header>
   <aside class="pane tree" id="tree" aria-label="Cây container"></aside>
@@ -748,7 +750,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 <label><input type="checkbox" id="codesChk"> Hiện mã kỹ thuật (T1, G0, A1…)</label></div>
 <dialog id="dlg">
   <h2 id="dlgTitle" style="margin:0 0 8px;font-size:15px">Dữ liệu phiếu (JSON)</h2>
-  <p class="hint">Nội dung gốc, cấu hình layout và các override. Sao chép để lưu hoặc gửi cho hệ thống khác.</p>
+  <p class="hint" id="dlgHint">Nội dung gốc, cấu hình layout và các override. Sao chép để lưu hoặc gửi cho hệ thống khác.</p>
   <textarea id="jsonOut" readonly></textarea>
   <div class="row"><button class="btn pri" id="loadJson" hidden>Nạp phiếu này</button><button class="btn" id="copyJson">Sao chép</button><button class="btn pri" id="closeDlg">Đóng</button></div>
 </dialog>
@@ -3306,7 +3308,7 @@ function colsDefault(t, L) { if (L === 'T5') return (t.content.variant === 'mult
 function colsRange(t, L) { const max = AGE[ws.age].maxCols; if (L === 'T5') return t.content.variant === 'multi' ? [1, 2] : cellDirOf(t) === 'row' ? [1, Math.min(2, max)] : [2, max]; if (L === 'T6') return [1, 2]; return null; }
 function colsOf(t) { const L = layoutOf(t), rg = colsRange(t, L); if (!rg) return 1; const c = t.layout.cols ?? colsDefault(t, L); return Math.min(rg[1], Math.max(rg[0], c)); }
 const T7CW = [40, 20, 40];
-function rmeta(t, L) { return (L === 'T6' && t.wordBank && t.wordBank.placement === 'right') ? { ratio: 62, range: [40, 80] } : TL[L]; }
+function rmeta(t, L) { if (L === 'T4' && t.answer && t.answer.layout === 'A6') return { ratio: 80, range: [50, 90] }; return (L === 'T6' && t.wordBank && t.wordBank.placement === 'right') ? { ratio: 62, range: [40, 80] } : TL[L]; }
 function ratioOf(t) { const L = layoutOf(t); if (L === 'T7') return null; const m = rmeta(t, L); if (!m.ratio) return null; const r = t.layout.split ?? m.ratio; return Math.min(m.range[1], Math.max(m.range[0], r)); }
 function t7cw(t) { const c = t.layout.cw; return Array.isArray(c) && c.length === 3 && c.every(x => x != null) ? c : T7CW; }
 // Hướng ô của T5 (bài item đơn): 'col' ảnh trên chữ, 'row' ảnh trái chữ phải. Mặc định: item có lines[] thì 'row', còn lại 'col'.
@@ -3433,7 +3435,7 @@ const a4autoDef = () => Math.round(22 * 14 / AGE[ws.age].font);
 function a4autoMax(t) { const p = t.answer.params || {}; return p.autoMax || a4autoDef(); }
 function a4dir(t, item) {
   const p = pOf(t, item); let d = p.dir || 'auto';
-  if (d === 'auto') d = Math.max(0, ...(item.opts || []).map(o => o.length)) <= a4autoMax(t) ? 'h' : 'v';
+  if (d === 'auto') d = Math.max(0, ...its(t).flatMap(i => (i.opts || []).map(o => o.length))) <= a4autoMax(t) ? 'h' : 'v';
   return d === 'h' ? 'h' : d;
 }
 // Mặc định căn ngang của đáp án theo chỗ đặt
@@ -4415,7 +4417,7 @@ function answerPanel(t, s, key) {
   else if (L === 'A4' && inl) { size = `<p class="hint" data-na="size">Lựa chọn nằm trong câu nên cỡ theo chữ.</p>`; content = `<p class="hint">Viết lựa chọn dạng {từ 1|từ 2} trong nội dung; hiện thành từ 1 / từ 2, mỗi từ in đậm. Học sinh gạch chân hoặc khoanh từ đúng.</p>`; }
   else if (L === 'A4') {
     size = fNum('gap', 'Khoảng cách các lựa chọn', o.gap, { min: 2, max: 20, unit: 'mm', def: D('gap', 7) });
-    content = fSeg('dir', 'Cách xếp', o.dir, Object.entries(A4DIRS), D('dir', 'auto'), { hint: key ? '' : 'Tự động: đáp án ngắn xếp một hàng, đáp án dài mỗi đáp án một dòng.' })
+    content = fSeg('dir', 'Cách xếp', o.dir, Object.entries(A4DIRS), D('dir', 'auto'), { hint: key ? '' : 'Tự động: nếu mọi câu trong Task đều ngắn thì xếp một hàng, chỉ cần một câu dài thì cả Task xếp mỗi đáp án một dòng.' })
       + (key ? '' : fNum('autoMax', 'Đáp án “ngắn” khi dài tối đa', o.autoMax, { min: 6, max: 60, unit: 'ký tự', def: a4autoDef() }) + fSeg('lab', 'Nhãn', o.lab, [['circle', 'Ⓐ'], ['dot', 'A.'], ['box', '☐ ô tick']], 'circle') + (o.lab === 'box' ? '' : fSeg('upper', 'Chữ nhãn', o.upper, [[false, 'a b c'], [true, 'A B C']], false)));
   } else if (L === 'A5') size = fNum('size', 'Cỡ ô tick', o.size, { min: 4, max: 12, step: .5, unit: 'mm', def: D('size', 6.5) });
   else if (L === 'A6') size = fNum('size', 'Cỡ ô T/F', o.size, { min: 5, max: 12, step: .5, unit: 'mm', def: D('size', 7.5) });
@@ -4617,12 +4619,20 @@ document.getElementById('zoomIn').onclick = () => { zoom = Math.min(1.5, Math.ro
 document.getElementById('zoomOut').onclick = () => { zoom = Math.max(.3, Math.round((scaleNow() - .1) * 10) / 10); draw(); };
 document.getElementById('zoomFit').onclick = () => { zoom = null; draw(); };
 document.getElementById('guidesBtn').onclick = () => { guides = !guides; document.getElementById('guidesBtn').classList.toggle('pri', guides); draw(); if (sel.type === 'sheet') renderInspector(); };
-document.getElementById('jsonBtn').onclick = () => { document.getElementById('jsonOut').value = JSON.stringify(ws, null, 2); document.getElementById('dlg').showModal(); };
+const JSON_HINT = document.getElementById('dlgHint').textContent;
+document.getElementById('mdBtn').onclick = () => {
+  document.getElementById('dlgTitle').textContent = 'Phiếu dạng Markdown (MD)';
+  document.getElementById('dlgHint').textContent = 'Chỉ giữ nội dung và loại bài, không giữ chỉnh layout, kích thước hay ảnh đã tải lên. Muốn giữ đủ thì dùng Xem JSON.';
+  document.getElementById('jsonOut').value = sheetToMd(ws);
+  document.getElementById('dlg').showModal();
+};
+document.getElementById('jsonBtn').onclick = () => { document.getElementById('dlgTitle').textContent = 'Dữ liệu phiếu (JSON)'; document.getElementById('dlgHint').textContent = JSON_HINT; document.getElementById('jsonOut').value = JSON.stringify(ws, null, 2); document.getElementById('dlg').showModal(); };
 document.getElementById('closeDlg').onclick = () => document.getElementById('dlg').close();
 document.getElementById('copyJson').onclick = () => {
+  const isMd = document.getElementById('dlgTitle').textContent.includes('MD');
   const ta = document.getElementById('jsonOut');
   const fall = () => { ta.focus(); ta.select(); toast('Đã chọn toàn bộ, bấm Ctrl+C để sao chép'); };
-  try { navigator.clipboard.writeText(ta.value).then(() => toast('Đã sao chép JSON'), fall); } catch (_) { fall(); }
+  try { navigator.clipboard.writeText(ta.value).then(() => toast(isMd ? 'Đã sao chép MD' : 'Đã sao chép JSON'), fall); } catch (_) { fall(); }
 };
 // Esc: lên một cấp (câu/ô → nhóm → Task → Phiếu)
 function upLevel() {
@@ -4848,7 +4858,7 @@ taskPanel = (t, s) => {
   return _taskPanel(t, s).replace('<div class="stack"><button class="btn" data-act="auto"', `<div class="stack">${extra}<button class="btn" data-act="auto"`);
 };
 document.getElementById('loadJson').onclick = () => { const ta = document.getElementById('jsonOut'); const r = readJson(ta.value); if (r.err) { toast(r.err + ' Phiếu đang mở giữ nguyên.'); return; } const bad = r.tasks.find(x => x.err); if (bad) { toast(bad.err + ' Phiếu đang mở giữ nguyên.'); return; } const obj = r.kind === 'sheet' ? r.sheet : { tasks: r.tasks.map(x => x.t) }; if (loadSheet(obj, 'Đã nạp phiếu')) document.getElementById('dlg').close(); };
-document.getElementById('dlg').addEventListener('close', () => { const ta = document.getElementById('jsonOut'); ta.readOnly = true; document.getElementById('loadJson').hidden = true; document.getElementById('dlgTitle').textContent = 'Dữ liệu phiếu (JSON)'; });
+document.getElementById('dlg').addEventListener('close', () => { const ta = document.getElementById('jsonOut'); ta.readOnly = true; document.getElementById('loadJson').hidden = true; document.getElementById('dlgTitle').textContent = 'Dữ liệu phiếu (JSON)'; document.getElementById('dlgHint').textContent = JSON_HINT; });
 
 /* ================= 0b–0c: đặc điểm nội dung, công thức dạng bài, thẻ dạng bài ================= */
 // Đặc điểm của một Task, suy ra từ dữ liệu (không lưu). Công thức và thẻ dạng bài chỉ đọc các đặc điểm này.
@@ -6033,7 +6043,7 @@ function mdTask(b, keys) {
   else conf = 'cao';
   return { t, notes, conf };
 }
-// Xuất MD theo quy ước (dùng để kiểm thử khứ hồi và làm mẫu cho người soạn; chưa có nút trên giao diện)
+// Xuất MD theo quy ước (dùng để kiểm thử khứ hồi và làm mẫu cho người soạn; nút Xuất MD ở thanh trên)
 const MD_KNAME = t => { const a = t.answer, k = a.kind; return k === 'word' ? (a.attach === 'inline' ? 'điền chỗ trống' : 'viết từ') : k === 'choice' ? (a.attach === 'inline' ? 'chọn trong câu' : (a.params || {}).lab === 'box' ? 'tick' : 'khoanh A/B/C') : { sentence: 'viết câu', tick: 'tick', tf: 'đúng/sai', match: 'nối', trace: 'tô chữ', none: 'không' }[k] || 'không'; };
 function taskToMd(t, asPart) {
   const c = t.content, o = [(asPart ? '### Phần: ' : '## Task: ') + (t.title || '')], k = ck(t), a = t.answer, cell = v => v && v.tick ? '[ ]' : v && v.img ? `[ảnh: ${v.img}]` : (typeof v === 'string' ? v : '');

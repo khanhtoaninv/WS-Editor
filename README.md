@@ -16,7 +16,7 @@ Muốn dữ liệu lưu trong trình duyệt (mặc định theo dạng bài, đ
 
 ## Nhập dữ liệu
 
-Nút "+ Task" hoặc "+ Phiếu" ở cột trái, thẻ "Nhập từ nguồn": JSON (ví dụ `samples/ws-sea-sample.json`), MD theo `docs/QUY_UOC_MD.md`, hoặc dán chữ.
+Nút "+ Task" hoặc "+ Phiếu" ở cột trái, thẻ "Từ file / dán": JSON (ví dụ `samples/ws-sea-sample.json`), MD theo `docs/QUY_UOC_MD.md`, hoặc dán chữ.
 
 ## Kiểm thử
 
@@ -34,4 +34,4 @@ Mỗi test in `PASS`/`FAIL` và dòng cuối `ALL OK` hoặc `SOME FAIL`. `test2
 - `tests/`: bộ test Playwright, ảnh và MD mẫu.
 - `fonts/`: font nhúng (giấy phép SIL OFL, kèm file giấy phép).
 
-Bản v69.
+Bản v70.
