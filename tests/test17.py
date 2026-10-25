@@ -34,6 +34,9 @@ with sync_playwright() as p:
     chk('MD mới: mỗi phần giữ loại đáp án riêng', [t['desc'] for t in N][5:] == ['Câu hỏi · điền chỗ trống', 'Câu hỏi · tick lựa chọn', 'Câu hỏi · điền chỗ trống'], [t['desc'] for t in N][5:])
     chk('MD mới: phần 6c không chép hướng dẫn trước', N[7]['ins'] == '' and N[6]['ins'].startswith('Which party activity'), (N[6]['ins'], N[7]['ins']))
     chk('MD mới: không cảnh báo đỏ', all(not t['warn'] for t in N), [t['warn'] for t in N])
+    # MD thật do AI tạo bằng prompt v68 (người dùng gửi 25/10 lần 5): giữ nguyên không sửa tay; hiện trùng từng chữ với md/birthday6.md
+    R68 = pg.evaluate(ROWS, open(os.path.join(HERE, 'real', 'birthday-prompt68.md'), encoding='utf-8').read())
+    chk('MD thật prompt v68: 6 Task + 2 phần nối, 6a/6b/6c, cùng kết quả đọc như MD mẫu', isinstance(R68, list) and R68 == N and [t['no'] for t in R68][5:] == ['6a', '6b', '6c'], R68 if not isinstance(R68, list) else len(R68))
 
     # ---- 3) + Phiếu từ MD mới
     pg.click('#tree [data-newsheet]'); pg.wait_for_timeout(300); pg.fill('#pasteTa', NEW6); pg.wait_for_timeout(800)

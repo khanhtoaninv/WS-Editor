@@ -420,6 +420,11 @@ P3 (thử 5–10 PDF thật qua đường chat, đo số Task đúng và chỗ p
 - **Ghi chú (đã làm ở v70, mục 16.11):** cột T/F mặc định 80/20; hướng lựa chọn khoanh thống nhất cả Task. Công tắc "Name / Class" ở cấp phiếu: người dùng hoãn.
 - **Kiểm thử v68:** test17 mới (35 phép kiểm: MD cũ 8 khối vẫn đọc, MD mới 8 khối với 2 phần nối, nhãn 6a–6c, G0 không số / tiêu đề ở phần nối, hướng dẫn phần nối thẳng đường dóng, khoảng cách 6a→6b = 4 mm và Task→Task = 8 mm, số câu duy nhất ẩn mà chữ vẫn thẳng lề, nhãn A B C hoa, công tắc ↳ + Inspector + hoàn tác + Task đầu bị khóa, phân trang 0–8 Task đệm không bao giờ tách phần nối khỏi Task trên, khứ hồi MD, đáp án chạy liền, + Task bỏ nối ở đầu lô, Task đầu đánh dấu nối, phiếu mẫu 18 Task không đổi) đạt; các test còn lại: xem bàn giao.
 
+### 16.9b Phiếu 1 chạy lại bằng prompt v68 (25/10/2026, lần 5)
+- Người dùng gửi MD do AI tạo bằng prompt v68 (`tests/real/birthday-prompt68.md`, giữ nguyên) + ảnh Task 6 sau khi nạp. Kết quả: 6 Task, Task 6 có 2 phần nối (6a/6b/6c), không lặp hướng dẫn, không cảnh báo đỏ; app dựng đúng. test17 có thêm phép kiểm cho file này.
+- **Hạn chế của phép thử:** file này trùng từng chữ với `tests/md/birthday6.md` và với ví dụ trong prompt (ví dụ trong prompt chính là phiếu này), nên chưa chứng minh prompt tổng quát hóa. Phép thử thật là phiếu không có trong ví dụ (đang chờ `tests/real/sunny-farm.pdf`).
+- Chỗ lệch nhỏ còn lại (nhóm dàn trang, chưa sửa): mục "Nhãn: ___" các dòng kẻ bắt đầu ngay sau nhãn nên mép trái các dòng lệch nhau, mép phải thẳng; PDF gốc thẳng cả hai mép.
+
 ### 16.10 Font chữ phiếu (v69, 25/10/2026 tối, lần 3)
 - **Yêu cầu:** người dùng thích bộ font trong ảnh chụp, muốn chọn font ở thông số phiếu: font hiện tại / font trong ảnh / một font khác hợp.
 - **Quy trình:** bước 1 chưa có chỗ chọn font; bước 2 thêm một thông số cấp phiếu `ws.font` (không thêm format). Panel Phiếu → mục **Font chữ phiếu**, đặt giữa "Xếp trang" và "Khoảng cách", 3 nút:
