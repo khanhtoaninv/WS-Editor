@@ -28,7 +28,7 @@ Mỗi lần nói rõ đã đến bước nào và vì sao.
 - Sửa trực tiếp file `ws-editor-prototype.html`, giữ một file duy nhất, JS thuần, không thêm thư viện.
 - Chạy kiểm thử bằng Playwright (chụp ảnh, xem lại) và kiểm tra không có lỗi console, 0 cảnh báo tràn trang trước khi báo xong. Chạy test từng cái (mỗi cái có thể mất 1–2 phút), chạy lại đủ test trên bản cuối trước khi báo xong.
 - Cuối mỗi thay đổi lớn, cập nhật `WS_EDITOR_SPEC.md` (giữ cùng cấu trúc mục) và đưa lại cho tôi cả hai file.
-- **Mỗi khi có code mới:** (1) sửa `ws-editor-prototype.html` và cập nhật `WS_EDITOR_SPEC.md` cho khớp; (2) xuất bản (publish) lại bản artifact để tôi xem; (3) gửi lại cho tôi cả hai file đã cập nhật để tôi thay vào Project. Bản artifact hiện có: https://claude.ai/artifact/7Ndsf8tt5xjidREi99Frf9 (từ v67; link cũ 4FLtRGtT211poqu1bPRSdG dừng ở v66). Thread mới đọc artifact này trước rồi publish vào cùng URL để giữ một đường dẫn duy nhất. Nếu không có quyền ghi vào URL đó thì publish bản mới và nói rõ link mới.
+- **Mỗi khi có code mới:** (1) sửa `ws-editor-prototype.html` và cập nhật `WS_EDITOR_SPEC.md` cho khớp; (2) xuất bản (publish) lại bản artifact để tôi xem; (3) gửi lại cho tôi cả hai file đã cập nhật để tôi thay vào Project. Bản artifact hiện có: https://claude.ai/artifact/7Ndsf8tt5xjidREi99Frf9 (từ v67, hiện v69; link cũ 4FLtRGtT211poqu1bPRSdG dừng ở v66). Thread mới đọc artifact này trước rồi publish vào cùng URL để giữ một đường dẫn duy nhất. Nếu không có quyền ghi vào URL đó thì publish bản mới và nói rõ link mới.
 - Khi trả lời xong một thay đổi, nêu ngắn: đã sửa gì, đã kiểm thử gì, và nhắc tôi thay file trong Project.
 - Nếu hành vi thật khác đặc tả, nói rõ chỗ lệch thay vì tự chọn một bên.
 

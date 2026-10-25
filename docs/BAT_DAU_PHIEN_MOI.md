@@ -1,6 +1,6 @@
 # Bắt đầu phiên mới — WS Editor
 
-Cập nhật: 2026-10-25 (tối). Bản prototype hiện tại: **v67** (v66 + sửa bộ đọc MD theo phiếu thật đầu tiên). Artifact: https://claude.ai/artifact/7Ndsf8tt5xjidREi99Frf9
+Cập nhật: 2026-10-25 (tối). Bản prototype hiện tại: **v69** (v68: Nối Task, MD `### Phần`; v69: chọn font phiếu Andika/Be Vietnam Pro/Lexend). Artifact: https://claude.ai/artifact/7Ndsf8tt5xjidREi99Frf9
 
 ## Cách dùng
 **Quan trọng:** ô Instructions của Project hiện vẫn là câu ngắn cũ (chưa trỏ tới mục BÀN GIAO). Hoặc dán nội dung `PROJECT_INSTRUCTIONS.md` vào ô đó (một lần), hoặc mở đầu mỗi thread mới bằng câu: **"Đọc claude/BAT_DAU_PHIEN_MOI.md trước, rồi:"** + lệnh ở mục 2.
@@ -44,9 +44,9 @@ Mở thread mới trong Project "WS Editor", dán MỘT trong các lệnh ở m�
 
 ## 5. Danh sách file trong Project (cập nhật 2026-10-25 tối)
 - `PROJECT_INSTRUCTIONS.md` (dán nội dung vào ô Instructions của Project nếu chưa)
-- `WS_EDITOR_SPEC.md` (có mục 16), `ws-sample.json`, `ws-editor-prototype.html` (v67; chạy local cần thư mục `fonts/` cạnh file)
-- `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục AC–AE: nhập file; mục cuối: BÀN GIAO)
+- `WS_EDITOR_SPEC.md` (có mục 16), `ws-sample.json`, `ws-editor-prototype.html` (v69; chạy local cần thư mục `fonts/` cạnh file)
+- `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục AC–AH; mục cuối: BÀN GIAO v69)
 - `claude/PHUONG_AN_NHAP_FILE.md`, `claude/QUY_UOC_MD.md`, `claude/PHUONG_AN_CONG_THUC.md`
 - `claude/ws-sea-sample.json` (phiếu Wonders of the Sea, đủ trường; bản sao ở `claude/tests/ws-sea-sample.json` cho test)
-- `claude/tests/`: test1–16, audit, audit2, shot, cmp_paste, ws_sea, run_all.sh, `md/sea.md`, `md/mau-tron.md`, `md/nghe-bang.md`, `md/birthday.md`, `real/birthday-user.md` (MD gốc người dùng nhận từ AI, giữ nguyên), `real/birthday.pdf`
-- `claude/PROMPT_PDF_SANG_PHIEU.md` (prompt cho AI đọc PDF; v67)
+- `claude/tests/`: test1–18, audit, audit2, shot, cmp_paste, ws_sea, run_all.sh, `md/sea.md`, `md/mau-tron.md`, `md/nghe-bang.md`, `md/birthday.md`, `real/birthday-user.md` (MD gốc người dùng nhận từ AI, giữ nguyên), `real/birthday.pdf`
+- `claude/PROMPT_PDF_SANG_PHIEU.md` (prompt cho AI đọc PDF; v68)

@@ -231,7 +231,22 @@ Chi tiết ở spec chính mục 16.8. Tóm tắt:
 - Quyết định đã tự chọn: lời nhắc cuối bài vào Hướng dẫn (không thêm trường Ghi chú hiển thị); không làm "số lựa chọn phải chọn"; khoanh A/B/C không bị bỏ gạch ___ (vd "She is a ___. A. … B. …" hợp lệ); dòng bảng không bao giờ đọc thành ô tick lựa chọn; Task trộn loại không tự tách, chỉ ghi chú + cảnh báo.
 - Kiểm thử: test16 (mới) + test1–15, audit, audit2, cmp_paste, ws_sea: đạt trên bản cuối.
 
-## D. Còn mở (cập nhật 25/10/2026 tối, bản v67)
+## AG. v68 — Nối Task, MD `### Phần`, nhãn, ẩn số
+- **Nối vào Task trên:** `layout.break = 'join'` (cạnh auto/page/keep). Task nối không lặp G0 riêng, chạy tiếp liền Task trên (phương án B đã chốt).
+- **MD:** `### Phần: <tên>` chia nhóm Task trong một file; nhãn lựa chọn viết HOA (A. B. C.).
+- **Một câu duy nhất:** ẩn số thứ tự câu.
+- **Prompt + quy ước MD** viết lại (`PROMPT_PDF_SANG_PHIEU.md`, `QUY_UOC_MD.md`) cho các thay đổi trên.
+- Test: `test17.py`, dữ liệu `tests/md/birthday6.md`, `tests/real/birthday-user2.md`.
+
+## AH. v69 — Font chữ phiếu
+- Panel Phiếu có mục **Font chữ phiếu** với 3 lựa chọn: **Andika** (hiện tại, mặc định), **Be Vietnam Pro** (font như trong ảnh người dùng gửi), **Lexend** (thiết kế cho dễ đọc, gợi ý của Claude). Mỗi nút hiển thị bằng chính font của nó.
+- Dữ liệu: `ws.font` = `'be'` | `'lexend'`; Andika không lưu (xóa trường). Font lạ khi nạp → về Andika + ghi chú "font không có trong danh sách".
+- Code: bảng `FONTS`, `applyFont()` đặt biến `--f-sheet`, nạp trước chữ thường + đậm (có tiếng Việt) rồi **dàn lại trang**; `--f-ui` (giao diện) giữ Be Vietnam Pro, không đổi.
+- Spec chính: mục 16.10. Test: `test18.py` (19 phép kiểm).
+- **Chưa kiểm:** hình dạng chữ thật của Be Vietnam Pro / Lexend (sandbox không tải được font); chỉ kiểm cơ chế (biến CSS, dàn lại, lưu/nạp). Giả định "font trong ảnh" = Be Vietnam Pro.
+- **Bản repo cần thêm:** woff2 Lexend (latin, latin-ext, vietnamese; 400 và 700) và Be Vietnam Pro 700 vào `fonts/` + khối `@font-face`; bản artifact đã dùng link Google Fonts (Andika, Be Vietnam Pro, Lexend).
+
+## D. Còn mở (cập nhật 25/10/2026 tối, bản v69)
 - **Nhập file:** P0, P1, P2 xong; v67 sửa theo phiếu thật thứ nhất (mục AF). Còn **P3** (đã thử 1/5–10 PDF) (thử 5–10 PDF thật qua đường chat: Claude đọc PDF → JSON/MD → nạp; đo số Task đúng, số chỗ phải sửa tay) và **P4** (mẫu có sẵn "Ô chữ" khi dán một khối chữ; đáp án ô chữ; phiếu nhiều nhóm).
 - Bộ đoán chữ thô vẫn yếu với chữ copy từ PDF 2 cột / lưới (chỉ mới nhận thêm số hoạt động trần). Đường chính là JSON hoặc MD.
 - "Mặc định theo dạng bài" khóa theo `typeId`: mọi Task nhập/dán có `typeId = custom` dùng chung một mặc định. Cần xem lại khi dùng nhiều Task tùy biến.
@@ -252,13 +267,14 @@ python3 -c "from PIL import Image; Image.new('RGB',(64,48),(200,200,200)).save('
 - test1: cột trái, khu vực, độ rộng · test2: bố cục 18 Task, thao tác soạn, cột trái chỉ có + Task / + Phiếu · test3: popup ảnh · test4: ô ảnh, khung trong popup · test5: bảng khung cố định · test6: khung cố định mọi bài ảnh · test7: mã QR · test8: Danh sách câu tắt/bật · test9: Áp mẫu, mô tả thành phần · test10: 13 mẫu · test11: dán bài → cấu hình · **test12: P0 (bù trường, nạp lỗi không đổi phiếu, Task không tên, nhận JSON, tự chọn Cả đề, cảnh báo dán dài, vị trí chèn)** · **test13: P1 (+ Task / + Phiếu, chèn cuối, chọn file, bảng nhận diện, ước tính trang, xác nhận + tải JSON cũ, lỗi, ID, Ctrl+V, PDF + hook)** · **test14: P2 (MD)** · cmp_paste.py: so kết quả đoán của 20 bài dán giữa hai bản · audit.py / audit2.py: tải ảnh dọc/ngang vào mọi ô, mọi tỉ lệ · ws_sea.py: dựng phiếu Sea, xuất `ws-sea-sample.json` · shot.py: chụp màn hình.
 - Bản cũ để so sánh: lấy từ artifact (đọc `index.html`, bỏ dòng khung `<!doctype…><body>` đầu và `</body></html>` cuối), hoặc giữ bản `ws-editor-prototype.html` cũ trước khi sửa.
 
-## AB. BÀN GIAO (2026-10-25 tối, bản v67) — đọc mục này đầu tiên khi mở thread mới
-
-**Bản hiện tại:** **v67** (artifact https://claude.ai/artifact/7Ndsf8tt5xjidREi99Frf9; repo khanhtoaninv/WS-Editor). v66 = font nhúng `fonts/` (bản artifact dùng link Google Fonts). Trên v67 đã chạy và đạt: test1–16, audit (0 vấn đề), audit2 (13/14/11 trang, 0 tràn), `cmp_paste.py` (20/20 giống v66), `ws_sea.py` (JSON Sea giống hệt); 0 lỗi console, 0 lỗi tràn.
-**Đã làm phiên 25/10 tối:** người dùng thử phiếu thật đầu tiên (PDF → MD bằng AI khác theo prompt cũ) và phải sửa tay nhiều. Phân tích: lỗi ở đường nhập (prompt + bộ đọc MD + bảng nhận diện), không ở mô hình container. Đã sửa bộ đọc MD, thêm A4 nhãn ô tick, bài đọc nhiều đoạn, 4 cảnh báo mới; viết lại prompt và quy ước MD (mục AF; spec chính 16.8).
-**Cách nhập hiện tại:** như v65 (+ Task / + Phiếu; JSON chính, MD theo quy ước, chữ thô là đoán). Prompt dùng cho AI: `claude/PROMPT_PDF_SANG_PHIEU.md` (cách B MD, khuyến nghị).
-**Việc tiếp theo đề xuất:** P3 tiếp — người dùng chạy prompt MỚI với AI của họ trên 4–9 PDF thật khác, gửi PDF + MD + ảnh sau khi nạp; Claude phân loại từng chỗ phải sửa (đọc sai chữ / prompt / bộ đọc / mô hình thiếu / dàn trang) rồi sửa đúng lớp. Thêm mỗi phiếu thật vào `tests/real/` và test16 (hoặc test17…). Sau đó P4 (Ô chữ), nút "Xuất MD".
-**Lưu ý kiểm thử:** như trước (mở thẻ 1/2/4 qua `SECT…`; lối vào `#tree [data-lib]` → `#libDlg [data-tab=src]`; + Phiếu `#tree [data-newsheet]`; chạy từng test hoặc `run_all.sh`, không song song). Mốc so bố cục: bản v66 trong repo (commit trước v67). Chỉ báo "đạt" cho test đã chạy trên bản cuối; mẫu do Claude tự viết không thay được phiếu do AI khác viết.
-**Link artifact đổi ở v67:** link cũ 4FLtRGtT211poqu1bPRSdG vẫn là bản v66; dịch vụ chỉ cho ghi đè sau khi đọc trọn file cũ (~430 KB), không đủ chỗ trong một lượt nên đã publish link mới. Từ giờ dùng link mới; thread mới vẫn phải đọc artifact (action read) rồi publish vào cùng URL.
-**Quy tắc đăng lại:** đọc artifact (action read, không kèm path) trước khi publish vào cùng URL; bản artifact = prototype với khối `@font-face` thay bằng link Google Fonts; sau đó project_write các file + gửi file cho người dùng + đẩy repo.
-**Người dùng nói:** không cần tái hiện đúng bố cục tài liệu gốc, chỉ cần đủ nội dung. Mỗi file một phiếu.
+## AB. BÀN GIAO (2026-10-25 tối, bản v69) — đọc mục này đầu tiên khi mở thread mới
+- **Artifact:** https://claude.ai/artifact/7Ndsf8tt5xjidREi99Frf9 (v69, version 3).
+- **Đã chạy trên bản cuối:** test1–14, 16, 17, 18 và audit đạt, 0 lỗi console, 0 tràn trang. `test15` có 3 FAIL do môi trường (bản artifact dùng link Google Fonts, sandbox không có mạng); cùng 3 FAIL trên v67 nên không phải lỗi mới. `run_all.sh` mặc định: `... test16 test17 test18 audit`.
+- **Không chạy lại ở v69:** audit2, cmp_paste, ws_sea.
+- **Việc tiếp theo:** P3 (thêm phiếu thật vào `tests/real/`), P4 (Ô chữ), nút "Xuất MD".
+- **Còn hỏi người dùng:** cột Đúng/Sai 80/20; hướng A4 thống nhất theo Task; công tắc Họ tên/Lớp ở đầu phiếu.
+- **Quy tắc đăng lại:** đọc trọn artifact (action read) trước khi publish cùng URL; nếu bị từ chối lần đầu, đọc xong thì publish lại nguyên bản.
+- **Cách nhập:** như v65 (+ Task / + Phiếu; JSON chính, MD theo `QUY_UOC_MD.md`, chữ thô là đoán). Prompt cho AI: `PROMPT_PDF_SANG_PHIEU.md` (cách B).
+- **Bản repo:** font nhúng `fonts/` (Andika, Be Vietnam Pro, Lexend); bản artifact = repo với khối `@font-face` thay bằng link Google Fonts. Repo: khanhtoaninv/WS-Editor, nhánh main.
+- test15 chạy bản repo thì qua đủ; 3 FAIL chỉ xuất hiện ở bản artifact (không có mạng trong sandbox).
+- Chỉ báo "đạt" cho test đã chạy trên bản cuối; mẫu do Claude tự viết không thay được phiếu do AI khác viết.

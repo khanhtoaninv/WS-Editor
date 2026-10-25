@@ -8,7 +8,7 @@ Trên Windows: bấm đúp `chay.bat`. File tự lấy bản mới nhất từ G
 
 Cách thủ công:
 
-Mở `ws-editor-prototype.html` bằng Chrome hoặc Edge (bấm đúp là chạy). Font Andika và Be Vietnam Pro đã nhúng sẵn trong `fonts/`, không cần mạng. Giữ thư mục `fonts/` cạnh file HTML.
+Mở `ws-editor-prototype.html` bằng Chrome hoặc Edge (bấm đúp là chạy). Font Andika, Be Vietnam Pro và Lexend đã nhúng sẵn trong `fonts/`, không cần mạng. Giữ thư mục `fonts/` cạnh file HTML.
 
 Muốn dữ liệu lưu trong trình duyệt (mặc định theo dạng bài, độ rộng cột trái) ổn định, chạy qua máy chủ nhỏ:
 
@@ -34,4 +34,4 @@ Mỗi test in `PASS`/`FAIL` và dòng cuối `ALL OK` hoặc `SOME FAIL`. `test2
 - `tests/`: bộ test Playwright, ảnh và MD mẫu.
 - `fonts/`: font nhúng (giấy phép SIL OFL, kèm file giấy phép).
 
-Bản v66.
+Bản v69.
