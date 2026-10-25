@@ -2,6 +2,9 @@
 
 Cập nhật: 2026-10-25 (tối). Bản prototype hiện tại: **v71** (v71: nhãn lựa chọn thẳng dòng đầu; v68: Nối Task, MD `### Phần`; v69: font phiếu; v70: Đúng/Sai 80/20, A4 tự động theo Task, nút Xuất MD). Không dùng artifact nữa: xong việc đẩy lên GitHub khanhtoaninv/WS-Editor, nhánh main.
 
+## Đang dở (đọc trước)
+**`docs/DANG_DO_KEO_DOI_CHO_VA_G_TEXT.md`**: thảo luận 25/10 đêm về kéo đổi chỗ container, G-Text và đề xuất thiết kế lại G0–G4. Chưa có dòng code nào; còn 4 câu hỏi chờ người dùng trả lời (mục 4 của file đó).
+
 ## Cách dùng
 **Quan trọng:** ô Instructions của Project hiện vẫn là câu ngắn cũ (chưa trỏ tới mục BÀN GIAO). Hoặc dán nội dung `PROJECT_INSTRUCTIONS.md` vào ô đó (một lần), hoặc mở đầu mỗi thread mới bằng câu: **"Đọc claude/BAT_DAU_PHIEN_MOI.md trước, rồi:"** + lệnh ở mục 2.
 
