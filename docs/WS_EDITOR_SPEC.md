@@ -3,7 +3,7 @@
 > File này là nguồn sự thật duy nhất cho WS Editor. Nó thay thế bản MASTER_SPEC v10 (quá nặng) và Claude Doc "Đặc tả Layout Task & Answer" (cũ hơn bản này).
 > Prototype chạy được: `ws-editor-prototype.html` (một file HTML, mở bằng trình duyệt). Dữ liệu mẫu: `ws-sample.json` (schema 0.2).
 > Khi bản prototype và file này lệch nhau, prototype là bản đúng hơn về hành vi; hãy báo để cập nhật file này.
-> **Cập nhật 25/10/2026 (lần 4):** prototype hiện là **v70** (v69 + Đúng/Sai mặc định 80/20, hướng A4 "Tự động" quyết theo cả Task, nút Xuất MD; mục 16.11). v69 = v68 + chọn font chữ phiếu (mục 16.10). v68 = (v67 + Task nhiều phần "Nối vào Task trên", MD `### Phần:`, nhãn A. B. C. giữ chữ hoa, câu duy nhất không đánh số; mục 16.9). v67 = v66 + sửa bộ đọc MD theo phiếu thật đầu tiên, A4 có nhãn ô tick (mục 16.8). v66 = v65 + font nhúng sẵn trong `fonts/` (mục 16.7). Thay đổi v37–v68 ghi chi tiết ở `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục cuối "BÀN GIAO"). Nhập file (P0–P2) tóm tắt ở **mục 16**; quy ước MD ở `claude/QUY_UOC_MD.md`.
+> **Cập nhật 25/10/2026 (lần 4):** prototype hiện là **v71** (v70 + nhãn lựa chọn thẳng dòng đầu và cách chữ 2 mm, mục 16.9c). v70 (v69 + Đúng/Sai mặc định 80/20, hướng A4 "Tự động" quyết theo cả Task, nút Xuất MD; mục 16.11). v69 = v68 + chọn font chữ phiếu (mục 16.10). v68 = (v67 + Task nhiều phần "Nối vào Task trên", MD `### Phần:`, nhãn A. B. C. giữ chữ hoa, câu duy nhất không đánh số; mục 16.9). v67 = v66 + sửa bộ đọc MD theo phiếu thật đầu tiên, A4 có nhãn ô tick (mục 16.8). v66 = v65 + font nhúng sẵn trong `fonts/` (mục 16.7). Thay đổi v37–v68 ghi chi tiết ở `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục cuối "BÀN GIAO"). Nhập file (P0–P2) tóm tắt ở **mục 16**; quy ước MD ở `claude/QUY_UOC_MD.md`.
 
 ---
 
@@ -424,6 +424,16 @@ P3 (thử 5–10 PDF thật qua đường chat, đo số Task đúng và chỗ p
 - Người dùng gửi MD do AI tạo bằng prompt v68 (`tests/real/birthday-prompt68.md`, giữ nguyên) + ảnh Task 6 sau khi nạp. Kết quả: 6 Task, Task 6 có 2 phần nối (6a/6b/6c), không lặp hướng dẫn, không cảnh báo đỏ; app dựng đúng. test17 có thêm phép kiểm cho file này.
 - **Hạn chế của phép thử:** file này trùng từng chữ với `tests/md/birthday6.md` và với ví dụ trong prompt (ví dụ trong prompt chính là phiếu này), nên chưa chứng minh prompt tổng quát hóa. Phép thử thật là phiếu không có trong ví dụ (đang chờ `tests/real/sunny-farm.pdf`).
 - Chỗ lệch nhỏ còn lại (nhóm dàn trang, chưa sửa): mục "Nhãn: ___" các dòng kẻ bắt đầu ngay sau nhãn nên mép trái các dòng lệch nhau, mép phải thẳng; PDF gốc thẳng cả hai mép.
+
+### 16.9c Phiếu 2 "A Visit to Sunny Farm" + prompt v68 (v71, 25/10/2026, lần 5)
+- MD thật do AI tạo: `tests/real/sunny-farm-prompt68.md` (giữ nguyên); PDF gốc `tests/real/sunny-farm.pdf`. Phiếu không có trong ví dụ của prompt: AI ra đúng 6 Task (Task 4 có 2 phần, Task 6 có 3 phần), app dựng 3 trang, 0 tràn.
+- **Sửa ở v71 (nhóm dàn trang):** nhãn lựa chọn Ⓐ / ô tick nằm ngang dòng đầu của lựa chọn (trước đây canh giữa nên lệch xuống khi lựa chọn dài hai dòng); khoảng cách nhãn → chữ 2 mm (ô tick 2,2 mm), trước 1,2 / 1,6 mm. test19 kiểm trên phiếu này.
+- **Chưa sửa, chờ người dùng quyết:**
+  1. *Header phiếu* (mô hình thiếu chỗ chứa): PDF có tên phiếu, Name/Class/Date, dòng "A1 Movers · 25 minutes", khung "My goal", đầu/chân trang; trang A4 hiện không in tên phiếu và không có chỗ cho các dòng này, nên AI nhét "My goal" vào `Ghi chú` của Task 1 (thành hướng dẫn của Task 1, sai chỗ).
+  2. *Bài 1 sai thứ tự:* MD đặt `Bài đọc:` trong Task 1 sau ô tick; app luôn in bài đọc trước câu hỏi nên học sinh đọc truyện trước khi dự đoán, ngược PDF. Cách tạm bằng prompt: bài đọc đặt trong `### Phần:` sau phần tick.
+  3. *Bài 5 (xếp thứ tự):* số câu 1–4 ở lề trùng với số học sinh phải điền, trông như đã điền sẵn; chưa có tùy chọn bỏ số câu khi có nhiều câu.
+  4. *Ô tick 4 lựa chọn một hàng:* cột đều nên "farm animals" và "a football match" bị gãy dòng; chế độ "Tự xuống dòng" tránh được nhưng "Tự động" chưa chọn nó.
+  5. Dòng "Self-check:" mất nhãn (tên phần không hiển thị).
 
 ### 16.10 Font chữ phiếu (v69, 25/10/2026 tối, lần 3)
 - **Yêu cầu:** người dùng thích bộ font trong ảnh chụp, muốn chọn font ở thông số phiếu: font hiện tại / font trong ảnh / một font khác hợp.

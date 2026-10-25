@@ -34,4 +34,4 @@ Mỗi test in `PASS`/`FAIL` và dòng cuối `ALL OK` hoặc `SOME FAIL`. `test2
 - `tests/`: bộ test Playwright, ảnh và MD mẫu.
 - `fonts/`: font nhúng (giấy phép SIL OFL, kèm file giấy phép).
 
-Bản v70.
+Bản v71.

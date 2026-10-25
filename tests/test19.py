@@ -8,7 +8,7 @@ with sync_playwright() as p:
     pg.on('console',lambda m: errs.append(m.text) if m.type=='error' and 'ERR_' not in m.text and 'font' not in m.text.lower() else None)
     pg.on('pageerror',lambda e: errs.append('PAGEERR '+str(e)))
     pg.goto(F); pg.wait_for_timeout(1500)
-    chk('badge v70', pg.evaluate("document.getElementById('verBadge').textContent")=='v70')
+    chk('badge v71', pg.evaluate("document.getElementById('verBadge').textContent")=='v71')
     # 1. 80/20 cho T4 + A6
     chk('T4+A6 mặc định 80', pg.evaluate("ratioOf(ws.tasks[12])")==80)
     chk('T4+A6 khoảng 50-90', pg.evaluate("rmeta(ws.tasks[12],'T4').range")==[50,90])
@@ -32,6 +32,18 @@ with sync_playwright() as p:
     pg.click('#jsonBtn'); pg.wait_for_timeout(200)
     chk('JSON: tiêu đề + nội dung trả về', pg.evaluate("document.getElementById('dlgTitle').textContent.includes('JSON') && document.getElementById('jsonOut').value.trim().startsWith('{')"))
     pg.click('#closeDlg')
+    # v71: phiếu thật Sunny Farm (MD do AI tạo bằng prompt v68, giữ nguyên): nhãn lựa chọn thẳng dòng đầu, cách chữ 2–2,2 mm
+    import os
+    md=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'real','sunny-farm-prompt68.md'),encoding='utf-8').read()
+    pg.click('#tree [data-newsheet]'); pg.wait_for_timeout(300); pg.fill('#pasteTa',md); pg.wait_for_timeout(800)
+    tb=pg.inner_text('#pasteOut')
+    chk('Sunny Farm: 6 Task (Task 4 có 2 phần, Task 6 có 3 phần)', '6 Task (Task 4 có 2 phần, Task 6 có 3 phần)' in tb, tb[:100])
+    pg.click('#pasteOk'); pg.wait_for_timeout(300)
+    if pg.is_visible('#pasteOk'): pg.click('#pasteOk'); pg.wait_for_timeout(1500)
+    chk('Sunny Farm: 0 tràn', pg.inner_text('#diagBadge')=='Không lỗi tràn', pg.inner_text('#diagBadge'))
+    m=pg.evaluate("""()=>[...document.querySelectorAll('.opt')].map(o=>{const l=o.querySelector('b,i'),s=o.querySelector('span'),lr=l.getBoundingClientRect(),rg=document.createRange();rg.selectNodeContents(s);const f=rg.getClientRects()[0];return [Math.abs((lr.top+lr.height/2)-(f.top+f.height/2)),(s.getBoundingClientRect().left-lr.right)/3.7795, rg.getClientRects().length]})""")
+    chk('nhãn Ⓐ/ô tick thẳng giữa dòng đầu (lệch <= 1.5 px), cả lựa chọn hai dòng', len(m)>=8 and all(x[0]<=1.5 for x in m) and any(x[2]>=2 for x in m), m[:4])
+    chk('khoảng cách nhãn -> chữ 2–2,2 mm (đo trên màn hình thu nhỏ 85%: 1,6–1,9)', all(1.6<=x[1]<=1.95 for x in m), [round(x[1],2) for x in m][:4])
     chk('0 lỗi console', not errs, errs)
     b.close()
 print('ALL OK' if ok else 'SOME FAIL')
