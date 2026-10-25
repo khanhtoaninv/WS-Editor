@@ -1,8 +1,8 @@
 # Prompt đưa PDF phiếu bài tập vào WS Editor
 
-Cập nhật: 2026-10-25 (tối), dùng với prototype **v67**. Bản này sửa theo lần thử thật đầu tiên (phiếu “A Surprise Birthday Party”): bỏ dòng mẫu “Nội dung:” làm AI chép theo, thêm quy tắc bỏ “giàn giáo” của bản gốc, ô tick ☐, lựa chọn xuống dòng, tách Task trộn loại, và một ví dụ đầy đủ.
+Cập nhật: 2026-10-25 (tối, lần 2), dùng với prototype **v68**. Bản v67 bảo AI "tách Task trộn loại" nên phiếu “A Surprise Birthday Party” ra 8 Task trong khi PDF có 6. Bản này sửa: **một bài của PDF = một `## Task`**; bài gốc có nhiều phần với chỗ trả lời khác nhau thì các phần sau là `### Phần:` (app nối vào Task trên, cùng số Task, mỗi phần giữ đáp án riêng). Vẫn giữ các quy tắc v67: không chép “Nội dung:”, bỏ “giàn giáo” của bản gốc, ô tick ☐, lựa chọn xuống dòng.
 
-Cách dùng: mở một AI đọc được PDF (Claude, ChatGPT, Gemini…), đính kèm PDF, dán MỘT trong hai prompt dưới đây. Lưu kết quả thành file `.md` (hoặc `.json`), rồi trong app bấm **+ Phiếu** (cả phiếu) hoặc **+ Task** (thêm vào phiếu đang mở) → Chọn file. Xem bảng nhận diện trước khi bấm tạo: dòng xanh là app đã tự xử lý, dòng đỏ là chỗ phải sửa.
+Cách dùng: mở một AI đọc được PDF (Claude, ChatGPT, Gemini…), đính kèm PDF, dán MỘT trong hai prompt dưới đây. Lưu kết quả thành file `.md` (hoặc `.json`), rồi trong app bấm **+ Phiếu** (cả phiếu) hoặc **+ Task** (thêm vào phiếu đang mở) → Chọn file. Xem bảng nhận diện trước khi bấm tạo: dòng xanh là app đã tự xử lý, dòng đỏ là chỗ phải sửa. Dòng đầu bảng nên khớp số bài của PDF (vd “6 Task (Task 6 có 3 phần)”).
 
 Nên chọn cách nào:
 - **Cách B (MD) — khuyến nghị.** Ngắn, dễ đọc, dễ sửa tay. Cấu trúc đầy đủ ở `docs/QUY_UOC_MD.md`.
@@ -20,11 +20,11 @@ Trả về DUY NHẤT một khối ```markdown, rồi mục "GHI CHÚ" ngắn.
 NGUYÊN TẮC
 1. Chép nguyên văn tiếng Anh (giữ dấu câu, chữ hoa, ’ …). Không sửa, không dịch, không bịa câu hay đáp án.
 2. Không cần giống bố cục PDF. Người học chỉ cần hiểu phải làm gì.
-3. Mỗi hoạt động = một Task, đúng thứ tự. MỖI TASK CHỈ CÓ MỘT LOẠI CHỖ TRẢ LỜI. Hoạt động gốc trộn nhiều loại (vd điền bảng + tick một ý + hoàn thành câu) thì tách thành nhiều Task liên tiếp.
+3. MỘT BÀI CỦA PDF = MỘT "## Task", đúng thứ tự và ĐÚNG SỐ LƯỢNG (PDF có TASK 1…6 thì file có đúng 6 dòng "## Task"). KHÔNG tách một bài của PDF thành nhiều Task. Mỗi "## Task" hay "### Phần" chỉ có MỘT loại chỗ trả lời. Bài gốc có nhiều phần với chỗ trả lời khác nhau (vd điền bảng + tick một ý + hoàn thành câu) thì: phần đầu viết ngay dưới "## Task:"; mỗi phần sau mở bằng một dòng "### Phần: <tên phần>" với "Hướng dẫn:" và "Trả lời:" riêng của phần đó. Chỉ chép "Hướng dẫn:" của phần khi PDF có câu lệnh riêng cho phần đó; không có thì bỏ trống, KHÔNG chép lại hướng dẫn của phần trước.
 4. KHÔNG CHÉP "GIÀN GIÁO" CỦA BẢN GỐC, vì app tự vẽ:
    - gạch ___ hay dòng kẻ ở cuối câu khi học sinh viết câu trả lời hoặc chọn Đúng/Sai (chỗ viết nằm SAU câu, không phải một phần của câu);
    - dòng "My answer: A / B / C", dòng chỉ có gạch "________";
-   - đầu phiếu: Name / Class / Date, số trang, thời gian từng bài ("3 min"), nhãn phần ("Before you read").
+   - đầu / cuối trang: Name / Class / Date, số trang, tên phiếu lặp lại ("READING WORKSHEET"), thời gian từng bài ("3 min"), nhãn phần ("Before you read").
    Giữ ___ khi chỗ trống là MỘT PHẦN CỦA CÂU, học sinh điền hoặc chọn từ vào đó (vd "She ___ a teacher.", "Place of the party: ___", "It is a ___. A. cat B. dog").
 5. Không viết dòng tiêu đề phần như "Nội dung:", "Content:". Câu đi ngay dưới các dòng trường.
 6. Ảnh: không tạo ảnh, chỉ ghi TÊN NGẮN dạng [ảnh: tên].
@@ -35,7 +35,7 @@ QUY ƯỚC
 # Tên phiếu
 Tuổi: 7-9                                  (5-6 | 7-9 | 10-12)
 
-## Task: <tiêu đề bài>                     (mỗi Task bắt đầu bằng dòng này)
+## Task: <tiêu đề bài>                     (mỗi bài của PDF bắt đầu bằng dòng này)
 Hướng dẫn: <lệnh / hướng dẫn của bài>
 Trả lời: <BẮT BUỘC, một trong: viết từ | điền chỗ trống | viết câu | khoanh A/B/C | chọn trong câu | tick | đúng/sai | nối | tô chữ | không>
 Dòng viết: 1                               (chỉ với "viết câu": số dòng mỗi câu)
@@ -45,6 +45,11 @@ Track: Track 05                            (nếu là bài nghe)
 Lời dẫn: <câu dẫn trước hội thoại>
 Ghi chú: <lời nhắc nằm dưới bài trong bản gốc>
 <rồi đến các câu, theo các cách viết dưới đây>
+
+### Phần: <tên phần>                       (CHỈ khi bài gốc có nhiều phần với chỗ trả lời khác nhau; cùng số Task)
+Hướng dẫn: <câu lệnh riêng của phần, bỏ trống nếu PDF không có>
+Trả lời: <loại chỗ trả lời của phần này>
+<các câu của phần này>
 
 CÁCH VIẾT CÂU
 - Câu đánh số: 1. She ___ a teacher.
@@ -72,7 +77,7 @@ CHỌN "Trả lời:"
 - "chọn một trong các từ rồi viết câu" → Khung từ + điền chỗ trống
 - bảng, ô chữ, hỏi đáp miệng, tô màu → không
 
-ĐÁP ÁN (chỉ khi PDF có), đặt CUỐI file:
+ĐÁP ÁN (chỉ khi PDF có), đặt CUỐI file. Số "Task n" là số của bài trong PDF; bài nhiều phần thì liệt kê đáp án liền nhau qua các phần, theo thứ tự câu:
 ## Đáp án
 ### Task 1
 1. cat
@@ -80,14 +85,15 @@ CHỌN "Trả lời:"
 Task 2: is; are; an
 
 TỰ KIỂM TRA TRƯỚC KHI TRẢ LỜI
-- Mỗi Task có "## Task:" và "Trả lời:"; không có dòng "Nội dung:".
+- Số dòng "## Task" bằng đúng số bài đánh số trong PDF. Chỉ dùng "### Phần:" cho các phần phụ của MỘT bài.
+- Mỗi Task và mỗi Phần có "Trả lời:"; không có dòng "Nội dung:".
 - Số câu đúng bằng PDF; không còn ___ thừa ở cuối câu Đúng/Sai, viết câu.
-- Không Task nào trộn hai loại chỗ trả lời.
+- Không "Hướng dẫn:" nào bị chép lặp từ phần trước.
 - Bài đọc giữ đúng số đoạn.
 
-ĐẦU RA: một khối ```markdown, rồi GHI CHÚ: (1) chỗ đọc không rõ, (2) Task đã tách hoặc chọn dạng chưa chắc và vì sao, (3) ảnh cần tải lên theo từng Task.
+ĐẦU RA: một khối ```markdown, rồi GHI CHÚ: (1) chỗ đọc không rõ, (2) bài nào có nhiều phần (### Phần) và vì sao, (3) ảnh cần tải lên theo từng Task.
 
-VÍ DỤ ĐẦY ĐỦ (một phiếu đọc thật; bài 6 gốc trộn 3 loại nên tách thành Task 6 và 7):
+VÍ DỤ ĐẦY ĐỦ (một phiếu đọc thật, PDF có 6 bài; bài 6 gốc có 3 phần với chỗ trả lời khác nhau nên viết thành "## Task" + hai "### Phần"):
 ```markdown
 # A Surprise Birthday Party
 Tuổi: 7-9
@@ -133,16 +139,19 @@ Trả lời: khoanh A/B/C
    B. The friends were sleeping.
    C. Ben was not at home.
 
-## Task: Story Map
+## Task: Story Map & My Idea
 Hướng dẫn: Complete the story map with words from the story.
 Trả lời: điền chỗ trống
 1. Place of the party: ___
 2. Food at the party (two things): ___
 
-## Task: My Idea
-Hướng dẫn: Which party activity would you like best? Choose one and finish the sentence.
+### Phần: My Idea – Tick One
+Hướng dẫn: Which party activity would you like best? Tick one and finish the sentence.
+Trả lời: tick
+☐ eating cake ☐ playing games ☐ singing songs
+
+### Phần: My Idea – Finish the Sentence
 Trả lời: điền chỗ trống
-Khung từ: eating cake, playing games, singing songs
 1. I would like ___ because ___.
 ```
 ````
@@ -156,8 +165,8 @@ Bạn chuyển phiếu bài tập tiếng Anh (PDF đính kèm) sang JSON cho ap
 
 NGUYÊN TẮC
 1. Chép nguyên văn tiếng Anh. Không sửa, không dịch, không bịa câu hay đáp án. Không cần giống bố cục PDF.
-2. Mỗi hoạt động = một Task, đúng thứ tự. MỖI TASK CHỈ MỘT LOẠI ĐÁP ÁN; hoạt động trộn nhiều loại thì tách thành nhiều Task.
-3. KHÔNG CHÉP GIÀN GIÁO: không để ___ ở cuối câu khi đáp án là Đúng/Sai, viết câu, viết từ (chỗ viết nằm sau câu); không có câu "My answer: A / B / C"; không chép Name/Class, thời gian từng bài, nhãn phần. Chỉ giữ ___ khi chỗ trống nằm trong câu hoặc sau nhãn ("Place of the party: ___").
+2. Mỗi bài của PDF = MỘT số thứ tự Task, đúng thứ tự và đúng số lượng. MỖI TASK CHỈ MỘT LOẠI ĐÁP ÁN. Bài gốc có nhiều phần với chỗ trả lời khác nhau: phần đầu là một Task; mỗi phần sau là một Task riêng ngay sau đó với "layout.break":"join" (app nối nó vào Task trên: không số, không tiêu đề, cùng số Task). Với phần nối: "title" = tên phần, "instruction" chỉ chép câu lệnh riêng của phần ('' nếu PDF không có; không chép lặp hướng dẫn phần trước).
+3. KHÔNG CHÉP GIÀN GIÁO: không để ___ ở cuối câu khi đáp án là Đúng/Sai, viết câu, viết từ (chỗ viết nằm sau câu); không có câu "My answer: A / B / C"; không chép Name/Class, tên phiếu lặp lại ở đầu trang, thời gian từng bài, nhãn phần. Chỉ giữ ___ khi chỗ trống nằm trong câu hoặc sau nhãn ("Place of the party: ___").
 4. Ảnh chỉ ghi TÊN NGẮN. Đáp án đúng chỉ khi PDF có (trường "key"). Mọi "id" duy nhất.
 5. Lời nhắc nằm dưới bài trong bản gốc: nối vào cuối "instruction".
 
@@ -171,7 +180,7 @@ KHUNG MỘT TASK
  "spacing":{"preset":null,"overrides":{}},
  "layout":{"task":"auto","split":null,"cols":null,"dir":null,"align":null,"valign":null,"width":null,"cw":null,"rowH":null,"whoW":null,"colGap":null,"break":null,"frame":{},"cells":null,"table":null}}
 - "audio": "Track 05" nếu bài nghe. "image": {"label":"the park","size":"medium","ar":"4/3"} cho một tranh chung ("large" nếu tranh lớn để tô/nhìn). "wordBank": {"words":["a","b"],"placement":"top","style":"chips","label":"none"}.
-- "spacing" và "layout" chép y nguyên như trên.
+- "spacing" và "layout" chép y nguyên như trên; riêng phần nối vào Task trên đặt "break":"join".
 
 DẠNG NỘI DUNG ("content")
 (a) Danh sách câu: {"form":"list","items":[{"id":"q1","text":"She ___ a teacher.","opts":["am","is","are"],"key":"is"}]}
@@ -192,7 +201,7 @@ LOẠI ĐÁP ÁN ("answer")
 - Viết một từ:                 {"kind":"word","attach":"item","layout":"A2","params":{}}
 - Điền chỗ trống ___ trong câu: {"kind":"word","attach":"inline","layout":"A2","params":{"lenMode":"fill","lines":1,"start":"inline"}}
 - Viết câu (dòng kẻ):          {"kind":"sentence","attach":"item","layout":"A1","params":{"lines":1}}
-- Khoanh A/B/C:                {"kind":"choice","attach":"item","layout":"A4","params":{}}
+- Khoanh A/B/C:                {"kind":"choice","attach":"item","layout":"A4","params":{"upper":true}}   (chữ hoa A B C; bỏ "upper" nếu bản gốc dùng a b c)
 - Tick lựa chọn bằng chữ (☐):  {"kind":"choice","attach":"item","layout":"A4","params":{"lab":"box"}}
 - Chọn trong câu {a|b}:        {"kind":"choice","attach":"inline","layout":"A4","params":{}}
 - Nghe và tick ảnh:            {"kind":"tick","attach":"item","layout":"A5","params":{}}
@@ -201,16 +210,16 @@ LOẠI ĐÁP ÁN ("answer")
 - Tô chữ:                      {"kind":"trace","attach":"item","layout":"A8","params":{"repeat":3}}
 - Không có chỗ trả lời:        {"kind":"none","attach":"item","layout":null,"params":{}}
 
-TỰ KIỂM TRA: JSON hợp lệ (không có chú thích //); số câu đúng PDF; không còn ___ thừa; không Task nào trộn hai loại đáp án; id duy nhất.
+TỰ KIỂM TRA: JSON hợp lệ (không có chú thích //); số Task đúng số bài PDF (phần nối "break":"join" không tính là bài mới); số câu đúng PDF; không còn ___ thừa; không Task nào trộn hai loại đáp án; không lặp hướng dẫn; id duy nhất.
 
-ĐẦU RA: một khối ```json, rồi GHI CHÚ: (1) chỗ đọc không rõ, (2) Task đã tách hoặc chọn dạng chưa chắc, (3) ảnh cần tải lên theo từng Task.
+ĐẦU RA: một khối ```json, rồi GHI CHÚ: (1) chỗ đọc không rõ, (2) bài nào có phần nối và vì sao, (3) ảnh cần tải lên theo từng Task.
 ````
 
 ---
 
 ## Sau khi AI trả kết quả
 1. Lưu thành `ten-phieu.md` (hoặc `.json`). Nếu AI bọc trong ``` thì bỏ dòng ``` đầu và cuối.
-2. App → **+ Phiếu** → Chọn file… Xem **bảng nhận diện**: số Task, mô tả từng Task, ghi chú (xanh: app đã tự xử lý), cảnh báo (đỏ: cần sửa), ước tính số trang.
-3. Dòng đỏ: sửa trong cột trái, hoặc nhờ AI sửa lại đúng Task đó rồi nạp lại.
+2. App → **+ Phiếu** → Chọn file… Xem **bảng nhận diện**: số Task (bài nhiều phần hiện 6a, 6b, 6c), mô tả từng Task, ghi chú (xanh: app đã tự xử lý), cảnh báo (đỏ: cần sửa), ước tính số trang. Đối chiếu số Task với PDF.
+3. Dòng đỏ: sửa trong cột trái, hoặc nhờ AI sửa lại đúng Task đó rồi nạp lại. Nếu một Task bị tách nhầm thành hai: chọn Task phía sau, mục Ngắt trang → **Nối vào Task trên** (hoặc nút ↳ ở cột trái).
 4. Tải ảnh thật vào các ô ảnh (nút + trên từng ô).
 5. Gặp dạng bài mà prompt không diễn đạt được: báo lại để mở rộng app theo quy trình 3 bước.

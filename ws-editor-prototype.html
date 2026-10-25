@@ -1,9 +1,10 @@
 <meta charset="utf-8">
 <title>WS Editor</title>
-<!-- v67: nhập MD theo phiếu thật đầu tiên — lựa chọn A/B/C mỗi dòng một lựa chọn, ô tick ☐ thành Lựa chọn (A4) nhãn ô tick, bỏ dòng "Nội dung:" / "My answer" / dòng kẻ / gạch ___ thừa, lời nhắc cuối bài và "Ghi chú:" vào hướng dẫn, bài đọc giữ đoạn, hội thoại chỉ qua khối "Hội thoại:", dòng nhãn lạ có ghi chú; cảnh báo mới (lỗi chữ, câu giống tiêu đề, chỗ trả lời trùng, ký hiệu ô tick sót). v66: font Andika + Be Vietnam Pro nhúng sẵn (thư mục fonts/), nạp trước nhóm ký tự tiếng Việt, đổi font không dựng lại cột trái. v65: P2 nhập file — quy ước MD trung gian ("## Task: …", trường "Tên: giá trị", khối Bài đọc / Hội thoại / Ô chữ, "## Đáp án" riêng), bộ đọc readMd dùng chung lớp nhập. v64: P1 nhập file — cột trái chỉ còn "+ Task" (thẻ Mẫu có sẵn | Từ file / dán, Task luôn vào cuối phiếu) và "+ Phiếu" (từ file / dán, để trống = phiếu rỗng, xác nhận + tải JSON cũ trước khi thay); bỏ nút "Dán…"; bảng nhận diện sơ bộ (số theo file, tiêu đề, mô tả, số câu, cảnh báo, ước tính số trang); một lần nhập = một bước hoàn tác. v63: P0 nhập file — nạp JSON thiếu trường tự bù (fillSheet/fillTask), nạp lỗi không đổi phiếu đang mở, Task không tên lấy tiêu đề/mô tả, hộp Dán nhận ra JSON, tự chọn "Cả đề", cảnh báo dán dài, báo vị trí chèn. v62: bảng có thể kèm khung từ (ô chữ = bảng chữ cái + khung từ). v61: mở Task nào cũng chỉ mở khu vực 3 Nội dung (1, 2, 4 thu lại), bất kể lần trước mở gì. v60: dán bài — bộ đoán trả về cấu hình (khung + thành phần + loại đáp án), mẫu chỉ áp khi người dùng chọn. v59: gọn mẫu 15 → 13 (gộp 3 mẫu bảng thành "Bảng", "Tranh" → "Tô màu / vẽ"). v58: "Công thức" → "Áp mẫu…" (áp một lần, mẫu chia nhóm); thẻ dạng bài và tóm tắt hiện mô tả thành phần (descOf). v57: bỏ dạng "Tranh" — Task chỉ có ảnh = Danh sách câu 0 câu + Ảnh chung; công tắc "Danh sách câu" (tắt = ẩn, giữ câu + đáp án). v56: QR bo góc. v55: mã QR nghe cho bài có Track. v54: thẻ câu không tô đậm lề trái. v53: viền Task xám, đệm hai bên rộng hơn, thanh tên Task cao bằng thanh khu vực và nền xanh. v52: Task mở nằm trong một thẻ có viền; Task đang thao tác được đánh dấu trên trang; cột trái rộng 360. v51: mặc định chỉ mở thẻ Nội dung. v50: bảng — chiều cao hàng mặc định 14 mm (cả hàng tiêu đề). v49: ảnh chung giữ khung cố định, ảnh thật nằm trong khung; T5 Fit dọc giữ tỉ lệ. v48: khung ảnh cố định cho mọi bài ảnh từng câu (bảng, danh sách, lưới T5). v47: Dùng ảnh này không còn qua fetch/blob. v46: popup ảnh — chỉnh nháp, chỉ lưu khi bấm Dùng ảnh này -->
+<!-- v69: Font chữ phiếu (Andika / Be Vietnam Pro / Lexend) ở panel Phiếu, lưu ở ws.font -->
+<!-- v68: Task nối vào Task trên (một Task của phiếu gốc có nhiều phần, mỗi phần giữ đáp án riêng): lựa chọn thứ 4 của mục Ngắt trang, không số / tiêu đề, giữ liền Task trên, cách trên bằng khoảng cách giữa các nhóm; MD: "### Phần: …" trong "## Task"; nhãn lựa chọn A. B. C. giữ chữ hoa; câu duy nhất không đánh số. v67: nhập MD theo phiếu thật đầu tiên — lựa chọn A/B/C mỗi dòng một lựa chọn, ô tick ☐ thành Lựa chọn (A4) nhãn ô tick, bỏ dòng "Nội dung:" / "My answer" / dòng kẻ / gạch ___ thừa, lời nhắc cuối bài và "Ghi chú:" vào hướng dẫn, bài đọc giữ đoạn, hội thoại chỉ qua khối "Hội thoại:", dòng nhãn lạ có ghi chú; cảnh báo mới (lỗi chữ, câu giống tiêu đề, chỗ trả lời trùng, ký hiệu ô tick sót). v66: font Andika + Be Vietnam Pro nhúng sẵn (thư mục fonts/), nạp trước nhóm ký tự tiếng Việt, đổi font không dựng lại cột trái. v65: P2 nhập file — quy ước MD trung gian ("## Task: …", trường "Tên: giá trị", khối Bài đọc / Hội thoại / Ô chữ, "## Đáp án" riêng), bộ đọc readMd dùng chung lớp nhập. v64: P1 nhập file — cột trái chỉ còn "+ Task" (thẻ Mẫu có sẵn | Từ file / dán, Task luôn vào cuối phiếu) và "+ Phiếu" (từ file / dán, để trống = phiếu rỗng, xác nhận + tải JSON cũ trước khi thay); bỏ nút "Dán…"; bảng nhận diện sơ bộ (số theo file, tiêu đề, mô tả, số câu, cảnh báo, ước tính số trang); một lần nhập = một bước hoàn tác. v63: P0 nhập file — nạp JSON thiếu trường tự bù (fillSheet/fillTask), nạp lỗi không đổi phiếu đang mở, Task không tên lấy tiêu đề/mô tả, hộp Dán nhận ra JSON, tự chọn "Cả đề", cảnh báo dán dài, báo vị trí chèn. v62: bảng có thể kèm khung từ (ô chữ = bảng chữ cái + khung từ). v61: mở Task nào cũng chỉ mở khu vực 3 Nội dung (1, 2, 4 thu lại), bất kể lần trước mở gì. v60: dán bài — bộ đoán trả về cấu hình (khung + thành phần + loại đáp án), mẫu chỉ áp khi người dùng chọn. v59: gọn mẫu 15 → 13 (gộp 3 mẫu bảng thành "Bảng", "Tranh" → "Tô màu / vẽ"). v58: "Công thức" → "Áp mẫu…" (áp một lần, mẫu chia nhóm); thẻ dạng bài và tóm tắt hiện mô tả thành phần (descOf). v57: bỏ dạng "Tranh" — Task chỉ có ảnh = Danh sách câu 0 câu + Ảnh chung; công tắc "Danh sách câu" (tắt = ẩn, giữ câu + đáp án). v56: QR bo góc. v55: mã QR nghe cho bài có Track. v54: thẻ câu không tô đậm lề trái. v53: viền Task xám, đệm hai bên rộng hơn, thanh tên Task cao bằng thanh khu vực và nền xanh. v52: Task mở nằm trong một thẻ có viền; Task đang thao tác được đánh dấu trên trang; cột trái rộng 360. v51: mặc định chỉ mở thẻ Nội dung. v50: bảng — chiều cao hàng mặc định 14 mm (cả hàng tiêu đề). v49: ảnh chung giữ khung cố định, ảnh thật nằm trong khung; T5 Fit dọc giữ tỉ lệ. v48: khung ảnh cố định cho mọi bài ảnh từng câu (bảng, danh sách, lưới T5). v47: Dùng ảnh này không còn qua fetch/blob. v46: popup ảnh — chỉnh nháp, chỉ lưu khi bấm Dùng ảnh này -->
 <!-- v37: cột trái dạng accordion + khu vực + kéo độ rộng -->
 <meta name="claude:viewport-fit-sides" content="cover">
-<!-- Font nhúng sẵn trong thư mục fonts/ (Andika, Be Vietnam Pro; giấy phép SIL OFL), không cần mạng -->
+<!-- Font nhúng sẵn trong thư mục fonts/ (Andika, Be Vietnam Pro, Lexend; giấy phép SIL OFL), không cần mạng -->
 <style>
 @font-face{font-family:'Andika';font-style:normal;font-display:swap;font-weight:400;src:url(fonts/andika-vietnamese-400-normal.woff2) format('woff2');unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
 @font-face{font-family:'Andika';font-style:normal;font-display:swap;font-weight:400;src:url(fonts/andika-latin-ext-400-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
@@ -20,6 +21,15 @@
 @font-face{font-family:'Be Vietnam Pro';font-style:normal;font-display:swap;font-weight:600;src:url(fonts/be-vietnam-pro-vietnamese-600-normal.woff2) format('woff2');unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
 @font-face{font-family:'Be Vietnam Pro';font-style:normal;font-display:swap;font-weight:600;src:url(fonts/be-vietnam-pro-latin-ext-600-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:'Be Vietnam Pro';font-style:normal;font-display:swap;font-weight:600;src:url(fonts/be-vietnam-pro-latin-600-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Be Vietnam Pro';font-style:normal;font-display:swap;font-weight:700;src:url(fonts/be-vietnam-pro-vietnamese-700-normal.woff2) format('woff2');unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+@font-face{font-family:'Be Vietnam Pro';font-style:normal;font-display:swap;font-weight:700;src:url(fonts/be-vietnam-pro-latin-ext-700-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Be Vietnam Pro';font-style:normal;font-display:swap;font-weight:700;src:url(fonts/be-vietnam-pro-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Lexend';font-style:normal;font-display:swap;font-weight:400;src:url(fonts/lexend-vietnamese-400-normal.woff2) format('woff2');unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+@font-face{font-family:'Lexend';font-style:normal;font-display:swap;font-weight:400;src:url(fonts/lexend-latin-ext-400-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Lexend';font-style:normal;font-display:swap;font-weight:400;src:url(fonts/lexend-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Lexend';font-style:normal;font-display:swap;font-weight:700;src:url(fonts/lexend-vietnamese-700-normal.woff2) format('woff2');unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+0300-0301,U+0303-0304,U+0308-0309,U+0323,U+0329,U+1EA0-1EF9,U+20AB}
+@font-face{font-family:'Lexend';font-style:normal;font-display:swap;font-weight:700;src:url(fonts/lexend-latin-ext-700-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Lexend';font-style:normal;font-display:swap;font-weight:700;src:url(fonts/lexend-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 </style>
 <style>
 /* Layout: 3 vùng — cây container | trang A4 thật | Inspector. Giấy luôn trắng ở cả hai theme. */
@@ -212,6 +222,9 @@ dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 .task.over{outline:.6mm solid var(--danger);outline-offset:.4mm}
 .g0{display:flex;gap:var(--ng);align-items:flex-start}
 .num{flex:none;width:var(--nd);height:var(--nd);border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-weight:700;font-size:.82em}
+.g0.jn{padding-left:var(--gut)}
+.g0.jn .g0t{padding-left:0}
+.tnode .n.pt{border-radius:99px;padding:0 5px}
 .g0t{display:flex;flex-wrap:wrap;column-gap:2.5mm;row-gap:.5mm;align-items:baseline;min-width:0}
 .ttl{font-weight:700}
 .cont{font-weight:400;color:var(--ink-3)}
@@ -669,7 +682,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 
 <div class="app">
   <header class="top">
-    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v67</span> <small id="wsTitle"></small></div>
+    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v69</span> <small id="wsTitle"></small></div>
     <div class="tb">
       <label for="age" class="hint" style="margin:0">Độ tuổi</label>
       <select id="age"><option value="5-6">5–6</option><option value="7-9">7–9</option><option value="10-12">10–12</option></select>
@@ -3361,7 +3374,9 @@ function tplOf(t) { const L = layoutOf(t); if (L === 'T7') { const c = t7cw(t); 
 function sheetSpacing() { return Object.assign({}, PRESETS[ws.spacing.preset] || PRESETS.normal, ws.spacing.overrides); }
 function inheritedSpacing(t) { return Object.assign(sheetSpacing(), PRESETS[t.spacing.preset] || {}); }
 function spacingOf(t) { return Object.assign(inheritedSpacing(t), t.spacing.overrides); }
-const gapOf = t => spacingOf(t).gapTask;
+// Nối vào Task trên (layout.break = 'join'): phần tiếp của Task phía trên, không số / tiêu đề. Task đầu phiếu không nối được.
+const isJoined = t => !!t && t.layout && t.layout.break === 'join' && ws.tasks.indexOf(t) > 0;
+const gapOf = t => isJoined(t) ? spacingOf(t).groupGap : spacingOf(t).gapTask;
 function attachOpts(t) {
   const a = t.answer, q = ck(t) === 'questions';
   const gap = ck(t) === 'dialogue' || (q && its(t).some(x => x.text.includes('___')));
@@ -3499,7 +3514,7 @@ const AI = { top: 'start', center: 'center', bottom: 'end' };
 function renderTask(t, frag, mt) {
   const L = layoutOf(t), sp = spacingOf(t), age = AGE[ws.age], cont = !!(frag && frag.cont), lay = t.layout, fr = frOf(t);
   const first = !frag || (frag.a === 0 && !frag.cont);
-  let style = `--pad:${sp.padTask}mm;--hg:${sp.headGap}mm;--gg:${sp.groupGap}mm;--ig:${sp.itemGap}mm;--fs:${age.font}pt;--nd:${(age.font * 0.3528 * 1.35).toFixed(2)}mm;--ng:2.5mm;--gut:calc(var(--nd) + var(--ng));--padx:${sheetSpacing().padTask}mm;--padt:3mm;--cols:${colsOf(t)};--tpl:${tplOf(t)};--img:${fr.scale || 100};--ar:${t.image && t.image.ar ? t.image.ar : '4/3'}${imgStyle(t)}`;
+  let style = `--pad:${sp.padTask}mm;--hg:${sp.headGap}mm;--gg:${sp.groupGap}mm;--ig:${sp.itemGap}mm;--fs:${age.font}pt;--nd:${(age.font * 0.3528 * 1.35).toFixed(2)}mm;--ng:2.5mm;--gut:calc(var(--nd) + var(--ng));--padx:${sheetSpacing().padTask}mm;--padt:${isJoined(t) ? 0 : 3}mm;--cols:${colsOf(t)};--tpl:${tplOf(t)};--img:${fr.scale || 100};--ar:${t.image && t.image.ar ? t.image.ar : '4/3'}${imgStyle(t)}`;
   const t6w = L === 'T6' && !(t.wordBank && t.wordBank.placement === 'right');
   if (lay.width && t6w) style += `;--cw:${lay.width}`;
   if (lay.rowH && L === 'T7') style += `;--mrh:${lay.rowH}mm`;
@@ -3510,10 +3525,12 @@ function renderTask(t, frag, mt) {
     L === 'T5' && lay.align && cellDirOf(t) !== 'row' ? `data-ca="${lay.align}"` : '', frameH(t) ? 'data-ih="1"' : '',
     lay.valign && cellDirOf(t) !== 'row' ? `data-va="${lay.valign}"` : '', fr.valign && isColI(t) ? `data-iv="${fr.valign}"` : '',
     lay.width && t6w ? 'data-w2="1"' : '', lay.align && (t6w || L === 'T8') ? `data-al2="${lay.align}"` : ''].filter(Boolean).join(' ');
-  const g0 = cont ? '' : `<div class="g0" data-node="${t.id}:G0"><span class="num">${t.number}</span><div class="g0t"><span class="ttl">${esc(t.title)}</span>${t.audio ? `<span class="trk">${esc(t.audio)}</span>` : ''}<span class="ins">${esc(t.instruction)}</span></div>${qrHtml(t)}</div>`;
+  const g0 = cont ? '' : isJoined(t) ? (t.instruction ? `<div class="g0 jn" data-node="${t.id}:G0"><div class="g0t"><span class="ins">${esc(t.instruction)}</span></div></div>` : '') : `<div class="g0" data-node="${t.id}:G0"><span class="num">${t.number}</span><div class="g0t"><span class="ttl">${esc(t.title)}</span>${t.audio ? `<span class="trk">${esc(t.audio)}</span>` : ''}<span class="ins">${esc(t.instruction)}</span></div>${qrHtml(t)}</div>`;
   return `<section class="task L-${L}" data-node="${t.id}" data-task="${t.id}" ${at} style="${style}">${g0}${body(t, L, frag, first)}</section>`;
 }
 
+// Số câu ở lề số. Task chỉ có một câu thì không đánh số, vẫn giữ chỗ lề để chữ thẳng đường dóng.
+const ino = (n, i) => n === 1 ? '<span class="ino" style="visibility:hidden" aria-hidden="true">1</span>' : `<span class="ino">${i + 1}</span>`;
 function body(t, L, frag, first) {
   const k = ck(t), c = t.content, id = t.id;
   const g1 = t.image && first ? `<div class="g1" data-node="${id}:G1">${pic(t.image.label, t.image.size === 'large' && L === 'T1' ? 'big' : '', srcOf(t, 'G1'), { slot: 'G1', gar: t.image.ar })}</div>` : '';
@@ -3609,19 +3626,19 @@ function body(t, L, frag, first) {
   if (k === 'questions') {
     const qs = range(c.items, frag);
     if (L === 'T4') {
-      const rows = qs.map(([q, i]) => `<div class="c2" data-node="${id}:G2"><span class="ino">${i + 1}</span><span>${qtext(t, q)}</span></div><div class="c3" data-node="${id}:G3">${ans(t, q)}</div>`).join('');
+      const rows = qs.map(([q, i]) => `<div class="c2" data-node="${id}:G2">${ino(c.items.length, i)}<span>${qtext(t, q)}</span></div><div class="c3" data-node="${id}:G3">${ans(t, q)}</div>`).join('');
       return `<div class="body b1">${g4}<div class="tbl">${g1}${rows}</div></div>`;
     }
     const block = t.answer.attach === 'block';
-    const g2 = `<div class="g2 list" data-node="${id}:G2">${qs.map(([q, i]) => `<div class="q"><span class="ino">${i + 1}</span><div class="qb"><div class="qt">${qtext(t, q)}</div>${t.answer.attach === 'item' ? ans(t, q) : ''}</div></div>`).join('')}</div>`;
-    const g3 = block ? `<div class="g3 list" data-node="${id}:G3" style="--cols:1">${qs.map(([q, i]) => `<div class="q"><span class="ino">${i + 1}</span><div class="qb">${ans(t, q)}</div></div>`).join('')}</div>` : '';
+    const g2 = `<div class="g2 list" data-node="${id}:G2">${qs.map(([q, i]) => `<div class="q">${ino(c.items.length, i)}<div class="qb"><div class="qt">${qtext(t, q)}</div>${t.answer.attach === 'item' ? ans(t, q) : ''}</div></div>`).join('')}</div>`;
+    const g3 = block ? `<div class="g3 list" data-node="${id}:G3" style="--cols:1">${qs.map(([q, i]) => `<div class="q">${ino(c.items.length, i)}<div class="qb">${ans(t, q)}</div></div>`).join('')}</div>` : '';
     return place(L, g1, withBank(g2) + g3);
   }
 
   if (k === 'passage') {
     const g2 = `<div class="g2 passage" data-node="${id}:G2">${paraHtml(leadText(t))}</div>`;
     const qs = range(its(t), L === 'T8' ? frag : null);
-    const g3 = qs.length ? `<div class="g3 list" data-node="${id}:G3" style="--cols:1">${qs.map(([q, i]) => `<div class="q"><span class="ino">${i + 1}</span><div class="qb"><div class="qt">${esc(q.text)}</div>${ans(t, q)}</div></div>`).join('')}</div>` : '';
+    const g3 = qs.length ? `<div class="g3 list" data-node="${id}:G3" style="--cols:1">${qs.map(([q, i]) => `<div class="q">${ino(its(t).length, i)}<div class="qb"><div class="qt">${esc(q.text)}</div>${ans(t, q)}</div></div>`).join('')}</div>` : '';
     if (L === 'T8' && !first) return `<div class="body b1">${g3}</div>`;
     if (L === 'T8' && g1) return `<div class="body b1"><div class="wrapbox">${g1}${g2}</div>${g3}</div>`;
     if (L === 'T4') return `<div class="body b1">${g1}<div class="tbl tbl2" style="align-items:start"><div class="c2">${g2}</div><div>${g3}</div></div></div>`;
@@ -3663,7 +3680,8 @@ function fixesFor(t) {
   return f;
 }
 function paginate() {
-  ws.tasks.forEach((t, i) => t.number = i + 1);
+  let nn = 0; ws.tasks.forEach((t, i) => { t.part = ''; if (isJoined(t)) t.number = nn; else t.number = ++nn; });
+  ws.tasks.forEach((t, i) => { if (isJoined(t)) { let k = i; while (k > 0 && isJoined(ws.tasks[k])) k--; t.part = String.fromCharCode(97 + (i - k)); ws.tasks[k].part = 'a'; } });
   const H = CONTENT_H * MM, diags = [];
   const pages = [{ items: [], used: 0 }]; let cur = pages[0];
   const add = t => cur.items.length ? gapOf(t) * MM : 0;
@@ -3674,7 +3692,7 @@ function paginate() {
     const brk = t.layout.break;
     if (brk === 'page' && cur.items.length) newPage();                 // Sang trang mới
     const full = measure(t, null);
-    if (brk === 'keep' && cur.items.length && ti + 1 < ws.tasks.length) { // Giữ liền Task sau: Task sau phải bắt đầu được ở cùng trang
+    if ((brk === 'keep' || (ti + 1 < ws.tasks.length && isJoined(ws.tasks[ti + 1]))) && cur.items.length && ti + 1 < ws.tasks.length) { // Giữ liền Task sau: Task sau phải bắt đầu được ở cùng trang
       const nx = ws.tasks[ti + 1], need = full + gapOf(nx) * MM + firstPart(nx);
       if (cur.used + add(t) + need > H + .5 && need <= H) newPage();
     }
@@ -3726,7 +3744,7 @@ function drawPages(res) {
     const free = Math.max(0, (res.H - p.used) / MM), over = p.items.some(x => x.over), k = p.items.length;
     const extra = ws.fill && i < n - 1 && k > 1 ? Math.min(FILL_MAX, free / (k - 1)) : 0;
     const fill = Math.min(100, (p.used + extra * (k - 1) * MM) / res.H * 100);
-    const tasks = p.items.map((x, j) => { const h = renderTask(x.t, x.frag, j ? gapOf(x.t) + extra : 0); return x.over ? h.replace('class="task ', 'class="task over ') : h; }).join('');
+    const tasks = p.items.map((x, j) => { const h = renderTask(x.t, x.frag, j ? gapOf(x.t) + (isJoined(x.t) ? 0 : extra) : 0); return x.over ? h.replace('class="task ', 'class="task over ') : h; }).join('');
     return `<div class="pg-wrap"><div class="pg-scale"><div class="page" data-page="${i}"><div class="flow">${tasks}</div>${gd}<div class="pfoot"><span>${esc(ws.title)}</span><span>Trang ${i + 1}/${n}</span></div></div></div>` +
       `<div class="pstat ${over ? 'bad' : ''}">Trang ${i + 1} · ${over ? 'có Task tràn trang' : `còn trống ${Math.round(Math.max(0, free - extra * (k - 1)))} mm`}<span class="bar"><i style="width:${fill}%"></i></span></div></div>`;
   }).join('');
@@ -4175,9 +4193,9 @@ function applyScope(scope) {
   const src = k === 'cimgs' ? { type: 'group', id: t.id, g: 'G1', item: cellKeys(t, 'cimg')[0] } : sel;
   commit(w => {
     const ts = w.tasks.find(x => x.id === t.id);
-    if (k === 'task' && scope === 'type') { tg.forEach(s => { const x = w.tasks.find(y => y.id === s.id); x.layout = clone(ts.layout); x.spacing = clone(ts.spacing); x.answer.attach = ts.answer.attach; x.answer.layout = ts.answer.layout; x.answer.params = clone(ts.answer.params); tidy(x); }); return; }
+    if (k === 'task' && scope === 'type') { tg.forEach(s => { const x = w.tasks.find(y => y.id === s.id); const b0 = x.layout.break; x.layout = clone(ts.layout); x.layout.break = b0; x.spacing = clone(ts.spacing); x.answer.attach = ts.answer.attach; x.answer.layout = ts.answer.layout; x.answer.params = clone(ts.answer.params); tidy(x); }); return; }
     const pl = payloadOf(ts, src);
-    if (k === 'task' && scope === 'sheet') { tg.forEach(s => { const x = w.tasks.find(y => y.id === s.id); x.spacing = clone(ts.spacing); x.layout.break = ts.layout.break; }); return; }
+    if (k === 'task' && scope === 'sheet') { tg.forEach(s => { const x = w.tasks.find(y => y.id === s.id); x.spacing = clone(ts.spacing); if (x.layout.break !== 'join' && ts.layout.break !== 'join') x.layout.break = ts.layout.break; }); return; }
     tg.forEach(s => pasteInto(w.tasks.find(y => y.id === s.id), s, pl));
   }, `Đã áp cho ${tg.length} container`);
 }
@@ -4223,7 +4241,7 @@ function renderTree() {
   let h = `<div class="ttools"><button class="btn pri" data-lib="1" title="Thêm Task vào cuối phiếu: từ mẫu có sẵn, hoặc từ file / dán (JSON, MD, chữ)">+ Task</button><button class="btn" data-newsheet="1" title="Tạo phiếu mới: từ file JSON / MD / chữ, hoặc phiếu trống. Thay phiếu đang mở sau khi xác nhận.">+ Phiếu</button></div><button class="tnode ${sel.type === 'sheet' ? 'on' : ''}" data-sel="sheet"><b>Phiếu</b><span class="tag">${ws.tasks.length} Task</span></button><ul class="tks">`;
   for (const t of ws.tasks) {
     const open = openTask === t.id, on = isOnSel({ type: 'task', id: t.id });
-    h += `<li class="tk ${open ? 'open' : ''}${open && sel.type !== 'sheet' && sel.id === t.id ? ' cur' : ''}" data-tk="${t.id}"><div class="tkh"><button class="tnode ${on ? 'on' : open ? 'opn' : ''}" data-sel="task" data-id="${t.id}" aria-expanded="${open}"><span class="chev" title="${open ? 'Thu gọn Task' : 'Mở Task để soạn'}">▶</span><span class="n">${t.number}</span><span class="tnm">${esc(taskLabel(t))}</span>${hasOverride(t) ? '<span class="ovmark" title="Có chỉnh tay"></span>' : ''}</button></div>`;
+    h += `<li class="tk ${open ? 'open' : ''}${open && sel.type !== 'sheet' && sel.id === t.id ? ' cur' : ''}" data-tk="${t.id}"><div class="tkh"><button class="tnode ${on ? 'on' : open ? 'opn' : ''}" data-sel="task" data-id="${t.id}" aria-expanded="${open}"><span class="chev" title="${open ? 'Thu gọn Task' : 'Mở Task để soạn'}">▶</span><span class="n${t.part ? ' pt' : ''}">${t.number}${t.part || ''}</span><span class="tnm">${esc(taskLabel(t))}</span>${hasOverride(t) ? '<span class="ovmark" title="Có chỉnh tay"></span>' : ''}</button></div>`;
     if (open) h += `<div class="tkb">${edHtml(t)}</div>`;
     h += '</li>';
   }
@@ -4320,7 +4338,7 @@ function taskPanel(t, s) {
   if (L === 'T5' && t.content.variant !== 'multi') content += fSeg('dir', 'Hướng ô (ảnh so với chữ)', lay.dir, [['col', 'Ảnh trên'], ['row', 'Ảnh trái']], dirDefault(t));
   if (L === 'T9') content += tblStyle(t);
   if (cellImgMode(t)) content += `<p class="hint">Mỗi ảnh là một container: bấm vào ảnh trên trang để chỉnh riêng.</p>`;
-  const brk = fSeg('break', 'Trước và sau Task này', lay.break, [['auto', 'Tự động'], ['page', 'Sang trang mới'], ['keep', 'Giữ liền Task sau']], 'auto');
+  const brk = fSeg('break', 'Trước và sau Task này', lay.break, [['auto', 'Tự động'], ['page', 'Sang trang mới'], ['keep', 'Giữ liền Task sau'], ['join', 'Nối vào Task trên', ws.tasks[0] === t ? 'Task đầu phiếu không nối được' : '']], 'auto', { hint: lay.break === 'join' ? 'Phần tiếp của Task trên: không số, không tiêu đề (chỉ giữ hướng dẫn riêng nếu có), luôn đi liền Task trên, cách trên bằng khoảng cách giữa các nhóm. Mỗi phần giữ đáp án riêng.' : '' });
   return panel(t, s, `Task ${t.number} · ${esc(taskLabel(t))} ${cd(t.typeId)}`, { diag: diagFor(t), top: layoutPicker(t), size, align, content, cname: 'Kiểu trình bày', brk });
 }
 function tblSize(t) {
@@ -4423,6 +4441,7 @@ function sheetPanel() {
   return `<h2>Phiếu · ${esc(ws.title)}</h2><p class="hint" style="margin:0">${ws.tasks.length} Task · ${lastRes ? lastRes.pages.length : '–'} trang A4</p>
     ${d.map(diagBox).join('')}
     <h3>Xếp trang</h3><div class="field"><div class="seg">${[['cont', 'Liền trang'], ['page', 'Tách trang']].map(([k, n]) => `<button data-act="flow" data-v="${k}" class="${(ws.flow || 'cont') === k ? 'on' : ''}">${n}</button>`).join('')}</div><p class="hint" style="margin:0">${(ws.flow || 'cont') === 'page' ? 'Tách trang: mỗi trang chỉ chứa các Task trọn vẹn. Task không vừa chỗ còn lại sẽ sang trang mới.' : 'Liền trang: các Task nối tiếp nhau, lấp đầy trang; Task dài được cắt giữa 2 trang ở ranh giới item, hàng hoặc câu.'} Muốn một Task luôn sang trang mới hoặc giữ liền Task sau: chọn Task đó, mục Ngắt trang.</p></div>
+    <h3>Font chữ phiếu</h3><div class="field"><div class="seg">${Object.keys(FONTS).map(k => `<button data-act="font" data-v="${k}" class="${fontKey() === k ? 'on' : ''}" style="font-family:${FONTS[k].css}">${FONTS[k].name}</button>`).join('')}</div><p class="hint" style="margin:0">${FONTS[fontKey()].hint} Đổi font có thể đổi số trang; phiếu được dàn lại ngay.</p></div>
     <h3>Khoảng cách</h3><div class="field"><div class="seg">${[...Object.keys(PRESETS).map(k => [k, PRESET_NAME[k]]), ['free', 'Tự do']].map(([k, n]) => `<button data-act="sheet-preset" data-v="${k}" class="${sh === k ? 'on' : ''}">${n}</button>`).join('')}</div></div>
     <p class="hint" style="margin:0 0 4px">${sh === 'free' ? 'Tự do: các số do bạn nhập. Bấm Gọn, Vừa hoặc Thoáng để về bộ số chuẩn.' : 'Các số đi theo mức đã chọn. Sửa tay một số bất kỳ thì chuyển sang Tự do.'}</p>
     ${Object.keys(SP_LABEL).map(k => numRow('sheet', k, sp[k], sp[k], sh === 'free')).join('')}
@@ -4497,6 +4516,7 @@ document.getElementById('insp').addEventListener('click', e => {
   if (act === 'guides') { guides = v === '1'; document.getElementById('guidesBtn').classList.toggle('pri', guides); draw(); renderInspector(); return; }
   if (extraActs[act]) return extraActs[act](b, v);
   if (act === 'layout') commit(w => { const t = curT(w), fit = t.layout.frame.fit; Object.assign(t.layout, { task: v, split: null, cols: null, cw: null, width: null, align: null, valign: null }); t.layout.frame = fit ? { fit } : {}; });
+  else if (act === 'font') commit(w => { if (v === 'andika') delete w.font; else w.font = v; }, 'Font phiếu: ' + FONTS[v].name);
   else if (act === 'flow') commit(w => { w.flow = v; }, v === 'page' ? 'Tách trang' : 'Liền trang');
   else if (act === 'sheet-preset') keepG0(() => commit(w => { if (v === 'free') { if (w.spacing.preset !== 'free') { w.spacing.overrides = sheetSpacing(); w.spacing.preset = 'free'; } } else { w.spacing.preset = v; w.spacing.overrides = {}; } }));
   else if (act === 'task-preset') keepG0(() => commit(w => { const t = curT(w); if (v === 'free') { if (t.spacing.preset !== 'free') { t.spacing.overrides = spacingOf(t); t.spacing.preset = 'free'; } } else { t.spacing.preset = v || null; t.spacing.overrides = {}; } }));
@@ -4924,6 +4944,7 @@ const endGap = s => /\s_{3,}\s*[.?!]?\s*$/.test(s) && !/:\s*_{3,}\s*$/.test(s); 
 function contentWarnings(t) {
   const w = [], k = ck(t), it = its(t), a = t.answer, c = t.content;
   const W = (m, lv = 'warn') => w.push({ lv, m });
+  if (t.layout.break === 'join' && ws.tasks[0] === t) W('Task đầu phiếu không nối được vào Task nào, nên hiện như Task thường.', 'info');
   const tx = x => [x.text || '', ...(x.lines || [])].join('\n');
   const blanks = it.reduce((n, x) => n + (tx(x).split('___').length - 1), 0);
   if (c.form === 'table') {
@@ -5228,7 +5249,7 @@ function edHtml(t) {
   const m = recipeMatch(t), c = t.content, k = ck(t), a = t.answer, i = ws.tasks.indexOf(t), n = ws.tasks.length, sums = secSums(t);
   const kinds = kindsOk(t), tgl = fieldToggles(t), sl = slotsOf(t);
   const sec = (key, title, inner) => `<section class="sec ${SECT[key] ? 'open' : ''}" data-sec="${key}"><button class="sech" data-stg="${key}" aria-expanded="${SECT[key] ? 'true' : 'false'}"><span class="snum">${({ kind: 1, info: 2, content: 3, parts: 4 })[key]}</span><span class="sect">${title}</span><span class="secs">${esc(sums[key] || '')}</span><span class="car">▶</span></button><div class="secb">${inner}</div></section>`;
-  const tools = `<div class="tkt" role="toolbar" aria-label="Thao tác với Task ${i + 1}"><button class="eb" data-eact="tup" ${i ? '' : 'disabled'} title="Đưa Task lên" aria-label="Đưa Task lên">↑</button><button class="eb" data-eact="tdown" ${i < n - 1 ? '' : 'disabled'} title="Đưa Task xuống" aria-label="Đưa Task xuống">↓</button><button class="eb" data-eact="tdup" title="Nhân đôi Task">⧉ Nhân đôi</button><span class="sp"></span><button class="eb dng" data-eact="tdel" title="Xóa Task (hoàn tác được)">✕ Xóa Task</button></div>`;
+  const tools = `<div class="tkt" role="toolbar" aria-label="Thao tác với Task ${i + 1}"><button class="eb" data-eact="tup" ${i ? '' : 'disabled'} title="Đưa Task lên" aria-label="Đưa Task lên">↑</button><button class="eb" data-eact="tdown" ${i < n - 1 ? '' : 'disabled'} title="Đưa Task xuống" aria-label="Đưa Task xuống">↓</button><button class="eb" data-eact="tdup" title="Nhân đôi Task">⧉ Nhân đôi</button><button class="eb" data-eact="tjoin" ${i ? '' : 'disabled'} aria-pressed="${t.layout.break === 'join'}" title="${i ? 'Nối vào Task trên: phần tiếp của Task trên, không số / tiêu đề' : 'Task đầu phiếu không nối được'}">${t.layout.break === 'join' ? '↳ Đã nối vào Task trên' : '↳ Nối vào Task trên'}</button><span class="sp"></span><button class="eb dng" data-eact="tdel" title="Xóa Task (hoàn tác được)">✕ Xóa Task</button></div>`;
   // 1. Dạng bài và đáp án
   const kind = `<div class="tcwrap">${cardHtml(t)}</div>
     <div class="ef"><span class="elb">Áp mẫu</span><select data-eact="recipe" aria-label="Áp một mẫu có sẵn cho Task này" title="Áp một lần: giữ chữ các câu, đổi cấu trúc, đáp án và bố cục theo mẫu. Hoàn tác được."><option value="" selected>Chọn mẫu để áp…</option>${libOpts()}</select></div>
@@ -5333,6 +5354,7 @@ treeEl.addEventListener('click', e => {
   if (act === 'delcol') return commit(w => { const t = T(w), c = t.content; const jn = c.cols.length - 1; c.rows.forEach(r => { if (r.id) { if (t.uploads) delete t.uploads[`@${r.id}.${jn}`]; if (t.upMeta) delete t.upMeta[`@${r.id}.${jn}`]; if (t.imgAr) delete t.imgAr[`@${r.id}.${jn}`]; } }); c.cols.pop(); c.rows.forEach(r => r.cells.pop()); if (t.layout.table) t.layout.table.cw = null; });
   if (act === 'paste-items') return openPaste('items', id);
   if (act === 'tup' || act === 'tdown') return commit(w => { const a = w.tasks, k = a.findIndex(y => y.id === id), j = act === 'tup' ? k - 1 : k + 1; [a[k], a[j]] = [a[j], a[k]]; }, act === 'tup' ? 'Đã đưa Task lên' : 'Đã đưa Task xuống');
+  if (act === 'tjoin') return commit(w => { const t = w.tasks.find(y => y.id === id); t.layout.break = t.layout.break === 'join' ? null : 'join'; }, 'Đã đổi: nối vào Task trên');
   if (act === 'tdup') { let nid; commit(w => { const k = w.tasks.findIndex(y => y.id === id), c = clone(w.tasks[k]); nid = c.id = newId(new Set(w.tasks.map(y => y.id)), 't'); w.tasks.splice(k + 1, 0, c); }); sel = { type: 'task', id: nid }; refreshSel(); toast('Đã nhân đôi Task'); return; }
   if (act === 'tdel') { const k = ws.tasks.findIndex(y => y.id === id), num = k + 1; commit(w => { w.tasks.splice(k, 1); }); sel = ws.tasks[k] ? { type: 'task', id: ws.tasks[k].id } : (ws.tasks[k - 1] ? { type: 'task', id: ws.tasks[k - 1].id } : { type: 'sheet' }); multi = []; refreshSel(); toast(`Đã xóa Task ${num} · Ctrl+Z để hoàn tác`); return; }
 });
@@ -5623,11 +5645,13 @@ function impRender() {
   }
   if (J.err) { out.innerHTML = `<div class="diag">${esc(J.err)} Phiếu đang mở không đổi.</div>`; ok.disabled = true; ok.textContent = sheet ? 'Tạo phiếu mới' : 'Thêm vào cuối phiếu'; return; }
   const n = J.tasks.length, bad = J.tasks.filter(r => r.err).length, list = impOk(J);
-  let h = `<p class="hint">Nhận ra <b>${SRC_NAME[J.src]}</b>${J.src === 'json' ? (J.kind === 'sheet' ? ' (cả phiếu)' : ' (Task)') : ''}${impFile ? ` · file “${esc(impFile)}”` : ''}: <b>${n}</b> Task${J.src === 'text' && pasteMode === 'test' ? ' (cắt theo dòng đầu mục)' : ''}.</p>`;
+  const nParts = J.tasks.filter(r => r.joined).length, nTop = n - nParts, multi = {}; J.tasks.forEach(r => { if (r.joined) multi[r.grp] = (multi[r.grp] || 1) + 1; });
+  const partTxt = nParts ? ` (${Object.keys(multi).map(g => `Task ${g} có ${multi[g]} phần`).join(', ')})` : '';
+  let h = `<p class="hint">Nhận ra <b>${SRC_NAME[J.src]}</b>${J.src === 'json' ? (J.kind === 'sheet' ? ' (cả phiếu)' : ' (Task)') : ''}${impFile ? ` · file “${esc(impFile)}”` : ''}: <b>${nTop}</b> Task${partTxt}${J.src === 'text' && pasteMode === 'test' ? ' (cắt theo dòng đầu mục)' : ''}.</p>`;
   if (J.src === 'text') h += `<div class="diag info">Chữ thô: hệ thống <b>đoán</b>, độ chắc thấp. Xem lại từng Task, chọn mẫu khác nếu đoán sai. Muốn chính xác thì dùng JSON hoặc MD theo quy ước.</div>`;
   if (J.src === 'text' && pasteMode === 'task' && J.lines > PASTE_LONG) h += `<div class="diag">Đang dán ${J.lines} dòng vào <b>một</b> Task. Nếu đây là cả đề, chuyển sang “Cả đề” để cắt thành nhiều Task. <button class="btn" data-pm2="test">Chuyển sang Cả đề</button></div>`;
   if (!sheet && J.kind === 'sheet') h += `<div class="diag info">File có <b>cài đặt cấp phiếu</b>: “+ Task” chỉ lấy các Task, bỏ cài đặt cấp phiếu (tên, tuổi, khoảng cách, xếp trang). <button class="btn" data-imp="tosheet">Mở bằng “+ Phiếu” thay vì thêm</button></div>`;
-  if (!sheet && n > 1) h += `<div class="diag warn">File có <b>${n}</b> Task. Bỏ chọn Task không muốn nhập; các Task được thêm vào cuối phiếu theo thứ tự trong file.</div>`;
+  if (!sheet && n > 1) h += `<div class="diag warn">File có <b>${nTop}</b> Task${partTxt}. Bỏ chọn Task không muốn nhập; các Task được thêm vào cuối phiếu theo thứ tự trong file.</div>`;
   if (sheet && J.sheetNotes && J.sheetNotes.length) h += `<p class="hint">Cấp phiếu thiếu, sẽ bù mặc định: ${esc(J.sheetNotes.join(', '))}.</p>`;
   if (bad) h += `<div class="diag">${bad} Task không dựng được (xem dòng đỏ).${sheet ? ' Sửa file rồi nạp lại; phiếu đang mở không đổi.' : ' Các Task này sẽ bị bỏ qua.'}</div>`;
   if (J.mdNotes && J.mdNotes.length) h += `<p class="hint">${esc(J.mdNotes.join('; '))}.</p>`;
@@ -5647,7 +5671,7 @@ function impRowHtml(r, i, o) {
   const conf = o.text ? ` <span class="conf c-${r.conf === 'cao' ? 'hi' : r.conf === 'vừa' ? 'mid' : 'lo'}">đoán · độ chắc: ${esc(r.conf)}</span>` : '';
   const pick = o.text ? `<select data-pr="${i}" aria-label="Áp mẫu khác cho Task ${i + 1}" title="Mặc định giữ cấu hình hệ thống đoán; chọn một mẫu nếu đoán sai"><option value="" ${r.rid ? '' : 'selected'}>Giữ cấu hình đoán</option>${libOpts(r.rid)}</select>` : '';
   const m = t ? recipeMatch(t) : null;
-  return `<div class="prv imrow${r.err ? ' bad' : ''}" data-ji="${i}"><div class="prh"><label>${cb}<b>${i + 1}.</b></label> <span class="imt">${t ? esc(t.title || '(chưa có tiêu đề)') : ''}</span>${conf}${pick}</div>
+  return `<div class="prv imrow${r.err ? ' bad' : ''}" data-ji="${i}"><div class="prh"><label>${cb}<b>${r.no || i + 1}.</b></label> <span class="imt">${t ? esc(t.title || '(chưa có tiêu đề)') : ''}</span>${conf}${pick}</div>
     ${t ? `<div class="prt"><b>${esc(descOf(t))}</b> <span class="hint">· ${n}${m ? (m.exact ? ` · giống mẫu “${esc(m.r.name)}”` : ' · cấu hình riêng') : ''}</span></div>` : ''}
     ${r.err || warns.length || (r.notes || []).length || noImg ? `<ul class="twarn">${r.err ? `<li>${esc(r.err)}</li>` : ''}${(r.notes || []).map(x => `<li class="info">${esc(o.src === 'json' ? 'Đã bù: ' + x : x)}</li>`).join('')}${warns.map(x => `<li class="${x.lv}">${esc(x.m)}</li>`).join('')}${noImg ? `<li class="info">${noImg} ô ảnh chưa có ảnh (ô giữ chỗ).</li>` : ''}</ul>` : ''}
     ${o.text ? `<details><summary>Chữ gốc</summary><pre>${esc(r.raw)}</pre></details>` : ''}</div>`;
@@ -5676,7 +5700,7 @@ function impCommit() {
     const ok = d.querySelector('#pasteOk'); ok.disabled = false; ok.textContent = 'Thay phiếu hiện tại'; return;
   }
   const obj = impSheetObj(J);
-  if (loadSheet(obj, J ? `Đã tạo phiếu mới (${obj.tasks.length} Task)` : 'Đã tạo phiếu trống')) d.close();
+  if (loadSheet(obj, J ? `Đã tạo phiếu mới (${obj.tasks.filter(t => !(t.layout && t.layout.break === 'join')).length} Task${obj.tasks.some(t => t.layout && t.layout.break === 'join') ? `, ${obj.tasks.length} khối` : ''})` : 'Đã tạo phiếu trống')) d.close();
 }
 // Chọn file: JSON / MD / TXT đọc như chữ; file khác (PDF…) chỉ đọc được khi WS Studio gắn window.WSImport.extract(file) → {tasks:[…]}
 async function impPickFile(f) {
@@ -5784,7 +5808,7 @@ function fillTask(t0, notes) {
   if (!isObj(t.spacing.overrides)) t.spacing.overrides = {};
   Object.keys(t.spacing.overrides).forEach(k => { if (!(k in MINS) || typeof t.spacing.overrides[k] !== 'number') delete t.spacing.overrides[k]; });
   ['uploads', 'upMeta', 'imgAr', 'qr'].forEach(k => { if (t[k] != null && !isObj(t[k])) delete t[k]; });
-  delete t.number;
+  delete t.number; delete t.part;
   migTask(t); ensureIds(t); ensureRowIds(t);
   const a0 = JSON.stringify(t.answer); normAnswer(t); if (JSON.stringify(t.answer) !== a0) add('đáp án chỉnh cho hợp nội dung');
   tidy(t);
@@ -5805,6 +5829,7 @@ function fillSheet(o0, notes) {
   if (!isObj(o.spacing.overrides)) o.spacing.overrides = {};
   if (!['cont', 'page'].includes(o.flow)) { add('xếp trang'); o.flow = 'cont'; }
   if (o.fill !== true) delete o.fill;
+  if (o.font != null && (!FONTS[o.font] || o.font === 'andika')) { if (o.font !== 'andika') add('font không có trong danh sách'); delete o.font; }
   const used = new Set();
   o.tasks = o.tasks.map((t, i) => { let x; try { x = fillTask(t, notes); } catch (e) { throw new Error(`Task ${i + 1}: ${e.message}`); } if (used.has(x.id)) x.id = newId(used, 't'); else used.add(x.id); return x; });
   o.schema = SCHEMA;
@@ -5840,7 +5865,7 @@ function addTasks(list, note) {
   let first = null, n0 = ws.tasks.length;
   const before = { ws: clone(ws), h: hist.length };
   try {
-    commit(w => { const used = new Set(w.tasks.map(x => x.id)); list.forEach(t0 => { const t = clone(t0); t.id = newId(used, 't'); delete t.number; if (!first) first = t.id; w.tasks.push(t); }); });
+    commit(w => { const used = new Set(w.tasks.map(x => x.id)); list.forEach(t0 => { const t = clone(t0); t.id = newId(used, 't'); delete t.number; delete t.part; if (!first) { first = t.id; if (t.layout && t.layout.break === 'join') t.layout.break = null; }  w.tasks.push(t); }); });
   } catch (e) { ws = before.ws; hist.length = before.h; fut = []; try { render(); } catch (_) {} toast(`Không nhập được: ${e.message}. Phiếu đang mở giữ nguyên.`); return null; }
   toast(`Đã thêm ${list.length} Task vào cuối phiếu (Task ${n0 + 1}${list.length > 1 ? '–' + (n0 + list.length) : ''})${note || ''} · Ctrl+Z để hoàn tác`);
   sel = { type: 'task', id: first }; multi = []; openTask = first; sectReset(first); refreshSel();
@@ -5859,12 +5884,15 @@ const MD_SECT = /^\s*(bài đọc|passage|hội thoại|dialogue|ô chữ|word ?
 const MD_KIND = { 'viết từ': ['word', 'item'], 'điền chỗ trống': ['word', 'inline'], 'điền từ': ['word', 'inline'], 'viết câu': ['sentence'], 'khoanh': ['choice'], 'khoanh a/b/c': ['choice', 'item'], 'chọn a/b/c': ['choice', 'item'], 'chọn trong câu': ['choice', 'inline'], 'gạch chân': ['choice', 'inline'], 'tick': ['tick'], 'đúng/sai': ['tf'], 'đúng sai': ['tf'], 'nối': ['match'], 'tô chữ': ['trace'], 'không': ['none'], 'không có': ['none'] };
 function readMd(raw) {
   const L = String(raw || '').replace(/\r/g, '').split('\n'), meta = {}, blocks = [], keys = {}, notes = [];
-  let cur = null, inAns = false, ansFor = null;
+  let cur = null, inAns = false, ansFor = null, grp = 0;
   L.forEach(line => {
     const t = line.trim(), h = /^##(?!#)\s*(.*)$/.exec(t);
+    // "### Phần: …" trong một Task: phần tiếp của Task đó (nối vào Task trên), có hướng dẫn / kiểu đáp án riêng
+    const pm = cur && !inAns ? /^###\s*(?:phần|part)\b\s*\d*\s*[:.)\-–]?\s*(.*)$/i.exec(t) : null;
+    if (pm) { cur = { title: pm[1].trim(), lines: [], part: true, grp }; blocks.push(cur); return; }
     if (h) {
       const x = h[1].trim();
-      if (/^task\b/i.test(x)) { cur = { title: x.replace(/^task\s*\d*\s*[:.)\-–]?\s*/i, '').trim(), lines: [] }; blocks.push(cur); inAns = false; return; }
+      if (/^task\b/i.test(x)) { cur = { title: x.replace(/^task\s*\d*\s*[:.)\-–]?\s*/i, '').trim(), lines: [], grp: ++grp }; blocks.push(cur); inAns = false; return; }
       if (/^(đáp án|answers?|answer key)\b/i.test(x)) { cur = null; inAns = true; ansFor = null; return; }
     }
     if (inAns) {
@@ -5886,8 +5914,23 @@ function readMd(raw) {
   });
   if (!blocks.length) return { src: 'md', err: 'MD không có dòng "## Task: …" nào.' };
   if (blocks.length > IMP_MAX) return { src: 'md', err: `Có ${blocks.length} Task, nhiều hơn giới hạn ${IMP_MAX}. Hãy tách thành nhiều file.` };
-  const tasks = blocks.map((b, i) => { try { const r = mdTask(b, keys[i + 1]); renderTask(r.t, null); return { t: r.t, notes: r.notes, conf: r.conf, err: '' }; } catch (e) { return { t: null, notes: [], err: `Task ${i + 1}: ${e.message}` }; } });
-  Object.keys(keys).forEach(n => { if (!blocks[n - 1]) notes.push(`đáp án của Task ${n} không có Task tương ứng`); });
+  const size = {}; blocks.forEach(b => size[b.grp] = (size[b.grp] || 0) + 1);
+  const seen = {};
+  const tasks = blocks.map((b, i) => {
+    const k = seen[b.grp] = (seen[b.grp] || 0) + 1, no = b.part ? `${b.grp}${String.fromCharCode(96 + k)}` : size[b.grp] > 1 ? `${b.grp}a` : String(b.grp);
+    try {
+      const r = mdTask(b, size[b.grp] === 1 ? keys[b.grp] : undefined); if (b.part) r.t.layout.break = 'join';
+      renderTask(r.t, null); return { t: r.t, notes: r.notes, conf: r.conf, err: '', joined: !!b.part, no, grp: b.grp };
+    } catch (e) { return { t: null, notes: [], err: `Task ${no}: ${e.message}`, joined: !!b.part, no, grp: b.grp }; }
+  });
+  // Task nhiều phần: đáp án "### Task n" chạy liền qua các phần, theo thứ tự câu
+  Object.keys(keys).forEach(n => {
+    const g = tasks.filter(r => r.grp === +n);
+    if (!g.length) { notes.push(`đáp án của Task ${n} không có Task tương ứng`); return; }
+    if (g.length === 1) return;
+    const all = g.filter(r => r.t).flatMap(r => its(r.t)); all.forEach((x, i) => { if (keys[n][i] != null && keys[n][i] !== '') x.key = keys[n][i]; });
+    if (keys[n].length > all.length) g[0].notes.push(`đáp án có ${keys[n].length} dòng, Task ${n} (cả các phần) có ${all.length} câu`);
+  });
   const sheetNotes = [];
   if (!meta.age) sheetNotes.push('độ tuổi'); if (!meta.flow) sheetNotes.push('xếp trang'); if (!meta.spacing) sheetNotes.push('khoảng cách');
   return { src: 'md', kind: Object.keys(meta).length ? 'sheet' : 'tasks', sheet: null, meta, sheetNotes, mdNotes: notes, tasks };
@@ -5944,6 +5987,7 @@ function mdTask(b, keys) {
   if (lastI >= 0) for (let i = body.length - 1; i > lastI; i--) { const x = body[i].s.trim(); if (!x.includes('___') && !/\{[^}]*\|/.test(x) && !/\s\|\s|\t|\[ảnh:/i.test(x) && !/^([A-Z][\p{L}.' -]{0,18}):\s+/u.test(x)) tail.unshift(body.splice(i, 1)[0].s.trim()); else break; }
   if (F.note) tail.push(F.note);
   if (tail.length) { F.instruction = [F.instruction || '', ...tail].filter(Boolean).join(' '); const s = tail.join(' '); notes.push(`đưa lời nhắc vào hướng dẫn: “${s.slice(0, 60)}${s.length > 60 ? '…' : ''}”`); }
+  const upLab = !box && body.some(x => /(^|\s)\(?A[.)]\s/.test(x.s) && /\s\(?B[.)]\s/.test(x.s));      // lựa chọn viết A. B. C. (chữ hoa) thì giữ chữ hoa
   let force = null;
   if (F.recipe) { const q = F.recipe.toLowerCase(), r = RECIPES.find(x => x.id === q || x.name.toLowerCase() === q); if (r) force = r.id; else notes.push(`không có mẫu "${F.recipe}", giữ cấu hình đoán`); }
   if (F.image) body.unshift(B(`[ảnh: ${F.image}]`));
@@ -5975,6 +6019,7 @@ function mdTask(b, keys) {
     else { setKind(t, k[0]); if (k[1] && attachOpts(t).includes(k[1])) { t.answer.attach = k[1]; normAnswer(t); } explicit = true; }
   }
   // ô tick ☐ trong MD: lựa chọn hiện bằng ô vuông (A4, nhãn ☐)
+  if (upLab && t.answer.layout === 'A4' && t.answer.attach === 'item') t.answer.params.upper = true;
   if (box && t.answer.layout === 'A4' && t.answer.attach === 'item') { t.answer.params.lab = 'box'; explicit = explicit || !!F.kind; }
   else if (box && !force) notes.push(`có ô tick ☐ nhưng đáp án là “${MD_KNAME(t)}”. Nếu bài trộn nhiều loại đáp án, tách thành nhiều Task (vd 6a, 6b)`);
   // gạch ___ ở cuối câu khi đáp án đã có chỗ trả lời riêng (Đúng/Sai, viết câu, viết từ theo câu): bỏ để không trùng
@@ -5990,8 +6035,8 @@ function mdTask(b, keys) {
 }
 // Xuất MD theo quy ước (dùng để kiểm thử khứ hồi và làm mẫu cho người soạn; chưa có nút trên giao diện)
 const MD_KNAME = t => { const a = t.answer, k = a.kind; return k === 'word' ? (a.attach === 'inline' ? 'điền chỗ trống' : 'viết từ') : k === 'choice' ? (a.attach === 'inline' ? 'chọn trong câu' : (a.params || {}).lab === 'box' ? 'tick' : 'khoanh A/B/C') : { sentence: 'viết câu', tick: 'tick', tf: 'đúng/sai', match: 'nối', trace: 'tô chữ', none: 'không' }[k] || 'không'; };
-function taskToMd(t) {
-  const c = t.content, o = ['## Task: ' + (t.title || '')], k = ck(t), a = t.answer, cell = v => v && v.tick ? '[ ]' : v && v.img ? `[ảnh: ${v.img}]` : (typeof v === 'string' ? v : '');
+function taskToMd(t, asPart) {
+  const c = t.content, o = [(asPart ? '### Phần: ' : '## Task: ') + (t.title || '')], k = ck(t), a = t.answer, cell = v => v && v.tick ? '[ ]' : v && v.img ? `[ảnh: ${v.img}]` : (typeof v === 'string' ? v : '');
   if (t.audio) o.push('Track: ' + t.audio);
   if (t.instruction) o.push('Hướng dẫn: ' + t.instruction);
   if (t.image && k !== 'table') o.push('Ảnh: ' + t.image.label);
@@ -6018,8 +6063,10 @@ function taskToMd(t) {
 function sheetToMd(w) {
   const o = ['# ' + (w.title || ''), 'Tuổi: ' + w.age, 'Xếp trang: ' + (w.flow === 'page' ? 'tách' : 'liền')];
   if (PRESET_NAME[w.spacing && w.spacing.preset]) o.push('Khoảng cách: ' + PRESET_NAME[w.spacing.preset].toLowerCase());
-  w.tasks.forEach(t => o.push('', taskToMd(t)));
-  const keys = w.tasks.map((t, i) => [i + 1, its(t).map(x => x.key)]).filter(([, k]) => k.some(x => x != null && x !== ''));
+  const jn = (t, i) => i > 0 && t.layout && t.layout.break === 'join';
+  w.tasks.forEach((t, i) => o.push('', taskToMd(t, jn(t, i))));
+  const grpKeys = []; w.tasks.forEach((t, i) => { if (!jn(t, i)) grpKeys.push([grpKeys.length + 1, []]); grpKeys[grpKeys.length - 1][1].push(...its(t).map(x => x.key)); });
+  const keys = grpKeys.filter(([, k]) => k.some(x => x != null && x !== ''));
   if (keys.length) { o.push('', '## Đáp án'); keys.forEach(([n, k]) => { o.push(`### Task ${n}`); k.forEach((x, i) => o.push(`${i + 1}. ${x == null ? '' : x}`)); }); }
   return o.join('\n') + '\n';
 }
@@ -6142,9 +6189,27 @@ extraActs['img-ar'] = (b, v) => { const [k, a] = v.split('|'); setAr(curT(ws).id
 /* ================= Vòng render ================= */
 function draw() { if (lastRes) { drawPages(lastRes); document.getElementById('zoomFit').textContent = zoom == null ? 'Vừa khung' : Math.round(scaleNow() * 100) + '%'; } }
 let ready = false;
+// Font chữ của phiếu (v69): chỉ đổi font của trang A4, giao diện giữ nguyên
+const FONTS = {
+  andika: { name: 'Andika', css: '"Andika", "Comic Sans MS", "Trebuchet MS", sans-serif', hint: 'Font hiện tại: chữ a, g đơn giản như sách tập đọc, dễ phân biệt cho trẻ mới học.' },
+  be: { name: 'Be Vietnam Pro', css: '"Be Vietnam Pro", "Segoe UI", system-ui, sans-serif', hint: 'Font trong ảnh bạn gửi: gọn, hiện đại, dấu tiếng Việt rõ.' },
+  lexend: { name: 'Lexend', css: '"Lexend", "Be Vietnam Pro", system-ui, sans-serif', hint: 'Font thiết kế cho dễ đọc, giãn chữ rộng hơn; hợp học sinh đọc còn chậm.' }
+};
+const fontKey = () => FONTS[ws.font] ? ws.font : 'andika';
+let fontApplied = '';
+function applyFont() {
+  const k = fontKey(); if (k === fontApplied) return false;
+  fontApplied = k; document.documentElement.style.setProperty('--f-sheet', FONTS[k].css);
+  if (document.fonts && k !== 'andika') {
+    const n = FONTS[k].name, vi = 'ăâđêôơưáàảãạéèẻẽẹíìỉĩịóòỏõọúùủũụýỳỷỹỵ';
+    Promise.all(['14pt ', 'bold 14pt '].flatMap(f => [document.fonts.load(f + '"' + n + '"'), document.fonts.load(f + '"' + n + '"', vi)])).catch(() => {}).then(() => document.fonts.ready).then(() => { if (ready && fontApplied === k) { const res = paginate(); lastRes = res; draw(); document.getElementById('pageBadge').textContent = `${res.pages.length} trang A4`; const db = document.getElementById('diagBadge'); db.textContent = res.diags.length ? `${res.diags.length} lỗi tràn trang` : 'Không lỗi tràn'; db.classList.toggle('bad', !!res.diags.length); } });
+  }
+  return true;
+}
 let renderCount = 0;
 function render() {
   renderCount++;
+  applyFont();
   ws.tasks.forEach(ensureRowIds);
   document.getElementById('wsTitle').textContent = ws.title;
   document.getElementById('age').value = ws.age;
@@ -6338,6 +6403,7 @@ const fontsReady = document.fonts
   : Promise.resolve();
 fontsReady.then(() => { ready = true; render(); });
 // Font nạp thêm nhóm ký tự giữa chừng: chỉ dàn lại trang, không dựng lại cột trái (đang gõ dở thì không mất chữ)
-if (document.fonts) document.fonts.addEventListener('loadingdone', e => { if (ready && e.fontfaces.some(f => /Andika/.test(f.family))) { const res = paginate(); lastRes = res; draw(); document.getElementById('pageBadge').textContent = `${res.pages.length} trang A4`; const db = document.getElementById('diagBadge'); db.textContent = res.diags.length ? `${res.diags.length} lỗi tràn trang` : 'Không lỗi tràn'; db.classList.toggle('bad', !!res.diags.length); } });
+if (document.fonts) document.fonts.addEventListener('loadingdone', e => { if (ready && e.fontfaces.some(f => /Andika|Be Vietnam|Lexend/.test(f.family))) { const res = paginate(); lastRes = res; draw(); document.getElementById('pageBadge').textContent = `${res.pages.length} trang A4`; const db = document.getElementById('diagBadge'); db.textContent = res.diags.length ? `${res.diags.length} lỗi tràn trang` : 'Không lỗi tràn'; db.classList.toggle('bad', !!res.diags.length); } });
 render();
 </script>
+

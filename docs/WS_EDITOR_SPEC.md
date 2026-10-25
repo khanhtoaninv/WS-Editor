@@ -1,9 +1,9 @@
-# WS Editor — Đặc tả (bản v36 + kế hoạch mục 15, 24/10/2026; cập nhật mục 16 ngày 25/10/2026, v67)
+# WS Editor — Đặc tả (bản v36 + kế hoạch mục 15, 24/10/2026; cập nhật mục 16 ngày 25/10/2026, v68)
 
 > File này là nguồn sự thật duy nhất cho WS Editor. Nó thay thế bản MASTER_SPEC v10 (quá nặng) và Claude Doc "Đặc tả Layout Task & Answer" (cũ hơn bản này).
 > Prototype chạy được: `ws-editor-prototype.html` (một file HTML, mở bằng trình duyệt). Dữ liệu mẫu: `ws-sample.json` (schema 0.2).
 > Khi bản prototype và file này lệch nhau, prototype là bản đúng hơn về hành vi; hãy báo để cập nhật file này.
-> **Cập nhật 25/10/2026 (tối):** prototype hiện là **v67** (v66 + sửa bộ đọc MD theo phiếu thật đầu tiên, A4 có nhãn ô tick; mục 16.8). v66 = v65 + font nhúng sẵn trong `fonts/` (mục 16.7). Thay đổi v37–v65 ghi chi tiết ở `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục cuối "BÀN GIAO"). Nhập file (P0–P2) tóm tắt ở **mục 16**; quy ước MD ở `claude/QUY_UOC_MD.md`.
+> **Cập nhật 25/10/2026 (tối, lần 2):** prototype hiện là **v69** (v68 + chọn font chữ phiếu, mục 16.10). v68 = (v67 + Task nhiều phần "Nối vào Task trên", MD `### Phần:`, nhãn A. B. C. giữ chữ hoa, câu duy nhất không đánh số; mục 16.9). v67 = v66 + sửa bộ đọc MD theo phiếu thật đầu tiên, A4 có nhãn ô tick (mục 16.8). v66 = v65 + font nhúng sẵn trong `fonts/` (mục 16.7). Thay đổi v37–v68 ghi chi tiết ở `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục cuối "BÀN GIAO"). Nhập file (P0–P2) tóm tắt ở **mục 16**; quy ước MD ở `claude/QUY_UOC_MD.md`.
 
 ---
 
@@ -31,13 +31,13 @@ Quy ước chung:
 
 ## 2. Mô hình dữ liệu và container
 
-**Phiếu** (`ws`) = danh sách **Task** xếp dọc theo thứ tự mảng (số hiển thị = chỉ số + 1).
+**Phiếu** (`ws`) = danh sách **Task** xếp dọc theo thứ tự mảng (số hiển thị = chỉ số + 1, **trừ phần nối vào Task trên**: dùng chung số của Task đó, mục 9.2 và 16.9).
 
 Mỗi **Task** là một container có các nhóm (tên tiếng Việt trước, mã sau):
 
 | Nhóm | Tên trên giao diện | Vai trò |
 |---|---|---|
-| G0 | Tiêu đề | Số, tên bài, hướng dẫn, track audio. Cố định, luôn trên cùng, không đổi theo layout |
+| G0 | Tiêu đề | Số, tên bài, hướng dẫn, track audio. Cố định, luôn trên cùng, không đổi theo layout. Phần nối vào Task trên: không số, không tên, chỉ còn hướng dẫn riêng (nếu có) |
 | G1 | Ảnh | Khung ảnh của Task (mục 5). Ở Lưới item (T5): **mỗi ảnh là một container riêng** |
 | G2 | Nội dung | Item, câu hỏi, bài đọc, cặp nối, hội thoại, bảng… Ở T5 Ảnh trái: **mỗi ô chữ là một container riêng** |
 | G3 | Đáp án | Kiểu A1–A8. **Mỗi đáp án của một câu cũng chọn được để ghi đè riêng** |
@@ -82,7 +82,7 @@ Chọn kiểu đáp án và chế độ gắn (Trong câu / Theo item / Khối r
 | A1 | Dòng kẻ viết | số dòng; chiều cao dòng `lineMm` (≥ tối thiểu theo tuổi); độ rộng `w` 40–100% | |
 | A2 | Ô trống | trong câu: `lenMode` fill/fixed, `lenMm`, `lines`; theo item: `width` (ký tự) | `start` inline/below |
 | A3 | Ô chữ cái | cỡ ô `boxW` 5–12 mm (cao = 1,15 × rộng) | |
-| A4 | Lựa chọn | khoảng cách `gap` 2–20 mm | `dir` (Tự động/Ngang/2 cột/Dọc/Tự xuống dòng), `autoMax`, `lab` (Ⓐ / A. / ☐ ô tick, từ v67), `upper` (ẩn khi ô tick) |
+| A4 | Lựa chọn | khoảng cách `gap` 2–20 mm | `dir` (Tự động/Ngang/2 cột/Dọc/Tự xuống dòng), `autoMax`, `lab` (Ⓐ / A. / ☐ ô tick, từ v67), `upper` (chữ hoa A B C; ẩn khi ô tick; từ v68 MD viết `A. B. C.` chữ hoa thì tự đặt `upper: true`) |
 | A5 | Tick | cỡ ô `size` 4–12 mm | |
 | A6 | Cột T/F | cỡ ô `size` 5–12 mm | |
 | A7 | Chấm nối | cỡ chấm `size` 1,5–6 mm | |
@@ -132,12 +132,13 @@ Tùy chọn (`layout.table`), mỗi tùy chọn là một thông số chuẩn (c
 - **Task:** đủ 5 thông số ("Cách Task phía trên" là khoảng trước Task này) và có **Tự do** như phiếu. "Theo phiếu" xóa mọi chỉnh riêng.
 - Khoảng giữa item/câu (T5, T6) và giữa các nhóm (T1, T8) **kéo được trên trang**.
 - Padding-top G0 cố định 3 mm. Đổi khoảng cách thì G0 không dịch trong màn hình.
+- **Phần nối vào Task trên:** khoảng cách phía trên lấy từ **"Giữa các nhóm"** (Vừa = 4 mm) thay vì "Giữa các Task" (8 mm); không có padding-top G0.
 
 ### 9.2 Xếp trang (`ws.flow`)
 - **Liền trang** (`cont`, mặc định): Task tự nối tiếp, lấp đầy trang; Task dài cắt ở ranh giới đơn vị.
 - **Tách trang** (`page`): mỗi trang chỉ chứa Task trọn vẹn.
-- **Ngắt trang theo Task** (`layout.break`): `auto` / `page` (Sang trang mới) / `keep` (Giữ liền Task sau: nếu Task sau không bắt đầu được ở cùng trang thì Task này sang trang mới, khi cả hai vừa một trang).
-- **Lấp đầy trang** (`ws.fill`): chia phần trống cuối mỗi trang (trừ trang cuối) vào khoảng giữa các Task, tối đa 8 mm mỗi khoảng. Không đổi số trang.
+- **Ngắt trang theo Task** (`layout.break`): `auto` / `page` (Sang trang mới) / `keep` (Giữ liền Task sau: nếu Task sau không bắt đầu được ở cùng trang thì Task này sang trang mới, khi cả hai vừa một trang) / **`join` (Nối vào Task trên, từ v68):** Task này là phần tiếp của Task ngay trên: **không số, không tiêu đề** (chỉ hiện `instruction` riêng nếu có, thẳng đường dóng với chữ tiêu đề), dùng chung số của Task trên (cột trái ghi 6a, 6b, 6c), cách trên bằng "Giữa các nhóm", **luôn đi liền Task trên** (Task trên coi như `keep` với nó; `join` bỏ qua `page`), mỗi phần giữ nguyên loại đáp án và bố cục riêng. Task đầu phiếu không nối được (nút khóa; nếu dữ liệu vẫn đặt `join` thì hiện như Task thường kèm ghi chú). Số Task tính lại khi bật / tắt `join` (hoàn tác được).
+- **Lấp đầy trang** (`ws.fill`): chia phần trống cuối mỗi trang (trừ trang cuối) vào khoảng giữa các Task, tối đa 8 mm mỗi khoảng. Không đổi số trang; khoảng trước phần nối không nhận thêm.
 - Hằng số: trang A4, lề 14 mm, chân trang 7 mm, vùng nội dung 262 mm.
 
 ### 9.3 Quy tắc cắt trang (Liền trang)
@@ -152,7 +153,7 @@ Tùy chọn (`layout.table`), mỗi tùy chọn là một thông số chuẩn (c
 
 - Ba khung: **cây** bên trái (Task → nhóm → ô), **trang A4** ở giữa, **Inspector** bên phải. Tên tiếng Việt trước, mã (T1–T9, G0–G4, A1–A8) là chữ xám nhỏ. Chấm xanh trên cây = container có chỉnh tay.
 - **Một cách thao tác chung cho mọi container:** chọn → kéo trên trang (hoặc nhập số) → bấm đúp tay kéo để về tự động → Esc để lên cấp (câu/ô → nhóm → Task → Phiếu). Dòng chú thích thao tác nằm trên trang.
-- **Panel chuẩn** cho mọi container, cùng thứ tự: (bố cục / kiểu đáp án) → **Kích thước** → **Căn lề** → **Nội dung / Hiển thị** → **Ngắt trang** (Task) → **Về tự động** (nút "Về tự động" + "Áp thông số của container này cho": Ô cùng cột / Cả Task / Task cùng dạng / Cả phiếu, kèm số container đích; nút không áp dụng thì mờ).
+- **Panel chuẩn** cho mọi container, cùng thứ tự: (bố cục / kiểu đáp án) → **Kích thước** → **Căn lề** → **Nội dung / Hiển thị** → **Ngắt trang** (Task) → **Về tự động** (nút "Về tự động" + "Áp thông số của container này cho": Ô cùng cột / Cả Task / Task cùng dạng / Cả phiếu, kèm số container đích; nút không áp dụng thì mờ). "Áp cho cả phiếu / cùng dạng" không chép trạng thái `join`.
 - **Mỗi thông số** là một ô chuẩn: nhãn, điều khiển, chấm "đã chỉnh tay", nút ↺ về tự động. Bấm vào lựa chọn mặc định cũng là về tự động. **Mọi tay kéo trên trang có ô số tương ứng** (mỗi tay kéo mang `data-for` = container, `data-param` = thông số).
 - **Áp cho… theo loại:** Task (cùng dạng: chép bố cục + khoảng cách + đáp án; cả phiếu: chép khoảng cách và ngắt trang), Ảnh (khung), Ô ảnh / Ô chữ (cùng cột, cả Task, cùng dạng, cả phiếu), Đáp án (cùng kiểu A), Đáp án một câu (cả Task), Khung từ.
 - **Chọn nhiều:** Shift/Ctrl + bấm (trên trang hoặc cây) để chọn thêm container **cùng loại**; mọi thay đổi (ô số, nút, tay kéo) áp cho tất cả, tay kéo chỉ chép phần đã đổi.
@@ -160,18 +161,19 @@ Tùy chọn (`layout.table`), mỗi tùy chọn là một thông số chuẩn (c
 - Bấm từ cây hoặc crumb thì trang cuộn tới container; bấm trên trang thì không cuộn. Bấm container khác khi đang nhập số vẫn chọn được ngay.
 - Thanh trên: độ tuổi, hoàn tác/làm lại, thu phóng, **Đường dóng**, số trang, lỗi tràn, Xem JSON (sao chép; nạp phiếu khác qua panel Phiếu).
 - **Cột trái, đầu danh sách Task (từ v64):** đúng hai nút nhập **+ Task** và **+ Phiếu** (mục 16). Không còn nút "Dán…".
+- **Thanh công cụ trong Task đang mở (cột trái):** ↑ ↓ ⧉ Nhân đôi · **↳ Nối vào Task trên** (bật / tắt `layout.break = 'join'`, từ v68; khóa ở Task đầu) · ✕ Xóa Task. Số ở dòng Task: số Task (phần nối: 6a, 6b…).
 - Chế độ tối được hỗ trợ.
 
 ## 11. Schema dữ liệu (ws-editor/0.2)
 
 ```
 ws { schema:'ws-editor/0.2', id, title, age: '5-6'|'7-9'|'10-12', page{size,marginMm},
-     spacing{preset: 'compact'|'normal'|'airy'|'free', overrides{}}, flow: 'cont'|'page', fill?: true, tasks[] }
-task { id, typeId, typeName, title, instruction, audio?, number(tự tính),
+     spacing{preset: 'compact'|'normal'|'airy'|'free', overrides{}}, flow: 'cont'|'page', fill?: true, font?: 'be'|'lexend' (vắng = Andika), tasks[] }
+task { id, typeId, typeName, title, instruction, audio?, number(tự tính, không lưu khi nạp), part(tự tính: a b c…, không lưu khi nạp),
        image?{label,size,ar}, wordBank?{words,placement,style,label,w?,align?,valign?},
        content{kind: items|questions|passage|pairs|trace|picture|dialogue|table, ...},
        answer{kind, attach: item|inline|block, layout: A1..A8, params{ ...tham số A, align?, perItem?{khóa câu:{...}} }},
-       layout{ task:'auto'|T1..T9, split, cols, dir, align, valign, width, cw[3], rowH, whoW, colGap, break,
+       layout{ task:'auto'|T1..T9, split, cols, dir, align, valign, width, cw[3], rowH, whoW, colGap, break: null|'page'|'keep'|'join', 
                frame{fit,h,w,scale,ox,oy,zoom,align,valign},
                cells?{khóa:{split,valign,rowH,frame{fit,h,ox,oy,zoom,align}}},
                table?{head,rowHead,nm,lines,fh,fc,fr,cols,first,cw[],rows,minH,rhs{},align,split,repeat} },
@@ -180,7 +182,7 @@ items (kind 'items'): { id, img | imgs[], text?, len?, lines?[] }   lines[]: có
 ```
 - Mọi khóa `layout` có mặt; `null` = tự động. `frame`, `cells`, `perItem` chỉ lưu phần đã chỉnh.
 - **Đọc được dữ liệu 0.1** và tự chuyển: `ratio`→`split` (T7: →`cw`), `cellDir`→`dir`, `cellAlign`→`align`, `imageFit/H/W/Ox/Oy/Zoom/Align/Obj`→`frame.*`, `image.scale`→`frame.scale`, `cells[].ratio/image*`→`cells[].split/frame.*`, `answer.params.perQ`→`perItem[].dir`, `table.fill`→`fh/fc/fr`.
-- Từ v57 dữ liệu lưu ở schema **0.3** (`content{form:'list'|'table', …}`, xem bổ sung mục V); 0.1/0.2 vẫn đọc được.
+- Từ v57 dữ liệu lưu ở schema **0.3** (`content{form:'list'|'table', …}`, xem bổ sung mục V); 0.1/0.2 vẫn đọc được. v68 không đổi schema: `layout.break` có thêm giá trị `'join'`.
 - **Nạp JSON thiếu trường (từ v63):** thiếu `schema`, `age`, `page`, `spacing`, `flow`, `id`, `answer`, `layout`… thì tự bù mặc định; file chỉ có `tasks` vẫn nạp được. Nạp lỗi không đổi phiếu đang mở (mục 16).
 - Xem `ws-sample.json` cho đủ 18 Task mẫu (đã ở dạng 0.2).
 
@@ -198,7 +200,8 @@ items (kind 'items'): { id, img | imgs[], text?, len?, lines?[] }   lines[]: có
 - A4 trong câu: kiểu hiển thị khác (khung tròn, `(a / b)`), ký tự thoát `{` `}`.
 - Item nhiều dòng (`lines[]`) ở T6.
 - Gộp layout thành 6 họ trên giao diện (Hai cột gồm T2/T3/T4/T6 + nút Trái/Phải): chưa làm; hiện vẫn hiện từng layout hợp lệ.
-- Nhập file: P3 (thử PDF thật; đã thử 1 phiếu ở v67, còn 4–9), P4 (mẫu Ô chữ, đáp án ô chữ, phiếu nhiều nhóm), nút "Xuất MD", bản in đáp án từ `key` (mục 16).
+- Nhập file: P3 (thử PDF thật; đã thử 2 phiếu ở v67–v68, còn 3–8), P4 (mẫu Ô chữ, đáp án ô chữ, phiếu nhiều nhóm), nút "Xuất MD", bản in đáp án từ `key` (mục 16).
+- Đang chờ người dùng quyết (chưa làm ở v68): cột T/F mặc định 80/20 (đổi bố cục Task 13 của phiếu mẫu); hướng lựa chọn khoanh A/B/C thống nhất cả Task (đổi Task 5 của phiếu mẫu); công tắc "Name / Class" ở đầu phiếu (phiếu thật có dòng này ở chân trang, hiện không chép).
 
 ## 14. Chuẩn hóa (kế hoạch chốt 24/10/2026, **đã làm xong cả 3 giai đoạn**)
 
@@ -357,7 +360,7 @@ Các Task còn lại chỉ có 1 kiểu A (2: A7, 3: A5, 4/5/18: A4, 13: A6, 16:
 
 ---
 
-## 16. Nhập file vào phiếu (P0–P2 xong, v63–v65; v67 sửa theo phiếu thật, 25/10/2026)
+## 16. Nhập file vào phiếu (P0–P2 xong, v63–v65; v67–v68 sửa theo phiếu thật, 25/10/2026)
 
 > Phương án và quyết định gốc: `claude/PHUONG_AN_NHAP_FILE.md` (mục 5 = quyết định đã chốt). Chi tiết từng bước: `claude/WS_EDITOR_SPEC_v37_bo_sung.md` mục AC (P0), AD (P1), AE (P2). Quy ước MD: `claude/QUY_UOC_MD.md`.
 
@@ -367,9 +370,9 @@ Các Task còn lại chỉ có 1 kiểu A (2: A7, 3: A5, 4/5/18: A4, 13: A6, 16:
 
 ### 16.2 Giao diện
 - Cột trái có đúng hai nút: **+ Task** và **+ Phiếu**.
-- **+ Task**: thẻ "Mẫu có sẵn" (13 mẫu) | "Từ file / dán" (chọn file `.json .md .txt` hoặc dán). Task mới **luôn vào cuối phiếu**, giữ thứ tự trong file, id mới. Nhiều Task: cảnh báo + tick chọn (mặc định tick hết). File (JSON/MD) có đúng 1 Task: chèn luôn. JSON/MD có cài đặt cấp phiếu: chỉ lấy Task, nói rõ, có nút chuyển sang + Phiếu. Một lần nhập = một bước hoàn tác.
+- **+ Task**: thẻ "Mẫu có sẵn" (13 mẫu) | "Từ file / dán" (chọn file `.json .md .txt` hoặc dán). Task mới **luôn vào cuối phiếu**, giữ thứ tự trong file, id mới. Nhiều Task: cảnh báo + tick chọn (mặc định tick hết). File (JSON/MD) có đúng 1 Task: chèn luôn. JSON/MD có cài đặt cấp phiếu: chỉ lấy Task, nói rõ, có nút chuyển sang + Phiếu. Một lần nhập = một bước hoàn tác. Phần nối đứng đầu lô được bỏ trạng thái nối (không dính vào Task cuối của phiếu đang mở).
 - **+ Phiếu**: từ file / dán; ô trống = **phiếu trống**. Áp cài đặt cấp phiếu của file, thiếu thì bù mặc định. Trước khi thay phiếu đang mở (có Task): **xác nhận** trong hộp + nút **"Tải JSON phiếu cũ"**; nạp phiếu xóa lịch sử hoàn tác.
-- **Bảng nhận diện**: mỗi Task một dòng — số theo file, tiêu đề, mô tả cấu hình (`descOf`) + "giống mẫu / cấu hình riêng", số câu/hàng/lượt, cảnh báo (`contentWarnings`, ô ảnh chưa có ảnh, trường đã bù, lỗi đỏ); cuối bảng: **ước tính số trang** sau khi nhập. Chữ thô: ghi rõ "đoán, độ chắc thấp", mỗi Task có độ chắc + ô chọn mẫu khác; tự chọn "Một Task / Cả đề", cảnh báo khi dán > 40 dòng vào một Task.
+- **Bảng nhận diện**: dòng tóm tắt đếm **bài** ("6 Task (Task 6 có 3 phần)"); mỗi Task / phần một dòng — số theo file (phần nối: 6a, 6b, 6c), tiêu đề, mô tả cấu hình (`descOf`) + "giống mẫu / cấu hình riêng", số câu/hàng/lượt, cảnh báo (`contentWarnings`, ô ảnh chưa có ảnh, trường đã bù, lỗi đỏ); cuối bảng: **ước tính số trang** sau khi nhập. Chữ thô: ghi rõ "đoán, độ chắc thấp", mỗi Task có độ chắc + ô chọn mẫu khác; tự chọn "Một Task / Cả đề", cảnh báo khi dán > 40 dòng vào một Task.
 - Ctrl+V chữ trên trang mở + Task ở thẻ "Từ file / dán". Panel Phiếu → Nâng cao → "Nạp phiếu khác (JSON / MD)…" mở + Phiếu.
 
 ### 16.3 Quy tắc
@@ -378,13 +381,13 @@ Các Task còn lại chỉ có 1 kiểu A (2: A7, 3: A5, 4/5/18: A4, 13: A6, 16:
 - **Mỗi file một phiếu**; phiếu nhiều nhóm tách thành nhiều file. Chưa nạp thẳng PDF trong app (không có hook thì báo gửi PDF cho Claude).
 
 ### 16.4 MD trung gian (tóm tắt, đủ ở `claude/QUY_UOC_MD.md`)
-`## Task: <tiêu đề>` mở mỗi Task; trường `Hướng dẫn:`, `Track:`, `Trả lời:`, `Dòng viết:`, `Khung từ:`, `Ảnh:`, `Lời dẫn:`, `Mẫu:`; khối `Bài đọc:`, `Hội thoại:`, `Ô chữ:`; câu đánh số và ký hiệu sẵn có; câu nhiều dòng bằng dòng thụt lề; `## Đáp án` riêng ở cuối → `key` từng câu. Xuất: `taskToMd` / `sheetToMd` (chưa có nút).
+`## Task: <tiêu đề>` mở mỗi bài của PDF; `### Phần: <tên>` mở một phần tiếp của bài đó (v68); trường `Hướng dẫn:`, `Track:`, `Trả lời:`, `Dòng viết:`, `Khung từ:`, `Ảnh:`, `Lời dẫn:`, `Mẫu:`, `Ghi chú:`; khối `Bài đọc:`, `Hội thoại:`, `Ô chữ:`; câu đánh số và ký hiệu sẵn có; câu nhiều dòng bằng dòng thụt lề; `## Đáp án` riêng ở cuối → `key` từng câu (`### Task n` chạy liền qua các phần của bài n). Xuất: `taskToMd` / `sheetToMd` (chưa có nút; phần nối xuất thành `### Phần:`).
 
 ### 16.5 Kiểm thử (v65)
 test12 (P0), test13 (P1), test14 (P2) cùng test1–11, audit, audit2, `cmp_paste.py`, `ws_sea.py`: đạt; 0 lỗi console, 0 lỗi tràn. Phiếu Sea: JSON 6 Task 3 trang; `sea.md` ra đúng 3 Task đầu của JSON và cùng số trang.
 
 ### 16.6 Còn lại
-P3 (thử 5–10 PDF thật qua đường chat, đo số Task đúng và chỗ phải sửa tay); P4 (mẫu "Ô chữ" khi dán một khối chữ, đáp án ô chữ, phiếu nhiều nhóm); nút "Xuất MD"; bản in đáp án từ `key`; "Mặc định theo dạng bài" cho Task `custom`.
+P3 (thử 5–10 PDF thật qua đường chat, đo số Task đúng và chỗ phải sửa tay; đã thử 2); P4 (mẫu "Ô chữ" khi dán một khối chữ, đáp án ô chữ, phiếu nhiều nhóm); nút "Xuất MD"; bản in đáp án từ `key`; "Mặc định theo dạng bài" cho Task `custom`.
 
 ### 16.7 Font nhúng sẵn (v66, 25/10/2026)
 - Andika (phiếu) và Be Vietnam Pro (giao diện) nhúng bằng `@font-face` trỏ tới thư mục `fonts/` cạnh file HTML (woff2 các nhóm latin, latin-ext, vietnamese; giấy phép SIL OFL kèm theo). Không còn gọi Google Fonts: chạy offline vẫn dàn trang giống nhau.
@@ -393,10 +396,38 @@ P3 (thử 5–10 PDF thật qua đường chat, đo số Task đúng và chỗ p
 - Bản artifact trên claude.ai vẫn dùng link Google Fonts (một file duy nhất, không có thư mục fonts).
 
 ### 16.8 Sửa theo phiếu thật đầu tiên (v67, 25/10/2026 tối)
-- **Mẫu thử:** PDF “A Surprise Birthday Party” (Cambridge A1 Movers, 6 bài, 2 trang) → AI khác viết MD theo prompt cũ → nạp vào v66: chỉ ~1/6 Task dùng được. Nguyên nhân chính nằm ở **đường nhập**, không ở mô hình container: prompt có dòng mẫu “Nội dung:” làm AI chép theo; bộ đọc MD gặp dòng lạ thì lặng lẽ biến thành câu; lựa chọn A/B/C mỗi dòng một lựa chọn không được hiểu; ô tick ☐ trên lựa chọn chữ bị hiểu thành “tick ảnh”; gạch ___ của bản gốc nằm trùng với chỗ trả lời app vẽ; bài đọc mất đoạn; bảng nhận diện không báo các lỗi này.
-- **Bộ đọc MD (`mdTask`):** bỏ dòng `Nội dung:` / `Content:`; dòng chỉ có nhãn `Xxx:` thì bỏ và ghi chú; bỏ `My answer: A / B / C` và dòng chỉ có gạch / chấm; lựa chọn `A. B. C.` mỗi dòng một lựa chọn (thụt lề hay không) gộp vào câu trên; câu chỉ có lựa chọn (không có thân câu) vẫn là một câu; `☐ / □ / [ ]` (cùng dòng hoặc mỗi dòng một ô, trừ dòng bảng) là lựa chọn của một câu → Lựa chọn A4 nhãn ô tick; dòng chữ thường sau câu cuối và trường mới `Ghi chú:` nối vào hướng dẫn (bước 1: dùng ô Hướng dẫn có sẵn, không thêm trường hiển thị mới); gạch `___` ở cuối câu bị bỏ khi đáp án là Đúng/Sai, viết câu, viết từ theo câu (giữ `Nhãn: ___`); bài đọc giữ đoạn (dòng trống); hội thoại chỉ nhận qua khối `Hội thoại:` (tránh nhầm `Place of the party: ___` là lời người nói); có ô tick mà đáp án không phải lựa chọn → ghi chú “tách thành nhiều Task”.
-- **Mở rộng (bước 2 của quy trình):** A4 thêm giá trị `lab: 'box'` (☐ ô tick, bo góc) ở Inspector; mô tả “tick lựa chọn”; MD xuất `☐ …` và `Trả lời: tick`, nạp lại ra đúng. Không thêm format mới. Đã bỏ ý “số lựa chọn phải chọn” vì hướng dẫn của bài đã nói (vd “Tick two”), thêm thông số chỉ làm rối.
+- **Mẫu thử:** PDF "A Surprise Birthday Party" (Cambridge A1 Movers, 6 bài, 2 trang) → AI khác viết MD theo prompt cũ → nạp vào v66: chỉ ~1/6 Task dùng được. Nguyên nhân chính nằm ở **đường nhập**, không ở mô hình container: prompt có dòng mẫu "Nội dung:" làm AI chép theo; bộ đọc MD gặp dòng lạ thì lặng lẽ biến thành câu; lựa chọn A/B/C mỗi dòng một lựa chọn không được hiểu; ô tick ☐ trên lựa chọn chữ bị hiểu thành "tick ảnh"; gạch ___ của bản gốc nằm trùng với chỗ trả lời app vẽ; bài đọc mất đoạn; bảng nhận diện không báo các lỗi này.
+- **Bộ đọc MD (`mdTask`):** bỏ dòng `Nội dung:` / `Content:`; dòng chỉ có nhãn `Xxx:` thì bỏ và ghi chú; bỏ `My answer: A / B / C` và dòng chỉ có gạch / chấm; lựa chọn `A. B. C.` mỗi dòng một lựa chọn (thụt lề hay không) gộp vào câu trên; câu chỉ có lựa chọn (không có thân câu) vẫn là một câu; `☐ / □ / [ ]` (cùng dòng hoặc mỗi dòng một ô, trừ dòng bảng) là lựa chọn của một câu → Lựa chọn A4 nhãn ô tick; dòng chữ thường sau câu cuối và trường mới `Ghi chú:` nối vào hướng dẫn (bước 1: dùng ô Hướng dẫn có sẵn, không thêm trường hiển thị mới); gạch `___` ở cuối câu bị bỏ khi đáp án là Đúng/Sai, viết câu, viết từ theo câu (giữ `Nhãn: ___`); bài đọc giữ đoạn (dòng trống); hội thoại chỉ nhận qua khối `Hội thoại:` (tránh nhầm `Place of the party: ___` là lời người nói); có ô tick mà đáp án không phải lựa chọn → ghi chú "tách thành nhiều Task" (**v68 đổi: ghi chú này nói tới `### Phần:`, mục 16.9**).
+- **Mở rộng (bước 2 của quy trình):** A4 thêm giá trị `lab: 'box'` (☐ ô tick, bo góc) ở Inspector; mô tả "tick lựa chọn"; MD xuất `☐ …` và `Trả lời: tick`, nạp lại ra đúng. Không thêm format mới. Đã bỏ ý "số lựa chọn phải chọn" vì hướng dẫn của bài đã nói (vd "Tick two"), thêm thông số chỉ làm rối.
 - **Bài đọc nhiều đoạn:** `lead.text` có `\n\n` thì mỗi đoạn một `<p>` (cách 2 mm); bài một đoạn hiển thị như cũ (18 Task mẫu giống hệt v66). Dùng được cả từ JSON.
 - **Cảnh báo mới** (`contentWarnings`, mọi nguồn): câu lỗi chữ (`undefined`), câu trông giống tiêu đề (kết thúc bằng `:`), gạch ___ cuối câu trùng chỗ trả lời riêng, câu còn ký hiệu ô tick. Phiếu mẫu 18 Task: không có cảnh báo mới.
-- **Prompt** `claude/PROMPT_PDF_SANG_PHIEU.md` và **quy ước** `claude/QUY_UOC_MD.md` (mục 4b, ví dụ 4) viết lại theo các quy tắc trên, có ví dụ đầy đủ là chính phiếu này (bài 6 tách thành Task 6 Story Map và Task 7 My Idea: khung từ + điền chỗ trống).
+- **Prompt** `claude/PROMPT_PDF_SANG_PHIEU.md` và **quy ước** `claude/QUY_UOC_MD.md` (mục 4b, ví dụ 4) viết lại theo các quy tắc trên. *(Ở v67 prompt bảo AI tách bài trộn loại thành nhiều Task; sai, đã sửa ở v68, mục 16.9.)*
 - **Kiểm thử v67:** test16 mới (32 phép kiểm, mẫu thật ở `claude/tests/real/` và `claude/tests/md/birthday.md`): MD gốc của người dùng ra đúng Task 1–5, Task 6 trộn loại có ghi chú + cảnh báo đỏ; MD mới ra đúng 7 Task, 3 trang, 0 tràn, không cảnh báo; Inspector ô tick; khứ hồi MD; JSON. test1–15, audit (0 vấn đề), audit2 (13/14/11 trang, 0 tràn), `cmp_paste.py` 20/20 giống v66, `ws_sea.py` giống hệt: đạt trên bản cuối; 0 lỗi console.
+
+### 16.9 Task nhiều phần: "Nối vào Task trên" (v68, 25/10/2026 tối, lần 2)
+- **Mẫu thử lần 2:** cùng phiếu "A Surprise Birthday Party", lần này người dùng chạy prompt v67 với AI của họ: PDF có **6** bài nhưng MD ra **8** Task. Phân loại lỗi:
+  - *Prompt dẫn sai* (chính): v67 bảo "mỗi Task chỉ một loại đáp án, bài trộn thì tách thành nhiều Task" → bài 6 (Story Map + tick một ý + hoàn thành câu) thành Task 6, 7, 8; Task 8 lại chép nguyên hướng dẫn của Task 7 ("Tick one and finish the sentence").
+  - *Mô hình thiếu chỗ chứa:* một bài của PDF có nhiều phần với chỗ trả lời khác nhau, mà phiếu chỉ có "một Task = một số + một kiểu đáp án". Cách thường: tách thành nhiều Task (đổi số Task so với PDF, sai).
+  - *Bộ đọc / dàn trang:* các lỗi v67 đã sạch; hai chỗ nhỏ còn lại: nhãn lựa chọn `A. B. C.` của bản gốc bị hiển thị chữ thường (a b c); Task chỉ có một câu vẫn in số "1".
+  - *AI đọc sai chữ:* không có. Dòng "Name / Class" cuối trang không chép (đúng).
+- **Quy trình 3 bước:** (1) layout và cấu hình hiện có: mỗi phần dàn đúng (T6 + A2 / A4 ô tick) nhưng không có cách gộp chúng thành một Task có một số; (2) mở rộng: **thêm một giá trị cho tùy chọn có sẵn** `layout.break` (cùng chỗ với "Sang trang mới" và "Giữ liền Task sau") thay vì tạo trường hay Task kiểu mới; (3) không cần format mới. Người dùng chọn phương án này trong ba phương án đã nêu (B: nối Task; A: một Task nhiều khối đáp án; C: gộp bằng bảng) vì đổi ít nhất mô hình và giữ mỗi phần cấu hình độc lập.
+- **`layout.break = 'join'`** ("Nối vào Task trên", mục 9.2): phần tiếp của Task phía trên. Hiển thị: không số, không tiêu đề; `instruction` riêng (nếu có) là một dòng thẳng đường dóng với chữ tiêu đề; cách trên bằng "Giữa các nhóm"; không padding-top G0. Số Task: `paginate()` tính `number` (phần nối dùng số Task trên) và `part` (a, b, c; chỉ khi Task có phần nối); cả hai không lưu khi nạp. Xếp trang: Task trên luôn xử lý như `keep` với phần nối (phần nối không bao giờ đứng đầu trang trừ khi cả cụm không vừa); `join` bỏ qua `page`; phần nối bị cắt trang vẫn không lặp G0.
+- **Bật / tắt:** Inspector → Ngắt trang → "Nối vào Task trên"; cột trái → nút ↳ trong thanh công cụ Task. Task đầu phiếu không nối được (nút khóa; dữ liệu vẫn có `join` ở Task đầu thì hiện như Task thường + ghi chú "không nối được"). "Áp cho cả phiếu / cùng dạng" không chép `join`.
+- **MD:** `### Phần: <tên>` trong một `## Task` (mục 1 và 4 của quy ước). Mỗi phần là một khối đọc như một Task (cùng trường `Hướng dẫn:`, `Trả lời:`…), khối đầu là Task, các khối sau có `layout.break = 'join'`. `## Đáp án`: `### Task n` đếm bài (không đếm phần), đáp án chạy liền qua các phần theo thứ tự câu. Xuất `sheetToMd`: phần nối thành `### Phần:`, đáp án gộp theo bài. Bảng nhận diện: "6 Task (Task 6 có 3 phần)", dòng 6a / 6b / 6c, thông báo sau khi tạo "6 Task, 8 khối".
+- **Nhãn lựa chọn chữ hoa:** MD có lựa chọn viết `A. … B. …` (chữ hoa) → `answer.params.upper = true` (nhãn A B C); viết thường giữ a b c. Không áp cho ô tick. JSON: tự đặt `params.upper`.
+- **Câu duy nhất không đánh số:** danh sách câu (câu hỏi, bài đọc + câu hỏi, T4) chỉ có đúng 1 câu thì ẩn số "1" nhưng **vẫn giữ lề số** (chữ thẳng đường dóng như các Task khác). Quy tắc tự động, không có công tắc (số "1" lẻ loi không có ý nghĩa; đổi lại nếu cần công tắc). Không áp cho T5 (lưới ảnh) và bảng.
+- **Prompt / quy ước:** `claude/PROMPT_PDF_SANG_PHIEU.md` và `claude/QUY_UOC_MD.md` viết lại: một bài của PDF = một `## Task`, tự kiểm tra số Task bằng số bài của PDF, không chép lặp hướng dẫn, `### Phần:` cho các phần phụ; JSON dùng `layout.break: "join"`. Ví dụ đầy đủ = chính phiếu này (6 bài).
+- **Chưa làm, chờ người dùng quyết (ghi ở mục 13):** cột T/F mặc định 80/20; hướng lựa chọn khoanh thống nhất cả Task; công tắc "Name / Class" ở cấp phiếu.
+- **Kiểm thử v68:** test17 mới (35 phép kiểm: MD cũ 8 khối vẫn đọc, MD mới 8 khối với 2 phần nối, nhãn 6a–6c, G0 không số / tiêu đề ở phần nối, hướng dẫn phần nối thẳng đường dóng, khoảng cách 6a→6b = 4 mm và Task→Task = 8 mm, số câu duy nhất ẩn mà chữ vẫn thẳng lề, nhãn A B C hoa, công tắc ↳ + Inspector + hoàn tác + Task đầu bị khóa, phân trang 0–8 Task đệm không bao giờ tách phần nối khỏi Task trên, khứ hồi MD, đáp án chạy liền, + Task bỏ nối ở đầu lô, Task đầu đánh dấu nối, phiếu mẫu 18 Task không đổi) đạt; các test còn lại: xem bàn giao.
+
+### 16.10 Font chữ phiếu (v69, 25/10/2026 tối, lần 3)
+- **Yêu cầu:** người dùng thích bộ font trong ảnh chụp, muốn chọn font ở thông số phiếu: font hiện tại / font trong ảnh / một font khác hợp.
+- **Quy trình:** bước 1 chưa có chỗ chọn font; bước 2 thêm một thông số cấp phiếu `ws.font` (không thêm format). Panel Phiếu → mục **Font chữ phiếu**, đặt giữa "Xếp trang" và "Khoảng cách", 3 nút:
+  - **Andika** (mặc định, font hiện tại; không lưu `font`);
+  - **Be Vietnam Pro** (`be`): font trong ảnh, gọn, hiện đại. *Giả định:* chữ trong ảnh trông giống Be Vietnam Pro (font giao diện của app); nếu người dùng muốn font khác thì đổi bảng `FONTS`;
+  - **Lexend** (`lexend`): font thiết kế cho dễ đọc, giãn chữ rộng, có tiếng Việt.
+- Chỉ đổi font của **trang A4** (biến `--f-sheet`), giao diện giữ nguyên. Thêm font = thêm một dòng vào bảng `FONTS` (tên, danh sách font CSS, mô tả).
+- Đổi font thì nạp trước các nhóm ký tự tiếng Việt, rồi **dàn lại trang** (số trang có thể đổi vì độ rộng chữ khác). Hoàn tác / làm lại và nạp phiếu đều áp đúng font.
+- Lưu ở `ws.font`; JSON / khứ hồi giữ nguyên; `fillSheet` bỏ font lạ và báo "font không có trong danh sách". `font` không nằm trong khóa nhận diện "phiếu" khi nạp JSON.
+- **Chưa kiểm:** hình dạng thật của Be Vietnam Pro và Lexend trong môi trường test (không tải được font, chỉ kiểm cơ chế: biến CSS đổi, dàn lại, 0 lỗi, khứ hồi). Bản artifact tải 3 font từ Google Fonts; bản trong repo cần thêm woff2 Lexend (latin, latin-ext, vietnamese; 400 và 700) và Be Vietnam Pro 700 vào `fonts/` kèm `@font-face`, nếu không máy offline sẽ dùng font dự phòng.
+- Kiểm thử: `test18.py` (19 phép kiểm).

@@ -1,6 +1,6 @@
 # Quy ước MD trung gian cho WS Editor (P2)
 
-Cập nhật: 2026-10-25 (tối) · áp dụng từ bản prototype **v67** (v65 + sửa theo phiếu thật đầu tiên “A Surprise Birthday Party”, mục 4b và ví dụ 4).
+Cập nhật: 2026-10-25 (tối, lần 2) · áp dụng từ bản prototype **v68** (v65 + sửa theo phiếu thật thứ nhất ở v67, mục 4b; v68: bài nhiều phần `### Phần:` ở mục 1 và mục 4, nhãn A. B. C. giữ chữ hoa, ví dụ 4 viết lại theo PDF 6 bài).
 
 MD (Markdown) là cách viết một phiếu bằng chữ thường mà app đọc **chắc chắn**, không phải đoán. Dùng khi:
 - tự soạn phiếu trong Word / Notes rồi dán vào app;
@@ -20,8 +20,11 @@ Tuổi: 7-9                      ← tùy chọn: 5-6 | 7-9 | 10-12
 Xếp trang: liền                ← tùy chọn: liền | tách
 Khoảng cách: vừa               ← tùy chọn: gọn | vừa | thoáng
 
-## Task: <tiêu đề Task>        ← BẮT BUỘC, mỗi Task bắt đầu bằng dòng này
+## Task: <tiêu đề Task>        ← BẮT BUỘC, mỗi bài của PDF bắt đầu bằng dòng này
 ...các dòng của Task...
+
+### Phần: <tên phần>           ← tùy chọn: phần tiếp của Task ngay trên (xem mục 4)
+...các dòng của phần...
 
 ## Task: <tiêu đề Task tiếp>
 ...
@@ -31,7 +34,8 @@ Khoảng cách: vừa               ← tùy chọn: gọn | vừa | thoáng
 ```
 - Các dòng trước `## Task` đầu tiên chỉ dùng cho cấp phiếu. Khi dùng **+ Task**, chúng bị bỏ qua (app báo).
 - **Mỗi file một phiếu.** Phiếu có nhiều nhóm (vd. “Students 1 and 2 / 3 and 4”) thì tách thành nhiều file.
-- Số Task tối đa mỗi lần nhập: 40.
+- **Một bài của PDF = một `## Task`.** Không tách một bài thành nhiều `## Task`; bài có nhiều phần dùng `### Phần:`.
+- Số Task tối đa mỗi lần nhập: 40 (tính cả phần).
 
 ## 2. Trường của một Task (dòng `Tên: giá trị`)
 
@@ -47,7 +51,7 @@ Khoảng cách: vừa               ← tùy chọn: gọn | vừa | thoáng
 | `Mẫu:` | ép theo một mẫu có sẵn (tên hoặc mã), thay cho `Trả lời:` | `Mẫu: Đúng/Sai` |
 | `Ghi chú:` | lời nhắc của bài (vd câu nằm dưới bài trong bản gốc); app nối vào cuối hướng dẫn | `Ghi chú: Check them after reading.` |
 
-Tên trường viết hoa hay thường đều được; có bản tiếng Anh: `Instruction`, `Audio`, `Answer type`, `Words`, `Image`, `Intro`.
+Tên trường viết hoa hay thường đều được; có bản tiếng Anh: `Instruction`, `Audio`, `Answer type`, `Words`, `Image`, `Intro`. Mọi trường dùng được ở `## Task` lẫn `### Phần`.
 
 ## 3. Giá trị của `Trả lời:`
 
@@ -56,7 +60,7 @@ Tên trường viết hoa hay thường đều được; có bản tiếng Anh: 
 | `viết từ` | ô trống viết một từ dưới mỗi câu / ảnh |
 | `điền chỗ trống` | gạch `___` ngay trong câu |
 | `viết câu` | dòng kẻ để viết câu |
-| `khoanh A/B/C` (hoặc `khoanh`, `chọn A/B/C`) | lựa chọn A, B, C dưới câu |
+| `khoanh A/B/C` (hoặc `khoanh`, `chọn A/B/C`) | lựa chọn A, B, C dưới câu (viết `A.` chữ hoa thì nhãn chữ hoa, `a.` thì chữ thường) |
 | `chọn trong câu` (hoặc `gạch chân`) | lựa chọn `{a|b}` ngay trong câu |
 | `tick` | lựa chọn bằng chữ có ô ☐ (`☐ a cake ☐ a football`) → các lựa chọn có ô tick; lựa chọn là ảnh (`A. [ảnh: x]` hoặc tên ảnh) → nhiều ảnh lựa chọn, tick ảnh |
 | `đúng/sai` | ô T / F |
@@ -71,6 +75,7 @@ Không ghi `Trả lời:` thì app đoán theo ký hiệu như khi dán chữ, v
 - **Câu đánh số:** `1. …`, `2) …`, `(3) …`. Trong câu dùng các ký hiệu sẵn có:
   `___` chỗ trống · `{a|b}` chọn trong câu · `A. … B. … C. …` lựa chọn (cùng dòng, hoặc mỗi lựa chọn một dòng ngay dưới câu, thụt lề hay không đều được) · `☐ …` lựa chọn có ô tick (cũng nhận `[ ]`, `□`; cùng dòng hoặc mỗi dòng một lựa chọn) · `[ảnh: tên]` ảnh của câu · `trái - phải` một cặp nối (vế trái là ảnh: `[ảnh: apple] - pear`).
 - **Câu chỉ có lựa chọn** (không có thân câu, vd chọn ý chính của bài đọc): `1. A. … B. … C. …` hoặc `☐ a cake ☐ a football ☐ balloons`.
+- **Task chỉ có một câu** thì trên phiếu không đánh số câu (vẫn chừa lề cho chữ thẳng hàng với các Task khác).
 - **Câu nhiều dòng:** dòng **thụt lề** (≥ 2 dấu cách) ngay dưới một câu đánh số là dòng tiếp của câu đó.
 - **Bài đọc:** dòng `Bài đọc:` rồi các đoạn văn; **dòng trống giữa hai đoạn = sang đoạn mới** (giữ trên phiếu). Hết bài đọc khi gặp câu đánh số, lựa chọn, dòng bảng hoặc dòng trường.
 - **Hội thoại:** dòng `Hội thoại:` rồi mỗi lượt một dòng `Tên: lời`. **Chỉ nhận hội thoại qua khối này** (từ v67): câu đánh số dạng `Place of the party: ___` là câu điền, không phải lời người nói. Tên được có số (“Students 1 and 2”). Có `___` thì thành điền chỗ trống, không có thì không có chỗ trả lời.
@@ -78,7 +83,11 @@ Không ghi `Trả lời:` thì app đoán theo ký hiệu như khi dán chữ, v
 - **Ô chữ (word search):** dòng `Ô chữ:` rồi mỗi dòng một hàng chữ cái (`SUNLIGHT…` hoặc `S U N L …`). Thành bảng chữ cái không tiêu đề, không số, căn giữa; dùng kèm `Khung từ:` cho danh sách từ cần tìm.
 - **Chỉ có ảnh** (tô màu, vẽ): chỉ ghi `Ảnh:` và `Trả lời: không`, không có câu.
 - Dòng trống giữa các phần không bắt buộc, chỉ để dễ đọc.
-- **Mỗi Task chỉ có một loại chỗ trả lời.** Bài gốc trộn nhiều loại (vd điền bảng + tick một ý + hoàn thành câu) thì tách thành nhiều `## Task` liên tiếp. Một ý “chọn một trong các từ rồi viết” dùng `Khung từ:` + `điền chỗ trống`.
+- **Mỗi `## Task` và mỗi `### Phần` chỉ có một loại chỗ trả lời.** Bài gốc có nhiều phần với chỗ trả lời khác nhau (vd điền bảng + tick một ý + hoàn thành câu) vẫn là **một** bài: phần đầu nằm ngay dưới `## Task:`, các phần sau mở bằng `### Phần: <tên phần>`.
+  - Mỗi phần có `Hướng dẫn:` và `Trả lời:` riêng. `Hướng dẫn:` chỉ ghi khi PDF có câu lệnh riêng cho phần đó; **không chép lại hướng dẫn của phần trước**; bỏ trống thì phần đó không có dòng hướng dẫn.
+  - Trên phiếu: phần nối không có số và tiêu đề (chỉ hiện hướng dẫn riêng nếu có), luôn đi liền phần trên, cách trên bằng khoảng cách “Giữa các nhóm” (không phải “Giữa các Task”). Bảng nhận diện và cột trái ghi 6a, 6b, 6c.
+  - Dữ liệu: mỗi phần là một Task có `layout.break = "join"` (lựa chọn thứ 4 của mục Ngắt trang; người dùng có thể bật / tắt bằng nút ↳ “Nối vào Task trên” ở cột trái). Task đầu phiếu không nối được.
+  - Một ý “chọn một trong các từ rồi viết” dùng `Khung từ:` + `điền chỗ trống`, không cần chia phần.
 
 ## 4b. Những dòng app tự bỏ hoặc chuyển chỗ (v67)
 Phiếu gốc có “giàn giáo” cho học sinh viết; app tự vẽ chỗ trả lời theo `Trả lời:`, nên các dòng này **không cần chép**. Nếu có, app xử lý và ghi chú ở dòng Task trong bảng nhận diện:
@@ -97,19 +106,21 @@ Cảnh báo mới trong bảng nhận diện (cho cả JSON): câu lỗi chữ (
 Hai cách viết, dùng lẫn được:
 ```
 ## Đáp án
-### Task 1          ← số Task theo thứ tự trong file
+### Task 1          ← số của bài trong file (bài nhiều phần chỉ đếm một lần)
 1. cat
 2. dog
 Task 2: is; are; an ← một dòng, các đáp án cách nhau bằng dấu ;
 ```
 - Đáp án được ghi vào trường “đáp án đúng” của từng câu (`key`), **không** hiện trên phiếu học sinh. Câu thiếu đáp án thì thẻ dạng bài cảnh báo như khi soạn tay.
+- **Bài nhiều phần:** `### Task 6` liệt kê đáp án **liền nhau qua các phần, theo thứ tự câu** (vd phần đầu 4 câu, phần sau 1 câu, phần cuối 1 câu → 6 dòng); thừa dòng thì app ghi chú.
 - Chưa nhận đáp án cho **bảng** và **ô chữ** (bỏ qua, có báo).
 
 ## 6. Khi app đọc MD
-- Mỗi `## Task` thành một dòng trong **bảng nhận diện**: số theo file, tiêu đề, mô tả cấu hình, số câu/hàng, cảnh báo (thiếu ảnh, khung từ không khớp chỗ trống, thiếu đáp án…), cuối bảng có ước tính số trang.
+- Mỗi `## Task` thành một dòng trong **bảng nhận diện**: số theo file, tiêu đề, mô tả cấu hình, số câu/hàng, cảnh báo (thiếu ảnh, khung từ không khớp chỗ trống, thiếu đáp án…), cuối bảng có ước tính số trang. Dòng tóm tắt đầu bảng đếm **bài** (không đếm phần): “6 Task (Task 6 có 3 phần)”; mỗi phần là một dòng ghi 6a, 6b, 6c. Nếu số này khác số bài trong PDF thì AI đã tách / gộp nhầm.
 - Trường không hiểu, `Trả lời:` không hợp nội dung, `Mẫu:` không có: app giữ cấu hình đoán và ghi chú ngay ở dòng Task đó.
 - Task không dựng được thì dòng đỏ: + Task bỏ qua Task đó, + Phiếu không cho tạo (sửa file rồi nạp lại). Phiếu đang mở không bao giờ bị đổi khi có lỗi.
-- Hàm `sheetToMd(ws)` / `taskToMd(t)` trong app xuất phiếu đang mở ra MD theo đúng quy ước này (chưa có nút; dùng cho kiểm thử và làm mẫu). Khứ hồi 18 Task mẫu: MD → app giữ đúng 18/18 cấu hình (mô tả, số câu, loại đáp án, bố cục).
+- **+ Task** nhập một lô mà phần nối đứng đầu lô: app bỏ trạng thái nối của nó (không dính vào Task cuối của phiếu đang mở).
+- Hàm `sheetToMd(ws)` / `taskToMd(t)` trong app xuất phiếu đang mở ra MD theo đúng quy ước này, phần nối xuất thành `### Phần:` (chưa có nút; dùng cho kiểm thử và làm mẫu). Khứ hồi 18 Task mẫu: MD → app giữ đúng 18/18 cấu hình (mô tả, số câu, loại đáp án, bố cục).
 
 ---
 
@@ -264,8 +275,8 @@ Task 2: meow; woof; moo
 Task 4: rainy, on; sunny, swimming costume
 ```
 
-## Ví dụ 4 — phiếu đọc thật “A Surprise Birthday Party” (Cambridge A1 Movers)
-Phiếu thật đầu tiên dùng để kiểm thử (PDF: `claude/tests/real/birthday.pdf`). File: `claude/tests/md/birthday.md`. Bài 6 gốc trộn 3 loại nên tách thành Task 6 (Story Map) và Task 7 (My Idea). Đầu phiếu (Name/Class, thời gian từng bài, “Before you read”) không chép.
+## Ví dụ 4 — phiếu đọc thật “A Surprise Birthday Party” (Cambridge A1 Movers), 6 bài, bài 6 có 3 phần
+Phiếu thật dùng để kiểm thử. PDF gốc ở `claude/tests/real/` (cùng chỗ với `birthday.pdf`). File: `claude/tests/md/birthday6.md` (đúng 6 `## Task`; bài 6 = `## Task` + 2 `### Phần`). Đầu / cuối trang (Name/Class, tên phiếu lặp lại, thời gian từng bài, “Before you read”) không chép. Bản MD người dùng nhận từ AI theo prompt v67 (tách bài 6 thành 3 Task, thành 8 Task, lặp hướng dẫn) ở `claude/tests/real/birthday-user2.md`, giữ nguyên làm mẫu lỗi.
 
 ```markdown
 # A Surprise Birthday Party
@@ -312,16 +323,19 @@ Trả lời: khoanh A/B/C
    B. The friends were sleeping.
    C. Ben was not at home.
 
-## Task: Story Map
+## Task: Story Map & My Idea
 Hướng dẫn: Complete the story map with words from the story.
 Trả lời: điền chỗ trống
 1. Place of the party: ___
 2. Food at the party (two things): ___
 
-## Task: My Idea
-Hướng dẫn: Which party activity would you like best? Choose one and finish the sentence.
+### Phần: My Idea – Tick One
+Hướng dẫn: Which party activity would you like best? Tick one and finish the sentence.
+Trả lời: tick
+☐ eating cake ☐ playing games ☐ singing songs
+
+### Phần: My Idea – Finish the Sentence
 Trả lời: điền chỗ trống
-Khung từ: eating cake, playing games, singing songs
 1. I would like ___ because ___.
 ```
-(Ví dụ rút gọn bằng “…”; file đầy đủ ở `claude/tests/md/birthday.md`.)
+(Ví dụ rút gọn bằng “…”; file đầy đủ ở `claude/tests/md/birthday6.md`. `claude/tests/md/birthday.md` là bản v67 tách bài 6 thành Task 6 và 7, vẫn đọc được.)
