@@ -276,6 +276,6 @@ python3 -c "from PIL import Image; Image.new('RGB',(64,48),(200,200,200)).save('
 - **Không còn dùng artifact.** Xong việc thì commit và đẩy lên GitHub `khanhtoaninv/WS-Editor`, nhánh main (người dùng yêu cầu). Repo: file chính `ws-editor-prototype.html`, `docs/`, `tests/`, `fonts/`, `samples/`.
 - **Đã chạy trên bản cuối v70:** test1, 3–19, audit (0 vấn đề), audit2 (không tràn), cmp_paste (20 bài dán giống v69), ws_sea (3 trang, 0 lỗi) đạt, 0 lỗi console. `test2` so với v69: 31/32, chỗ lệch duy nhất là Task 5 phiếu mẫu (đã định, xem mục AI).
 - **Cách chạy:** `bash tests/run_all.sh <mới.html> <cũ.html>`; `cmp_paste.py <mới> <cũ>`; `ws_sea.py` ghi ra `/home/claude/ws/ws-sea-sample.json` (cần tạo thư mục), bản đó khác `ws-sea-sample.json` trong repo ở trường `part:""` từ v68 (không phải lỗi v70, chưa tái xuất mẫu).
-- **Việc tiếp theo:** P3 (người dùng gửi PDF thật + MD do AI tạo + ảnh sau khi nạp, thêm vào `tests/real/`), P4 (Ô chữ), công tắc Họ tên / Lớp (hoãn). `real/birthday.pdf` không có trong repo.
+- **Việc tiếp theo:** P3 (người dùng gửi PDF thật + MD do AI tạo + ảnh sau khi nạp, thêm vào `tests/real/`), P4 (Ô chữ), công tắc Họ tên / Lớp (hoãn)..
 - **Cách nhập:** như v65 (+ Task / + Phiếu; JSON chính, MD theo `QUY_UOC_MD.md`, chữ thô là đoán). Prompt cho AI: `PROMPT_PDF_SANG_PHIEU.md`.
 - Chỉ báo "đạt" cho test đã chạy trên bản cuối; mẫu do Claude tự viết không thay được phiếu do AI khác viết.

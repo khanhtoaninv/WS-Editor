@@ -45,5 +45,5 @@ Mở thread mới trong Project "WS Editor", dán MỘT trong các lệnh ở m�
 - `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục AC–AH; mục cuối: BÀN GIAO v70)
 - `claude/PHUONG_AN_NHAP_FILE.md`, `claude/QUY_UOC_MD.md`, `claude/PHUONG_AN_CONG_THUC.md`
 - `claude/ws-sea-sample.json` (phiếu Wonders of the Sea, đủ trường; bản sao ở `claude/tests/ws-sea-sample.json` cho test)
-- `claude/tests/`: test1–18, audit, audit2, shot, cmp_paste, ws_sea, run_all.sh, `md/sea.md`, `md/mau-tron.md`, `md/nghe-bang.md`, `md/birthday.md`, `real/birthday-user.md` (MD gốc người dùng nhận từ AI, giữ nguyên), `real/birthday.pdf`
+- `claude/tests/`: test1–19, audit, audit2, shot, cmp_paste, ws_sea, run_all.sh, `md/sea.md`, `md/mau-tron.md`, `md/nghe-bang.md`, `md/birthday.md`, `real/birthday-user.md` (MD gốc người dùng nhận từ AI, giữ nguyên), `real/birthday.pdf`
 - `claude/PROMPT_PDF_SANG_PHIEU.md` (prompt cho AI đọc PDF; v68)
