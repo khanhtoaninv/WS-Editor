@@ -1,0 +1,136 @@
+# P1 (v64): "+ Task" (Mẫu có sẵn | Từ file / dán, luôn thêm vào cuối) và "+ Phiếu" (từ file / dán, trống = phiếu rỗng, xác nhận + tải JSON cũ)
+import sys, json, os, tempfile
+from playwright.sync_api import sync_playwright
+ok=True
+def chk(n,c,i=''):
+    global ok; print(('PASS ' if c else 'FAIL ')+n, i); ok = ok and bool(c)
+HERE=os.path.dirname(os.path.abspath(__file__))
+SEA=open(os.path.join(HERE,'ws-sea-sample.json'),encoding='utf-8').read()
+TMP=tempfile.mkdtemp()
+def tmpfile(name, text):
+    p=os.path.join(TMP,name); open(p,'w',encoding='utf-8').write(text); return p
+SNAP="JSON.stringify(ws)"
+with sync_playwright() as p:
+    b=p.chromium.launch(); ctx=b.new_context(viewport={'width':1440,'height':900}, accept_downloads=True); pg=ctx.new_page(); errs=[]
+    pg.on('console', lambda m: errs.append(m.text) if m.type=='error' and 'ERR_' not in m.text and 'fonts' not in m.text else None); pg.on('pageerror', lambda e: errs.append('PAGEERR '+str(e)))
+    pg.goto('file://'+sys.argv[1]); pg.wait_for_timeout(1300)
+    ids = lambda: pg.evaluate("ws.tasks.map(t=>t.id)")
+    # 1) cột trái: đúng 2 nút nhập
+    btns = pg.eval_on_selector_all('#tree .ttools .btn','e=>e.map(x=>x.innerText.trim())')
+    chk('cột trái có đúng 2 nút: + Task, + Phiếu', btns==['+ Task','+ Phiếu'], btns)
+    # 2) + Task: hai thẻ, mặc định Mẫu có sẵn
+    pg.click('#tree [data-lib]'); pg.wait_for_timeout(300)
+    tabs = pg.eval_on_selector_all('#imTabs [data-tab]','e=>e.map(x=>x.innerText+":"+x.classList.contains("on"))')
+    chk('+ Task: hai thẻ Mẫu có sẵn | Từ file / dán, mở ở Mẫu có sẵn', tabs==['Mẫu có sẵn:true','Từ file / dán:false'] and pg.is_visible('#libGrid') and not pg.is_visible('#pasteTa'), tabs)
+    pg.click('#libDlg [data-tab=src]'); pg.wait_for_timeout(200)
+    chk('bấm thẻ Từ file / dán: hiện chọn file + ô dán, ẩn thư viện', pg.is_visible('#pasteTa') and pg.is_visible('#impPick') and not pg.is_visible('#libGrid'))
+    chk('ô trống: nút thêm tắt', pg.is_disabled('#pasteOk'))
+    pg.click('#libDlg [data-tab=lib]'); pg.wait_for_timeout(200)
+    # 3) mẫu có sẵn: luôn thêm vào CUỐI, dù đang chọn Task giữa phiếu
+    pg.click('#libClose'); pg.click('#tree .tnode[data-sel=task][data-id=t3]'); pg.wait_for_timeout(200)
+    i0 = ids(); pg.click('#tree [data-lib]'); pg.wait_for_timeout(300); pg.click('#libGrid [data-r=answer-q]'); pg.wait_for_timeout(500)
+    i1 = ids(); chk('mẫu có sẵn: thêm vào cuối phiếu (không chèn sau Task đang chọn)', i1[:-1]==i0 and len(i1)==len(i0)+1, i1[-3:])
+    chk('toast: vào cuối phiếu', 'cuối phiếu' in pg.inner_text('#toast'), pg.inner_text('#toast'))
+    pg.click('#undo'); pg.wait_for_timeout(300)
+    # 4) chọn file JSON có 1 Task: chèn luôn
+    one = json.loads(SEA)['tasks'][1]
+    f1 = tmpfile('mot-task.json', json.dumps(one, ensure_ascii=False))
+    pg.click('#tree [data-lib]'); pg.wait_for_timeout(300); pg.click('#libDlg [data-tab=src]'); pg.wait_for_timeout(200)
+    pg.set_input_files('#impFile', f1); pg.wait_for_timeout(800)
+    chk('file 1 Task: chèn luôn, đóng hộp', not pg.evaluate("document.getElementById('libDlg').open") and len(ids())==19, len(ids()))
+    chk('báo "Đã thêm 1 Task vào cuối phiếu (Task 19)"', 'Đã thêm 1 Task vào cuối phiếu (Task 19)' in pg.inner_text('#toast'), pg.inner_text('#toast'))
+    new_id = ids()[-1]; chk('Task chèn có id mới (không trùng "ws1b")', new_id!='ws1b' and len(set(ids()))==19, new_id)
+    pg.click('#undo'); pg.wait_for_timeout(300)
+    # 5) chọn file nhiều Task: bảng nhận diện, mặc định tick hết, cảnh báo
+    fs = tmpfile('sea.json', SEA)
+    pg.click('#tree [data-lib]'); pg.wait_for_timeout(300); pg.click('#libDlg [data-tab=src]'); pg.wait_for_timeout(200)
+    pg.set_input_files('#impFile', fs); pg.wait_for_timeout(900)
+    out = pg.inner_text('#pasteOut')
+    chk('file nhiều Task: hộp vẫn mở, có bảng nhận diện 6 dòng', pg.evaluate("document.getElementById('libDlg').open") and pg.locator('#pasteOut .imrow').count()==6)
+    chk('cảnh báo "File có 6 Task", ghi tên file', 'File có 6 Task' in out and 'sea.json' in out)
+    chk('mặc định tick hết', pg.evaluate("[...document.querySelectorAll('#pasteOut input[data-jk]')].every(x=>x.checked)") and pg.locator('#pasteOut input[data-jk]').count()==6)
+    rows = pg.eval_on_selector_all('#pasteOut .imrow','e=>e.map(x=>x.innerText.split("\\n").filter(Boolean).slice(0,3).join(" | ").trim())')
+    chk('mỗi dòng: số theo file, tiêu đề, mô tả cấu hình, số câu/hàng', rows[0].startswith('1.') and 'Students 1 and 2' in rows[0] and 'Bảng' in rows[0] and '10 hàng' in rows[0] and rows[2].startswith('3.') and '3 lượt' in rows[2], rows[:3])
+    est = pg.inner_text('#pasteOut .imest'); print('est', est)
+    pg.click('#pasteOk'); pg.wait_for_timeout(800)
+    real = pg.inner_text('#pageBadge')
+    chk('ước tính số trang = số trang thật sau khi nhập', est.split('khoảng ')[1].split(' ')[0]==real.split(' ')[0], (est, real))
+    chk('thứ tự theo file, giữ 18 Task cũ ở đầu', pg.evaluate("ws.tasks.slice(18).map(t=>t.title.slice(0,10)).join('|')")==pg.evaluate("s=>JSON.parse(s).tasks.map(t=>t.title.slice(0,10)).join('|')", SEA))
+    pg.click('#tree [data-lib]'); pg.wait_for_timeout(300); pg.click('#libDlg [data-tab=src]'); pg.set_input_files('#impFile', fs); pg.wait_for_timeout(900); pg.click('#pasteOk'); pg.wait_for_timeout(700)
+    chk('nhập cùng file 2 lần: 30 Task, id không trùng', len(ids())==30 and len(set(ids()))==30)
+    pg.click('#undo'); pg.wait_for_timeout(300); pg.click('#undo'); pg.wait_for_timeout(300)
+    chk('hoàn tác 2 lần: về 18 Task', len(ids())==18)
+    # 6) file PDF: chưa có hook → báo rõ; có hook WSImport → đọc được
+    fp = os.path.join(TMP,'de.pdf'); open(fp,'wb').write(b'%PDF-1.4 fake')
+    pg.click('#tree [data-lib]'); pg.wait_for_timeout(300); pg.click('#libDlg [data-tab=src]'); pg.set_input_files('#impFile', fp); pg.wait_for_timeout(600)
+    chk('PDF chưa có hook: báo gửi cho Claude để ra JSON, nút tắt', 'Gửi file cho Claude' in pg.inner_text('#pasteOut') and pg.is_disabled('#pasteOk'))
+    pg.evaluate("s=>{window.WSImport={extract:async f=>({tasks:JSON.parse(s).tasks.slice(0,3)})}}", SEA)
+    pg.evaluate("document.getElementById('impFile').value=''"); pg.set_input_files('#impFile', fp); pg.wait_for_timeout(900)
+    chk('PDF qua hook WSImport.extract: ra bảng 3 Task', pg.locator('#pasteOut .imrow').count()==3, pg.inner_text('#pasteOut')[:120])
+    pg.evaluate("delete window.WSImport"); pg.click('#libClose'); pg.wait_for_timeout(200)
+    # 7) một Task hỏng trong file: + Task bỏ qua Task hỏng, nhập phần còn lại
+    mix = {'tasks':[json.loads(SEA)['tasks'][1], {'content':{'kind':'weird'}}, json.loads(SEA)['tasks'][2]]}
+    pg.click('#tree [data-lib]'); pg.wait_for_timeout(300); pg.click('#libDlg [data-tab=src]'); pg.fill('#pasteTa', json.dumps(mix)); pg.wait_for_timeout(600)
+    chk('Task hỏng: dòng đỏ, ô tick tắt, nút thêm 2 Task', pg.locator('#pasteOut .imrow.bad').count()==1 and pg.is_disabled('#pasteOut input[data-jk="1"]') and 'Thêm 2 Task' in pg.inner_text('#pasteOk'))
+    pg.click('#pasteOk'); pg.wait_for_timeout(600)
+    chk('nhập 2 Task tốt', len(ids())==20); pg.click('#undo'); pg.wait_for_timeout(300)
+    # 8) + Phiếu: JSON hỏng / quá 40 Task / Task hỏng → không tạo được, phiếu giữ nguyên
+    s0 = pg.evaluate(SNAP)
+    pg.click('#tree [data-newsheet]'); pg.wait_for_timeout(300)
+    chk('+ Phiếu: không có thẻ, ô nhập hiện ngay', not pg.is_visible('#imTabs') and pg.is_visible('#pasteTa') and 'Phiếu mới' in pg.inner_text('#libTitle'))
+    chk('+ Phiếu ô trống: nút "Tạo phiếu trống" bật', not pg.is_disabled('#pasteOk') and pg.inner_text('#pasteOk')=='Tạo phiếu trống')
+    for bad,name in [('{"tasks":[','JSON hỏng'), (json.dumps({'tasks':[{'title':'a'}]*41}),'quá 40 Task'), (json.dumps(mix),'có Task hỏng')]:
+        pg.fill('#pasteTa', bad); pg.wait_for_timeout(500)
+        chk('+ Phiếu '+name+': nút tắt', pg.is_disabled('#pasteOk'), pg.inner_text('#pasteOut')[:100])
+    pg.click('#libClose'); pg.wait_for_timeout(200)
+    chk('phiếu đang mở giữ nguyên sau các lỗi', pg.evaluate(SNAP)==s0)
+    # 9) + Phiếu từ JSON Sea: xác nhận, tải JSON cũ, Quay lại, Thay
+    pg.click('#tree [data-newsheet]'); pg.wait_for_timeout(300); pg.set_input_files('#impFile', fs); pg.wait_for_timeout(900)
+    chk('+ Phiếu file Sea: bảng 6 dòng, không có ô tick, nút Tạo phiếu mới (6 Task)', pg.locator('#pasteOut .imrow').count()==6 and pg.locator('#pasteOut input[data-jk]').count()==0 and 'Tạo phiếu mới (6 Task)' in pg.inner_text('#pasteOk'))
+    pg.click('#pasteOk'); pg.wait_for_timeout(300)
+    chk('bước xác nhận: thay phiếu, không hoàn tác được, có Tải JSON phiếu cũ', 'Thay phiếu hiện tại' in pg.inner_text('#pasteOk') and 'không quay lại được' in pg.inner_text('#pasteOut') and pg.locator('#pasteOut [data-imp=dl]').count()==1)
+    chk('phiếu chưa đổi khi đang hỏi', pg.evaluate(SNAP)==s0)
+    with pg.expect_download() as dl: pg.click('#pasteOut [data-imp=dl]')
+    path = dl.value.path(); old = json.load(open(path,encoding='utf-8'))
+    chk('Tải JSON phiếu cũ: đúng 18 Task, tên file theo tên phiếu', len(old['tasks'])==18 and dl.value.suggested_filename.endswith('.json'), dl.value.suggested_filename)
+    pg.click('#pasteOut [data-imp=back]'); pg.wait_for_timeout(300)
+    chk('Quay lại: về bảng nhận diện', pg.locator('#pasteOut .imrow').count()==6 and 'Tạo phiếu mới' in pg.inner_text('#pasteOk'))
+    pg.click('#pasteOk'); pg.wait_for_timeout(300); pg.click('#pasteOk'); pg.wait_for_timeout(800)
+    chk('Thay: phiếu Sea 6 Task, 3 trang, 0 tràn', len(ids())==6 and pg.inner_text('#pageBadge').startswith('3') and pg.inner_text('#diagBadge')=='Không lỗi tràn')
+    chk('áp cài đặt cấp phiếu từ file (tên phiếu)', pg.evaluate("ws.title").startswith('Wonders of the Sea'))
+    chk('nạp phiếu xóa lịch sử Hoàn tác', pg.is_disabled('#undo'))
+    # 10) + Phiếu từ JSON thiếu trường cấp phiếu: bù mặc định
+    only = json.dumps({'tasks': json.loads(SEA)['tasks'][:3]})
+    pg.click('#tree [data-newsheet]'); pg.wait_for_timeout(300); pg.fill('#pasteTa', only); pg.wait_for_timeout(600)
+    chk('+ Phiếu thiếu trường: báo sẽ bù mặc định', 'bù mặc định' in pg.inner_text('#pasteOut'), pg.inner_text('#pasteOut')[:150])
+    pg.click('#pasteOk'); pg.wait_for_timeout(300); pg.click('#pasteOk'); pg.wait_for_timeout(700)
+    chk('phiếu mới 3 Task, đủ trường', len(ids())==3 and pg.evaluate("[ws.schema,ws.age,ws.flow,ws.spacing.preset].join()")=='ws-editor/0.3,7-9,cont,normal')
+    # 11) + Phiếu trống
+    pg.click('#tree [data-newsheet]'); pg.wait_for_timeout(300); pg.click('#pasteOk'); pg.wait_for_timeout(300)
+    chk('phiếu trống: vẫn hỏi xác nhận vì phiếu hiện tại có Task', 'Thay phiếu hiện tại' in pg.inner_text('#pasteOk'))
+    pg.click('#pasteOk'); pg.wait_for_timeout(600)
+    chk('phiếu trống: 0 Task, 1 trang, không lỗi', len(ids())==0 and pg.inner_text('#pageBadge').startswith('1') and pg.inner_text('#diagBadge')=='Không lỗi tràn')
+    pg.click('#tree [data-newsheet]'); pg.wait_for_timeout(300); pg.fill('#pasteTa', only); pg.wait_for_timeout(500); pg.click('#pasteOk'); pg.wait_for_timeout(600)
+    chk('phiếu hiện tại trống: không cần xác nhận', len(ids())==3 and not pg.evaluate("document.getElementById('libDlg').open"))
+    # 12) + Task vào phiếu trống
+    pg.click('#tree [data-newsheet]'); pg.wait_for_timeout(300); pg.click('#pasteOk'); pg.click('#pasteOk'); pg.wait_for_timeout(500)
+    pg.click('#tree [data-lib]'); pg.wait_for_timeout(300); pg.click('#libGrid [data-r=trace]'); pg.wait_for_timeout(500)
+    chk('phiếu trống + mẫu có sẵn: 1 Task', len(ids())==1 and pg.inner_text('#diagBadge')=='Không lỗi tràn')
+    # 13) Nâng cao → Nạp phiếu khác mở hộp + Phiếu
+    pg.click('#tree .tnode[data-sel=sheet]'); pg.wait_for_timeout(200); pg.click('#insp details.adv summary'); pg.click('#insp [data-act=import]'); pg.wait_for_timeout(300)
+    chk('Nạp phiếu khác (Nâng cao) mở hộp + Phiếu', pg.evaluate("document.getElementById('libDlg').open && document.getElementById('libDlg').dataset.mode==='sheet'"))
+    pg.click('#libClose')
+    # 14) Ctrl+V chữ trên trang: mở + Task, thẻ Từ file / dán, có sẵn chữ
+    pg.reload(); pg.wait_for_timeout(1300)
+    pg.evaluate("""(()=>{const dt=new DataTransfer(); dt.setData('text/plain','Answer the questions.\\n1. What is your name?'); document.dispatchEvent(new ClipboardEvent('paste',{clipboardData:dt,bubbles:true}));})()"""); pg.wait_for_timeout(600)
+    chk('Ctrl+V chữ: mở + Task ở thẻ Từ file / dán, có bảng nhận diện', pg.evaluate("document.getElementById('libDlg').open") and pg.is_visible('#pasteTa') and pg.locator('#pasteOut .imrow').count()==1)
+    pg.click('#libClose')
+    # 15) hộp "Dán nhiều câu" của Task vẫn chạy (hộp riêng)
+    pg.click('#tree .tnode[data-sel=task][data-id=t8]'); pg.wait_for_timeout(300)
+    n0 = pg.evaluate("ws.tasks.find(t=>t.id==='t8').content.items.length")
+    pg.click('#tree .ed [data-eact=paste-items]'); pg.wait_for_timeout(300); pg.fill('#itemsTa','Where do you live?\nWhat is your hobby?'); pg.wait_for_timeout(200); pg.click('#itemsOk'); pg.wait_for_timeout(400)
+    chk('Dán nhiều câu vào Task: thêm 2 câu', pg.evaluate("ws.tasks.find(t=>t.id==='t8').content.items.length")==n0+2)
+    pg.click('#undo'); pg.wait_for_timeout(300)
+    pg.screenshot(path=os.path.join(HERE,'..','shots','p1_end.png'))
+    chk('cuối: 18 Task, 11 trang, 0 tràn', len(ids())==18 and pg.inner_text('#pageBadge').startswith('11') and pg.inner_text('#diagBadge')=='Không lỗi tràn')
+    print('ERRS',errs); print('ALL OK' if ok and not errs else 'SOME FAIL')
