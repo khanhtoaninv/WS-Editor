@@ -1,4 +1,4 @@
-# WS Editor — Bổ sung đặc tả v37 → v65 (25/10/2026)
+# WS Editor — Bổ sung đặc tả v37 → v67 (25/10/2026)
 
 > Bổ sung cho `WS_EDITOR_SPEC.md` (v36). Khi gộp vào spec chính: thay mục 10 "Trình soạn" bằng 10b dưới đây cho phần cột trái, và sửa trạng thái mục 15. Phần nhập file (v63–v65) ở các mục AC–AE; tóm tắt ở mục 16 của spec chính.
 
@@ -224,8 +224,15 @@ Trong khung Task **không dùng màu nhấn** (teal, cam, xanh, tím); mọi c�
 - Sửa kèm trong bộ đoán chữ (không đổi 20 bài dán thử): cặp nối vế trái là ảnh `[ảnh: apple] - pear`; dòng bảng bắt đầu bằng `[ảnh: …]` không còn bị nhầm là khung từ.
 - **Kiểm thử v65:** test1–13 đạt; test14 mới (P2, 34 phép kiểm: nhận ra MD, Sea MD = 3 Task đầu của `ws-sea-sample.json` và cùng số trang, + Phiếu từ MD, 2 ví dụ còn lại đúng cấu hình / số câu / đáp án / cấp phiếu, câu nhiều dòng, `Mẫu:`, `Trả lời:` lạ, chèn file .md 1 Task, khứ hồi 18 Task) đạt; audit ảnh 0 vấn đề; audit2 số trang giống v62 (1:1 13 trang, 3:4 14 trang, 16:9 11 trang, 0 tràn); `cmp_paste.py` 20/20 giống v62; `ws_sea.py` dựng lại `ws-sea-sample.json` giống hệt; màn hình 390 px không tràn ngang; 0 lỗi console.
 
-## D. Còn mở (cập nhật 25/10/2026, bản v65)
-- **Nhập file:** P0, P1, P2 xong. Còn **P3** (thử 5–10 PDF thật qua đường chat: Claude đọc PDF → JSON/MD → nạp; đo số Task đúng, số chỗ phải sửa tay) và **P4** (mẫu có sẵn "Ô chữ" khi dán một khối chữ; đáp án ô chữ; phiếu nhiều nhóm).
+## AF. v67 — Sửa đường nhập MD theo phiếu thật đầu tiên ("A Surprise Birthday Party")
+Chi tiết ở spec chính mục 16.8. Tóm tắt:
+- Phân loại lỗi của lần thử (MD do AI khác viết theo prompt cũ): AI đọc sai chữ 0; prompt dẫn sai ("Nội dung:", không dặn bỏ giàn giáo, không dặn tách Task trộn loại); bộ đọc hiểu sai (lựa chọn xuống dòng, ô ☐, dòng nhãn, gạch thừa, mất đoạn); mô hình thiếu (tick lựa chọn chữ, lời nhắc cuối bài, Task trộn loại); dàn trang xấu: gần như không. Mô hình container giữ nguyên.
+- Code: `MD_SKIP`, `MD_LABEL`, `MD_SCAF`, `MD_RULE`, `BOX`, `OPT_LINE`, `boxSplit`, `optStr` (trước `mdTask`); `mdTask` viết lại phần đọc dòng (mỗi dòng thân Task là `{s, box}`); `parseTask(…, pre)` nhận `pre.box` (không đoán "tick ảnh" khi có ô ☐) và câu không thân câu khi đến từ MD; dò người nói chỉ chạy với chữ dán (không chạy với MD); `dupGapKind`, `endGap` + 4 cảnh báo mới trong `contentWarnings`; `paraHtml` cho bài đọc nhiều đoạn; A4 `lab: 'box'` (`.opt b.bx`), Inspector thêm "☐ ô tick" và ẩn "Chữ nhãn"; `descOf` / `MD_KNAME` / `taskToMd` cho ô tick; trường MD `Ghi chú:` / `Lưu ý:` / `Note:`.
+- Quyết định đã tự chọn: lời nhắc cuối bài vào Hướng dẫn (không thêm trường Ghi chú hiển thị); không làm "số lựa chọn phải chọn"; khoanh A/B/C không bị bỏ gạch ___ (vd "She is a ___. A. … B. …" hợp lệ); dòng bảng không bao giờ đọc thành ô tick lựa chọn; Task trộn loại không tự tách, chỉ ghi chú + cảnh báo.
+- Kiểm thử: test16 (mới) + test1–15, audit, audit2, cmp_paste, ws_sea: đạt trên bản cuối.
+
+## D. Còn mở (cập nhật 25/10/2026 tối, bản v67)
+- **Nhập file:** P0, P1, P2 xong; v67 sửa theo phiếu thật thứ nhất (mục AF). Còn **P3** (đã thử 1/5–10 PDF) (thử 5–10 PDF thật qua đường chat: Claude đọc PDF → JSON/MD → nạp; đo số Task đúng, số chỗ phải sửa tay) và **P4** (mẫu có sẵn "Ô chữ" khi dán một khối chữ; đáp án ô chữ; phiếu nhiều nhóm).
 - Bộ đoán chữ thô vẫn yếu với chữ copy từ PDF 2 cột / lưới (chỉ mới nhận thêm số hoạt động trần). Đường chính là JSON hoặc MD.
 - "Mặc định theo dạng bài" khóa theo `typeId`: mọi Task nhập/dán có `typeId = custom` dùng chung một mặc định. Cần xem lại khi dùng nhiều Task tùy biến.
 - Chưa có nút "Xuất MD" (hàm đã có). Đáp án (`key`) chưa có bản in đáp án cho giáo viên.
@@ -240,18 +247,18 @@ Các script nằm trong Project ở `claude/tests/` (Python + Playwright, Chromi
 ```
 python3 -c "from PIL import Image; Image.new('RGB',(64,48),(200,200,200)).save('ref.png'); Image.new('RGB',(300,900),(200,80,80)).save('tall.png'); Image.new('RGB',(900,200),(60,120,200)).save('wide.png'); Image.new('RGB',(200,200),(0,0,0)).save('qr_up.png'); Image.effect_noise((3000,2000),80).convert('RGB').save('big.jpg',quality=92)"
 ```
+- test16 (v67) đọc `real/birthday-user.md` (MD người dùng nhận từ AI, prompt cũ, giữ nguyên không sửa) và `md/birthday.md` (theo prompt mới); PDF gốc ở `real/birthday.pdf`.
 - test12–14 đọc `ws-sea-sample.json` và thư mục `md/` nằm **cạnh file test** (`claude/tests/ws-sea-sample.json`, `claude/tests/md/*.md`).
 - test1: cột trái, khu vực, độ rộng · test2: bố cục 18 Task, thao tác soạn, cột trái chỉ có + Task / + Phiếu · test3: popup ảnh · test4: ô ảnh, khung trong popup · test5: bảng khung cố định · test6: khung cố định mọi bài ảnh · test7: mã QR · test8: Danh sách câu tắt/bật · test9: Áp mẫu, mô tả thành phần · test10: 13 mẫu · test11: dán bài → cấu hình · **test12: P0 (bù trường, nạp lỗi không đổi phiếu, Task không tên, nhận JSON, tự chọn Cả đề, cảnh báo dán dài, vị trí chèn)** · **test13: P1 (+ Task / + Phiếu, chèn cuối, chọn file, bảng nhận diện, ước tính trang, xác nhận + tải JSON cũ, lỗi, ID, Ctrl+V, PDF + hook)** · **test14: P2 (MD)** · cmp_paste.py: so kết quả đoán của 20 bài dán giữa hai bản · audit.py / audit2.py: tải ảnh dọc/ngang vào mọi ô, mọi tỉ lệ · ws_sea.py: dựng phiếu Sea, xuất `ws-sea-sample.json` · shot.py: chụp màn hình.
 - Bản cũ để so sánh: lấy từ artifact (đọc `index.html`, bỏ dòng khung `<!doctype…><body>` đầu và `</body></html>` cuối), hoặc giữ bản `ws-editor-prototype.html` cũ trước khi sửa.
 
-## AB. BÀN GIAO (2026-10-25, bản v66) — đọc mục này đầu tiên khi mở thread mới
+## AB. BÀN GIAO (2026-10-25 tối, bản v67) — đọc mục này đầu tiên khi mở thread mới
 
-**v66 (font nhúng):** `@font-face` trỏ `fonts/` (Andika + Be Vietnam Pro), nạp trước chữ Việt, `loadingdone` chỉ dàn lại trang. Test mới: test15 (8 điểm). Mốc so bố cục: `v62_font.html`. Bản artifact giữ link Google Fonts.
-**Bản hiện tại:** v65 (artifact https://claude.ai/artifact/4FLtRGtT211poqu1bPRSdG). Trên v65 đã chạy và đạt: test1–14, audit (0 vấn đề), audit2 (số trang giống v62), `cmp_paste.py` (20/20 giống v62), `ws_sea.py` (JSON Sea giống hệt bản trước); 0 lỗi console, 0 lỗi tràn.
-**Đã làm trong phiên 25/10 (chiều):** P0 (v63), P1 (v64), P2 (v65) của `claude/PHUONG_AN_NHAP_FILE.md`, đúng quyết định mục 5. Chi tiết ở mục AC, AD, AE; quy ước MD ở `claude/QUY_UOC_MD.md`.
-**Cách nhập hiện tại:** cột trái có **+ Task** (thẻ Mẫu có sẵn | Từ file / dán; luôn thêm vào cuối; một lần nhập = một bước hoàn tác) và **+ Phiếu** (từ file / dán; trống = phiếu rỗng; xác nhận + tải JSON cũ trước khi thay). Nguồn: JSON (chính) · MD theo quy ước (chính xác) · chữ thô (đoán, độ chắc thấp). File PDF: gửi cho Claude trong chat để ra JSON/MD; trong Studio thì gắn `window.WSImport.extract(file)`.
-**Quyết định đã tự chọn (tài liệu chưa chốt), đã ghi ở AC–AE:** không ghi `typeName` khi thiếu (chỉ hiển thị tiêu đề → mô tả); `{tasks:[…]}` không có trường cấp phiếu = danh sách Task; chọn file 1 Task thì chèn luôn, dán chữ luôn qua bảng; + Phiếu không hỏi lại khi phiếu hiện tại trống; + Phiếu chặn khi còn Task hỏng, + Task bỏ qua Task hỏng; mẫu có sẵn cũng vào cuối phiếu; số hoạt động trần "2 Work with…" là đầu Task khi cắt cả đề; giới hạn 40 Task / 8 MB.
-**Việc tiếp theo đề xuất:** P3 — người dùng gửi 5–10 PDF thật; Claude đọc ra JSON (hoặc MD) theo `claude/ws-sea-sample.json` / `claude/QUY_UOC_MD.md`, nạp qua + Phiếu, ghi số Task đúng và chỗ phải sửa tay. Sau đó P4 (mẫu Ô chữ).
-**Lưu ý kiểm thử:** test phải tự mở thẻ 1/2/4 qua `SECT.kind=true;SECT.info=true;SECT.parts=true;refreshSel()` sau khi chọn Task. Lối vào nhập trong test: `#tree [data-lib]` → `#libDlg [data-tab=src]` → `#pasteTa` / `#impFile` → `#pasteOk`; + Phiếu: `#tree [data-newsheet]`. Chạy từng test (hoặc `run_all.sh`), không chạy song song.
-**Quy tắc đăng lại:** đọc artifact (action read, không kèm path) trước khi publish vào cùng URL; publish cùng file; sau đó project_write file + gửi lại file cho người dùng.
-**Người dùng nói:** không cần tái hiện đúng bố cục tài liệu gốc, chỉ cần thể hiện đủ nội dung. Mỗi file một phiếu; phiếu nhiều nhóm tách nhiều file.
+**Bản hiện tại:** **v67** (artifact https://claude.ai/artifact/7Ndsf8tt5xjidREi99Frf9; repo khanhtoaninv/WS-Editor). v66 = font nhúng `fonts/` (bản artifact dùng link Google Fonts). Trên v67 đã chạy và đạt: test1–16, audit (0 vấn đề), audit2 (13/14/11 trang, 0 tràn), `cmp_paste.py` (20/20 giống v66), `ws_sea.py` (JSON Sea giống hệt); 0 lỗi console, 0 lỗi tràn.
+**Đã làm phiên 25/10 tối:** người dùng thử phiếu thật đầu tiên (PDF → MD bằng AI khác theo prompt cũ) và phải sửa tay nhiều. Phân tích: lỗi ở đường nhập (prompt + bộ đọc MD + bảng nhận diện), không ở mô hình container. Đã sửa bộ đọc MD, thêm A4 nhãn ô tick, bài đọc nhiều đoạn, 4 cảnh báo mới; viết lại prompt và quy ước MD (mục AF; spec chính 16.8).
+**Cách nhập hiện tại:** như v65 (+ Task / + Phiếu; JSON chính, MD theo quy ước, chữ thô là đoán). Prompt dùng cho AI: `claude/PROMPT_PDF_SANG_PHIEU.md` (cách B MD, khuyến nghị).
+**Việc tiếp theo đề xuất:** P3 tiếp — người dùng chạy prompt MỚI với AI của họ trên 4–9 PDF thật khác, gửi PDF + MD + ảnh sau khi nạp; Claude phân loại từng chỗ phải sửa (đọc sai chữ / prompt / bộ đọc / mô hình thiếu / dàn trang) rồi sửa đúng lớp. Thêm mỗi phiếu thật vào `tests/real/` và test16 (hoặc test17…). Sau đó P4 (Ô chữ), nút "Xuất MD".
+**Lưu ý kiểm thử:** như trước (mở thẻ 1/2/4 qua `SECT…`; lối vào `#tree [data-lib]` → `#libDlg [data-tab=src]`; + Phiếu `#tree [data-newsheet]`; chạy từng test hoặc `run_all.sh`, không song song). Mốc so bố cục: bản v66 trong repo (commit trước v67). Chỉ báo "đạt" cho test đã chạy trên bản cuối; mẫu do Claude tự viết không thay được phiếu do AI khác viết.
+**Link artifact đổi ở v67:** link cũ 4FLtRGtT211poqu1bPRSdG vẫn là bản v66; dịch vụ chỉ cho ghi đè sau khi đọc trọn file cũ (~430 KB), không đủ chỗ trong một lượt nên đã publish link mới. Từ giờ dùng link mới; thread mới vẫn phải đọc artifact (action read) rồi publish vào cùng URL.
+**Quy tắc đăng lại:** đọc artifact (action read, không kèm path) trước khi publish vào cùng URL; bản artifact = prototype với khối `@font-face` thay bằng link Google Fonts; sau đó project_write các file + gửi file cho người dùng + đẩy repo.
+**Người dùng nói:** không cần tái hiện đúng bố cục tài liệu gốc, chỉ cần đủ nội dung. Mỗi file một phiếu.

@@ -1,6 +1,6 @@
 # Quy ước MD trung gian cho WS Editor (P2)
 
-Cập nhật: 2026-10-25 · áp dụng từ bản prototype **v65**.
+Cập nhật: 2026-10-25 (tối) · áp dụng từ bản prototype **v67** (v65 + sửa theo phiếu thật đầu tiên “A Surprise Birthday Party”, mục 4b và ví dụ 4).
 
 MD (Markdown) là cách viết một phiếu bằng chữ thường mà app đọc **chắc chắn**, không phải đoán. Dùng khi:
 - tự soạn phiếu trong Word / Notes rồi dán vào app;
@@ -45,6 +45,7 @@ Khoảng cách: vừa               ← tùy chọn: gọn | vừa | thoáng
 | `Ảnh:` | ảnh chung của Task (tên ảnh, ảnh thật tải sau) | `Ảnh: the park` |
 | `Lời dẫn:` | câu dẫn trước hội thoại | `Lời dẫn: Mai is talking to Ben.` |
 | `Mẫu:` | ép theo một mẫu có sẵn (tên hoặc mã), thay cho `Trả lời:` | `Mẫu: Đúng/Sai` |
+| `Ghi chú:` | lời nhắc của bài (vd câu nằm dưới bài trong bản gốc); app nối vào cuối hướng dẫn | `Ghi chú: Check them after reading.` |
 
 Tên trường viết hoa hay thường đều được; có bản tiếng Anh: `Instruction`, `Audio`, `Answer type`, `Words`, `Image`, `Intro`.
 
@@ -57,7 +58,7 @@ Tên trường viết hoa hay thường đều được; có bản tiếng Anh: 
 | `viết câu` | dòng kẻ để viết câu |
 | `khoanh A/B/C` (hoặc `khoanh`, `chọn A/B/C`) | lựa chọn A, B, C dưới câu |
 | `chọn trong câu` (hoặc `gạch chân`) | lựa chọn `{a|b}` ngay trong câu |
-| `tick` | ô tick (có lựa chọn A. B. C. thì thành nhiều ảnh lựa chọn) |
+| `tick` | lựa chọn bằng chữ có ô ☐ (`☐ a cake ☐ a football`) → các lựa chọn có ô tick; lựa chọn là ảnh (`A. [ảnh: x]` hoặc tên ảnh) → nhiều ảnh lựa chọn, tick ảnh |
 | `đúng/sai` | ô T / F |
 | `nối` | chấm nối hai vế |
 | `tô chữ` | dòng tô chữ |
@@ -68,14 +69,28 @@ Không ghi `Trả lời:` thì app đoán theo ký hiệu như khi dán chữ, v
 ## 4. Nội dung
 
 - **Câu đánh số:** `1. …`, `2) …`, `(3) …`. Trong câu dùng các ký hiệu sẵn có:
-  `___` chỗ trống · `{a|b}` chọn trong câu · `A. … B. … C. …` lựa chọn (cùng dòng hoặc mỗi lựa chọn một dòng) · `[ảnh: tên]` ảnh của câu · `trái - phải` một cặp nối (vế trái là ảnh: `[ảnh: apple] - pear`).
+  `___` chỗ trống · `{a|b}` chọn trong câu · `A. … B. … C. …` lựa chọn (cùng dòng, hoặc mỗi lựa chọn một dòng ngay dưới câu, thụt lề hay không đều được) · `☐ …` lựa chọn có ô tick (cũng nhận `[ ]`, `□`; cùng dòng hoặc mỗi dòng một lựa chọn) · `[ảnh: tên]` ảnh của câu · `trái - phải` một cặp nối (vế trái là ảnh: `[ảnh: apple] - pear`).
+- **Câu chỉ có lựa chọn** (không có thân câu, vd chọn ý chính của bài đọc): `1. A. … B. … C. …` hoặc `☐ a cake ☐ a football ☐ balloons`.
 - **Câu nhiều dòng:** dòng **thụt lề** (≥ 2 dấu cách) ngay dưới một câu đánh số là dòng tiếp của câu đó.
-- **Bài đọc:** dòng `Bài đọc:` rồi các đoạn văn; hết bài đọc khi gặp câu đánh số, dòng bảng hoặc dòng trường.
-- **Hội thoại:** dòng `Hội thoại:` rồi mỗi lượt một dòng `Tên: lời`. Tên được có số (“Students 1 and 2”). Có `___` thì thành điền chỗ trống, không có thì không có chỗ trả lời.
+- **Bài đọc:** dòng `Bài đọc:` rồi các đoạn văn; **dòng trống giữa hai đoạn = sang đoạn mới** (giữ trên phiếu). Hết bài đọc khi gặp câu đánh số, lựa chọn, dòng bảng hoặc dòng trường.
+- **Hội thoại:** dòng `Hội thoại:` rồi mỗi lượt một dòng `Tên: lời`. **Chỉ nhận hội thoại qua khối này** (từ v67): câu đánh số dạng `Place of the party: ___` là câu điền, không phải lời người nói. Tên được có số (“Students 1 and 2”). Có `___` thì thành điền chỗ trống, không có thì không có chỗ trả lời.
 - **Bảng:** các dòng ô cách nhau bằng ` | ` (hoặc Tab). Dòng đầu là tiêu đề cột (ô đầu là góc bảng). Ô trống = để học sinh viết; `[ ]` = ô tick; `[ảnh: tên]` = ô ảnh.
 - **Ô chữ (word search):** dòng `Ô chữ:` rồi mỗi dòng một hàng chữ cái (`SUNLIGHT…` hoặc `S U N L …`). Thành bảng chữ cái không tiêu đề, không số, căn giữa; dùng kèm `Khung từ:` cho danh sách từ cần tìm.
 - **Chỉ có ảnh** (tô màu, vẽ): chỉ ghi `Ảnh:` và `Trả lời: không`, không có câu.
 - Dòng trống giữa các phần không bắt buộc, chỉ để dễ đọc.
+- **Mỗi Task chỉ có một loại chỗ trả lời.** Bài gốc trộn nhiều loại (vd điền bảng + tick một ý + hoàn thành câu) thì tách thành nhiều `## Task` liên tiếp. Một ý “chọn một trong các từ rồi viết” dùng `Khung từ:` + `điền chỗ trống`.
+
+## 4b. Những dòng app tự bỏ hoặc chuyển chỗ (v67)
+Phiếu gốc có “giàn giáo” cho học sinh viết; app tự vẽ chỗ trả lời theo `Trả lời:`, nên các dòng này **không cần chép**. Nếu có, app xử lý và ghi chú ở dòng Task trong bảng nhận diện:
+| Dòng trong MD | App làm gì |
+|---|---|
+| `Nội dung:`, `Content:`, `Câu hỏi:` (dòng chỉ có nhãn) | bỏ, không thành câu |
+| dòng chỉ có nhãn khác (`Xxx:` không có gì sau) | bỏ, **có ghi chú** |
+| `My answer: A / B / C`, `Answer: A / B / C` | bỏ (đáp án khoanh đã có) |
+| dòng chỉ có gạch / chấm (`_______`, `.......`) | bỏ (dòng viết do app vẽ) |
+| `___` ở **cuối** câu khi `Trả lời:` là đúng/sai, viết câu, viết từ | bỏ gạch (tránh trùng chỗ trả lời); `Nhãn: ___` và câu khoanh A/B/C (“She is a ___. A. … B. …”) thì giữ |
+| dòng chữ thường nằm **sau câu cuối** (không đánh số, không có chỗ trả lời) | nối vào hướng dẫn, như `Ghi chú:` |
+Cảnh báo mới trong bảng nhận diện (cho cả JSON): câu lỗi chữ (`undefined`), câu trông giống tiêu đề (kết thúc bằng `:`), gạch `___` trùng với chỗ trả lời riêng, câu còn ký hiệu ô tick.
 
 ## 5. Phần đáp án (`## Đáp án`, cuối file)
 
@@ -248,3 +263,65 @@ Trả lời: không
 Task 2: meow; woof; moo
 Task 4: rainy, on; sunny, swimming costume
 ```
+
+## Ví dụ 4 — phiếu đọc thật “A Surprise Birthday Party” (Cambridge A1 Movers)
+Phiếu thật đầu tiên dùng để kiểm thử (PDF: `claude/tests/real/birthday.pdf`). File: `claude/tests/md/birthday.md`. Bài 6 gốc trộn 3 loại nên tách thành Task 6 (Story Map) và Task 7 (My Idea). Đầu phiếu (Name/Class, thời gian từng bài, “Before you read”) không chép.
+
+```markdown
+# A Surprise Birthday Party
+Tuổi: 7-9
+
+## Task: Look & Predict
+Hướng dẫn: Look at the title. What do you think you will see in the story? Tick (✓) two.
+Trả lời: tick
+Ghi chú: Your ideas are predictions. Check them after reading.
+☐ a cake ☐ a football ☐ balloons
+
+## Task: Read & Choose the Main Idea
+Hướng dẫn: Read the story. Then choose the best summary (A, B or C).
+Trả lời: khoanh A/B/C
+Bài đọc:
+On Saturday morning, Lily was at home with her mum. … Lily's dad brought some presents.
+
+At two o'clock, Lily's mum said, "Let's visit Ben." … Lily was very surprised.
+
+But then their dog Max jumped onto a chair and took a sandwich! … her friends made her day special.
+
+1. A. Lily and her friends made a cake at school.
+   B. Lily’s friends planned a party, and something funny happened.
+   C. Lily went to a party, but no one came.
+
+## Task: True or False?
+Hướng dẫn: Read again. Write T (True) or F (False).
+Trả lời: đúng/sai
+1. Lily thought everyone was busy on her birthday.
+2. Ben and his friends prepared the party at Lily’s house.
+
+## Task: Find the Details
+Hướng dẫn: Answer with one word or a short phrase.
+Trả lời: viết câu
+Dòng viết: 1
+1. Where did the friends prepare the party?
+2. What time did Lily visit Ben?
+
+## Task: Choose & Think
+Hướng dẫn: Use clues in the story. Circle the best answer.
+Trả lời: khoanh A/B/C
+1. Why was the room dark when Lily opened the door?
+   A. The friends wanted to surprise her.
+   B. The friends were sleeping.
+   C. Ben was not at home.
+
+## Task: Story Map
+Hướng dẫn: Complete the story map with words from the story.
+Trả lời: điền chỗ trống
+1. Place of the party: ___
+2. Food at the party (two things): ___
+
+## Task: My Idea
+Hướng dẫn: Which party activity would you like best? Choose one and finish the sentence.
+Trả lời: điền chỗ trống
+Khung từ: eating cake, playing games, singing songs
+1. I would like ___ because ___.
+```
+(Ví dụ rút gọn bằng “…”; file đầy đủ ở `claude/tests/md/birthday.md`.)

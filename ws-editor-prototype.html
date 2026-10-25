@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <title>WS Editor</title>
-<!-- v66: font Andika + Be Vietnam Pro nhúng sẵn (thư mục fonts/), nạp trước nhóm ký tự tiếng Việt, đổi font không dựng lại cột trái. v65: P2 nhập file — quy ước MD trung gian ("## Task: …", trường "Tên: giá trị", khối Bài đọc / Hội thoại / Ô chữ, "## Đáp án" riêng), bộ đọc readMd dùng chung lớp nhập. v64: P1 nhập file — cột trái chỉ còn "+ Task" (thẻ Mẫu có sẵn | Từ file / dán, Task luôn vào cuối phiếu) và "+ Phiếu" (từ file / dán, để trống = phiếu rỗng, xác nhận + tải JSON cũ trước khi thay); bỏ nút "Dán…"; bảng nhận diện sơ bộ (số theo file, tiêu đề, mô tả, số câu, cảnh báo, ước tính số trang); một lần nhập = một bước hoàn tác. v63: P0 nhập file — nạp JSON thiếu trường tự bù (fillSheet/fillTask), nạp lỗi không đổi phiếu đang mở, Task không tên lấy tiêu đề/mô tả, hộp Dán nhận ra JSON, tự chọn "Cả đề", cảnh báo dán dài, báo vị trí chèn. v62: bảng có thể kèm khung từ (ô chữ = bảng chữ cái + khung từ). v61: mở Task nào cũng chỉ mở khu vực 3 Nội dung (1, 2, 4 thu lại), bất kể lần trước mở gì. v60: dán bài — bộ đoán trả về cấu hình (khung + thành phần + loại đáp án), mẫu chỉ áp khi người dùng chọn. v59: gọn mẫu 15 → 13 (gộp 3 mẫu bảng thành "Bảng", "Tranh" → "Tô màu / vẽ"). v58: "Công thức" → "Áp mẫu…" (áp một lần, mẫu chia nhóm); thẻ dạng bài và tóm tắt hiện mô tả thành phần (descOf). v57: bỏ dạng "Tranh" — Task chỉ có ảnh = Danh sách câu 0 câu + Ảnh chung; công tắc "Danh sách câu" (tắt = ẩn, giữ câu + đáp án). v56: QR bo góc. v55: mã QR nghe cho bài có Track. v54: thẻ câu không tô đậm lề trái. v53: viền Task xám, đệm hai bên rộng hơn, thanh tên Task cao bằng thanh khu vực và nền xanh. v52: Task mở nằm trong một thẻ có viền; Task đang thao tác được đánh dấu trên trang; cột trái rộng 360. v51: mặc định chỉ mở thẻ Nội dung. v50: bảng — chiều cao hàng mặc định 14 mm (cả hàng tiêu đề). v49: ảnh chung giữ khung cố định, ảnh thật nằm trong khung; T5 Fit dọc giữ tỉ lệ. v48: khung ảnh cố định cho mọi bài ảnh từng câu (bảng, danh sách, lưới T5). v47: Dùng ảnh này không còn qua fetch/blob. v46: popup ảnh — chỉnh nháp, chỉ lưu khi bấm Dùng ảnh này -->
+<!-- v67: nhập MD theo phiếu thật đầu tiên — lựa chọn A/B/C mỗi dòng một lựa chọn, ô tick ☐ thành Lựa chọn (A4) nhãn ô tick, bỏ dòng "Nội dung:" / "My answer" / dòng kẻ / gạch ___ thừa, lời nhắc cuối bài và "Ghi chú:" vào hướng dẫn, bài đọc giữ đoạn, hội thoại chỉ qua khối "Hội thoại:", dòng nhãn lạ có ghi chú; cảnh báo mới (lỗi chữ, câu giống tiêu đề, chỗ trả lời trùng, ký hiệu ô tick sót). v66: font Andika + Be Vietnam Pro nhúng sẵn (thư mục fonts/), nạp trước nhóm ký tự tiếng Việt, đổi font không dựng lại cột trái. v65: P2 nhập file — quy ước MD trung gian ("## Task: …", trường "Tên: giá trị", khối Bài đọc / Hội thoại / Ô chữ, "## Đáp án" riêng), bộ đọc readMd dùng chung lớp nhập. v64: P1 nhập file — cột trái chỉ còn "+ Task" (thẻ Mẫu có sẵn | Từ file / dán, Task luôn vào cuối phiếu) và "+ Phiếu" (từ file / dán, để trống = phiếu rỗng, xác nhận + tải JSON cũ trước khi thay); bỏ nút "Dán…"; bảng nhận diện sơ bộ (số theo file, tiêu đề, mô tả, số câu, cảnh báo, ước tính số trang); một lần nhập = một bước hoàn tác. v63: P0 nhập file — nạp JSON thiếu trường tự bù (fillSheet/fillTask), nạp lỗi không đổi phiếu đang mở, Task không tên lấy tiêu đề/mô tả, hộp Dán nhận ra JSON, tự chọn "Cả đề", cảnh báo dán dài, báo vị trí chèn. v62: bảng có thể kèm khung từ (ô chữ = bảng chữ cái + khung từ). v61: mở Task nào cũng chỉ mở khu vực 3 Nội dung (1, 2, 4 thu lại), bất kể lần trước mở gì. v60: dán bài — bộ đoán trả về cấu hình (khung + thành phần + loại đáp án), mẫu chỉ áp khi người dùng chọn. v59: gọn mẫu 15 → 13 (gộp 3 mẫu bảng thành "Bảng", "Tranh" → "Tô màu / vẽ"). v58: "Công thức" → "Áp mẫu…" (áp một lần, mẫu chia nhóm); thẻ dạng bài và tóm tắt hiện mô tả thành phần (descOf). v57: bỏ dạng "Tranh" — Task chỉ có ảnh = Danh sách câu 0 câu + Ảnh chung; công tắc "Danh sách câu" (tắt = ẩn, giữ câu + đáp án). v56: QR bo góc. v55: mã QR nghe cho bài có Track. v54: thẻ câu không tô đậm lề trái. v53: viền Task xám, đệm hai bên rộng hơn, thanh tên Task cao bằng thanh khu vực và nền xanh. v52: Task mở nằm trong một thẻ có viền; Task đang thao tác được đánh dấu trên trang; cột trái rộng 360. v51: mặc định chỉ mở thẻ Nội dung. v50: bảng — chiều cao hàng mặc định 14 mm (cả hàng tiêu đề). v49: ảnh chung giữ khung cố định, ảnh thật nằm trong khung; T5 Fit dọc giữ tỉ lệ. v48: khung ảnh cố định cho mọi bài ảnh từng câu (bảng, danh sách, lưới T5). v47: Dùng ảnh này không còn qua fetch/blob. v46: popup ảnh — chỉnh nháp, chỉ lưu khi bấm Dùng ảnh này -->
 <!-- v37: cột trái dạng accordion + khu vực + kéo độ rộng -->
 <meta name="claude:viewport-fit-sides" content="cover">
 <!-- Font nhúng sẵn trong thư mục fonts/ (Andika, Be Vietnam Pro; giấy phép SIL OFL), không cần mạng -->
@@ -314,6 +314,7 @@ dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 .irow{display:flex;gap:0;align-items:center}
 .irow .pic{margin-right:5mm}
 .passage{line-height:1.55;text-wrap:pretty}
+.passage p{margin:0 0 2mm}.passage p:last-child{margin-bottom:0}
 .tbl{display:grid;grid-template-columns:var(--tpl);column-gap:var(--gg);row-gap:var(--ig);align-items:center}
 .tbl>.g1{grid-column:1/-1;margin-left:var(--gut)}
 .tbl:not(.tbl2){margin-left:calc(-1 * var(--hang))}
@@ -378,6 +379,7 @@ dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 .opt>span{min-width:0}
 .opt i{font-style:normal;font-weight:700;margin-right:1.6mm;flex:none}
 .opt b{display:inline-grid;place-items:center;width:1.45em;height:1.45em;border:.3mm solid var(--ink-3);border-radius:50%;font-size:.72em;margin-right:1.2mm;flex:none;align-self:center}
+.opt b.bx{border-radius:.8mm;width:1.5em;height:1.5em;border-color:var(--ink-2);margin-right:1.6mm}
 .a5{width:var(--as,6.5mm);height:var(--as,6.5mm);border:.35mm solid var(--ink);border-radius:1mm;display:inline-block;flex:none}
 .a6{display:inline-flex;gap:3mm}
 .a6 span{width:var(--as,7.5mm);height:var(--as,7.5mm);border:.3mm solid var(--ink-3);border-radius:50%;display:grid;place-items:center;font-size:.8em;font-weight:700}
@@ -3211,6 +3213,8 @@ function ckOf(c, A) {
 const ck = t => ckOf(t.content, t.answer && t.answer.layout);
 const its = t => (t.content && t.content.list !== false && t.content.items) || [];
 const leadText = t => (t.content.lead && t.content.lead.text) || '';
+// Bài đọc nhiều đoạn (dòng trống giữa các đoạn) → mỗi đoạn một <p>; bài một đoạn giữ nguyên như cũ
+const paraHtml = s => /\n/.test(s) ? s.split(/\n\s*\n/).map(x => x.replace(/\s*\n\s*/g, ' ').trim()).filter(Boolean).map(x => `<p>${esc(x)}</p>`).join('') : esc(s);
 const clone = o => JSON.parse(JSON.stringify(o));
 const SCHEMA = 'ws-editor/0.3';
 // Bố cục Task (schema 0.2). Khóa null hoặc vắng mặt = Tự động.
@@ -3429,7 +3433,7 @@ function ans(t, item) {
       return `<span class="a a2" ${nd} style="width:${w}${p.width && !p.lenMode ? ' !important' : ''}"></span>`; }
     case 'A3': return `<span class="a a3" ${nd}${p.boxW ? ` style="--bw:${p.boxW}mm"` : ''}>${'<i></i>'.repeat((item && item.len) || p.boxes || 6)}</span>`;
     case 'A4': { const d = a4dir(t, item), os = item.opts || [], up = p.upper ? 'ABCD' : 'abcd';
-      return `<div class="a a4 ${d}" ${nd} style="--oc:${d === 'g2' ? 2 : os.length}${p.gap != null ? `;--og:${p.gap}mm` : ''}">${os.map((o, i) => `<span class="opt">${p.lab === 'dot' ? `<i>${up[i]}.</i>` : `<b>${up[i]}</b>`}<span>${esc(o)}</span></span>`).join('')}</div>`; }
+      return `<div class="a a4 ${d}" ${nd} style="--oc:${d === 'g2' ? 2 : os.length}${p.gap != null ? `;--og:${p.gap}mm` : ''}">${os.map((o, i) => `<span class="opt">${p.lab === 'dot' ? `<i>${up[i]}.</i>` : p.lab === 'box' ? '<b class="bx"></b>' : `<b>${up[i]}</b>`}<span>${esc(o)}</span></span>`).join('')}</div>`; }
     case 'A5': return `<span class="a a5" ${nd}${as}></span>`;
     case 'A6': return `<span class="a a6" ${nd}${as}><span>T</span><span>F</span></span>`;
     case 'A7': return `<span class="a a7" ${nd}${as}></span>`;
@@ -3615,7 +3619,7 @@ function body(t, L, frag, first) {
   }
 
   if (k === 'passage') {
-    const g2 = `<div class="g2 passage" data-node="${id}:G2">${esc(leadText(t))}</div>`;
+    const g2 = `<div class="g2 passage" data-node="${id}:G2">${paraHtml(leadText(t))}</div>`;
     const qs = range(its(t), L === 'T8' ? frag : null);
     const g3 = qs.length ? `<div class="g3 list" data-node="${id}:G3" style="--cols:1">${qs.map(([q, i]) => `<div class="q"><span class="ino">${i + 1}</span><div class="qb"><div class="qt">${esc(q.text)}</div>${ans(t, q)}</div></div>`).join('')}</div>` : '';
     if (L === 'T8' && !first) return `<div class="body b1">${g3}</div>`;
@@ -4394,7 +4398,7 @@ function answerPanel(t, s, key) {
   else if (L === 'A4') {
     size = fNum('gap', 'Khoảng cách các lựa chọn', o.gap, { min: 2, max: 20, unit: 'mm', def: D('gap', 7) });
     content = fSeg('dir', 'Cách xếp', o.dir, Object.entries(A4DIRS), D('dir', 'auto'), { hint: key ? '' : 'Tự động: đáp án ngắn xếp một hàng, đáp án dài mỗi đáp án một dòng.' })
-      + (key ? '' : fNum('autoMax', 'Đáp án “ngắn” khi dài tối đa', o.autoMax, { min: 6, max: 60, unit: 'ký tự', def: a4autoDef() }) + fSeg('lab', 'Nhãn', o.lab, [['circle', 'Ⓐ'], ['dot', 'A.']], 'circle') + fSeg('upper', 'Chữ nhãn', o.upper, [[false, 'a b c'], [true, 'A B C']], false));
+      + (key ? '' : fNum('autoMax', 'Đáp án “ngắn” khi dài tối đa', o.autoMax, { min: 6, max: 60, unit: 'ký tự', def: a4autoDef() }) + fSeg('lab', 'Nhãn', o.lab, [['circle', 'Ⓐ'], ['dot', 'A.'], ['box', '☐ ô tick']], 'circle') + (o.lab === 'box' ? '' : fSeg('upper', 'Chữ nhãn', o.upper, [[false, 'a b c'], [true, 'A B C']], false)));
   } else if (L === 'A5') size = fNum('size', 'Cỡ ô tick', o.size, { min: 4, max: 12, step: .5, unit: 'mm', def: D('size', 6.5) });
   else if (L === 'A6') size = fNum('size', 'Cỡ ô T/F', o.size, { min: 5, max: 12, step: .5, unit: 'mm', def: D('size', 7.5) });
   else if (L === 'A7') size = fNum('size', 'Cỡ chấm nối', o.size, { min: 1.5, max: 6, step: .5, unit: 'mm', def: D('size', 2.8) });
@@ -4913,6 +4917,10 @@ function recipeMatch(t) {
   return { r: near.r, exact: false, diffs: near.miss.map(k => `${FEAT_NAME[k]}: ${featVal(k, f[k])} (gốc: ${featVal(k, near.r.sig[k])})`) };
 }
 // Cảnh báo nhập liệu: lv 'warn' = có thể sai, 'info' = chỉ để biết
+// Đáp án có chỗ trả lời riêng (không dùng ___ trong câu): Đúng/Sai, viết câu, khoanh dưới câu, viết từ theo câu
+// (khoanh A/B/C không tính: "She ___ a teacher. A. am B. is" là chỗ trống hợp lệ của lựa chọn)
+const dupGapKind = t => { const a = t.answer; return a.attach === 'item' && (a.kind === 'tf' || a.kind === 'sentence' || (a.kind === 'word' && ck(t) !== 'dialogue')); };
+const endGap = s => /\s_{3,}\s*[.?!]?\s*$/.test(s) && !/:\s*_{3,}\s*$/.test(s);   // gạch ___ ở cuối câu (không phải sau nhãn "Xxx:")
 function contentWarnings(t) {
   const w = [], k = ck(t), it = its(t), a = t.answer, c = t.content;
   const W = (m, lv = 'warn') => w.push({ lv, m });
@@ -4939,6 +4947,11 @@ function contentWarnings(t) {
     if (a.kind === 'choice' && a.attach === 'inline' && !hasChoiceMarkup(tx(x))) W(`${n} không có chỗ chọn {a|b}.`);
     if (a.kind === 'word' && a.attach === 'inline' && k !== 'dialogue' && !tx(x).includes('___')) W(`${n} không có chỗ trống ___.`);
     if (k === 'items' && c.variant === 'multi' && !(x.imgs && x.imgs.length >= 2)) W(`${n} cần ít nhất 2 ảnh lựa chọn.`);
+    const s1 = tx(x).trim();
+    if (/^(undefined|null|\[object object\])$/i.test(s1)) W(`${n} bị lỗi chữ (“${s1}”).`);
+    else if (s1 && /:$/.test(s1) && s1.length <= 40 && !s1.includes('___') && !(x.opts && x.opts.length) && !x.img && !x.imgs) W(`${n} trông giống tiêu đề (“${s1}”), không phải câu.`);
+    if (dupGapKind(t) && endGap(s1) && k !== 'items') W(`${n} có gạch ___ nhưng đáp án đã có chỗ trả lời riêng: chỗ trả lời bị trùng.`);
+    if (/\[\s*\]|☐|□/.test(s1)) W(`${n} còn ký hiệu ô tick ☐ trong chữ.`);
   });
   if (k === 'dialogue' && a.attach === 'inline' && !blanks) W('Hội thoại chưa có chỗ trống ___.');
   if (t.wordBank && blanks) {
@@ -4962,7 +4975,7 @@ function descOf(t) {
   if (k === 'table') p.push({ text: 'ô có chữ', blank: 'ô trống để viết', tick: 'ô tick' }[f.cells]);
   else if (k !== 'empty') {
     const L = a.layout, inl = a.attach === 'inline';
-    const an = !L ? 'không có chỗ trả lời' : L === 'A2' ? (inl ? 'điền chỗ trống' : 'viết từ') : L === 'A4' ? (inl ? 'chọn trong câu {a|b}' : 'khoanh A/B/C') : L === 'A1' ? 'viết câu' : L === 'A6' ? 'Đúng/Sai' : L === 'A5' ? 'tick' : L === 'A8' ? (k === 'trace' ? '' : 'dòng tô') : L === 'A7' ? (k === 'pairs' ? '' : 'chấm nối') : A_SHORT[L];
+    const an = !L ? 'không có chỗ trả lời' : L === 'A2' ? (inl ? 'điền chỗ trống' : 'viết từ') : L === 'A4' ? (inl ? 'chọn trong câu {a|b}' : (t.answer.params || {}).lab === 'box' ? 'tick lựa chọn' : 'khoanh A/B/C') : L === 'A1' ? 'viết câu' : L === 'A6' ? 'Đúng/Sai' : L === 'A5' ? 'tick' : L === 'A8' ? (k === 'trace' ? '' : 'dòng tô') : L === 'A7' ? (k === 'pairs' ? '' : 'chấm nối') : A_SHORT[L];
     if (an) p.push(an);
   }
   if (t.image && k !== 'empty') p.push('ảnh chung');
@@ -5449,14 +5462,16 @@ function parseTask(raw, force, pre) {
     x = stripNum(x);
     let im = null; const mi = /^\[ảnh:\s*([^\]]+)\]\s*/i.exec(x); if (mi) { im = mi[1].trim(); x = x.slice(mi[0].length); }
     const push = o => { if (im) o.img = im; items.push(o); };
-    const so = splitOptsLine(x); if (so && so[0]) { push({ text: so[0], opts: so[1] }); return; }
+    const so = splitOptsLine(x); if (so && (so[0] || (pre && so[1].length >= 2))) { push({ text: so[0], opts: so[1] }); return; }   // MD: câu chỉ có lựa chọn (không có thân câu) vẫn là một câu
     if (items.length && /^[^/]{1,25}(\s\/\s[^/]{1,25}){1,4}$/.test(x) && !x.includes('___') && !items[items.length - 1].opts && /\?$|___/.test(items[items.length - 1].text || '')) { items[items.length - 1].opts = x.split(/\s\/\s/).map(y => y.trim()); return; }
     push({ text: x });
   });
   // người nói
   const whoRe = /^([A-Z][\p{L}.' -]{0,18}):\s+(.*)$/u;
   let intro = '';
-  if (items.length >= 2 && items.filter(x => whoRe.test(x.text)).length >= Math.max(2, (items.length - 1) * .6)) { while (items.length && !whoRe.test(items[0].text)) intro += (intro ? ' ' : '') + items.shift().text; items.forEach(x => { const m = whoRe.exec(x.text); if (m) { x.who = m[1]; x.text = m[2]; } else x.who = ''; }); }
+  const whoLike = items.length >= 2 && items.filter(x => whoRe.test(x.text)).length >= Math.max(2, (items.length - 1) * .6);
+  // MD: hội thoại chỉ nhận qua khối "Hội thoại:" (tránh nhầm ô điền "Place of the party: ___" là lời người nói)
+  if (whoLike && !pre) { while (items.length && !whoRe.test(items[0].text)) intro += (intro ? ' ' : '') + items.shift().text; items.forEach(x => { const m = whoRe.exec(x.text); if (m) { x.who = m[1]; x.text = m[2]; } else x.who = ''; }); }
   // cặp nối: "trái - phải" / Tab / 2+ dấu cách
   const pairRe = /^(.+?)\s+(?:[-–—→]|\.{3,}|\s{2,})\s*(.+)$/;
   const wantMatch = (pre && pre.match) || /\bmatch|\bjoin|\bnối/.test(instr), imgPair = x => x.img && /^[-–—→]\s*\S/.test(x.text || '');   // "[ảnh: apple] - pear": vế trái là ảnh
@@ -5474,7 +5489,7 @@ function parseTask(raw, force, pre) {
   else if (!items.length && !passage) { kind = 'none'; listOff = true; if (!image && !/colou?r|draw|tô màu|vẽ/.test(instr)) { conf = 'thấp'; notes.push('Không thấy câu nào: tạo Task chỉ có ảnh (danh sách câu tắt).'); } }
   else if (items.some(x => x.pair)) kind = 'match';
   else if (items.some(x => x.who != null)) kind = 'word';
-  else if (/\btick\b/.test(instr) && opts) { kind = 'tick'; multi = true; }
+  else if (/\btick\b/.test(instr) && opts && !(pre && pre.box)) { kind = 'tick'; multi = true; }
   else if (isTF) kind = 'tf';
   else if (mark || opts) kind = 'choice';
   else if (/\btrace\b|\btô\b/.test(instr)) kind = 'trace';
@@ -5837,8 +5852,8 @@ function addTasks(list, note) {
    (Hướng dẫn, Track, Mẫu, Trả lời, Dòng viết, Khung từ, Ảnh, Lời dẫn); khối "Bài đọc:", "Hội thoại:", "Ô chữ:";
    còn lại là câu đánh số / dòng bảng "|" như khi dán chữ. Đáp án nằm riêng ở "## Đáp án" cuối file. */
 const MD_RE = /^\s*##\s*task\b/im;
-const MD_FIELD = /^\s*(hướng dẫn|instruction|track|audio|mẫu|trả lời|answer type|dòng viết|khung từ|words?|word bank|ảnh chung|ảnh|image|lời dẫn|intro)\s*:\s*(.*)$/i;
-const MD_FKEY = { 'hướng dẫn': 'instruction', instruction: 'instruction', track: 'audio', audio: 'audio', 'mẫu': 'recipe', 'trả lời': 'kind', 'answer type': 'kind', 'dòng viết': 'lines', 'khung từ': 'bank', word: 'bank', words: 'bank', 'word bank': 'bank', 'ảnh chung': 'image', 'ảnh': 'image', image: 'image', 'lời dẫn': 'intro', intro: 'intro' };
+const MD_FIELD = /^\s*(hướng dẫn|instruction|track|audio|mẫu|trả lời|answer type|dòng viết|khung từ|words?|word bank|ảnh chung|ảnh|image|lời dẫn|intro|ghi chú|lưu ý|note)\s*:\s*(.*)$/i;
+const MD_FKEY = { 'hướng dẫn': 'instruction', instruction: 'instruction', track: 'audio', audio: 'audio', 'mẫu': 'recipe', 'trả lời': 'kind', 'answer type': 'kind', 'dòng viết': 'lines', 'khung từ': 'bank', word: 'bank', words: 'bank', 'word bank': 'bank', 'ảnh chung': 'image', 'ảnh': 'image', image: 'image', 'lời dẫn': 'intro', intro: 'intro', 'ghi chú': 'note', 'lưu ý': 'note', note: 'note' };
 const MD_SECT = /^\s*(bài đọc|passage|hội thoại|dialogue|ô chữ|word ?search)\s*:\s*$/i;
 // Loại đáp án viết bằng chữ → [loại, cách gắn ưu tiên]
 const MD_KIND = { 'viết từ': ['word', 'item'], 'điền chỗ trống': ['word', 'inline'], 'điền từ': ['word', 'inline'], 'viết câu': ['sentence'], 'khoanh': ['choice'], 'khoanh a/b/c': ['choice', 'item'], 'chọn a/b/c': ['choice', 'item'], 'chọn trong câu': ['choice', 'inline'], 'gạch chân': ['choice', 'inline'], 'tick': ['tick'], 'đúng/sai': ['tf'], 'đúng sai': ['tf'], 'nối': ['match'], 'tô chữ': ['trace'], 'không': ['none'], 'không có': ['none'] };
@@ -5877,24 +5892,64 @@ function readMd(raw) {
   if (!meta.age) sheetNotes.push('độ tuổi'); if (!meta.flow) sheetNotes.push('xếp trang'); if (!meta.spacing) sheetNotes.push('khoảng cách');
   return { src: 'md', kind: Object.keys(meta).length ? 'sheet' : 'tasks', sheet: null, meta, sheetNotes, mdNotes: notes, tasks };
 }
+// v67: dòng trong MD mà app bỏ qua hoặc chuyển chỗ (giàn giáo của bản gốc: app tự vẽ chỗ trả lời)
+const MD_SKIP = /^\s*(nội dung|content|câu hỏi|questions?|bài tập|exercise)\s*:\s*$/i;            // tiêu đề phần, không phải câu
+const MD_LABEL = /^\s*[\p{L}][\p{L}\d ()/'’-]{1,30}:\s*$/u;                                       // dòng chỉ có nhãn "Xxx:"
+const MD_SCAF = /^\s*(my answer|your answer|answer|đáp án( của em)?)\s*:?\s*[A-Da-d](\s*[\/,]\s*[A-Da-d])+\s*\.?\s*$/i;   // "My answer: A / B / C"
+const MD_RULE = /^\s*[_.…\-–—\s]{6,}\s*$/;                                                         // dòng chỉ có gạch / chấm (dòng kẻ viết)
+const BOX = /\[\s*\]|☐|□/;
+const OPT_LINE = /^\(?[A-Da-d][.)]\s+\S/;
+const optStr = os => os.map((o, i) => `${'ABCDEFGH'[i]}. ${o}`).join(' ');
+// Dòng có ô tick: "☐ a cake ☐ a football" hoặc "1. [ ] a cake" → [thân câu, [lựa chọn]]
+function boxSplit(line) {
+  const s = stripNum(line.trim()); if (!BOX.test(s)) return null;
+  const parts = s.split(/\s*(?:\[\s*\]|☐|□)\s*/), stem = parts.shift().trim(), opts = parts.map(x => x.trim()).filter(Boolean);
+  return opts.length ? [stem, opts] : null;
+}
 function mdTask(b, keys) {
-  const notes = [], F = {}, body = [], sec = { passage: [], dialogue: [], grid: [] }; let mode = null;
+  const notes = [], F = {}, body = [], sec = { passage: [], dialogue: [], grid: [] }; let mode = null, scaf = 0, box = false;
+  const B = (s, o) => ({ s, box: o || null });          // một dòng thân Task; box = các lựa chọn ô tick của câu này
+  const last = () => body[body.length - 1];
   b.lines.forEach(line => {
     const t = line.trim();
-    if (!t) { if (mode !== 'passage') mode = null; return; }
+    if (!t) { if (mode === 'passage') { if (sec.passage.length && sec.passage[sec.passage.length - 1] !== '') sec.passage.push(''); } else mode = null; return; }
     const s = MD_SECT.exec(t); if (s) { mode = /bài đọc|passage/i.test(s[1]) ? 'passage' : /hội thoại|dialogue/i.test(s[1]) ? 'dialogue' : 'grid'; return; }
     const f = MD_FIELD.exec(t);
-    if (f) { F[MD_FKEY[f[1].toLowerCase()]] = f[2].trim(); mode = null; return; }
-    if (mode === 'passage' && (NUM_RE.test(t) || /\s\|\s|\t/.test(t))) mode = null;      // câu đánh số / bảng: hết bài đọc
+    if (f) { const k = MD_FKEY[f[1].toLowerCase()]; F[k] = k === 'note' && F.note ? F.note + ' ' + f[2].trim() : f[2].trim(); mode = null; return; }
+    if (MD_SKIP.test(t)) return;
+    if (mode === 'passage' && (NUM_RE.test(t) || /\s\|\s|\t/.test(t) || OPT_LINE.test(t) || BOX.test(t))) mode = null;      // câu đánh số / lựa chọn / bảng: hết bài đọc
     if (mode === 'dialogue' && !/^[^:]{1,40}:\s*\S/.test(t)) mode = null;
     if (mode) { sec[mode].push(t); return; }
-    if (/^(\s{2,}|\t)\S/.test(line) && body.length && NUM_RE.test(body[body.length - 1])) { body[body.length - 1] += '\u2028' + t; return; }   // dòng thụt lề: dòng tiếp của câu trên
-    body.push(line);
+    if (MD_SCAF.test(t)) { scaf++; return; }
+    if (MD_RULE.test(t)) return;
+    if (MD_LABEL.test(t)) { notes.push(`bỏ dòng “${t}” (chỉ có nhãn, không phải câu)`); return; }
+    // lựa chọn A. B. C. mỗi cái một dòng (thụt lề hoặc không) ngay dưới câu: gộp vào câu đó
+    if (OPT_LINE.test(t) && body.length && !last().box && NUM_RE.test(last().s)) { last().s += ' ' + t; return; }
+    // ô tick ☐ / □ / [ ]: các dòng liền nhau là lựa chọn của một câu
+    const bx = /\s\|\s|\t|\|/.test(t) ? null : boxSplit(line);      // dòng bảng: "[ ]" là ô tick của bảng, không phải lựa chọn
+    if (bx) {
+      box = true; const p = body.length ? last() : null;
+      if (bx[0] || bx[1].length >= 2) { body.push(B(`1. ${bx[0]} ${optStr(bx[1])}`, bx[1].slice())); return; }
+      if (p && p.box) { p.box = p.box.concat(bx[1]); p.s = p.s.replace(/(^|\s)\(?A[.)]\s.*$/, '') + ' ' + optStr(p.box); return; }
+      if (p && !NUM_RE.test(p.s) && !OPT_LINE.test(p.s.trim())) { p.box = bx[1].slice(); p.s = `1. ${p.s.trim()} ${optStr(p.box)}`; return; }   // dòng hỏi ngay trên là thân câu
+      body.push(B(`1. ${optStr(bx[1])}`, bx[1].slice())); return;
+    }
+    if (/^(\s{2,}|\t)\S/.test(line) && body.length && NUM_RE.test(last().s)) { last().s += ' ' + t; return; }   // dòng thụt lề: dòng tiếp của câu trên
+    body.push(B(line));
   });
+  if (scaf) notes.push(`bỏ ${scaf} dòng kiểu “My answer: A / B / C” (app tự vẽ chỗ trả lời)`);
+  // dòng chữ thường nằm SAU câu cuối (không đánh số, không có chỗ trả lời): lời nhắc của bài → đưa vào hướng dẫn
+  const isItem = x => NUM_RE.test(x.s) || x.box || OPT_LINE.test(x.s.trim());
+  const lastI = body.reduce((k, x, i) => isItem(x) ? i : k, -1), tail = [];
+  if (lastI >= 0) for (let i = body.length - 1; i > lastI; i--) { const x = body[i].s.trim(); if (!x.includes('___') && !/\{[^}]*\|/.test(x) && !/\s\|\s|\t|\[ảnh:/i.test(x) && !/^([A-Z][\p{L}.' -]{0,18}):\s+/u.test(x)) tail.unshift(body.splice(i, 1)[0].s.trim()); else break; }
+  if (F.note) tail.push(F.note);
+  if (tail.length) { F.instruction = [F.instruction || '', ...tail].filter(Boolean).join(' '); const s = tail.join(' '); notes.push(`đưa lời nhắc vào hướng dẫn: “${s.slice(0, 60)}${s.length > 60 ? '…' : ''}”`); }
   let force = null;
   if (F.recipe) { const q = F.recipe.toLowerCase(), r = RECIPES.find(x => x.id === q || x.name.toLowerCase() === q); if (r) force = r.id; else notes.push(`không có mẫu "${F.recipe}", giữ cấu hình đoán`); }
-  if (F.image) body.unshift(`[ảnh: ${F.image}]`);
-  const r = parseTask(body.join('\n'), force, { title: b.title, instruction: F.instruction || '', audio: F.audio || '', passage: sec.passage.join(' '), match: !!F.kind && /^nối/i.test(F.kind.trim()) });
+  if (F.image) body.unshift(B(`[ảnh: ${F.image}]`));
+  while (sec.passage.length && sec.passage[sec.passage.length - 1] === '') sec.passage.pop();
+  const passage = sec.passage.reduce((s, x) => x === '' ? s + '\n\n' : s + (s && !s.endsWith('\n') ? ' ' : '') + x, '');   // giữ đoạn văn (dòng trống = sang đoạn mới)
+  const r = parseTask(body.map(x => x.s).join('\n'), force, { title: b.title, instruction: F.instruction || '', audio: F.audio || '', passage, match: !!F.kind && /^nối/i.test(F.kind.trim()), box });
   const t = r.t; let conf = r.conf, explicit = !!force;
   its(t).forEach(x => { if ((x.text || '').includes('\u2028')) { x.lines = x.text.split('\u2028').map(y => y.trim()); delete x.text; delete x.len; } });
   if (sec.grid.length) {         // ô chữ: bảng chữ cái, mỗi dòng một hàng (có dấu cách thì tách theo dấu cách)
@@ -5913,11 +5968,17 @@ function mdTask(b, keys) {
   }
   if (F.bank) { const w = F.bank.split(/\s*[,;|]\s*|\s\/\s/).map(x => x.trim()).filter(Boolean), dl = ck(t) === 'dialogue'; t.wordBank = { words: w, placement: dl ? 'right' : 'top', style: dl ? 'list' : 'chips', label: 'lower' }; }
   if (F.kind && !force) {
-    const k = MD_KIND[F.kind.toLowerCase().replace(/[.!]+$/, '').trim()];
+    let k = MD_KIND[F.kind.toLowerCase().replace(/[.!]+$/, '').trim()];
+    if (k && k[0] === 'tick' && its(t).some(x => x.opts && x.opts.length >= 2 && !x.imgs)) k = ['choice', 'item'];   // tick vào lựa chọn bằng chữ = Lựa chọn (A4) kiểu ô tick
     if (!k) notes.push(`không hiểu "Trả lời: ${F.kind}"; giữ loại đáp án đoán`);
     else if (!kindsOk(t).includes(k[0])) notes.push(`"Trả lời: ${F.kind}" không hợp với nội dung; giữ loại đáp án đoán`);
     else { setKind(t, k[0]); if (k[1] && attachOpts(t).includes(k[1])) { t.answer.attach = k[1]; normAnswer(t); } explicit = true; }
   }
+  // ô tick ☐ trong MD: lựa chọn hiện bằng ô vuông (A4, nhãn ☐)
+  if (box && t.answer.layout === 'A4' && t.answer.attach === 'item') { t.answer.params.lab = 'box'; explicit = explicit || !!F.kind; }
+  else if (box && !force) notes.push(`có ô tick ☐ nhưng đáp án là “${MD_KNAME(t)}”. Nếu bài trộn nhiều loại đáp án, tách thành nhiều Task (vd 6a, 6b)`);
+  // gạch ___ ở cuối câu khi đáp án đã có chỗ trả lời riêng (Đúng/Sai, viết câu, viết từ theo câu): bỏ để không trùng
+  if (dupGapKind(t)) { let n = 0; its(t).forEach(x => { if (x.text && /\s*_{3,}\s*[.?!]?\s*$/.test(x.text) && x.text.split('___').length === 2 && !/:\s*_{3,}\s*$/.test(x.text)) { x.text = x.text.replace(/\s*_{3,}(\s*[.?!]?)\s*$/, '$1').replace(/\s+([.?!])$/, '$1'); n++; } }); if (n) notes.push(`bỏ gạch ___ ở cuối ${n} câu (app tự vẽ chỗ trả lời)`); }
   if (F.lines) { const n = Math.max(1, Math.min(8, parseInt(F.lines, 10) || 1)); if (['A1', 'A2'].includes(t.answer.layout)) t.answer.params.lines = n; else notes.push('“Dòng viết” chỉ dùng cho đáp án viết câu / điền chỗ trống'); }
   if (keys && keys.length) { const it = its(t); if (it.length) { it.forEach((x, i) => { if (keys[i] != null && keys[i] !== '') x.key = keys[i]; }); if (keys.length > it.length) notes.push(`đáp án có ${keys.length} dòng, Task có ${it.length} câu`); } else notes.push('Task không có câu: bỏ phần đáp án'); }
   if (/\s\|\s|\t/.test(body.join('\n')) && ck(t) === 'table') explicit = true;
@@ -5928,7 +5989,7 @@ function mdTask(b, keys) {
   return { t, notes, conf };
 }
 // Xuất MD theo quy ước (dùng để kiểm thử khứ hồi và làm mẫu cho người soạn; chưa có nút trên giao diện)
-const MD_KNAME = t => { const a = t.answer, k = a.kind; return k === 'word' ? (a.attach === 'inline' ? 'điền chỗ trống' : 'viết từ') : k === 'choice' ? (a.attach === 'inline' ? 'chọn trong câu' : 'khoanh A/B/C') : { sentence: 'viết câu', tick: 'tick', tf: 'đúng/sai', match: 'nối', trace: 'tô chữ', none: 'không' }[k] || 'không'; };
+const MD_KNAME = t => { const a = t.answer, k = a.kind; return k === 'word' ? (a.attach === 'inline' ? 'điền chỗ trống' : 'viết từ') : k === 'choice' ? (a.attach === 'inline' ? 'chọn trong câu' : (a.params || {}).lab === 'box' ? 'tick' : 'khoanh A/B/C') : { sentence: 'viết câu', tick: 'tick', tf: 'đúng/sai', match: 'nối', trace: 'tô chữ', none: 'không' }[k] || 'không'; };
 function taskToMd(t) {
   const c = t.content, o = ['## Task: ' + (t.title || '')], k = ck(t), a = t.answer, cell = v => v && v.tick ? '[ ]' : v && v.img ? `[ảnh: ${v.img}]` : (typeof v === 'string' ? v : '');
   if (t.audio) o.push('Track: ' + t.audio);
@@ -5950,7 +6011,7 @@ function taskToMd(t) {
     if (x.pair) o.push(n + ((x.pair.l && (x.pair.l.img ? `[ảnh: ${x.pair.l.img}]` : x.pair.l.text)) || '') + ' - ' + ((x.pair.r && x.pair.r.text) || ''));
     else if (x.lines) { o.push(n + im + (x.lines[0] || '')); x.lines.slice(1).forEach(l => o.push('   ' + l)); }
     else if (x.imgs) o.push(n + (x.text || '') + ' ' + x.imgs.map((m, j) => `${'ABCD'[j]}. ${m}`).join(' '));
-    else o.push(n + im + (x.text || '') + (x.opts && a.kind === 'choice' && a.attach === 'item' ? ' ' + x.opts.map((p, j) => `${'ABCD'[j]}. ${p}`).join(' ') : ''));
+    else o.push(n + im + (x.text || '') + (x.opts && a.kind === 'choice' && a.attach === 'item' ? ' ' + x.opts.map((p, j) => (a.params || {}).lab === 'box' ? `☐ ${p}` : `${'ABCD'[j]}. ${p}`).join(' ') : ''));
   });
   return o.join('\n');
 }

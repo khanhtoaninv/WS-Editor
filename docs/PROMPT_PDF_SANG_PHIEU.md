@@ -1,162 +1,216 @@
 # Prompt đưa PDF phiếu bài tập vào WS Editor
 
-Cách dùng: mở một AI đọc được PDF (Claude, ChatGPT, Gemini…), đính kèm PDF, dán MỘT trong hai prompt dưới đây. Lưu kết quả thành file `.json` (hoặc `.md`), rồi trong app bấm **+ Phiếu** (cả phiếu) hoặc **+ Task** (thêm vào phiếu đang mở) → Chọn file.
+Cập nhật: 2026-10-25 (tối), dùng với prototype **v67**. Bản này sửa theo lần thử thật đầu tiên (phiếu “A Surprise Birthday Party”): bỏ dòng mẫu “Nội dung:” làm AI chép theo, thêm quy tắc bỏ “giàn giáo” của bản gốc, ô tick ☐, lựa chọn xuống dòng, tách Task trộn loại, và một ví dụ đầy đủ.
+
+Cách dùng: mở một AI đọc được PDF (Claude, ChatGPT, Gemini…), đính kèm PDF, dán MỘT trong hai prompt dưới đây. Lưu kết quả thành file `.md` (hoặc `.json`), rồi trong app bấm **+ Phiếu** (cả phiếu) hoặc **+ Task** (thêm vào phiếu đang mở) → Chọn file. Xem bảng nhận diện trước khi bấm tạo: dòng xanh là app đã tự xử lý, dòng đỏ là chỗ phải sửa.
 
 Nên chọn cách nào:
-- **Cách A (JSON)**: đúng thứ bạn yêu cầu, đủ mọi trường. AI hay sai dấu ngoặc/trường khi file dài; app tự bù trường thiếu nhưng JSON hỏng thì báo lỗi.
-- **Cách B (MD)**: ngắn gọn, dễ đọc, dễ sửa tay, app đọc chắc chắn. **Khuyến nghị thử B trước**, vì AI ít sai hơn. Cấu trúc đầy đủ của MD ở `docs/QUY_UOC_MD.md`.
-
-Nguyên tắc chung (đã có trong hai prompt): chỉ cần ĐỦ NỘI DUNG, không cần giống bố cục PDF; mỗi file một phiếu; ảnh chỉ ghi tên, ảnh thật tải lên sau trong app.
-
----
-
-## CÁCH A. Prompt ra JSON
-
-````
-Bạn là bộ chuyển đổi phiếu bài tập tiếng Anh (PDF) sang JSON cho app "WS Editor". Đọc kỹ PDF đính kèm, rồi trả về DUY NHẤT một khối JSON hợp lệ (không giải thích, không markdown ngoài khối ```json).
-
-NGUYÊN TẮC
-1. Chỉ lấy NỘI DUNG (chữ, câu, lựa chọn, khung từ, bảng). Không cần giống bố cục gốc. Người học phải hiểu được phải làm gì.
-2. Chép đúng nguyên văn tiếng Anh, giữ dấu câu, chữ hoa, ký tự đặc biệt (’ …). Không sửa, không dịch, không tự bịa câu hay đáp án. Chỗ không đọc rõ thì ghi vào mục GHI CHÚ cuối câu trả lời, không đoán.
-3. Mỗi "bài tập/hoạt động/activity" trong PDF = một Task. Giữ đúng thứ tự.
-4. Mỗi file là một phiếu. Nếu PDF có nhiều nhóm/phiên bản (vd "Students 1 and 2" và "Students 3 and 4"), chỉ làm nhóm tôi nói; hỏi tôi nếu chưa rõ.
-5. Ảnh: không tạo ảnh. Với mỗi ảnh cần dùng, ghi một TÊN NGẮN mô tả (vd "cat", "the park") vào trường tương ứng.
-6. Đáp án đúng: chỉ điền khi PDF có đáp án. Có thì điền vào "key" của từng câu; không có thì bỏ qua.
-7. Mọi "id" duy nhất trong phiếu: Task t1,t2…; câu q1,q2… (hoặc i1,i2… với câu có ảnh, l1,l2… với lượt hội thoại, w1.. với từ tô chữ, p1.. với cặp nối, r1.. với hàng bảng).
-
-KHUNG PHIẾU
-{
-  "schema": "ws-editor/0.3",
-  "id": "ws-001",
-  "title": "<tên phiếu>",
-  "age": "7-9",                 // "5-6" | "7-9" | "10-12" (đoán theo trình độ; ghi vào GHI CHÚ nếu không chắc)
-  "page": {"size":"A4","marginMm":{"top":14,"right":14,"bottom":14,"left":14}},
-  "spacing": {"preset":"normal","overrides":{}},
-  "flow": "cont",
-  "tasks": [ ...Task... ]
-}
-
-KHUNG MỘT TASK (điền đủ mọi trường này; những trường không dùng để null hoặc như mẫu)
-{
-  "id": "t1",
-  "typeId": "custom",
-  "typeName": "<tên dạng bài ngắn, vd Look and write>",
-  "title": "<tiêu đề/ lệnh chính của bài, vd Look and write.>",
-  "instruction": "<hướng dẫn phụ, ví dụ mẫu; '' nếu không có>",
-  "audio": null,                 // hoặc "Track 05" nếu bài nghe
-  "image": null,                 // hoặc {"label":"the park","size":"medium","ar":"4/3"} cho MỘT ảnh chung của bài (size "large" nếu là tranh lớn để tô/nhìn)
-  "wordBank": null,              // hoặc {"words":["a","b"],"placement":"top","style":"chips","label":"none"}  (khung từ trong hộp)
-  "content": { ... xem DẠNG NỘI DUNG ... },
-  "answer": { "kind": "...", "attach": "item", "layout": "...", "params": {} },
-  "spacing": {"preset":null,"overrides":{}},
-  "layout": {"task":"auto","split":null,"cols":null,"dir":null,"align":null,"valign":null,"width":null,"cw":null,"rowH":null,"whoW":null,"colGap":null,"break":null,"frame":{},"cells":null,"table":null}
-}
-Phần "spacing" và "layout" của Task luôn chép y nguyên như trên (app tự dàn trang).
-
-DẠNG NỘI DUNG ("content") — chọn đúng một
-(a) Danh sách câu:
-    {"form":"list","items":[{"id":"q1","text":"She ___ a teacher.","opts":["am","is","are"],"key":"is"}]}
-    - "___" là chỗ trống. "opts" chỉ khi bài có lựa chọn a/b/c. "key" chỉ khi có đáp án.
-    - Chọn ngay trong câu (gạch chân/khoanh từ): viết {từ1|từ2} thẳng trong text, vd "It’s {windy|rainy}.".
-(b) Ảnh mỗi câu (nhìn tranh viết từ):  items: [{"id":"i1","img":"cat","len":3}]   ("len" = số chữ cái của từ, nếu biết)
-(c) Nhiều ảnh lựa chọn mỗi câu (nghe và tick): {"form":"list","variant":"multi","items":[{"id":"i1","text":"What is Tom eating?","imgs":["pizza","rice","cake"]}]}
-(d) Câu nhiều dòng có ảnh (đọc và gạch chân): items: [{"id":"i1","img":"rainy","lines":["It’s {windy|rainy}.","{Take|Put} your raincoat {on|off}."]}]
-(e) Nối cặp: {"form":"list","items":[{"id":"p1","pair":{"l":{"img":"apple"},"r":{"text":"pear"}}}]}   (vế "l" là {"img":..} hoặc {"text":..}; vế "r" thường {"text":..}; số cặp bằng số hàng)
-(f) Hội thoại: {"form":"list","lead":{"kind":"text","text":"<lời dẫn nếu có>"},"items":[{"id":"l1","who":"Mai","text":"Hi, Ben."},{"id":"l2","who":"Ben","text":"___"}]}
-(g) Bài đọc + câu hỏi: {"form":"list","lead":{"kind":"passage","text":"<cả bài đọc, nguyên văn>"},"items":[{"id":"q1","text":"How old is Lucy?"}]}
-(h) Tô chữ: {"form":"list","items":[{"id":"w1","text":"cat"},{"id":"w2","text":"hat"}]}
-(i) Bảng (kể cả ô chữ word search):
-    {"form":"table","corner":"<ô góc, hoặc ''>","cols":["Age","Hobby"],"rows":[{"id":"r1","head":"Tom","cells":["9","football"]},{"id":"r2","head":"Lily","cells":["",""]}]}
-    - Ô trống để học sinh viết = "". Ô tick = {"tick":1}. Ô ảnh = {"img":"cat"}. Đầu hàng có ảnh: "head":{"img":"cow","text":"cow"}.
-    - Ô chữ (word search): mỗi ô một chữ cái, "cols" là mảng chuỗi rỗng đủ số cột, "head":"" ở mọi hàng, và thêm vào Task "layout.table": {"head":false,"rowHead":false,"nm":"off","lines":"all","align":"center","minH":8}; danh sách từ cần tìm đưa vào "wordBank".
-(j) Chỉ có ảnh (tô màu, vẽ): {"form":"list","list":false,"items":[]} và "image" ở Task (size "large").
-
-LOẠI ĐÁP ÁN ("answer") — chọn theo cái học sinh phải làm
-- Viết một từ dưới ảnh/câu:          {"kind":"word","attach":"item","layout":"A2","params":{}}
-- Điền chỗ trống "___" trong câu:     {"kind":"word","attach":"inline","layout":"A2","params":{"lenMode":"fill","lines":1,"start":"inline"}}
-- Viết câu trả lời (dòng kẻ):         {"kind":"sentence","attach":"item","layout":"A1","params":{"lines":2}}   ("lines" = số dòng viết)
-- Khoanh a/b/c dưới câu:              {"kind":"choice","attach":"item","layout":"A4","params":{}}
-- Chọn trong câu {a|b}:               {"kind":"choice","attach":"inline","layout":"A4","params":{}}
-- Tick ô (nghe và tick):              {"kind":"tick","attach":"item","layout":"A5","params":{}}
-- Đúng/Sai (T/F):                     {"kind":"tf","attach":"item","layout":"A6","params":{}}
-- Nối:                                {"kind":"match","attach":"item","layout":"A7","params":{}}
-- Tô chữ:                             {"kind":"trace","attach":"item","layout":"A8","params":{"repeat":3}}
-- Không có chỗ trả lời (tô màu, hội thoại miệng, bảng tự có ô trống, ô chữ): {"kind":"none","attach":"item","layout":null,"params":{}}
-
-CÁCH CHỌN NHANH
-- Có "___" trong câu + khung từ → (a) + điền chỗ trống.
-- Câu hỏi "Who/What/How…?" cần viết lại → (a) hoặc (g) + viết câu.
-- Câu có A/B/C → (a) với "opts" + khoanh A/B/C.
-- True/False → (a) + Đúng/Sai (nếu có tranh chung thì điền "image").
-- Bài đọc dài → (g).
-- Bảng → (i), answer "none".
-
-SAU KHI ĐIỀN XONG, TỰ KIỂM TRA RỒI MỚI TRẢ LỜI
-- JSON hợp lệ (đúng dấu phẩy, ngoặc, dấu nháy kép; không có chú thích // trong kết quả).
-- Số câu đúng bằng PDF; số chỗ "___" khớp số từ trong khung từ nếu bài dùng khung từ.
-- Mọi id duy nhất. Không còn trường bắt buộc nào thiếu.
-
-ĐẦU RA
-Một khối ```json duy nhất. Ngay sau khối đó, một mục ngắn "GHI CHÚ" liệt kê: (1) chỗ không đọc rõ / phải đoán, (2) Task nào chọn dạng nội dung/đáp án chưa chắc và vì sao, (3) ảnh nào cần tải lên (tên ảnh theo từng Task).
-````
+- **Cách B (MD) — khuyến nghị.** Ngắn, dễ đọc, dễ sửa tay. Cấu trúc đầy đủ ở `docs/QUY_UOC_MD.md`.
+- **Cách A (JSON).** Đủ mọi trường, nhưng AI dễ sai dấu ngoặc khi file dài. Dùng khi cần kiểm soát từng trường.
 
 ---
 
 ## CÁCH B. Prompt ra MD (khuyến nghị)
 
 ````
-Bạn là bộ chuyển đổi phiếu bài tập tiếng Anh (PDF) sang Markdown theo QUY ƯỚC của app "WS Editor". Đọc kỹ PDF đính kèm, trả về DUY NHẤT một khối ```markdown theo đúng quy ước dưới đây, rồi một mục "GHI CHÚ" ngắn.
+Bạn chuyển phiếu bài tập tiếng Anh (PDF đính kèm) sang Markdown theo QUY ƯỚC của app "WS Editor". App tự dàn trang và TỰ VẼ chỗ trả lời (dòng kẻ, ô T/F, ô tick, vòng khoanh). Việc của bạn chỉ là chép NỘI DUNG và chọn đúng loại chỗ trả lời.
+
+Trả về DUY NHẤT một khối ```markdown, rồi mục "GHI CHÚ" ngắn.
 
 NGUYÊN TẮC
-- Chỉ lấy NỘI DUNG; không cần giống bố cục gốc. Chép nguyên văn tiếng Anh, giữ dấu câu, không sửa/dịch/bịa.
-- Mỗi hoạt động trong PDF = một Task, đúng thứ tự. Mỗi file một phiếu (nhiều nhóm thì làm nhóm tôi chỉ định).
-- Ảnh chỉ ghi TÊN NGẮN dạng [ảnh: tên].
-- Không đọc rõ thì ghi vào GHI CHÚ, không đoán.
+1. Chép nguyên văn tiếng Anh (giữ dấu câu, chữ hoa, ’ …). Không sửa, không dịch, không bịa câu hay đáp án.
+2. Không cần giống bố cục PDF. Người học chỉ cần hiểu phải làm gì.
+3. Mỗi hoạt động = một Task, đúng thứ tự. MỖI TASK CHỈ CÓ MỘT LOẠI CHỖ TRẢ LỜI. Hoạt động gốc trộn nhiều loại (vd điền bảng + tick một ý + hoàn thành câu) thì tách thành nhiều Task liên tiếp.
+4. KHÔNG CHÉP "GIÀN GIÁO" CỦA BẢN GỐC, vì app tự vẽ:
+   - gạch ___ hay dòng kẻ ở cuối câu khi học sinh viết câu trả lời hoặc chọn Đúng/Sai (chỗ viết nằm SAU câu, không phải một phần của câu);
+   - dòng "My answer: A / B / C", dòng chỉ có gạch "________";
+   - đầu phiếu: Name / Class / Date, số trang, thời gian từng bài ("3 min"), nhãn phần ("Before you read").
+   Giữ ___ khi chỗ trống là MỘT PHẦN CỦA CÂU, học sinh điền hoặc chọn từ vào đó (vd "She ___ a teacher.", "Place of the party: ___", "It is a ___. A. cat B. dog").
+5. Không viết dòng tiêu đề phần như "Nội dung:", "Content:". Câu đi ngay dưới các dòng trường.
+6. Ảnh: không tạo ảnh, chỉ ghi TÊN NGẮN dạng [ảnh: tên].
+7. Mỗi file một phiếu. PDF có nhiều nhóm/phiên bản thì chỉ làm nhóm tôi chỉ định, hỏi nếu chưa rõ.
+8. Không đọc rõ thì ghi vào GHI CHÚ, không đoán.
 
 QUY ƯỚC
-# Tên phiếu                         (một dòng)
-Tuổi: 7-9                           (5-6 | 7-9 | 10-12)
+# Tên phiếu
+Tuổi: 7-9                                  (5-6 | 7-9 | 10-12)
 
-## Task: <tiêu đề/lệnh chính của bài>     (mỗi Task bắt đầu bằng dòng này)
-Hướng dẫn: <hướng dẫn phụ / ví dụ mẫu>      (nếu có)
-Track: Track 05                             (nếu là bài nghe)
-Trả lời: <một trong: viết từ | điền chỗ trống | viết câu | khoanh A/B/C | chọn trong câu | tick | đúng/sai | nối | tô chữ | không>
-Dòng viết: 2                                (số dòng viết mỗi câu, nếu viết câu)
-Khung từ: từ1, từ2, từ3                     (nếu có hộp từ; từ có dấu phẩy thì ngăn bằng ;)
-Ảnh: tên ảnh chung                          (nếu có một tranh chung của bài)
-Lời dẫn: <câu dẫn>                          (trước hội thoại, nếu có)
+## Task: <tiêu đề bài>                     (mỗi Task bắt đầu bằng dòng này)
+Hướng dẫn: <lệnh / hướng dẫn của bài>
+Trả lời: <BẮT BUỘC, một trong: viết từ | điền chỗ trống | viết câu | khoanh A/B/C | chọn trong câu | tick | đúng/sai | nối | tô chữ | không>
+Dòng viết: 1                               (chỉ với "viết câu": số dòng mỗi câu)
+Khung từ: từ1, từ2, từ3                    (nếu có hộp từ)
+Ảnh: <tên ảnh chung>                       (nếu bài có một tranh chung)
+Track: Track 05                            (nếu là bài nghe)
+Lời dẫn: <câu dẫn trước hội thoại>
+Ghi chú: <lời nhắc nằm dưới bài trong bản gốc>
+<rồi đến các câu, theo các cách viết dưới đây>
 
-Nội dung:
-- Câu đánh số: `1. She ___ a teacher. A. am B. is C. are` (___ = chỗ trống; A. B. C. = lựa chọn; {a|b} = chọn trong câu; [ảnh: x] = ảnh của câu).
-- Câu nhiều dòng: dòng thụt lề 2 dấu cách ngay dưới câu đánh số.
-- Bài đọc: dòng `Bài đọc:` rồi các đoạn văn; sau đó mới đến câu hỏi đánh số.
-- Hội thoại: dòng `Hội thoại:` rồi mỗi lượt một dòng `Tên: lời` (chỗ cần điền ghi ___).
-- Nối: `1. cat - meow` (vế trái - vế phải; vế ảnh: `[ảnh: apple] - pear`), kèm `Trả lời: nối`.
-- Bảng: mỗi hàng một dòng, các ô cách nhau ` | `; dòng đầu là tiêu đề cột; ô trống để học sinh viết thì để trống; `[ ]` = ô tick; `[ảnh: x]` = ô ảnh.
-- Ô chữ (word search): dòng `Ô chữ:` rồi mỗi dòng một hàng chữ cái (viết liền, hoặc cách nhau dấu cách); từ cần tìm đưa vào `Khung từ:`.
-- Bài chỉ có tranh (tô màu, vẽ): chỉ `Ảnh:` và `Trả lời: không`, không có câu.
+CÁCH VIẾT CÂU
+- Câu đánh số: 1. She ___ a teacher.
+- Lựa chọn A/B/C: cùng dòng "1. Where is it? A. here B. there C. home", hoặc mỗi lựa chọn một dòng thụt lề ngay dưới câu.
+- Câu chỉ có lựa chọn (không có thân câu): "1. A. … B. … C. …".
+- Tick vào lựa chọn bằng chữ: ☐ a cake ☐ a football ☐ balloons   (một dòng, hoặc mỗi dòng một ☐), kèm "Trả lời: tick".
+- Nghe và tick ảnh: "1. What is Tom eating? A. [ảnh: pizza] B. [ảnh: rice] C. [ảnh: cake]", kèm "Trả lời: tick".
+- Chọn trong câu: It’s {windy|rainy}.
+- Ảnh của câu: 1. [ảnh: cat]
+- Nối: 1. cat - meow   (vế trái là ảnh: 1. [ảnh: apple] - pear)
+- Bài đọc: dòng "Bài đọc:" rồi các đoạn văn, MỖI ĐOẠN CÁCH NHAU MỘT DÒNG TRỐNG; sau đó đến câu hỏi đánh số.
+- Hội thoại: dòng "Hội thoại:" rồi mỗi lượt một dòng "Tên: lời" (chỗ cần điền ghi ___). Chỉ dùng khối này cho hội thoại.
+- Bảng: mỗi hàng một dòng, ô cách nhau " | "; dòng đầu là tiêu đề cột; ô để học sinh viết thì để trống; [ ] = ô tick; [ảnh: x] = ô ảnh.
+- Ô chữ (word search): dòng "Ô chữ:" rồi mỗi dòng một hàng chữ cái; từ cần tìm đưa vào "Khung từ:".
+- Bài chỉ có tranh (tô màu, vẽ): chỉ "Ảnh:" và "Trả lời: không".
 
-ĐÁP ÁN (chỉ khi PDF có đáp án), đặt CUỐI file, tách khỏi đề:
+CHỌN "Trả lời:"
+- ___ trong câu → điền chỗ trống
+- câu hỏi, học sinh viết câu trả lời → viết câu (+ Dòng viết)
+- một từ dưới tranh → viết từ
+- có A/B/C → khoanh A/B/C
+- ☐ trước các lựa chọn, hoặc nghe và tick ảnh → tick
+- True/False → đúng/sai
+- {a|b} → chọn trong câu
+- "chọn một trong các từ rồi viết câu" → Khung từ + điền chỗ trống
+- bảng, ô chữ, hỏi đáp miệng, tô màu → không
+
+ĐÁP ÁN (chỉ khi PDF có), đặt CUỐI file:
 ## Đáp án
 ### Task 1
 1. cat
 2. dog
-Task 2: is; are; an        (hoặc một dòng, các đáp án cách nhau dấu ;)
-(Không ghi đáp án cho bảng và ô chữ.)
+Task 2: is; are; an
 
-CHỌN "Trả lời:" NHANH
-___ trong câu → điền chỗ trống · câu hỏi cần viết lại → viết câu · có A/B/C → khoanh A/B/C · True/False → đúng/sai · {a|b} trong câu → chọn trong câu · nghe & đánh dấu ảnh → tick · bảng, ô chữ, hội thoại miệng, tô màu → không · nhìn tranh viết từ → viết từ.
+TỰ KIỂM TRA TRƯỚC KHI TRẢ LỜI
+- Mỗi Task có "## Task:" và "Trả lời:"; không có dòng "Nội dung:".
+- Số câu đúng bằng PDF; không còn ___ thừa ở cuối câu Đúng/Sai, viết câu.
+- Không Task nào trộn hai loại chỗ trả lời.
+- Bài đọc giữ đúng số đoạn.
 
-TỰ KIỂM TRA TRƯỚC KHI TRẢ LỜI: số câu đúng PDF; số ___ khớp số từ trong Khung từ (nếu dùng); mỗi Task đều có dòng `## Task:`; mọi Task nên có `Trả lời:`.
+ĐẦU RA: một khối ```markdown, rồi GHI CHÚ: (1) chỗ đọc không rõ, (2) Task đã tách hoặc chọn dạng chưa chắc và vì sao, (3) ảnh cần tải lên theo từng Task.
 
-ĐẦU RA: một khối ```markdown duy nhất, rồi mục GHI CHÚ: (1) chỗ đọc không rõ, (2) Task chọn dạng chưa chắc, (3) danh sách ảnh cần tải lên theo từng Task.
+VÍ DỤ ĐẦY ĐỦ (một phiếu đọc thật; bài 6 gốc trộn 3 loại nên tách thành Task 6 và 7):
+```markdown
+# A Surprise Birthday Party
+Tuổi: 7-9
+
+## Task: Look & Predict
+Hướng dẫn: Look at the title. What do you think you will see in the story? Tick (✓) two.
+Trả lời: tick
+Ghi chú: Your ideas are predictions. Check them after reading.
+☐ a cake ☐ a football ☐ balloons
+
+## Task: Read & Choose the Main Idea
+Hướng dẫn: Read the story. Then choose the best summary (A, B or C).
+Trả lời: khoanh A/B/C
+Bài đọc:
+On Saturday morning, Lily was at home with her mum. (… đoạn 1 …)
+
+At two o'clock, Lily's mum said, "Let's visit Ben." (… đoạn 2 …)
+
+But then their dog Max jumped onto a chair and took a sandwich! (… đoạn 3 …)
+
+1. A. Lily and her friends made a cake at school.
+   B. Lily’s friends planned a party, and something funny happened.
+   C. Lily went to a party, but no one came.
+
+## Task: True or False?
+Hướng dẫn: Read again. Write T (True) or F (False).
+Trả lời: đúng/sai
+1. Lily thought everyone was busy on her birthday.
+2. Ben and his friends prepared the party at Lily’s house.
+
+## Task: Find the Details
+Hướng dẫn: Answer with one word or a short phrase.
+Trả lời: viết câu
+Dòng viết: 1
+1. Where did the friends prepare the party?
+2. What time did Lily visit Ben?
+
+## Task: Choose & Think
+Hướng dẫn: Use clues in the story. Circle the best answer.
+Trả lời: khoanh A/B/C
+1. Why was the room dark when Lily opened the door?
+   A. The friends wanted to surprise her.
+   B. The friends were sleeping.
+   C. Ben was not at home.
+
+## Task: Story Map
+Hướng dẫn: Complete the story map with words from the story.
+Trả lời: điền chỗ trống
+1. Place of the party: ___
+2. Food at the party (two things): ___
+
+## Task: My Idea
+Hướng dẫn: Which party activity would you like best? Choose one and finish the sentence.
+Trả lời: điền chỗ trống
+Khung từ: eating cake, playing games, singing songs
+1. I would like ___ because ___.
+```
+````
+
+---
+
+## CÁCH A. Prompt ra JSON
+
+````
+Bạn chuyển phiếu bài tập tiếng Anh (PDF đính kèm) sang JSON cho app "WS Editor". App tự dàn trang và TỰ VẼ chỗ trả lời. Trả về DUY NHẤT một khối ```json hợp lệ, rồi mục "GHI CHÚ" ngắn.
+
+NGUYÊN TẮC
+1. Chép nguyên văn tiếng Anh. Không sửa, không dịch, không bịa câu hay đáp án. Không cần giống bố cục PDF.
+2. Mỗi hoạt động = một Task, đúng thứ tự. MỖI TASK CHỈ MỘT LOẠI ĐÁP ÁN; hoạt động trộn nhiều loại thì tách thành nhiều Task.
+3. KHÔNG CHÉP GIÀN GIÁO: không để ___ ở cuối câu khi đáp án là Đúng/Sai, viết câu, viết từ (chỗ viết nằm sau câu); không có câu "My answer: A / B / C"; không chép Name/Class, thời gian từng bài, nhãn phần. Chỉ giữ ___ khi chỗ trống nằm trong câu hoặc sau nhãn ("Place of the party: ___").
+4. Ảnh chỉ ghi TÊN NGẮN. Đáp án đúng chỉ khi PDF có (trường "key"). Mọi "id" duy nhất.
+5. Lời nhắc nằm dưới bài trong bản gốc: nối vào cuối "instruction".
+
+KHUNG PHIẾU
+{"schema":"ws-editor/0.3","id":"ws-001","title":"<tên phiếu>","age":"7-9","page":{"size":"A4","marginMm":{"top":14,"right":14,"bottom":14,"left":14}},"spacing":{"preset":"normal","overrides":{}},"flow":"cont","tasks":[ ... ]}
+("age": "5-6" | "7-9" | "10-12")
+
+KHUNG MỘT TASK
+{"id":"t1","typeId":"custom","typeName":"<tên dạng ngắn>","title":"<tiêu đề bài>","instruction":"<hướng dẫn, '' nếu không có>","audio":null,"image":null,"wordBank":null,
+ "content":{ ...DẠNG NỘI DUNG... },"answer":{ ...LOẠI ĐÁP ÁN... },
+ "spacing":{"preset":null,"overrides":{}},
+ "layout":{"task":"auto","split":null,"cols":null,"dir":null,"align":null,"valign":null,"width":null,"cw":null,"rowH":null,"whoW":null,"colGap":null,"break":null,"frame":{},"cells":null,"table":null}}
+- "audio": "Track 05" nếu bài nghe. "image": {"label":"the park","size":"medium","ar":"4/3"} cho một tranh chung ("large" nếu tranh lớn để tô/nhìn). "wordBank": {"words":["a","b"],"placement":"top","style":"chips","label":"none"}.
+- "spacing" và "layout" chép y nguyên như trên.
+
+DẠNG NỘI DUNG ("content")
+(a) Danh sách câu: {"form":"list","items":[{"id":"q1","text":"She ___ a teacher.","opts":["am","is","are"],"key":"is"}]}
+    - "opts" chỉ khi có lựa chọn. Câu chỉ có lựa chọn: "text":"". Chọn trong câu: viết {từ1|từ2} trong "text".
+(b) Ảnh mỗi câu: items [{"id":"i1","img":"cat","len":3}]
+(c) Nghe và tick ảnh: {"form":"list","variant":"multi","items":[{"id":"i1","text":"What is Tom eating?","imgs":["pizza","rice","cake"]}]}
+(d) Câu nhiều dòng có ảnh: items [{"id":"i1","img":"rainy","lines":["It’s {windy|rainy}.","{Take|Put} your raincoat {on|off}."]}]
+(e) Nối: {"form":"list","items":[{"id":"p1","pair":{"l":{"text":"cat"},"r":{"text":"meow"}}}]}
+(f) Hội thoại: {"form":"list","lead":{"kind":"text","text":"<lời dẫn>"},"items":[{"id":"l1","who":"Mai","text":"Hi, Ben."},{"id":"l2","who":"Ben","text":"___"}]}
+(g) Bài đọc + câu hỏi: {"form":"list","lead":{"kind":"passage","text":"<đoạn 1>\n\n<đoạn 2>"},"items":[...]}   (các đoạn cách nhau "\n\n")
+(h) Tô chữ: items [{"id":"w1","text":"cat"}]
+(i) Bảng: {"form":"table","corner":"","cols":["Age","Hobby"],"rows":[{"id":"r1","head":"Tom","cells":["9","football"]},{"id":"r2","head":"Lily","cells":["",""]}]}
+    - Ô trống để viết = "". Ô tick = {"tick":1}. Ô ảnh = {"img":"cat"}.
+    - Ô chữ (word search): mỗi ô một chữ, "cols" toàn chuỗi rỗng, "head":"" mọi hàng, thêm "layout.table": {"head":false,"rowHead":false,"nm":"off","lines":"all","align":"center","minH":8}; từ cần tìm vào "wordBank".
+(j) Chỉ có tranh: {"form":"list","list":false,"items":[]} và "image" (size "large").
+
+LOẠI ĐÁP ÁN ("answer")
+- Viết một từ:                 {"kind":"word","attach":"item","layout":"A2","params":{}}
+- Điền chỗ trống ___ trong câu: {"kind":"word","attach":"inline","layout":"A2","params":{"lenMode":"fill","lines":1,"start":"inline"}}
+- Viết câu (dòng kẻ):          {"kind":"sentence","attach":"item","layout":"A1","params":{"lines":1}}
+- Khoanh A/B/C:                {"kind":"choice","attach":"item","layout":"A4","params":{}}
+- Tick lựa chọn bằng chữ (☐):  {"kind":"choice","attach":"item","layout":"A4","params":{"lab":"box"}}
+- Chọn trong câu {a|b}:        {"kind":"choice","attach":"inline","layout":"A4","params":{}}
+- Nghe và tick ảnh:            {"kind":"tick","attach":"item","layout":"A5","params":{}}
+- Đúng/Sai:                    {"kind":"tf","attach":"item","layout":"A6","params":{}}
+- Nối:                         {"kind":"match","attach":"item","layout":"A7","params":{}}
+- Tô chữ:                      {"kind":"trace","attach":"item","layout":"A8","params":{"repeat":3}}
+- Không có chỗ trả lời:        {"kind":"none","attach":"item","layout":null,"params":{}}
+
+TỰ KIỂM TRA: JSON hợp lệ (không có chú thích //); số câu đúng PDF; không còn ___ thừa; không Task nào trộn hai loại đáp án; id duy nhất.
+
+ĐẦU RA: một khối ```json, rồi GHI CHÚ: (1) chỗ đọc không rõ, (2) Task đã tách hoặc chọn dạng chưa chắc, (3) ảnh cần tải lên theo từng Task.
 ````
 
 ---
 
 ## Sau khi AI trả kết quả
-1. Lưu thành `ten-phieu.json` (hoặc `.md`). Nếu AI bọc trong ``` thì bỏ dòng ``` đầu và cuối.
-2. App → **+ Phiếu** → Chọn file… Xem **bảng nhận diện**: số Task, mô tả từng Task, cảnh báo, ước tính số trang.
-3. Chỗ nào bảng ghi "đã bù", "do hệ thống đoán" hay cảnh báo đỏ: sửa trong cột trái, hoặc nhờ AI sửa lại đúng Task đó.
+1. Lưu thành `ten-phieu.md` (hoặc `.json`). Nếu AI bọc trong ``` thì bỏ dòng ``` đầu và cuối.
+2. App → **+ Phiếu** → Chọn file… Xem **bảng nhận diện**: số Task, mô tả từng Task, ghi chú (xanh: app đã tự xử lý), cảnh báo (đỏ: cần sửa), ước tính số trang.
+3. Dòng đỏ: sửa trong cột trái, hoặc nhờ AI sửa lại đúng Task đó rồi nạp lại.
 4. Tải ảnh thật vào các ô ảnh (nút + trên từng ô).
-5. Gặp dạng bài mà cả hai prompt không diễn đạt được: báo lại để mở rộng app theo quy trình 3 bước (dùng cái có sẵn → mở rộng → format mới).
+5. Gặp dạng bài mà prompt không diễn đạt được: báo lại để mở rộng app theo quy trình 3 bước.

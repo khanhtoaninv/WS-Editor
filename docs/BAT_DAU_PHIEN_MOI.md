@@ -1,6 +1,6 @@
 # Bắt đầu phiên mới — WS Editor
 
-Cập nhật: 2026-10-25 (chiều). Bản prototype hiện tại: **v66** (v65 + font nhúng sẵn). Artifact: https://claude.ai/artifact/4FLtRGtT211poqu1bPRSdG
+Cập nhật: 2026-10-25 (tối). Bản prototype hiện tại: **v67** (v66 + sửa bộ đọc MD theo phiếu thật đầu tiên). Artifact: https://claude.ai/artifact/7Ndsf8tt5xjidREi99Frf9
 
 ## Cách dùng
 **Quan trọng:** ô Instructions của Project hiện vẫn là câu ngắn cũ (chưa trỏ tới mục BÀN GIAO). Hoặc dán nội dung `PROJECT_INSTRUCTIONS.md` vào ô đó (một lần), hoặc mở đầu mỗi thread mới bằng câu: **"Đọc claude/BAT_DAU_PHIEN_MOI.md trước, rồi:"** + lệnh ở mục 2.
@@ -15,7 +15,7 @@ Mở thread mới trong Project "WS Editor", dán MỘT trong các lệnh ở m�
 5. Dựng lại thư mục làm việc: prototype + spec, và `claude/tests/*` (gồm `ws-sea-sample.json`, thư mục `md/`, `run_all.sh`) vào `/home/claude/ws/tests`. Fixture ảnh (ref.png, tall.png, wide.png, qr_up.png, big.jpg) không nằm trong Project; tạo lại bằng Pillow (lệnh ở mục E0 của bổ sung).
 
 ## 2. Lệnh mẫu (dán nguyên văn)
-**Thử một PDF mới (đường chat, P3):**
+**Thử một PDF mới (P3):** người dùng chạy prompt `claude/PROMPT_PDF_SANG_PHIEU.md` (cách B) với AI của họ, gửi PDF + MD + ảnh sau khi nạp; Claude phân loại chỗ sai theo 5 nhóm (đọc sai chữ / prompt / bộ đọc / mô hình thiếu / dàn trang) rồi sửa đúng lớp. Hoặc đường chat:
 > Đọc file PDF đính kèm, ra JSON phiếu đủ trường theo mẫu `claude/ws-sea-sample.json` (hoặc MD theo `claude/QUY_UOC_MD.md`), nạp thử bằng + Phiếu trong app, báo phần nào đúng và phần nào còn thiếu. Không cần giống bố cục gốc, chỉ cần đủ nội dung.
 
 **Làm mẫu Ô chữ (P4):**
@@ -30,6 +30,7 @@ Mở thread mới trong Project "WS Editor", dán MỘT trong các lệnh ở m�
 ## 3. Những điều cần nhớ (tránh lặp lại lỗi)
 - Nạp JSON thiếu trường giờ đã tự bù (v63), nhưng JSON xuất cho người dùng vẫn nên đủ trường: schema, id, title, age, page, spacing, flow, tasks. Mẫu chuẩn: `claude/ws-sea-sample.json`.
 - Từ v61 mỗi Task mở ra chỉ mở thẻ 3 Nội dung. Test phải tự mở thẻ 1/2/4 qua `SECT.kind=true;SECT.info=true;SECT.parts=true;refreshSel()` sau khi chọn Task.
+- Từ v67 MD chỉ nhận hội thoại qua khối `Hội thoại:`; `☐` là lựa chọn có ô tick (A4 `lab:'box'`). Mỗi phiếu thật mới: thêm vào `tests/real/` + test.
 - Từ v64 không còn nút "Dán…": test vào hộp nhập bằng `#tree [data-lib]` → `#libDlg [data-tab=src]`; + Phiếu là `#tree [data-newsheet]`.
 - Chạy test từng cái (hoặc `bash run_all.sh <mới> <cũ>`, mỗi test một tiến trình); thực tế 5–35 s mỗi test, audit ~2 phút. Không dùng `pkill -f tests/test`.
 - Khi báo kết quả: chỉ nói "đạt" cho những test đã chạy trên BẢN CUỐI.
@@ -41,10 +42,11 @@ Mở thread mới trong Project "WS Editor", dán MỘT trong các lệnh ở m�
 - Nguồn chính: JSON. MD theo quy ước cũng chính xác. Chữ thô là đường phụ, ghi "đoán, độ chắc thấp".
 - Mỗi file một phiếu. Nhập không bao giờ ghi đè Task có sẵn. Lỗi không đổi phiếu đang mở.
 
-## 5. Danh sách file trong Project (cập nhật 2026-10-25 chiều)
+## 5. Danh sách file trong Project (cập nhật 2026-10-25 tối)
 - `PROJECT_INSTRUCTIONS.md` (dán nội dung vào ô Instructions của Project nếu chưa)
-- `WS_EDITOR_SPEC.md` (có mục 16), `ws-sample.json`, `ws-editor-prototype.html` (v66; chạy local cần thư mục `fonts/` cạnh file)
+- `WS_EDITOR_SPEC.md` (có mục 16), `ws-sample.json`, `ws-editor-prototype.html` (v67; chạy local cần thư mục `fonts/` cạnh file)
 - `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục AC–AE: nhập file; mục cuối: BÀN GIAO)
 - `claude/PHUONG_AN_NHAP_FILE.md`, `claude/QUY_UOC_MD.md`, `claude/PHUONG_AN_CONG_THUC.md`
 - `claude/ws-sea-sample.json` (phiếu Wonders of the Sea, đủ trường; bản sao ở `claude/tests/ws-sea-sample.json` cho test)
-- `claude/tests/`: test1–14, audit, audit2, shot, cmp_paste, ws_sea, run_all.sh, `md/sea.md`, `md/mau-tron.md`, `md/nghe-bang.md`
+- `claude/tests/`: test1–16, audit, audit2, shot, cmp_paste, ws_sea, run_all.sh, `md/sea.md`, `md/mau-tron.md`, `md/nghe-bang.md`, `md/birthday.md`, `real/birthday-user.md` (MD gốc người dùng nhận từ AI, giữ nguyên), `real/birthday.pdf`
+- `claude/PROMPT_PDF_SANG_PHIEU.md` (prompt cho AI đọc PDF; v67)

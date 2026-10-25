@@ -1,9 +1,9 @@
-# WS Editor — Đặc tả (bản v36 + kế hoạch mục 15, 24/10/2026; cập nhật mục 16 ngày 25/10/2026)
+# WS Editor — Đặc tả (bản v36 + kế hoạch mục 15, 24/10/2026; cập nhật mục 16 ngày 25/10/2026, v67)
 
 > File này là nguồn sự thật duy nhất cho WS Editor. Nó thay thế bản MASTER_SPEC v10 (quá nặng) và Claude Doc "Đặc tả Layout Task & Answer" (cũ hơn bản này).
 > Prototype chạy được: `ws-editor-prototype.html` (một file HTML, mở bằng trình duyệt). Dữ liệu mẫu: `ws-sample.json` (schema 0.2).
 > Khi bản prototype và file này lệch nhau, prototype là bản đúng hơn về hành vi; hãy báo để cập nhật file này.
-> **Cập nhật 25/10/2026:** prototype hiện là **v66** (v65 + font nhúng sẵn trong `fonts/`, xem mục 16.6). Thay đổi v37–v65 ghi chi tiết ở `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục cuối "BÀN GIAO"). Nhập file (P0–P2) tóm tắt ở **mục 16**; quy ước MD ở `claude/QUY_UOC_MD.md`.
+> **Cập nhật 25/10/2026 (tối):** prototype hiện là **v67** (v66 + sửa bộ đọc MD theo phiếu thật đầu tiên, A4 có nhãn ô tick; mục 16.8). v66 = v65 + font nhúng sẵn trong `fonts/` (mục 16.7). Thay đổi v37–v65 ghi chi tiết ở `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục cuối "BÀN GIAO"). Nhập file (P0–P2) tóm tắt ở **mục 16**; quy ước MD ở `claude/QUY_UOC_MD.md`.
 
 ---
 
@@ -82,7 +82,7 @@ Chọn kiểu đáp án và chế độ gắn (Trong câu / Theo item / Khối r
 | A1 | Dòng kẻ viết | số dòng; chiều cao dòng `lineMm` (≥ tối thiểu theo tuổi); độ rộng `w` 40–100% | |
 | A2 | Ô trống | trong câu: `lenMode` fill/fixed, `lenMm`, `lines`; theo item: `width` (ký tự) | `start` inline/below |
 | A3 | Ô chữ cái | cỡ ô `boxW` 5–12 mm (cao = 1,15 × rộng) | |
-| A4 | Lựa chọn | khoảng cách `gap` 2–20 mm | `dir` (Tự động/Ngang/2 cột/Dọc/Tự xuống dòng), `autoMax`, `lab`, `upper` |
+| A4 | Lựa chọn | khoảng cách `gap` 2–20 mm | `dir` (Tự động/Ngang/2 cột/Dọc/Tự xuống dòng), `autoMax`, `lab` (Ⓐ / A. / ☐ ô tick, từ v67), `upper` (ẩn khi ô tick) |
 | A5 | Tick | cỡ ô `size` 4–12 mm | |
 | A6 | Cột T/F | cỡ ô `size` 5–12 mm | |
 | A7 | Chấm nối | cỡ chấm `size` 1,5–6 mm | |
@@ -198,7 +198,7 @@ items (kind 'items'): { id, img | imgs[], text?, len?, lines?[] }   lines[]: có
 - A4 trong câu: kiểu hiển thị khác (khung tròn, `(a / b)`), ký tự thoát `{` `}`.
 - Item nhiều dòng (`lines[]`) ở T6.
 - Gộp layout thành 6 họ trên giao diện (Hai cột gồm T2/T3/T4/T6 + nút Trái/Phải): chưa làm; hiện vẫn hiện từng layout hợp lệ.
-- Nhập file: P3 (thử PDF thật), P4 (mẫu Ô chữ, đáp án ô chữ, phiếu nhiều nhóm), nút "Xuất MD", bản in đáp án từ `key` (mục 16).
+- Nhập file: P3 (thử PDF thật; đã thử 1 phiếu ở v67, còn 4–9), P4 (mẫu Ô chữ, đáp án ô chữ, phiếu nhiều nhóm), nút "Xuất MD", bản in đáp án từ `key` (mục 16).
 
 ## 14. Chuẩn hóa (kế hoạch chốt 24/10/2026, **đã làm xong cả 3 giai đoạn**)
 
@@ -357,7 +357,7 @@ Các Task còn lại chỉ có 1 kiểu A (2: A7, 3: A5, 4/5/18: A4, 13: A6, 16:
 
 ---
 
-## 16. Nhập file vào phiếu (P0–P2 xong, v63–v65, 25/10/2026)
+## 16. Nhập file vào phiếu (P0–P2 xong, v63–v65; v67 sửa theo phiếu thật, 25/10/2026)
 
 > Phương án và quyết định gốc: `claude/PHUONG_AN_NHAP_FILE.md` (mục 5 = quyết định đã chốt). Chi tiết từng bước: `claude/WS_EDITOR_SPEC_v37_bo_sung.md` mục AC (P0), AD (P1), AE (P2). Quy ước MD: `claude/QUY_UOC_MD.md`.
 
@@ -386,8 +386,17 @@ test12 (P0), test13 (P1), test14 (P2) cùng test1–11, audit, audit2, `cmp_past
 ### 16.6 Còn lại
 P3 (thử 5–10 PDF thật qua đường chat, đo số Task đúng và chỗ phải sửa tay); P4 (mẫu "Ô chữ" khi dán một khối chữ, đáp án ô chữ, phiếu nhiều nhóm); nút "Xuất MD"; bản in đáp án từ `key`; "Mặc định theo dạng bài" cho Task `custom`.
 
-### 16.6 Font nhúng sẵn (v66, 25/10/2026)
+### 16.7 Font nhúng sẵn (v66, 25/10/2026)
 - Andika (phiếu) và Be Vietnam Pro (giao diện) nhúng bằng `@font-face` trỏ tới thư mục `fonts/` cạnh file HTML (woff2 các nhóm latin, latin-ext, vietnamese; giấy phép SIL OFL kèm theo). Không còn gọi Google Fonts: chạy offline vẫn dàn trang giống nhau.
 - Nạp trước nhóm ký tự tiếng Việt cho Andika 400 và 700 trước khi đo trang. Khi font nạp thêm giữa chừng chỉ dàn lại trang, không dựng lại cột trái (tránh mất chữ đang gõ).
 - Lưu ý kiểm thử: trước v66, môi trường test không tải được font nên đo bằng font thay thế. Từ v66 test đo bằng font thật; so sánh bố cục dùng `v62_font.html` (v62 + font nhúng) làm mốc, không dùng `v62_orig.html`.
 - Bản artifact trên claude.ai vẫn dùng link Google Fonts (một file duy nhất, không có thư mục fonts).
+
+### 16.8 Sửa theo phiếu thật đầu tiên (v67, 25/10/2026 tối)
+- **Mẫu thử:** PDF “A Surprise Birthday Party” (Cambridge A1 Movers, 6 bài, 2 trang) → AI khác viết MD theo prompt cũ → nạp vào v66: chỉ ~1/6 Task dùng được. Nguyên nhân chính nằm ở **đường nhập**, không ở mô hình container: prompt có dòng mẫu “Nội dung:” làm AI chép theo; bộ đọc MD gặp dòng lạ thì lặng lẽ biến thành câu; lựa chọn A/B/C mỗi dòng một lựa chọn không được hiểu; ô tick ☐ trên lựa chọn chữ bị hiểu thành “tick ảnh”; gạch ___ của bản gốc nằm trùng với chỗ trả lời app vẽ; bài đọc mất đoạn; bảng nhận diện không báo các lỗi này.
+- **Bộ đọc MD (`mdTask`):** bỏ dòng `Nội dung:` / `Content:`; dòng chỉ có nhãn `Xxx:` thì bỏ và ghi chú; bỏ `My answer: A / B / C` và dòng chỉ có gạch / chấm; lựa chọn `A. B. C.` mỗi dòng một lựa chọn (thụt lề hay không) gộp vào câu trên; câu chỉ có lựa chọn (không có thân câu) vẫn là một câu; `☐ / □ / [ ]` (cùng dòng hoặc mỗi dòng một ô, trừ dòng bảng) là lựa chọn của một câu → Lựa chọn A4 nhãn ô tick; dòng chữ thường sau câu cuối và trường mới `Ghi chú:` nối vào hướng dẫn (bước 1: dùng ô Hướng dẫn có sẵn, không thêm trường hiển thị mới); gạch `___` ở cuối câu bị bỏ khi đáp án là Đúng/Sai, viết câu, viết từ theo câu (giữ `Nhãn: ___`); bài đọc giữ đoạn (dòng trống); hội thoại chỉ nhận qua khối `Hội thoại:` (tránh nhầm `Place of the party: ___` là lời người nói); có ô tick mà đáp án không phải lựa chọn → ghi chú “tách thành nhiều Task”.
+- **Mở rộng (bước 2 của quy trình):** A4 thêm giá trị `lab: 'box'` (☐ ô tick, bo góc) ở Inspector; mô tả “tick lựa chọn”; MD xuất `☐ …` và `Trả lời: tick`, nạp lại ra đúng. Không thêm format mới. Đã bỏ ý “số lựa chọn phải chọn” vì hướng dẫn của bài đã nói (vd “Tick two”), thêm thông số chỉ làm rối.
+- **Bài đọc nhiều đoạn:** `lead.text` có `\n\n` thì mỗi đoạn một `<p>` (cách 2 mm); bài một đoạn hiển thị như cũ (18 Task mẫu giống hệt v66). Dùng được cả từ JSON.
+- **Cảnh báo mới** (`contentWarnings`, mọi nguồn): câu lỗi chữ (`undefined`), câu trông giống tiêu đề (kết thúc bằng `:`), gạch ___ cuối câu trùng chỗ trả lời riêng, câu còn ký hiệu ô tick. Phiếu mẫu 18 Task: không có cảnh báo mới.
+- **Prompt** `claude/PROMPT_PDF_SANG_PHIEU.md` và **quy ước** `claude/QUY_UOC_MD.md` (mục 4b, ví dụ 4) viết lại theo các quy tắc trên, có ví dụ đầy đủ là chính phiếu này (bài 6 tách thành Task 6 Story Map và Task 7 My Idea: khung từ + điền chỗ trống).
+- **Kiểm thử v67:** test16 mới (32 phép kiểm, mẫu thật ở `claude/tests/real/` và `claude/tests/md/birthday.md`): MD gốc của người dùng ra đúng Task 1–5, Task 6 trộn loại có ghi chú + cảnh báo đỏ; MD mới ra đúng 7 Task, 3 trang, 0 tràn, không cảnh báo; Inspector ô tick; khứ hồi MD; JSON. test1–15, audit (0 vấn đề), audit2 (13/14/11 trang, 0 tràn), `cmp_paste.py` 20/20 giống v66, `ws_sea.py` giống hệt: đạt trên bản cuối; 0 lỗi console.
