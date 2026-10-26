@@ -47,4 +47,4 @@ Trạng thái (cập nhật cuối phiên 6): **v85 đã làm A1, A2, B1, B2, C1
 - D2: xác nhận: nút Bình thường (mặc định) / Đậm cho chữ câu hỏi, theo Task, không đậm lựa chọn.
 - F1, F2: người dùng chưa hiểu → hình minh họa `docs/MINH_HOA_F1_F2.png` (F1 màu dấu đáp án câu ví dụ: xanh app #0a6b75 hoặc xanh dương #1e6fd9; F2 ô tích đáp án đúng ở cột trái, không in). Chờ chọn.
 - F1, F2: người dùng chọn **xanh lá đậm của app #0a6b75** cho dấu đáp án; đồng ý ô tích ở cột trái.
-- Mới (H1): thanh B I U ___ {a|b} ở hàng "Câu hỏi" (G3) dính dưới thanh tiêu đề khi cuộn danh sách câu (sticky), không trôi mất. Người dùng viết "G2"; Claude hiểu là G3 (G2 chưa có thanh riêng), đã hỏi có làm cho G2 không.
+- Mới (H1): thanh B I U ___ {a|b} ở hàng "Câu hỏi" (G3) dính dưới thanh tiêu đề khi cuộn danh sách câu (sticky), không trôi mất. Người dùng đồng ý: **thanh có ở cả G2 (bài đọc / lời dẫn) và G3**, dính dưới tiêu đề khi cuộn.
