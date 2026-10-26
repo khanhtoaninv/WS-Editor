@@ -25,6 +25,13 @@
 - MD chưa mang extras / marks / gap keys (chỉ JSON). Điểm trên ảnh chỉ cho G1 ảnh chung. Khung từ của bài đọc bị cắt chỉ hiện ở đoạn đầu. Khối ảnh G-Text chưa có Fit / zoom. Bài 1 Sunny Farm vẫn dùng `### Phần:` để lách thứ tự. Đã bỏ: kiểu Thẻ và đường nối (kiểu B).
 - Ô chữ: app không tự xếp từ vào lưới; người soạn hoặc AI phải đưa lưới sẵn.
 
+## Bổ sung cùng ngày (phiên 2): phiếu demo đầy đủ
+- Thêm `samples/ws-demo-day-du.json` (30 Task, 17 trang, 0 tràn, 0 lỗi console) và script dựng `tests/demo_full.py`. Không sửa app. Đã thử nạp lại file qua hộp + Phiếu: ra cùng 30 Task / 17 trang. Đã chụp và xem từng trang. Bộ test không chạy lại (app không đổi).
+- Ba chỗ phát hiện khi dựng demo (chưa sửa, cần người dùng quyết):
+  1. Khối chữ: danh sách số chỉ giữ số bắt đầu, số sau tự tăng. Gợi ý ô chữ kiểu "Across 1, 3, 4" phải tách bằng dòng trống (`1. …` / dòng trống / `3. …`) mới giữ được số 3.
+  2. Khung từ không hiện ở Task "chỉ có ảnh" (danh sách câu tắt hoặc 0 câu). Demo dùng khối chữ thay.
+  3. Bài đọc có danh sách câu tắt (`list:false`) vẫn báo "Chưa có câu nào" (vàng), trong khi đặc tả coi đây là trường hợp hợp lệ (mục V, v57).
+
 ## Cách chạy kiểm thử
 `bash tests/run_all.sh <mới.html> <cũ.html>` (từng test một, mỗi cái riêng; không chạy hai Chromium cùng lúc).
 

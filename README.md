@@ -30,7 +30,7 @@ Mỗi test in `PASS`/`FAIL` và dòng cuối `ALL OK` hoặc `SOME FAIL`. `test2
 ## Thư mục
 
 - `docs/`: spec (`WS_EDITOR_SPEC.md`, `WS_EDITOR_SPEC_v37_bo_sung.md`), phương án nhập file, quy ước MD, ghi chú bắt đầu phiên mới.
-- `samples/`: phiếu mẫu. Phiếu demo 18 Task có sẵn trong app.
+- `samples/`: phiếu mẫu. Phiếu demo 18 Task có sẵn trong app; **`samples/ws-demo-day-du.json`** là phiếu demo đầy đủ tính năng trình bày (30 Task, bản v78), mở bằng nút "+ Phiếu" → Chọn file.
 - `tests/`: bộ test Playwright, ảnh và MD mẫu.
 - `fonts/`: font nhúng (giấy phép SIL OFL, kèm file giấy phép).
 
