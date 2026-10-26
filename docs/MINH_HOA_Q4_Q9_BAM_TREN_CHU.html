@@ -1,0 +1,42 @@
+<!doctype html><html lang="vi"><meta charset="utf-8"><title>Q4 Q9 bấm đáp án trên chữ</title>
+<style>
+body{font:15px/1.5 system-ui,sans-serif;background:#f4f5f7;margin:0;padding:20px;color:#222}
+h2{font-size:15px;margin:0 0 4px}.sub{color:#666;font-size:13px;margin:0 0 10px}
+.row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.card{background:#fff;border:1px solid #d5d8de;border-radius:10px;padding:12px 14px;width:380px}
+.tag{font-size:12px;font-weight:700;color:#fff;background:#6b7280;border-radius:10px;padding:1px 8px;display:inline-block;margin-bottom:8px}
+.tag.on{background:#16a34a}
+.q{display:flex;gap:8px;align-items:baseline}.n{font-weight:700}
+.opt{display:inline-block;border:1.5px dashed #9aa3b2;border-radius:12px;padding:0 8px;margin:0 2px;background:#fafafa}
+.opt.ok{border:1.5px solid #16a34a;background:#dcfce7;color:#166534;font-weight:600}
+.opt.ok:before{content:"✓ "}
+.opt.cur{outline:2px solid #3b82f6}
+.plus{display:inline-block;width:20px;height:20px;line-height:18px;text-align:center;border:1.5px dashed #9aa3b2;border-radius:50%;color:#6b7280;font-size:14px}
+.w{display:inline-block;padding:0 2px;border-radius:4px}.w.hl{background:#fde047;box-shadow:0 0 0 1px #ca8a04}
+.hint{margin-top:8px;font-size:12px;color:#555;background:#eef2ff;border-radius:6px;padding:4px 8px}
+.pre{margin-top:6px;border-top:1px dashed #ccc;padding-top:6px;font-size:13px;color:#555}
+.pre .q{color:#222}.pre .circ{border:1.5px solid #333;border-radius:12px;padding:0 6px}
+</style>
+<h2>Q4 Chọn trong câu: bấm vế đúng ngay trên câu</h2>
+<p class="sub">Mỗi vế là một "chip"; bấm chip để đánh dấu đúng (bấm lại để bỏ). Bấm chữ trống cuối để thêm vế; bấm chip rồi gõ để sửa.</p>
+<div class="row">
+<div class="card"><span class="tag">Trước khi bấm</span>
+<div class="q"><span class="n">1</span><span>She <span class="opt">goes</span> <span class="opt">go</span> <span class="plus">+</span> to school every day.</span></div>
+<div class="hint">Chưa có vế nào đúng: viền đứt, báo "chưa chọn đáp án" ở câu.</div></div>
+<div class="card"><span class="tag on">Sau khi bấm "goes"</span>
+<div class="q"><span class="n">1</span><span>She <span class="opt ok">goes</span> <span class="opt">go</span> <span class="plus">+</span> to school every day.</span></div>
+<div class="hint">Vế đúng: nền xanh + dấu ✓. Không in ra phiếu học sinh.</div>
+<div class="pre">Phiếu in (học sinh):<div class="q"><span class="n">1</span><span>She <span class="circ">goes</span> / go to school every day.</span></div></div></div>
+</div>
+<h2>Q9 Tô chữ: bấm từng chữ cần tô ngay trên bài</h2>
+<p class="sub">Bấm chữ để bật/tắt tô (nền vàng); kéo qua nhiều chữ để tô cụm. Chữ đã tô = đáp án đúng.</p>
+<div class="row">
+<div class="card"><span class="tag">Trước khi bấm</span>
+<div class="q"><span class="n">1</span><span>Underline the verbs: The cat <span class="w">sat</span> on the mat and <span class="w">ate</span> fish.</span></div>
+<div class="hint">Di chuột lên chữ: hiện nền vàng nhạt gợi ý bấm được.</div></div>
+<div class="card"><span class="tag on">Sau khi bấm "sat" và "ate"</span>
+<div class="q"><span class="n">1</span><span>Underline the verbs: The cat <span class="w hl">sat</span> on the mat and <span class="w hl">ate</span> fish.</span></div>
+<div class="hint">Chữ tô vàng = đáp án đúng (chỉ trong editor, bản in để học sinh tự tô).</div>
+<div class="pre">Phiếu in: "The cat sat on the mat and ate fish." (không tô sẵn; bản giáo viên có thể tô).</div></div>
+</div>
+</html>
