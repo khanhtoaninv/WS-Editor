@@ -22,6 +22,10 @@
 
 **Lưu ý môi trường:** trên cloud cần `pip install playwright==1.63.0`; bản cũ để so (test2, cmp_v80) phải có thư mục `fonts/` cạnh file, nếu không test2 lệch chiều cao vì khác phông.
 
+## 0b. Sau v92: v93 (người dùng: "thực hiện các công việc bàn giao")
+- Làm phần rõ ràng: MD mang `Chữ câu hỏi: đậm`, `Xáo vế phải: có`, `Khối ảnh: tên (n ảnh)` (spec mục 25).
+- Ba việc lớn (chi tiết trang, bản đáp án giáo viên, G2 bố cục riêng) là tính năng mới: đã hỏi người dùng chọn việc nào, sẽ vẽ phương án trước khi code. P3 cần PDF thật; câu hỏi 1, 2, 4 của v84 vẫn chờ.
+
 ## 1. Lỗi tìm được khi tự kiểm thử (đã sửa trước khi đẩy)
 - Chú thích `//` chèn giữa dòng một-dòng làm mất code phía sau (parseCell; ô tích Đúng/Sai). Đã tách chú thích ra dòng riêng.
 - Chip đếm không cập nhật khi gõ đáp án (khung soạn không vẽ lại khi rời ô) → `kcntSync`.

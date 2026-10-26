@@ -104,5 +104,11 @@ with sync_playwright() as p:
         E("commit(w=>{const t=w.tasks.find(x=>x.id==='t15'); t.layout.table=Object.assign({},t.layout.table||{},{key:true});})"); pg.wait_for_timeout(300)
         chk('v92: Hiện đáp án → in chữ', 'swimming' in E("document.querySelector('.task[data-task=t15]').textContent"))
         chk('v92: MD giữ "=swimming"', '=swimming' in E("sheetToMd(ws)"))
+    if STEP >= 93:
+        E("commit(w=>{const a=w.tasks.find(x=>x.id==='t2'); a.content.shuffle=true; const q=w.tasks.find(x=>x.id==='t4'); q.layout.qbold=true; q.extras=(q.extras||[]).concat([{id:'xm',kind:'image',pos:'bottom',label:'farm',n:3}]);})"); pg.wait_for_timeout(300)
+        md = E("sheetToMd(ws)")
+        chk('v93: MD xuất "Chữ câu hỏi: đậm", "Xáo vế phải: có", "(3 ảnh)"', 'Chữ câu hỏi: đậm' in md and 'Xáo vế phải: có' in md and 'Khối ảnh: farm (3 ảnh)' in md)
+        r = E("md=>{const r=readMd(md); const ts=r.tasks.map(x=>x.t); return [ts.some(t=>t.layout.qbold), ts.some(t=>ck(t)==='pairs'&&t.content.shuffle), ts.flatMap(t=>t.extras||[]).filter(x=>x.kind==='image'&&x.label==='farm').map(x=>x.n)]}", md)
+        chk('v93: đọc lại MD giữ đậm, xáo, số ảnh khối', r[0] and r[1] and r[2] == [3], r)
     print('ERRS', errs); ok &= not errs
     print('ALL OK' if ok else 'SOME FAIL'); b.close()

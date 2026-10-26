@@ -313,7 +313,12 @@ Thu gọn theo thẻ + liên kết chọn khối, Nối Task / xóa có hỏi, G
 ## AD. v84 (2026-10-26) — xem WS_EDITOR_SPEC.md mục 21
 Ảnh chung ở mọi dạng, chọn đúng khối G3 / GT, căn lề Task kéo theo ảnh, cỡ chữ mặc định Vừa, hàng bảng 12 mm, nhãn a b c, khối tự do + Thêm / nhiều ảnh, độ rộng ảnh %, hội thoại cắt trang.
 
-## AB. BÀN GIAO (2026-10-26, bản v92) — đọc mục này đầu tiên khi mở thread mới
+## AB. BÀN GIAO (2026-10-26, bản v93) — đọc mục này đầu tiên khi mở thread mới
+- **Bản v93** (spec mục 25): MD mang `Chữ câu hỏi: đậm`, `Xáo vế phải: có`, `Khối ảnh: tên (n ảnh)`. Nền là v92 (mục dưới).
+- **Đang chờ người dùng chọn việc lớn tiếp theo** (đã hỏi, Claude đề xuất chi tiết trang): chi tiết trang (tiêu đề phiếu, Họ tên / Lớp / Ngày, header / footer) · bản đáp án giáo viên · G2 bố cục riêng. Cả ba là tính năng mới: vẽ phương án, chờ duyệt rồi mới code.
+- **Chờ người dùng:** PDF thật để làm P3; câu hỏi 1, 2, 4 của bàn giao v84 (câu 3 "Q3 có cần ô tick" đã giải quyết ở v87).
+
+## AB-cũ. BÀN GIAO (2026-10-26, bản v92)
 - **Bản v92** (spec mục 24, báo cáo `docs/BAO_CAO_PHIEN_2026-10-26_phien7.md`): xác định đáp án đúng ngay trong khung soạn cho mọi dạng Q (trừ Q9 tô theo nét, Q12 viết tự do): Q3 dòng đáp án có ô tích + "+"; ô đáp án luôn hiện + chip "x/y câu có đáp án"; Q4 chip `{*đúng|sai}` và tìm lỗi sai; Q8 "Xáo vế phải khi in"; đáp án từng chỗ trống (chọn từ Khung từ); Q10 ô `=đáp án`.
 - **Việc tiếp theo:** người dùng thử v92 và góp ý; bản đáp án giáo viên; MD mang `shuffle`; việc tồn ở bàn giao v86.
 

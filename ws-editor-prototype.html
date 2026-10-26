@@ -839,7 +839,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 
 <div class="app">
   <header class="top">
-    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v92</span> <small id="wsTitle"></small></div>
+    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v93</span> <small id="wsTitle"></small></div>
     <div class="tb">
       <label for="age" class="hint" style="margin:0">Độ tuổi</label>
       <select id="age"><option value="5-6">5–6</option><option value="7-9">7–9</option><option value="10-12">10–12</option></select>
@@ -6390,10 +6390,10 @@ function addTasks(list, note) {
    (Hướng dẫn, Track, Mẫu, Trả lời, Dòng viết, Khung từ, Ảnh, Lời dẫn); khối "Bài đọc:", "Hội thoại:", "Ô chữ:";
    còn lại là câu đánh số / dòng bảng "|" như khi dán chữ. Đáp án nằm riêng ở "## Đáp án" cuối file. */
 const MD_RE = /^\s*##\s*task\b/im;
-const MD_FIELD = /^\s*(hướng dẫn|instruction|track|audio|mẫu|trả lời|answer type|dòng viết|khung từ ảnh|khung từ|đáp án chỗ trống|gap answers|words?|word bank|ảnh chung|ảnh|image|lời dẫn|intro|ghi chú|lưu ý|note|dạng|bố cục|vị trí khung từ|dòng kẻ|thứ tự|khối chữ trên|khối chữ dưới|khối chữ|khối ảnh trên|khối ảnh dưới|khối ảnh|điểm trên ảnh)\s*:\s*(.*)$/i;
+const MD_FIELD = /^\s*(hướng dẫn|instruction|track|audio|mẫu|trả lời|answer type|dòng viết|khung từ ảnh|khung từ|đáp án chỗ trống|gap answers|words?|word bank|ảnh chung|ảnh|image|lời dẫn|intro|ghi chú|lưu ý|note|dạng|bố cục|vị trí khung từ|dòng kẻ|thứ tự|khối chữ trên|khối chữ dưới|khối chữ|khối ảnh trên|khối ảnh dưới|khối ảnh|điểm trên ảnh|chữ câu hỏi|xáo vế phải)\s*:\s*(.*)$/i;
 const MD_FKEY = { 'hướng dẫn': 'instruction', instruction: 'instruction', track: 'audio', audio: 'audio', 'mẫu': 'recipe', 'trả lời': 'kind', 'answer type': 'kind', 'dòng viết': 'lines', 'khung từ': 'bank', 'đáp án chỗ trống': 'gapkeys', 'gap answers': 'gapkeys', word: 'bank', words: 'bank', 'word bank': 'bank', 'ảnh chung': 'image', 'ảnh': 'image', image: 'image', 'lời dẫn': 'intro', intro: 'intro', 'ghi chú': 'note', 'lưu ý': 'note', note: 'note',
   'dạng': 'form', 'bố cục': 'tlay', 'khung từ ảnh': 'ibank', 'vị trí khung từ': 'bankpos', 'dòng kẻ': 'ruling', 'thứ tự': 'order', 'điểm trên ảnh': 'marks',
-  'khối chữ': 'gtT', 'khối chữ dưới': 'gtT', 'khối chữ trên': 'gtTtop', 'khối ảnh': 'gtI', 'khối ảnh dưới': 'gtI', 'khối ảnh trên': 'gtItop' };
+  'khối chữ': 'gtT', 'khối chữ dưới': 'gtT', 'khối chữ trên': 'gtTtop', 'khối ảnh': 'gtI', 'khối ảnh dưới': 'gtI', 'khối ảnh trên': 'gtItop', 'chữ câu hỏi': 'qbold', 'xáo vế phải': 'shuf' };   // v93: MD mang chữ câu hỏi đậm, xáo vế phải bài nối
 // v81: "Dạng:" = dạng câu hỏi (Q1–Q12), ghi chi tiết trong ngoặc; "Bố cục:" = bố cục Task (4 kiểu)
 const MD_FORM = { 'điền từ': 'Q1', 'điền chỗ trống': 'Q1', 'viết từ': 'Q1', 'viết câu': 'Q2', 'trả lời câu hỏi': 'Q2', 'chọn a/b/c': 'Q3', 'khoanh a/b/c': 'Q3', 'chọn đáp án': 'Q3', 'chọn trong câu': 'Q4', 'gạch chân': 'Q4', 'khoanh trong câu': 'Q4', 'tìm lỗi sai': 'Q4', 'đúng/sai': 'Q5', 'đúng sai': 'Q5', 'nhìn ảnh viết': 'Q6', 'chọn ảnh': 'Q7', 'tick ảnh': 'Q7', 'nối': 'Q8', 'tô chữ': 'Q9', 'bảng': 'Q10', 'lưới': 'Q11', 'ô chữ': 'Q11', 'viết tự do': 'Q12', 'viết đoạn': 'Q12' };
 const MD_TLAY = { 'xếp dọc': 'T1', 'ảnh trái': 'T2', 'ảnh phải': 'T3', 'ảnh trong bài đọc': 'T4', 'bao chữ': 'T4' };
@@ -6598,7 +6598,7 @@ function mdTask(b, keys) {
   if (F.ibank) { const w = F.ibank.split(/\s*[,;|]\s*/).map(x => x.trim()).filter(Boolean); t.wordBank = { words: w, placement: 'top', style: 'chips', label: 'lower', kind: 'image' }; }
   if (F.bankpos) { const v = { 'trên': 'top', 'dưới': 'bottom', 'phải': 'right', 'bên phải': 'right', top: 'top', bottom: 'bottom', right: 'right' }[F.bankpos.toLowerCase().trim()]; if (!t.wordBank) notes.push('“Vị trí khung từ” nhưng Task không có khung từ'); else if (!v) notes.push(`không hiểu "Vị trí khung từ: ${F.bankpos}" (trên / dưới / phải)`); else t.wordBank.placement = v; }
   if (F.ruling) { if (/bốn ô li|4 ô li/i.test(F.ruling)) { if (['A1', 'A8'].includes(t.answer.layout)) t.answer.params.ruling = '4'; else notes.push('“Dòng kẻ: bốn ô li” chỉ dùng cho dòng viết / tô chữ'); } else if (!/thường/i.test(F.ruling)) notes.push(`không hiểu "Dòng kẻ: ${F.ruling}"`); }
-  if (gts.length) { t.extras = t.extras || []; const used = new Set(t.extras.map(y => y.id)); gts.forEach(g => { while (g.lines.length && g.lines[g.lines.length - 1] === '') g.lines.pop(); const id = newId(used, 'x'); t.extras.push(g.kind === 'image' ? { id, kind: 'image', pos: g.pos, label: g.lines.join(' ') || 'ảnh' } : { id, kind: 'text', pos: g.pos, text: g.lines.join('\n') }); }); }
+  if (gts.length) { t.extras = t.extras || []; const used = new Set(t.extras.map(y => y.id)); gts.forEach(g => { while (g.lines.length && g.lines[g.lines.length - 1] === '') g.lines.pop(); const id = newId(used, 'x'); const lb = g.lines.join(' '), mn = /\s*\((\d)\s*ảnh\)\s*$/i.exec(lb), n = mn ? Math.min(4, Math.max(1, +mn[1])) : 1; t.extras.push(g.kind === 'image' ? Object.assign({ id, kind: 'image', pos: g.pos, label: (mn ? lb.slice(0, mn.index) : lb).trim() || 'ảnh' }, n > 1 ? { n } : {}) : { id, kind: 'text', pos: g.pos, text: g.lines.join('\n') }); }); }
   if (F.marks) { if (!t.image) notes.push('“Điểm trên ảnh” nhưng Task không có ảnh chung'); else { const pts = F.marks.replace(/\(([^)]*)\)/g, '').split(/\s*;\s*/).map(x => x.trim().split(/[\s,]+/).map(parseFloat)).filter(a => a.length >= 2 && isFinite(a[0]) && isFinite(a[1])).slice(0, 20).map(([x, y]) => ({ x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)) })); if (pts.length) t.image.marks = pts; else notes.push(`không đọc được "Điểm trên ảnh: ${F.marks}" (viết x y theo %, cách nhau bằng ;)`); if (/ô trống/i.test(F.marks)) t.image.mk = { label: 'none' }; } }
   // ô tick ☐ trong MD: lựa chọn hiện bằng ô vuông (A4, nhãn ☐)
   
@@ -6613,6 +6613,8 @@ function mdTask(b, keys) {
   if (keys && keys.gap) { if (t.content.lead && t.content.lead.kind === 'passage') t.content.lead.keys = keys.gap; else notes.push('“Chỗ trống:” trong đáp án nhưng Task không có bài đọc'); }
   if (F.tlay) { const v = MD_TLAY[F.tlay.toLowerCase().trim()]; if (!v) notes.push(`không hiểu "Bố cục: ${F.tlay}" (xếp dọc / ảnh trái / ảnh phải / ảnh trong bài đọc)`); else if (tnReasons(t)[v]) notes.push(`"Bố cục: ${F.tlay}" không dùng được (${tnReasons(t)[v]}); để Tự động`); else qCmd(t, 'tn', v); }
   if (F.order) { if (!/câu hỏi trước|questions? first/i.test(F.order)) { if (!/bài đọc trước/i.test(F.order)) notes.push(`không hiểu "Thứ tự: ${F.order}"`); } else if (ck(t) !== 'passage') notes.push('“Thứ tự: câu hỏi trước” chỉ dùng cho Task có bài đọc'); else if (t.layout.task !== 'auto' && ['T8', 'T4'].includes(layoutOf(t))) notes.push('“Bố cục:” đã chọn đặt bài đọc cạnh câu hỏi / bao quanh ảnh: bài đọc luôn đứng trước, bỏ “Thứ tự”'); else t.layout.order = 'qfirst'; }
+  if (F.qbold) { if (/^(đậm|bold|có)$/i.test(F.qbold)) t.layout.qbold = true; else if (!/^(thường|bình thường|normal|không)$/i.test(F.qbold)) notes.push(`không hiểu "Chữ câu hỏi: ${F.qbold}" (đậm / thường)`); }
+  if (F.shuf) { if (ck(t) !== 'pairs') notes.push('“Xáo vế phải” chỉ dùng cho bài nối'); else if (/^(có|bật|yes|on)$/i.test(F.shuf)) t.content.shuffle = true; else if (/^(không|tắt|no|off)$/i.test(F.shuf)) delete t.content.shuffle; else notes.push(`không hiểu "Xáo vế phải: ${F.shuf}" (có / không)`); }
   if (/\s\|\s|\t/.test(body.join('\n')) && ck(t) === 'table') explicit = true;
   normAnswer(t); tidy(t);
   if (!force) { const m = recipeMatch(t); t.typeId = m.exact ? m.r.id : 'custom'; t.typeName = descOf(t); }
@@ -6635,8 +6637,10 @@ function taskToMd(t, asPart) {
       if (nm) o.push(`Dạng: ${nm}${op ? ` (${op})` : ''}`); }
     if (p.ruling === '4') o.push('Dòng kẻ: bốn ô li'); }
   if (t.layout.order === 'qfirst') o.push('Thứ tự: câu hỏi trước');
+  if (t.layout.qbold) o.push('Chữ câu hỏi: đậm');
+  if (k === 'pairs' && c.shuffle) o.push('Xáo vế phải: có');
   if (t.image && t.image.marks && t.image.marks.length) o.push('Điểm trên ảnh: ' + t.image.marks.map(m => `${m.x} ${m.y}`).join('; ') + (t.image.mk && t.image.mk.label === 'none' ? ' (ô trống)' : ''));
-  (t.extras || []).forEach(x => { if (x.kind === 'image') o.push(`Khối ảnh${x.pos === 'top' ? ' trên' : ''}: ${x.label || 'ảnh'}`); else { o.push(`Khối chữ${x.pos === 'top' ? ' trên' : ''}:`); String(x.text || '').split('\n').forEach(l => o.push(l.trim() ? '  ' + l : '')); } });
+  (t.extras || []).forEach(x => { if (x.kind === 'image') o.push(`Khối ảnh${x.pos === 'top' ? ' trên' : ''}: ${x.label || 'ảnh'}${gtN(x) > 1 ? ` (${gtN(x)} ảnh)` : ''}`); else { o.push(`Khối chữ${x.pos === 'top' ? ' trên' : ''}:`); String(x.text || '').split('\n').forEach(l => o.push(l.trim() ? '  ' + l : '')); } });
   if (['A1', 'A2'].includes(a.layout) && (a.params.lines || 1) > 1) o.push('Dòng viết: ' + a.params.lines);
   if (k === 'passage' && c.lead && c.lead.keys && c.lead.keys.length) o.push('Đáp án chỗ trống: ' + c.lead.keys.join(', '));
   if (t.wordBank) { const wb = t.wordBank; o.push((wb.kind === 'image' ? 'Khung từ ảnh: ' : 'Khung từ: ') + wb.words.join(wb.words.some(w => w.includes(',')) ? '; ' : ', ')); const dp = k === 'dialogue' ? 'right' : 'top'; if ((wb.placement || 'top') !== dp) o.push('Vị trí khung từ: ' + { top: 'trên', bottom: 'dưới', right: 'phải' }[wb.placement || 'top']); }

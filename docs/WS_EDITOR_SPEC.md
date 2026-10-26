@@ -706,3 +706,10 @@ Nguồn: góp ý người dùng sau v86; đề xuất `docs/DE_XUAT_CHON_DAP_AN_
 - **v92 — Q10 (bảng):** ô gõ `=chữ` = ô học sinh điền, chữ là đáp án (`{ans}` qua `parseCell` / `fmtCell`); phiếu in ô trống, khung soạn tô xanh nghiêng; có ô đáp án thì panel Bảng có "Hiện đáp án (bản giáo viên)" (`layout.table.key`). MD giữ `=chữ`.
 - **Chưa làm:** bản đáp án giáo viên cho cả phiếu; ô tick trong bảng chưa ghi được ô đúng; lưới tìm từ chưa đánh dấu vị trí từ; MD chưa mang `content.shuffle`; nhập MD bài nối (phiếu PDF đã xáo) vẫn Tắt xáo.
 - **Kiểm thử:** `tests/test36.py` (mọi bước, tham số thứ hai = bước tối đa); test35 nhận ô tích ở dòng đáp án mới.
+
+## 25. MD mang thêm cấu hình (v93, 26/10/2026)
+- `Chữ câu hỏi: đậm` (hoặc `thường`) ↔ `layout.qbold`.
+- `Xáo vế phải: có` (hoặc `không`) ↔ `content.shuffle` của bài nối (Task không phải bài nối thì báo). Thiếu dòng này thì bài nối nhập vào để Tắt xáo như v90.
+- `Khối ảnh: <tên> (3 ảnh)` ↔ khối ảnh tự do nhiều ảnh cạnh nhau `x.n` (2–4).
+- `qmem` (nhớ dạng câu hỏi) vẫn chỉ lưu trong JSON, chờ người dùng trả lời câu hỏi 2 của bàn giao v84.
+- Kiểm thử: `tests/test36.py` mục v93 (xuất MD rồi đọc lại).
