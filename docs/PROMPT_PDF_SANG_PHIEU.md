@@ -85,6 +85,7 @@ CHỌN "Trả lời:"
 Task 2: is; are; an
 
 TỰ KIỂM TRA TRƯỚC KHI TRẢ LỜI
+- Nhãn in sẵn đầu một phần trong PDF (ví dụ "Self-check:") ghi vào dòng `Hướng dẫn:` của phần đó. Tên sau "### Phần:" chỉ là tên nội bộ, KHÔNG được in lên phiếu.
 - Số dòng "## Task" bằng đúng số bài đánh số trong PDF. Chỉ dùng "### Phần:" cho các phần phụ của MỘT bài.
 - Mỗi Task và mỗi Phần có "Trả lời:"; không có dòng "Nội dung:".
 - Số câu đúng bằng PDF; không còn ___ thừa ở cuối câu Đúng/Sai, viết câu.

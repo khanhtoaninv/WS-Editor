@@ -289,8 +289,11 @@ python3 -c "from PIL import Image; Image.new('RGB',(64,48),(200,200,200)).save('
 ## AN. v76 — Điểm trên ảnh chung
 - Spec chính mục 17.7. `withMarks`, `marksCtl`, `image.marks/mk`, kéo / đặt điểm ở bắt sự kiện `pointerdown` pha capture trên stage, `test24.py`.
 
-## AB. BÀN GIAO (2026-10-26, bản v76) — đọc mục này đầu tiên khi mở thread mới
-- **Bản v76** thêm điểm trên ảnh chung (mục AN; v75 bài đọc có chỗ trống / chọn / đánh dấu / cắt theo đoạn, mục AM; v74 G-Text kiểu Ảnh, mục AL; v73 kiểu Chữ, mục AK; v72 cỡ chữ phiếu, mục AJ). **Việc tiếp theo:** điểm neo kiểu B (dây nối ra ô viết) nếu cần, rồi lưới tự do (ô chữ; cần hình mẫu duyệt trước). Đã chạy trên bản cuối v76: test1–24 và audit; `test2` so với v75.
+## AO. v77 — Dọn việc nhỏ
+- Spec chính mục 17.8. `presetKey`, `layout.num`, `a4dir` tự động ra `fl`, `test25.py`. Prompt và quy ước MD: nhãn in sẵn của phần ghi vào `Hướng dẫn:`.
+
+## AB. BÀN GIAO (2026-10-26, bản v77) — đọc mục này đầu tiên khi mở thread mới
+- **Bản v77** dọn việc nhỏ (mục AO; v76 điểm trên ảnh chung, mục AN; v75 bài đọc có chỗ trống / chọn / đánh dấu / cắt theo đoạn, mục AM; v74 G-Text kiểu Ảnh, mục AL; v73 kiểu Chữ, mục AK; v72 cỡ chữ phiếu, mục AJ). **Việc tiếp theo:** điểm neo kiểu B (dây nối ra ô viết) nếu cần, rồi lưới tự do (ô chữ; cần hình mẫu duyệt trước). Đã chạy trên bản cuối v77: test1–25 và audit; `test2` so với v76.
 - **Không còn dùng artifact.** Xong việc thì commit và đẩy lên GitHub `khanhtoaninv/WS-Editor`, nhánh main (người dùng yêu cầu). Repo: file chính `ws-editor-prototype.html`, `docs/`, `tests/`, `fonts/`, `samples/`.
 - **Đã chạy trên bản cuối v70:** test1, 3–19, audit (0 vấn đề), audit2 (không tràn), cmp_paste (20 bài dán giống v69), ws_sea (3 trang, 0 lỗi) đạt, 0 lỗi console. `test2` so với v69: 31/32, chỗ lệch duy nhất là Task 5 phiếu mẫu (đã định, xem mục AI).
 - **Cách chạy:** `bash tests/run_all.sh <mới.html> <cũ.html>`; `cmp_paste.py <mới> <cũ>`; `ws_sea.py` ghi ra `/home/claude/ws/ws-sea-sample.json` (cần tạo thư mục), bản đó khác `ws-sea-sample.json` trong repo ở trường `part:""` từ v68 (không phải lỗi v70, chưa tái xuất mẫu).

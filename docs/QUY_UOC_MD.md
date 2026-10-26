@@ -34,6 +34,7 @@ Khoảng cách: vừa               ← tùy chọn: gọn | vừa | thoáng
 ```
 - Các dòng trước `## Task` đầu tiên chỉ dùng cho cấp phiếu. Khi dùng **+ Task**, chúng bị bỏ qua (app báo).
 - **Mỗi file một phiếu.** Phiếu có nhiều nhóm (vd. “Students 1 and 2 / 3 and 4”) thì tách thành nhiều file.
+- **Nhãn của phần:** tên sau `### Phần:` không in lên phiếu. Muốn in một nhãn có sẵn trong PDF (vd `Self-check:`), ghi nó vào dòng `Hướng dẫn:` của phần.
 - **Một bài của PDF = một `## Task`.** Không tách một bài thành nhiều `## Task`; bài có nhiều phần dùng `### Phần:`.
 - Số Task tối đa mỗi lần nhập: 40 (tính cả phần).
 
