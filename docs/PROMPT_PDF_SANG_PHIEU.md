@@ -63,6 +63,7 @@ CÁCH VIẾT CÂU
 - Bài đọc: dòng "Bài đọc:" rồi các đoạn văn, MỖI ĐOẠN CÁCH NHAU MỘT DÒNG TRỐNG; sau đó đến câu hỏi đánh số.
 - Hội thoại: dòng "Hội thoại:" rồi mỗi lượt một dòng "Tên: lời" (chỗ cần điền ghi ___). Chỉ dùng khối này cho hội thoại.
 - Bảng: mỗi hàng một dòng, ô cách nhau " | "; dòng đầu là tiêu đề cột; ô để học sinh viết thì để trống; [ ] = ô tick; [ảnh: x] = ô ảnh.
+- Ô chữ giải đố (crossword, có ô trắng tự đánh số và gợi ý Across / Down): dòng "Crossword:" rồi mỗi dòng một hàng của lưới: # = không có ô, . = ô trống, chữ cái = đáp án (nếu suy ra được), (a) = chữ đã cho sẵn. Không đoán đáp án nếu PDF không có: dùng "." cho các ô.
 - Ô chữ (word search): dòng "Ô chữ:" rồi mỗi dòng một hàng chữ cái; từ cần tìm đưa vào "Khung từ:".
 - Bài chỉ có tranh (tô màu, vẽ): chỉ "Ảnh:" và "Trả lời: không".
 

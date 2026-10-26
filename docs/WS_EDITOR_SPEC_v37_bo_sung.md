@@ -292,12 +292,15 @@ python3 -c "from PIL import Image; Image.new('RGB',(64,48),(200,200,200)).save('
 ## AO. v77 — Dọn việc nhỏ
 - Spec chính mục 17.8. `presetKey`, `layout.num`, `a4dir` tự động ra `fl`, `test25.py`. Prompt và quy ước MD: nhãn in sẵn của phần ghi vào `Hướng dẫn:`.
 
-## AB. BÀN GIAO (2026-10-26, bản v77) — đọc mục này đầu tiên khi mở thread mới
-- **Bản v77** dọn việc nhỏ (mục AO; v76 điểm trên ảnh chung, mục AN; v75 bài đọc có chỗ trống / chọn / đánh dấu / cắt theo đoạn, mục AM; v74 G-Text kiểu Ảnh, mục AL; v73 kiểu Chữ, mục AK; v72 cỡ chữ phiếu, mục AJ). **Việc tiếp theo:** điểm neo kiểu B (dây nối ra ô viết) nếu cần, rồi lưới tự do (ô chữ; cần hình mẫu duyệt trước). Đã chạy trên bản cuối v77: test1–25 và audit; `test2` so với v76.
+## AP. v78 — Ô chữ giải đố
+- Spec chính mục 17.9. `crossCell`, `crossParse`, `crossLines`, `crossCount`, `crossHtml`, `layout.table.cross/key/xc`, `Crossword:` trong MD, G-Text `cols:2` và `<ol start>`, `test26.py`.
+
+## AB. BÀN GIAO (2026-10-26, bản v78) — đọc mục này đầu tiên khi mở thread mới
+- **Bản v78** ô chữ giải đố (mục AP; v77 dọn việc nhỏ, mục AO; v76 điểm trên ảnh chung, mục AN; v75 bài đọc có chỗ trống / chọn / đánh dấu / cắt theo đoạn, mục AM; v74 G-Text kiểu Ảnh, mục AL; v73 kiểu Chữ, mục AK; v72 cỡ chữ phiếu, mục AJ). **Việc tiếp theo:** điểm neo kiểu B (dây nối ra ô viết) nếu cần, rồi lưới tự do (ô chữ; cần hình mẫu duyệt trước). Đã chạy trên bản cuối v77: test1–25 và audit; `test2` so với v76.
 - **Không còn dùng artifact.** Xong việc thì commit và đẩy lên GitHub `khanhtoaninv/WS-Editor`, nhánh main (người dùng yêu cầu). Repo: file chính `ws-editor-prototype.html`, `docs/`, `tests/`, `fonts/`, `samples/`.
 - **Đã chạy trên bản cuối v70:** test1, 3–19, audit (0 vấn đề), audit2 (không tràn), cmp_paste (20 bài dán giống v69), ws_sea (3 trang, 0 lỗi) đạt, 0 lỗi console. `test2` so với v69: 31/32, chỗ lệch duy nhất là Task 5 phiếu mẫu (đã định, xem mục AI).
 - **Cách chạy:** `bash tests/run_all.sh <mới.html> <cũ.html>`; `cmp_paste.py <mới> <cũ>`; `ws_sea.py` ghi ra `/home/claude/ws/ws-sea-sample.json` (cần tạo thư mục), bản đó khác `ws-sea-sample.json` trong repo ở trường `part:""` từ v68 (không phải lỗi v70, chưa tái xuất mẫu).
 - **Đang dở, đọc trước:** `docs/DANG_DO_KEO_DOI_CHO_VA_G_TEXT.md` (kéo đổi chỗ container, G-Text, đề xuất thiết kế lại G0–G4; chờ người dùng trả lời 4 câu hỏi, chưa sửa code).
-- **Việc tiếp theo:** P3 (người dùng gửi PDF thật + MD do AI tạo + ảnh sau khi nạp, thêm vào `tests/real/`), P4 (Ô chữ), công tắc Họ tên / Lớp (hoãn)..
+- **Việc tiếp theo (thứ tự người dùng chốt): (2) cú pháp MD cho khối G-Text, điểm trên ảnh, đáp án chỗ trống; (3) tiêu đề phiếu / Họ tên Lớp Ngày / header footer.** Sau đó P3 (người dùng gửi PDF thật + MD do AI tạo + ảnh sau khi nạp, thêm vào `tests/real/`), P4 (Ô chữ), công tắc Họ tên / Lớp (hoãn)..
 - **Cách nhập:** như v65 (+ Task / + Phiếu; JSON chính, MD theo `QUY_UOC_MD.md`, chữ thô là đoán). Prompt cho AI: `PROMPT_PDF_SANG_PHIEU.md`.
 - Chỉ báo "đạt" cho test đã chạy trên bản cuối; mẫu do Claude tự viết không thay được phiếu do AI khác viết.

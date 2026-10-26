@@ -1,4 +1,4 @@
-# WS Editor — Đặc tả (bản v36 + kế hoạch mục 15, 24/10/2026; cập nhật mục 16 ngày 25/10/2026, v70)
+# WS Editor — Đặc tả (bản v36 + kế hoạch mục 15, 24/10/2026; cập nhật mục 16 ngày 25/10/2026; v78 ô chữ giải đố, mục 17.9)
 
 > File này là nguồn sự thật duy nhất cho WS Editor. Nó thay thế bản MASTER_SPEC v10 (quá nặng) và Claude Doc "Đặc tả Layout Task & Answer" (cũ hơn bản này).
 > Prototype chạy được: `ws-editor-prototype.html` (một file HTML, mở bằng trình duyệt). Dữ liệu mẫu: `ws-sample.json` (schema 0.2).
@@ -513,6 +513,17 @@ P3 (thử 5–10 PDF thật qua đường chat, đo số Task đúng và chỗ p
 - **A4 "Tự động":** lựa chọn dài hơn ngưỡng (`autoMax`, mặc định 22 ký tự ở cỡ To) vẫn xếp **Dọc**; nếu vừa một hàng cột đều (ước lượng `n × (ký tự × cỡ chữ × 0,5 + 14 mm) ≤ 150 mm`) thì **Ngang**; còn lại **Tự xuống dòng** (trước đây vẫn Ngang rồi gãy chữ trong ô). Ước lượng này là xấp xỉ, không đo chữ thật; nếu thấy sai thì chỉnh thủ công Hướng xếp.
 - **Nhãn "Self-check:" của phần:** không sửa app; đây là lỗi prompt. Tên `### Phần:` chỉ là tên nội bộ và không in; nhãn in sẵn trong PDF phải ghi vào `Hướng dẫn:` của phần (app in dòng này cho phần nối). Prompt (`PROMPT_PDF_SANG_PHIEU.md`) và `QUY_UOC_MD.md` đã thêm quy tắc.
 - Test mới: `test25.py`.
+
+### 17.9 Ô chữ giải đố (v78, 26/10/2026)
+- **Là bảng (T9) có `layout.table.cross = true`.** Không thêm kiểu nội dung mới: `content.form='table'`, mỗi ô một ký tự trong `rows[].cells`, `cols` toàn chuỗi rỗng, `head=''`. Bật ở panel Task → "Kiểu bảng: Bảng thường / Ô chữ giải đố".
+- **Quy ước ô** (`crossCell`): `''` hoặc `#` = không có ô (không vẽ gì); `.` = ô trống chưa biết đáp án; chữ cái = ô có đáp án; `(a)` = chữ cho sẵn (luôn in, nền xám nhạt).
+- **Hiển thị:** không có ô đen. Mặc định mọi chỗ nền trắng không viền; chỉ ô có nội dung mới có viền xám, bo góc. Số 1, 2, 3 đánh tự động ở góc ô, đọc từ trái sang phải, trên xuống dưới, ô nào là đầu của từ ngang hoặc dọc thì nhận số (`crossHtml`). `layout.table.key = true` thì in chữ đáp án (bản giáo viên); mặc định ẩn.
+- **Cỡ ô** `layout.table.xc` (mm, 6–16, mặc định 10); vị trí trái / giữa / phải = `layout.table.align`. Ô chữ không bị cắt giữa trang (`units` bỏ qua `split` khi `cross`).
+- **Soạn:** cột trái mục 3 là một ô văn bản "Lưới ô chữ" (mỗi dòng một hàng, `applyField('cross.grid')`), có đếm ô / từ ngang / từ dọc. Cảnh báo khi chưa có từ nào.
+- **MD:** `Crossword:` (hoặc `Ô chữ giải đố:`) rồi mỗi dòng một hàng, dùng `#`, `.`, chữ, `(a)`. `Ô chữ:` cũ vẫn là word search.
+- **Lời gợi ý ngang / dọc:** dùng khối G-Text (mục 5). G-Text có thêm **2 cột chữ** (`extras[].cols = 2`) và danh sách số được bắt đầu từ số bất kỳ (`4. …` → `<ol start=4>`), để chia "Across" và "Down" mà không cần format mới.
+- Không làm: tự tìm vị trí đặt từ (người soạn hoặc AI cho sẵn lưới); ô trống chỉ định từ nhiều chữ trong một ô.
+- Test mới: `test26.py`.
 
 ### 17.2 Ước lượng độ phủ (26/10/2026, phán đoán của Claude, không phải số đo)
 Trong danh sách 40 dạng bài tiếng Anh tự lập: 24 dạng (60%) đáp ứng trực tiếp, 9 (22%) làm được nhưng phải lách, 7 (18%) chưa hỗ trợ. Với bài cho học sinh 5–12 tuổi thực tế khoảng 90% trở lên. Phần thiếu dồn vào ba loại: điểm neo trên ảnh, tương tác trong văn bản liền mạch, lưới và sơ đồ tự do. Nên đối chiếu với các bộ sách đang dùng (Our World, Family and Friends, Global Success) để biết loại nào thực sự hay gặp.
