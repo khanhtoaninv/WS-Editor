@@ -4,8 +4,8 @@ Dự án: bước dàn trang phiếu bài tập tiếng Anh (A4, đầu ra HTML,
 
 ## Đọc theo thứ tự
 0. `docs/BAT_DAU_PHIEN_MOI.md`: lệnh mở phiên và thứ tự đọc.
-1. `docs/BAO_CAO_PHIEN_2026-10-26_phien3.md` (**mới nhất**): đang thảo luận **kiến trúc trình bày mới** (T / Q / G, bỏ tầng A), chưa code; quyết định đã chốt. Xem `docs/KIEN_TRUC_TRINH_BAY_MOI.html` (bản để duyệt) và `docs/RA_SOAT_DANG_BAI.md`. Rồi `docs/BAO_CAO_PHIEN_2026-10-26.md` (v73–v80, việc treo, giới hạn).
-2. `docs/WS_EDITOR_SPEC.md` (đặc tả của app hiện tại v80, chưa theo kiến trúc mới) rồi mục "BÀN GIAO" cuối `docs/WS_EDITOR_SPEC_v37_bo_sung.md`.
+1. `docs/BAO_CAO_PHIEN_2026-10-26_phien4.md` (**mới nhất**): **v81 = kiến trúc trình bày mới đã triển khai** (Bố cục T 4 kiểu, Dạng câu hỏi Q 12 kiểu, khối G, cú pháp MD `Dạng:`…), đã kiểm thử gì, việc tiếp theo. Bản duyệt: `docs/KIEN_TRUC_TRINH_BAY_MOI.html`; rà soát dạng bài: `docs/RA_SOAT_DANG_BAI.md`. Lịch sử: `docs/BAO_CAO_PHIEN_2026-10-26_phien3.md` (quyết định kiến trúc), `docs/BAO_CAO_PHIEN_2026-10-26.md` (v73–v80).
+2. `docs/WS_EDITOR_SPEC.md` (đặc tả app; **mục 18 = v81**, các mục T1–T9 / A1–A8 cũ giờ là tầng dữ liệu bên trong) rồi mục "BÀN GIAO" cuối `docs/WS_EDITOR_SPEC_v37_bo_sung.md`.
 3. Khi cần: `docs/PHUONG_AN_NHAP_FILE.md` (nhập file), `docs/QUY_UOC_MD.md` (cú pháp MD), `docs/PROMPT_PDF_SANG_PHIEU.md` (prompt cho AI đọc PDF), `ws-sample.json` / `samples/`.
 Không dùng MASTER_SPEC v10 hay đặc tả cũ nếu mâu thuẫn. Nếu hành vi thật khác đặc tả, nói rõ chỗ lệch, đừng tự chọn một bên.
 
@@ -20,7 +20,7 @@ Không dùng MASTER_SPEC v10 hay đặc tả cũ nếu mâu thuẫn. Nếu hành
 Khi người dùng gửi PDF thật + MD/JSON do AI tạo + ảnh sau khi nạp: phân từng chỗ sửa vào 5 nhóm (AI đọc sai chữ / prompt dẫn sai / bộ đọc hiểu sai / mô hình thiếu chỗ chứa / dàn trang xấu), sửa đúng lớp, thêm phiếu vào `tests/real/`.
 
 ## Nguyên tắc thiết kế (không phá)
-- Phiếu = các Task xếp dọc. Mỗi Task: G0 (số, tiêu đề, hướng dẫn; cố định, luôn trên cùng), G1 ảnh, G2 nội dung, G3 đáp án, G4 word bank. Luồng: chọn Task layout → chỉnh kích thước container → chọn Answer layout.
+- Phiếu = các Task xếp dọc. Mỗi Task: G0 (số, tiêu đề, hướng dẫn; cố định, luôn trên cùng), G1 ảnh chung (1–2 ảnh), G2 bài đọc / lời dẫn, G3 câu hỏi, G4 khung từ (chữ hoặc ảnh), G-Text khối tự do. Luồng (v81): chọn Bố cục Task (4 kiểu T) → chọn Dạng câu hỏi (12 kiểu Q, gồm cách trả lời và cách xếp câu) → chỉnh kích thước container. Mã T1–T9 / A1–A8 chỉ còn là dữ liệu bên trong.
 - Khung container ảnh chính là khung ảnh. Fit ngang/dọc không làm khung to ra; co giãn là co giãn khung, ảnh đi theo.
 - Mọi khung có viền phải bo góc. Mọi thứ thẳng hàng theo đường dóng.
 - Khoảng cách chỉ có Gọn/Vừa/Thoáng/Tự do và các số mm khai báo; không hệ số ẩn.

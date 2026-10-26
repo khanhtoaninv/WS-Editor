@@ -1,6 +1,6 @@
-# Quy ước MD trung gian cho WS Editor (P2)
+# Quy ước MD trung gian cho WS Editor
 
-Cập nhật: 2026-10-25 (tối, lần 2) · áp dụng từ bản prototype **v68** (v65 + sửa theo phiếu thật thứ nhất ở v67, mục 4b; v68: bài nhiều phần `### Phần:` ở mục 1 và mục 4, nhãn A. B. C. giữ chữ hoa, ví dụ 4 viết lại theo PDF 6 bài).
+Cập nhật: 2026-10-26 · áp dụng từ bản **v81** (kiến trúc trình bày mới: trường `Dạng:` cho 12 dạng câu hỏi, `Bố cục:`, câu ví dụ `0.`, dòng chữ `> `, khung từ ảnh, khối chữ / ảnh, điểm trên ảnh, hai ảnh chung, bốn ô li, đáp án `0.` và `Chỗ trống:`; mục **2b**, **4c**, **5**, **Ví dụ 5**). Mọi cú pháp cũ (v65–v80) vẫn đọc được như trước; `Trả lời:` vẫn dùng được, có `Dạng:` thì `Dạng:` thắng.
 
 MD (Markdown) là cách viết một phiếu bằng chữ thường mà app đọc **chắc chắn**, không phải đoán. Dùng khi:
 - tự soạn phiếu trong Word / Notes rồi dán vào app;
@@ -8,7 +8,7 @@ MD (Markdown) là cách viết một phiếu bằng chữ thường mà app đ�
 
 Nạp MD: **+ Task → thẻ “Từ file / dán”** (thêm các Task vào cuối phiếu) hoặc **+ Phiếu** (tạo phiếu mới). Chọn file `.md` / `.txt` hoặc dán thẳng. App tự nhận ra MD khi có ít nhất một dòng bắt đầu bằng `## Task`.
 
-JSON vẫn là nguồn chính (đủ mọi trường, kể cả bố cục đã chỉnh). MD chỉ chở **nội dung**: chữ, câu, ảnh (tên), khung từ, loại đáp án, đáp án đúng. Bố cục do app tự dàn.
+JSON vẫn là nguồn chính (đủ mọi trường, kể cả bố cục đã chỉnh tay). MD chở **nội dung** (chữ, câu, ảnh theo tên, khung từ, đáp án đúng) và **cách trình bày ở mức người dùng chọn**: dạng câu hỏi (`Dạng:`), bố cục Task (`Bố cục:`), vị trí khung từ, thứ tự bài đọc / câu hỏi. Kích thước, khoảng cách, căn lề vẫn do app tự dàn.
 
 ---
 
@@ -51,10 +51,42 @@ Khoảng cách: vừa               ← tùy chọn: gọn | vừa | thoáng
 | `Lời dẫn:` | câu dẫn trước hội thoại | `Lời dẫn: Mai is talking to Ben.` |
 | `Mẫu:` | ép theo một mẫu có sẵn (tên hoặc mã), thay cho `Trả lời:` | `Mẫu: Đúng/Sai` |
 | `Ghi chú:` | lời nhắc của bài (vd câu nằm dưới bài trong bản gốc); app nối vào cuối hướng dẫn | `Ghi chú: Check them after reading.` |
+| `Dạng:` (v81) | dạng câu hỏi, một trong 12 dạng ở mục 2b; chi tiết trong ngoặc. **Nên ghi** (thay cho `Trả lời:`) | `Dạng: đúng/sai (Yes/No)` |
+| `Bố cục:` (v81) | bố cục Task: `xếp dọc` / `ảnh trái` / `ảnh phải` / `ảnh trong bài đọc`. Chỉ ghi khi muốn khác Tự động | `Bố cục: ảnh trái` |
+| `Ảnh: A; B` (v81) | hai ảnh chung đứng cạnh nhau, cùng cỡ (chỉ dùng với Xếp dọc) | `Ảnh: phòng ngủ; phòng khách` |
+| `Khung từ ảnh:` (v81) | khung từ bằng ảnh (ô ảnh cùng cỡ, nhãn A B C, tên ảnh in dưới); không trộn chữ và ảnh | `Khung từ ảnh: apple, banana, cherry` |
+| `Vị trí khung từ:` (v81) | `trên` (mặc định) / `dưới` / `phải` | `Vị trí khung từ: dưới` |
+| `Dòng kẻ:` (v81) | `bốn ô li` = dòng tập viết 4 ô li (viết câu / tô chữ) | `Dòng kẻ: bốn ô li` |
+| `Thứ tự:` (v81) | `câu hỏi trước` = câu hỏi in trước bài đọc (Task có bài đọc, không dùng với Ảnh trong bài đọc) | `Thứ tự: câu hỏi trước` |
+| `Điểm trên ảnh:` (v81) | các điểm đánh số trên ảnh chung, `x y` theo % (trái → phải, trên → dưới), cách nhau `;`; thêm `(ô trống)` nếu điểm không in số | `Điểm trên ảnh: 20 30; 50 60` |
+| `Khối chữ:` / `Khối chữ trên:` (v81) | khối chữ tự do ngang cả Task (ghi chú, luật chơi, ví dụ dài): các dòng **thụt lề** ngay dưới là nội dung; không có `trên` thì nằm dưới bài | xem mục 4c |
+| `Khối ảnh:` / `Khối ảnh trên:` (v81) | khối ảnh tự do ngang cả Task (sơ đồ, ảnh minh họa) | `Khối ảnh trên: bản đồ khu vườn` |
 
 Tên trường viết hoa hay thường đều được; có bản tiếng Anh: `Instruction`, `Audio`, `Answer type`, `Words`, `Image`, `Intro`. Mọi trường dùng được ở `## Task` lẫn `### Phần`.
 
-## 3. Giá trị của `Trả lời:`
+## 2b. Giá trị của `Dạng:` (v81)
+
+| Viết | Mã | Trên phiếu | Chi tiết trong ngoặc |
+|---|---|---|---|
+| `điền từ` (`điền chỗ trống`) | Q1 | gạch `___` trong câu, hoặc dưới câu | `(ô chữ cái)` = mỗi chữ một ô |
+| `viết câu` | Q2 | dòng kẻ để viết câu (`Dòng viết: N`) | `(bốn ô li)` |
+| `chọn A/B/C` (`khoanh A/B/C`) | Q3 | lựa chọn A, B, C dưới câu | `(ô tick)` = ☐ thay vòng khoanh; `(A.)` = nhãn chữ thường có chấm |
+| `chọn trong câu` (`gạch chân`) | Q4 | `{a\|b}` trong câu, học sinh gạch / khoanh | `(nhãn A-D)` = bài tìm lỗi sai: viết các đoạn gạch chân `<u>…</u>`, app in A B C D dưới từng đoạn |
+| `đúng/sai` | Q5 | khoanh T / F | nhãn tự đặt 2–3 cái: `(Yes/No)`, `(True/False)`, `(T/F/NG)`, `(Right/Wrong)`; `(ô tick)` = ô tick |
+| `nhìn ảnh viết` | Q6 | mỗi câu một ảnh `[ảnh: x]`, viết từ / câu | |
+| `chọn ảnh` (`tick ảnh`) | Q7 | mỗi câu 2–4 ảnh, tick ảnh đúng | |
+| `nối` | Q8 | chấm nối hai vế `trái - phải` | |
+| `tô chữ` | Q9 | dòng tô chữ | `(bốn ô li)` |
+| `bảng` | Q10 | bảng ` \| ` (ô trống viết, `[ ]` tick, `[ảnh: x]`) | |
+| `lưới` (`ô chữ`) | Q11 | `Crossword:` / `Ô chữ:` | |
+| `viết tự do` (`viết đoạn`) | Q12 | không có câu: dòng kẻ (`Dòng viết: N`, tới 20) | `(khung vẽ)` = khung trống để vẽ |
+
+- Viết mã cũng được: `Dạng: Q5 (Yes/No)`.
+- Bài **chỉ hiển thị, không có chỗ trả lời** (từ điển tranh, tô màu, hỏi đáp miệng): vẫn ghi `Trả lời: không`.
+- Câu có ảnh riêng (`1. [ảnh: cat]`) mà ghi `Dạng: điền từ` / `viết câu` / `chọn…`: app hiểu là cách trả lời của dạng Nhìn ảnh viết / Chọn ảnh, **không bỏ ảnh**.
+- `Dạng:` không hợp nội dung (vd `nối` với bài đọc) thì app giữ dạng đoán và ghi chú. Có cả `Trả lời:` và `Dạng:` khác nhau thì dùng `Dạng:` và ghi chú.
+
+## 3. Giá trị của `Trả lời:` (cũ, vẫn dùng được)
 
 | Viết | Chỗ trả lời trên phiếu |
 |---|---|
@@ -94,6 +126,24 @@ Không ghi `Trả lời:` thì app đoán theo ký hiệu như khi dán chữ, v
   - Dữ liệu: mỗi phần là một Task có `layout.break = "join"` (lựa chọn thứ 4 của mục Ngắt trang; người dùng có thể bật / tắt bằng nút ↳ “Nối vào Task trên” ở cột trái). Task đầu phiếu không nối được.
   - Một ý “chọn một trong các từ rồi viết” dùng `Khung từ:` + `điền chỗ trống`, không cần chia phần.
 
+## 4c. Câu ví dụ, dòng chữ giữa các câu, khối tự do, đoạn có nhãn (v81)
+
+```
+Dạng: điền từ
+0. This is a ___ .                 ← câu ví dụ: số 0, đáp án in sẵn (đáp án ở "0." trong ## Đáp án)
+1. I have a ___ .
+> Part B: in the living room       ← dòng chữ giữa các câu: không số, không chỗ trả lời, không làm đổi số câu
+2. She has a ___ .
+Khối chữ:
+  Remember: use capital letters.   ← các dòng thụt lề = nội dung khối chữ (giữ xuống dòng)
+  Look at the pictures first.
+Khối ảnh trên: bản đồ khu vườn
+```
+- **Câu ví dụ** chỉ một câu mỗi Task, viết đúng cách như các câu khác (lựa chọn, ảnh, `___`…). Số câu thật vẫn bắt đầu từ 1.
+- **Dòng chữ `> `** dùng cho tiêu đề nhóm câu nhỏ ngay trong một Task. Nhóm có hướng dẫn riêng và số câu bắt đầu lại từ 1 thì vẫn dùng `### Phần:`.
+- **Đoạn có nhãn trong bài đọc** (bài nối tiêu đề với đoạn): viết `A. <đoạn>` mỗi đoạn một dòng (đoạn từ 8 từ trở lên). App giữ là đoạn văn và in chữ A, B, C đậm ở đầu đoạn; không hiểu nhầm thành lựa chọn.
+- **Khối chữ / khối ảnh** nằm ngang cả Task, không số, không đáp án; nhiều khối thì theo thứ tự viết.
+
 ## 4b. Những dòng app tự bỏ hoặc chuyển chỗ (v67)
 Phiếu gốc có “giàn giáo” cho học sinh viết; app tự vẽ chỗ trả lời theo `Trả lời:`, nên các dòng này **không cần chép**. Nếu có, app xử lý và ghi chú ở dòng Task trong bảng nhận diện:
 | Dòng trong MD | App làm gì |
@@ -116,7 +166,9 @@ Hai cách viết, dùng lẫn được:
 2. dog
 Task 2: is; are; an ← một dòng, các đáp án cách nhau bằng dấu ;
 ```
-- Đáp án được ghi vào trường “đáp án đúng” của từng câu (`key`), **không** hiện trên phiếu học sinh. Câu thiếu đáp án thì thẻ dạng bài cảnh báo như khi soạn tay.
+- **Câu ví dụ (v81):** dòng `0. …` là đáp án mẫu, **in sẵn trên phiếu**. Các dòng `1.`, `2.` … chỉ đếm câu thật (bỏ câu ví dụ và dòng chữ `> `). Cách một dòng: `Task 1: 0. book; pen; bag`.
+- **Chỗ trống của bài đọc (v81):** trong `### Task n` viết `Chỗ trống: am, go, play` (giống trường `Đáp án chỗ trống:` ở đề).
+- Đáp án được ghi vào trường “đáp án đúng” của từng câu (`key`), **không** hiện trên phiếu học sinh (trừ câu ví dụ). Câu thiếu đáp án thì thẻ dạng bài cảnh báo như khi soạn tay.
 - **Bài nhiều phần:** `### Task 6` liệt kê đáp án **liền nhau qua các phần, theo thứ tự câu** (vd phần đầu 4 câu, phần sau 1 câu, phần cuối 1 câu → 6 dòng); thừa dòng thì app ghi chú.
 - Chưa nhận đáp án cho **bảng** và **ô chữ** (bỏ qua, có báo).
 
@@ -130,7 +182,7 @@ Task 2: is; are; an ← một dòng, các đáp án cách nhau bằng dấu ;
 ---
 
 ## Ví dụ 1 — phiếu “Wonders of the Sea” (nhóm Students 1 and 2)
-Ô chữ + khung từ, viết gợi ý 2 dòng, hội thoại. File: `claude/tests/md/sea.md`. Đọc ra đúng 3 Task đầu của `claude/ws-sea-sample.json`. Nhóm Students 3 and 4 là một file riêng (cùng cấu trúc).
+Ô chữ + khung từ, viết gợi ý 2 dòng, hội thoại. File: `tests/md/sea.md`. Đọc ra đúng 3 Task đầu của `tests/ws-sea-sample.json`. Nhóm Students 3 and 4 là một file riêng (cùng cấu trúc).
 
 ```markdown
 # Wonders of the Sea (Our World 4, WS 6.1) – Students 1 and 2
@@ -167,7 +219,7 @@ Students 1 and 2: Yes, it is. Where is it in the puzzle?
 ```
 
 ## Ví dụ 2 — phiếu ôn tập trộn dạng, có đáp án
-Ảnh mỗi câu viết từ, khoanh A/B/C, điền chỗ trống + khung từ, Đúng/Sai + ảnh chung, bài đọc. File: `claude/tests/md/mau-tron.md`.
+Ảnh mỗi câu viết từ, khoanh A/B/C, điền chỗ trống + khung từ, Đúng/Sai + ảnh chung, bài đọc. File: `tests/md/mau-tron.md`.
 
 ```markdown
 # Unit 3 · My home – ôn tập
@@ -229,7 +281,7 @@ Task 4: T; F; T
 ```
 
 ## Ví dụ 3 — nghe, bảng, nối, hội thoại, chọn trong câu, tô màu
-File: `claude/tests/md/nghe-bang.md`.
+File: `tests/md/nghe-bang.md`.
 
 ```markdown
 # Listening and reading – Unit 5
@@ -281,7 +333,7 @@ Task 4: rainy, on; sunny, swimming costume
 ```
 
 ## Ví dụ 4 — phiếu đọc thật “A Surprise Birthday Party” (Cambridge A1 Movers), 6 bài, bài 6 có 3 phần
-Phiếu thật dùng để kiểm thử. PDF gốc ở `claude/tests/real/` (cùng chỗ với `birthday.pdf`). File: `claude/tests/md/birthday6.md` (đúng 6 `## Task`; bài 6 = `## Task` + 2 `### Phần`). Đầu / cuối trang (Name/Class, tên phiếu lặp lại, thời gian từng bài, “Before you read”) không chép. Bản MD người dùng nhận từ AI theo prompt v67 (tách bài 6 thành 3 Task, thành 8 Task, lặp hướng dẫn) ở `claude/tests/real/birthday-user2.md`, giữ nguyên làm mẫu lỗi.
+Phiếu thật dùng để kiểm thử. PDF gốc ở `tests/real/` (cùng chỗ với `birthday.pdf`). File: `tests/md/birthday6.md` (đúng 6 `## Task`; bài 6 = `## Task` + 2 `### Phần`). Đầu / cuối trang (Name/Class, tên phiếu lặp lại, thời gian từng bài, “Before you read”) không chép. Bản MD người dùng nhận từ AI theo prompt v67 (tách bài 6 thành 3 Task, thành 8 Task, lặp hướng dẫn) ở `tests/real/birthday-user2.md`, giữ nguyên làm mẫu lỗi.
 
 ```markdown
 # A Surprise Birthday Party
@@ -343,4 +395,68 @@ Trả lời: tick
 Trả lời: điền chỗ trống
 1. I would like ___ because ___.
 ```
-(Ví dụ rút gọn bằng “…”; file đầy đủ ở `claude/tests/md/birthday6.md`. `claude/tests/md/birthday.md` là bản v67 tách bài 6 thành Task 6 và 7, vẫn đọc được.)
+(Ví dụ rút gọn bằng “…”; file đầy đủ ở `tests/md/birthday6.md`. `tests/md/birthday.md` là bản v67 tách bài 6 thành Task 6 và 7, vẫn đọc được.)
+
+## Ví dụ 5 — cú pháp v81 (mẫu do Claude viết để kiểm thử, `tests/md/v81-cu-phap.md`)
+
+```markdown
+# Phiếu thử cú pháp v81
+Tuổi: 7-9
+
+## Task: Look and write
+Hướng dẫn: Look at the pictures. Write the words.
+Ảnh: phòng ngủ; phòng khách
+Dạng: điền từ
+0. This is a ___ .
+1. I have a ___ .
+> Part B: in the living room
+2. She has a ___ .
+
+## Task: Read and answer
+Bài đọc:
+A. Tom lives in a small house near the park.
+B. He has a dog called Max. Max is brown.
+
+Dạng: đúng/sai (Yes/No)
+Thứ tự: câu hỏi trước
+1. Tom lives in a big house.
+2. Max is a dog.
+
+## Task: Find the mistake
+Dạng: chọn trong câu (nhãn A-D)
+1. She <u>go</u> to <u>school</u> every <u>day</u> by <u>bus</u>.
+
+## Task: Draw your room
+Hướng dẫn: Draw your bedroom.
+Dạng: viết tự do (khung vẽ)
+
+## Task: Write the words
+Dạng: viết câu
+Dòng kẻ: bốn ô li
+1. cat
+2. dog
+
+## Task: Choose the fruit
+Khung từ ảnh: apple, banana, cherry
+Vị trí khung từ: dưới
+Khối chữ:
+  Remember: use capital letters.
+Khối ảnh trên: bản đồ khu vườn
+Dạng: điền từ
+1. I like ___ .
+
+## Task: Look at the town
+Ảnh: thành phố
+Bố cục: ảnh trái
+Điểm trên ảnh: 20 30; 50 60 (ô trống)
+Dạng: viết câu
+1. What is number 1?
+
+## Đáp án
+### Task 1
+0. book
+1. pen
+2. bag
+Task 2: No; Yes
+```
+Xuất MD (nút **Xuất MD**) ghi đủ các trường v81 khi phiếu dùng chúng; đọc lại ra đúng phiếu (test30).

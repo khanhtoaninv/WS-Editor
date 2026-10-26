@@ -1,8 +1,9 @@
-# WS Editor — Đặc tả (bản v36 + kế hoạch mục 15, 24/10/2026; cập nhật mục 16 ngày 25/10/2026; v78 ô chữ giải đố, mục 17.9)
+# WS Editor — Đặc tả (bản v36 + kế hoạch mục 15, 24/10/2026; cập nhật mục 16 ngày 25/10/2026; v78 ô chữ giải đố, mục 17.9; **v81 kiến trúc trình bày mới, mục 18**)
 
 > File này là nguồn sự thật duy nhất cho WS Editor. Nó thay thế bản MASTER_SPEC v10 (quá nặng) và Claude Doc "Đặc tả Layout Task & Answer" (cũ hơn bản này).
 > Prototype chạy được: `ws-editor-prototype.html` (một file HTML, mở bằng trình duyệt). Dữ liệu mẫu: `ws-sample.json` (schema 0.2).
 > Khi bản prototype và file này lệch nhau, prototype là bản đúng hơn về hành vi; hãy báo để cập nhật file này.
+> **Cập nhật 26/10/2026 (tối): prototype hiện là v81** — kiến trúc trình bày mới: Bố cục Task 4 kiểu (T), Dạng câu hỏi 12 kiểu (Q), khối G thêm / xóa thống nhất, cú pháp MD mới. Đọc **mục 18** trước; các mục 3–4 (T1–T9, A1–A8) giờ là tầng dữ liệu bên trong, giao diện không còn hiện.
 > **Cập nhật 26/10/2026:** prototype hiện là **v77** (v76 + mặc định theo cấu hình, ẩn số câu ở lề, A4 Tự động chọn Tự xuống dòng, mục 17.8; v76 = v75 + điểm trên ảnh chung, mục 17.7; v75 = v74 + bài đọc có chỗ trống, chọn, đánh dấu chữ, cắt theo đoạn, mục 17.6; v74 = G-Text kiểu Ảnh và khung chữ 4 kiểu, mục 17.5; v73 = G-Text kiểu Chữ, mục 17.4; v72 = cỡ chữ phiếu Nhỏ / Vừa / To, mục 16.12; kế hoạch ba năng lực còn thiếu ở mục 17). Trước đó (25/10/2026, lần 4): **v71** (v70 + nhãn lựa chọn thẳng dòng đầu và cách chữ 2 mm, mục 16.9c). v70 (v69 + Đúng/Sai mặc định 80/20, hướng A4 "Tự động" quyết theo cả Task, nút Xuất MD; mục 16.11). v69 = v68 + chọn font chữ phiếu (mục 16.10). v68 = (v67 + Task nhiều phần "Nối vào Task trên", MD `### Phần:`, nhãn A. B. C. giữ chữ hoa, câu duy nhất không đánh số; mục 16.9). v67 = v66 + sửa bộ đọc MD theo phiếu thật đầu tiên, A4 có nhãn ô tick (mục 16.8). v66 = v65 + font nhúng sẵn trong `fonts/` (mục 16.7). Thay đổi v37–v68 ghi chi tiết ở `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục cuối "BÀN GIAO"). Nhập file (P0–P2) tóm tắt ở **mục 16**; quy ước MD ở `claude/QUY_UOC_MD.md`.
 
 ---
@@ -550,3 +551,65 @@ Trong danh sách 40 dạng bài tiếng Anh tự lập: 24 dạng (60%) đáp �
 
 ### 17.3 Việc còn chờ từ phiếu Sunny Farm (mục 16.9c)
 Còn: header phiếu (làm riêng); bài 1 sai thứ tự (tạm dùng `### Phần:`). Đã xử lý ở v77 (mục 17.8): số câu ở lề, ô tick 4 lựa chọn, nhãn "Self-check:".
+
+## 18. Kiến trúc trình bày mới (v81, 26/10/2026)
+
+Bản duyệt: `docs/KIEN_TRUC_TRINH_BAY_MOI.html`. Mục này ghi **hành vi thật** của v81. Nguyên tắc chính: **dữ liệu không đổi** (schema `ws-editor/0.3`, mã T1–T9 trong `layout.task`, A1–A8 trong `answer.layout`). T và Q **suy ra** từ dữ liệu đó, nên mọi phiếu cũ mở ra giống v80 từng điểm ảnh (công cụ `tests/cmp_v80.py`: 16 phiếu, so HTML các trang).
+
+### 18.1 Bố cục Task (T, 4 kiểu)
+| T | Tên | Mã bên trong |
+|---|---|---|
+| T1 | Xếp dọc | T1, T4 (hai cột câu / đáp án), T5 (lưới), T6, T7 (nối), T9 (bảng) |
+| T2 | Ảnh trái | T2 |
+| T3 | Ảnh phải | T3 |
+| T4 | Ảnh trong bài đọc | T8 |
+- Bộ chọn: **Tự động** + 4 nút; bố cục không dùng được nằm trong "Bố cục chưa dùng được" kèm lý do (lấy từ `layoutReasons`). Chọn Xếp dọc thì giữ cách xếp câu bên trong đang dùng (`t1Old`), Tự động thì `task:'auto'`.
+- Hai ảnh chung (`image.two`) và "câu hỏi trước bài đọc" khóa Ảnh trái / phải / trong bài đọc (`layoutReasons`, `autoLayout` bọc lại).
+
+### 18.2 Dạng câu hỏi (Q, 12 kiểu) = nội dung câu + cách trả lời + cách xếp câu
+Q1 Điền từ · Q2 Viết câu · Q3 Chọn A/B/C · Q4 Chọn trong câu · Q5 Đúng / Sai · Q6 Nhìn ảnh viết · Q7 Chọn ảnh · Q8 Nối · Q9 Tô chữ · Q10 Bảng · Q11 Lưới · Q12 Viết tự do.
+- `qDerived(t)`: bảng → Q10 (Q11 nếu ô chữ giải đố hoặc bảng không tiêu đề hàng / cột); vế ghép → Q8; ảnh từng câu → Q6 (Q7 nếu nhiều ảnh / câu); tô chữ → Q9; tf / tick → Q5; choice inline → Q4, khác → Q3; sentence → Q12 nếu một câu rỗng và ẩn số, khác → Q2; word → Q1.
+- Task **không có chỗ trả lời** (kind none) thì Q không suy ra được: nhớ ở `t.q` (chỉ khi cần, `qTidy` xóa khi thừa). Công tắc "Có chỗ trả lời": tắt = `setKind none`, cất đáp án cũ ở `content.noAns`, bật lại khôi phục.
+- `setQ(t,q)`: đổi cấu trúc câu, giữ chữ các câu, ảnh chung, bài đọc, khung từ, khối tự do, nối Task; bố cục về Tự động (trừ Ảnh trái / phải / trong bài đọc còn dùng được). Hoàn tác một bước. Câu có ảnh mà đổi sang Q1–Q5: tên ảnh thành chữ câu. Q4 trên câu có `<u>…</u>` và chưa có `{a|b}` = bài tìm lỗi sai (bật nhãn A–D); câu chưa có lựa chọn thì chèn `{…|…}` để sửa. Q12 = một câu rỗng, ẩn số, 8 dòng.
+- `qReasons`: bài đọc chỉ đi với Q1, Q2, Q3, Q5; hội thoại (có người nói) chỉ Q1–Q5.
+- **Cách trả lời** (`qStyles`, không hiện mã A): Q1 gạch / ô chữ cái; Q2 dòng kẻ / gạch cuối câu; Q3 khoanh Ⓐ / A. / ô tick; Q4 gạch-khoanh / nhãn A–D (chỉ hiện cách dùng được); Q5 khoanh nhãn / ô tick, **nhãn** T/F · True/False · Yes/No · T/F/NG · Right/Wrong (`params.labs`); Q6 gạch / ô chữ cái / dòng kẻ / chọn trong câu; Q12 dòng kẻ / khung trống để vẽ (`params.frame:'box'`). **Kiểu dòng** cho A1 / A8: thường / bốn ô li (`params.ruling:'4'`).
+- **Cách xếp câu** (`qArr`, chỉ khi Xếp dọc): Q5 cột phải (T4) / ngay dưới câu; Q6 / Q7 lưới ô (T5) / danh sách (T6).
+- Hình xem trước: rê chuột lên nút Q hiện một mẫu nhỏ (`QPV`).
+
+### 18.3 Giao diện
+- Inspector Task: Bố cục Task + Dạng câu hỏi + tùy chọn Q thay bộ chọn 9 bố cục cũ; các phần Kích thước / Căn lề / Khoảng cách giữ nguyên.
+- Chọn G3 (chỗ trả lời) → panel **Câu hỏi · <Q>** (bỏ "Gắn đáp án" và lưới "Kiểu đáp án"; thông số cỡ / căn giữ nguyên). Chọn chỗ trả lời của một câu → "Câu n · chỗ trả lời" + Thêm câu sau / Nhân đôi / Đặt làm câu ví dụ / Xóa câu (`iadd/idup/iex/idel`); câu ví dụ có ô đáp án mẫu.
+- Chọn bài đọc (G2 của Task có bài đọc) → panel **Bài đọc**: thứ tự Bài đọc trước / Câu hỏi trước (`layout.order:'qfirst'`; khóa khi Bố cục chọn tay là Ảnh trong bài đọc), xóa bài đọc; dưới là thông số cả Task.
+- Ảnh chung: thêm / xóa ảnh thứ hai (`image.two`, `image.label2`, ô `G1b`), hai ảnh cạnh nhau cùng cỡ.
+- Khung từ: Loại Chữ / Ảnh (`wordBank.kind:'image'`, ô `B.i`, nhãn A B C, chữ dưới ảnh hiện / ẩn `cap`, tỉ lệ `ar` 1:1 · 4:3 · 3:4, số ảnh mỗi hàng `cols`), Vị trí Trên / **Dưới** / Phải (`placement:'bottom'`, in sau câu hỏi ở mảnh cuối), nút Xóa.
+- Cột trái mục 1 đổi tên **Bố cục & dạng câu hỏi**: cùng bộ chọn T / Q (giữ Áp mẫu và chọn loại đáp án cũ ở dưới). Mục 3: nút ✕ ở từng khối (ảnh chung, ảnh thứ hai, bài đọc, lời dẫn, khung từ), ô ảnh của khung từ ảnh, **Thêm khối** (ảnh chung, ảnh thứ hai, bài đọc, lời dẫn, câu hỏi, khung từ chữ / ảnh, khối chữ / ảnh), nút **Ví dụ** ở từng câu, **+ Dòng chữ**; câu đánh số theo câu thật (ví dụ = 0, dòng chữ ghi "Chữ").
+- Phím **Delete** trên trang: xóa khối đang chọn (khung từ, khối tự do, bài đọc, câu; ảnh chung như v80). Hoàn tác được.
+
+### 18.4 Lõi vẽ trang (dữ liệu mới, đều tùy chọn)
+| Trường | Ý nghĩa |
+|---|---|
+| `items[].ex` | câu ví dụ: số 0, đáp án (`key`) in sẵn theo kiểu A (gạch có chữ, ô chữ cái, lựa chọn được khoanh…) |
+| `items[].gt` | dòng chữ giữa các câu (G3-Text): không số, không chỗ trả lời, không tính vào số câu (`qnum`, `itemKeys`, `labelOf` bỏ qua) |
+| `items[].who` + choice | người nói trước câu hỏi A/B/C (chỉ JSON) |
+| `image.two`, `image.label2` | ảnh chung thứ hai |
+| `wordBank.kind:'image'`, `ar`, `cols`, `cap`; `placement:'bottom'` | khung từ ảnh, vị trí dưới |
+| `answer.params.labs` | nhãn Đúng / Sai tự đặt (2–3) |
+| `answer.params.ulab` | nhãn A–D dưới đoạn `<u>…</u>` (tìm lỗi sai) |
+| `answer.params.frame:'box'`, `boxH` | khung trống để vẽ (A1) |
+| `answer.params.ruling:'4'` | dòng bốn ô li (A1, A8) |
+| `layout.order:'qfirst'` | câu hỏi trước bài đọc (không cắt bài đọc theo đoạn) |
+| `t.q`, `content.noAns` | dạng câu hỏi nhớ khi tắt chỗ trả lời |
+- Bài đọc có ≥ 2 đoạn bắt đầu `A.`–`H.` thì in nhãn đậm đầu đoạn.
+- `fillTask` nhận các trường mới (placement `bottom`, `kind`/`ar`/`cols`/`cap` của khung từ); `migTask` giữ `layout.order`; `ovOf` tính `order` là chỉnh tay.
+
+### 18.5 MD (bậc 0 / 5)
+Cú pháp đầy đủ ở `docs/QUY_UOC_MD.md` mục 2, 2b, 4c, 5. Trường mới: `Dạng:` (thắng `Trả lời:`, chi tiết trong ngoặc), `Bố cục:`, `Ảnh: A; B`, `Khung từ ảnh:`, `Vị trí khung từ:`, `Dòng kẻ: bốn ô li`, `Thứ tự: câu hỏi trước`, `Điểm trên ảnh:`, `Khối chữ[ trên]:` + dòng thụt lề, `Khối ảnh[ trên]:`; câu `0.` = ví dụ, dòng `> ` = dòng chữ; trong `## Đáp án`: `0.` = đáp án mẫu, `Chỗ trống:` = đáp án chỗ trống bài đọc; đoạn bài đọc `A. …` (≥ 8 từ) giữ là đoạn có nhãn. Câu có `[ảnh: …]` mà `Dạng:` là điền từ / viết câu / chọn: hiểu là cách trả lời của Nhìn ảnh viết / Chọn ảnh, không bỏ ảnh. Xuất MD luôn ghi `Dạng:` (kèm `Trả lời:`) và các trường v81 đang dùng; đọc lại ra đúng phiếu. Prompt cho AI (`PROMPT_PDF_SANG_PHIEU.md`) đã chuyển sang `Dạng:` (quy tắc 11–15).
+
+### 18.6 Kiểm thử
+`tests/test29.py` (giao diện T / Q: 18 Task × mọi Q hợp lệ ≈ 200 lần đổi dạng + hoàn tác, bố cục, xem trước, chỗ trả lời, nhãn, bốn ô li, khung vẽ, khối, Delete, câu ví dụ, dòng chữ, bài đọc, JSON khứ hồi), `tests/test30.py` (MD mới: đọc, vẽ, xuất rồi đọc lại; `birthday6-dang.md` = phiếu thật viết bằng `Dạng:` cho cùng cấu hình như `Trả lời:`), `tests/cmp_v80.py <mới> <v80>` (16 phiếu cũ / phiếu thật giống v80). `test2` đổi một kiểm tra chữ "Đáp án" → chấp nhận "Câu hỏi" (đổi tên có chủ đích).
+
+### 18.7 Chưa làm / giới hạn
+- G3 chia nhóm (hai nhóm câu với hai cách trả lời trong một Task) vẫn hoãn; dùng `### Phần:` / Nối vào Task trên.
+- Chưa thử P3 với phiếu do AI khác tạo theo prompt v81 (cần người dùng gửi PDF + MD).
+- "Áp mẫu" và chọn loại đáp án cũ vẫn còn ở cột trái mục 1 (trùng một phần với bộ chọn Q); chưa bỏ để không phá test cũ.
+- Câu hỏi trước bài đọc không dùng với Ảnh trong bài đọc / bài đọc cạnh câu hỏi (khóa, có lý do).

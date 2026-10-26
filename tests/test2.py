@@ -66,7 +66,7 @@ with sync_playwright() as p:
     chk('không còn khu vực Khối trên trang', pn.locator('#tree .sec[data-sec=blocks]').count()==0)
     pn.click('.page [data-node*="G3"]', position={'x':4,'y':4}) if pn.locator('.page [data-node*="G3"]').count() else None
     pn.wait_for_timeout(300)
-    chk('chọn khối Đáp án trên trang: Inspector đổi, Task vẫn mở', 'Đáp án' in pn.inner_text('#insp') and pn.eval_on_selector_all('#tree .tk.open','e=>e.length')==1)
+    chk('chọn khối Đáp án trên trang: Inspector đổi (v81: panel Câu hỏi / chỗ trả lời), Task vẫn mở', any(w in pn.inner_text('#insp') for w in ['Đáp án', 'Câu hỏi', 'chỗ trả lời']) and pn.eval_on_selector_all('#tree .tk.open','e=>e.length')==1)
     pn.keyboard.press('Escape'); pn.wait_for_timeout(100)
     pn.click('#tree [data-lib]'); pn.wait_for_timeout(300)
     pn.click('#libGrid [data-r]:first-child'); pn.wait_for_timeout(500)

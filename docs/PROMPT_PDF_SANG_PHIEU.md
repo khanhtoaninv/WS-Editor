@@ -1,6 +1,6 @@
 # Prompt đưa PDF phiếu bài tập vào WS Editor
 
-Cập nhật: 2026-10-26 (v80: thêm quy tắc 9–11 về kiểu chữ, nhóm câu có hướng dẫn riêng, bài viết đoạn; trước đó 2026-10-25 lần 2, prototype **v68**). Bản v67 bảo AI "tách Task trộn loại" nên phiếu “A Surprise Birthday Party” ra 8 Task trong khi PDF có 6. Bản này sửa: **một bài của PDF = một `## Task`**; bài gốc có nhiều phần với chỗ trả lời khác nhau thì các phần sau là `### Phần:` (app nối vào Task trên, cùng số Task, mỗi phần giữ đáp án riêng). Vẫn giữ các quy tắc v67: không chép “Nội dung:”, bỏ “giàn giáo” của bản gốc, ô tick ☐, lựa chọn xuống dòng.
+Cập nhật: 2026-10-26 (**v81**, kiến trúc trình bày mới): AI ghi **`Dạng:`** (12 dạng câu hỏi) thay cho `Trả lời:`; thêm câu ví dụ `0.`, dòng chữ `> `, khung từ ảnh, khối chữ / ảnh, hai ảnh chung, nhãn Đúng/Sai tự đặt, bài tìm lỗi sai (nhãn A–D), khung vẽ, bốn ô li, đoạn có nhãn A. B., `Bố cục:` và `Thứ tự:` khi cần (quy tắc 12–15). Các quy tắc v67–v80 giữ nguyên: một bài của PDF = một `## Task`, phần phụ dùng `### Phần:`, bỏ giàn giáo, kiểu chữ chỉ khi ý bài cần. File MD theo prompt cũ (`Trả lời:`) vẫn nạp được.
 
 Cách dùng: mở một AI đọc được PDF (Claude, ChatGPT, Gemini…), đính kèm PDF, dán MỘT trong hai prompt dưới đây. Lưu kết quả thành file `.md` (hoặc `.json`), rồi trong app bấm **+ Phiếu** (cả phiếu) hoặc **+ Task** (thêm vào phiếu đang mở) → Chọn file. Xem bảng nhận diện trước khi bấm tạo: dòng xanh là app đã tự xử lý, dòng đỏ là chỗ phải sửa. Dòng đầu bảng nên khớp số bài của PDF (vd “6 Task (Task 6 có 3 phần)”).
 
@@ -32,7 +32,11 @@ NGUYÊN TẮC
 8. Không đọc rõ thì ghi vào GHI CHÚ, không đoán.
 9. KIỂU CHỮ: chỉ giữ in đậm / nghiêng / gạch chân khi ý của bài cần chúng. Viết **đậm**, *nghiêng*, <u>gạch chân</u> (lồng nhau được: **<u>park</u>**). Ví dụ cần: từ bị gạch chân trong đề "closest in meaning to the underlined word(s)" → "Acupuncture <u>originated</u> in China…"; từ gốc in đậm trong ngoặc → "We are trying to have an ___ world. (**POLLUTE**)"; từ cần chú ý trong bài đọc. KHÔNG dùng cho tiêu đề, nhãn, số câu hay chữ chỉ trang trí. KHÔNG viết gạch chân bằng dấu gạch dưới (__từ__): app hiểu đó là chỗ trống.
 10. NHÓM CÂU CÓ HƯỚNG DẪN RIÊNG TRONG CÙNG MỘT BÀI (số câu bắt đầu lại từ 1, vd một nhóm "CLOSEST in meaning", một nhóm "OPPOSITE in meaning"): nhóm sau mở bằng "### Phần: <tên>" kèm "Hướng dẫn:" là câu lệnh của nhóm đó và "Trả lời:" riêng. KHÔNG để câu lệnh của nhóm sau nằm trơ giữa các câu đánh số.
-11. BÀI VIẾT ĐOẠN / VIẾT TỰ DO (không có câu hỏi, học sinh viết cả bài): chỉ ghi "Hướng dẫn:", "Trả lời: viết câu" và "Dòng viết: N" (N = số dòng kẻ trong PDF, tới 20; không rõ thì ước lượng và ghi vào GHI CHÚ). Không viết câu mẫu, không ghi "Ảnh:" nếu PDF không có tranh.
+11. BÀI VIẾT ĐOẠN / VIẾT TỰ DO (không có câu hỏi, học sinh viết cả bài): chỉ ghi "Hướng dẫn:", "Dạng: viết tự do" và "Dòng viết: N" (N = số dòng kẻ trong PDF, tới 20; không rõ thì ước lượng và ghi vào GHI CHÚ). Bài vẽ vào khung trống: "Dạng: viết tự do (khung vẽ)". Không viết câu mẫu, không ghi "Ảnh:" nếu PDF không có tranh.
+12. CÂU VÍ DỤ: câu mẫu đã làm sẵn trong PDF (thường có chữ "Example", số 0, hoặc đáp án in sẵn) viết là "0. <câu>" ngay trước câu 1, đáp án mẫu ghi "0. <đáp án>" trong "## Đáp án". KHÔNG đánh số lại các câu sau. Mỗi Task tối đa một câu ví dụ.
+13. DÒNG CHỮ GIỮA CÁC CÂU (tiêu đề nhóm nhỏ, không có chỗ trả lời, số câu KHÔNG bắt đầu lại): viết "> <dòng chữ>". Nếu số câu bắt đầu lại từ 1 thì dùng "### Phần:" (quy tắc 10).
+14. KHUNG TỪ BẰNG ẢNH (hộp tranh A, B, C… để chọn): "Khung từ ảnh: tên1, tên2, tên3". Hộp từ nằm dưới các câu: thêm "Vị trí khung từ: dưới" (bên phải: "phải"). Hai tranh chung cạnh nhau: "Ảnh: tên1; tên2". Chữ / tranh tự do ngang cả bài (ghi chú dài, luật chơi, sơ đồ) không thuộc câu nào: "Khối chữ:" + các dòng thụt lề 2 dấu cách bên dưới, hoặc "Khối ảnh: tên" (thêm "trên" nếu nằm trên bài: "Khối chữ trên:", "Khối ảnh trên:").
+15. BỐ CỤC: thường KHÔNG ghi (app tự chọn). Chỉ ghi "Bố cục: ảnh trái" / "ảnh phải" / "ảnh trong bài đọc" khi PDF đặt tranh chung rõ ràng như vậy và điều đó giúp học sinh. Câu hỏi in TRƯỚC bài đọc trong PDF: "Thứ tự: câu hỏi trước". Điểm đánh số trên tranh chung: "Điểm trên ảnh: x y; x y" (x, y theo % chiều ngang / dọc của tranh, ước lượng; thêm "(ô trống)" nếu điểm không in số).
 
 QUY ƯỚC
 # Tên phiếu
@@ -40,10 +44,14 @@ Tuổi: 7-9                                  (5-6 | 7-9 | 10-12)
 
 ## Task: <tiêu đề bài>                     (mỗi bài của PDF bắt đầu bằng dòng này)
 Hướng dẫn: <lệnh / hướng dẫn của bài>
-Trả lời: <BẮT BUỘC, một trong: viết từ | điền chỗ trống | viết câu | khoanh A/B/C | chọn trong câu | tick | đúng/sai | nối | tô chữ | không>
-Dòng viết: 1                               (chỉ với "viết câu": số dòng mỗi câu; bài viết đoạn: tổng số dòng, tới 20)
+Dạng: <BẮT BUỘC, một trong: điền từ | viết câu | chọn A/B/C | chọn trong câu | đúng/sai | nhìn ảnh viết | chọn ảnh | nối | tô chữ | bảng | lưới | viết tự do>  (chi tiết trong ngoặc, xem CHỌN "Dạng:")
+Trả lời: không                             (CHỈ khi bài không có chỗ trả lời: tô màu, hỏi đáp miệng, từ điển tranh)
+Dòng viết: 1                               (chỉ với "viết câu": số dòng mỗi câu; "viết tự do": tổng số dòng, tới 20)
+Dòng kẻ: bốn ô li                          (chỉ khi PDF dùng dòng tập viết 4 ô li)
 Khung từ: từ1, từ2, từ3                    (nếu có hộp từ)
-Ảnh: <tên ảnh chung>                       (nếu bài có một tranh chung)
+Khung từ ảnh: tên1, tên2                   (nếu hộp là tranh)
+Vị trí khung từ: dưới                      (chỉ khi hộp từ nằm dưới / bên phải câu hỏi)
+Ảnh: <tên ảnh chung>                       (nếu bài có một tranh chung; hai tranh cạnh nhau: "Ảnh: tên1; tên2")
 Track: Track 05                            (nếu là bài nghe)
 Lời dẫn: <câu dẫn trước hội thoại>
 Ghi chú: <lời nhắc nằm dưới bài trong bản gốc>
@@ -51,11 +59,15 @@ Ghi chú: <lời nhắc nằm dưới bài trong bản gốc>
 
 ### Phần: <tên phần>                       (CHỈ khi bài gốc có nhiều phần với chỗ trả lời khác nhau; cùng số Task)
 Hướng dẫn: <câu lệnh riêng của phần, bỏ trống nếu PDF không có>
-Trả lời: <loại chỗ trả lời của phần này>
+Dạng: <dạng câu hỏi của phần này>
 <các câu của phần này>
 
 CÁCH VIẾT CÂU
 - Câu đánh số: 1. She ___ a teacher.
+- Câu ví dụ: 0. He ___ a doctor.   (đáp án mẫu "0. is" ở ## Đáp án)
+- Dòng chữ giữa các câu: > Part B: at school
+- Bài tìm lỗi sai (gạch chân 4 chỗ, chọn A/B/C/D): 1. She <u>go</u> to <u>school</u> every <u>day</u> by <u>bus</u>.   kèm "Dạng: chọn trong câu (nhãn A-D)"
+- Đoạn có nhãn trong bài đọc (nối tiêu đề với đoạn): mỗi đoạn một dòng "A. <đoạn>", "B. <đoạn>", cách nhau một dòng trống.
 - Lựa chọn A/B/C: cùng dòng "1. Where is it? A. here B. there C. home", hoặc mỗi lựa chọn một dòng thụt lề ngay dưới câu.
 - Câu chỉ có lựa chọn (không có thân câu): "1. A. … B. … C. …".
 - Tick vào lựa chọn bằng chữ: ☐ a cake ☐ a football ☐ balloons   (một dòng, hoặc mỗi dòng một ☐), kèm "Trả lời: tick".
@@ -68,32 +80,41 @@ CÁCH VIẾT CÂU
 - Bảng: mỗi hàng một dòng, ô cách nhau " | "; dòng đầu là tiêu đề cột; ô để học sinh viết thì để trống; [ ] = ô tick; [ảnh: x] = ô ảnh.
 - Ô chữ giải đố (crossword, có ô trắng tự đánh số và gợi ý Across / Down): dòng "Crossword:" rồi mỗi dòng một hàng của lưới: # = không có ô, . = ô trống, chữ cái = đáp án (nếu suy ra được), (a) = chữ đã cho sẵn. Không đoán đáp án nếu PDF không có: dùng "." cho các ô.
 - Ô chữ (word search): dòng "Ô chữ:" rồi mỗi dòng một hàng chữ cái; từ cần tìm đưa vào "Khung từ:".
-- Bài chỉ có tranh (tô màu, vẽ): chỉ "Ảnh:" và "Trả lời: không".
-- Bài viết đoạn (không câu hỏi): "Trả lời: viết câu" + "Dòng viết: 15", không có dòng câu nào.
+- Bài chỉ có tranh (tô màu): chỉ "Ảnh:" và "Trả lời: không".
+- Bài viết đoạn (không câu hỏi): "Dạng: viết tự do" + "Dòng viết: 15", không có dòng câu nào. Vẽ vào khung: "Dạng: viết tự do (khung vẽ)".
 - Chữ cần nhấn: **đậm**, *nghiêng*, <u>gạch chân</u>.
 
-CHỌN "Trả lời:"
-- ___ trong câu → điền chỗ trống
+CHỌN "Dạng:"
+- ___ trong câu, hoặc viết một từ → điền từ   (mỗi chữ một ô: "điền từ (ô chữ cái)")
 - câu hỏi, học sinh viết câu trả lời → viết câu (+ Dòng viết)
-- một từ dưới tranh → viết từ
-- có A/B/C → khoanh A/B/C
-- ☐ trước các lựa chọn, hoặc nghe và tick ảnh → tick
-- True/False → đúng/sai
-- {a|b} → chọn trong câu
-- "chọn một trong các từ rồi viết câu" → Khung từ + điền chỗ trống
-- bảng, ô chữ, hỏi đáp miệng, tô màu → không
+- mỗi câu là một tranh, viết từ / câu dưới tranh → nhìn ảnh viết
+- có A/B/C bằng chữ → chọn A/B/C   (lựa chọn có ô ☐: "chọn A/B/C (ô tick)")
+- mỗi câu có 2–4 tranh, tick tranh đúng → chọn ảnh
+- {a|b} trong câu → chọn trong câu   (tìm lỗi sai gạch chân A–D: "chọn trong câu (nhãn A-D)")
+- True/False, Yes/No, T/F/NG → đúng/sai (nhãn)   vd "đúng/sai (Yes/No)", "đúng/sai (T/F/NG)"; chỉ T/F thì "đúng/sai"
+- hai cột nối → nối
+- tô theo nét → tô chữ
+- bảng điền / tick, story map, KWL, phân loại → bảng
+- ô chữ giải đố, tìm từ → lưới
+- viết đoạn, vẽ → viết tự do
+- "chọn một trong các từ rồi viết câu" → Khung từ + điền từ
+- tô màu, hỏi đáp miệng, chỉ nhìn → "Trả lời: không" (không ghi Dạng)
 
 ĐÁP ÁN (chỉ khi PDF có), đặt CUỐI file. Số "Task n" là số của bài trong PDF; bài nhiều phần thì liệt kê đáp án liền nhau qua các phần, theo thứ tự câu:
 ## Đáp án
 ### Task 1
+0. book          (đáp án của câu ví dụ, nếu có)
 1. cat
 2. dog
 Task 2: is; are; an
+### Task 3
+Chỗ trống: am, go, play   (đáp án chỗ trống trong bài đọc, theo thứ tự)
 
 TỰ KIỂM TRA TRƯỚC KHI TRẢ LỜI
 - Nhãn in sẵn đầu một phần trong PDF (ví dụ "Self-check:") ghi vào dòng `Hướng dẫn:` của phần đó. Tên sau "### Phần:" chỉ là tên nội bộ, KHÔNG được in lên phiếu.
 - Số dòng "## Task" bằng đúng số bài đánh số trong PDF. Chỉ dùng "### Phần:" cho các phần phụ của MỘT bài.
-- Mỗi Task và mỗi Phần có "Trả lời:"; không có dòng "Nội dung:".
+- Mỗi Task và mỗi Phần có "Dạng:" (hoặc "Trả lời: không"); không có dòng "Nội dung:".
+- Câu ví dụ là "0." và không làm lệch số các câu sau; dòng chữ giữa câu là "> ".
 - Số câu đúng bằng PDF; không còn ___ thừa ở cuối câu Đúng/Sai, viết câu.
 - Không "Hướng dẫn:" nào bị chép lặp từ phần trước.
 - Bài đọc giữ đúng số đoạn.
@@ -109,13 +130,13 @@ Tuổi: 7-9
 
 ## Task: Look & Predict
 Hướng dẫn: Look at the title. What do you think you will see in the story? Tick (✓) two.
-Trả lời: tick
+Dạng: chọn A/B/C (ô tick)
 Ghi chú: Your ideas are predictions. Check them after reading.
 ☐ a cake ☐ a football ☐ balloons
 
 ## Task: Read & Choose the Main Idea
 Hướng dẫn: Read the story. Then choose the best summary (A, B or C).
-Trả lời: khoanh A/B/C
+Dạng: chọn A/B/C
 Bài đọc:
 On Saturday morning, Lily was at home with her mum. (… đoạn 1 …)
 
@@ -129,20 +150,20 @@ But then their dog Max jumped onto a chair and took a sandwich! (… đoạn 3 �
 
 ## Task: True or False?
 Hướng dẫn: Read again. Write T (True) or F (False).
-Trả lời: đúng/sai
+Dạng: đúng/sai
 1. Lily thought everyone was busy on her birthday.
 2. Ben and his friends prepared the party at Lily’s house.
 
 ## Task: Find the Details
 Hướng dẫn: Answer with one word or a short phrase.
-Trả lời: viết câu
+Dạng: viết câu
 Dòng viết: 1
 1. Where did the friends prepare the party?
 2. What time did Lily visit Ben?
 
 ## Task: Choose & Think
 Hướng dẫn: Use clues in the story. Circle the best answer.
-Trả lời: khoanh A/B/C
+Dạng: chọn A/B/C
 1. Why was the room dark when Lily opened the door?
    A. The friends wanted to surprise her.
    B. The friends were sleeping.
@@ -150,17 +171,17 @@ Trả lời: khoanh A/B/C
 
 ## Task: Story Map & My Idea
 Hướng dẫn: Complete the story map with words from the story.
-Trả lời: điền chỗ trống
+Dạng: điền từ
 1. Place of the party: ___
 2. Food at the party (two things): ___
 
 ### Phần: My Idea – Tick One
 Hướng dẫn: Which party activity would you like best? Tick one and finish the sentence.
-Trả lời: tick
+Dạng: chọn A/B/C (ô tick)
 ☐ eating cake ☐ playing games ☐ singing songs
 
 ### Phần: My Idea – Finish the Sentence
-Trả lời: điền chỗ trống
+Dạng: điền từ
 1. I would like ___ because ___.
 ```
 ````
@@ -218,6 +239,12 @@ LOẠI ĐÁP ÁN ("answer")
 - Nối:                         {"kind":"match","attach":"item","layout":"A7","params":{}}
 - Tô chữ:                      {"kind":"trace","attach":"item","layout":"A8","params":{"repeat":3}}
 - Không có chỗ trả lời:        {"kind":"none","attach":"item","layout":null,"params":{}}
+
+TRƯỜNG MỚI (v81, chỉ dùng khi bài cần)
+- Câu ví dụ: thêm "ex":true vào câu (đặt đầu danh sách, "key" = đáp án mẫu, in sẵn trên phiếu). Dòng chữ giữa các câu: {"id":"g1","gt":true,"text":"Part B"}.
+- Hai tranh chung: "image":{"label":"A","size":"medium","two":true,"label2":"B"}. Khung từ ảnh: "wordBank":{"words":["apple","banana"],"kind":"image","placement":"top","style":"chips","label":"upper"}; "placement" thêm "bottom".
+- Đúng/Sai nhãn khác: "params":{"labs":["Yes","No"]} (2–3 nhãn). Tìm lỗi sai: đáp án chọn trong câu + "params":{"ulab":true}, đoạn gạch chân viết <u>…</u>. Khung vẽ: viết câu, một câu "text":"", "layout.num":"off", "params":{"frame":"box"}. Bốn ô li: "params":{"ruling":"4"}.
+- Câu hỏi trước bài đọc: "layout.order":"qfirst". Khối tự do: "extras":[{"id":"x1","kind":"text","pos":"bottom","text":"…"},{"id":"x2","kind":"image","pos":"top","label":"…"}].
 
 TỰ KIỂM TRA: JSON hợp lệ (không có chú thích //); số Task đúng số bài PDF (phần nối "break":"join" không tính là bài mới); số câu đúng PDF; không còn ___ thừa; không Task nào trộn hai loại đáp án; không lặp hướng dẫn; id duy nhất.
 

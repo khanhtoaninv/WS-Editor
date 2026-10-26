@@ -301,7 +301,19 @@ python3 -c "from PIL import Image; Image.new('RGB',(64,48),(200,200,200)).save('
 ## AR. v80 — Ký hiệu chữ, tách phần tự động, khung viết tự do, gạch trong câu, xóa khung ảnh
 - 5 điều chỉnh của người dùng, phân loại và sửa ở spec mục 16.14: `rich()` (`**đậm**`, `*nghiêng*`, `<u>gạch chân</u>`) dùng khắp phiếu; dòng hướng dẫn nhóm sau trong cùng bài tự thành phần mới (có ghi chú); Task viết đoạn không câu = khung viết tới 20 dòng, không ảnh; `___` trong câu thành gạch thật; nút "Xóa khung ảnh" + phím Delete. Test `test28.py`, dữ liệu `tests/real/dieu-chinh-v80.md`. `QUY_UOC_MD.md` và `PROMPT_PDF_SANG_PHIEU.md` đã thêm kiểu chữ (quy tắc 9), nhóm câu có hướng dẫn riêng (10), bài viết đoạn (11).
 
-## AB. BÀN GIAO (2026-10-26, bản v80) — đọc mục này đầu tiên khi mở thread mới
+## AS. v81 — Kiến trúc trình bày mới (T / Q / G), bậc 0–5
+- Spec chính mục 18. Bố cục Task 4 kiểu, Dạng câu hỏi 12 kiểu (suy ra từ dữ liệu cũ, không đổi schema), khối thêm / xóa thống nhất, câu ví dụ, dòng chữ, hai ảnh, khung từ ảnh, bốn ô li, khung vẽ, nhãn A–D, nhãn Đúng/Sai tự đặt, câu hỏi trước bài đọc, cú pháp MD mới, quy ước MD + prompt viết lại. Test mới `test29.py`, `test30.py`, `cmp_v80.py`; mẫu `tests/md/v81-cu-phap.md`, `tests/md/birthday6-dang.md`. Bản v80 lưu ở nhánh `backup/v80`.
+
+## AB. BÀN GIAO (2026-10-26 tối, bản v81) — đọc mục này đầu tiên khi mở thread mới
+- **Bản v81** (mục AS, spec mục 18): kiến trúc trình bày mới đã vào `main`. Phiếu cũ mở ra giống v80 (cmp_v80 16/16). Khôi phục v80: nhánh `backup/v80`.
+- **Đã chạy trên bản cuối v81:** xem báo cáo `docs/BAO_CAO_PHIEN_2026-10-26_phien4.md` (test1–30, audit, cmp_v80).
+- **Việc tiếp theo:** P3 với PDF thật + MD do AI tạo theo prompt v81 (người dùng gửi); sau đó tiêu đề phiếu / Họ tên Lớp Ngày / header footer; G3 chia nhóm (hoãn); cân nhắc bỏ "Áp mẫu" / chọn loại đáp án cũ ở cột trái khi người dùng quen bộ chọn Q.
+- **Không còn dùng artifact.** Xong việc thì commit và đẩy lên GitHub `khanhtoaninv/WS-Editor`, nhánh main. Repo: file chính `ws-editor-prototype.html`, `docs/`, `tests/`, `fonts/`, `samples/`.
+- **Cách chạy:** `bash tests/run_all.sh <mới.html> <cũ.html>` (bản cũ cần thư mục `fonts/` cạnh file); `python3 tests/cmp_v80.py <mới.html> <v80.html>` (lấy v80 từ nhánh `backup/v80`).
+- **Cách nhập:** + Task / + Phiếu; JSON chính, MD theo `QUY_UOC_MD.md` (v81: `Dạng:` …), chữ thô là đoán. Prompt cho AI: `PROMPT_PDF_SANG_PHIEU.md` (v81).
+- Chỉ báo "đạt" cho test đã chạy trên bản cuối; mẫu do Claude tự viết không thay được phiếu do AI khác viết.
+
+## AB-cũ. BÀN GIAO (2026-10-26, bản v80)
 - **Bản v80** (mục AR) ký hiệu chữ + 4 sửa khác. **Bản v79** sửa lỗi câu nhiều dòng (mục AQ). **Bản v78** ô chữ giải đố (mục AP; v77 dọn việc nhỏ, mục AO; v76 điểm trên ảnh chung, mục AN; v75 bài đọc có chỗ trống / chọn / đánh dấu / cắt theo đoạn, mục AM; v74 G-Text kiểu Ảnh, mục AL; v73 kiểu Chữ, mục AK; v72 cỡ chữ phiếu, mục AJ). **Việc tiếp theo:** xem `docs/BAO_CAO_PHIEN_2026-10-26_phien3.md` (kiến trúc trình bày mới T / Q / G, đang chờ người dùng duyệt, chưa code). Đã chạy trên bản cuối v79: test1–27 và audit; test28 theo báo cáo v80.
 - **Không còn dùng artifact.** Xong việc thì commit và đẩy lên GitHub `khanhtoaninv/WS-Editor`, nhánh main (người dùng yêu cầu). Repo: file chính `ws-editor-prototype.html`, `docs/`, `tests/`, `fonts/`, `samples/`.
 - **Đã chạy trên bản cuối v70:** test1, 3–19, audit (0 vấn đề), audit2 (không tràn), cmp_paste (20 bài dán giống v69), ws_sea (3 trang, 0 lỗi) đạt, 0 lỗi console. `test2` so với v69: 31/32, chỗ lệch duy nhất là Task 5 phiếu mẫu (đã định, xem mục AI).
