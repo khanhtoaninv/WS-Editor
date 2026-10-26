@@ -25,6 +25,23 @@ Ghi 26/10/2026. **Điểm là phán đoán của Claude, không phải số đo 
 | IELTS | 5 | 78% | 79% |
 | Sư phạm | 7 | 66% | 82% |
 
+## Phụ thuộc "G3 chia nhóm" (cập nhật 26/10/2026)
+Các dòng ghi "(cần G3 chia nhóm)" (viết truyện theo 3 tranh, đồng nghĩa/trái nghĩa 2 nhóm, tự đánh giá, bài trộn) được chấm *Mới* theo giả định **có** G3 chia nhóm. Quyết định hiện tại là để sau (bài trộn dùng Task nối). Nếu không có chia nhóm, 4 dạng này quay về điểm *Cũ* (-15 đến -30 mỗi dạng, vẫn trình bày được) và trung bình có trọng số mới tụt khoảng **87% → 86%**. Tính lại bằng cách cộng trọng số tần suất của các dòng trong bảng.
+
+## Dạng đặc trưng trẻ nhỏ (thêm 26/10/2026, ngoài 63 dạng ở trên)
+Phán đoán của Claude, chưa thử trên app. *Mới* tính **sau khi** bổ sung hai thuộc tính nhỏ vào kiến trúc: nền bốn ô li ở Q2 / Q9, và G1 cho 1–2 ảnh cạnh nhau.
+
+| Dạng | Tần suất | Cũ | Mới | Ghi chú |
+|---|---|---|---|---|
+| Tập viết / tô theo nét chấm, nền bốn ô li | cao | 60 | 85 | cần thử font nét chấm |
+| Tìm điểm khác nhau | vừa | 50 | 80 | G1 hai ảnh cạnh nhau |
+| Xếp tranh theo thứ tự (1-2-3) | vừa | 80 | 85 | Q7 / Q11 |
+| Lời bài hát / chant có chỗ trống | vừa | 90 | 95 | G2 + Q1 |
+| Cắt và dán | thấp | 60 | 60 | chỉ khung ảnh + ô trống, chưa có ý "dán" |
+| Bingo / board game | thấp | 20 | 20 | bố cục tự do, ngoài phạm vi |
+
+Tổng hợp 63 + 6 = 69 dạng: tính theo cách nhìn gần đúng, phủ khoảng 62–63/69 (~90%). Phần chưa phủ gồm flow-chart, Venn / mind map, bingo / board game, cắt dán.
+
 ## Bảng đầy đủ
 
 | Nhóm | Dạng | Trong repo | Tần suất | Cũ | Mới | Ghi chú |

@@ -80,7 +80,7 @@ Bài nhiều dạng = nhiều Task nối nhau</pre>
 <table>
 <tr><th>Khối</th><th>Chứa</th><th>Do ai xếp</th><th>Số lượng</th></tr>
 <tr><td>G0 Tiêu đề</td><td>Số, tên bài, hướng dẫn, track audio</td><td>Cố định trên cùng</td><td>1, không xóa</td></tr>
-<tr><td>G1 Ảnh chung</td><td>Ảnh phục vụ cả Task; điểm đánh số / ô trống trên ảnh</td><td>T</td><td>0–1</td></tr>
+<tr><td>G1 Ảnh chung</td><td>Ảnh phục vụ cả Task; điểm đánh số / ô trống trên ảnh. <b>1 hoặc 2 ảnh cạnh nhau cùng cỡ</b> (tìm điểm khác nhau, so sánh trước / sau)</td><td>T</td><td>0–1</td></tr>
 <tr><td>G2 Bài đọc / lời dẫn</td><td>Chữ (bài đọc, lời giới thiệu); chỗ trống đánh số; ký hiệu đậm / nghiêng / gạch chân; đoạn có nhãn A–F (bài nối tiêu đề với đoạn). <b>Không có ảnh riêng</b></td><td>T</td><td>0–1</td></tr>
 <tr><td>G3 Câu hỏi</td><td>Các block câu (Câu hỏi | Trả lời, ảnh của câu) + G3-Text. <b>Mọi chỗ trả lời ở đây</b></td><td>Q</td><td>0–1</td></tr>
 <tr><td>G3-Text</td><td>Chữ chen giữa các câu: tiêu đề nhóm, nhãn "Self-check:", dòng hướng dẫn riêng của nhóm sau</td><td>Theo thứ tự câu</td><td>nhiều</td></tr>
@@ -159,7 +159,7 @@ Bài nhiều dạng = nhiều Task nối nhau</pre>
 <div class="card"><h3>Q2 Viết câu</h3><div class="q">
 <div><span class="n">1</span>Where do you live?</div><div class="ln"></div>
 <div><span class="n">2</span>What do you like?</div><div class="ln"></div></div>
-<div class="qt">Trả lời: dòng kẻ N dòng, chiều cao dòng, độ rộng.</div></div>
+<div class="qt">Trả lời: dòng kẻ N dòng, chiều cao dòng, độ rộng. <b>Kiểu dòng: thường / bốn ô li (tập viết).</b></div></div>
 
 <div class="card"><h3>Q3 Chọn A/B/C</h3><div class="q">
 <div><span class="n">1</span>I ___ to school.</div>
@@ -200,7 +200,7 @@ Bài nhiều dạng = nhiều Task nối nhau</pre>
 <div><span class="n">1</span>cat &nbsp;<span class="trace">cat cat cat</span></div>
 <div><span class="n">2</span>dog &nbsp;<span class="trace">dog dog dog</span></div>
 <div><span class="n">3</span>sun &nbsp;<span class="trace">sun sun sun</span></div></div>
-<div class="qt">Số lần lặp, chiều cao dòng.</div></div>
+<div class="qt">Số lần lặp, chiều cao dòng. <b>Nền bốn ô li</b> (tập viết chữ cái / từ cho lớp nhỏ).</div></div>
 
 <div class="card"><h3>Q10 Bảng</h3><div class="q">
 <table class="tb"><tr><td class="hd"></td><td class="hd">Mon</td><td class="hd">Tue</td></tr>
@@ -231,14 +231,14 @@ Bài nhiều dạng = nhiều Task nối nhau</pre>
 <table>
 <tr><th>Q</th><th>Cách trả lời (mặc định in đậm)</th><th>Cách xếp câu</th></tr>
 <tr><td>Q1 Điền từ</td><td><b>Gạch</b> · ô chữ cái · ô đầu câu</td><td>1–2 cột</td></tr>
-<tr><td>Q2 Viết câu</td><td><b>Dòng kẻ</b></td><td>1 cột</td></tr>
+<tr><td>Q2 Viết câu</td><td><b>Dòng kẻ</b> (thường · bốn ô li)</td><td>1 cột</td></tr>
 <tr><td>Q3 Chọn A/B/C</td><td><b>Khoanh Ⓐ</b> · A. · ☐ tick</td><td>1–2 cột; lựa chọn ngang / dọc / 2 cột / tự xuống dòng</td></tr>
 <tr><td>Q4 Chọn trong câu</td><td><b>Gạch / khoanh từ</b> · chọn nhãn A–D</td><td>1–2 cột</td></tr>
 <tr><td>Q5 Đúng / Sai</td><td><b>Cột phải</b> · sau câu; 2–3 lựa chọn, nhãn tự đặt</td><td>1 cột</td></tr>
 <tr><td>Q6 Nhìn ảnh viết</td><td><b>Gạch</b> · ô chữ cái · dòng kẻ</td><td>Ảnh trên (lưới) · ảnh trái</td></tr>
 <tr><td>Q7 Chọn ảnh</td><td><b>Tick</b> · khoanh chữ cái</td><td>1–2 cột</td></tr>
 <tr><td>Q8 Nối</td><td><b>Chấm nối</b> · viết chữ cái</td><td>3 cột</td></tr>
-<tr><td>Q9 Tô chữ</td><td><b>Dòng tô</b></td><td>1–2 cột</td></tr>
+<tr><td>Q9 Tô chữ</td><td><b>Dòng tô</b> (nền thường · bốn ô li)</td><td>1–2 cột</td></tr>
 <tr><td>Q10 Bảng</td><td>Theo từng ô</td><td>Độ rộng cột, cao hàng</td></tr>
 <tr><td>Q11 Lưới</td><td>Ô chữ cái</td><td>Cỡ ô; số và viền bật / tắt</td></tr>
 <tr><td>Q12 Viết tự do</td><td><b>Dòng kẻ</b> · khung trống</td><td>—</td></tr>
@@ -270,17 +270,57 @@ Bài nhiều dạng = nhiều Task nối nhau</pre>
 </ul>
 
 <h2>8. Độ phủ và việc để sau</h2>
-<p>Đối chiếu 63 dạng bài (<code>RA_SOAT_DANG_BAI.md</code>) với 12 Q và các thuộc tính trên, <b>phán đoán của Claude, chưa thử trên app</b>:</p>
+<p>Đối chiếu 63 dạng bài + 6 dạng đặc trưng trẻ nhỏ (<code>RA_SOAT_DANG_BAI.md</code>) với 12 Q và các thuộc tính trên, <b>phán đoán của Claude, chưa thử trên app</b>:</p>
 <ul class="tight">
-<li>~52 dạng phủ trọn, ~8 dạng nhờ thuộc tính nhỏ (Yes/No / T-F-NG, Ví dụ, người nói ở Q3, không chỗ trả lời, khung vẽ, lưới chữ, đoạn có nhãn, nối tên bằng điểm trên ảnh), ~1 dạng nhờ nhãn A–D ở Q4 (tìm lỗi sai).</li>
+<li>63 dạng: ~52 phủ trọn, ~8 nhờ thuộc tính nhỏ (Yes/No / T-F-NG, Ví dụ, người nói ở Q3, không chỗ trả lời, khung vẽ, lưới chữ, đoạn có nhãn, nối tên bằng điểm trên ảnh), ~1 nhờ nhãn A–D ở Q4 (tìm lỗi sai). Điểm trung bình có trọng số: cũ 83%, mới 87% (theo bản rà soát).</li>
+<li>6 dạng trẻ nhỏ (mục 8b): tập viết bốn ô li, tìm điểm khác nhau, xếp tranh theo thứ tự, lời bài hát / chant có chỗ trống phủ được nhờ hai thuộc tính nhỏ vừa thêm (bốn ô li ở Q2 / Q9, G1 hai ảnh). Cắt dán chỉ ở mức khung ảnh + ô trống. Bingo / board game <b>ngoài phạm vi</b> (bố cục tự do).</li>
 <li>Chưa phủ: <b>flow-chart</b>, <b>Venn / mind map</b> (cần sơ đồ tự do, Q mới, làm sau).</li>
 <li>"Phủ được" chưa có nghĩa là đẹp và gọn; chỉ biết khi dựng thật.</li>
 </ul>
+<h3>8a. G3 chia nhóm: đã chọn "để sau", và hệ quả</h3>
+<p>Đã chốt: bài trộn nhiều dạng dùng <b>Task nối</b> (cơ chế "Nối vào Task trên" có sẵn); G3 chưa chia nhóm mỗi nhóm một Q. Điểm 87% ở trên đã tính cho 4 dạng cần chia nhóm (viết truyện theo 3 tranh, đồng nghĩa / trái nghĩa hai nhóm, tự đánh giá, bài trộn tick + viết + tự đánh giá) <b>theo giả định có chia nhóm</b>. Nếu để sau thì 4 dạng này quay về cách làm hiện tại (Task nối / <code>### Phần:</code>) và điểm trung bình mới tụt khoảng <b>87% → 86%</b>; 4 dạng này mất 15–30 điểm mỗi dạng nhưng vẫn trình bày được. Chia nhóm là việc làm sau cùng, không chặn bậc nào.</p>
+<h3>8b. Dạng đặc trưng trẻ nhỏ (mới thêm vào rà soát)</h3>
+<table>
+<tr><th>Dạng</th><th>Cách trình bày</th><th>Cần thêm</th></tr>
+<tr><td>Tập viết / tô theo nét chấm</td><td>Q9 Tô chữ, Q2 Viết câu</td><td>Nền <b>bốn ô li</b> (tùy chọn nền dòng); cần thử font nét chấm</td></tr>
+<tr><td>Tìm điểm khác nhau</td><td>G1 hai ảnh cạnh nhau + Q12 hoặc G-Text</td><td>G1 cho 1–2 ảnh</td></tr>
+<tr><td>Xếp tranh theo thứ tự (1-2-3)</td><td>Q7 Chọn ảnh hoặc Q11 Lưới ô số</td><td>Không</td></tr>
+<tr><td>Lời bài hát / chant có chỗ trống</td><td>G2 + Q1 Điền từ</td><td>Không</td></tr>
+<tr><td>Cắt và dán</td><td>Khung ảnh + ô trống để dán</td><td>Chỉ trình bày, chưa có ý "dán"; chấp nhận</td></tr>
+<tr><td>Bingo / board game</td><td>—</td><td>Ngoài phạm vi (bố cục tự do)</td></tr>
+</table>
 <h3>Để xem xét sau</h3>
 <ul class="tight">
-<li>Bài trộn nhiều dạng: dùng Task nối; có thể cho G3 chia nhóm mỗi nhóm một Q.</li>
 <li>Chỗ trống đánh số trong bài đọc: chữ ở G2, đáp án từng chỗ trống là câu ở G3.</li>
 <li>Header phiếu (tên phiếu, Name / Class / Date) nằm ngoài Task, làm riêng.</li>
-<li>Dây nối từ ảnh sang chữ (chưa có).</li>
+<li>Dây nối từ ảnh sang chữ (dạng nối tên vào người trong tranh, chưa có).</li>
+<li>Cỡ chữ Nhỏ / Vừa / To mới là đề xuất, chưa chốt.</li>
 </ul>
+
+<h2>9. Dữ liệu và nhập file (phải chốt trước khi code)</h2>
+<p>Kiến trúc đổi thì lớp AI ghi phiếu cũng đổi. Ba tài liệu liên quan: <code>QUY_UOC_MD.md</code> (cú pháp MD), <code>PROMPT_PDF_SANG_PHIEU.md</code> (prompt cho AI đọc PDF), <code>PHUONG_AN_NHAP_FILE.md</code>. <b>Nguyên tắc: MD / JSON cũ phải nạp được như v80; cú pháp mới chỉ thêm, không bắt buộc.</b></p>
+<table>
+<tr><th>Nội dung</th><th>Cú pháp MD hiện tại (v80)</th><th>Dự kiến theo kiến trúc mới</th></tr>
+<tr><td>Tiêu đề / hướng dẫn / track audio</td><td><code>## Task: …</code> + các dòng <code>Tên: giá trị</code></td><td>Giữ nguyên (G0)</td></tr>
+<tr><td>Dạng câu hỏi + cách trả lời</td><td><code>Trả lời:</code> (giá trị A1–A8) và tự nhận dạng loại nội dung</td><td>Thêm <code>Dạng:</code> = tên Q (Q1–Q12). Bỏ trống thì app đoán như cũ và <b>báo chỗ đoán</b>; <code>Trả lời:</code> cũ vẫn đọc được</td></tr>
+<tr><td>Bố cục</td><td>Chọn tay trong app</td><td>Thêm <code>Bố cục:</code> T1–T4 (tùy chọn)</td></tr>
+<tr><td>Bài đọc / lời dẫn</td><td>Dòng văn bản trước danh sách câu</td><td>Vào G2; đoạn có nhãn A–F bằng dòng <code>A. …</code></td></tr>
+<tr><td>Chia nhóm trong Task</td><td><code>### Phần:</code></td><td>Giữ <code>### Phần:</code>; sau này thêm G3-Text cho nhóm cùng dạng</td></tr>
+<tr><td>Ví dụ, người nói</td><td>Người nói đã có; "Example" chưa có</td><td>Cờ <code>Ví dụ</code> trên câu (vd. <code>0. (ví dụ) …</code>)</td></tr>
+<tr><td>G-Text, điểm trên ảnh, đáp án chỗ trống</td><td>Chưa có cú pháp MD (đang treo)</td><td>Chốt cú pháp trước khi viết lại prompt; xem bậc 0 mục 10</td></tr>
+</table>
+<p>Hệ quả: <code>PROMPT_PDF_SANG_PHIEU.md</code> phải viết lại sau khi cú pháp mới chốt, và phải thử trên PDF thật (việc P3 đang treo: PDF thật + MD do AI tạo + ảnh sau nạp). Mẫu do Claude tự viết không thay được phiếu do AI khác viết.</p>
+
+<h2>10. Kế hoạch làm theo bậc và cách kiểm thử (chờ duyệt)</h2>
+<p>Mỗi bậc là một bản (badge <code>vNN</code>); sau mỗi bậc phiếu cũ vẫn mở giống v80, chạy đủ bộ test (28 test hồi quy + audit) từng cái một và so ảnh chụp, 0 lỗi console, 0 cảnh báo tràn trang. Chỉ báo "đạt" cho test đã chạy trên bản cuối.</p>
+<table>
+<tr><th>Bậc</th><th>Làm gì</th><th>Rủi ro</th></tr>
+<tr><td>0</td><td>Chốt cú pháp MD cho G-Text, điểm trên ảnh, đáp án chỗ trống, <code>Dạng:</code>, <code>Bố cục:</code>, <code>Ví dụ</code> (mục 9). Chưa code app.</td><td>Thấp (chỉ tài liệu)</td></tr>
+<tr><td>—</td><td><b>G4 kiểu Ảnh</b> (độc lập, làm lúc nào cũng được trên v80)</td><td>Thấp</td></tr>
+<tr><td>1</td><td>Đổi nhóm giao diện: G2 = Bài đọc / Lời dẫn, G3 = Câu hỏi; thứ tự khối ở cấp Task (sửa lỗi Sunny Farm bài 1); xóa / tạo khối thống nhất; G1 hai ảnh</td><td>Vừa</td></tr>
+<tr><td>2</td><td>Q đặt ở G3, có hình xem trước khi rê chuột; thu A vào trong Q; thêm bốn ô li ở Q2 / Q9</td><td>Vừa</td></tr>
+<tr><td>3</td><td>Tách T / Q: T chỉ còn bố cục Task; lưới / cột / nối / bảng / T-F thành cách xếp của Q (code đang rẽ nhánh theo loại nội dung ở ~30 chỗ)</td><td><b>Cao</b>, bậc lớn nhất</td></tr>
+<tr><td>4</td><td>G3-Text (thay <code>### Phần:</code> khi cùng dạng); sau đó mới tới G3 chia nhóm (mục 8a)</td><td>Vừa</td></tr>
+<tr><td>5</td><td>Viết lại <code>PROMPT_PDF_SANG_PHIEU.md</code> và <code>QUY_UOC_MD.md</code>, thử PDF thật (P3), thêm phiếu vào <code>tests/real/</code></td><td>Vừa</td></tr>
+</table>
 </main></body></html>
