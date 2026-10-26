@@ -1,5 +1,7 @@
 # Đang dở: kéo đổi chỗ container, G-Text, thiết kế lại G0–G4
 
+> **ĐÃ LỖI THỜI (26/10/2026).** Thay bằng `KIEN_TRUC_TRINH_BAY_MOI.html` và `BAO_CAO_PHIEN_2026-10-26_phien3.md`. Bốn câu hỏi ở mục 4 đã được trả lời: G2 = Bài đọc / Lời dẫn, G3 = Câu hỏi; G-Text là băng ngang cấp Task (đã làm v73–v74); thứ tự làm theo kế hoạch bậc ở báo cáo phiên 3. Giữ file để tham khảo lịch sử.
+
 Ghi ngày 25/10/2026 (đêm). Bản app hiện tại: **v71**, chưa sửa dòng code nào trong phiên này. Phiên này chỉ thảo luận và vẽ minh họa. Đọc file này đầu phiên mới, cùng mục "BÀN GIAO" trong `WS_EDITOR_SPEC_v37_bo_sung.md`.
 
 ## 1. Ý tưởng của người dùng

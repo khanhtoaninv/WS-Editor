@@ -3,8 +3,9 @@
 Dự án: bước dàn trang phiếu bài tập tiếng Anh (A4, đầu ra HTML, không in/PDF). Một file HTML thuần `ws-editor-prototype.html`, JS thuần, không thư viện; sau này mới tích hợp vào WS Studio. Nguồn sự thật là **git repo này** (không còn dùng file trong Claude Project).
 
 ## Đọc theo thứ tự
-1. `docs/BAO_CAO_PHIEN_*.md` (bản mới nhất): đã làm gì, việc tiếp theo, giới hạn đã biết.
-2. `docs/WS_EDITOR_SPEC.md` (đặc tả) rồi mục "BÀN GIAO" cuối `docs/WS_EDITOR_SPEC_v37_bo_sung.md`.
+0. `docs/BAT_DAU_PHIEN_MOI.md`: lệnh mở phiên và thứ tự đọc.
+1. `docs/BAO_CAO_PHIEN_2026-10-26_phien3.md` (**mới nhất**): đang thảo luận **kiến trúc trình bày mới** (T / Q / G, bỏ tầng A), chưa code; quyết định đã chốt. Xem `docs/KIEN_TRUC_TRINH_BAY_MOI.html` (bản để duyệt) và `docs/RA_SOAT_DANG_BAI.md`. Rồi `docs/BAO_CAO_PHIEN_2026-10-26.md` (v73–v80, việc treo, giới hạn).
+2. `docs/WS_EDITOR_SPEC.md` (đặc tả của app hiện tại v80, chưa theo kiến trúc mới) rồi mục "BÀN GIAO" cuối `docs/WS_EDITOR_SPEC_v37_bo_sung.md`.
 3. Khi cần: `docs/PHUONG_AN_NHAP_FILE.md` (nhập file), `docs/QUY_UOC_MD.md` (cú pháp MD), `docs/PROMPT_PDF_SANG_PHIEU.md` (prompt cho AI đọc PDF), `ws-sample.json` / `samples/`.
 Không dùng MASTER_SPEC v10 hay đặc tả cũ nếu mâu thuẫn. Nếu hành vi thật khác đặc tả, nói rõ chỗ lệch, đừng tự chọn một bên.
 
