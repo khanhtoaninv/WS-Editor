@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kiến trúc trình bày mới</title>
+<style>
+:root{--ink:#1f2328;--mut:#6b7280;--line:#d0d5dc;--bg:#f6f7f9;--card:#fff;
+--g0:#3f4652;--g1:#cfe0f5;--g1b:#7aa6d8;--g2:#f3ead8;--g2b:#c9a96a;--g3:#dcefe2;--g3b:#6fb084;--g4:#fbe3cf;--g4b:#e0995e;--gt:#ece6f7;--gtb:#9a86c9}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:24px 16px 60px}
+h1{font-size:24px;margin:0 0 4px}h2{font-size:19px;margin:34px 0 10px;padding-top:10px;border-top:1px solid var(--line)}
+h3{font-size:15px;margin:0 0 6px}p,li{margin:4px 0}.mut{color:var(--mut);font-size:13px}
+table{border-collapse:collapse;width:100%;display:block;overflow-x:auto;background:var(--card);font-size:14px}th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}th{background:#eef0f3}
+code{background:#eef0f3;padding:1px 4px;border-radius:4px;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}
+.card .cap{font-size:13px;color:var(--mut);margin-top:8px}
+/* trang mini */
+.pg{background:#fff;border:1px solid #c4c9d1;border-radius:6px;padding:8px;display:flex;flex-direction:column;gap:5px;min-height:200px;font-size:10px}
+.b{border-radius:5px;border:1px solid;padding:4px 6px;display:flex;align-items:center;justify-content:center;font-weight:600;color:#333}
+.g0{background:var(--g0);border-color:var(--g0);color:#fff;justify-content:flex-start}
+.g1{background:var(--g1);border-color:var(--g1b)}.g2{background:var(--g2);border-color:var(--g2b)}
+.g3{background:var(--g3);border-color:var(--g3b)}.g4{background:var(--g4);border-color:var(--g4b)}
+.gt{background:var(--gt);border-color:var(--gtb);border-style:dashed}
+.row{display:flex;gap:5px}.col{display:flex;flex-direction:column;gap:5px}.f1{flex:1}
+.h30{height:30px}.h40{height:40px}.h50{height:50px}.h60{height:60px}.h80{height:80px}
+.wrap{position:relative;display:block;padding:6px;font-weight:400;text-align:left;line-height:1.35}
+.wrap .g1{float:left;width:45%;height:46px;margin:0 6px 2px 0}
+.leg{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.leg span{display:inline-flex;align-items:center;gap:5px;font-size:13px}.leg i{width:16px;height:12px;border-radius:3px;border:1px solid;display:inline-block}
+/* Q mini */
+.q{background:#fff;border:1px solid #c4c9d1;border-radius:6px;padding:8px;font-size:11px;line-height:1.5;min-height:112px}
+.n{display:inline-block;width:15px;height:15px;border-radius:50%;background:#e7e9ee;text-align:center;font-size:9px;line-height:15px;margin-right:4px;font-weight:700}
+.gap{display:inline-block;width:42px;border-bottom:1.5px solid #555;margin:0 2px}
+.ln{border-bottom:1px solid #9aa1ab;height:13px;margin:2px 0 2px 19px}
+.box{display:inline-block;width:12px;height:12px;border:1.3px solid #555;border-radius:3px;vertical-align:-2px;margin:0 2px}
+.im{display:inline-block;background:var(--g1);border:1px solid var(--g1b);border-radius:4px;width:34px;height:26px;vertical-align:middle}
+.imgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.imgrid div{font-size:10px;text-align:center}
+.imgrid .im{width:100%;height:32px;display:block;margin-bottom:2px}
+.ci{display:inline-block;border:1.2px solid #555;border-radius:50%;width:13px;height:13px;font-size:8px;text-align:center;line-height:11px;margin:0 2px 0 6px}
+.tf{float:right}.tf b{display:inline-block;border:1px solid #555;border-radius:4px;padding:0 4px;margin-left:3px;font-size:9px}
+.dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#333;margin:0 3px}
+.trace{color:#b7bcc4;letter-spacing:2px;border-bottom:1px dashed #b7bcc4}
+.tb{border-collapse:collapse;width:100%;display:table;font-size:10px;background:#fff}.tb td{border:1px solid #9aa1ab;padding:2px 4px;height:16px}.tb .hd{background:#eef0f3;font-weight:600}
+.cw{display:grid;grid-template-columns:repeat(6,15px);gap:0}.cw span{width:15px;height:15px}.cw .c{border:1px solid #9aa1ab;border-radius:2px;font-size:7px;line-height:9px;padding-left:1px}
+.cwt{width:auto;border-collapse:separate;border-spacing:2px}.cwt td{width:18px;height:18px;padding:0 0 0 2px;font-size:8px;vertical-align:top;border-radius:3px}.cwt td.x{border:0}
+.who{display:inline-block;width:22px;font-weight:700}
+.tag{display:inline-block;font-size:11px;background:#eef0f3;border-radius:4px;padding:0 5px;margin-right:4px}
+.qt{font-size:10px;color:var(--mut);margin:4px 0 0}
+ul.tight{padding-left:18px}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--ink:#e6e8eb;--mut:#a3a9b3;--line:#3a3f47;--bg:#16181c;--card:#1f2228}
+:root:not([data-theme=light]) th,:root:not([data-theme=light]) code{background:#2a2e35}}
+</style></head><body><main>
+
+<h1>Kiến trúc trình bày mới (đề xuất)</h1>
+<p class="mut">WS Editor · 26/10/2026 · bản để duyệt, chưa code. Thay thế mô hình G0–G4 + T1–T9 + A1–A8 hiện tại (v80).</p>
+
+<h2>1. Tổng thể</h2>
+<div class="row" style="flex-wrap:wrap;gap:20px;align-items:flex-start">
+<pre style="margin:0;max-width:100%;overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:13px;line-height:1.55">Phiếu = các Task xếp dọc
+Task ── T (bố cục)
+├─ G0  Tiêu đề        cố định, luôn trên cùng, không xóa
+├─ G1  Ảnh chung      (điểm trên ảnh)
+├─ G2  Bài đọc / lời dẫn   chỉ chữ
+├─ G3  Câu hỏi ── Q (một dạng cho cả G3)
+│    ├─ block câu: Câu hỏi | Trả lời
+│    ├─ G3-Text   (tiêu đề nhóm, câu mẫu, nhãn)
+│    └─ …
+├─ G4  Khung từ       chữ HOẶC ảnh
+└─ G-Text            tự do, nhiều cái
+Bài nhiều dạng = nhiều Task nối nhau</pre>
+<div style="flex:1;min-width:260px">
+<p><b>T</b> quyết các khối G xếp thế nào trong Task.</p>
+<p><b>Q</b> quyết câu hỏi là dạng gì, chỗ trả lời ra sao, các câu xếp thế nào. Kiểu đáp án (A) nằm bên trong Q.</p>
+<p>Luồng: <b>chọn T → chọn Q → chỉnh kích thước</b>.</p>
+<div class="leg">
+<span><i class="g0"></i>G0 Tiêu đề</span><span><i class="g1"></i>G1 Ảnh chung</span><span><i class="g2"></i>G2 Bài đọc</span>
+<span><i class="g3"></i>G3 Câu hỏi</span><span><i class="g4"></i>G4 Khung từ</span><span><i class="gt"></i>G-Text</span></div>
+</div></div>
+
+<h2>2. Các khối</h2>
+<table>
+<tr><th>Khối</th><th>Chứa</th><th>Do ai xếp</th><th>Số lượng</th></tr>
+<tr><td>G0 Tiêu đề</td><td>Số, tên bài, hướng dẫn, track audio</td><td>Cố định trên cùng</td><td>1, không xóa</td></tr>
+<tr><td>G1 Ảnh chung</td><td>Ảnh phục vụ cả Task; điểm đánh số / ô trống trên ảnh</td><td>T</td><td>0–1</td></tr>
+<tr><td>G2 Bài đọc / lời dẫn</td><td>Chữ (bài đọc, lời giới thiệu); chỗ trống đánh số; ký hiệu đậm / nghiêng / gạch chân. <b>Không có ảnh riêng</b></td><td>T</td><td>0–1</td></tr>
+<tr><td>G3 Câu hỏi</td><td>Các block câu (Câu hỏi | Trả lời, ảnh của câu) + G3-Text. <b>Mọi chỗ trả lời ở đây</b></td><td>Q</td><td>0–1</td></tr>
+<tr><td>G3-Text</td><td>Chữ chen giữa các câu: tiêu đề nhóm, câu mẫu "0. Example", nhãn "Self-check:"</td><td>Theo thứ tự câu</td><td>nhiều</td></tr>
+<tr><td>G4 Khung từ</td><td><b>Chữ</b> (rời / danh sách a. b. c.) <b>hoặc Ảnh</b> (lưới ô cùng cỡ, nhãn A B C, chú thích dưới ảnh). Không trộn</td><td>Vị trí: trên / dưới / phải G3</td><td>0–1</td></tr>
+<tr><td>G-Text</td><td>Chữ (cỡ, căn, khung, 1–2 cột, danh sách) hoặc Ảnh</td><td>Vị trí trong Task</td><td>nhiều</td></tr>
+</table>
+
+<h3 style="margin-top:14px">Mỗi ảnh một nhà</h3>
+<table>
+<tr><th>Ảnh phục vụ</th><th>Ở</th></tr>
+<tr><td>Cả Task (tranh tô màu, tranh để trả lời nhiều câu, tranh minh họa bài đọc)</td><td>G1</td></tr>
+<tr><td>Một câu (ảnh của câu, ảnh lựa chọn của câu)</td><td>Block câu trong G3</td></tr>
+<tr><td>Lựa chọn dùng chung cho mọi câu (ảnh A–F)</td><td>G4 kiểu Ảnh</td></tr>
+<tr><td>Ảnh phụ, không gắn câu nào</td><td>G-Text / G3-Text kiểu Ảnh</td></tr>
+</table>
+
+<h2>3. Thao tác (giống nhau cho mọi khối và mọi block câu)</h2>
+<table>
+<tr><th>Thao tác</th><th>Cách làm</th></tr>
+<tr><td>Chọn</td><td>Bấm trên trang hoặc trên cây cột trái (đồng bộ hai bên)</td></tr>
+<tr><td>Sửa</td><td>Panel của khối. Block câu: hai thẻ <b>Câu hỏi</b> và <b>Trả lời</b></td></tr>
+<tr><td>Xóa</td><td>Nút "Xóa" + phím Delete; Ctrl+Z khôi phục. Bỏ kiểu "tắt mà vẫn giữ dữ liệu"</td></tr>
+<tr><td>Tạo</td><td>"+ Thêm khối" ở cấp Task; "+ Thêm câu", "+ G3-Text" trong G3 (câu mới có sẵn chỗ trả lời theo Q)</td></tr>
+<tr><td>Nhân đôi, đổi chỗ</td><td>Khối G: ở cấp Task. Câu, G3-Text: trong G3</td></tr>
+<tr><td>Ghi đè từng câu</td><td>Trong cùng Q (dòng dài hơn, lựa chọn xếp dọc…); không đổi sang dạng khác</td></tr>
+</table>
+<p class="mut">Chỉnh tay khóa theo id khối / id câu, đi theo khi xóa, đổi chỗ (có sẵn ở v80, mở rộng ra mọi khối).</p>
+
+<h2>4. T — bố cục Task (4 kiểu)</h2>
+<p class="mut">T chỉ quyết vị trí G1 so với G2 / G3. Thứ tự các khối khác đổi bằng kéo / ↑↓.</p>
+<div class="grid">
+<div class="card"><h3>T1 Xếp dọc</h3><div class="pg">
+<div class="b g0">1 · Tiêu đề</div><div class="b g1 h60">G1</div><div class="b g2 h30">G2</div><div class="b g3 h50">G3</div><div class="b g4">G4</div></div>
+<div class="cap">Ảnh lớn trên (hoặc không ảnh). Mặc định cho phần lớn bài.</div></div>
+
+<div class="card"><h3>T2 Ảnh trái</h3><div class="pg">
+<div class="b g0">1 · Tiêu đề</div>
+<div class="row"><div class="b g1" style="width:36%;height:118px">G1</div><div class="col f1"><div class="b g2 h40">G2</div><div class="b g3 h80">G3</div></div></div>
+<div class="b g4">G4</div></div>
+<div class="cap">Ảnh một cột, chữ cột kia. Kéo tỉ lệ 25–50%.</div></div>
+
+<div class="card"><h3>T3 Ảnh phải</h3><div class="pg">
+<div class="b g0">1 · Tiêu đề</div>
+<div class="row"><div class="col f1"><div class="b g2 h40">G2</div><div class="b g3 h80">G3</div></div><div class="b g1" style="width:36%;height:118px">G1</div></div>
+<div class="b g4">G4</div></div>
+<div class="cap">Như T2, đảo bên.</div></div>
+
+<div class="card"><h3>T4 Ảnh trong bài đọc</h3><div class="pg">
+<div class="b g0">1 · Tiêu đề</div>
+<div class="b g2 wrap"><div class="b g1">G1</div>Bài đọc chạy bao quanh ảnh, ảnh trái hoặc phải, rộng 25–60% bài đọc …</div>
+<div class="b g3 h50">G3</div></div>
+<div class="cap">Ảnh nằm trong G2 (T8 cũ). Chỉ khi có bài đọc.</div></div>
+</div>
+
+<h3 style="margin-top:16px">Đổi thứ tự khối (cấp Task) — ví dụ</h3>
+<div class="grid">
+<div class="card"><div class="pg">
+<div class="b g0">1 · Before you read</div><div class="b g3 h40">G3 · tick dự đoán</div><div class="b g2 h60">G2 · bài đọc</div></div>
+<div class="cap">Câu hỏi trước bài đọc (Sunny Farm bài 1).</div></div>
+<div class="card"><div class="pg">
+<div class="b g0">1 · Read and choose</div><div class="b gt">G-Text · My goal</div><div class="b g2 h40">G2</div><div class="b g3 h40">G3</div><div class="b g4 h30">G4 · ảnh A–F</div></div>
+<div class="cap">G-Text trên cùng; khung từ ảnh dưới câu hỏi.</div></div>
+</div>
+
+<h2>5. Q — dạng câu hỏi (13 kiểu)</h2>
+<p class="mut">Một Q cho cả G3. Mỗi Q có: <b>kiểu trả lời</b> (A cũ, chọn trong các kiểu hợp lệ, có mặc định) và <b>cách xếp câu</b> (1–2 cột, lưới, độ rộng khối, số câu ở lề bật / tắt). Rê chuột lên Q hiện hình nhỏ như dưới.</p>
+<div class="grid">
+
+<div class="card"><h3>Q1 Điền từ</h3><div class="q">
+<div><span class="n">1</span>I like <span class="gap"></span> .</div>
+<div><span class="n">2</span>She is my <span class="gap"></span> .</div>
+<div><span class="n">3</span>c <span class="box"></span> t &nbsp; <span class="box"></span><span class="box"></span><span class="box"></span></div></div>
+<div class="qt">Trả lời: gạch trong / cuối câu, ô chữ cái, ô viết chữ cái / số đầu câu (xếp thứ tự).</div></div>
+
+<div class="card"><h3>Q2 Viết câu</h3><div class="q">
+<div><span class="n">1</span>Where do you live?</div><div class="ln"></div>
+<div><span class="n">2</span>What do you like?</div><div class="ln"></div></div>
+<div class="qt">Trả lời: dòng kẻ N dòng, chiều cao dòng, độ rộng.</div></div>
+
+<div class="card"><h3>Q3 Chọn A/B/C</h3><div class="q">
+<div><span class="n">1</span>I ___ to school.</div>
+<div style="padding-left:19px"><span class="ci">A</span>go <span class="ci">B</span>goes <span class="ci">C</span>going</div>
+<div><span class="n">2</span>Which is a fruit?</div>
+<div style="padding-left:19px"><span class="box"></span>apple <span class="box"></span>chair <span class="box"></span>bus</div></div>
+<div class="qt">Trả lời: ngang / dọc / 2 cột / tự xuống dòng; nhãn Ⓐ, A., ☐.</div></div>
+
+<div class="card"><h3>Q4 Chọn trong câu</h3><div class="q">
+<div><span class="n">1</span>It is <b>big</b> / <b>small</b>.</div>
+<div><span class="n">2</span>I <b>am</b> / <b>is</b> happy.</div>
+<div><span class="n">3</span>They <b>was</b> / <b>were</b> late.</div></div>
+<div class="qt">Viết <code>{a|b}</code> trong câu; học sinh gạch / khoanh.</div></div>
+
+<div class="card"><h3>Q5 Đúng / Sai</h3><div class="q">
+<div><span class="n">1</span>The cat is black.<span class="tf"><b>T</b><b>F</b></span></div>
+<div><span class="n">2</span>There are two dogs.<span class="tf"><b>T</b><b>F</b></span></div>
+<div><span class="n">3</span>The boy is sad.<span class="tf"><b>T</b><b>F</b></span></div></div>
+<div class="qt">Cột T/F bên phải (80/20, kéo được) hoặc ngay sau câu. Thay T4 cũ.</div></div>
+
+<div class="card"><h3>Q6 Nhìn ảnh viết</h3><div class="q">
+<div class="imgrid"><div><span class="im"></span><span class="gap"></span></div><div><span class="im"></span><span class="gap"></span></div><div><span class="im"></span><span class="gap"></span></div></div>
+<div style="margin-top:6px"><span class="im"></span> <span class="n">4</span>The boy is <span class="gap"></span>.</div></div>
+<div class="qt">Mỗi câu 1 ảnh. Xếp: ảnh trên (lưới 2–3 cột) hoặc ảnh trái (1–2 cột). Thay T5 cũ.</div></div>
+
+<div class="card"><h3>Q7 Chọn ảnh</h3><div class="q">
+<div><span class="n">1</span>What did Tom eat?</div>
+<div class="imgrid" style="padding-left:19px"><div><span class="im"></span>A <span class="box"></span></div><div><span class="im"></span>B <span class="box"></span></div><div><span class="im"></span>C <span class="box"></span></div></div></div>
+<div class="qt">Mỗi câu 2–4 ảnh riêng, tick. Dùng được cùng bài đọc (G2).</div></div>
+
+<div class="card"><h3>Q8 Nối</h3><div class="q">
+<div class="row" style="justify-content:space-between"><span>1 apple<span class="dot"></span></span><span><span class="dot"></span>a red</span></div>
+<div class="row" style="justify-content:space-between"><span>2 sky<span class="dot"></span></span><span><span class="dot"></span>b blue</span></div>
+<div class="row" style="justify-content:space-between"><span>3 grass<span class="dot"></span></span><span><span class="dot"></span>c green</span></div></div>
+<div class="qt">3 cột trái / chấm / phải (chữ hoặc ảnh), cỡ chấm, chiều cao hàng. Thay T7.</div></div>
+
+<div class="card"><h3>Q9 Hội thoại</h3><div class="q">
+<div><span class="who">Ann</span>Hello! How are you?</div>
+<div><span class="who">Ben</span>(1) <span class="gap"></span></div>
+<div><span class="who">Ann</span>Where are you going?</div>
+<div><span class="who">Ben</span>(2) <span class="gap"></span></div></div>
+<div class="qt">Người nói + lượt; chỗ trống tự đánh số; độ rộng cột tên.</div></div>
+
+<div class="card"><h3>Q10 Tô chữ</h3><div class="q">
+<div><span class="n">1</span>cat &nbsp;<span class="trace">cat cat cat</span></div>
+<div><span class="n">2</span>dog &nbsp;<span class="trace">dog dog dog</span></div>
+<div><span class="n">3</span>sun &nbsp;<span class="trace">sun sun sun</span></div></div>
+<div class="qt">Số lần lặp, chiều cao dòng.</div></div>
+
+<div class="card"><h3>Q11 Bảng</h3><div class="q">
+<table class="tb"><tr><td class="hd"></td><td class="hd">Mon</td><td class="hd">Tue</td></tr>
+<tr><td class="hd">Mia</td><td>swim</td><td></td></tr><tr><td class="hd">Tom</td><td></td><td>✓</td></tr></table></div>
+<div class="qt">Ô chữ / ô trống để viết / ô tick; block câu = hàng. Thay T9.</div></div>
+
+<div class="card"><h3>Q12 Ô chữ</h3><div class="q">
+<table class="tb cwt"><tr><td class="c">1</td><td class="c"></td><td class="c"></td><td class="x"></td></tr><tr><td class="x"></td><td class="c"></td><td class="x"></td><td class="x"></td></tr><tr><td class="c">2</td><td class="c"></td><td class="c"></td><td class="c"></td></tr></table>
+<div class="qt" style="margin-top:6px">Gợi ý Across / Down đặt bằng G3-Text.</div></div>
+<div class="qt">Lưới đưa sẵn; tự đánh số; không ô đen.</div></div>
+
+<div class="card"><h3>Q13 Viết tự do</h3><div class="q">
+<div class="ln" style="margin-left:0"></div><div class="ln" style="margin-left:0"></div><div class="ln" style="margin-left:0"></div><div class="ln" style="margin-left:0"></div><div class="ln" style="margin-left:0"></div></div>
+<div class="qt">Không có câu; khung N dòng (tới 20). Gợi ý ý viết bằng G-Text.</div></div>
+</div>
+
+<h3 style="margin-top:16px">Q và kiểu trả lời bên trong</h3>
+<table>
+<tr><th>Q</th><th>Kiểu trả lời (mặc định in đậm)</th><th>Cách xếp câu</th></tr>
+<tr><td>Q1 Điền từ</td><td><b>Gạch</b> · ô chữ cái · ô đầu câu</td><td>1–2 cột</td></tr>
+<tr><td>Q2 Viết câu</td><td><b>Dòng kẻ</b></td><td>1 cột</td></tr>
+<tr><td>Q3 Chọn A/B/C</td><td><b>Khoanh Ⓐ</b> · A. · ☐ tick</td><td>1–2 cột; lựa chọn ngang / dọc / 2 cột / tự xuống dòng</td></tr>
+<tr><td>Q4 Chọn trong câu</td><td><b>Gạch / khoanh từ</b></td><td>1–2 cột</td></tr>
+<tr><td>Q5 Đúng / Sai</td><td><b>Cột T/F phải</b> · T F sau câu</td><td>1 cột</td></tr>
+<tr><td>Q6 Nhìn ảnh viết</td><td><b>Gạch</b> · ô chữ cái · dòng kẻ</td><td>Ảnh trên (lưới) · ảnh trái</td></tr>
+<tr><td>Q7 Chọn ảnh</td><td><b>Tick</b> · khoanh chữ cái</td><td>1–2 cột</td></tr>
+<tr><td>Q8 Nối</td><td><b>Chấm nối</b> · viết chữ cái</td><td>3 cột</td></tr>
+<tr><td>Q9 Hội thoại</td><td><b>Gạch đánh số</b></td><td>1 cột</td></tr>
+<tr><td>Q10 Tô chữ</td><td><b>Dòng tô</b></td><td>1–2 cột</td></tr>
+<tr><td>Q11 Bảng</td><td>Theo từng ô</td><td>Độ rộng cột, cao hàng</td></tr>
+<tr><td>Q12 Ô chữ</td><td>Ô chữ cái</td><td>Cỡ ô</td></tr>
+<tr><td>Q13 Viết tự do</td><td><b>Dòng kẻ</b></td><td>—</td></tr>
+</table>
+
+<h2>6. Đối chiếu với v80</h2>
+<table>
+<tr><th>v80</th><th>Kiến trúc mới</th></tr>
+<tr><td>T1, T2, T3, T8</td><td>T1, T2, T3, T4</td></tr>
+<tr><td>T4 Nội dung | Đáp án</td><td>Q5 Đúng / Sai (cột T/F phải)</td></tr>
+<tr><td>T5 Lưới item (Ảnh trên / Ảnh trái / multi)</td><td>Q6 Nhìn ảnh viết · Q7 Chọn ảnh</td></tr>
+<tr><td>T6 Chỉ nội dung (cột, độ rộng)</td><td>Cách xếp câu của mọi Q</td></tr>
+<tr><td>T7 Matching · T9 Bảng</td><td>Q8 Nối · Q11 Bảng</td></tr>
+<tr><td>A1–A8, "Gắn đáp án"</td><td>Kiểu trả lời bên trong Q</td></tr>
+<tr><td>"Mẫu có sẵn" (13 mẫu)</td><td>Q (đặt ở G3, có hình xem trước)</td></tr>
+<tr><td><code>### Phần:</code></td><td>G3-Text (cùng dạng) hoặc Task nối (khác dạng)</td></tr>
+<tr><td>Công tắc Ảnh chung / Bài đọc / Khung từ / Danh sách câu</td><td>"+ Thêm khối" / "Xóa"</td></tr>
+<tr><td>Khung từ chỉ chữ, Trên / Phải</td><td>Chữ hoặc Ảnh, Trên / Dưới / Phải</td></tr>
+</table>
+<p class="mut">Dữ liệu cũ giữ được: <code>content.lead</code> → G2, <code>items</code> + <code>answer</code> → G3, <code>extras</code> → G-Text. Phiếu cũ phải mở ra giống v80.</p>
+
+<h2>7. Nguyên tắc giữ nguyên</h2>
+<ul class="tight">
+<li>G0 cố định trên cùng; trang sau của Task bị cắt không lặp G0; không để tiêu đề mồ côi.</li>
+<li>Khung ảnh là khung container; Fit không làm khung to ra. Mọi khung có viền bo góc, thẳng đường dóng.</li>
+<li>Khoảng cách: Gọn / Vừa / Thoáng / Tự do + số mm. Liền trang / Tách trang.</li>
+<li>Nhập file không ghi đè Task có sẵn; chỗ không hiểu phải báo.</li>
+</ul>
+
+<h2>8. Để xem xét sau</h2>
+<ul class="tight">
+<li>Bài trộn nhiều dạng: hiện dùng Task nối; có thể cho G3 chia nhóm mỗi nhóm một Q.</li>
+<li>Chỗ trống đánh số trong bài đọc: chữ ở G2, đáp án từng chỗ trống là câu ở G3.</li>
+<li>Header phiếu (tên phiếu, Name / Class / Date) nằm ngoài Task, làm riêng.</li>
+<li>Bộ vẽ mới cho dạng chưa trình bày được: nối tên vào tranh, tìm lỗi sai A B C D, flow-chart, Venn / mind map.</li>
+</ul>
+</main></body></html>
