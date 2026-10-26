@@ -277,8 +277,11 @@ python3 -c "from PIL import Image; Image.new('RGB',(64,48),(200,200,200)).save('
 - Số Nhỏ / Vừa là đề xuất để người dùng xem, chưa chốt.
 - Kế hoạch G-Text và ba năng lực còn thiếu: spec chính mục 17.
 
-## AB. BÀN GIAO (2026-10-26, bản v72) — đọc mục này đầu tiên khi mở thread mới
-- **Bản v72** thêm cỡ chữ phiếu (mục AJ). **Việc tiếp theo: G-Text (spec mục 17).** Đã chạy trên bản cuối v72: test1–20 và audit đạt, 0 lỗi console, 0 tràn; `test2` so với v71: bố cục mức To giống hệt.
+## AK. v73 — G-Text kiểu Chữ
+- Chi tiết ở spec chính mục 17.4. `t.extras`, `gtHtml/gtBody/gtMove`, `frag.last`, `gtPanel`, mục 5 ở cột trái. Test mới: `test21.py` (~40 phép kiểm). Chưa có kiểu Ảnh / Thẻ, chưa có cú pháp MD.
+
+## AB. BÀN GIAO (2026-10-26, bản v73) — đọc mục này đầu tiên khi mở thread mới
+- **Bản v73** thêm G-Text kiểu Chữ (mục AK; trước đó v72 cỡ chữ phiếu, mục AJ). **Việc tiếp theo:** G-Text kiểu Ảnh và Thẻ, rồi chỗ trống trong bài đọc (spec mục 17). Đã chạy trên bản cuối v73: test1–21 và audit (xem kết quả cuối thread); `test2` so với v72 đạt.
 - **Không còn dùng artifact.** Xong việc thì commit và đẩy lên GitHub `khanhtoaninv/WS-Editor`, nhánh main (người dùng yêu cầu). Repo: file chính `ws-editor-prototype.html`, `docs/`, `tests/`, `fonts/`, `samples/`.
 - **Đã chạy trên bản cuối v70:** test1, 3–19, audit (0 vấn đề), audit2 (không tràn), cmp_paste (20 bài dán giống v69), ws_sea (3 trang, 0 lỗi) đạt, 0 lỗi console. `test2` so với v69: 31/32, chỗ lệch duy nhất là Task 5 phiếu mẫu (đã định, xem mục AI).
 - **Cách chạy:** `bash tests/run_all.sh <mới.html> <cũ.html>`; `cmp_paste.py <mới> <cũ>`; `ws_sea.py` ghi ra `/home/claude/ws/ws-sea-sample.json` (cần tạo thư mục), bản đó khác `ws-sea-sample.json` trong repo ở trường `part:""` từ v68 (không phải lỗi v70, chưa tái xuất mẫu).

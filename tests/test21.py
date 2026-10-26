@@ -1,0 +1,87 @@
+import json, sys
+from playwright.sync_api import sync_playwright
+F='file://'+sys.argv[1]; ok=True
+def chk(n,c,x=''):
+    global ok; print(('PASS ' if c else 'FAIL '),n,x); ok&=bool(c)
+with sync_playwright() as p:
+    b=p.chromium.launch(); pg=b.new_page(viewport={'width':1440,'height':900}); errs=[]
+    pg.on('console',lambda m: errs.append(m.text) if m.type=='error' and 'ERR_' not in m.text and 'font' not in m.text.lower() else None)
+    pg.on('pageerror',lambda e: errs.append('PAGEERR '+str(e)))
+    pg.goto(F); pg.wait_for_timeout(1500)
+    chk('badge v73', pg.evaluate("document.getElementById('verBadge').textContent")=='v73')
+    chk('không extras: không có .gt', pg.evaluate("document.querySelectorAll('.gt').length")==0)
+    H0=pg.evaluate("lastRes.pages.length")
+    tid=pg.evaluate("ws.tasks[0].id")
+    # thêm khối qua cột trái
+    pg.evaluate(f"sel={{type:'task',id:'{tid}'}}; refreshSel()"); pg.wait_for_timeout(300)
+    pg.evaluate("SECT.free=true; renderTree()"); pg.wait_for_timeout(200)
+    pg.click(f'.ed[data-ed="{tid}"] [data-eact=gtadd]'); pg.wait_for_timeout(400)
+    chk('thêm 1 khối', pg.evaluate("ws.tasks[0].extras.length")==1)
+    chk('mặc định phía dưới', pg.evaluate("ws.tasks[0].extras[0].pos")=='bottom')
+    chk('hiện placeholder khi trống', pg.evaluate("document.querySelectorAll('.gt.gt-empty').length")==1)
+    xid=pg.evaluate("ws.tasks[0].extras[0].id")
+    pg.fill(f'#tree [data-k="x.{xid}.text"]', "Ghi chú **đậm** và *nghiêng*\n- một\n- hai\n\n1. ba\n2. bốn <b>x</b>")
+    pg.wait_for_timeout(500)
+    h=pg.evaluate("document.querySelector('.gt .gtb').innerHTML")
+    chk('đậm/nghiêng', '<b>đậm</b>' in h and '<i>nghiêng</i>' in h, h)
+    chk('bullet 2 mục', h.count('<li>')==4 and '<ul>' in h and '<ol>' in h, h)
+    chk('HTML bị escape', '&lt;b&gt;x&lt;/b&gt;' in h, h)
+    chk('chọn được khối trên trang', True)
+    pg.click('.gt .gtb'); pg.wait_for_timeout(300)
+    chk('chọn → sel GT', pg.evaluate("sel.g")=='GT' and pg.evaluate("sel.item")==xid)
+    chk('Inspector khối chữ', 'Khối chữ' in pg.evaluate("document.getElementById('insp').textContent"))
+    # cỡ chữ
+    base=pg.evaluate("parseFloat(getComputedStyle(document.querySelector('.gt')).fontSize)")
+    chk('Theo phiếu = 14pt', abs(base-14*96/72)<.1, base)
+    for k,pt in (('s',10),('m',12),('l',14)):
+        pg.click(f'#insp [data-act=set][data-p=size][data-v={k}]'); pg.wait_for_timeout(300)
+        fs=pg.evaluate("parseFloat(getComputedStyle(document.querySelector('.gt')).fontSize)")
+        chk(f'cỡ {k} = {pt}pt', abs(fs-pt*96/72)<.1, fs)
+    pg.click('#insp [data-act=set][data-p=size][data-v=null]'); pg.wait_for_timeout(300)
+    chk('Theo phiếu: xóa key size', pg.evaluate("'size' in ws.tasks[0].extras[0]")==False)
+    pg.click('#insp [data-act=set][data-p=frame][data-v=line]'); pg.wait_for_timeout(300)
+    chk('khung viền bo góc', pg.evaluate("getComputedStyle(document.querySelector('.gt .gtb')).borderRadius")!='0px')
+    pg.click('#insp [data-act=set][data-p=frame][data-v=fill]'); pg.wait_for_timeout(300)
+    chk('khung nền nhẹ', pg.evaluate("getComputedStyle(document.querySelector('.gt .gtb')).backgroundColor")!='rgba(0, 0, 0, 0)')
+    pg.click('#insp [data-act=set][data-p=align][data-v=center]'); pg.wait_for_timeout(300)
+    chk('căn giữa', pg.evaluate("getComputedStyle(document.querySelector('.gt .gtb')).textAlign")=='center')
+    chk('có chấm đã chỉnh tay → Về tự động', pg.evaluate("ovOf(ws.tasks[0],sel)")==True)
+    pg.click('#insp [data-act=auto]'); pg.wait_for_timeout(300)
+    chk('Về tự động xóa định dạng', pg.evaluate("JSON.stringify(ws.tasks[0].extras[0])")==json.dumps({"id":xid,"kind":"text","pos":"bottom","text":pg.evaluate("ws.tasks[0].extras[0].text")},ensure_ascii=False,separators=(',',':')))
+    # đưa lên: bottom → top (qua BÀI)
+    pg.click('#insp [data-act=gtmove][data-v="-1"]'); pg.wait_for_timeout(400)
+    chk('đưa lên → pos top', pg.evaluate("ws.tasks[0].extras[0].pos")=='top')
+    chk('khối nằm ngay dưới G0', pg.evaluate("(()=>{const s=document.querySelector(`.task[data-task=\"%s\"]`);const k=[...s.children].map(e=>e.className.split(' ')[0]);return k.indexOf('gt')==k.indexOf('g0')+1})()"%tid))
+    # thêm khối thứ hai, đổi chỗ giữa các khối
+    pg.click(f'.ed[data-ed="{tid}"] [data-eact=gtadd]'); pg.wait_for_timeout(400)
+    chk('2 khối', pg.evaluate("ws.tasks[0].extras.length")==2)
+    pg.click(f'.ed[data-ed="{tid}"] [data-eact=gtup]:not([disabled]) >> nth=-1'); pg.wait_for_timeout(300)
+    chk('khối 2 lên trên bài', pg.evaluate("ws.tasks[0].extras.map(x=>x.pos).join()")=='top,top')
+    # undo/redo
+    pg.click('#undo'); pg.wait_for_timeout(300)
+    chk('hoàn tác di chuyển', pg.evaluate("ws.tasks[0].extras.map(x=>x.pos).join()")=='top,bottom')
+    # JSON khứ hồi
+    js=pg.evaluate("JSON.stringify(ws)")
+    pg.evaluate("(js)=>loadSheet(JSON.parse(js),'test')", js); pg.wait_for_timeout(500)
+    chk('nạp lại giữ extras', pg.evaluate("ws.tasks[0].extras.length")==2 and pg.evaluate("document.querySelectorAll('.gt').length")>=2)
+    # nạp xấu
+    notes=pg.evaluate("""(()=>{const n=[];const t=fillTask({id:'z',title:'',instruction:'',content:{form:'list',items:[]},answer:{kind:'none'},extras:[{kind:'cards'},{kind:'text',text:5,size:'xx',pos:'x',id:'a'},{kind:'text',text:'y',id:'a'},7]},n);return {n,ex:t.extras}})()""")
+    chk('nạp xấu: bỏ loại lạ và rác, id không trùng', len(notes['ex'])==2 and notes['ex'][0]['id']!=notes['ex'][1]['id'] and notes['ex'][0]['pos']=='bottom' and 'size' not in notes['ex'][0] and len(notes['n'])>=2, notes)
+    # nhân đôi Task giữ khối
+    # xóa
+    tid=pg.evaluate("ws.tasks[0].id")
+    pg.evaluate(f"sel={{type:'task',id:'{tid}'}}; openTask='{tid}'; SECT.free=true; refreshSel()"); pg.wait_for_timeout(300)
+    pg.click(f'.ed[data-ed="{tid}"] [data-eact=gtrm] >> nth=0'); pg.wait_for_timeout(300)
+    pg.click(f'.ed[data-ed="{tid}"] [data-eact=gtrm] >> nth=0'); pg.wait_for_timeout(300)
+    chk('xóa hết → bỏ key extras', pg.evaluate("'extras' in ws.tasks[0]")==False)
+    chk('trang như ban đầu', pg.evaluate("lastRes.pages.length")==H0)
+    chk('0 lỗi console', not errs, errs)
+    # phân trang: khối dưới chỉ ở mảnh cuối, khối trên chỉ ở mảnh đầu
+    pg.evaluate("""(()=>{const t=ws.tasks.find(x=>(x.content.items||[]).length>=6)||ws.tasks[0];t.extras=[{id:'xa',kind:'text',pos:'top',text:'TOP'},{id:'xb',kind:'text',pos:'bottom',text:'BOT'}];window.__tid=t.id;render()})()""")
+    pg.wait_for_timeout(500)
+    cnt=pg.evaluate("[document.querySelectorAll('.page .gt-top').length,document.querySelectorAll('.page .gt-bot').length]")
+    chk('mỗi khối đúng 1 lần trên trang', cnt==[1,1], cnt)
+    chk('0 cảnh báo tràn', pg.evaluate("lastRes.diags.length")==0)
+    pg.screenshot(path=sys.argv[2] if len(sys.argv)>2 else '/tmp/gt.png')
+    b.close()
+print('ALL OK' if ok else 'FAILED'); sys.exit(0 if ok else 1)

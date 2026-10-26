@@ -3,7 +3,7 @@
 > File này là nguồn sự thật duy nhất cho WS Editor. Nó thay thế bản MASTER_SPEC v10 (quá nặng) và Claude Doc "Đặc tả Layout Task & Answer" (cũ hơn bản này).
 > Prototype chạy được: `ws-editor-prototype.html` (một file HTML, mở bằng trình duyệt). Dữ liệu mẫu: `ws-sample.json` (schema 0.2).
 > Khi bản prototype và file này lệch nhau, prototype là bản đúng hơn về hành vi; hãy báo để cập nhật file này.
-> **Cập nhật 26/10/2026:** prototype hiện là **v72** (v71 + cỡ chữ phiếu Nhỏ / Vừa / To, mục 16.12; kế hoạch G-Text và ba năng lực còn thiếu ở mục 17). Trước đó (25/10/2026, lần 4): **v71** (v70 + nhãn lựa chọn thẳng dòng đầu và cách chữ 2 mm, mục 16.9c). v70 (v69 + Đúng/Sai mặc định 80/20, hướng A4 "Tự động" quyết theo cả Task, nút Xuất MD; mục 16.11). v69 = v68 + chọn font chữ phiếu (mục 16.10). v68 = (v67 + Task nhiều phần "Nối vào Task trên", MD `### Phần:`, nhãn A. B. C. giữ chữ hoa, câu duy nhất không đánh số; mục 16.9). v67 = v66 + sửa bộ đọc MD theo phiếu thật đầu tiên, A4 có nhãn ô tick (mục 16.8). v66 = v65 + font nhúng sẵn trong `fonts/` (mục 16.7). Thay đổi v37–v68 ghi chi tiết ở `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục cuối "BÀN GIAO"). Nhập file (P0–P2) tóm tắt ở **mục 16**; quy ước MD ở `claude/QUY_UOC_MD.md`.
+> **Cập nhật 26/10/2026:** prototype hiện là **v73** (v72 + G-Text kiểu Chữ, mục 17.4; v72 = cỡ chữ phiếu Nhỏ / Vừa / To, mục 16.12; kế hoạch ba năng lực còn thiếu ở mục 17). Trước đó (25/10/2026, lần 4): **v71** (v70 + nhãn lựa chọn thẳng dòng đầu và cách chữ 2 mm, mục 16.9c). v70 (v69 + Đúng/Sai mặc định 80/20, hướng A4 "Tự động" quyết theo cả Task, nút Xuất MD; mục 16.11). v69 = v68 + chọn font chữ phiếu (mục 16.10). v68 = (v67 + Task nhiều phần "Nối vào Task trên", MD `### Phần:`, nhãn A. B. C. giữ chữ hoa, câu duy nhất không đánh số; mục 16.9). v67 = v66 + sửa bộ đọc MD theo phiếu thật đầu tiên, A4 có nhãn ô tick (mục 16.8). v66 = v65 + font nhúng sẵn trong `fonts/` (mục 16.7). Thay đổi v37–v68 ghi chi tiết ở `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục cuối "BÀN GIAO"). Nhập file (P0–P2) tóm tắt ở **mục 16**; quy ước MD ở `claude/QUY_UOC_MD.md`.
 
 ---
 
@@ -467,7 +467,7 @@ P3 (thử 5–10 PDF thật qua đường chat, đo số Task đúng và chỗ p
 
 ---
 
-## 17. Kế hoạch: G-Text và ba năng lực còn thiếu (chốt 26/10/2026, **chưa làm**)
+## 17. G-Text và ba năng lực còn thiếu (chốt 26/10/2026; G-Text kiểu Chữ đã làm ở v73, mục 17.4)
 
 > Thảo luận ngày 25–26/10/2026. Header / footer / tên phiếu làm riêng, không nằm trong mục này.
 
@@ -476,6 +476,14 @@ P3 (thử 5–10 PDF thật qua đường chat, đo số Task đúng và chỗ p
 - **G-Text (khối tự do, cấp Task):** thêm / xóa tự do, một Task có thể có nhiều khối; không đánh số, không đáp án, không chịu ảnh hưởng của Task layout; là băng ngang full chiều rộng nằm **trên hoặc dưới** khối bài (cách A), đổi chỗ được với nhau và với khối bài. Ba dạng: **Chữ** (đoạn văn, gạch đầu dòng `- `, đánh số `1. `, in đậm / nghiêng, căn lề, kiểu khung không / viền / nền nhẹ, **cỡ chữ Theo phiếu / Nhỏ / Vừa / To**, cỡ theo cả khối chứ không theo đoạn bôi chọn, không có trình soạn WYSIWYG); **Ảnh** (dùng lại khung ảnh); **Thẻ** (một hàng 2–6 thẻ, mỗi thẻ ảnh + chữ như một ô T5 Ảnh trên, không có chỗ trả lời; dùng làm khung từ có ảnh). Cần thêm khái niệm "mảnh cuối" khi Task bị cắt trang; G-Text là khối không cắt được.
 - **Ba năng lực còn thiếu**, làm lần lượt, mỗi bước chạy lại toàn bộ test: (1) G-Text; (2) chỗ trống và đánh dấu ngay trong bài đọc (cloze, khoanh, gạch chân; mở rộng bài đọc, dùng lại A2 và khung từ, kèm cắt bài đọc theo đoạn); (3) điểm neo trên ảnh (gắn nhãn, khoanh, tick, nối; điểm neo tính theo ảnh nên khi Fit cắt ảnh có thể rơi ra ngoài khung → cảnh báo; đặt tay bằng cách bấm lên ảnh, AI đọc PDF khó cho tọa độ đáng tin); (4) lưới tự do, bắt đầu từ crossword (ô đen và ô số, mở rộng T9). Bước 3 và 4 có giao diện mới nên **đưa hình minh họa cho người dùng duyệt trước khi viết code**.
 - **Việc nhỏ cùng đợt đầu:** "Mặc định theo dạng bài" khóa theo cấu hình thay vì `typeId` (hiện mọi Task `custom` dùng chung một mặc định).
+
+### 17.4 G-Text kiểu Chữ (v73, 26/10/2026) — đã làm; kiểu Ảnh và Thẻ chưa
+- **Dữ liệu:** `t.extras = [{id, kind:'text', pos:'top'|'bottom', text, size?:'s'|'m'|'l', align?:'center'|'right', frame?:'line'|'fill'}]`. Không có `extras` thì Task giống hệt v72 (`test2` so với v72 đạt). Thứ tự gộp là `[khối top..., BÀI, khối bottom...]`; đổi chỗ là hoán vị trong danh sách này và tính lại `pos` (hàm `gtMove`).
+- **Dàn trang:** băng ngang trong Task, thụt theo đường dóng B (như nội dung). Khối `top` nằm ngay dưới G0 và chỉ ở **mảnh đầu**; khối `bottom` chỉ ở **mảnh cuối** (`frag.last`, thêm vào `paginate`/`measure`). Vì khối đi theo mảnh đầu/cuối nên không bao giờ đứng một mình đầu hoặc cuối trang. Khối không cắt được qua trang.
+- **Chữ:** đoạn cách nhau bằng dòng trống; `- ` hoặc `* ` đầu dòng là gạch đầu dòng; `1. ` hoặc `1) ` là danh sách số (tự đánh số); `**đậm**`, `*nghiêng*`; HTML bị escape; `___` giữ nguyên. Cỡ chữ cả khối: Theo phiếu / Nhỏ / Vừa / To (cùng bảng `FSZ` với cỡ chữ phiếu). Căn lề Trái/Giữa/Phải. Khung: Không / Viền / Nền nhẹ (bo góc 2 mm).
+- **Giao diện:** cột trái, mục **5 · Khối tự do** (`+ Chữ`, ô gõ, ↑ ↓ đổi chỗ, ✕ xóa, ⚙ chọn để chỉnh định dạng). Chọn khối trên trang (`data-node="id:GT:xN"`) thì bảng phải hiện cỡ chữ, căn lề, khung, vị trí, xóa, về tự động.
+- **Nạp file:** `fillTask` kiểm tra `extras`; loại khác `text` bị bỏ kèm thông báo; id trùng được cấp lại; giá trị sai bị bỏ kèm thông báo. **MD chưa có cú pháp cho khối tự do** (xuất MD không mang theo; dùng JSON).
+- **Chưa làm:** kiểu Ảnh, kiểu Thẻ (1 hàng 2–6 thẻ ảnh + chữ), mang theo khi áp "Mặc định theo dạng bài", cú pháp MD.
 
 ### 17.2 Ước lượng độ phủ (26/10/2026, phán đoán của Claude, không phải số đo)
 Trong danh sách 40 dạng bài tiếng Anh tự lập: 24 dạng (60%) đáp ứng trực tiếp, 9 (22%) làm được nhưng phải lách, 7 (18%) chưa hỗ trợ. Với bài cho học sinh 5–12 tuổi thực tế khoảng 90% trở lên. Phần thiếu dồn vào ba loại: điểm neo trên ảnh, tương tác trong văn bản liền mạch, lưới và sơ đồ tự do. Nên đối chiếu với các bộ sách đang dùng (Our World, Family and Friends, Global Success) để biết loại nào thực sự hay gặp.
