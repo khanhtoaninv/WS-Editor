@@ -8,7 +8,7 @@
 main{max-width:1000px;margin:0 auto;padding:24px 16px 60px}
 h1{font-size:24px;margin:0 0 4px}h2{font-size:19px;margin:34px 0 10px;padding-top:10px;border-top:1px solid var(--line)}
 h3{font-size:15px;margin:0 0 6px}p,li{margin:4px 0}.mut{color:var(--mut);font-size:13px}
-table{border-collapse:collapse;width:100%;display:block;overflow-x:auto;background:var(--card);font-size:14px}th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}th{background:#eef0f3}
+table{border-collapse:collapse;width:100%;background:var(--card);font-size:14px}th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}th{background:#eef0f3}
 code{background:#eef0f3;padding:1px 4px;border-radius:4px;font-size:13px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}
@@ -45,6 +45,7 @@ code{background:#eef0f3;padding:1px 4px;border-radius:4px;font-size:13px}
 .tag{display:inline-block;font-size:11px;background:#eef0f3;border-radius:4px;padding:0 5px;margin-right:4px}
 .qt{font-size:10px;color:var(--mut);margin:4px 0 0}
 ul.tight{padding-left:18px}
+@media (max-width:700px){table{display:block;overflow-x:auto}.tb{display:table}}
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]){--ink:#e6e8eb;--mut:#a3a9b3;--line:#3a3f47;--bg:#16181c;--card:#1f2228}
 :root:not([data-theme=light]) th,:root:not([data-theme=light]) code{background:#2a2e35}}
 </style></head><body><main>
@@ -68,7 +69,7 @@ Task ── T (bố cục)
 Bài nhiều dạng = nhiều Task nối nhau</pre>
 <div style="flex:1;min-width:260px">
 <p><b>T</b> quyết các khối G xếp thế nào trong Task.</p>
-<p><b>Q</b> quyết câu hỏi là dạng gì, chỗ trả lời ra sao, các câu xếp thế nào. Kiểu đáp án (A) nằm bên trong Q.</p>
+<p><b>Q</b> quyết câu hỏi là dạng gì, chỗ trả lời ra sao, các câu xếp thế nào. Cách trả lời (A1–A8 cũ) nằm bên trong Q, không còn là một tầng riêng và không hiện mã A trên giao diện.</p>
 <p>Luồng: <b>chọn T → chọn Q → chỉnh kích thước</b>.</p>
 <div class="leg">
 <span><i class="g0"></i>G0 Tiêu đề</span><span><i class="g1"></i>G1 Ảnh chung</span><span><i class="g2"></i>G2 Bài đọc</span>
@@ -80,9 +81,9 @@ Bài nhiều dạng = nhiều Task nối nhau</pre>
 <tr><th>Khối</th><th>Chứa</th><th>Do ai xếp</th><th>Số lượng</th></tr>
 <tr><td>G0 Tiêu đề</td><td>Số, tên bài, hướng dẫn, track audio</td><td>Cố định trên cùng</td><td>1, không xóa</td></tr>
 <tr><td>G1 Ảnh chung</td><td>Ảnh phục vụ cả Task; điểm đánh số / ô trống trên ảnh</td><td>T</td><td>0–1</td></tr>
-<tr><td>G2 Bài đọc / lời dẫn</td><td>Chữ (bài đọc, lời giới thiệu); chỗ trống đánh số; ký hiệu đậm / nghiêng / gạch chân. <b>Không có ảnh riêng</b></td><td>T</td><td>0–1</td></tr>
+<tr><td>G2 Bài đọc / lời dẫn</td><td>Chữ (bài đọc, lời giới thiệu); chỗ trống đánh số; ký hiệu đậm / nghiêng / gạch chân; đoạn có nhãn A–F (bài nối tiêu đề với đoạn). <b>Không có ảnh riêng</b></td><td>T</td><td>0–1</td></tr>
 <tr><td>G3 Câu hỏi</td><td>Các block câu (Câu hỏi | Trả lời, ảnh của câu) + G3-Text. <b>Mọi chỗ trả lời ở đây</b></td><td>Q</td><td>0–1</td></tr>
-<tr><td>G3-Text</td><td>Chữ chen giữa các câu: tiêu đề nhóm, câu mẫu "0. Example", nhãn "Self-check:"</td><td>Theo thứ tự câu</td><td>nhiều</td></tr>
+<tr><td>G3-Text</td><td>Chữ chen giữa các câu: tiêu đề nhóm, nhãn "Self-check:", dòng hướng dẫn riêng của nhóm sau</td><td>Theo thứ tự câu</td><td>nhiều</td></tr>
 <tr><td>G4 Khung từ</td><td><b>Chữ</b> (rời / danh sách a. b. c.) <b>hoặc Ảnh</b> (lưới ô cùng cỡ, nhãn A B C, chú thích dưới ảnh). Không trộn</td><td>Vị trí: trên / dưới / phải G3</td><td>0–1</td></tr>
 <tr><td>G-Text</td><td>Chữ (cỡ, căn, khung, 1–2 cột, danh sách) hoặc Ảnh</td><td>Vị trí trong Task</td><td>nhiều</td></tr>
 </table>
@@ -104,6 +105,7 @@ Bài nhiều dạng = nhiều Task nối nhau</pre>
 <tr><td>Xóa</td><td>Nút "Xóa" + phím Delete; Ctrl+Z khôi phục. Bỏ kiểu "tắt mà vẫn giữ dữ liệu"</td></tr>
 <tr><td>Tạo</td><td>"+ Thêm khối" ở cấp Task; "+ Thêm câu", "+ G3-Text" trong G3 (câu mới có sẵn chỗ trả lời theo Q)</td></tr>
 <tr><td>Nhân đôi, đổi chỗ</td><td>Khối G: ở cấp Task. Câu, G3-Text: trong G3</td></tr>
+<tr><td>Thuộc tính của block câu</td><td><b>Người nói</b> (mọi Q), <b>Ví dụ</b> (hiện sẵn đáp án, không đánh số thường, vd. "0. Example"), ảnh của câu</td></tr>
 <tr><td>Ghi đè từng câu</td><td>Trong cùng Q (dòng dài hơn, lựa chọn xếp dọc…); không đổi sang dạng khác</td></tr>
 </table>
 <p class="mut">Chỉnh tay khóa theo id khối / id câu, đi theo khi xóa, đổi chỗ (có sẵn ở v80, mở rộng ra mọi khối).</p>
@@ -144,8 +146,8 @@ Bài nhiều dạng = nhiều Task nối nhau</pre>
 <div class="cap">G-Text trên cùng; khung từ ảnh dưới câu hỏi.</div></div>
 </div>
 
-<h2>5. Q — dạng câu hỏi (13 kiểu)</h2>
-<p class="mut">Một Q cho cả G3. Mỗi Q có: <b>kiểu trả lời</b> (A cũ, chọn trong các kiểu hợp lệ, có mặc định) và <b>cách xếp câu</b> (1–2 cột, lưới, độ rộng khối, số câu ở lề bật / tắt). Rê chuột lên Q hiện hình nhỏ như dưới.</p>
+<h2>5. Q — dạng câu hỏi (12 kiểu)</h2>
+<p class="mut">Một Q cho cả G3. Mỗi Q có: <b>cách trả lời</b> (mặc định theo Q, đổi được trong các kiểu hợp lệ) và <b>cách xếp câu</b> (1–2 cột, lưới, độ rộng khối, số câu ở lề bật / tắt). Rê chuột lên Q hiện hình nhỏ như dưới.</p>
 <div class="grid">
 
 <div class="card"><h3>Q1 Điền từ</h3><div class="q">
@@ -170,13 +172,13 @@ Bài nhiều dạng = nhiều Task nối nhau</pre>
 <div><span class="n">1</span>It is <b>big</b> / <b>small</b>.</div>
 <div><span class="n">2</span>I <b>am</b> / <b>is</b> happy.</div>
 <div><span class="n">3</span>They <b>was</b> / <b>were</b> late.</div></div>
-<div class="qt">Viết <code>{a|b}</code> trong câu; học sinh gạch / khoanh.</div></div>
+<div class="qt">Viết <code>{a|b}</code> trong câu; học sinh gạch / khoanh. Tùy chọn <b>nhãn A B C D gắn trên đoạn gạch chân</b> (tìm lỗi sai).</div></div>
 
 <div class="card"><h3>Q5 Đúng / Sai</h3><div class="q">
 <div><span class="n">1</span>The cat is black.<span class="tf"><b>T</b><b>F</b></span></div>
 <div><span class="n">2</span>There are two dogs.<span class="tf"><b>T</b><b>F</b></span></div>
 <div><span class="n">3</span>The boy is sad.<span class="tf"><b>T</b><b>F</b></span></div></div>
-<div class="qt">Cột T/F bên phải (80/20, kéo được) hoặc ngay sau câu. Thay T4 cũ.</div></div>
+<div class="qt">Cột bên phải (80/20, kéo được) hoặc ngay sau câu. <b>2–3 lựa chọn, nhãn tự đặt</b> (T/F, Yes/No, T/F/NG). Thay T4 cũ.</div></div>
 
 <div class="card"><h3>Q6 Nhìn ảnh viết</h3><div class="q">
 <div class="imgrid"><div><span class="im"></span><span class="gap"></span></div><div><span class="im"></span><span class="gap"></span></div><div><span class="im"></span><span class="gap"></span></div></div>
@@ -194,50 +196,52 @@ Bài nhiều dạng = nhiều Task nối nhau</pre>
 <div class="row" style="justify-content:space-between"><span>3 grass<span class="dot"></span></span><span><span class="dot"></span>c green</span></div></div>
 <div class="qt">3 cột trái / chấm / phải (chữ hoặc ảnh), cỡ chấm, chiều cao hàng. Thay T7.</div></div>
 
-<div class="card"><h3>Q9 Hội thoại</h3><div class="q">
-<div><span class="who">Ann</span>Hello! How are you?</div>
-<div><span class="who">Ben</span>(1) <span class="gap"></span></div>
-<div><span class="who">Ann</span>Where are you going?</div>
-<div><span class="who">Ben</span>(2) <span class="gap"></span></div></div>
-<div class="qt">Người nói + lượt; chỗ trống tự đánh số; độ rộng cột tên.</div></div>
-
-<div class="card"><h3>Q10 Tô chữ</h3><div class="q">
+<div class="card"><h3>Q9 Tô chữ</h3><div class="q">
 <div><span class="n">1</span>cat &nbsp;<span class="trace">cat cat cat</span></div>
 <div><span class="n">2</span>dog &nbsp;<span class="trace">dog dog dog</span></div>
 <div><span class="n">3</span>sun &nbsp;<span class="trace">sun sun sun</span></div></div>
 <div class="qt">Số lần lặp, chiều cao dòng.</div></div>
 
-<div class="card"><h3>Q11 Bảng</h3><div class="q">
+<div class="card"><h3>Q10 Bảng</h3><div class="q">
 <table class="tb"><tr><td class="hd"></td><td class="hd">Mon</td><td class="hd">Tue</td></tr>
 <tr><td class="hd">Mia</td><td>swim</td><td></td></tr><tr><td class="hd">Tom</td><td></td><td>✓</td></tr></table></div>
-<div class="qt">Ô chữ / ô trống để viết / ô tick; block câu = hàng. Thay T9.</div></div>
+<div class="qt">Ô chữ / ô trống để viết / ô tick; block câu = hàng. Cũng dùng cho phân loại từ vào cột, story map, KWL. Thay T9.</div></div>
 
-<div class="card"><h3>Q12 Ô chữ</h3><div class="q">
+<div class="card"><h3>Q11 Lưới</h3><div class="q">
 <table class="tb cwt"><tr><td class="c">1</td><td class="c"></td><td class="c"></td><td class="x"></td></tr><tr><td class="x"></td><td class="c"></td><td class="x"></td><td class="x"></td></tr><tr><td class="c">2</td><td class="c"></td><td class="c"></td><td class="c"></td></tr></table>
 <div class="qt" style="margin-top:6px">Gợi ý Across / Down đặt bằng G3-Text.</div></div>
-<div class="qt">Lưới đưa sẵn; tự đánh số; không ô đen.</div></div>
+<div class="qt">Ô chữ và lưới chữ (word search): lưới đưa sẵn, bật / tắt số và viền ô.</div></div>
 
-<div class="card"><h3>Q13 Viết tự do</h3><div class="q">
+<div class="card"><h3>Q12 Viết tự do</h3><div class="q">
 <div class="ln" style="margin-left:0"></div><div class="ln" style="margin-left:0"></div><div class="ln" style="margin-left:0"></div><div class="ln" style="margin-left:0"></div><div class="ln" style="margin-left:0"></div></div>
-<div class="qt">Không có câu; khung N dòng (tới 20). Gợi ý ý viết bằng G-Text.</div></div>
+<div class="qt">Không có câu; <b>dòng kẻ</b> N dòng (tới 20) hoặc <b>khung trống</b> (để vẽ). Gợi ý ý viết bằng G-Text.</div></div>
 </div>
 
-<h3 style="margin-top:16px">Q và kiểu trả lời bên trong</h3>
+<h3 style="margin-top:16px">Thuộc tính chung (mọi Q)</h3>
 <table>
-<tr><th>Q</th><th>Kiểu trả lời (mặc định in đậm)</th><th>Cách xếp câu</th></tr>
+<tr><th>Thuộc tính</th><th>Ghi chú</th></tr>
+<tr><td>Có chỗ trả lời</td><td>Công tắc. Tắt = Q chỉ hiển thị (từ điển tranh, nội dung đọc)</td></tr>
+<tr><td>Số câu ở lề</td><td>Bật / tắt (tắt khi học sinh phải điền số, vd. xếp thứ tự)</td></tr>
+<tr><td>Số cột, độ rộng khối, khoảng câu</td><td>Cách xếp câu; thay T6 cũ</td></tr>
+<tr><td>Người nói, Ví dụ</td><td>Thuộc tính của từng block câu (mục 3); hội thoại = Q1 hoặc Q3 với người nói bật</td></tr>
+<tr><td>Ghi đè từng câu</td><td>Cỡ, số dòng, cách xếp lựa chọn; không đổi sang Q khác</td></tr>
+</table>
+
+<h3 style="margin-top:16px">Q và cách trả lời bên trong</h3>
+<table>
+<tr><th>Q</th><th>Cách trả lời (mặc định in đậm)</th><th>Cách xếp câu</th></tr>
 <tr><td>Q1 Điền từ</td><td><b>Gạch</b> · ô chữ cái · ô đầu câu</td><td>1–2 cột</td></tr>
 <tr><td>Q2 Viết câu</td><td><b>Dòng kẻ</b></td><td>1 cột</td></tr>
 <tr><td>Q3 Chọn A/B/C</td><td><b>Khoanh Ⓐ</b> · A. · ☐ tick</td><td>1–2 cột; lựa chọn ngang / dọc / 2 cột / tự xuống dòng</td></tr>
-<tr><td>Q4 Chọn trong câu</td><td><b>Gạch / khoanh từ</b></td><td>1–2 cột</td></tr>
-<tr><td>Q5 Đúng / Sai</td><td><b>Cột T/F phải</b> · T F sau câu</td><td>1 cột</td></tr>
+<tr><td>Q4 Chọn trong câu</td><td><b>Gạch / khoanh từ</b> · chọn nhãn A–D</td><td>1–2 cột</td></tr>
+<tr><td>Q5 Đúng / Sai</td><td><b>Cột phải</b> · sau câu; 2–3 lựa chọn, nhãn tự đặt</td><td>1 cột</td></tr>
 <tr><td>Q6 Nhìn ảnh viết</td><td><b>Gạch</b> · ô chữ cái · dòng kẻ</td><td>Ảnh trên (lưới) · ảnh trái</td></tr>
 <tr><td>Q7 Chọn ảnh</td><td><b>Tick</b> · khoanh chữ cái</td><td>1–2 cột</td></tr>
 <tr><td>Q8 Nối</td><td><b>Chấm nối</b> · viết chữ cái</td><td>3 cột</td></tr>
-<tr><td>Q9 Hội thoại</td><td><b>Gạch đánh số</b></td><td>1 cột</td></tr>
-<tr><td>Q10 Tô chữ</td><td><b>Dòng tô</b></td><td>1–2 cột</td></tr>
-<tr><td>Q11 Bảng</td><td>Theo từng ô</td><td>Độ rộng cột, cao hàng</td></tr>
-<tr><td>Q12 Ô chữ</td><td>Ô chữ cái</td><td>Cỡ ô</td></tr>
-<tr><td>Q13 Viết tự do</td><td><b>Dòng kẻ</b></td><td>—</td></tr>
+<tr><td>Q9 Tô chữ</td><td><b>Dòng tô</b></td><td>1–2 cột</td></tr>
+<tr><td>Q10 Bảng</td><td>Theo từng ô</td><td>Độ rộng cột, cao hàng</td></tr>
+<tr><td>Q11 Lưới</td><td>Ô chữ cái</td><td>Cỡ ô; số và viền bật / tắt</td></tr>
+<tr><td>Q12 Viết tự do</td><td><b>Dòng kẻ</b> · khung trống</td><td>—</td></tr>
 </table>
 
 <h2>6. Đối chiếu với v80</h2>
@@ -247,8 +251,9 @@ Bài nhiều dạng = nhiều Task nối nhau</pre>
 <tr><td>T4 Nội dung | Đáp án</td><td>Q5 Đúng / Sai (cột T/F phải)</td></tr>
 <tr><td>T5 Lưới item (Ảnh trên / Ảnh trái / multi)</td><td>Q6 Nhìn ảnh viết · Q7 Chọn ảnh</td></tr>
 <tr><td>T6 Chỉ nội dung (cột, độ rộng)</td><td>Cách xếp câu của mọi Q</td></tr>
-<tr><td>T7 Matching · T9 Bảng</td><td>Q8 Nối · Q11 Bảng</td></tr>
-<tr><td>A1–A8, "Gắn đáp án"</td><td>Kiểu trả lời bên trong Q</td></tr>
+<tr><td>T7 Matching · T9 Bảng</td><td>Q8 Nối · Q10 Bảng</td></tr>
+<tr><td>A1–A8, "Gắn đáp án" (Trong câu / Theo item / Khối riêng)</td><td>Cách trả lời bên trong Q. Không còn mã A trên giao diện, không còn "Khối riêng"; code vẽ và dữ liệu <code>answer</code> giữ để mở phiếu cũ</td></tr>
+<tr><td>Hội thoại (người nói, kiểu riêng)</td><td>Người nói là thuộc tính block câu</td></tr>
 <tr><td>"Mẫu có sẵn" (13 mẫu)</td><td>Q (đặt ở G3, có hình xem trước)</td></tr>
 <tr><td><code>### Phần:</code></td><td>G3-Text (cùng dạng) hoặc Task nối (khác dạng)</td></tr>
 <tr><td>Công tắc Ảnh chung / Bài đọc / Khung từ / Danh sách câu</td><td>"+ Thêm khối" / "Xóa"</td></tr>
@@ -264,11 +269,18 @@ Bài nhiều dạng = nhiều Task nối nhau</pre>
 <li>Nhập file không ghi đè Task có sẵn; chỗ không hiểu phải báo.</li>
 </ul>
 
-<h2>8. Để xem xét sau</h2>
+<h2>8. Độ phủ và việc để sau</h2>
+<p>Đối chiếu 63 dạng bài (<code>RA_SOAT_DANG_BAI.md</code>) với 12 Q và các thuộc tính trên, <b>phán đoán của Claude, chưa thử trên app</b>:</p>
 <ul class="tight">
-<li>Bài trộn nhiều dạng: hiện dùng Task nối; có thể cho G3 chia nhóm mỗi nhóm một Q.</li>
+<li>~52 dạng phủ trọn, ~8 dạng nhờ thuộc tính nhỏ (Yes/No / T-F-NG, Ví dụ, người nói ở Q3, không chỗ trả lời, khung vẽ, lưới chữ, đoạn có nhãn, nối tên bằng điểm trên ảnh), ~1 dạng nhờ nhãn A–D ở Q4 (tìm lỗi sai).</li>
+<li>Chưa phủ: <b>flow-chart</b>, <b>Venn / mind map</b> (cần sơ đồ tự do, Q mới, làm sau).</li>
+<li>"Phủ được" chưa có nghĩa là đẹp và gọn; chỉ biết khi dựng thật.</li>
+</ul>
+<h3>Để xem xét sau</h3>
+<ul class="tight">
+<li>Bài trộn nhiều dạng: dùng Task nối; có thể cho G3 chia nhóm mỗi nhóm một Q.</li>
 <li>Chỗ trống đánh số trong bài đọc: chữ ở G2, đáp án từng chỗ trống là câu ở G3.</li>
 <li>Header phiếu (tên phiếu, Name / Class / Date) nằm ngoài Task, làm riêng.</li>
-<li>Bộ vẽ mới cho dạng chưa trình bày được: nối tên vào tranh, tìm lỗi sai A B C D, flow-chart, Venn / mind map.</li>
+<li>Dây nối từ ảnh sang chữ (chưa có).</li>
 </ul>
 </main></body></html>
