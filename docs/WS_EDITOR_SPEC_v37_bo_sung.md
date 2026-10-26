@@ -310,6 +310,7 @@ python3 -c "from PIL import Image; Image.new('RGB',(64,48),(200,200,200)).save('
 ## AB. BÀN GIAO (2026-10-26, bản v82) — đọc mục này đầu tiên khi mở thread mới
 - **Bản v82** (mục AT, spec mục 19): cột trái theo khối. Báo cáo: `docs/BAO_CAO_PHIEN_2026-10-26_phien5.md`.
 - **Việc tiếp theo:** người dùng thử cột trái mới; P3 (PDF thật + MD AI tạo theo prompt v81); tiêu đề phiếu / Họ tên Lớp Ngày / header footer (thread "chi tiết trang" mới mở đầu, chưa bàn); G2 bố cục riêng (để sau); G3 chia nhóm (hoãn).
+- **Chờ duyệt (chưa code):** `docs/VAN_DE_CAN_XU_LY.md` (V1 ô ảnh G1, V2 ⓘ thủ thuật viết + thanh chèn ký hiệu, V3 câu có ảnh chia 2 cột).
 - Cách chạy test, nhập file, nguyên tắc: như mục AB-cũ (v81) dưới đây. Test2 so với bản v81 (`git show <commit v81>:ws-editor-prototype.html`, có `fonts/` cạnh file).
 
 ## AB-cũ. BÀN GIAO (2026-10-26 tối, bản v81)

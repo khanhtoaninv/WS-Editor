@@ -8,6 +8,7 @@ CLAUDE.md ở gốc repo tự được nạp. Dán câu này làm tin nhắn đ�
 > Đọc CLAUDE.md và docs/BAO_CAO_PHIEN_2026-10-26_phien5.md, rồi mục 18–19 của docs/WS_EDITOR_SPEC.md. Tóm tắt trạng thái ngắn gọn và hỏi tôi muốn tiếp tục việc nào. Chưa cần làm gì cả.
 
 ## Thứ tự đọc
+0. `docs/VAN_DE_CAN_XU_LY.md` — danh sách vấn đề người dùng đã nêu, đang chờ duyệt (chưa code).
 1. `docs/BAO_CAO_PHIEN_2026-10-26_phien5.md` — v82 (cột trái theo khối); `docs/BAO_CAO_PHIEN_2026-10-26_phien4.md` — v81.
 2. `docs/WS_EDITOR_SPEC.md` mục 18 (v81), mục 19 (v82) + mục "BÀN GIAO" cuối `docs/WS_EDITOR_SPEC_v37_bo_sung.md`.
 3. `docs/KIEN_TRUC_TRINH_BAY_MOI.html` (bản duyệt kiến trúc), `docs/RA_SOAT_DANG_BAI.md`.

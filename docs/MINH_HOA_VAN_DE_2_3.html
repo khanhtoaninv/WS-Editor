@@ -1,0 +1,52 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Minh họa vấn đề 1 2 3</title>
+<style>
+body{font:13px/1.4 system-ui,sans-serif;margin:0;padding:18px;background:#f4f5f7;color:#222}
+h1{font-size:17px;margin:0 0 4px}h2{font-size:14px;margin:18px 0 8px;padding:5px 10px;background:#222;color:#fff;border-radius:6px}
+.row{display:flex;gap:16px;flex-wrap:wrap}.col{flex:1;min-width:300px}.lab{font-weight:700;margin:0 0 6px}.bad .lab{color:#b3261e}.good .lab{color:#1b7f3b}
+.panel{background:#fff;border:1.5px solid #cfd3da;border-radius:10px;padding:10px}
+.it{border:1px solid #d9dce2;border-radius:8px;padding:6px;margin:6px 0;background:#f7f8fa}
+.hd{display:flex;gap:6px;align-items:center;font-size:11px;color:#777;margin-bottom:4px}.no{width:18px;height:18px;border-radius:9px;border:1px solid #888;display:grid;place-items:center;font-weight:700;color:#222;background:#fff}
+.in{border:1px solid #bbb;border-radius:6px;background:#fff;padding:3px 7px;color:#888;height:20px;box-sizing:content-box}
+.th{border:1px dashed #999;border-radius:6px;background:#fff;display:grid;place-items:center;color:#666;font-size:20px;width:84px;height:62px;flex:none}
+.big{width:100%;height:96px;border:2px dashed #7a9bd6;background:#eef3fc;border-radius:10px;display:grid;place-items:center;text-align:center;color:#1a4fb4;font-weight:600;font-size:13px;box-sizing:border-box}
+.big small{display:block;font-weight:400;color:#555}
+.grid{display:flex;gap:7px}.rt{flex:1;display:grid;gap:5px;align-content:center}
+.note{font-size:12px;color:#555;margin-top:6px}.ok{color:#1b7f3b;font-weight:600}.warn{color:#b3261e;font-weight:600}
+.info{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;background:#1a4fb4;color:#fff;font-size:11px;font-weight:700;font-style:italic}
+.tb{display:flex;gap:4px;margin:3px 0}.tb b,.tb i,.tb u,.tb span{border:1px solid #bbb;border-radius:5px;background:#fff;padding:1px 7px;font-size:12px;font-style:normal}
+.pop{border:1px solid #1a4fb4;border-radius:8px;background:#fff;padding:8px 10px;box-shadow:0 4px 12px #0002;font-size:12px;margin-top:4px}
+.pop table{border-collapse:collapse;width:100%}.pop td{padding:2px 6px;border-top:1px solid #eee}.pop td:first-child{font-family:monospace;color:#1a4fb4;white-space:nowrap}
+</style></head><body>
+<h1>Minh họa vấn đề 1, 2, 3</h1><div style="color:#555">Hình tĩnh, không phải app thật. Đỏ = hiện tại, xanh = đề xuất.</div>
+
+<h2>Vấn đề 1 · G1 Ảnh chung: bấm "+ Thêm" nhưng không thấy chỗ nhập ảnh</h2>
+<div class="row"><div class="col bad"><p class="lab">Bây giờ</p><div class="panel">
+<div style="display:flex;gap:6px;align-items:center"><span>Ảnh chung ✕</span><div class="th" style="width:50px;height:38px">+</div><div class="in" style="flex:1">ảnh</div></div>
+<div class="note warn">Ô ảnh chỉ là nút "+" nhỏ 50×38 px, không có chữ, trông như nút phụ. Panel bên phải cũng không hiện "Tải ảnh" vì G1 chưa được chọn.</div></div></div>
+<div class="col good"><p class="lab">Đề xuất</p><div class="panel">
+<div class="big">＋ Tải ảnh lên · Tạo ảnh<small>hoặc kéo thả ảnh vào đây, hoặc Ctrl+V</small></div>
+<div class="in" style="margin-top:6px">Tên ảnh: ảnh</div>
+<div class="note ok">Ô lớn, có chữ hướng dẫn; bấm "+ Thêm" xong G1 tự được chọn trên trang nên panel phải cũng hiện nút Tải / Tạo / Gỡ ảnh.</div></div></div></div>
+
+<h2>Vấn đề 2 · Biểu tượng ⓘ ở ô nhập chữ: xem thủ thuật viết và thao tác nhanh</h2>
+<div class="row"><div class="col bad"><p class="lab">Bây giờ</p><div class="panel">
+<div class="it"><div class="hd">Bài đọc</div><div class="in" style="height:70px;white-space:normal;color:#999">Dán bài đọc vào đây (___ chỗ trống, {a|b} chọn, **đậm**, *nghiêng*, __gạch chân__; dòng trống = sang đoạn)</div></div>
+<div class="note warn">Cách viết chỉ nằm trong dòng gợi ý mờ, mất khi gõ chữ. Muốn đậm hay chèn chỗ trống phải tự nhớ ký hiệu.</div></div></div>
+<div class="col good"><p class="lab">Đề xuất</p><div class="panel">
+<div class="it"><div class="hd">Bài đọc <span style="flex:1"></span><span class="info">i</span></div>
+<div class="tb"><b>B</b><i>I</i><u>U</u><span>＿＿</span><span>{a|b}</span><span>¶ đoạn mới</span></div>
+<div class="in" style="height:60px;white-space:normal;color:#444">My name is <b>Lucy</b>. I live in a ___ house …</div></div>
+<div class="pop"><b>Cách viết trong ô này</b><table>
+<tr><td>**chữ**</td><td>đậm</td></tr><tr><td>*chữ*</td><td>nghiêng</td></tr><tr><td>&lt;u&gt;chữ&lt;/u&gt;</td><td>gạch chân</td></tr>
+<tr><td>___</td><td>chỗ trống để học sinh điền</td></tr><tr><td>{a|b}</td><td>chọn trong câu</td></tr><tr><td>dòng trống</td><td>sang đoạn mới</td></tr><tr><td>A. … (đầu đoạn)</td><td>nhãn đoạn đậm</td></tr></table></div>
+<div class="note ok">Thanh nút chèn ký hiệu vào chỗ con trỏ (hoặc bọc phần đang bôi đen). ⓘ mở bảng ký hiệu riêng cho từng ô.</div></div></div></div>
+
+<h2>Vấn đề 3 · Câu có ảnh: chia hai cột, ảnh bên trái, hai dòng chữ bên phải</h2>
+<div class="row"><div class="col bad"><p class="lab">Bây giờ: mỗi câu cao ~160 px</p><div class="panel">
+<div class="it"><div class="hd"><span class="no">1</span></div><div class="th" style="width:104px;height:56px">+</div><div class="in" style="margin-top:5px">cat</div><div class="in" style="margin-top:5px">Chữ (___ chỗ trống, {a|b} chọn)</div></div>
+<div class="it"><div class="hd"><span class="no">2</span></div><div class="th" style="width:104px;height:56px">+</div><div class="in" style="margin-top:5px">dog</div><div class="in" style="margin-top:5px">Chữ (___ chỗ trống, {a|b} chọn)</div></div></div></div>
+<div class="col good"><p class="lab">Đề xuất: mỗi câu ~90 px, gọn hơn gần một nửa</p><div class="panel">
+<div class="it"><div class="hd"><span class="no">1</span></div><div class="grid"><div class="th">+</div><div class="rt"><div class="in">Tên ảnh: cat</div><div class="in">Chữ (___ )</div></div></div></div>
+<div class="it"><div class="hd"><span class="no">2</span></div><div class="grid"><div class="th">+</div><div class="rt"><div class="in">Tên ảnh: dog</div><div class="in">Chữ (___ )</div></div></div></div>
+<div class="note ok">Áp cho các dạng có ảnh mỗi câu (Nhìn ảnh viết, Chọn ảnh có ảnh riêng, ô nhiều dòng). Nút ↑ ↓ ⧉ ✕ giữ ở hàng đầu như cũ.</div></div></div></div>
+</body></html>
