@@ -104,7 +104,7 @@ with sync_playwright() as p:
     pg.click('#tree [data-newsheet]'); pg.wait_for_timeout(300); pg.fill('#pasteTa', only); pg.wait_for_timeout(600)
     chk('+ Phiếu thiếu trường: báo sẽ bù mặc định', 'bù mặc định' in pg.inner_text('#pasteOut'), pg.inner_text('#pasteOut')[:150])
     pg.click('#pasteOk'); pg.wait_for_timeout(300); pg.click('#pasteOk'); pg.wait_for_timeout(700)
-    chk('phiếu mới 3 Task, đủ trường', len(ids())==3 and pg.evaluate("[ws.schema,ws.age,ws.flow,ws.spacing.preset].join()")=='ws-editor/0.3,7-9,cont,normal')
+    chk('phiếu mới 3 Task, đủ trường', len(ids())==3 and pg.evaluate("[ws.schema,ws.age,ws.flow,ws.spacing.preset].join()")=='ws-editor/0.3,7-9,cont,compact')
     # 11) + Phiếu trống
     pg.click('#tree [data-newsheet]'); pg.wait_for_timeout(300); pg.click('#pasteOk'); pg.wait_for_timeout(300)
     chk('phiếu trống: vẫn hỏi xác nhận vì phiếu hiện tại có Task', 'Thay phiếu hiện tại' in pg.inner_text('#pasteOk'))
@@ -132,5 +132,5 @@ with sync_playwright() as p:
     chk('Dán nhiều câu vào Task: thêm 2 câu', pg.evaluate("ws.tasks.find(t=>t.id==='t8').content.items.length")==n0+2)
     pg.click('#undo'); pg.wait_for_timeout(300)
     pg.screenshot(path=os.path.join(HERE,'..','shots','p1_end.png'))
-    chk('cuối: 18 Task, 11 trang, 0 tràn', len(ids())==18 and pg.inner_text('#pageBadge').startswith('11') and pg.inner_text('#diagBadge')=='Không lỗi tràn')
+    chk('cuối: 18 Task, 10 trang, 0 tràn', len(ids())==18 and pg.inner_text('#pageBadge').startswith('10') and pg.inner_text('#diagBadge')=='Không lỗi tràn')
     print('ERRS',errs); print('ALL OK' if ok and not errs else 'SOME FAIL')

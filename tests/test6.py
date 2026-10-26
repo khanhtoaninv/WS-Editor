@@ -23,5 +23,5 @@ with sync_playwright() as p:
     ar=pg.evaluate("(()=>{const r=document.getElementById('genFr').getBoundingClientRect();return +(r.width/r.height).toFixed(2)})()")
     chk('khung popup đúng tỉ lệ đã chọn', abs(ar-1.33)<0.05, ar)
     pg.evaluate("document.getElementById('genDlg').close()")
-    chk('A4 vẫn 11 trang', pg.inner_text('#pageBadge').startswith('11') and pg.inner_text('#diagBadge')=='Không lỗi tràn', pg.inner_text('#pageBadge'))
+    chk('A4 vẫn 10 trang', pg.inner_text('#pageBadge').startswith('10') and pg.inner_text('#diagBadge')=='Không lỗi tràn', pg.inner_text('#pageBadge'))
     print('ERRS',errs); print('ALL OK' if ok and not errs else 'SOME FAIL')

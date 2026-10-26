@@ -58,6 +58,6 @@ with sync_playwright() as p:
     chk('Ảnh chung có ô thu nhỏ', pg.locator('#tree .ed .ithumb').count()>=1)
     pg.click('#tree .tnode[data-sel=task][data-id=t10]'); pg.wait_for_timeout(300)
     chk('Task chỉ có ảnh (t10): ô thu nhỏ ảnh chung', pg.locator('#tree .ed .ithumb').count()==1)
-    chk('trang vẫn 11 và không tràn', pg.inner_text('#pageBadge').startswith('11') and pg.inner_text('#diagBadge')=='Không lỗi tràn')
+    chk('trang vẫn 10 và không tràn', pg.inner_text('#pageBadge').startswith('10') and pg.inner_text('#diagBadge')=='Không lỗi tràn')
     f=[e for e in errs if 'fonts' not in e and 'ERR_' not in e and 'Failed to load' not in e]; print('ERRS',f)
 print('ALL OK' if ok else 'SOME FAIL')

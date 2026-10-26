@@ -41,5 +41,5 @@ with sync_playwright() as p:
     t = pg.evaluate("ws.tasks.find(t=>t.id===window.__ws.sel.id)")
     chk('nhập vào phiếu: Task mới, tên trên cây = mô tả', pg.evaluate("ws.tasks.length")==n0+1 and t['typeName']=='Ảnh mỗi câu · khoanh A/B/C', t['typeName'])
     pg.click('#undo'); pg.wait_for_timeout(300)
-    chk('11 trang, 0 tràn', pg.inner_text('#pageBadge').startswith('11') and pg.inner_text('#diagBadge')=='Không lỗi tràn')
+    chk('10 trang, 0 tràn', pg.inner_text('#pageBadge').startswith('10') and pg.inner_text('#diagBadge')=='Không lỗi tràn')
     print('ERRS',errs); print('ALL OK' if ok and not errs else 'SOME FAIL')

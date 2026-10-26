@@ -313,7 +313,14 @@ Thu gọn theo thẻ + liên kết chọn khối, Nối Task / xóa có hỏi, G
 ## AD. v84 (2026-10-26) — xem WS_EDITOR_SPEC.md mục 21
 Ảnh chung ở mọi dạng, chọn đúng khối G3 / GT, căn lề Task kéo theo ảnh, cỡ chữ mặc định Vừa, hàng bảng 12 mm, nhãn a b c, khối tự do + Thêm / nhiều ảnh, độ rộng ảnh %, hội thoại cắt trang.
 
-## AB. BÀN GIAO (2026-10-26, bản v84) — đọc mục này đầu tiên khi mở thread mới
+## AB. BÀN GIAO (2026-10-26, bản v85) — đọc mục này đầu tiên khi mở thread mới
+- **Bản v85** (spec mục 22, báo cáo `docs/BAO_CAO_PHIEN_2026-10-26_phien6.md`, danh sách việc `docs/DANH_SACH_VIEC_v85.md`): Q8/Q9 hiện Khung từ; Fit dùng tỉ lệ thật của ảnh; ảnh thứ hai và ảnh khung từ có Fit + Zoom riêng; bỏ "Khối của bài"; G3 "Câu hỏi" + thanh B I U ___ {a|b}; khoảng cách mặc định Gọn; hộp hỏi xóa nền mờ, bấm ngoài = Hủy; mỗi bài một câu ví dụ.
+- **Mặc định mới cần nhớ:** khoảng cách Gọn (phiếu mẫu 10 trang). test2 / cmp_v80 đưa về Vừa trước khi so.
+- **Chờ người dùng xác nhận (chưa làm):** A3 Task 5 không tách trang (gửi phiếu); C3 cột trái 420 px; D2 chữ câu hỏi Đậm (phạm vi); F1 màu xanh dấu đáp án; F2 ô tích chọn đáp án đúng (ở đâu). A2 "ô ảnh Task 3 lúc đúng lúc sai": đã sửa nguyên nhân tìm được, chưa có ca tái hiện của người dùng.
+- **Việc tiếp theo cũ vẫn còn:** chi tiết trang (tiêu đề phiếu, Họ tên/Lớp/Ngày, header/footer); P3 với PDF thật; G2 có bố cục riêng; 4 câu hỏi chờ từ v84.
+- Cách chạy test: cần `pip install playwright==1.63.0` (Chromium có sẵn ở /opt/pw-browsers khi chạy trên cloud). Quy tắc như bàn giao v82.
+
+## AB-cũ. BÀN GIAO (2026-10-26, bản v84)
 - **Bản v84** (spec mục 21) sửa 10 góp ý sau v83. v83 (mục 20) = hoàn thiện cột trái + nhớ dạng câu hỏi; v82 (mục 19) = cột trái theo khối.
 - **Mặc định mới cần nhớ:** cỡ chữ Vừa (không ghi vào phiếu), hàng bảng 12 mm, nhãn chữ thường. test2 so với bản cũ phải đặt lại To + 14 mm trước khi so.
 - **Chờ người dùng:** nghĩa "khoảng cách / ký hiệu trên dòng trống" ở ⓘ; xác nhận nhớ dạng câu hỏi chỉ ở JSON; Q3 có cần tick như Q7; xác nhận cách hiểu "khối tự do nhiều ảnh" = nhiều ảnh cạnh nhau. Bàn giao đầy đủ: mục 0 của `docs/BAO_CAO_PHIEN_2026-10-26_phien5.md`.

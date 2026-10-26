@@ -1,5 +1,6 @@
 <meta charset="utf-8">
 <title>WS Editor</title>
+<!-- v85: Q8/Q9 hiện Khung từ; ảnh ô lưới dùng tỉ lệ thật khi Fit; ảnh thứ hai và ảnh khung từ có Fit + zoom riêng; bỏ "Khối của bài"; G3 "Câu hỏi" + thanh B I U; khoảng cách mặc định Gọn; hộp hỏi xóa nền mờ, bấm ngoài để hủy; mỗi bài một câu ví dụ -->
 <!-- v81: kiến trúc trình bày mới — Bố cục Task 4 kiểu (Xếp dọc / Ảnh trái / Ảnh phải / Ảnh trong bài đọc), 12 dạng câu hỏi có hình xem trước, khối thêm / xóa thống nhất, câu ví dụ số 0, dòng chữ giữa các câu, hai ảnh chung, khung từ ảnh, bốn ô li, khung vẽ, nhãn A–D dưới đoạn gạch chân, nhãn Đúng/Sai tự đặt, câu hỏi trước bài đọc. Dữ liệu cũ mở ra giống v80. -->
 <!-- v71: nhãn lựa chọn (Ⓐ / ☐) nằm ngang dòng đầu của lựa chọn, không còn canh giữa khi lựa chọn dài hai dòng; khoảng cách nhãn → chữ 2 mm (trước 1,2 / 1,6 mm). -->
 <!-- v70: Đáp án Đúng/Sai (A6) trong Hai cột mặc định 80/20; A4 "Tự động" quyết một lần cho cả Task; nút Xuất MD -->
@@ -281,6 +282,11 @@ dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 .task[data-fit] .g1 .pic img{inset:auto;left:50%;top:50%;object-fit:fill;aspect-ratio:var(--iar,var(--ar,4/3));transform:translate(calc(-50% + var(--ox,0) * 1%),calc(-50% + var(--oy,0) * 1%))}
 .task[data-fit="width"] .g1 .pic img{width:calc(100% * var(--z,1));height:auto;max-width:none}
 .task[data-fit="height"] .g1 .pic img{height:calc(100% * var(--z,1));width:auto;max-width:none}
+/* v85: ảnh thứ hai / ảnh khung từ có Fit riêng, mạnh hơn Fit của khung ảnh chung */
+.task .g1 .pic[data-tf] img,.task .g4 .pic[data-tf] img{position:absolute;inset:auto;left:50%;top:50%;object-fit:fill;aspect-ratio:var(--iar,4/3);transform:translate(calc(-50% + var(--ox,0) * 1%),calc(-50% + var(--oy,0) * 1%))}
+.task .g1 .pic[data-tf="width"] img,.task .g4 .pic[data-tf="width"] img{width:calc(100% * var(--z,1));height:auto;max-width:none}
+.task .g1 .pic[data-tf="height"] img,.task .g4 .pic[data-tf="height"] img{height:calc(100% * var(--z,1));width:auto;max-width:none}
+.task .g1 .pic[data-tf="normal"] img,.task .g4 .pic[data-tf="normal"] img{inset:0;left:0;top:0;width:100%;height:100%;transform:none;aspect-ratio:auto;object-fit:cover;max-width:100%}
 .mk{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);aspect-ratio:var(--iar,4/3);min-width:100%;min-height:100%;pointer-events:none;z-index:2}
 .task[data-fit] .g1 .pic .mk{min-width:0;min-height:0;transform:translate(calc(-50% + var(--ox,0) * 1%),calc(-50% + var(--oy,0) * 1%))}
 .task[data-fit="width"] .g1 .pic .mk{width:calc(100% * var(--z,1));height:auto;max-width:none}
@@ -375,6 +381,7 @@ dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 .gt-empty .gtb{color:var(--ink-3);font-style:italic}
 .g4{display:flex;flex-wrap:wrap;gap:1.5mm 5mm;border:.35mm dashed var(--ink-3);border-radius:2mm;padding:2mm 3.5mm;justify-content:center}
 .wbwrap{display:grid;grid-template-columns:var(--tpl);gap:var(--gg);align-items:start}
+.wbwrap.wbm{grid-template-columns:minmax(0,72fr) minmax(0,28fr)}
 .wbwrap .g4{flex-direction:column;align-items:flex-start}
 .g4.wlist{display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;justify-content:flex-start;border:.35mm solid var(--ink-3);border-radius:2mm;padding:2mm 3.5mm;gap:var(--ig)}
 .g4.wlist .wi{display:flex;gap:1.6mm;min-width:0}.g4.wlist .wi i{font-style:normal;font-weight:700;flex:none;min-width:1.2em}
@@ -708,7 +715,8 @@ html.codes .cd{display:inline}
 .tkt .eb.dng{color:var(--danger)}
 .tkt .eb.dng:hover:not(:disabled){border-color:var(--danger)}
 .tkt .eb.dng{display:inline-grid;place-items:center;min-width:28px}.tkt .eb.tjn[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:var(--panel)}
-#cfmDlg{width:min(92vw,380px)}.btn.dngb{background:var(--danger);border-color:var(--danger);color:#fff}
+#cfmDlg{width:min(92vw,380px)}
+dialog::backdrop{background:rgba(15,23,30,.45)}   /* v85: nền xám mờ sau hộp thoại để tập trung vào cảnh báo */.btn.dngb{background:var(--danger);border-color:var(--danger);color:#fff}
 .fitrow{display:flex;align-items:center;gap:6px;padding:4px 0}
 .fitrow input{width:56px;border:1px solid var(--line);background:var(--panel);border-radius:5px;padding:3px 6px;text-align:right}
 .fitrow .btn{padding:3px 10px}
@@ -797,6 +805,13 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 #txHelp table{border-collapse:collapse;width:100%}#txHelp td{padding:2px 5px;border-top:1px solid var(--line);vertical-align:top}
 #txHelp td:first-child{font-family:ui-monospace,Menlo,monospace;color:var(--accent);white-space:nowrap}
 #txHelp .txnote{margin:6px 0 0;color:var(--muted)}
+.sec[data-sec=g3] .subh{align-items:center}
+.subh .g3n{display:flex;align-items:center;gap:4px;white-space:nowrap}
+.g3tb{display:flex;gap:3px;margin-left:auto}
+.g3tb button{border:1px solid var(--line);background:var(--card);border-radius:6px;padding:1px 5px;font-size:12px;line-height:18px;color:var(--fg);min-width:22px}
+.g3tb button[data-tx=b]{font-weight:700}.g3tb button[data-tx=i]{font-style:italic}.g3tb button[data-tx=u]{text-decoration:underline}
+.g3tb button:hover{border-color:var(--accent)}
+.ef.g3ar{align-items:center}.ef.g3ar>.tinfo{margin-left:auto}
 .eit.egt{background:var(--panel2,#f7f7f7)}.eit.egt .ino{font-size:10px;color:var(--muted)}
 .ino.ex{color:var(--accent)}
 .eb.xb{margin-left:4px;font-size:10px;padding:0 4px;width:auto;vertical-align:1px}
@@ -805,7 +820,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 
 <div class="app">
   <header class="top">
-    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v84</span> <small id="wsTitle"></small></div>
+    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v85</span> <small id="wsTitle"></small></div>
     <div class="tb">
       <label for="age" class="hint" style="margin:0">Độ tuổi</label>
       <select id="age"><option value="5-6">5–6</option><option value="7-9">7–9</option><option value="10-12">10–12</option></select>
@@ -3225,7 +3240,7 @@ const T = o => { const r = Object.assign({ audio: null, image: null, wordBank: n
 const SAMPLE = {
   schema: 'ws-editor/0.1', id: 'ws-demo-001', title: 'Unit 3 · My home', age: '7-9',
   page: { size: 'A4', marginMm: { top: 14, right: 14, bottom: 14, left: 14 } },
-  spacing: { preset: 'normal', overrides: {} }, flow: 'cont',
+  spacing: { preset: 'compact', overrides: {} }, flow: 'cont',   // v85: mặc định Gọn
   tasks: [
     T({ id: 't1', typeId: 'V01', typeName: 'Look and write', title: 'Look and write.', instruction: 'Look at the pictures. Write the words.',
       content: { kind: 'items', variant: 'single', items: ['cat','dog','fish','bird','frog','duck'].map((w,i) => ({ id: 'i'+(i+1), img: w, len: w.length })) },
@@ -3509,7 +3524,7 @@ function frameH(t) {
 function imgStyle(t) {
   const f = fitOf(t), fr = frOf(t); let o = '';
   if (layoutOf(t) === 'T8' && t.image) o += `;--iw:${fr.w ?? IW8[2]}`;
-  if (t.image) o += `;--iar:${(t.imgAr || {}).G1 || t.image.ar}`;
+  if (t.image) o += `;--iar:${natAr(t, 'G1') || t.image.ar}`;
   if (!f) return o;
   if (frameH(t)) o += `;--ih:${frameH(t)}`;
   else if (layoutOf(t) !== 'T8') o += `;--car:${(arNum(t.image.ar) * 100 / (fr.scale || 100)).toFixed(3)}`;
@@ -3518,7 +3533,7 @@ function imgStyle(t) {
 }
 function tplOf(t) { const L = layoutOf(t); if (L === 'T7') { const c = t7cw(t); return `${c[0]}fr ${c[1]}fr ${c[2]}fr`; } const r = ratioOf(t); if (r == null) return '1fr'; return `${r}fr ${100 - r}fr`; }
 // Phiếu: preset gọn/vừa/thoáng, hoặc 'free' (Tự do) khi người dùng nhập tay: overrides giữ đủ 5 giá trị. Task cũng vậy.
-function sheetSpacing() { return Object.assign({}, PRESETS[ws.spacing.preset] || PRESETS.normal, ws.spacing.overrides); }
+function sheetSpacing() { return Object.assign({}, PRESETS[ws.spacing.preset] || PRESETS.compact, ws.spacing.overrides); }
 function inheritedSpacing(t) { return Object.assign(sheetSpacing(), PRESETS[t.spacing.preset] || {}); }
 function spacingOf(t) { return Object.assign(inheritedSpacing(t), t.spacing.overrides); }
 // Nối vào Task trên (layout.break = 'join'): phần tiếp của Task phía trên, không số / tiêu đề. Task đầu phiếu không nối được.
@@ -3584,7 +3599,7 @@ const pic = (label, cls = '', src, o = {}) => `<div class="pic ${cls}${src ? ' u
 // Container ảnh của một ô T5 (khung riêng: Fit, chiều cao, zoom, tâm, căn ngang)
 function ci(t, key, label, src) {
   const f = cellFr(t, key);
-  return `<div class="ci" data-node="${t.id}:G1:${key}" data-ck="${key}"${f.fit ? ` data-cf="${f.fit}"` : ''}${f.h ? ' data-cih="1"' : ''}${f.align ? ` data-fa="${f.align}"` : ''}${f.w ? ` data-cw="1"` : ''} style="${f.w ? `--cw:${f.w}%;` : ''}--iar:${(t.imgAr || {})['@' + key] || tblAr(t)};--ih:${f.h || 35};--ox:${f.ox || 0};--oy:${f.oy || 0};--z:${(f.zoom || 100) / 100}">${pic(label, '', src, { slot: '@' + key, ar: imgArOf(t, '@' + key) })}</div>`;
+  return `<div class="ci" data-node="${t.id}:G1:${key}" data-ck="${key}"${f.fit ? ` data-cf="${f.fit}"` : ''}${f.h ? ' data-cih="1"' : ''}${f.align ? ` data-fa="${f.align}"` : ''}${f.w ? ` data-cw="1"` : ''} style="${f.w ? `--cw:${f.w}%;` : ''}--iar:${natAr(t, '@' + key) || tblAr(t)};--ih:${f.h || 35};--ox:${f.ox || 0};--oy:${f.oy || 0};--z:${(f.zoom || 100) / 100}">${pic(label, '', src, { slot: '@' + key, ar: imgArOf(t, '@' + key) })}</div>`;
 }
 // Các ô ảnh của một Task, theo thứ tự: G1 rồi ảnh item / ảnh cột trái bài nối
 function slotsOf(t) {
@@ -3813,7 +3828,7 @@ function g4Html(t) {
   const wb = t.wordBank, id = t.id, lab = i => !wb || wb.label === 'none' ? '' : (wb.label === 'upper' ? 'ABCDEFGHIJ' : 'abcdefghij')[i] + '.';
   const wbst = wb.placement !== 'right' && wb.w ? ` style="width:${wb.w}%;justify-self:${JS[wb.align || 'center']}"` : '';
   if (wb.kind === 'image') { const n = wb.words.length, lb = wb.label === 'none' ? '' : wb.label === 'upper' ? 'ABCDEFGHIJ' : 'abcdefghij', wc = wb.cols || Math.max(1, Math.min(n, wb.placement === 'right' ? 1 : 5));
-    return `<div class="g4 wimg" data-node="${id}:G4" style="--wc:${wc}${wb.placement !== 'right' && wb.w ? `;width:${wb.w}%;justify-self:${JS[wb.align || 'center']}` : ''}">${wb.words.map((w, i) => `<div class="wim">${lb ? `<b>${lb[i] || ''}</b>` : ''}${pic(w || 'ảnh', '', srcOf(t, 'B.' + i), { slot: 'B.' + i, ar: wb.ar || '1/1' })}${w && wb.cap !== false ? `<span>${er(w)}</span>` : ''}</div>`).join('')}</div>`; }
+    return `<div class="g4 wimg" data-node="${id}:G4" style="--wc:${wc}${wb.placement !== 'right' && wb.w ? `;width:${wb.w}%;justify-self:${JS[wb.align || 'center']}` : ''}">${wb.words.map((w, i) => `<div class="wim">${lb ? `<b>${lb[i] || ''}</b>` : ''}${ownFit(t, 'B.' + i, pic(w || 'ảnh', '', srcOf(t, 'B.' + i), { slot: 'B.' + i, ar: wb.ar || '1/1' }), wb.frame)}${w && wb.cap !== false ? `<span>${er(w)}</span>` : ''}</div>`).join('')}</div>`; }
   return wb.style === 'list'
     ? `<div class="g4 wlist" data-node="${id}:G4"${wbst}>${wb.words.map((w, i) => `<div class="wi">${lab(i) ? `<i>${lab(i)}</i>` : ''}<span>${er(w)}</span></div>`).join('')}</div>`
     : `<div class="g4" data-node="${id}:G4"${wbst}>${wb.words.map(w => `<span>${er(w)}</span>`).join('')}</div>`;
@@ -3831,10 +3846,10 @@ function body0(t, L, frag, first) {
   if (!t.image || !first || !G1_TOP.includes(ck(t))) return h;
   return h.replace(/^<div class="body b1">/, m => m + g1Of(t, L));
 }
-function g1Of(t, L) { const id = t.id; return `<div class="g1${t.image.two ? ' g1two' : ''}" data-node="${id}:G1">${withMarks(t, pic(t.image.label, t.image.size === 'large' && L === 'T1' ? 'big' : '', srcOf(t, 'G1'), { slot: 'G1', gar: t.image.ar }))}${t.image.two ? pic(t.image.label2 || 'ảnh 2', '', srcOf(t, 'G1b'), { slot: 'G1b', gar: t.image.ar }) : ''}</div>`; }
+function g1Of(t, L) { const id = t.id; return `<div class="g1${t.image.two ? ' g1two' : ''}" data-node="${id}:G1">${withMarks(t, pic(t.image.label, t.image.size === 'large' && L === 'T1' ? 'big' : '', srcOf(t, 'G1'), { slot: 'G1', gar: t.image.ar }))}${t.image.two ? ownFit(t, 'G1b', pic(t.image.label2 || 'ảnh 2', '', srcOf(t, 'G1b'), { slot: 'G1b', gar: t.image.ar }), g1bFit(t)) : ''}</div>`; }
 function body0n(t, L, frag, first) {
   const k = ck(t), c = t.content, id = t.id;
-  const g1 = t.image && first ? `<div class="g1${t.image.two ? ' g1two' : ''}" data-node="${id}:G1">${withMarks(t, pic(t.image.label, t.image.size === 'large' && L === 'T1' ? 'big' : '', srcOf(t, 'G1'), { slot: 'G1', gar: t.image.ar }))}${t.image.two ? pic(t.image.label2 || 'ảnh 2', '', srcOf(t, 'G1b'), { slot: 'G1b', gar: t.image.ar }) : ''}</div>` : '';
+  const g1 = t.image && first ? `<div class="g1${t.image.two ? ' g1two' : ''}" data-node="${id}:G1">${withMarks(t, pic(t.image.label, t.image.size === 'large' && L === 'T1' ? 'big' : '', srcOf(t, 'G1'), { slot: 'G1', gar: t.image.ar }))}${t.image.two ? ownFit(t, 'G1b', pic(t.image.label2 || 'ảnh 2', '', srcOf(t, 'G1b'), { slot: 'G1b', gar: t.image.ar }), g1bFit(t)) : ''}</div>` : '';
   const wb = t.wordBank;
   const g4 = wb && first && wb.placement !== 'bottom' ? g4Html(t) : '';
   const withBank = g2 => !g4 ? g2 : (wb.placement === 'right' ? `<div class="wbwrap"${wb.valign ? ` style="align-items:${AI[wb.valign]}"` : ''}>${g2}${g4}</div>` : g4 + g2);
@@ -3888,7 +3903,7 @@ function body0n(t, L, frag, first) {
         `<div class="md" data-node="${id}:G3">${ans(t, it)}${ans(t, it)}</div>` +
         `<div class="mr" data-node="${id}:G2">${r ? `<span>${er(r.text)}</span>` : ''}</div>`;
     }
-    return `<div class="body b1"><div class="mrows">${rows}</div></div>`;
+    return `<div class="body b1">${withBank(`<div class="mrows">${rows}</div>`).replace('<div class="wbwrap"', '<div class="wbwrap wbm"')}</div>`;   // v85: Khung từ (G4) cũng hiện ở dạng nối (đặt bên phải: cột riêng, không dùng --tpl của 3 cột nối)
   }
 
   if (k === 'items') {
@@ -3920,7 +3935,7 @@ function body0n(t, L, frag, first) {
 
   if (k === 'trace') {
     const rows = range(c.items, frag).map(([w, i]) => `<div class="q tr">${inoN(t, i)}<div class="qb">${ans(t, { id: w.id, text: w.text || '' })}</div></div>`).join('');
-    return `<div class="body b1"><div class="g2 list" data-node="${id}:G2">${rows}</div></div>`;
+    return `<div class="body b1">${withBank(`<div class="g2 list" data-node="${id}:G2">${rows}</div>`)}</div>`;   // v85: Khung từ (G4) cũng hiện ở dạng tô chữ
   }
 
   if (k === 'questions') {
@@ -6235,7 +6250,7 @@ function fillSheet(o0, notes) {
   o.id = sv(o.id).trim() || ('ws-' + Date.now().toString(36)); o.title = sv(o.title).trim() || 'Phiếu mới';
   if (!AGE[o.age]) { add('độ tuổi'); o.age = '7-9'; }
   if (!isObj(o.page)) { add('khổ trang'); o.page = { size: 'A4', marginMm: { top: 14, right: 14, bottom: 14, left: 14 } }; }
-  if (!isObj(o.spacing) || !(PRESETS[o.spacing.preset] || o.spacing.preset === 'free')) { add('khoảng cách'); o.spacing = { preset: 'normal', overrides: {} }; }
+  if (!isObj(o.spacing) || !(PRESETS[o.spacing.preset] || o.spacing.preset === 'free')) { add('khoảng cách'); o.spacing = { preset: 'compact', overrides: {} }; }   // v85: phiếu không ghi khoảng cách → Gọn
   if (!isObj(o.spacing.overrides)) o.spacing.overrides = {};
   if (!['cont', 'page'].includes(o.flow)) { add('xếp trang'); o.flow = 'cont'; }
   if (o.fill !== true) delete o.fill;
@@ -6573,13 +6588,27 @@ function sheetToMd(w) {
 const AR_OPTS = [['1/1', '1:1'], ['4/3', '4:3'], ['3/4', '3:4'], ['16/9', '16:9']];
 const arLabel = a => { const o = AR_OPTS.find(x => x[0] === String(a)); if (o) return o[1]; const v = arNum(a); return v ? `${Math.round(v * 100) / 100}:1` : '4:3'; };
 const tblAr = t => (t.content && t.content.imgAr) || '4/3';
+// v85: tỉ lệ THẬT của ảnh đã tải (để Fit tính đúng). imgAr[key] của ô còn là tỉ lệ khung (đổi bằng nút Tỉ lệ), nên ưu tiên kích thước gốc upMeta
+// v85: ảnh có Fit riêng (ảnh thứ hai G1b, ảnh khung từ): gắn data-tf + tỉ lệ thật + zoom / lệch tâm vào ô ảnh. fr = { fit, zoom, ox, oy }
+function ownFit(t, key, h, fr) {
+  if (!fr || !fr.fit || !srcOf(t, key)) return h;
+  const st = `--iar:${natAr(t, key) || '4/3'};--ox:${fr.ox || 0};--oy:${fr.oy || 0};--z:${(fr.zoom || 100) / 100};`;
+  h = h.replace('<div class="pic ', `<div data-tf="${fr.fit}" class="pic `);
+  return /^<div [^>]*style="/.test(h) ? h.replace(/^(<div [^>]*?)style="/, `$1style="${st}`) : h.replace(/^<div /, `<div style="${st}" `);
+}
+const g1bFr = t => cellFr(t, 'G1b');
+// "Như ảnh 1" = bỏ hết chỉnh riêng của ảnh thứ hai (cả zoom, lệch tâm)
+postSet = (f => (t, s, p, v) => { f(t, s, p, v); if (p === '@cells.G1b.frame.fit' && v == null && t.layout.cells) { delete t.layout.cells.G1b; if (!Object.keys(t.layout.cells).length) t.layout.cells = null; } })(postSet);
+// Ảnh thứ hai chưa chỉnh riêng thì theo Fit của ảnh 1, nhưng vẫn dùng tỉ lệ thật của chính nó (trước v85 bị méo theo tỉ lệ ảnh 1)
+const g1bFit = t => g1bFr(t).fit ? g1bFr(t) : fitOf(t) ? { fit: fitOf(t) } : null;
+const natAr = (t, key) => { const m = (t.upMeta || {})[key]; return m && m.w && m.h ? `${m.w}/${m.h}` : (t.imgAr || {})[key] || null; };
 const fixedImg = (t, key) => key !== 'G1' && !xOfKey(t, key);
 const imgArOf = (t, key) => key === 'G1' || key === 'G1b' ? (t.image && t.image.ar) || null : /^B\.\d+$/.test(key) ? (t.wordBank && t.wordBank.ar) || '1/1' : fixedImg(t, key) ? tblAr(t) : ((t.imgAr || {})[key] || null);
 // Ảnh trong bảng: khung cố định theo tỉ lệ của bảng; ảnh nằm trong khung theo Fit / zoom / lệch tâm của từng ô
 function tpic(t, key, label, cls) {
   const src = srcOf(t, key), f = cellFr(t, key.slice(1)); let h = pic(label, cls, src, { slot: key, ar: tblAr(t) });
   if (!src || !f.fit) return h;
-  return h.replace('<div class="pic ', `<div data-tf="${f.fit}" class="pic `).replace('style="', `style="--iar:${(t.imgAr || {})[key] || tblAr(t)};--ox:${f.ox || 0};--oy:${f.oy || 0};--z:${(f.zoom || 100) / 100};`);
+  return h.replace('<div class="pic ', `<div data-tf="${f.fit}" class="pic `).replace('style="', `style="--iar:${natAr(t, key) || tblAr(t)};--ox:${f.ox || 0};--oy:${f.oy || 0};--z:${(f.zoom || 100) / 100};`);
 }
 async function dropImages(id, files, slotKey, pre) {
   files = files.filter(f => f.type && f.type.startsWith('image/')); if (!files.length) { toast('Không có tệp ảnh'); return; }
@@ -6603,7 +6632,7 @@ async function dropImages(id, files, slotKey, pre) {
     normAnswer(t);
   }, `Đã gắn ${imgs.length - dropped} ảnh${added ? ` · thêm ${added} câu` : ''}${dropped ? ` · bỏ ${dropped} ảnh thừa` : ''}`);
 }
-function delFrame(id) { if (sel.type !== 'sheet' && sel.g === 'G1') sel = { type: 'task', id }; commit(w => { const t = w.tasks.find(x => x.id === id); if (!t || !t.image) return; delete t.image; if (t.uploads) delete t.uploads.G1; if (t.upMeta) delete t.upMeta.G1; t.layout.frame = {}; }, 'Đã xóa khung ảnh (bật lại ở Thành phần của bài)'); }
+function delFrame(id) { if (sel.type !== 'sheet' && sel.g === 'G1') sel = { type: 'task', id }; commit(w => { const t = w.tasks.find(x => x.id === id); if (!t || !t.image) return; delete t.image; if (t.uploads) delete t.uploads.G1; if (t.upMeta) delete t.upMeta.G1; t.layout.frame = {}; }, 'Đã xóa khung ảnh (thêm lại ở mục G1 · Ảnh chung)'); }
 function removeImage(id, key) { commit(w => { const t = w.tasks.find(x => x.id === id); if (t.uploads) delete t.uploads[key]; if (t.upMeta) delete t.upMeta[key]; }, 'Đã gỡ ảnh, về ô giữ chỗ'); }
 function setAr(id, key, ar) { commit(w => { const t = w.tasks.find(x => x.id === id); if (key === 'G1') { if (t.image) t.image.ar = ar; } else { t.imgAr = t.imgAr || {}; t.imgAr[key] = ar; } }, `Tỉ lệ khung: ${arLabel(ar)}`); }
 // Khóa ô ảnh ứng với container đang chọn
@@ -6629,7 +6658,7 @@ function imgCtl(t, key) {
   return `<h3>Ảnh</h3><div class="stack"><div class="erow"><button class="btn" data-act="img-gen" data-v="${key}">Tạo ảnh…</button><button class="btn" data-act="img-up" data-v="${key}">${up ? 'Thay ảnh…' : 'Tải ảnh lên…'}</button>${up ? `<button class="btn" data-act="img-rm" data-v="${key}">Gỡ ảnh</button>` : ''}</div>
     ${up ? `<p class="hint">Ảnh thật${m ? ` ${m.w}×${m.h} px` : ''}, tỉ lệ ${arLabel(ar)}.${lr ? ` <b style="color:var(--danger)">Hơi mờ khi in (~${lr.dpi} dpi, nên ≥ 150).</b>` : ''}</p>`
       : fld('ar', 'Tỉ lệ ô giữ chỗ', `<span class="seg wrapseg">${AR_OPTS.map(([v, n]) => `<button data-act="img-ar" data-v="${key}|${v}" class="${String(ar) === v ? 'on' : ''}">${n}</button>`).join('')}</span>`, false, '', 's')}
-    <p class="hint">Cũng có thể kéo thả ảnh vào ô trên trang, hoặc chọn ô rồi bấm Ctrl+V.</p>${key === 'G1' ? `<div class="erow"><button class="btn" data-act="img-del">Xóa khung ảnh</button></div><p class="hint">Bài không cần ảnh chung thì xóa cả khung. Phím Delete cũng được. Bật lại ở Thành phần của bài → Ảnh.</p>` : ''}</div>`;
+    <p class="hint">Cũng có thể kéo thả ảnh vào ô trên trang, hoặc chọn ô rồi bấm Ctrl+V.</p>${key === 'G1' ? `<div class="erow"><button class="btn" data-act="img-del">Xóa khung ảnh</button></div><p class="hint">Bài không cần ảnh chung thì xóa cả khung. Phím Delete cũng được. Thêm lại bằng nút + Thêm ở mục G1 · Ảnh chung (cột trái).</p>` : ''}</div>`;
 }
 
 /* ---- Thư viện mẫu có sẵn (thẻ 1 của "+ Task") ---- */
@@ -6878,6 +6907,11 @@ document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === 
   document.addEventListener('click', e => { if (!hp.hidden && !hp.contains(e.target)) shut(); });
   window.addEventListener('keydown', e => { if (e.key === 'Escape' && !hp.hidden) { shut(); e.stopPropagation(); e.preventDefault(); } }, true); }
 // Hộp hỏi xác nhận (thay confirm() của trình duyệt): trả về Promise<true|false>
+// v85: bấm ra ngoài hộp hỏi (vùng nền mờ) = Hủy. Chỉ tính khi cả lúc nhấn và lúc thả đều ở ngoài, để kéo bôi chữ không làm đóng hộp
+{ const d = document.getElementById('cfmDlg'); let downOut = false;
+  const out = e => { const r = d.getBoundingClientRect(); return e.target === d && (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom); };
+  d.addEventListener('mousedown', e => { downOut = out(e); });
+  d.addEventListener('click', e => { if (downOut && out(e) && d.open) d.close(); downOut = false; }); }
 function askConfirm(title, msg, yes) {
   const d = document.getElementById('cfmDlg'); document.getElementById('cfmTitle').textContent = title; document.getElementById('cfmMsg').textContent = msg || ''; document.getElementById('cfmYes').textContent = yes || 'Đồng ý';
   return new Promise(res => { const done = v => { d.removeEventListener('close', onc); document.getElementById('cfmYes').onclick = document.getElementById('cfmNo').onclick = null; if (d.open) d.close(); res(v); }, onc = () => done(false);
@@ -7124,7 +7158,7 @@ function itemAct(t, act, id) {
   if (act === 'iadd') { const x = blankItem(t); t.content.items.splice(i + 1, 0, x); ensureIds(t); normAnswer(t); return 'Đã thêm câu'; }
   if (act === 'idup') { const x = clone(it[i]); delete x.id; delete x.ex; t.content.items.splice(i + 1, 0, x); ensureIds(t); return 'Đã nhân đôi câu'; }
   if (act === 'idel') { dropOrphans(t, id); t.content.items.splice(i, 1); normAnswer(t); return 'Đã xóa câu'; }
-  if (act === 'iex') { if (it[i].ex) delete it[i].ex; else { it[i].ex = true; if (it[i].key == null) it[i].key = ''; } return it[i].ex ? 'Câu ví dụ: số 0, hiện sẵn đáp án' : 'Bỏ câu ví dụ'; }
+  if (act === 'iex') { if (it[i].ex) { delete it[i].ex; return 'Bỏ câu ví dụ'; } const had = it.some(y => y.ex); it.forEach(y => { delete y.ex; }); it[i].ex = true; if (it[i].key == null) it[i].key = ''; return had ? 'Câu ví dụ chuyển sang câu này (mỗi bài chỉ một câu ví dụ)' : 'Câu ví dụ: số 0, hiện sẵn đáp án'; }   // v85: mỗi bài một câu ví dụ
   if (act === 'iup' || act === 'idown') { const j = act === 'iup' ? i - 1 : i + 1; if (j < 0 || j >= it.length) return null; [t.content.items[i], t.content.items[j]] = [t.content.items[j], t.content.items[i]]; return null; }
   return null;
 }
@@ -7164,7 +7198,9 @@ answerPanel = (t, s, key) => {
 const _framePanel81 = framePanel;
 framePanel = (t, s) => {
   const two = !!(t.image && t.image.two), ok = ['questions', 'passage', 'empty'].includes(ck(t));
-  const add = `<h3>Ảnh thứ hai</h3>${two ? imgCtl(t, 'G1b').replace('<h3>Ảnh</h3>', '') + `<div class="stack"><button class="btn" data-act="blkdel" data-v="G1b">Xóa ảnh thứ hai</button></div>` : `<div class="stack"><button class="btn" data-act="blkadd" data-v="G1b" ${ok ? '' : 'disabled title="Hai ảnh dùng cho bài có câu hỏi / bài đọc"'}>+ Thêm ảnh thứ hai</button></div>`}<p class="hint">Hai ảnh đứng cạnh nhau, cùng cỡ.</p>`;
+  const f2 = two ? g1bFr(t) : {}, fit2 = two ? fSeg('@cells.G1b.frame.fit', 'Hiển thị ảnh thứ hai', f2.fit, [['', 'Như ảnh 1'], ['normal', 'Bình thường'], ['width', 'Fit ngang'], ['height', 'Fit dọc']], '', { hint: 'Kích thước và căn lề đi theo khung ảnh chung.' })
+    + (f2.fit && f2.fit !== 'normal' ? fRange('@cells.G1b.frame.zoom', 'Zoom ảnh thứ hai', f2.zoom, { min: 50, max: 300, step: 5, def: 100, fmt: x => x + '%', fmtKey: 'zoom' }) : '') : '';   // v85
+  const add = `<h3>Ảnh thứ hai</h3>${two ? fit2 + imgCtl(t, 'G1b').replace('<h3>Ảnh</h3>', '') + `<div class="stack"><button class="btn" data-act="blkdel" data-v="G1b">Xóa ảnh thứ hai</button></div>` : `<div class="stack"><button class="btn" data-act="blkadd" data-v="G1b" ${ok ? '' : 'disabled title="Hai ảnh dùng cho bài có câu hỏi / bài đọc"'}>+ Thêm ảnh thứ hai</button></div>`}<p class="hint">Hai ảnh đứng cạnh nhau, cùng cỡ.</p>`;
   return _framePanel81(t, s).replace(/(<section class="psec" data-sec="auto")/, `<section class="psec" data-sec="two">${add}</section>$1`);
 };
 bankPanel = (t, s) => {
@@ -7174,7 +7210,7 @@ bankPanel = (t, s) => {
   const sg = (act, cur, opts) => `<div class="seg wrapseg">${opts.map(([v, n]) => `<button data-act="${act}" data-v="${v}" class="${String(cur) === String(v) ? 'on' : ''}">${n}</button>`).join('')}</div>`;
   let content = `<div class="field"><span>Loại</span>${sg('wbkind', img ? 'image' : 'text', [['text', 'Chữ'], ['image', 'Ảnh']])}</div><div class="field"><span>Vị trí</span>${sg('wb', pl, [['top', 'Trên câu hỏi'], ['bottom', 'Dưới câu hỏi'], ['right', 'Bên phải']])}</div>`;
   if (!img) content += `<div class="field"><span>Kiểu hiển thị</span>${sg('wbstyle', b.style === 'list' ? 'list' : 'chips', [['chips', 'Từ rời'], ['list', 'Danh sách']])}</div>` + (b.style === 'list' ? `<div class="field"><span>Nhãn</span>${sg('wblab', b.label || 'lower', [['lower', 'a b c'], ['upper', 'A B C'], ['none', 'Không']])}</div>` : '');
-  else content += `<div class="field"><span>Nhãn</span>${sg('wblab', b.label || 'lower', [['upper', 'A B C'], ['lower', 'a b c'], ['none', 'Không']])}</div><div class="field"><span>Chữ dưới ảnh</span>${sg('wbcap', b.cap === false ? '0' : '1', [['1', 'Hiện'], ['0', 'Ẩn']])}</div><div class="field"><span>Tỉ lệ ô ảnh</span>${sg('wbar', b.ar || '1/1', [['1/1', '1:1'], ['4/3', '4:3'], ['3/4', '3:4']])}</div><div class="field"><span>Số ảnh mỗi hàng</span>${sg('wbcols', b.cols || 0, [[0, 'Tự động'], [2, '2'], [3, '3'], [4, '4'], [5, '5'], [6, '6']])}</div><p class="hint">Bấm vào từng ô ảnh trên trang để tải / tạo ảnh. Tên ảnh sửa ở cột trái (mục Nội dung).</p>`;
+  else content += `<div class="field"><span>Nhãn</span>${sg('wblab', b.label || 'lower', [['upper', 'A B C'], ['lower', 'a b c'], ['none', 'Không']])}</div><div class="field"><span>Chữ dưới ảnh</span>${sg('wbcap', b.cap === false ? '0' : '1', [['1', 'Hiện'], ['0', 'Ẩn']])}</div>${fSeg('frame.fit', 'Hiển thị ảnh trong khung', (b.frame || {}).fit, [['normal', 'Bình thường'], ['width', 'Fit ngang'], ['height', 'Fit dọc']], 'normal', { hint: 'Áp cho mọi ảnh trong khung từ.' })}${(b.frame || {}).fit ? fRange('frame.zoom', 'Zoom ảnh', b.frame.zoom, { min: 50, max: 300, step: 5, def: 100, fmt: x => x + '%', fmtKey: 'zoom' }) : ''}<div class="field"><span>Tỉ lệ ô ảnh</span>${sg('wbar', b.ar || '1/1', [['1/1', '1:1'], ['4/3', '4:3'], ['3/4', '3:4']])}</div><div class="field"><span>Số ảnh mỗi hàng</span>${sg('wbcols', b.cols || 0, [[0, 'Tự động'], [2, '2'], [3, '3'], [4, '4'], [5, '5'], [6, '6']])}</div><p class="hint">Bấm vào từng ô ảnh trên trang để tải / tạo ảnh. Tên ảnh sửa ở cột trái (mục Nội dung).</p>`;
   content += `<div class="stack"><button class="btn" data-act="blkdel" data-v="G4">Xóa khung từ</button></div>`;
   return panel(t, s, `Khung từ ${img ? 'ảnh' : 'chữ'} ${cd('G4')}`, { size, align, content, cname: 'Kiểu hiển thị' });
 };
@@ -7186,6 +7222,8 @@ function leadPanel(t, s) {
 }
 const _renderInspector81 = renderInspector;
 renderInspector = function () {
+  // v85: hoàn tác sau khi thêm khối có thể để lựa chọn trỏ vào khối không còn (vd khung từ) → về chọn cả Task
+  if (sel.type === 'group') { const t0 = ws.tasks.find(x => x.id === sel.id); if (!t0) sel = { type: 'sheet' }; else if ((sel.g === 'G4' && !t0.wordBank) || (sel.g === 'G1' && !sel.item && !t0.image) || (sel.g === 'GT' && sel.item && !gtOf(t0, sel.item))) { sel = { type: 'task', id: t0.id }; multi = []; } }
   if (sel.type === 'group' && sel.g === 'G2' && !sel.item) { const t = curT(ws); if (t && ck(t) === 'passage') { document.getElementById('insp').innerHTML = leadPanel(t, sel); tidyHints(document.getElementById('insp')); return; } }
   _renderInspector81();
 };
@@ -7393,6 +7431,28 @@ document.addEventListener('click', e => { const b = e.target.closest('#txHelp [d
 document.addEventListener('keydown', e => { const pop = document.getElementById('txHelp'); if (e.key === 'Escape' && pop && !pop.hidden) { pop.hidden = true; e.stopPropagation(); } }, true);
 treeEl.addEventListener('scroll', () => { const pop = document.getElementById('txHelp'); if (pop) pop.hidden = true; }, { passive: true });
 /* ================= hết v83 ================= */
+
+/* ================= v85: cột trái gọn hơn =================
+   Bỏ "Khối của bài" trong Cấu hình (thêm / xóa khối đã có ngay ở từng mục G; G3 có nút ✕ = tắt câu hỏi, giữ câu để bật lại).
+   Mục G3: "Danh sách câu" → "Câu hỏi", bỏ số câu, thanh B I U ___ {a|b} bên phải cùng hàng; ⓘ lên hàng "Tỉ lệ ô ảnh" nếu có. */
+const _edHtml84 = edHtml;
+edHtml = t => {
+  const tp = document.createElement('template'); tp.innerHTML = _edHtml84(t); const R = tp.content;
+  const h3 = [...R.querySelectorAll('.sec[data-sec=cfg] h3')].find(h => h.textContent.trim() === 'Khối của bài');
+  if (h3) { [h3.nextElementSibling && h3.nextElementSibling.matches('p.hint') ? h3.nextElementSibling : null].forEach(e => e && e.remove()); const g = h3.nextElementSibling; if (g && g.matches('.etgs')) g.remove(); h3.remove(); }
+  const sh = R.querySelector('.sec[data-sec=g3] .subh');
+  if (sh) {
+    const nm = (sh.firstChild && sh.firstChild.nodeType === 3 ? sh.firstChild.textContent : '').trim(), inf = sh.querySelector('.tinfo');
+    const lt = R.querySelector('.sec[data-sec=g3] .ef .elb'), ar = lt && lt.textContent.trim() === 'Tỉ lệ ô ảnh' ? lt.closest('.ef') : null;
+    const lst = fieldToggles(t).find(x => x.id === 'list'), canOff = lst && lst.on && !lst.dis;
+    sh.innerHTML = `<span class="g3n">${esc(nm === 'Danh sách câu' ? 'Câu hỏi' : nm)}${canOff ? xb('G3', 'câu hỏi (giữ câu để bật lại)') : ''}</span>${t.content.form === 'table' ? '' : `<span class="g3tb" role="toolbar" aria-label="Chèn ký hiệu vào ô câu đang gõ">${TXB.items.map(([n, a]) => `<button type="button" data-tx="${a}" title="${{ b: 'Đậm', i: 'Nghiêng', u: 'Gạch chân', gap: 'Chỗ trống', pick: 'Chọn trong câu' }[a]}: chèn vào ô câu đang gõ">${esc(n)}</button>`).join('')}</span>`}`;
+    if (inf) { if (ar) { ar.classList.add('g3ar'); ar.appendChild(inf); } else sh.appendChild(inf); }
+  }
+  const d = document.createElement('div'); d.appendChild(R.cloneNode(true)); return d.innerHTML;
+};
+treeEl.addEventListener('mousedown', e => { if (e.target.closest('.g3tb [data-tx]')) e.preventDefault(); }, true);   // giữ con trỏ trong ô đang gõ
+treeEl.addEventListener('click', e => { const b = e.target.closest('.g3tb [data-tx]'); if (b) { e.stopPropagation(); txInsert(b.dataset.tx); } }, true);
+/* ================= hết v85 cột trái ================= */
 
 /* ================= v83 (V4): bộ nhớ theo dạng câu hỏi =================
    Đổi Dạng câu hỏi (Q) rồi đi một vòng quay lại thì về đúng như lần trình bày gần nhất của dạng đó, không mất nội dung đã nhập.

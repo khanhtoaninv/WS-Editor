@@ -56,7 +56,7 @@ with sync_playwright() as p:
     chk('G1 ở hội thoại hiện trên trang', E("document.querySelectorAll('[data-node=\"t12:G1\"]').length") == 1)
     chk('hội thoại vừa một trang: không cắt', E("document.querySelectorAll('.task[data-task=t12]').length") == 1)
     pg.click('[data-node="t12:G1"]'); pg.wait_for_timeout(200)
-    pg.fill('#insp input[data-pv="frame.h"]', '140'); pg.keyboard.press('Enter'); pg.wait_for_timeout(600)
+    pg.fill('#insp input[data-pv="frame.h"]', '190'); pg.keyboard.press('Enter'); pg.wait_for_timeout(600)
     n12 = E("document.querySelectorAll('.task[data-task=t12]').length"); dg = E("JSON.stringify(window.__ws.res.diags)")
     chk('hội thoại quá một trang: cắt sang trang sau, không báo tràn', n12 == 2 and 't12' not in dg, (n12, dg[:200]))
     chk('số chỗ trống đếm tiếp ở trang sau', E("(()=>{const f=[...document.querySelectorAll('.task[data-task=t12] .dialogue')];const tx=f.map(x=>x.textContent).join(' ');return [1,2,3,4,5].every(i=>tx.includes('('+i+')'))&&!tx.includes('(6)')})()"))

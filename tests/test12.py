@@ -25,7 +25,7 @@ with sync_playwright() as p:
     only = json.loads(SEA); only = {'tasks': only['tasks']}
     r = pg.evaluate("o=>loadSheet(o,'thiếu')", only); pg.wait_for_timeout(400)
     chk('JSON chỉ có tasks: nạp được', r is True and pg.evaluate("ws.tasks.length")==6)
-    chk('bù đủ trường cấp phiếu', pg.evaluate("[ws.schema, ws.age, ws.page.size, ws.spacing.preset, ws.flow].join()")=='ws-editor/0.3,7-9,A4,normal,cont', pg.evaluate("[ws.schema, ws.age, ws.page&&ws.page.size, ws.spacing&&ws.spacing.preset, ws.flow].join()"))
+    chk('bù đủ trường cấp phiếu', pg.evaluate("[ws.schema, ws.age, ws.page.size, ws.spacing.preset, ws.flow].join()")=='ws-editor/0.3,7-9,A4,compact,cont', pg.evaluate("[ws.schema, ws.age, ws.page&&ws.page.size, ws.spacing&&ws.spacing.preset, ws.flow].join()"))
     chk('bố cục giống phiếu Sea đủ trường (3 trang, 0 tràn)', pg.inner_text('#pageBadge').startswith('3') and pg.inner_text('#diagBadge')=='Không lỗi tràn')
     # 4) Task tối thiểu: chỉ có title + items là chuỗi; thiếu id, answer, layout, spacing, typeName
     mini = {'tasks':[{'title':'Answer the questions.','content':{'items':['What is your name?','How old are you?']}},{'title':'','content':{'form':'table','rows':[['cat','',''],['dog','','']]}},{'content':{}}]}
@@ -107,5 +107,5 @@ with sync_playwright() as p:
     chk('chữ thô: báo "Đã thêm 1 Task vào cuối phiếu (Task 19)"', 'vào cuối phiếu (Task 19)' in pg.inner_text('#toast'), pg.inner_text('#toast'))
     chk('chữ thô: Task mới ở cuối, không ghi đè', ids1[:-1]==ids0 and len(ids1)==len(ids0)+1)
     pg.click('#undo'); pg.wait_for_timeout(300)
-    chk('cuối: 18 Task, 11 trang, 0 tràn', pg.evaluate("ws.tasks.length")==18 and pg.inner_text('#pageBadge').startswith('11') and pg.inner_text('#diagBadge')=='Không lỗi tràn')
+    chk('cuối: 18 Task, 10 trang, 0 tràn', pg.evaluate("ws.tasks.length")==18 and pg.inner_text('#pageBadge').startswith('10') and pg.inner_text('#diagBadge')=='Không lỗi tràn')
     print('ERRS',errs); print('ALL OK' if ok and not errs else 'SOME FAIL')

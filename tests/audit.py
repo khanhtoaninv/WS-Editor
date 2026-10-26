@@ -33,7 +33,7 @@ with sync_playwright() as p:
                         if key!='G1' and abs(r['ar']-want)>0.06 and not pg.evaluate(f"!!(cellFr(ws.tasks.find(t=>t.id==='{tid}'),'{key[1:]}').h)"): bad.append(f"tỉ lệ {r['ar']} != {want}")
                         if not r['up']: bad.append('chưa hiện ảnh up')
                         if not r['inside']: bad.append('img rỗng')
-                        if not r['pages'].startswith('11') and not r['pages'].startswith('12'): bad.append('trang '+r['pages'])
+                        if not r['pages'].startswith('10') and not r['pages'].startswith('11'): bad.append('trang '+r['pages'])
                         if r['diag']!='Không lỗi tràn': bad.append(r['diag'])
                         if bad: problems.append((tid,key,f,fit,bad,r['pages']))
                     pg.evaluate(f"openGen('{tid}','{key}')"); pg.wait_for_timeout(60)

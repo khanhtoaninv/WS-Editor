@@ -18,7 +18,7 @@ with sync_playwright() as p:
     chk('chip đầu = mô tả thành phần', chip=='Câu hỏi · khoanh A/B/C', chip)
     chk('tóm tắt mục 1 = mô tả', pg.inner_text('#tree .sec[data-sec=cfg] .secs')=='Câu hỏi · khoanh A/B/C')
     # tùy biến: bật ảnh chung -> mô tả đổi theo, không còn chữ "tùy biến"
-    pg.click('#tree .ed .etg input[data-tg=image]'); pg.wait_for_timeout(300)
+    pg.evaluate("(()=>{const id=document.querySelector('#tree .ed').dataset.ed,t=ws.tasks.find(y=>y.id===id),f=fieldToggles(t).find(x=>x.id==='image');commit(w=>toggleField(w.tasks.find(y=>y.id===id),'image',!f.on));})()"); pg.wait_for_timeout(300)
     chip = pg.inner_text('#tree .tcwrap .chip.nm')
     chk('bật Ảnh chung: mô tả thêm "ảnh chung"', chip=='Câu hỏi · khoanh A/B/C · ảnh chung', chip)
     pg.click('#undo'); pg.wait_for_timeout(300)
@@ -49,5 +49,5 @@ with sync_playwright() as p:
     pg.fill('#pasteTa','Choose the correct answer.\n1. She ___ a teacher. A. am B. is C. are'); pg.wait_for_timeout(500)
     chk('hộp dán: chọn mẫu có nhóm', pg.locator('#pasteOut select[data-pr] optgroup').count()==5)
     pg.click('#libClose')
-    chk('11 trang, 0 tràn', pg.inner_text('#pageBadge').startswith('11') and pg.inner_text('#diagBadge')=='Không lỗi tràn')
+    chk('10 trang, 0 tràn', pg.inner_text('#pageBadge').startswith('10') and pg.inner_text('#diagBadge')=='Không lỗi tràn')
     print('ERRS',errs); print('ALL OK' if ok and not errs else 'SOME FAIL')

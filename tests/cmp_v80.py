@@ -12,6 +12,8 @@ LOAD = """raw => { if (raw == null) { loadSheet(clone(SAMPLE2)); } else { const 
   const obj = J.kind === 'sheet' ? J.sheet : { tasks: J.tasks.filter(x => x.t).map(x => x.t) }; loadSheet(obj); }
   // v84 đổi mặc định (cỡ chữ Vừa, hàng bảng 12 mm, nhãn chữ thường): đặt cả hai bản về thông số cũ rồi mới so
   if (!ws.size) ws.size = 'l';
+  // v85 đổi khoảng cách mặc định sang Gọn: đưa về Vừa như cũ
+  if (ws.spacing.preset === 'compact' && !Object.keys(ws.spacing.overrides || {}).length) ws.spacing = { preset: 'normal', overrides: {} };
   ws.tasks.forEach(t => { if (t.content.form === 'table') { t.layout.table = Object.assign({}, t.layout.table); if (t.layout.table.minH == null) t.layout.table.minH = 14; }
     if (t.answer && t.answer.layout === 'A4') { t.answer.params = t.answer.params || {}; t.answer.params.upper = true; } });
   render();

@@ -17,7 +17,7 @@ with sync_playwright() as p:
     row = lambda i: f'#tree .tnode[data-sel=task][data-id={i}]'
     opened = lambda: pg.eval_on_selector_all('#tree .tk.open', 'e=>e.map(x=>x.dataset.tk)')
     chk('ban đầu không Task nào mở', opened()==[], opened())
-    base_badge = pg.inner_text('#pageBadge'); chk('11 trang', base_badge.startswith('11'), base_badge)
+    base_badge = pg.inner_text('#pageBadge'); chk('10 trang', base_badge.startswith('10'), base_badge)
     pg.click(row('t1')); pg.wait_for_timeout(300)
     chk('mở Task 1', opened()==['t1'], opened())
     pg.click(row('t2')); pg.wait_for_timeout(300)

@@ -670,3 +670,18 @@ Làm theo danh sách V1–V10 (`docs/VAN_DE_CAN_XU_LY.md`). Dàn trang không đ
 - **Hội thoại cắt trang:** Task hội thoại cao hơn một trang (vd thêm ảnh chung lớn) được cắt theo lượt ở Liền trang (`units`), số chỗ trống đếm tiếp; vừa một trang thì vẫn chuyển nguyên sang trang sau như cũ. Khung từ bên phải chỉ ở phần đầu.
 - **Kiểm thử:** `tests/test33.py` (21 mục). test2 và cmp_v80 so với bản cũ ở thông số cũ (To, hàng 14 mm, nhãn chữ hoa); test17, test20, test21, test22, test31 sửa theo mặc định mới; test32 được 420 giây.
 - **Chưa làm:** câu hỏi có ảnh chung ở bố cục Xếp dọc / Ảnh trái / phải vẫn không cắt trang được (như các bản trước); MD chưa mang `x.n`.
+
+## 22. Sửa theo danh sách việc phiên 6 (v85, 26/10/2026)
+Danh sách gốc và trạng thái từng việc: `docs/DANH_SACH_VIEC_v85.md`.
+- **Q8 (nối), Q9 (tô chữ) hiện Khung từ G4** (trước chỉ ghi dữ liệu, trang bỏ qua). Trên / dưới / phải đều được; ở dạng nối, khung từ bên phải là cột riêng 72/28 (`.wbwrap.wbm`), không dùng `--tpl` 3 cột của bài nối. Ảnh chung G1 ở hai dạng này đã có từ v84.
+- **Tỉ lệ thật của ảnh tách khỏi tỉ lệ khung** (`natAr`): khi Fit, ảnh dùng kích thước gốc đã lưu (`upMeta[key]` w×h) thay cho `imgAr[key]`. Trước đây ở ô ảnh lưới, `imgAr[key]` vừa là tỉ lệ khung vừa là tỉ lệ ảnh, nên đổi tỉ lệ ô làm ảnh bị méo khi Fit. Ca "Task 3 lúc đúng lúc sai" người dùng báo **chưa tái hiện được chắc chắn**; đây là nguyên nhân tìm được gần nhất.
+- **Ảnh thứ hai (G1b) có Fit riêng:** panel ảnh chung → "Ảnh thứ hai" → "Hiển thị ảnh thứ hai": Như ảnh 1 (mặc định) / Bình thường / Fit ngang / Fit dọc, có Zoom. Lưu ở `layout.cells.G1b.frame` (`fit`, `zoom`); "Như ảnh 1" xóa hết chỉnh riêng. Kích thước, căn lề đi theo khung ảnh chung. Khi theo ảnh 1, ảnh 2 vẫn dùng tỉ lệ thật của chính nó (trước bị méo theo tỉ lệ ảnh 1).
+- **Ảnh khung từ (G4 ảnh) có Fit + Zoom**, áp cho mọi ảnh trong khung từ: `wordBank.frame` (`fit`, `zoom`). Hàm chung `ownFit(t, key, html, fr)` gắn `data-tf` + `--iar/--ox/--oy/--z` vào ô ảnh; CSS `.task .g1/.g4 .pic[data-tf]` đặt sau CSS Fit của khung ảnh chung để thắng.
+- **Bỏ "Khối của bài"** trong Cấu hình. Thêm khối: "+ Thêm" ở từng mục G; xóa: nút ✕. G3 có ✕ cạnh tiêu đề = tắt câu hỏi (giữ câu, mục mờ có "+ Bật lại"); Ctrl+Z hoàn tác.
+- **Mục G3:** "Danh sách câu" → "Câu hỏi" (cặp / lượt / từ giữ tên cũ), bỏ số câu "N · N có chỗ trả lời", thanh **B I U ___ {a|b}** bên phải cùng hàng (chèn vào ô câu đang gõ, không làm mất con trỏ; không hiện ở Bảng). ⓘ lên hàng "Tỉ lệ ô ảnh" nếu Task có hàng đó, không thì ở cuối hàng "Câu hỏi".
+- **Khoảng cách mặc định Gọn** (phiếu mẫu, phiếu từ MD / file không ghi khoảng cách, `sheetSpacing` dự phòng). Phiếu đã ghi Vừa / Thoáng / Tự do giữ nguyên. Phiếu mẫu còn 10 trang (trước 11).
+- **Hộp hỏi xóa:** nền xám mờ `rgba(15,23,30,.45)` sau mọi hộp thoại (`dialog::backdrop`). Hộp hỏi xác nhận (`cfmDlg`): bấm ra ngoài (cả lúc nhấn và lúc thả) = Hủy; Hủy, Esc như cũ. Các hộp thoại khác (nhập file, tạo ảnh…) chưa đóng khi bấm ngoài để không mất chữ đang gõ.
+- **Mỗi bài một câu ví dụ:** đặt "Ví dụ" ở câu khác thì câu ví dụ cũ tự bỏ, có thông báo. Nhập MD / JSON có nhiều câu ví dụ thì chưa chặn.
+- **Sửa lỗi cũ:** hoàn tác sau khi thêm khối làm panel lỗi (vẫn chọn khối không còn); `renderInspector` về chọn cả Task.
+- **Kiểm thử:** `tests/test34.py` (31 mục, ảnh mẫu `tests/ph_tall.jpg`, `ph_wide.jpg`, `ph_sq.jpg`). test2 và cmp_v80 đưa khoảng cách về Vừa trước khi so; test31 kiểm badge v85.
+- **Chờ người dùng xác nhận (chưa làm):** A3 Task 5 không tách trang (cần phiếu thật); C3 cột trái 420 px (có phải "khung Thao tác Phiếu"); D2 chữ câu hỏi Bình thường / Đậm (chỉ chữ câu hỏi?); F1 màu xanh dấu đáp án (mã màu); F2 ô tích chọn đáp án đúng (ở cột trái, trên phiếu hay cả hai).

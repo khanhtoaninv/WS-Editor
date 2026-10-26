@@ -16,7 +16,7 @@ with sync_playwright() as p:
         pg.goto('file://'+path); pg.evaluate("localStorage.setItem('wsEditor.sections.v2', JSON.stringify({kind:true,info:true,content:true,parts:false}))"); pg.reload(); pg.wait_for_timeout(1500); return pg, errs
     po, eo = load(old); pn, en = load(new)
     # v84 đổi mặc định (cỡ chữ Vừa, hàng bảng 12 mm): so bố cục ở cùng thông số cũ (To, hàng 14 mm)
-    OLDDEF = "(()=>{commit(w=>{w.size='l';w.tasks.forEach(t=>{if(t.content.form==='table'){t.layout.table=Object.assign({},t.layout.table);if(t.layout.table.minH==null)t.layout.table.minH=14;}});});})()"
+    OLDDEF = "(()=>{commit(w=>{w.size='l';w.spacing={preset:'normal',overrides:{}};w.tasks.forEach(t=>{if(t.content.form==='table'){t.layout.table=Object.assign({},t.layout.table);if(t.layout.table.minH==null)t.layout.table.minH=14;}});});})()"
     po.evaluate(OLDDEF); pn.evaluate(OLDDEF); po.wait_for_timeout(500); pn.wait_for_timeout(500)
     lo, ln = po.evaluate(LAY), pn.evaluate(LAY)
     chk('bố cục phiếu giống hệt bản trước (trang, chiều cao từng Task, lỗi tràn)', lo == ln, '' if lo==ln else (lo[:200], ln[:200]))
@@ -55,8 +55,8 @@ with sync_playwright() as p:
     pn.click('#tree .tnode[data-sel=task][data-id=t1]'); pn.wait_for_timeout(200)
     pn.evaluate("SECT.cfg=true;SECT.g0=true;refreshSel()"); pn.wait_for_timeout(100)
     chk('v82: cột trái không còn Áp mẫu / ô Đáp án cũ', pn.locator('#tree .ed select[data-eact=recipe]').count()==0 and pn.locator('#tree .ed select[data-eact=kind]').count()==0)
-    chk('Cấu hình có công tắc khối + tùy chọn câu', pn.locator('#tree .ed .sec[data-sec=cfg] .etg').count()>=5, pn.locator('#tree .ed .etg').count())
-    pn.click('#tree .ed .sec[data-sec=cfg] .etg:has-text("Khung từ") input'); pn.wait_for_timeout(300)
+    chk('v85: Cấu hình không còn "Khối của bài"', 'Khối của bài' not in pn.inner_text('#tree .ed .sec[data-sec=cfg]'))
+    pn.click('#tree .ed .sec.off[data-sec=g4] [data-eact=blkaddb][data-v=G4]'); pn.wait_for_timeout(300)
     chk('bật Khung từ: có ô nhập khung từ trong G4', pn.locator('#tree .ed .sec[data-sec=g4] [data-k="wb.words"]').count()==1)
     pn.click('#undo'); pn.wait_for_timeout(300)
     pn.click('#tree .tnode[data-sel=task][data-id=t14]'); pn.wait_for_timeout(300)
@@ -86,7 +86,7 @@ with sync_playwright() as p:
     chk('cột trái chỉ có + Task và + Phiếu (không còn Dán…)', pn.locator('#tree [data-paste]').count()==0 and pn.locator('#tree [data-lib]').count()==1 and pn.locator('#tree [data-newsheet]').count()==1)
     pn.click('#tree [data-lib]'); pn.wait_for_timeout(300); pn.click('#libDlg [data-tab=src]'); pn.wait_for_timeout(200)
     chk('hộp + Task: thẻ Từ file / dán mở', pn.eval_on_selector('#libDlg','e=>e.open') and pn.is_visible('#pasteTa')); pn.click('#libClose'); pn.wait_for_timeout(200)
-    chk('kết thúc: không lỗi tràn, 11 trang', pn.inner_text('#diagBadge')=='Không lỗi tràn' and pn.inner_text('#pageBadge').startswith('11'))
+    chk('kết thúc: không lỗi tràn, 11 trang (khoảng cách Vừa như bản cũ)', pn.inner_text('#diagBadge')=='Không lỗi tràn' and pn.inner_text('#pageBadge').startswith('11'))
     pn.click('#tree .tnode[data-sel=sheet]'); pn.wait_for_timeout(200)
     chk('Phiếu: có Nâng cao, không còn nút ↵ cũ', pn.locator('#insp details.adv').count()==1 and pn.locator('#insp .fitrow').count()==1)
     chk('hướng dẫn dài được gấp', pn.locator('#insp .hint.fold').count()>=2)

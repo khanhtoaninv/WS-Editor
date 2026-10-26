@@ -34,6 +34,6 @@ with sync_playwright() as p:
     pg.evaluate("document.querySelector('#tree .ed .etr .ithumb').click()"); pg.wait_for_timeout(300)
     chk('popup nhớ Fit dọc', pg.evaluate("document.querySelector('#genFit .on').dataset.fit")=='height')
     pg.evaluate("document.getElementById('genDlg').close()")
-    chk('A4 vẫn 11 trang, không tràn', pg.evaluate("document.body.innerText.includes('11 trang A4') && document.body.innerText.includes('Không lỗi tràn')"))
+    chk('A4 vẫn 10 trang, không tràn', pg.evaluate("document.body.innerText.includes('10 trang A4') && document.body.innerText.includes('Không lỗi tràn')"))
     pg.screenshot(path='../shots/p5.png')
     print('ERRS',errs); print('ALL OK' if ok and not errs else 'SOME FAIL')

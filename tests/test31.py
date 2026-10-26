@@ -10,7 +10,7 @@ with sync_playwright() as p:
     pg.on('console', lambda m: errs.append(m.text) if m.type == 'error' and 'ERR_' not in m.text and 'font' not in m.text.lower() else None)
     pg.goto(F); pg.wait_for_timeout(1200)
     E = pg.evaluate
-    chk('badge v84', pg.inner_text('#verBadge').strip() == 'v84')
+    chk('badge v85', pg.inner_text('#verBadge').strip() == 'v85')
     ids = E("ws.tasks.map(t=>t.id)")
     def opn(tid): pg.click(f'#tree .tnode[data-sel=task][data-id={tid}]'); pg.wait_for_timeout(120)
     S = "[...document.querySelectorAll('#tree .ed .sec')]"
@@ -32,10 +32,10 @@ with sync_playwright() as p:
     # 2. Cấu hình: tùy chọn câu tách khỏi bật / tắt khối
     opn('t1'); E("SECT.cfg=true;refreshSel()"); pg.wait_for_timeout(100)
     h3 = E("[...document.querySelectorAll('#tree .ed .sec[data-sec=cfg] h3')].map(x=>x.textContent)")
-    chk('Cấu hình: Bố cục Task, Dạng câu hỏi, Tùy chọn của câu, Khối của bài', h3[:2] == ['Bố cục Task', 'Dạng câu hỏi'] and 'Tùy chọn của câu' in h3 and 'Khối của bài' in h3, h3)
+    chk('Cấu hình: Bố cục Task, Dạng câu hỏi, Tùy chọn của câu; v85 không còn Khối của bài', h3[:2] == ['Bố cục Task', 'Dạng câu hỏi'] and 'Tùy chọn của câu' in h3 and 'Khối của bài' not in h3, h3)
     tg = E("""(()=>{const h=[...document.querySelectorAll('#tree .ed .sec[data-sec=cfg] h3')], i=h.findIndex(x=>x.textContent==='Khối của bài'), j=h.findIndex(x=>x.textContent==='Tùy chọn của câu');
-      const after=(e)=>{let n=e.nextElementSibling;while(n&&!n.classList.contains('etgs'))n=n.nextElementSibling;return n?[...n.querySelectorAll('input')].map(x=>x.dataset.tg):[]};return [after(h[j]),after(h[i])]})()""")
-    chk('tùy chọn câu không chứa công tắc khối; khối = Ảnh chung / Câu hỏi / Khung từ…', not set(tg[0]) & {'image', 'list', 'bank', 'passage', 'intro'} and set(tg[1]) <= {'image', 'list', 'bank', 'passage', 'intro'} and 'bank' in tg[1], tg)
+      const after=(e)=>{if(!e)return [];let n=e.nextElementSibling;while(n&&!n.classList.contains('etgs'))n=n.nextElementSibling;return n?[...n.querySelectorAll('input')].map(x=>x.dataset.tg):[]};return [after(h[j]),after(h[i])]})()""")
+    chk('tùy chọn câu không chứa công tắc khối; khối = Ảnh chung / Câu hỏi / Khung từ…', not set(tg[0]) & {'image', 'list', 'bank', 'passage', 'intro'} and tg[1] == [], tg)
     # 3. Nút thêm ngay tại mục mờ: thêm, mở mục, hoàn tác
     n0 = E("JSON.stringify(curT(ws))")
     pg.click('#tree .ed .sec.off[data-sec=g4] [data-eact=blkaddb][data-v=G4]'); pg.wait_for_timeout(200)

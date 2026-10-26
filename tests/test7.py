@@ -20,7 +20,7 @@ with sync_playwright() as p:
     chk('QR hợp lệ (nhiều module)', pg.evaluate(f"document.querySelector('.task[data-task={tid}] .qrb svg').innerHTML.length")>500)
     url=pg.evaluate(f"qrUrl(ws.tasks.find(t=>t.id==='{tid}'))"); chk('link ghép địa chỉ gốc', url=='https://pinta.vn/audio/unit3/track05.mp3', url)
     sz=pg.evaluate(f"(()=>{{const r=document.querySelector('.task[data-task={tid}] .qrb').getBoundingClientRect();return [r.width,r.height]}})()"); print('size px',sz)
-    chk('phiếu vẫn 11 trang, không tràn', pg.inner_text('#pageBadge').startswith('11') and pg.inner_text('#diagBadge')=='Không lỗi tràn', pg.inner_text('#pageBadge'))
+    chk('phiếu vẫn 10 trang, không tràn', pg.inner_text('#pageBadge').startswith('10') and pg.inner_text('#diagBadge')=='Không lỗi tràn', pg.inner_text('#pageBadge'))
     # ảnh mã
     pg.click('#tree .ed [data-eact=qrsrc][data-v=img]'); pg.wait_for_timeout(300)
     with pg.expect_file_chooser() as fc: pg.click('#tree .ed [data-eact=qrimg]')

@@ -91,5 +91,5 @@ with sync_playwright() as p:
     chk('5 Task vào cuối, Task cũ giữ nguyên, 0 tràn', ids1[:18]==ids0 and len(ids1)==23 and pg.inner_text('#diagBadge')=='Không lỗi tràn', pg.inner_text('#diagBadge'))
     chk('đáp án đúng có trong Task (không hiện trên phiếu)', pg.evaluate("ws.tasks[18].content.items.map(x=>x.key).join()")=='cat,dog,fish,bird' and 'She is nine years old' not in pg.inner_text('#stage') and pg.evaluate("ws.tasks[22].content.items[0].key")=='She is nine years old.')
     pg.click('#undo'); pg.wait_for_timeout(300)
-    chk('cuối: 18 Task, 11 trang, 0 tràn', pg.evaluate("ws.tasks.length")==18 and pg.inner_text('#pageBadge').startswith('11') and pg.inner_text('#diagBadge')=='Không lỗi tràn')
+    chk('cuối: 18 Task, 10 trang, 0 tràn', pg.evaluate("ws.tasks.length")==18 and pg.inner_text('#pageBadge').startswith('10') and pg.inner_text('#diagBadge')=='Không lỗi tràn')
     print('ERRS',errs); print('ALL OK' if ok and not errs else 'SOME FAIL')

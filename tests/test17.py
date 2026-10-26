@@ -58,7 +58,7 @@ with sync_playwright() as p:
     # khoảng cách giữa các phần = khoảng cách giữa các nhóm (Vừa = 4 mm), không phải khoảng cách giữa Task (8 mm)
     gaps = pg.evaluate(f"""()=>{{const f=id=>document.querySelector('.task[data-task="'+id+'"]'); const r=[];
       for(const [a,b] of [['{ids[5]}','{ids[6]}'],['{ids[6]}','{ids[7]}'],['{ids[3]}','{ids[4]}']]) {{ const A=f(a),B=f(b); r.push(Math.round((B.offsetTop-(A.offsetTop+A.offsetHeight))/3.7795*10)/10) }} return r}}""")
-    chk('khoảng cách 6a→6b và 6b→6c = 4 mm (Giữa các nhóm); 4→5 = 8 mm (Giữa các Task)', abs(gaps[0] - 4) < .6 and abs(gaps[1] - 4) < .6 and abs(gaps[2] - 8) < .6, gaps)
+    chk('khoảng cách 6a→6b và 6b→6c = 3 mm (Giữa các nhóm, Gọn); 4→5 = 6 mm (Giữa các Task, Gọn)', abs(gaps[0] - 3) < .6 and abs(gaps[1] - 3) < .6 and abs(gaps[2] - 6) < .6, gaps)
     # số câu: Task chỉ 1 câu không đánh số nhưng vẫn chừa lề
     vis = pg.evaluate(f"""()=>{{const v=id=>[...document.querySelectorAll('.task[data-task="'+id+'"] .ino')].map(e=>getComputedStyle(e).visibility); return {{t1:v('{ids[0]}'),t2:v('{ids[1]}'),t3:v('{ids[2]}'),t6b:v('{ids[6]}'),t6c:v('{ids[7]}')}}}}""")
     chk('1 câu: số ẩn (Task 1, 2, 6b, 6c); nhiều câu: số hiện (Task 3)', all(x == 'hidden' for x in vis['t1'] + vis['t2'] + vis['t6b'] + vis['t6c']) and all(x == 'visible' for x in vis['t3']) and len(vis['t3']) == 4, vis)

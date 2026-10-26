@@ -41,5 +41,5 @@ with sync_playwright() as p:
     nt = pg.evaluate("ws.tasks.find(t=>t.id===window.__ws.sel.id)")
     chk('+ Task Tô màu / vẽ: danh sách tắt, ảnh lớn', nt['content'].get('list') is False and nt['image']['size']=='large', nt)
     pg.click('#undo'); pg.wait_for_timeout(300)
-    chk('11 trang, 0 tràn', pg.inner_text('#pageBadge').startswith('11') and pg.inner_text('#diagBadge')=='Không lỗi tràn')
+    chk('10 trang, 0 tràn', pg.inner_text('#pageBadge').startswith('10') and pg.inner_text('#diagBadge')=='Không lỗi tràn')
     print('ERRS',errs); print('ALL OK' if ok and not errs else 'SOME FAIL')
