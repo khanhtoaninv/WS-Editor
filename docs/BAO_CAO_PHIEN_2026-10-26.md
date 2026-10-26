@@ -1,4 +1,4 @@
-# Báo cáo phiên 26/10/2026 (v73 → v79) — đọc đầu tiên khi mở phiên mới
+# Báo cáo phiên 26/10/2026 (v73 → v80) — đọc đầu tiên khi mở phiên mới
 
 ## Đã làm trong phiên (đều đã commit và đẩy lên main, trừ v78 ghi rõ ở dưới)
 - v73 G-Text kiểu Chữ · v74 G-Text kiểu Ảnh + 4 khung chữ · v75 bài đọc có chỗ trống đánh số / {a|b} / đậm nghiêng gạch chân / đáp án chỗ trống / cắt theo đoạn · v76 điểm trên ảnh chung (số trong chấm / ô trống, tròn / vuông, bấm để thêm, kéo để dời) · v77 mặc định theo cấu hình, ẩn số câu ở lề, A4 Tự động chọn Tự xuống dòng, nhãn "Self-check:" vào `Hướng dẫn:`.
@@ -37,6 +37,12 @@
 - Test kiểm số bản (test19–21, 26, 27) đổi thành "≥ bản lúc viết test" để không hỏng mỗi lần nâng bản.
 - Kết quả trên bản cuối v79: test1–27 và audit đạt, 0 lỗi console, 0 tràn; test2 so với v78: 32/32. Chưa chạy: audit2, cmp_paste, ws_sea.
 - **Lưu ý khi chạy test2:** bản cũ để so phải có thư mục `fonts/` bên cạnh (vd `ln -s <repo>/fonts <thư mục bản cũ>/fonts`); thiếu font thì bản cũ dùng font dự phòng, chữ rộng hơn và test2 báo lệch giả (lần này: Task 14 cao hơn 10 px).
+
+## v80 (phiên 2): 5 điều chỉnh của người dùng
+- Phân loại và cách sửa: spec 16.14. Tóm tắt: ký hiệu `**đậm**` / `*nghiêng*` / `<u>gạch chân</u>` (mới, mọi chỗ có chữ trừ tiêu đề); tự tách phần khi một dòng hướng dẫn không số đứng ngay trước câu `1.` mới (có ghi chú, nên kiểm); Task viết đoạn không có câu = khung viết 15 dòng, không ảnh "tranh" (A1 tới 20 dòng); `___` trong câu là gạch thật 22 mm; nút Xóa khung ảnh + phím Delete.
+- Prompt PDF đã thêm quy tắc 9 (kiểu chữ), 10 (nhóm câu có hướng dẫn riêng → `### Phần:`), 11 (bài viết đoạn). `QUY_UOC_MD.md` mục 4 cập nhật.
+- Chưa làm (vẫn như danh sách việc tiếp theo): MD cho khối G-Text / điểm trên ảnh / đáp án chỗ trống; tiêu đề phiếu / Họ tên Lớp Ngày.
+- Chưa kiểm: ký hiệu trong ô bảng ảnh / khung từ dạng danh sách khi chữ rất dài; đậm / gạch chân qua hai chỗ trống `___` trong cùng một câu (dấu không ghép qua chỗ trống, hiện nguyên chữ).
 
 ## Cách chạy kiểm thử
 `bash tests/run_all.sh <mới.html> <cũ.html>` (từng test một, mỗi cái riêng; không chạy hai Chromium cùng lúc).

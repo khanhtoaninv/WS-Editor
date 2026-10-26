@@ -472,6 +472,19 @@ P3 (thử 5–10 PDF thật qua đường chat, đo số Task đúng và chỗ p
 - **Sửa:** câu **có ảnh** (`img` / `imgs`) giữ như v65 (ô nhiều dòng). Câu **không ảnh**: giữ một câu, dòng tiếp nằm trong `text` sau ký tự `\n`. Trên phiếu `\n` là xuống dòng (`qtext`; chỗ trống cuối câu A2 vẫn kéo dài hết dòng cuối nhờ phần tử ngắt `.brk` trong hàng flex). Cột trái: câu có `\n` dùng ô nhập nhiều dòng. Xuất MD: dòng tiếp viết thụt lề 3 dấu cách; lựa chọn A–D của câu nhiều dòng ra một dòng thụt lề riêng. JSON: `text` có `\n` hiển thị như trên.
 - Dữ liệu thật: `tests/real/nhieu-dong-user.md` (giữ nguyên). Test: `test27.py`.
 
+### 16.14 Ký hiệu chữ, tách phần tự động, khung viết tự do, gạch trong câu, xóa khung ảnh (v80, 26/10/2026)
+Người dùng nạp 5 chỗ chưa ổn; phân loại và cách sửa:
+| # | Hiện tượng | Lớp lỗi | Sửa |
+|---|---|---|---|
+| 1, 2 | Không in đậm / gạch chân được một từ (`POLLUTE`, `originated`) | mô hình thiếu chỗ chứa (chữ câu không có kiểu chữ; chỉ bài đọc và G-Text có) | hàm `rich()` dùng chung: `**đậm**`, `*nghiêng*`, `<u>gạch chân</u>`, lồng nhau được. Áp ở câu, lựa chọn, hướng dẫn, bài đọc, hội thoại, ô bảng, ô nối, khung từ, G-Text |
+| 3 | Bài có hai nhóm câu (hướng dẫn riêng, số lại từ 1) thành 1 Task 5 câu, dòng hướng dẫn thứ hai thành "câu" không có lựa chọn | prompt dẫn sai (AI không dùng `### Phần:`) + bộ đọc không phát hiện | prompt: quy tắc 10. Bộ đọc: dòng chữ không số, sau dòng trống, ngay trước `1.` → tách phần mới (7a / 7b), làm hướng dẫn, kế thừa `Trả lời:`, **có ghi chú** để người dùng kiểm tra |
+| 4 | Dòng `‘ ___ ’` "mất" | dàn trang xấu (chỗ trống trong câu không có đáp án gắn trong câu chỉ là 6 dấu `_`, nhìn như không có) | `.gap` là một gạch thật rộng 22 mm, cao theo chữ |
+| 5 | Bài viết 15 dòng bị hiểu là "một tranh", `Trả lời: viết câu` bị bỏ | bộ đọc hiểu sai + mô hình thiếu chỗ chứa | Task không có câu mà ghi `Trả lời: viết câu`: dựng một câu rỗng, `layout.num = 'off'`, A1 với `Dòng viết: N`, **không tự thêm ảnh**; "Dòng viết" tối đa 20 cho A1 (điền chỗ trống vẫn 8; ô nhập trong cột phải cũng tới 20). Không cảnh báo "chưa có chữ" cho khung viết đó. Xuất MD không in dòng `1.` rỗng |
+- **Xóa khung ảnh:** chọn khung ảnh chung (G1) → cột phải có nút "Xóa khung ảnh"; phím Delete / Backspace khi G1 được chọn cũng được. Hoàn tác khôi phục. Bật lại ở Thành phần của bài → Ảnh (đã có từ trước). Chỉ áp cho ảnh chung G1; ảnh từng câu và khối ảnh G-Text vẫn xóa theo câu / khối.
+- **Đặc tả ký hiệu `rich()`:** nhận chuỗi đã `esc`. `**` và `*` ghép từng cặp theo thứ tự; mở phải dính chữ phía sau, đóng phải dính chữ phía trước (nên `a * b * c` không thành nghiêng); dấu thiếu cặp hiện nguyên. Trong hàng flex của chỗ trống cuối câu (A2 `fill`), mỗi từ là một ô riêng nên đậm / gạch chân được bọc từng từ (gạch chân không liền qua dấu cách). Ký hiệu **không** áp trong tiêu đề Task, tên phiếu và nhãn.
+- **Lệch cần biết:** `__x__` chỉ còn dùng được trong Bài đọc (v75). Trong MD, `normGap` đổi mọi `__` thành `___`, nên gạch chân ở nơi khác phải viết `<u>`. Đã ghi trong `QUY_UOC_MD.md` và prompt.
+- Dữ liệu thật: `tests/real/dieu-chinh-v80.md` (MD người dùng gửi, thêm Task 6 để thử ký hiệu). Test: `test28.py`.
+
 ---
 
 ## 17. G-Text và ba năng lực còn thiếu (chốt 26/10/2026; G-Text kiểu Chữ đã làm ở v73, mục 17.4)

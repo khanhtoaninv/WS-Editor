@@ -45,7 +45,7 @@ Khoảng cách: vừa               ← tùy chọn: gọn | vừa | thoáng
 | `Hướng dẫn:` | dòng hướng dẫn dưới tiêu đề | `Hướng dẫn: Circle a, b or c.` |
 | `Track:` | số track nghe (tự có mục Mã QR) | `Track: Track 05` |
 | `Trả lời:` | loại chỗ trả lời (bảng mục 3). **Nên ghi** để app khỏi đoán | `Trả lời: viết câu` |
-| `Dòng viết:` | số dòng viết mỗi câu (viết câu / điền chỗ trống cuối câu) | `Dòng viết: 2` |
+| `Dòng viết:` | số dòng viết mỗi câu (viết câu: tới 20; điền chỗ trống cuối câu: tới 8) | `Dòng viết: 2` |
 | `Khung từ:` | từ cách nhau bằng dấu phẩy (từ có dấu phẩy thì dùng `;`) | `Khung từ: kitchen, garden, bedroom` |
 | `Ảnh:` | ảnh chung của Task (tên ảnh, ảnh thật tải sau) | `Ảnh: the park` |
 | `Lời dẫn:` | câu dẫn trước hội thoại | `Lời dẫn: Mai is talking to Ben.` |
@@ -78,12 +78,15 @@ Không ghi `Trả lời:` thì app đoán theo ký hiệu như khi dán chữ, v
 - **Câu chỉ có lựa chọn** (không có thân câu, vd chọn ý chính của bài đọc): `1. A. … B. … C. …` hoặc `☐ a cake ☐ a football ☐ balloons`.
 - **Task chỉ có một câu** thì trên phiếu không đánh số câu (vẫn chừa lề cho chữ thẳng hàng với các Task khác).
 - **Câu nhiều dòng:** dòng **thụt lề** (≥ 2 dấu cách) ngay dưới một câu đánh số là dòng tiếp của câu đó. Câu không ảnh: in xuống dòng trong cùng một câu (vd câu gốc rồi `He used to ___ .` ở bài viết lại câu). Câu có `[ảnh: …]`: mỗi dòng là một dòng của ô nhiều dòng (như bài Read and underline).
+- **Kiểu chữ (v80):** `**đậm**`, `*nghiêng*`, `<u>gạch chân</u>`. Dùng được trong câu, lựa chọn, `Hướng dẫn:`, bài đọc, lời hội thoại, ô bảng, khung từ; lồng nhau được (`**<u>park</u>**` = vừa đậm vừa gạch chân). Chỉ dùng khi **ý nghĩa của bài cần** (từ bị gạch chân trong đề "closest in meaning to the underlined word", từ gốc in đậm trong ngoặc `(**POLLUTE**)`), không dùng để trang trí. Dấu thiếu cặp thì hiện nguyên là chữ (`**a`), và `*` có dấu cách hai bên (`a * b`) không phải nghiêng. **Không viết gạch chân bằng `__x__`** (app đổi mọi `__` thành chỗ trống `___`); riêng trong `Bài đọc:` thì `__x__` vẫn nhận (từ v75). Chỗ trống `___` không bao giờ nằm trong cặp dấu.
+- **Task viết đoạn / viết tự do (v80):** không có câu nào, chỉ `Hướng dẫn:` + `Trả lời: viết câu` + `Dòng viết: N` (N tới 20). App dựng một khung viết N dòng, **không số câu, không tự thêm ảnh** (muốn có ảnh thì ghi `Ảnh:`). Trước v80 Task như vậy bị hiểu nhầm thành Task “chỉ có ảnh”.
+- **Bài bên trong có hai nhóm câu, mỗi nhóm một hướng dẫn riêng (v80):** ví dụ nhóm 1 “… CLOSEST in meaning …” rồi nhóm 2 “… OPPOSITE in meaning …”, số câu bắt đầu lại từ 1. Viết nhóm sau bằng `### Phần:` (xem dưới). Nếu quên, app tự nhận ra khi thấy **một dòng chữ không đánh số, đứng sau dòng trống, ngay trước câu `1.`**: tách nó thành phần mới, dùng dòng đó làm `Hướng dẫn:`, kế thừa `Trả lời:` của phần trên, và **ghi chú ở bảng nhận diện** để người dùng kiểm tra. Cách này chỉ là lưới an toàn, nên viết `### Phần:` rõ ràng.
 - **Bài đọc:** dòng `Bài đọc:` rồi các đoạn văn; **dòng trống giữa hai đoạn = sang đoạn mới** (giữ trên phiếu). Hết bài đọc khi gặp câu đánh số, lựa chọn, dòng bảng hoặc dòng trường.
 - **Hội thoại:** dòng `Hội thoại:` rồi mỗi lượt một dòng `Tên: lời`. **Chỉ nhận hội thoại qua khối này** (từ v67): câu đánh số dạng `Place of the party: ___` là câu điền, không phải lời người nói. Tên được có số (“Students 1 and 2”). Có `___` thì thành điền chỗ trống, không có thì không có chỗ trả lời.
 - **Bảng:** các dòng ô cách nhau bằng ` | ` (hoặc Tab). Dòng đầu là tiêu đề cột (ô đầu là góc bảng). Ô trống = để học sinh viết; `[ ]` = ô tick; `[ảnh: tên]` = ô ảnh.
 - **Ô chữ giải đố (crossword):** dòng `Crossword:` rồi mỗi dòng một hàng; `#` = không có ô, `.` = ô trống chưa có đáp án, chữ cái = ô có đáp án, `(a)` = chữ cho sẵn. Số 1, 2, 3 app tự đánh. Lời gợi ý ngang / dọc đưa vào `Hướng dẫn:` hoặc văn bản kèm (chưa có cú pháp riêng; sẽ làm ở bước MD cho G-Text).
 - **Ô chữ (word search):** dòng `Ô chữ:` rồi mỗi dòng một hàng chữ cái (`SUNLIGHT…` hoặc `S U N L …`). Thành bảng chữ cái không tiêu đề, không số, căn giữa; dùng kèm `Khung từ:` cho danh sách từ cần tìm.
-- **Chỉ có ảnh** (tô màu, vẽ): chỉ ghi `Ảnh:` và `Trả lời: không`, không có câu.
+- **Chỉ có ảnh** (tô màu, vẽ): chỉ ghi `Ảnh:` và `Trả lời: không`, không có câu. (Task không có câu mà ghi `Trả lời: viết câu` là Task viết đoạn, xem trên.)
 - Dòng trống giữa các phần không bắt buộc, chỉ để dễ đọc.
 - **Mỗi `## Task` và mỗi `### Phần` chỉ có một loại chỗ trả lời.** Bài gốc có nhiều phần với chỗ trả lời khác nhau (vd điền bảng + tick một ý + hoàn thành câu) vẫn là **một** bài: phần đầu nằm ngay dưới `## Task:`, các phần sau mở bằng `### Phần: <tên phần>`.
   - Mỗi phần có `Hướng dẫn:` và `Trả lời:` riêng. `Hướng dẫn:` chỉ ghi khi PDF có câu lệnh riêng cho phần đó; **không chép lại hướng dẫn của phần trước**; bỏ trống thì phần đó không có dòng hướng dẫn.

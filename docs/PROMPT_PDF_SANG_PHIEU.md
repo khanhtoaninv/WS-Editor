@@ -1,6 +1,6 @@
 # Prompt đưa PDF phiếu bài tập vào WS Editor
 
-Cập nhật: 2026-10-25 (tối, lần 2), dùng với prototype **v68**. Bản v67 bảo AI "tách Task trộn loại" nên phiếu “A Surprise Birthday Party” ra 8 Task trong khi PDF có 6. Bản này sửa: **một bài của PDF = một `## Task`**; bài gốc có nhiều phần với chỗ trả lời khác nhau thì các phần sau là `### Phần:` (app nối vào Task trên, cùng số Task, mỗi phần giữ đáp án riêng). Vẫn giữ các quy tắc v67: không chép “Nội dung:”, bỏ “giàn giáo” của bản gốc, ô tick ☐, lựa chọn xuống dòng.
+Cập nhật: 2026-10-26 (v80: thêm quy tắc 9–11 về kiểu chữ, nhóm câu có hướng dẫn riêng, bài viết đoạn; trước đó 2026-10-25 lần 2, prototype **v68**). Bản v67 bảo AI "tách Task trộn loại" nên phiếu “A Surprise Birthday Party” ra 8 Task trong khi PDF có 6. Bản này sửa: **một bài của PDF = một `## Task`**; bài gốc có nhiều phần với chỗ trả lời khác nhau thì các phần sau là `### Phần:` (app nối vào Task trên, cùng số Task, mỗi phần giữ đáp án riêng). Vẫn giữ các quy tắc v67: không chép “Nội dung:”, bỏ “giàn giáo” của bản gốc, ô tick ☐, lựa chọn xuống dòng.
 
 Cách dùng: mở một AI đọc được PDF (Claude, ChatGPT, Gemini…), đính kèm PDF, dán MỘT trong hai prompt dưới đây. Lưu kết quả thành file `.md` (hoặc `.json`), rồi trong app bấm **+ Phiếu** (cả phiếu) hoặc **+ Task** (thêm vào phiếu đang mở) → Chọn file. Xem bảng nhận diện trước khi bấm tạo: dòng xanh là app đã tự xử lý, dòng đỏ là chỗ phải sửa. Dòng đầu bảng nên khớp số bài của PDF (vd “6 Task (Task 6 có 3 phần)”).
 
@@ -30,6 +30,9 @@ NGUYÊN TẮC
 6. Ảnh: không tạo ảnh, chỉ ghi TÊN NGẮN dạng [ảnh: tên].
 7. Mỗi file một phiếu. PDF có nhiều nhóm/phiên bản thì chỉ làm nhóm tôi chỉ định, hỏi nếu chưa rõ.
 8. Không đọc rõ thì ghi vào GHI CHÚ, không đoán.
+9. KIỂU CHỮ: chỉ giữ in đậm / nghiêng / gạch chân khi ý của bài cần chúng. Viết **đậm**, *nghiêng*, <u>gạch chân</u> (lồng nhau được: **<u>park</u>**). Ví dụ cần: từ bị gạch chân trong đề "closest in meaning to the underlined word(s)" → "Acupuncture <u>originated</u> in China…"; từ gốc in đậm trong ngoặc → "We are trying to have an ___ world. (**POLLUTE**)"; từ cần chú ý trong bài đọc. KHÔNG dùng cho tiêu đề, nhãn, số câu hay chữ chỉ trang trí. KHÔNG viết gạch chân bằng dấu gạch dưới (__từ__): app hiểu đó là chỗ trống.
+10. NHÓM CÂU CÓ HƯỚNG DẪN RIÊNG TRONG CÙNG MỘT BÀI (số câu bắt đầu lại từ 1, vd một nhóm "CLOSEST in meaning", một nhóm "OPPOSITE in meaning"): nhóm sau mở bằng "### Phần: <tên>" kèm "Hướng dẫn:" là câu lệnh của nhóm đó và "Trả lời:" riêng. KHÔNG để câu lệnh của nhóm sau nằm trơ giữa các câu đánh số.
+11. BÀI VIẾT ĐOẠN / VIẾT TỰ DO (không có câu hỏi, học sinh viết cả bài): chỉ ghi "Hướng dẫn:", "Trả lời: viết câu" và "Dòng viết: N" (N = số dòng kẻ trong PDF, tới 20; không rõ thì ước lượng và ghi vào GHI CHÚ). Không viết câu mẫu, không ghi "Ảnh:" nếu PDF không có tranh.
 
 QUY ƯỚC
 # Tên phiếu
@@ -38,7 +41,7 @@ Tuổi: 7-9                                  (5-6 | 7-9 | 10-12)
 ## Task: <tiêu đề bài>                     (mỗi bài của PDF bắt đầu bằng dòng này)
 Hướng dẫn: <lệnh / hướng dẫn của bài>
 Trả lời: <BẮT BUỘC, một trong: viết từ | điền chỗ trống | viết câu | khoanh A/B/C | chọn trong câu | tick | đúng/sai | nối | tô chữ | không>
-Dòng viết: 1                               (chỉ với "viết câu": số dòng mỗi câu)
+Dòng viết: 1                               (chỉ với "viết câu": số dòng mỗi câu; bài viết đoạn: tổng số dòng, tới 20)
 Khung từ: từ1, từ2, từ3                    (nếu có hộp từ)
 Ảnh: <tên ảnh chung>                       (nếu bài có một tranh chung)
 Track: Track 05                            (nếu là bài nghe)
@@ -66,6 +69,8 @@ CÁCH VIẾT CÂU
 - Ô chữ giải đố (crossword, có ô trắng tự đánh số và gợi ý Across / Down): dòng "Crossword:" rồi mỗi dòng một hàng của lưới: # = không có ô, . = ô trống, chữ cái = đáp án (nếu suy ra được), (a) = chữ đã cho sẵn. Không đoán đáp án nếu PDF không có: dùng "." cho các ô.
 - Ô chữ (word search): dòng "Ô chữ:" rồi mỗi dòng một hàng chữ cái; từ cần tìm đưa vào "Khung từ:".
 - Bài chỉ có tranh (tô màu, vẽ): chỉ "Ảnh:" và "Trả lời: không".
+- Bài viết đoạn (không câu hỏi): "Trả lời: viết câu" + "Dòng viết: 15", không có dòng câu nào.
+- Chữ cần nhấn: **đậm**, *nghiêng*, <u>gạch chân</u>.
 
 CHỌN "Trả lời:"
 - ___ trong câu → điền chỗ trống
@@ -92,6 +97,8 @@ TỰ KIỂM TRA TRƯỚC KHI TRẢ LỜI
 - Số câu đúng bằng PDF; không còn ___ thừa ở cuối câu Đúng/Sai, viết câu.
 - Không "Hướng dẫn:" nào bị chép lặp từ phần trước.
 - Bài đọc giữ đúng số đoạn.
+- Từ bị gạch chân / in đậm mà đề nhắc tới (underlined, bold) đã được đánh dấu bằng <u> hoặc **.
+- Không có dòng hướng dẫn nào nằm trơ giữa các câu đánh số: nhóm câu có hướng dẫn riêng đã thành "### Phần:".
 
 ĐẦU RA: một khối ```markdown, rồi GHI CHÚ: (1) chỗ đọc không rõ, (2) bài nào có nhiều phần (### Phần) và vì sao, (3) ảnh cần tải lên theo từng Task.
 
