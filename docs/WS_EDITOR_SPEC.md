@@ -685,3 +685,13 @@ Danh sách gốc và trạng thái từng việc: `docs/DANH_SACH_VIEC_v85.md`.
 - **Sửa lỗi cũ:** hoàn tác sau khi thêm khối làm panel lỗi (vẫn chọn khối không còn); `renderInspector` về chọn cả Task.
 - **Kiểm thử:** `tests/test34.py` (31 mục, ảnh mẫu `tests/ph_tall.jpg`, `ph_wide.jpg`, `ph_sq.jpg`). test2 và cmp_v80 đưa khoảng cách về Vừa trước khi so; test31 kiểm badge v85.
 - **Chờ người dùng xác nhận (chưa làm):** A3 Task 5 không tách trang (cần phiếu thật); C3 cột trái 420 px (có phải "khung Thao tác Phiếu"); D2 chữ câu hỏi Bình thường / Đậm (chỉ chữ câu hỏi?); F1 màu xanh dấu đáp án (mã màu); F2 ô tích chọn đáp án đúng (ở cột trái, trên phiếu hay cả hai).
+
+## 23. Lô sau v85 (v86, 26/10/2026)
+- **Cột trái mặc định 420 px** (`LW_DEF`, `--lw`). Độ rộng đã kéo (lưu ở trình duyệt) vẫn giữ; bấm đúp thanh chia về 420; màn hẹp vẫn tự giới hạn (`lwMax`).
+- **Chữ câu hỏi Bình thường / Đậm** theo Task: hàng "Chữ câu hỏi" dưới tiêu đề mục G3, lưu `layout.qbold`, trang có `data-qb` → đậm `.qt`, `.c2>span`, `.itx`, `.cl`, `.ml>span`; lựa chọn a b c không đậm. Không hiện ở Bảng, Hội thoại, Tô chữ. MD chưa mang.
+- **Thanh B I U dính:** hàng "Câu hỏi" (G3) và hàng "Bài đọc / Lời dẫn" (G2, thêm ¶) có thanh chèn ký hiệu, dính ngay dưới thanh tiêu đề Task khi cuộn (`position:sticky; top:var(--tkh)`; `.sec` đổi `overflow:hidden` → `overflow:clip`).
+- **Màu đáp án (F1):** đáp án sẵn của câu ví dụ trên phiếu (khoanh, ✓, viền Đúng/Sai, chữ đáp án) và ô tích ở cột trái dùng xanh lá đậm của app `#0a6b75` (trước: xám `#4a5560`, ô tích xanh lá `#1b8a3a`).
+- **Ô tích đáp án đúng (F2):** dưới ô "Chọn" của câu Chọn A/B/C và ở câu Đúng/Sai có hàng "Đúng" với ô tích từng lựa chọn; ảnh Q7 vẫn tích dưới ảnh. Chọn được nhiều đáp án: `key` = "b, c" (`keyParts`, `exPicks`); Đúng/Sai chỉ một. Gõ ở ô "Đáp án" vẫn được. Ô tích không in ra phiếu; câu ví dụ khoanh / tích tất cả đáp án đúng.
+- **Ảnh chung ở lưới ảnh (A2):** Task lưới ảnh (`cellImgMode`) có ảnh chung thì `G1` không có ô = ảnh chung (`kindOf` → `frame`), nên Fit trong hộp Tạo ảnh và panel Ảnh chung có tác dụng. Trước đó `G1` = "mọi ô ảnh", Fit bị ghi vào chỗ không dùng. Chỉnh mọi ô ảnh câu cùng lúc: chọn một ô rồi "Áp cho · Cả Task".
+- **Câu hỏi có ảnh chung cắt được trang (A3):** bố cục Xếp dọc / Ảnh trái / Ảnh phải, Liền trang: cắt theo từng câu (`units`); ảnh và tiêu đề chỉ ở phần đầu, phần sau chạy hết bề ngang. Tách trang vẫn chuyển nguyên Task.
+- **Kiểm thử:** `tests/test35.py` (16 mục); test31 kiểm badge v86.

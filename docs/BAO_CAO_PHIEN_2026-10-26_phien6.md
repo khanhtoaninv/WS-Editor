@@ -1,7 +1,7 @@
 # Báo cáo phiên 26/10/2026 (phiên 6): v85, sửa theo danh sách việc
 
 ## 0. BÀN GIAO CHO PHIÊN SAU (đọc mục này trước)
-**Trạng thái:** `main` = **v85**. Danh sách việc và trạng thái: `docs/DANH_SACH_VIEC_v85.md`. Đặc tả: `docs/WS_EDITOR_SPEC.md` mục 22.
+**Trạng thái:** `main` = **v86** (mục 3). v85 ở mục 0–2. Danh sách việc và trạng thái: `docs/DANH_SACH_VIEC_v85.md`. Đặc tả: `docs/WS_EDITOR_SPEC.md` mục 22.
 
 **Đã làm (người dùng nói "thực hiện lần lượt, mỗi việc tự kiểm thử"):**
 | Việc | Nội dung |
@@ -39,3 +39,12 @@ Khi tìm lỗi Task 3: ở ô ảnh lưới, `imgAr[key]` vừa là tỉ lệ kh
 - **Kết quả chạy đủ bộ trên bản cuối:** test1–34 đều ALL OK, audit PROBLEMS 0, cmp_v80 ALL OK (18 phiếu). test29 ~85 s, test32 ~170 s.
 - **Sửa thêm một lỗi cũ (có từ v84) lộ ra khi chạy test2:** thêm khối (vd Khung từ) rồi Ctrl+Z thì panel phải báo lỗi vì vẫn đang chọn khối không còn. Nay `renderInspector` tự về chọn cả Task khi khối đang chọn không còn (G4 / G1 / khối tự do).
 - **Chưa kiểm thử:** màn hình nhỏ; ảnh thật của người dùng (chỉ dùng ảnh tổng hợp 3 tỉ lệ); test34 có một lần lỗi thời gian chờ khi bấm ảnh khung từ lúc trang đang vẽ lại, đã thêm bước chọn dự phòng.
+
+## 3. v86 (cuối phiên): người dùng trả lời 5 mục chờ + thêm thanh B I U dính
+- Người dùng gửi ảnh: Task 3 thêm ảnh chung, Fit ngang không ăn (ảnh chỉ nửa trái); Task 5 thêm ảnh chung thì tràn trang. Tái hiện được cả hai: (A2) ở lưới ảnh, `G1` không có ô bị hiểu là "mọi ô ảnh" nên Fit ghi sai chỗ; (A3) giới hạn cũ, câu hỏi có ảnh chung không cắt được.
+- Chốt: C3 = cột trái 420 px; D2 = nút Bình thường / Đậm cho chữ câu hỏi; F1, F2 (sau hình `docs/MINH_HOA_F1_F2.png`) = xanh lá đậm của app #0a6b75, ô tích ở cột trái; thêm H1 = thanh B I U dính ở cả G2 và G3.
+- Đã làm tất cả (spec mục 23), mỗi việc tự kiểm thử. test35 mới.
+- Lỗi phát hiện khi chạy đủ bộ: `overflow:clip` (để thanh B I U dính được) làm ô `.sec` không tự co, nên dòng tóm tắt dài của G2 đẩy cột trái phình ngang (nút ⓘ bị đẩy ra ngoài). Sửa: thêm `min-width:0` cho `.sec`; test35 thêm kiểm tra mọi Task không làm cột trái cuộn ngang.
+- Test cũ cập nhật theo hành vi mới: test1 (420 px), test19 (đặt cột 360 trước khi đo), test29 (G4 Dưới câu hỏi tìm ở mọi mảnh Task vì Task giờ cắt được), test31 (tích nhiều đáp án: B rồi C → "B, C"; bấm lại C → "B").
+- KẾT QUẢ CHẠY ĐỦ BỘ v86 (bản cuối): test1–35 đều ALL OK (test35: 17 kiểm tra), audit PROBLEMS 0, cmp_v80 ALL OK, 0 lỗi console.
+- Chưa làm / giới hạn: MD chưa mang `qbold` (Đậm chữ câu hỏi chỉ lưu trong JSON); hàng "Chữ câu hỏi" vẫn hiện ở lưới ảnh không có chữ (bấm không ảnh hưởng gì).

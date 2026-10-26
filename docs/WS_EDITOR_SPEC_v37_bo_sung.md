@@ -313,7 +313,12 @@ Thu gọn theo thẻ + liên kết chọn khối, Nối Task / xóa có hỏi, G
 ## AD. v84 (2026-10-26) — xem WS_EDITOR_SPEC.md mục 21
 Ảnh chung ở mọi dạng, chọn đúng khối G3 / GT, căn lề Task kéo theo ảnh, cỡ chữ mặc định Vừa, hàng bảng 12 mm, nhãn a b c, khối tự do + Thêm / nhiều ảnh, độ rộng ảnh %, hội thoại cắt trang.
 
-## AB. BÀN GIAO (2026-10-26, bản v85) — đọc mục này đầu tiên khi mở thread mới
+## AB. BÀN GIAO (2026-10-26, bản v86) — đọc mục này đầu tiên khi mở thread mới
+- **Bản v86** (spec mục 23, báo cáo `docs/BAO_CAO_PHIEN_2026-10-26_phien6.md` mục 3): cột trái 420 px; chữ câu hỏi Đậm; thanh B I U dính ở G2, G3; đáp án + ô tích màu #0a6b75, ô tích nhiều đáp án đúng; ảnh chung ở lưới ảnh có panel riêng (Fit đúng); câu hỏi có ảnh chung cắt được trang. Mọi mục của `docs/DANH_SACH_VIEC_v85.md` đã làm.
+- **Việc tiếp theo:** chi tiết trang (tiêu đề phiếu, Họ tên/Lớp/Ngày, header/footer); P3 với PDF thật; G2 bố cục riêng; MD chưa mang `qbold`, `x.n`, `qmem`; 4 câu hỏi chờ từ v84.
+- Cách chạy test như bàn giao v85.
+
+## AB-cũ. BÀN GIAO (2026-10-26, bản v85)
 - **Bản v85** (spec mục 22, báo cáo `docs/BAO_CAO_PHIEN_2026-10-26_phien6.md`, danh sách việc `docs/DANH_SACH_VIEC_v85.md`): Q8/Q9 hiện Khung từ; Fit dùng tỉ lệ thật của ảnh; ảnh thứ hai và ảnh khung từ có Fit + Zoom riêng; bỏ "Khối của bài"; G3 "Câu hỏi" + thanh B I U ___ {a|b}; khoảng cách mặc định Gọn; hộp hỏi xóa nền mờ, bấm ngoài = Hủy; mỗi bài một câu ví dụ.
 - **Mặc định mới cần nhớ:** khoảng cách Gọn (phiếu mẫu 10 trang). test2 / cmp_v80 đưa về Vừa trước khi so.
 - **Chờ người dùng xác nhận (chưa làm):** A3 Task 5 không tách trang (gửi phiếu); C3 cột trái 420 px; D2 chữ câu hỏi Đậm (phạm vi); F1 màu xanh dấu đáp án; F2 ô tích chọn đáp án đúng (ở đâu). A2 "ô ảnh Task 3 lúc đúng lúc sai": đã sửa nguyên nhân tìm được, chưa có ca tái hiện của người dùng.

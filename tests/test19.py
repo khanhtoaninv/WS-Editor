@@ -7,7 +7,7 @@ with sync_playwright() as p:
     b=p.chromium.launch(); pg=b.new_page(viewport={'width':1440,'height':900}); errs=[]
     pg.on('console',lambda m: errs.append(m.text) if m.type=='error' and 'ERR_' not in m.text and 'font' not in m.text.lower() else None)
     pg.on('pageerror',lambda e: errs.append('PAGEERR '+str(e)))
-    pg.goto(F); pg.wait_for_timeout(1500)
+    pg.goto(F); pg.evaluate("localStorage.setItem('wsEditor.leftW.v2','360')"); pg.reload(); pg.wait_for_timeout(1500)   # v86: cột trái mặc định 420; phép đo này tính theo tỉ lệ màn hình cũ (cột 360)
     chk('badge ≥ v70', int(__import__('re').sub(r'\D','',pg.evaluate("document.getElementById('verBadge').textContent")) or 0) >= 70)
     # 1. 80/20 cho T4 + A6
     chk('T4+A6 mặc định 80', pg.evaluate("ratioOf(ws.tasks[12])")==80)

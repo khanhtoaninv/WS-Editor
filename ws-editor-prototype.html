@@ -1,5 +1,6 @@
 <meta charset="utf-8">
 <title>WS Editor</title>
+<!-- v86: cột trái 420 px; chữ câu hỏi Bình thường / Đậm; thanh B I U dính ở G2, G3; đáp án câu ví dụ + ô tích màu #0a6b75, ô tích chọn nhiều đáp án đúng; ảnh chung ở lưới ảnh có panel riêng (Fit đúng); câu hỏi có ảnh chung cắt được trang -->
 <!-- v85: Q8/Q9 hiện Khung từ; ảnh ô lưới dùng tỉ lệ thật khi Fit; ảnh thứ hai và ảnh khung từ có Fit + zoom riêng; bỏ "Khối của bài"; G3 "Câu hỏi" + thanh B I U; khoảng cách mặc định Gọn; hộp hỏi xóa nền mờ, bấm ngoài để hủy; mỗi bài một câu ví dụ -->
 <!-- v81: kiến trúc trình bày mới — Bố cục Task 4 kiểu (Xếp dọc / Ảnh trái / Ảnh phải / Ảnh trong bài đọc), 12 dạng câu hỏi có hình xem trước, khối thêm / xóa thống nhất, câu ví dụ số 0, dòng chữ giữa các câu, hai ảnh chung, khung từ ảnh, bốn ô li, khung vẽ, nhãn A–D dưới đoạn gạch chân, nhãn Đúng/Sai tự đặt, câu hỏi trước bài đọc. Dữ liệu cũ mở ra giống v80. -->
 <!-- v71: nhãn lựa chọn (Ⓐ / ☐) nằm ngang dòng đầu của lựa chọn, không còn canh giữa khi lựa chọn dài hai dòng; khoảng cách nhãn → chữ 2 mm (trước 1,2 / 1,6 mm). -->
@@ -61,7 +62,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
-.app{height:100%;display:grid;grid-template-columns:var(--lw,360px) minmax(0,1fr) 312px;grid-template-rows:auto minmax(0,1fr);gap:0 20px}
+.app{height:100%;display:grid;grid-template-columns:var(--lw,420px) minmax(0,1fr) 312px;grid-template-rows:auto minmax(0,1fr);gap:0 20px}
 .top{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding-block:10px;border-bottom:1px solid var(--line)}
 .brand{font-weight:600;font-size:15px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:8px}
 .brand small{font-weight:400;color:var(--muted);font-size:12px}
@@ -444,16 +445,19 @@ dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 .a1.r4 .ln,.a8.r4{background:repeating-linear-gradient(to bottom,#c3ccd2 0 .2mm,transparent .2mm calc(var(--lh) / 3));border-bottom-color:var(--ink-3)}
 .a1.abox{height:var(--bh);border:.35mm solid var(--ink-3);border-radius:2mm}
 .a6.lb span{width:auto;min-width:var(--as,7.5mm);padding:0 1.8mm;border-radius:999px}
-.exk{font-style:italic;color:#4a5560;padding:0 1mm;white-space:nowrap}
+/* v86 (F1): đáp án sẵn của câu ví dụ màu xanh lá đậm #0a6b75 */
+.exk{font-style:italic;color:#0a6b75;padding:0 1mm;white-space:nowrap}
 .a1 .ln .exk{display:inline-block;padding-top:.6mm}
 .a2 .exk{display:block;text-align:center;line-height:1.15}
 .a3 i .exk{display:block;text-align:center;font-style:normal}
-.opt.pk>b,.opt.pk>i{outline:.45mm solid #4a5560;outline-offset:.4mm;border-radius:50%}
-.a6 span.pk{box-shadow:0 0 0 .45mm #4a5560}
-.a5.pk{display:inline-grid;place-items:center}.a5.pk::after{content:'✓';font-weight:700;color:#4a5560}
-.a4i b.pk{border-radius:1.5mm;outline:.4mm solid #4a5560;outline-offset:.3mm}
+.opt.pk>b,.opt.pk>i{outline:.45mm solid #0a6b75;outline-offset:.4mm;border-radius:50%}
+.a6 span.pk{box-shadow:0 0 0 .45mm #0a6b75}
+.a5.pk{display:inline-grid;place-items:center}.a5.pk::after{content:'✓';font-weight:700;color:#0a6b75}
+.a4i b.pk{border-radius:1.5mm;outline:.4mm solid #0a6b75;outline-offset:.3mm}
 .ino.ex{color:var(--ink-2)}
 .q.g3t .qt{font-weight:600}
+/* v86: chữ câu hỏi Đậm (theo Task); lựa chọn a b c không đậm */
+.task[data-qb] .qt,.task[data-qb] .c2>span,.task[data-qb] .itx,.task[data-qb] .cl,.task[data-qb] .ml>span{font-weight:700}
 .tbl>.g3tw{grid-column:1/-1}
 .qwho{font-weight:700;margin-right:.3em}
 .ulb{display:inline-flex;flex-direction:column;align-items:center;line-height:1.15;vertical-align:top}.ulb i{font-style:normal;font-weight:700;font-size:.72em}
@@ -586,7 +590,7 @@ dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 .tkb{margin:6px 0 4px;padding:0;border-left:0}
 .ed{display:grid;gap:8px;margin:0;padding:0;border:0;background:none}
 .tkt{padding:0 0 2px}
-.sec,.sec:first-of-type{background:var(--card);border:1px solid var(--ln2);border-radius:10px;overflow:hidden}
+.sec,.sec:first-of-type{background:var(--card);border:1px solid var(--ln2);border-radius:10px;overflow:hidden;overflow:clip;min-width:0}   /* v86: clip (không tạo vùng cuộn) để thanh B I U dính được; min-width:0 vì clip không tự co ô lưới */
 .sech{padding:9px 10px;gap:8px;color:var(--fg);font-size:13px;font-weight:600;text-transform:none;letter-spacing:0}
 .sech:hover{background:var(--card-2)}
 .sec.open>.sech{background:var(--card-2);color:var(--fg);border-bottom:1px solid var(--ln2)}
@@ -785,7 +789,8 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 .eb.exb{font-size:10px;padding:0 5px;width:auto}.eb.exb.on{background:var(--accent);border-color:var(--accent);color:var(--panel);font-weight:700}
 .eit.eex{border-color:var(--accent);background:var(--accent-soft)}
 .tkq{flex:none;width:24px;height:24px;border:1.5px solid var(--ln2);border-radius:6px;background:var(--card);color:transparent;font-size:15px;font-weight:700;line-height:1;padding:0;display:grid;place-items:center}
-.tkq:hover{border-color:#1b8a3a}.tkq.on{background:#1b8a3a;border-color:#1b8a3a;color:#fff}
+.tkq:hover{border-color:var(--accent)}.tkq.on{background:var(--accent);border-color:var(--accent);color:#fff}   /* v86: cùng màu xanh thanh tiêu đề */
+.ktk{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px}.ktk .ko{display:inline-flex;align-items:center;gap:4px;font-size:12px;cursor:pointer}.ktk .tkq{width:18px;height:18px;font-size:12px;border-radius:4px}
 .imgsgrid .imgblk{position:relative}
 .imgrow2{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:start}
 .imgrow2>.ithumb{height:62px;max-width:84px;min-width:56px}
@@ -812,6 +817,10 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 .g3tb button[data-tx=b]{font-weight:700}.g3tb button[data-tx=i]{font-style:italic}.g3tb button[data-tx=u]{text-decoration:underline}
 .g3tb button:hover{border-color:var(--accent)}
 .ef.g3ar{align-items:center}.ef.g3ar>.tinfo{margin-left:auto}
+/* v86: hàng có thanh B I U (G3 "Câu hỏi", G2 "Bài đọc") dính ngay dưới thanh tiêu đề Task khi cuộn */
+.sec[data-sec=g3] .subh,.sec[data-sec=g2] .ef>.elb.g2bar{position:sticky;top:var(--tkh,50px);z-index:3;background:var(--card);box-shadow:0 1px 0 var(--ln2)}
+.sec[data-sec=g3] .subh{margin-top:6px;padding:6px 0}
+.sec[data-sec=g2] .ef>.elb.g2bar{display:flex;align-items:center;gap:4px;width:100%;padding:4px 0}
 .eit.egt{background:var(--panel2,#f7f7f7)}.eit.egt .ino{font-size:10px;color:var(--muted)}
 .ino.ex{color:var(--accent)}
 .eb.xb{margin-left:4px;font-size:10px;padding:0 4px;width:auto;vertical-align:1px}
@@ -820,7 +829,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 
 <div class="app">
   <header class="top">
-    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v85</span> <small id="wsTitle"></small></div>
+    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v86</span> <small id="wsTitle"></small></div>
     <div class="tb">
       <label for="age" class="hint" style="margin:0">Độ tuổi</label>
       <select id="age"><option value="5-6">5–6</option><option value="7-9">7–9</option><option value="10-12">10–12</option></select>
@@ -3637,19 +3646,23 @@ function a4dir(t, item) {
 function ansAlignDef(t) { const L = layoutOf(t); if (L === 'T4' || L === 'T7' || t.content.variant === 'multi') return 'center'; if (L === 'T5' && t.layout.align) return t.layout.align; return 'left'; }
 // v81: câu ví dụ hiện sẵn đáp án (key) trong chỗ trả lời
 function ans(t, item) { const h = ans0(t, item); return item && typeof item === 'object' && item.ex && String(item.key ?? '').trim() ? exFill(t, item, h) : h; }
+// v86 (F2): một câu có thể có nhiều đáp án đúng, ghi "a, c" (hoặc chữ của lựa chọn, cách nhau dấu phẩy)
+function optsOfKey(t, x) { if (x.imgs) return x.imgs; if (x.opts) return x.opts; if (t.answer.layout === 'A6') return [...ans0(t, x).matchAll(/<span>([^<]*)<\/span>/g)].map(m => m[1]); return []; }
+const keyParts = item => String(item.key ?? '').split(/\s*[,;]\s*/).map(x => x.trim()).filter(Boolean);
+function exPicks(t, item, opts) { const r = []; keyParts(item).forEach(k => { const i = exPick(t, { key: k }, opts); if (i >= 0 && !r.includes(i)) r.push(i); }); if (!r.length) { const i = exPick(t, item, opts); if (i >= 0) r.push(i); } return r; }
 function exPick(t, item, opts) { const k = String(item.key).trim(), L = k.toLowerCase(); if (/^[a-d]$/i.test(k) && opts.length > 1 && !opts.some(o => String(o).trim().toLowerCase() === L)) return 'abcd'.indexOf(L); return opts.findIndex(o => String(o).replace(/<[^>]+>|\*/g, '').trim().toLowerCase() === L); }
 function exFill(t, item, h) {
   const k = esc(String(item.key).trim()), A = t.answer.layout, ek = `<span class="exk">${k}</span>`;
   if (A === 'A1') return h.replace('<div class="ln"></div>', `<div class="ln">${ek}</div>`);
   if (A === 'A2') return h.replace(/(<span class="a a2"[^>]*>)(<\/span>)/, `$1${ek}$2`);
   if (A === 'A3') { const ch = [...String(item.key).trim().replace(/\s+/g, '')]; let j = 0; return h.replace(/<i><\/i>/g, () => `<i>${ch[j] ? `<span class="exk">${esc(ch[j++])}</span>` : (j++, '')}</i>`); }
-  if (A === 'A4') { const i = exPick(t, item, item.opts || []); let n = -1; return i < 0 ? h : h.replace(/<span class="opt">/g, m => (++n === i ? '<span class="opt pk">' : m)); }
+  if (A === 'A4') { const ix = exPicks(t, item, item.opts || []); let n = -1; return !ix.length ? h : h.replace(/<span class="opt">/g, m => (ix.includes(++n) ? '<span class="opt pk">' : m)); }
   if (A === 'A5') return h.replace('class="a a5"', 'class="a a5 pk"');
   if (A === 'A6') { const L = String(item.key).trim().toLowerCase(), al = { true: 't', false: 'f', 'đúng': 't', 'sai': 'f', yes: 'yes', no: 'no' }[L] || L; return h.replace(/<span>([^<]*)<\/span>/g, (m, x) => (x.toLowerCase() === al || x.toLowerCase() === L) ? `<span class="pk">${x}</span>` : m); }
   return h;
 }
 // Câu nhiều ảnh lựa chọn (Q7): chỉ ô của ảnh đúng trong câu ví dụ được tích sẵn (✓)
-function ansI(t, item, j) { const h = ans0(t, item); return item.ex && String(item.key ?? '').trim() && t.answer.layout === 'A5' ? (exPick(t, item, item.imgs || []) === j ? h.replace('class="a a5"', 'class="a a5 pk"') : h) : h; }
+function ansI(t, item, j) { const h = ans0(t, item); return item.ex && String(item.key ?? '').trim() && t.answer.layout === 'A5' ? (exPicks(t, item, item.imgs || []).includes(j) ? h.replace('class="a a5"', 'class="a a5 pk"') : h) : h; }
 function ans0(t, item) {
   const a = t.answer, p = pOf(t, item), age = AGE[ws.age], key = item && typeof item === 'object' ? item.id : null;
   const nd = `data-node="${t.id}:G3${key ? ':' + key : ''}"${p.align ? ` data-aa="${p.align}"` : ''}`;
@@ -3806,7 +3819,7 @@ function renderTask(t, frag, mt) {
   const at = [fitOf(t) ? `data-fit="${fitOf(t)}"` : '', alignOf(t) ? `data-ia="${alignOf(t)}"` : '',
     L === 'T5' && lay.align && cellDirOf(t) !== 'row' ? `data-ca="${lay.align}"` : '', frameH(t) ? 'data-ih="1"' : '', lay.num === 'off' ? 'data-nonum="1"' : '',
     lay.valign && cellDirOf(t) !== 'row' ? `data-va="${lay.valign}"` : '', fr.valign && isColI(t) ? `data-iv="${fr.valign}"` : '',
-    lay.width && t6w ? 'data-w2="1"' : '', lay.align && (t6w || L === 'T8') ? `data-al2="${lay.align}"` : ''].filter(Boolean).join(' ');
+    lay.width && t6w ? 'data-w2="1"' : '', lay.align && (t6w || L === 'T8') ? `data-al2="${lay.align}"` : '', lay.qbold ? 'data-qb="1"' : ''].filter(Boolean).join(' ');   // v86: data-qb = chữ câu hỏi đậm
   const g0 = cont ? '' : isJoined(t) ? (t.instruction ? `<div class="g0 jn" data-node="${t.id}:G0"><div class="g0t"><span class="ins">${er(t.instruction)}</span></div></div>` : '') : `<div class="g0" data-node="${t.id}:G0"><span class="num">${t.number}</span><div class="g0t"><span class="ttl">${esc(t.title)}</span>${t.audio ? `<span class="trk">${esc(t.audio)}</span>` : ''}<span class="ins">${er(t.instruction)}</span></div>${qrHtml(t)}</div>`;
   const ex = Array.isArray(t.extras) ? t.extras : [], lastF = !frag || !!frag.last;
   const gtTop = first ? ex.filter(x => x.pos === 'top').map(x => gtHtml(t, x, 'top')).join('') : '', gtBot = lastF ? ex.filter(x => x.pos !== 'top').map(x => gtHtml(t, x, 'bot')).join('') : '';
@@ -3977,6 +3990,7 @@ function units(t) {
   const L = layoutOf(t), c = t.content, k0 = ck(t), chunk = (n, k) => { const u = []; for (let i = 0; i < n; i += k) u.push([i, Math.min(n, i + k) - 1]); return u; };
   if (k0 === 'items' && (L === 'T5' || L === 'T6')) return chunk(c.items.length, colsOf(t));
   if (k0 === 'questions' && t.answer.attach !== 'block' && (L === 'T6' || L === 'T4')) return chunk(c.items.length, L === 'T6' ? colsOf(t) : 1);
+  if (k0 === 'questions' && t.answer.attach !== 'block' && t.image && ['T1', 'T2', 'T3'].includes(L)) return c.items.length > 1 ? chunk(c.items.length, 1) : null;   // v86: câu hỏi có ảnh chung cắt theo câu; ảnh ở phần đầu, phần sau chạy hết bề ngang
   if (k0 === 'trace') return chunk(c.items.length, 1);
   if (k0 === 'dialogue') return c.items.length > 1 ? chunk(c.items.length, 1) : null;
   if (k0 === 'passage' && L === 'T8') return its(t).length ? chunk(its(t).length, 1) : null; // bài đọc (ảnh + văn bản) đi cùng câu đầu, các câu sau có thể sang trang
@@ -4393,7 +4407,7 @@ function kindOf(t, s) {
   const g = s.g, it = s.item;
   if (g === 'GT') return it && gtOf(t, it) ? 'gt' : 'task';
   if (g === 'G0') return 'head';
-  if (g === 'G1') return it ? 'cimg' : (cellImgMode(t) ? 'cimgs' : 'frame');
+  if (g === 'G1') return it ? 'cimg' : (cellImgMode(t) && !t.image ? 'cimgs' : 'frame');   // v86: lưới ảnh có ảnh chung → G1 = ảnh chung (panel Ảnh chung); chỉnh mọi ô cùng lúc bằng "Áp cho · Cả Task"
   if (g === 'G2') return it ? 'crow' : 'task';
   if (g === 'G3') return it ? 'aitem' : 'answer';
   if (g === 'G4') return 'bank';
@@ -5607,7 +5621,7 @@ function edItems(t) {
     else f += eIn(`it.${i}.text`, x.text || '', k === 'trace' ? 'Từ để tô' : 'Chữ (___ chỗ trống, {a|b} chọn)', { label: `Chữ câu ${i + 1}`, area: /\n/.test(x.text || ''), rows: ((x.text || '').match(/\n/g) || []).length + 1 });
     if (x.img != null) f = (!x.pair && !x.who && !x.lines && !x.imgs) ? `<div class="imgrow2">${thumbHtml(t, '@' + x.id)}<div class="imgcol">${eIn(`it.${i}.img`, x.img, 'Chữ dưới ảnh / tên ảnh', { label: `Chữ dưới ảnh câu ${i + 1}` })}${f}</div></div>`
       : `<div class="imgblk">${thumbHtml(t, '@' + x.id)}${eIn(`it.${i}.img`, x.img, 'Chữ dưới ảnh / tên ảnh', { label: `Chữ dưới ảnh câu ${i + 1}` })}</div>` + f;
-    if (x.imgs) f += `<div class="imgsgrid" style="--n:${x.imgs.length}">${x.imgs.map((im, j) => `<div class="imgblk">${thumbHtml(t, `@${x.id}.${j}`)}${eIn(`it.${i}.imgs.${j}`, im, 'Chữ dưới ảnh', { label: `Chữ dưới ảnh ${j + 1} của câu ${i + 1}` })}${t.answer.layout === 'A5' ? `<button type="button" class="tkq${String(x.key ?? '').trim() && exPick(t, x, x.imgs) === j ? ' on' : ''}" data-eact="tickopt" data-i="${i}" data-j="${j}" aria-pressed="${!!(String(x.key ?? '').trim() && exPick(t, x, x.imgs) === j)}" title="Tick ✓ = ảnh này là đáp án đúng" aria-label="Đáp án đúng: ảnh ${j + 1} của câu ${i + 1}">✓</button>` : ''}</div>`).join('')}</div>`;
+    if (x.imgs) f += `<div class="imgsgrid" style="--n:${x.imgs.length}">${x.imgs.map((im, j) => `<div class="imgblk">${thumbHtml(t, `@${x.id}.${j}`)}${eIn(`it.${i}.imgs.${j}`, im, 'Chữ dưới ảnh', { label: `Chữ dưới ảnh ${j + 1} của câu ${i + 1}` })}${t.answer.layout === 'A5' ? `<button type="button" class="tkq${exPicks(t, x, x.imgs).includes(j) ? ' on' : ''}" data-eact="tickopt" data-i="${i}" data-j="${j}" aria-pressed="${!!(String(x.key ?? '').trim() && exPick(t, x, x.imgs) === j)}" title="Tick ✓ = ảnh này là đáp án đúng" aria-label="Đáp án đúng: ảnh ${j + 1} của câu ${i + 1}">✓</button>` : ''}</div>`).join('')}</div>`;
     if (x.opts) f += `<div class="er2"><span class="elb">Chọn</span>${eIn(`it.${i}.opts`, fieldVal(x, 'opts'), 'a / b / c', { label: `Lựa chọn câu ${i + 1}` })}</div>`;
     if (t.answer.layout === 'A3' && !x.who && !x.pair) f += `<div class="er2"><span class="elb">Số ô</span>${eIn(`it.${i}.len`, x.len || '', 'tự động', { w: '60px', label: `Số ô chữ câu ${i + 1}` })}</div>`;
     if (keys && !(x.imgs && t.answer.layout === 'A5')) f += `<div class="er2"><span class="elb">Đáp án</span>${eIn(`it.${i}.key`, x.key || '', 'đáp án đúng', { label: `Đáp án đúng câu ${i + 1}` })}</div>`;
@@ -7276,7 +7290,9 @@ treeEl.addEventListener('click', e => {
   const T = w => w.tasks.find(y => y.id === id);
   if (Q_ACTS.includes(act)) { let msg = null; return commit(w => { msg = qCmd(T(w), act, v); }, null, () => { if (msg) toast(msg); }); }
   if (act === 'blkdel') { let m = null; if (sel.type === 'group' && sel.id === id) { sel = { type: 'task', id }; multi = []; } return commit(w => { m = blkDel(T(w), v); }, null, () => { if (sel.type === 'group' && sel.id === id) { sel = { type: 'task', id }; refreshSel(); } if (m) toast(m + ' · Ctrl+Z để hoàn tác'); }); }
-  if (act === 'tickopt') { const i = +b.dataset.i, j = +b.dataset.j; return commit(w => { const x = its(T(w))[i]; if (!x) return; const on = String(x.key ?? '').trim() && exPick(T(w), x, x.imgs || []) === j; x.key = on ? '' : 'abcd'[j] || String(j + 1); }); }
+  if (act === 'tickopt') { const i = +b.dataset.i, j = +b.dataset.j; return commit(w => { const t = T(w), x = its(t)[i]; if (!x) return; const op = optsOfKey(t, x);   // v86 (F2): bật / tắt từng đáp án, được chọn nhiều
+    if (t.answer.layout === 'A6') { x.key = exPicks(t, x, op).includes(j) ? '' : op[j]; return; }
+    const cur = exPicks(t, x, op), nx = cur.includes(j) ? cur.filter(k => k !== j) : cur.concat(j).sort((a, c) => a - c); x.key = nx.map(k => 'abcdefgh'[k] || String(k + 1)).join(', '); }); }
   if (act === 'iexi') { const i = +b.dataset.i; let m = null; return commit(w => { const t = T(w), x = its(t)[i]; if (x) m = itemAct(t, 'iex', x.id); }, null, () => { if (m) toast(m); }); }
   if (act === 'gtiadd') { return commit(w => { const t = T(w); t.content.items = t.content.items || []; t.content.items.push({ gt: true, text: '' }); ensureIds(t); }, null, () => focusK(`it.${its(curT(ws)).length - 1}.text`)); }
 });
@@ -7447,10 +7463,26 @@ edHtml = t => {
     const lst = fieldToggles(t).find(x => x.id === 'list'), canOff = lst && lst.on && !lst.dis;
     sh.innerHTML = `<span class="g3n">${esc(nm === 'Danh sách câu' ? 'Câu hỏi' : nm)}${canOff ? xb('G3', 'câu hỏi (giữ câu để bật lại)') : ''}</span>${t.content.form === 'table' ? '' : `<span class="g3tb" role="toolbar" aria-label="Chèn ký hiệu vào ô câu đang gõ">${TXB.items.map(([n, a]) => `<button type="button" data-tx="${a}" title="${{ b: 'Đậm', i: 'Nghiêng', u: 'Gạch chân', gap: 'Chỗ trống', pick: 'Chọn trong câu' }[a]}: chèn vào ô câu đang gõ">${esc(n)}</button>`).join('')}</span>`}`;
     if (inf) { if (ar) { ar.classList.add('g3ar'); ar.appendChild(inf); } else sh.appendChild(inf); }
+    // v86: chữ câu hỏi Bình thường / Đậm
+    if (!['table', 'empty', 'trace', 'dialogue'].includes(ck(t))) { const qb = !!t.layout.qbold; sh.insertAdjacentHTML('afterend', `<div class="ef qbrow"><span class="elb">Chữ câu hỏi</span><span class="seg"><button type="button" data-eact="qbold" data-v="" class="${qb ? '' : 'on'}">Bình thường</button><button type="button" data-eact="qbold" data-v="1" class="${qb ? 'on' : ''}" style="font-weight:700">Đậm</button></span></div>`); }
   }
+  // v86 (F2): ô tích đáp án đúng ngay dưới lựa chọn (Chọn A/B/C, Đúng/Sai); không in ra phiếu
+  if (['A4', 'A6'].includes(t.answer.layout)) R.querySelectorAll('.sec[data-sec=g3] .eit[data-i]').forEach(e => {
+    const i = +e.dataset.i, x = its(t)[i]; if (!x || x.gt || x.imgs) return; const op = optsOfKey(t, x); if (op.length < 2) return; const on = exPicks(t, x, op);
+    const row = `<div class="er2 ktk"><span class="elb">Đúng</span>${op.map((o, j) => `<span class="ko"><button type="button" class="tkq${on.includes(j) ? ' on' : ''}" data-eact="tickopt" data-i="${i}" data-j="${j}" aria-pressed="${on.includes(j)}" title="Đánh dấu đáp án đúng (chọn được nhiều)">✓</button>${t.answer.layout === 'A4' ? esc('abcdefgh'[j] + '. ') : ''}${esc(String(o).replace(/<[^>]+>|\*/g, ''))}</span>`).join('')}</div>`;
+    const anchor = e.querySelector('[data-k="it.' + i + '.opts"]'), host = anchor ? anchor.closest('.er2') : e.querySelector('[data-k="it.' + i + '.text"]');
+    if (host) host.insertAdjacentHTML('afterend', row);
+  });
+  // v86: G2 (bài đọc / lời dẫn) có thanh B I U ___ {a|b} ¶ ở hàng tiêu đề, dính khi cuộn
+  const g2l = R.querySelector('.sec[data-sec=g2] .ef > .elb');
+  if (g2l && R.querySelector('.sec[data-sec=g2] [data-k="lead.text"]')) { g2l.classList.add('g2bar'); g2l.insertAdjacentHTML('beforeend', `<span class="g3tb" role="toolbar" aria-label="Chèn ký hiệu vào bài đọc">${TXB.passage.map(([n, a]) => `<button type="button" data-tx="${a}" title="${{ b: 'Đậm', i: 'Nghiêng', u: 'Gạch chân', gap: 'Chỗ trống', pick: 'Chọn trong câu', para: 'Sang đoạn mới' }[a]}: chèn vào ô đang gõ">${esc(n)}</button>`).join('')}</span>`); }
   const d = document.createElement('div'); d.appendChild(R.cloneNode(true)); return d.innerHTML;
 };
-treeEl.addEventListener('mousedown', e => { if (e.target.closest('.g3tb [data-tx]')) e.preventDefault(); }, true);   // giữ con trỏ trong ô đang gõ
+// chiều cao thanh tiêu đề Task (đang dính) → vị trí dính của thanh B I U
+treeEl.addEventListener('scroll', () => { const h = treeEl.querySelector('.tk.open>.tkh'); if (h) treeEl.style.setProperty('--tkh', Math.round(h.getBoundingClientRect().height) + 'px'); }, { passive: true });
+treeEl.addEventListener('mousedown', e => { if (e.target.closest('.g3tb [data-tx]')) e.preventDefault(); }, true);
+treeEl.addEventListener('click', e => { const b = e.target.closest('[data-eact="qbold"]'); if (!b) return; e.stopPropagation(); const id = b.closest('.ed').dataset.ed, v = !!b.dataset.v;
+  if (!!(ws.tasks.find(x => x.id === id) || { layout: {} }).layout.qbold === v) return; commit(w => { const t = w.tasks.find(x => x.id === id); if (v) t.layout.qbold = true; else delete t.layout.qbold; }, v ? 'Chữ câu hỏi: Đậm' : 'Chữ câu hỏi: Bình thường'); }, true);   // giữ con trỏ trong ô đang gõ
 treeEl.addEventListener('click', e => { const b = e.target.closest('.g3tb [data-tx]'); if (b) { e.stopPropagation(); txInsert(b.dataset.tx); } }, true);
 /* ================= hết v85 cột trái ================= */
 
@@ -7527,7 +7559,7 @@ function setQMem(t, q) {
 }
 window.__ws = { pick: s => pick(s), get ws() { return ws; }, get res() { return lastRes; }, get renders() { return renderCount; }, get sel() { return sel; }, get multi() { return multi; }, render, setZoom(z) { zoom = z; draw(); } };
 // Độ rộng cột trái (khung nhập liệu): kéo thanh ở mép phải, bấm đúp về mặc định, nhớ trong trình duyệt
-const LW_KEY = 'wsEditor.leftW.v2', LW_DEF = 360, appEl = document.querySelector('.app'), lsEl = document.getElementById('lsplit');
+const LW_KEY = 'wsEditor.leftW.v2', LW_DEF = 420, appEl = document.querySelector('.app'), lsEl = document.getElementById('lsplit');
 let leftW = LW_DEF; try { const v = parseInt(localStorage.getItem(LW_KEY), 10); if (v >= 240 && v <= 900) leftW = v; } catch (_) {}
 const lwMax = () => Math.max(320, Math.min(720, window.innerWidth - 312 - 32 - 40 - 420)); // chừa tối thiểu ~420px cho trang A4
 function setLeftW(px, save) {

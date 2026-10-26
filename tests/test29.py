@@ -83,7 +83,7 @@ with sync_playwright() as p:
     pics = E(f"[document.querySelectorAll('#stage .task[data-task=\"{t15}\"] .g1 .pic, #stage .task[data-task=\"{t15}\"] .g1 [data-slot]').length, document.querySelectorAll('#stage .task[data-task=\"{t15}\"] .g4.wimg .wim').length]")
     chk('Thêm ảnh chung + ảnh thứ hai + khung từ ảnh 3 ô', r == [True, True, 'image', 3] and pics[0] >= 2 and pics[1] == 3, (r, pics))
     pick(t15, 'G4'); pg.click('#insp [data-act=wb][data-v=bottom]')
-    order = E(f"(()=>{{const el=document.querySelector('#stage .task[data-task=\"{t15}\"]'),g4=el.querySelector('.g4'),q=el.querySelector('.q');return !!(g4&&q&&(q.compareDocumentPosition(g4)&Node.DOCUMENT_POSITION_FOLLOWING))}})()")
+    order = E(f"(()=>{{const els=[...document.querySelectorAll('#stage .task[data-task=\"{t15}\"]')],g4=els.map(e=>e.querySelector('.g4')).filter(Boolean).pop(),q=els.map(e=>e.querySelector('.q')).filter(Boolean)[0];return !!(g4&&q&&(q.compareDocumentPosition(g4)&Node.DOCUMENT_POSITION_FOLLOWING))}})()")
     chk('Khung từ: vị trí Dưới câu hỏi', order and T(t15, "t.wordBank.placement") == 'bottom')
     pick(t15); pg.wait_for_timeout(30)
     chk('Cột trái: ô ảnh của khung từ ảnh (3 ô) và ảnh thứ hai', E("document.querySelectorAll('#tree .tk.open .wbth .ithumb').length") == 3 and E("!!document.querySelector('#tree .tk.open [data-k=\"image.label2\"]')"))
