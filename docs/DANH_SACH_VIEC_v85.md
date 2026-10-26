@@ -39,3 +39,10 @@ Trạng thái (cập nhật cuối phiên 6): **v85 đã làm A1, A2, B1, B2, C1
 3. "Đậm" chỉ cho chữ câu hỏi?
 4. Màu xanh của dấu đáp án (mã màu); ô tích muốn ở cột trái, trên phiếu hay cả hai.
 5. A2: gửi ảnh chụp màn hình ca sai nếu còn.
+
+## Cập nhật sau v85 (người dùng trả lời, 26/10 tối) — chưa code, chờ "ok làm"
+- A2: người dùng gửi ảnh. **Tái hiện được:** ở dạng có ô ảnh riêng (lưới ảnh Task 1/3/18, bài nối có ảnh), ảnh chung G1 đặt trên cùng bị lẫn với "tất cả ô ảnh" (`kindOf` G1 không item → `cimgs` khi `cellImgMode`), nên Fit lưu vào ô ảnh câu (`cfgOf` cimgs trả `{}`), ảnh chung không có `data-fit`, panel mở sai. Sửa: ảnh chung có lựa chọn riêng + panel Ảnh chung.
+- A3: người dùng gửi ảnh Task 5 + ảnh chung → tràn trang. **Đúng giới hạn cũ** (`units` = null khi câu hỏi có ảnh chung ở T1/T2/T3). Đề xuất: cắt theo câu, ảnh ở trang đầu; T2/T3 phần sau chạy hết bề ngang.
+- C3: xác nhận "khung Thao tác phiếu" = cột trái → mặc định 420 px.
+- D2: xác nhận: nút Bình thường (mặc định) / Đậm cho chữ câu hỏi, theo Task, không đậm lựa chọn.
+- F1, F2: người dùng chưa hiểu → hình minh họa `docs/MINH_HOA_F1_F2.png` (F1 màu dấu đáp án câu ví dụ: xanh app #0a6b75 hoặc xanh dương #1e6fd9; F2 ô tích đáp án đúng ở cột trái, không in). Chờ chọn.
