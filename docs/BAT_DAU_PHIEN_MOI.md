@@ -1,21 +1,21 @@
 # Bắt đầu phiên mới — WS Editor
 
-Cập nhật 26/10/2026. App: **v84** (cột trái theo khối Cấu hình · G0–G4 · G-Text, trên nền kiến trúc trình bày v81). Bản v80 lưu ở nhánh `backup/v80`. Nguồn sự thật là **git repo này**, không dùng Claude Project hay artifact nữa.
+Cập nhật 26/10/2026. App: **v84** (cột trái theo khối + nhớ dạng câu hỏi + mặc định mới: cỡ chữ Vừa, hàng bảng 12 mm, nhãn a b c; trên nền kiến trúc trình bày v81). Bản v80 lưu ở nhánh `backup/v80`. Nguồn sự thật là **git repo này**, không dùng Claude Project hay artifact nữa.
 
 ## Mở phiên mới (Claude Code, gắn repo `khanhtoaninv/WS-Editor`, nhánh `main`)
 CLAUDE.md ở gốc repo tự được nạp. Dán câu này làm tin nhắn đầu:
 
-> Đọc CLAUDE.md và docs/BAO_CAO_PHIEN_2026-10-26_phien5.md, rồi mục 18–19 của docs/WS_EDITOR_SPEC.md. Tóm tắt trạng thái ngắn gọn và hỏi tôi muốn tiếp tục việc nào. Chưa cần làm gì cả.
+> Đọc CLAUDE.md và mục 0 "BÀN GIAO" của docs/BAO_CAO_PHIEN_2026-10-26_phien5.md, rồi mục 18–21 của docs/WS_EDITOR_SPEC.md. Tóm tắt trạng thái ngắn gọn và hỏi tôi muốn tiếp tục việc nào. Chưa cần làm gì cả.
 
 ## Thứ tự đọc
-0. `docs/VAN_DE_CAN_XU_LY.md` — danh sách vấn đề người dùng đã nêu, đang chờ duyệt (chưa code).
-1. `docs/BAO_CAO_PHIEN_2026-10-26_phien5.md` — v82 (cột trái theo khối); `docs/BAO_CAO_PHIEN_2026-10-26_phien4.md` — v81.
+0. `docs/BAO_CAO_PHIEN_2026-10-26_phien5.md` mục 0 — bàn giao (trạng thái v84, câu hỏi chờ người dùng, việc tiếp theo). `docs/VAN_DE_CAN_XU_LY.md` — lịch sử vấn đề V1–V10 (đã làm trong v83).
+1. `docs/BAO_CAO_PHIEN_2026-10-26_phien5.md` — v82–v84; `docs/BAO_CAO_PHIEN_2026-10-26_phien4.md` — v81.
 2. `docs/WS_EDITOR_SPEC.md` mục 18 (v81), mục 19 (v82), mục 20 (v83), mục 21 (v84) + mục "BÀN GIAO" cuối `docs/WS_EDITOR_SPEC_v37_bo_sung.md`.
 3. `docs/KIEN_TRUC_TRINH_BAY_MOI.html` (bản duyệt kiến trúc), `docs/RA_SOAT_DANG_BAI.md`.
 4. Khi cần: `docs/QUY_UOC_MD.md` (v81: `Dạng:` …), `docs/PROMPT_PDF_SANG_PHIEU.md` (v81), `docs/PHUONG_AN_NHAP_FILE.md`, `samples/`.
 
 ## Lệnh mẫu
-- **Góp ý v81:** "Tôi đã thử bộ chọn Bố cục / Dạng câu hỏi, đây là chỗ cần sửa: …"
+- **Góp ý v84:** "Tôi đã thử v84, đây là chỗ cần sửa: …" (Claude tái hiện, phân tích, chờ "ok làm")
 - **Thử PDF thật (P3):** gửi PDF + MD AI tạo (theo `docs/PROMPT_PDF_SANG_PHIEU.md` bản v81, có `Dạng:`) + ảnh sau khi nạp; Claude phân 5 nhóm lỗi (AI đọc sai chữ / prompt / bộ đọc / mô hình thiếu / dàn trang xấu), sửa đúng lớp, thêm vào `tests/real/`.
 - **Kiểm tra hiện trạng:** "Chạy lại toàn bộ test trên bản hiện tại, chưa sửa gì."
 

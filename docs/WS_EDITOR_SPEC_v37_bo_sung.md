@@ -316,7 +316,7 @@ Thu gọn theo thẻ + liên kết chọn khối, Nối Task / xóa có hỏi, G
 ## AB. BÀN GIAO (2026-10-26, bản v84) — đọc mục này đầu tiên khi mở thread mới
 - **Bản v84** (spec mục 21) sửa 10 góp ý sau v83. v83 (mục 20) = hoàn thiện cột trái + nhớ dạng câu hỏi; v82 (mục 19) = cột trái theo khối.
 - **Mặc định mới cần nhớ:** cỡ chữ Vừa (không ghi vào phiếu), hàng bảng 12 mm, nhãn chữ thường. test2 so với bản cũ phải đặt lại To + 14 mm trước khi so.
-- **Chờ người dùng (từ v83):** nghĩa "khoảng cách / ký hiệu trên dòng trống" ở ⓘ; xác nhận nhớ dạng câu hỏi chỉ ở JSON; Q3 có cần tick như Q7.
+- **Chờ người dùng:** nghĩa "khoảng cách / ký hiệu trên dòng trống" ở ⓘ; xác nhận nhớ dạng câu hỏi chỉ ở JSON; Q3 có cần tick như Q7; xác nhận cách hiểu "khối tự do nhiều ảnh" = nhiều ảnh cạnh nhau. Bàn giao đầy đủ: mục 0 của `docs/BAO_CAO_PHIEN_2026-10-26_phien5.md`.
 - **Việc tiếp theo:** chi tiết trang (tiêu đề phiếu, Họ tên/Lớp/Ngày, header/footer); P3 với PDF thật; G2 có bố cục riêng.
 - Cách chạy và quy tắc như bàn giao v82. test16 đôi khi báo không ổn định khi chạy cả bộ.
 

@@ -1,6 +1,34 @@
-# Báo cáo phiên 26/10/2026 (phiên 5) — v82: cột trái theo khối
+# Báo cáo phiên 26/10/2026 (phiên 5) — v82 → v84: cột trái theo khối, hoàn thiện cột trái, nhớ dạng câu hỏi, sửa góp ý
 
-## 1. Kết quả
+## 0. BÀN GIAO CHO PHIÊN SAU (đọc mục này trước)
+**Trạng thái:** `main` = **v84**, mọi việc người dùng giao trong phiên đã làm xong và đẩy lên git. Không còn việc đang dở.
+
+**Các bản trong phiên:**
+| Bản | Nội dung | Spec |
+|---|---|---|
+| v82 | Cột trái theo khối: Cấu hình · G0 · G1 · G2 · G3 · G4 · GT; bỏ Áp mẫu / ô Đáp án cũ; sửa giữ chỗ `{…\|…}` sót khi rời Q4 | mục 19 |
+| v83 | V1–V10: một mục mở một lúc + liên kết khối trang ↔ cột trái; "Nối Task / Đã nối", nút biểu tượng, xóa Task có hỏi; G1 ô ảnh lớn; ⓘ thủ thuật viết + chèn nhanh; câu ảnh + chữ hai cột; Q7 tick đáp án cạnh ảnh; câu ví dụ hiện trên trang; **nhớ dạng câu hỏi** (`qmem`, `qmemLin`: đổi dạng đi một vòng quay lại về đúng như cũ) | mục 20 |
+| v84 | 10 góp ý sau v83: ảnh chung ở mọi dạng; chọn đúng khối G3 / GT; căn lề Task kéo theo ảnh; **cỡ chữ mặc định Vừa**; **hàng bảng 12 mm**; **nhãn a b c chữ thường**; khối tự do "+ Thêm" và nhiều ảnh cạnh nhau (`x.n`); độ rộng ảnh % ở lưới ô; hội thoại quá một trang thì cắt | mục 21 |
+
+**Kiểm thử trên bản cuối v84 (đã chạy):** test1–33 + audit (0 vấn đề) + `cmp_v80.py` đều đạt, 0 lỗi console. test16 đôi khi lỗi chụp ảnh / "not stable" khi chạy cả bộ, chạy lại riêng thì đạt. test32 chạy ~250 giây (run_all cho 420 giây).
+
+**Lưu ý khi so với bản cũ:** v84 đổi mặc định (Vừa, 12 mm, chữ thường) nên `test2` và `cmp_v80.py` đặt cả hai bản về thông số cũ (To, hàng 14 mm, nhãn chữ hoa) rồi mới so. Phiếu cũ không ghi cỡ chữ giờ mở ra ở Vừa.
+
+**Câu hỏi còn chờ người dùng trả lời:**
+1. Ở bảng ⓘ, "khoảng cách" và "ký hiệu trên dòng trống" nghĩa là gì (hiện chỉ chèn ký hiệu app đã có).
+2. Bộ nhớ đổi dạng câu hỏi chỉ lưu trong JSON phiếu, MD không mang: có ổn không.
+3. Q3 có cần ô tick như Q7 không.
+4. "Khối tự do không hiển thị được nhiều ảnh như v82": đã hiểu là nhiều ảnh cạnh nhau trong một khối và làm theo; người dùng chưa xác nhận cách hiểu.
+
+**Giới hạn đã biết:** Task câu hỏi có ảnh chung ở bố cục Xếp dọc / Ảnh trái / Ảnh phải không cắt trang được (như các bản trước); MD chưa mang `x.n` của khối ảnh tự do và `qmem`.
+
+**Việc tiếp theo (người dùng chưa chọn thứ tự):** chi tiết trang (tiêu đề phiếu, Họ tên / Lớp / Ngày, header / footer); P3 thử PDF thật + MD do AI tạo; G2 có bố cục riêng; trả lời 4 câu hỏi trên.
+
+**Cách làm việc người dùng muốn:** thảo luận / phân tích trước, chỉ code khi nói "ok làm"; khi người dùng nêu nhiều ý liên tiếp thì gom lại, phân tích từng ý (tái hiện bằng Playwright trước khi kết luận), chờ "ok làm" rồi làm cả lô; xong thì báo ngắn: đã sửa gì, đã test gì, chưa làm gì; commit + push `main`.
+
+---
+
+## 1. Kết quả v82
 - **v82 trên `main`**: cột trái của Task xếp theo khối, khớp các khối trên trang: **Cấu hình** (nhãn `T · Q`) · **G0** Tiêu đề · **G1** Ảnh chung · **G2** Bài đọc (`theo T`) · **G3** Câu hỏi (`theo Q`) · **G4** Khung từ · **GT** Khối tự do. Chi tiết: `docs/WS_EDITOR_SPEC.md` mục 19.
 - Không đổi dữ liệu, không đổi dàn trang: phiếu cũ vẽ ra giống v80 (cmp_v80).
 

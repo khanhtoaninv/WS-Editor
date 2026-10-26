@@ -1,6 +1,6 @@
 # Vấn đề cần xử lý (người dùng tổng hợp) — cập nhật 26/10/2026
 
-Trạng thái (cập nhật v83): **V1–V10 đã làm xong trong v83** (spec mục 20); nội dung bên dưới giữ làm lịch sử. Hình minh họa: `docs/MINH_HOA_VAN_DE_2_3.html` (tĩnh, đỏ = hiện tại, xanh = đề xuất). App hiện tại: v82.
+Trạng thái (cập nhật v84): **V1–V10 đã làm xong trong v83** (spec mục 20); 10 góp ý tiếp theo làm trong v84 (spec mục 21). Câu hỏi còn chờ: xem mục 0 của `BAO_CAO_PHIEN_2026-10-26_phien5.md`. Nội dung bên dưới giữ làm lịch sử. Hình minh họa: `docs/MINH_HOA_VAN_DE_2_3.html` (tĩnh, đỏ = hiện tại, xanh = đề xuất). App hiện tại: v82.
 
 ## Đã sửa
 - Sau khi đổi Dạng câu hỏi, `{…|…}` sót lại trên phiếu (Task 1 demo): đã sửa trong v82 (spec 19.4).
