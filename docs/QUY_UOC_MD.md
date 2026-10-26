@@ -171,6 +171,10 @@ Task 2: is; are; an ← một dòng, các đáp án cách nhau bằng dấu ;
 - Đáp án được ghi vào trường “đáp án đúng” của từng câu (`key`), **không** hiện trên phiếu học sinh (trừ câu ví dụ). Câu thiếu đáp án thì thẻ dạng bài cảnh báo như khi soạn tay.
 - **Bài nhiều phần:** `### Task 6` liệt kê đáp án **liền nhau qua các phần, theo thứ tự câu** (vd phần đầu 4 câu, phần sau 1 câu, phần cuối 1 câu → 6 dòng); thừa dòng thì app ghi chú.
 - Chưa nhận đáp án cho **bảng** và **ô chữ** (bỏ qua, có báo).
+- **(v89) Chọn trong câu:** đáp án ghi luôn trong câu bằng dấu `*` trước vế đúng: `She {*goes|go} to school and {play|*plays} football.` Mỗi nhóm `{…}` một đáp án; không cần dòng ở `## Đáp án`. Ghi đáp án ở `## Đáp án` như cũ vẫn được (app tự đổi sang `*` khi khớp đúng một vế).
+- **(v91) Câu nhiều chỗ trống:** một dòng đáp án, các chỗ trống cách nhau ` | `: `3. went | played`.
+- **(v92) Bảng:** ô học sinh điền có đáp án viết `=đáp án` ngay trong ô (`| Tom | 9 | =swimming |`); phiếu in ô trống.
+- **(v90) Bài nối:** app chưa đọc đáp án nối từ MD; nhập vào thì "Xáo vế phải khi in" ở Tắt (giữ thứ tự như PDF).
 
 ## 6. Khi app đọc MD
 - Mỗi `## Task` thành một dòng trong **bảng nhận diện**: số theo file, tiêu đề, mô tả cấu hình, số câu/hàng, cảnh báo (thiếu ảnh, khung từ không khớp chỗ trống, thiếu đáp án…), cuối bảng có ước tính số trang. Dòng tóm tắt đầu bảng đếm **bài** (không đếm phần): “6 Task (Task 6 có 3 phần)”; mỗi phần là một dòng ghi 6a, 6b, 6c. Nếu số này khác số bài trong PDF thì AI đã tách / gộp nhầm.

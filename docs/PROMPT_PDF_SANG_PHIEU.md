@@ -91,6 +91,7 @@ CHỌN "Dạng:"
 - có A/B/C bằng chữ → chọn A/B/C   (lựa chọn có ô ☐: "chọn A/B/C (ô tick)")
 - mỗi câu có 2–4 tranh, tick tranh đúng → chọn ảnh
 - {a|b} trong câu → chọn trong câu   (tìm lỗi sai gạch chân A–D: "chọn trong câu (nhãn A-D)")
+- Nếu PDF có đáp án của câu chọn trong câu: đặt dấu * trước vế đúng, vd {*goes|go}. Câu nhiều chỗ trống: đáp án một dòng, cách nhau " | ". Bảng có đáp án ô: viết =đáp án trong ô.
 - True/False, Yes/No, T/F/NG → đúng/sai (nhãn)   vd "đúng/sai (Yes/No)", "đúng/sai (T/F/NG)"; chỉ T/F thì "đúng/sai"
 - hai cột nối → nối
 - tô theo nét → tô chữ

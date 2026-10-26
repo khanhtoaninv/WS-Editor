@@ -20,7 +20,7 @@ with sync_playwright() as p:
     pg.locator('#tree .ed [data-eact=qbold][data-v=""]').click(); pg.wait_for_timeout(300)
     chk('Bình thường: về như cũ', E("getComputedStyle(document.querySelector('.task[data-task=t4] .qt')).fontWeight") == '400' and not E("ws.tasks.find(t=>t.id==='t4').layout.qbold"))
     # F2 + F1
-    tk = lambda i, j: pg.locator(f'#tree .ed .ktk [data-eact=tickopt][data-i="{i}"][data-j="{j}"]').click() or pg.wait_for_timeout(250)
+    tk = lambda i, j: pg.locator(f'#tree .ed :is(.ktk,.eo) [data-eact=tickopt][data-i="{i}"][data-j="{j}"]').click() or pg.wait_for_timeout(250)
     tk(0, 1); tk(0, 2)
     chk('ô tích: chọn nhiều đáp án → "b, c"', E("ws.tasks.find(t=>t.id==='t4').content.items[0].key") == 'b, c')
     pg.locator('#tree .ed [data-eact=iexi][data-i="0"]').click(); pg.wait_for_timeout(300)
