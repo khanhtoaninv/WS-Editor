@@ -1,5 +1,6 @@
 import json, sys
 from playwright.sync_api import sync_playwright
+GTT = ':is([data-eact=gtadd]:not([data-kind]),[data-eact=blkaddb][data-v=GTt])'; GTI = ':is([data-eact=gtadd][data-kind=image],[data-eact=blkaddb][data-v=GTi])'   # v84: chưa có khối thì nút nằm ở tiêu đề mục
 F='file://'+sys.argv[1]; ok=True
 def chk(n,c,x=''):
     global ok; print(('PASS ' if c else 'FAIL '),n,x); ok&=bool(c)
@@ -10,7 +11,7 @@ with sync_playwright() as p:
     pg.goto(F); pg.wait_for_timeout(1500)
     tid=pg.evaluate("ws.tasks[0].id"); H0=pg.evaluate("lastRes.pages.length")
     pg.evaluate(f"sel={{type:'task',id:'{tid}'}}; openTask='{tid}'; refreshSel()"); pg.evaluate("SECT.gt=true; renderTree()"); pg.wait_for_timeout(300)
-    pg.click(f'.ed[data-ed="{tid}"] [data-eact=gtadd][data-kind=image]'); pg.wait_for_timeout(400)
+    pg.click(f'.ed[data-ed="{tid}"] {GTI}'); pg.wait_for_timeout(400)
     ex=pg.evaluate("ws.tasks[0].extras")
     chk('thêm khối ảnh', len(ex)==1 and ex[0]['kind']=='image' and ex[0]['pos']=='bottom', ex)
     xid=ex[0]['id']
@@ -41,7 +42,7 @@ with sync_playwright() as p:
     chk('nạp xấu: w sai bị bỏ, frame/size bỏ', r['e'][0].get('w') is None and 'frame' not in r['e'][0] and 'size' not in r['e'][0] and r['e'][0]['label']=='5', r)
     # trang trí chữ
     pg.evaluate(f"sel={{type:'task',id:'{tid}'}}; openTask='{tid}'; refreshSel()"); pg.evaluate("SECT.gt=true; renderTree()"); pg.wait_for_timeout(300)
-    pg.click(f'.ed[data-ed="{tid}"] [data-eact=gtadd]:not([data-kind])'); pg.wait_for_timeout(400)
+    pg.click(f'.ed[data-ed="{tid}"] {GTT}'); pg.wait_for_timeout(400)
     tx=pg.evaluate("ws.tasks[0].extras[1].id"); pg.fill(f'#tree [data-k="x.{tx}.text"]','Hello'); pg.wait_for_timeout(400)
     pg.click('.gt:not(:has(.pic)) .gtb'); pg.wait_for_timeout(300)
     opts=pg.evaluate("[...document.querySelectorAll('#insp [data-act=set][data-p=frame]')].map(b=>b.textContent)")

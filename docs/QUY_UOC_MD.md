@@ -93,7 +93,7 @@ Tên trường viết hoa hay thường đều được; có bản tiếng Anh: 
 | `viết từ` | ô trống viết một từ dưới mỗi câu / ảnh |
 | `điền chỗ trống` | gạch `___` ngay trong câu |
 | `viết câu` | dòng kẻ để viết câu |
-| `khoanh A/B/C` (hoặc `khoanh`, `chọn A/B/C`) | lựa chọn A, B, C dưới câu (viết `A.` chữ hoa thì nhãn chữ hoa, `a.` thì chữ thường) |
+| `khoanh A/B/C` (hoặc `khoanh`, `chọn A/B/C`) | lựa chọn A, B, C dưới câu (viết `A.` hay `a.` đều được; v84: nhãn trên phiếu mặc định chữ thường a b c, đổi chữ hoa ở nút Nhãn) |
 | `chọn trong câu` (hoặc `gạch chân`) | lựa chọn `{a|b}` ngay trong câu |
 | `tick` | lựa chọn bằng chữ có ô ☐ (`☐ a cake ☐ a football`) → các lựa chọn có ô tick; lựa chọn là ảnh (`A. [ảnh: x]` hoặc tên ảnh) → nhiều ảnh lựa chọn, tick ảnh |
 | `đúng/sai` | ô T / F |

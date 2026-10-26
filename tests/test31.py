@@ -10,7 +10,7 @@ with sync_playwright() as p:
     pg.on('console', lambda m: errs.append(m.text) if m.type == 'error' and 'ERR_' not in m.text and 'font' not in m.text.lower() else None)
     pg.goto(F); pg.wait_for_timeout(1200)
     E = pg.evaluate
-    chk('badge v83', pg.inner_text('#verBadge').strip() == 'v83')
+    chk('badge v84', pg.inner_text('#verBadge').strip() == 'v84')
     ids = E("ws.tasks.map(t=>t.id)")
     def opn(tid): pg.click(f'#tree .tnode[data-sel=task][data-id={tid}]'); pg.wait_for_timeout(120)
     S = "[...document.querySelectorAll('#tree .ed .sec')]"
@@ -87,9 +87,9 @@ with sync_playwright() as p:
     chk('Q7: không còn ô gõ Đáp án, có 3 ô tick mỗi câu', pg.locator('#tree .ed .sec[data-sec=g3] [data-k="it.0.key"]').count() == 0 and pg.locator('#tree .ed .sec[data-sec=g3] .eit[data-i="0"] [data-eact=tickopt]').count() == 3)
     chk('Ví dụ chưa có đáp án mẫu: phiếu chưa tick, có cảnh báo nhẹ', E("document.querySelectorAll('.task[data-task=t3] .a5.pk').length") == 0 and 'chưa có đáp án mẫu' in pg.inner_text('#tree .tcwrap'))
     pg.click('#tree .ed .sec[data-sec=g3] .eit[data-i="0"] [data-eact=tickopt][data-j="1"]'); pg.wait_for_timeout(200)
-    chk('tick ảnh 2: key = "B", đúng ô thứ 2 của câu ví dụ được ✓ trên trang', E("its(curT(ws))[0].key") == 'B' and E("[...document.querySelectorAll('.task[data-task=t3] .choices')][0] && [...document.querySelectorAll('.task[data-task=t3] .choices')[0].querySelectorAll('.a5')].map(e=>e.classList.contains('pk')).join()") == 'false,true,false')
+    chk('tick ảnh 2: key = "B", đúng ô thứ 2 của câu ví dụ được ✓ trên trang', E("its(curT(ws))[0].key").lower() == 'b' and E("[...document.querySelectorAll('.task[data-task=t3] .choices')][0] && [...document.querySelectorAll('.task[data-task=t3] .choices')[0].querySelectorAll('.a5')].map(e=>e.classList.contains('pk')).join()") == 'false,true,false')
     pg.click('#tree .ed .sec[data-sec=g3] .eit[data-i="0"] [data-eact=tickopt][data-j="2"]'); pg.wait_for_timeout(200)
-    chk('tick ảnh 3: chuyển đáp án sang ô 3 (chỉ một đáp án)', E("its(curT(ws))[0].key") == 'C' and E("document.querySelectorAll('.task[data-task=t3] .a5.pk').length") == 1)
+    chk('tick ảnh 3: chuyển đáp án sang ô 3 (chỉ một đáp án)', E("its(curT(ws))[0].key").lower() == 'c' and E("document.querySelectorAll('.task[data-task=t3] .a5.pk').length") == 1)
     pg.click('#tree .ed .sec[data-sec=g3] .eit[data-i="0"] [data-eact=tickopt][data-j="2"]'); pg.wait_for_timeout(200)
     chk('bấm lại ô đang tick: bỏ tick', E("its(curT(ws))[0].key") == '' and E("document.querySelectorAll('.task[data-task=t3] .a5.pk').length") == 0)
     for _ in range(60):

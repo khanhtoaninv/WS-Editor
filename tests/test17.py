@@ -23,7 +23,7 @@ with sync_playwright() as p:
     # ---- 1) MD người dùng nhận (8 khối, Task 6 bị tách): vẫn đọc, ghi chú đúng, không còn lỗi lặp hướng dẫn
     U = pg.evaluate(ROWS, USER8)
     chk('MD cũ: 8 khối, không khối nào nối (đúng như file)', isinstance(U, list) and len(U) == 8 and not any(t['j'] for t in U), U if not isinstance(U, list) else len(U))
-    chk('MD cũ: nhãn A. B. C. giữ chữ hoa (Task 2, 5)', U[1]['up'] and U[4]['up'] and U[1]['lab'] == '', (U[1], U[4]))
+    chk('v84: MD viết A. B. C. → nhãn mặc định chữ thường (Task 2, 5)', not U[1]['up'] and not U[4]['up'] and U[1]['lab'] == '', (U[1], U[4]))
     chk('MD cũ: Task 1 và Task 7 là ô tick', U[0]['A'] == 'A4' and U[0]['lab'] == 'box' and U[6]['A'] == 'A4' and U[6]['lab'] == 'box', (U[0], U[6]))
 
     # ---- 2) MD mới: 6 Task, Task 6 có 3 phần
@@ -64,7 +64,7 @@ with sync_playwright() as p:
     chk('1 câu: số ẩn (Task 1, 2, 6b, 6c); nhiều câu: số hiện (Task 3)', all(x == 'hidden' for x in vis['t1'] + vis['t2'] + vis['t6b'] + vis['t6c']) and all(x == 'visible' for x in vis['t3']) and len(vis['t3']) == 4, vis)
     lefts = pg.evaluate(f"""()=>{{const L=id=>document.querySelector('.task[data-task="'+id+'"] .qb, .task[data-task="'+id+'"] .c2 > span:not(.ino)').getBoundingClientRect().left; return [L('{ids[1]}'),L('{ids[2]}')]}}""")
     chk('1 câu: chữ vẫn thẳng lề với Task nhiều câu', abs(lefts[0] - lefts[1]) < 1.5, lefts)
-    chk('chữ hoa A B C ở Task 2 và 5', pg.evaluate(f"""()=>['{ids[1]}','{ids[4]}'].every(id=>[...document.querySelectorAll('.task[data-task="'+id+'"] .opt b')].every(e=>/^[ABC]$/.test(e.textContent.trim())))"""))
+    chk('v84: chữ thường a b c ở Task 2 và 5', pg.evaluate(f"""()=>['{ids[1]}','{ids[4]}'].every(id=>[...document.querySelectorAll('.task[data-task="'+id+'"] .opt b')].every(e=>/^[abc]$/.test(e.textContent.trim())))"""))
     for i in range(pages): pg.locator('.page').nth(i).screenshot(path=os.path.join(SHOTS, f'p17_birthday6_{i+1}.png'))
 
     # ---- 4) Công tắc nối: cột trái + Inspector, hoàn tác, Task đầu không nối được

@@ -10,6 +10,11 @@ for f in sorted(glob.glob(os.path.join(ROOT, 'samples', '*.json')) + glob.glob(o
 for f in sorted(glob.glob(os.path.join(HERE, 'md', '*.md')) + glob.glob(os.path.join(HERE, 'real', '*.md'))): srcs.append((os.path.relpath(f, ROOT), open(f, encoding='utf-8').read()))
 LOAD = """raw => { if (raw == null) { loadSheet(clone(SAMPLE2)); } else { const J = looksJson(raw) ? readJson(raw) : readMd(raw); if (J.err) return 'ERR ' + J.err;
   const obj = J.kind === 'sheet' ? J.sheet : { tasks: J.tasks.filter(x => x.t).map(x => x.t) }; loadSheet(obj); }
+  // v84 đổi mặc định (cỡ chữ Vừa, hàng bảng 12 mm, nhãn chữ thường): đặt cả hai bản về thông số cũ rồi mới so
+  if (!ws.size) ws.size = 'l';
+  ws.tasks.forEach(t => { if (t.content.form === 'table') { t.layout.table = Object.assign({}, t.layout.table); if (t.layout.table.minH == null) t.layout.table.minH = 14; }
+    if (t.answer && t.answer.layout === 'A4') { t.answer.params = t.answer.params || {}; t.answer.params.upper = true; } });
+  render();
   return [document.getElementById('pageBadge').textContent, [...document.querySelectorAll('#stage .page')].map(p => p.outerHTML).join('\\n')]; }"""
 ok = True
 def grab(path):
@@ -26,7 +31,7 @@ def grab(path):
         b.close()
     return out, errs
 a, ea = grab(NEW); b, eb = grab(OLD)
-norm = lambda h: re.sub(r'\s+', ' ', h)
+norm = lambda h: re.sub(r'\s+', ' ', h).replace(';--gn:1"', '"')
 for name, _ in srcs:
     x, y = a[name], b[name]
     if isinstance(x, str) or isinstance(y, str):

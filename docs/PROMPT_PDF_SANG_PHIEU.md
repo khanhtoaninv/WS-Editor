@@ -231,7 +231,7 @@ LOẠI ĐÁP ÁN ("answer")
 - Viết một từ:                 {"kind":"word","attach":"item","layout":"A2","params":{}}
 - Điền chỗ trống ___ trong câu: {"kind":"word","attach":"inline","layout":"A2","params":{"lenMode":"fill","lines":1,"start":"inline"}}
 - Viết câu (dòng kẻ):          {"kind":"sentence","attach":"item","layout":"A1","params":{"lines":1}}
-- Khoanh A/B/C:                {"kind":"choice","attach":"item","layout":"A4","params":{"upper":true}}   (chữ hoa A B C; bỏ "upper" nếu bản gốc dùng a b c)
+- Khoanh A/B/C:                {"kind":"choice","attach":"item","layout":"A4"}   (nhãn mặc định a b c chữ thường, kể cả khi bản gốc in A B C)
 - Tick lựa chọn bằng chữ (☐):  {"kind":"choice","attach":"item","layout":"A4","params":{"lab":"box"}}
 - Chọn trong câu {a|b}:        {"kind":"choice","attach":"inline","layout":"A4","params":{}}
 - Nghe và tick ảnh:            {"kind":"tick","attach":"item","layout":"A5","params":{}}
@@ -242,7 +242,7 @@ LOẠI ĐÁP ÁN ("answer")
 
 TRƯỜNG MỚI (v81, chỉ dùng khi bài cần)
 - Câu ví dụ: thêm "ex":true vào câu (đặt đầu danh sách, "key" = đáp án mẫu, in sẵn trên phiếu). Dòng chữ giữa các câu: {"id":"g1","gt":true,"text":"Part B"}.
-- Hai tranh chung: "image":{"label":"A","size":"medium","two":true,"label2":"B"}. Khung từ ảnh: "wordBank":{"words":["apple","banana"],"kind":"image","placement":"top","style":"chips","label":"upper"}; "placement" thêm "bottom".
+- Hai tranh chung: "image":{"label":"A","size":"medium","two":true,"label2":"B"}. Khung từ ảnh: "wordBank":{"words":["apple","banana"],"kind":"image","placement":"top","style":"chips","label":"lower"}; "placement" thêm "bottom".
 - Đúng/Sai nhãn khác: "params":{"labs":["Yes","No"]} (2–3 nhãn). Tìm lỗi sai: đáp án chọn trong câu + "params":{"ulab":true}, đoạn gạch chân viết <u>…</u>. Khung vẽ: viết câu, một câu "text":"", "layout.num":"off", "params":{"frame":"box"}. Bốn ô li: "params":{"ruling":"4"}.
 - Câu hỏi trước bài đọc: "layout.order":"qfirst". Khối tự do: "extras":[{"id":"x1","kind":"text","pos":"bottom","text":"…"},{"id":"x2","kind":"image","pos":"top","label":"…"}].
 

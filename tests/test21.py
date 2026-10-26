@@ -1,5 +1,6 @@
 import json, sys
 from playwright.sync_api import sync_playwright
+GTT = ':is([data-eact=gtadd]:not([data-kind]),[data-eact=blkaddb][data-v=GTt])'; GTI = ':is([data-eact=gtadd][data-kind=image],[data-eact=blkaddb][data-v=GTi])'   # v84: chưa có khối thì nút nằm ở tiêu đề mục
 F='file://'+sys.argv[1]; ok=True
 def chk(n,c,x=''):
     global ok; print(('PASS ' if c else 'FAIL '),n,x); ok&=bool(c)
@@ -15,7 +16,7 @@ with sync_playwright() as p:
     # thêm khối qua cột trái
     pg.evaluate(f"sel={{type:'task',id:'{tid}'}}; refreshSel()"); pg.wait_for_timeout(300)
     pg.evaluate("SECT.gt=true; renderTree()"); pg.wait_for_timeout(200)
-    pg.click(f'.ed[data-ed="{tid}"] [data-eact=gtadd]'); pg.wait_for_timeout(400)
+    pg.click(f'.ed[data-ed="{tid}"] {GTT}'); pg.wait_for_timeout(400)
     chk('thêm 1 khối', pg.evaluate("ws.tasks[0].extras.length")==1)
     chk('mặc định phía dưới', pg.evaluate("ws.tasks[0].extras[0].pos")=='bottom')
     chk('hiện placeholder khi trống', pg.evaluate("document.querySelectorAll('.gt.gt-empty').length")==1)
@@ -32,7 +33,7 @@ with sync_playwright() as p:
     chk('Inspector khối chữ', 'Khối chữ' in pg.evaluate("document.getElementById('insp').textContent"))
     # cỡ chữ
     base=pg.evaluate("parseFloat(getComputedStyle(document.querySelector('.gt')).fontSize)")
-    chk('Theo phiếu = 14pt', abs(base-14*96/72)<.1, base)
+    chk('Theo phiếu = 12pt (v84: mặc định Vừa)', abs(base-12*96/72)<.1, base)
     for k,pt in (('s',10),('m',12),('l',14)):
         pg.click(f'#insp [data-act=set][data-p=size][data-v={k}]'); pg.wait_for_timeout(300)
         fs=pg.evaluate("parseFloat(getComputedStyle(document.querySelector('.gt')).fontSize)")
@@ -53,7 +54,7 @@ with sync_playwright() as p:
     chk('đưa lên → pos top', pg.evaluate("ws.tasks[0].extras[0].pos")=='top')
     chk('khối nằm ngay dưới G0', pg.evaluate("(()=>{const s=document.querySelector(`.task[data-task=\"%s\"]`);const k=[...s.children].map(e=>e.className.split(' ')[0]);return k.indexOf('gt')==k.indexOf('g0')+1})()"%tid))
     # thêm khối thứ hai, đổi chỗ giữa các khối
-    pg.click(f'.ed[data-ed="{tid}"] [data-eact=gtadd]'); pg.wait_for_timeout(400)
+    pg.click(f'.ed[data-ed="{tid}"] {GTT}'); pg.wait_for_timeout(400)
     chk('2 khối', pg.evaluate("ws.tasks[0].extras.length")==2)
     pg.click(f'.ed[data-ed="{tid}"] [data-eact=gtup]:not([disabled]) >> nth=-1'); pg.wait_for_timeout(300)
     chk('khối 2 lên trên bài', pg.evaluate("ws.tasks[0].extras.map(x=>x.pos).join()")=='top,top')

@@ -42,3 +42,9 @@ Làm hết danh sách vấn đề người dùng tổng hợp theo thứ tự V7
 - Điểm khó nhất là V4 (nhớ dạng câu hỏi): ba lần viết lại. Bản cuối: cất bản chụp khi rời dạng, trả nguyên bản nếu chưa ai sửa, gộp ba bên nếu đã sửa, thêm `qmemLin` cho vòng a→b→c→a.
 - Đã chạy: test32 (8/8) trên bản cuối; kết quả cả bộ xem cuối báo cáo chat.
 - Chưa làm / hỏi lại: nghĩa "khoảng cách / ký hiệu trên dòng trống"; Q3 tick; MD không mang `qmem`.
+
+## Phần 3: v84 (10 góp ý sau v83)
+Người dùng thử v83 và nêu: G1 ở Task 1 không có ô up ảnh; chọn nhầm khối (ảnh câu → G1, khung lưới không nhận G3); căn giữa không kéo khung ảnh; Task 6 thêm ảnh dài quá trang không ngắt; cỡ chữ mặc định Vừa; nhãn a b c chữ thường; Khối tự do cần "+ Thêm"; độ rộng ảnh Q6 theo %; khối ảnh tự do nhiều ảnh; GT không có viền khi chọn từ cột trái; hàng bảng 12.
+- Gốc của lỗi G1 và Task 6: ảnh chung không được vẽ ở các dạng lưới ảnh / nối / hội thoại / tô chữ / bảng. Sửa: vẽ trên cùng thân Task. Hội thoại quá một trang giờ cắt theo lượt.
+- "Nhiều ảnh như v82" ở khối tự do: so v82 và v83 thấy giống nhau; hiểu là nhiều ảnh cạnh nhau trong một khối (đã báo người dùng cách hiểu).
+- Chi tiết: spec mục 21. Kiểm thử: test33 mới + cả bộ (xem báo cáo chat).

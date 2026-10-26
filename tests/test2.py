@@ -15,6 +15,9 @@ with sync_playwright() as p:
         pg.on('pageerror', lambda e: errs.append('PAGEERR '+str(e)))
         pg.goto('file://'+path); pg.evaluate("localStorage.setItem('wsEditor.sections.v2', JSON.stringify({kind:true,info:true,content:true,parts:false}))"); pg.reload(); pg.wait_for_timeout(1500); return pg, errs
     po, eo = load(old); pn, en = load(new)
+    # v84 đổi mặc định (cỡ chữ Vừa, hàng bảng 12 mm): so bố cục ở cùng thông số cũ (To, hàng 14 mm)
+    OLDDEF = "(()=>{commit(w=>{w.size='l';w.tasks.forEach(t=>{if(t.content.form==='table'){t.layout.table=Object.assign({},t.layout.table);if(t.layout.table.minH==null)t.layout.table.minH=14;}});});})()"
+    po.evaluate(OLDDEF); pn.evaluate(OLDDEF); po.wait_for_timeout(500); pn.wait_for_timeout(500)
     lo, ln = po.evaluate(LAY), pn.evaluate(LAY)
     chk('bố cục phiếu giống hệt bản trước (trang, chiều cao từng Task, lỗi tràn)', lo == ln, '' if lo==ln else (lo[:200], ln[:200]))
     ids = pn.evaluate("window.__ws.ws.tasks.map(t=>t.id)")

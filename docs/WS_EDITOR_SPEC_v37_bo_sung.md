@@ -310,7 +310,17 @@ python3 -c "from PIL import Image; Image.new('RGB',(64,48),(200,200,200)).save('
 ## AC. v83 (2026-10-26) — xem WS_EDITOR_SPEC.md mục 20
 Thu gọn theo thẻ + liên kết chọn khối, Nối Task / xóa có hỏi, G1 ô ảnh lớn, ⓘ thủ thuật viết, câu ảnh + chữ hai cột, Q7 tick đáp án, câu ví dụ hiện trên trang, nhớ dạng câu hỏi (`qmem`, `qmemLin`).
 
-## AB. BÀN GIAO (2026-10-26, bản v83) — đọc mục này đầu tiên khi mở thread mới
+## AD. v84 (2026-10-26) — xem WS_EDITOR_SPEC.md mục 21
+Ảnh chung ở mọi dạng, chọn đúng khối G3 / GT, căn lề Task kéo theo ảnh, cỡ chữ mặc định Vừa, hàng bảng 12 mm, nhãn a b c, khối tự do + Thêm / nhiều ảnh, độ rộng ảnh %, hội thoại cắt trang.
+
+## AB. BÀN GIAO (2026-10-26, bản v84) — đọc mục này đầu tiên khi mở thread mới
+- **Bản v84** (spec mục 21) sửa 10 góp ý sau v83. v83 (mục 20) = hoàn thiện cột trái + nhớ dạng câu hỏi; v82 (mục 19) = cột trái theo khối.
+- **Mặc định mới cần nhớ:** cỡ chữ Vừa (không ghi vào phiếu), hàng bảng 12 mm, nhãn chữ thường. test2 so với bản cũ phải đặt lại To + 14 mm trước khi so.
+- **Chờ người dùng (từ v83):** nghĩa "khoảng cách / ký hiệu trên dòng trống" ở ⓘ; xác nhận nhớ dạng câu hỏi chỉ ở JSON; Q3 có cần tick như Q7.
+- **Việc tiếp theo:** chi tiết trang (tiêu đề phiếu, Họ tên/Lớp/Ngày, header/footer); P3 với PDF thật; G2 có bố cục riêng.
+- Cách chạy và quy tắc như bàn giao v82. test16 đôi khi báo không ổn định khi chạy cả bộ.
+
+## AB-cũ. BÀN GIAO (2026-10-26, bản v83) — đọc mục này đầu tiên khi mở thread mới
 - **Bản v83** (spec mục 20, báo cáo `docs/BAO_CAO_PHIEN_2026-10-26_phien5.md`) hoàn thành V1–V10. Bản v82 là cột trái theo khối (mục 19).
 - **Chờ người dùng:** (1) "khoảng cách / ký hiệu trên dòng trống" ở ⓘ nghĩa là gì; (2) xác nhận nhớ dạng câu hỏi lưu trong file JSON phiếu (MD không mang); (3) Q3 có cần tick như Q7; (4) cách hiểu câu ví dụ.
 - **Việc tiếp theo:** chi tiết trang (tiêu đề phiếu, Họ tên/Lớp/Ngày, header/footer); P3 với PDF thật; G2 có bố cục riêng.
