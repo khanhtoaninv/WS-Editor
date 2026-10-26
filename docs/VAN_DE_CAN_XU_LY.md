@@ -23,6 +23,18 @@ Trạng thái: **chỉ thảo luận, chưa code** cho đến khi người dùng
 - **Đề xuất:** lưới hai cột: trái ô ảnh (~84×62), phải hai dòng: "Tên ảnh" (chữ dưới ảnh) và "Chữ (___ )". Còn ~90 px mỗi câu. Áp cho dạng có ảnh riêng từng câu (Nhìn ảnh viết, Chọn ảnh 1 ảnh / câu, ô nhiều dòng). Nút ↑ ↓ ⧉ ✕ giữ ở hàng đầu. Dạng Q7 nhiều ảnh lựa chọn (lưới ảnh) giữ nguyên.
 - **Ảnh hưởng:** chỉ HTML / CSS của `edItems` (khối v81 `imgblk`); không đổi dữ liệu hay dàn trang.
 
+### V4. Đổi Dạng câu hỏi đi một vòng rồi quay lại phải về đúng như lần trình bày gần nhất
+- **Yêu cầu của người dùng:** khi các G (nhất là G3) đã có nội dung, đổi sang Dạng câu hỏi khác thì **nội dung đã nhập vẫn được lưu** (hiện hay không tùy dạng); đi một vòng quay về dạng cũ thì **như lần trình bày gần nhất của dạng đó**.
+- **Đo hiện trạng (26/10, v82, 18 Task × mọi Q hợp lệ a → b → a):** gần như mọi cặp đều khác dữ liệu gốc. Số đo thô có lẫn nhiễu (thứ tự khóa, thông số tự chuẩn hóa), nhưng có mất thật, ví dụ đã kiểm:
+  - Task 1 (Nhìn ảnh viết, Q6) → Điền từ (Q1) → Q6: tên ảnh `img:"cat"` bị chuyển thành chữ `text:"cat"`; về lại thì thành `img:"ảnh 1"` + `text:"cat"`, mất `len` (độ dài chỗ viết).
+  - Task 4 (Chọn A/B/C, Q3) → Viết câu (Q2) → Q3: **mất các lựa chọn đã nhập** (`opts` thành `["","",""]`); thông số `dir:"h"` thành `auto`.
+  - Task 6 (Đúng/Sai, Q5) → Q2 → Q5: về đúng (không mất).
+  - Chuyển sang Bảng (Q10/Q11) và về lại: danh sách câu / vế nối / người nói bị đổi cấu trúc.
+- **Nguyên nhân:** `setQ` đổi dữ liệu tại chỗ (xóa `opts`, đổi `img` ↔ `text`, `toTable`…), và Q được **suy ra từ dữ liệu** (`ck`/`qOf`) nên không thể chỉ để trường thừa ở lại (vd còn `pair` thì Task bị coi là Nối).
+- **Đề xuất (cần duyệt):** bộ nhớ theo dạng. Khi rời dạng Q cũ, cất phần riêng của dạng đó vào `t.qmem[Qcũ]` (bản chụp: các trường riêng của câu như `opts` / `img` / `len` / `pair` / `who` / `lines` theo `id` câu, `answer`, các thông số bố cục liên quan, và với Bảng thì cả `content` dạng danh sách). Khi vào dạng Q mới: nếu có `qmem[Qmới]` thì khôi phục rồi gộp với thay đổi từ lúc rời: chữ câu nào người dùng sửa trong lúc ở dạng khác thì giữ chữ mới; câu thêm mới thì thêm vào; câu đã xóa thì bỏ. Không có bản cất thì chuyển như hiện nay.
+- **Ảnh hưởng / rủi ro:** thêm trường tùy chọn `qmem` (JSON lưu theo, MD không mang theo; nên ghi rõ trong spec; schema thêm, không phá phiếu cũ); không ảnh hưởng dàn trang vì bộ vẽ bỏ qua `qmem`. Phần khó là gộp khi người dùng đã sửa giữa chừng và dạng Bảng. Đo nghiệm thu: với mọi Task, mọi cặp a → b → a và một vòng dài a → b → c → a: **HTML vẽ ra giống hệt ban đầu**, nội dung đã gõ ở dạng khác không mất.
+- **Cần hỏi:** bản nhớ lưu **trong file phiếu** (mở lại hôm sau vẫn đi vòng được, đúng ý "update bài") hay chỉ trong phiên đang mở? Mình nghiêng về lưu trong file.
+
 ## Việc mở khác (từ trước)
 - Chi tiết trang: tiêu đề phiếu / Họ tên Lớp Ngày / header footer (đã đặt câu hỏi, chưa chốt).
 - P3 PDF thật + MD AI tạo theo prompt v81; G2 bố cục riêng; G3 chia nhóm.
