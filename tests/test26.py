@@ -17,7 +17,7 @@ with sync_playwright() as p:
     pg.on('console',lambda m: errs.append(m.text) if m.type=='error' and 'ERR_' not in m.text and 'font' not in m.text.lower() else None)
     pg.on('pageerror',lambda e: errs.append('PAGEERR '+str(e)))
     pg.goto(F); pg.wait_for_timeout(1500)
-    chk('badge v78', pg.evaluate("document.getElementById('verBadge').textContent")=='v78')
+    chk('badge ≥ v78', int(__import__('re').sub(r'\D','',pg.evaluate("document.getElementById('verBadge').textContent")) or 0) >= 78)
     t={'id':'x1','typeId':'custom','title':'Crossword','instruction':'Complete the crossword.','content':{'form':'table','corner':'','cols':['']*5,'rows':[{'head':'','cells':list(r.replace('#',' ').replace(' ','').ljust(0)) } for r in []]},'answer':{'kind':'none','attach':'none','layout':'A1','params':{}}}
     cells=lambda s:[('' if ch=='#' else ch) for ch in s]
     t['content']['rows']=[{'head':'','cells':cells(r)} for r in ["#C#S#","#A#U#","TEN..",".#N#."]]

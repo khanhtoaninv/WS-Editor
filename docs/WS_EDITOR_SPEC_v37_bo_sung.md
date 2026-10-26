@@ -295,8 +295,11 @@ python3 -c "from PIL import Image; Image.new('RGB',(64,48),(200,200,200)).save('
 ## AP. v78 — Ô chữ giải đố
 - Spec chính mục 17.9. `crossCell`, `crossParse`, `crossLines`, `crossCount`, `crossHtml`, `layout.table.cross/key/xc`, `Crossword:` trong MD, G-Text `cols:2` và `<ol start>`, `test26.py`.
 
-## AB. BÀN GIAO (2026-10-26, bản v78) — đọc mục này đầu tiên khi mở thread mới
-- **Bản v78** ô chữ giải đố (mục AP; v77 dọn việc nhỏ, mục AO; v76 điểm trên ảnh chung, mục AN; v75 bài đọc có chỗ trống / chọn / đánh dấu / cắt theo đoạn, mục AM; v74 G-Text kiểu Ảnh, mục AL; v73 kiểu Chữ, mục AK; v72 cỡ chữ phiếu, mục AJ). **Việc tiếp theo:** điểm neo kiểu B (dây nối ra ô viết) nếu cần, rồi lưới tự do (ô chữ; cần hình mẫu duyệt trước). Đã chạy trên bản cuối v77: test1–25 và audit; `test2` so với v76.
+## AQ. v79 — Sửa lỗi câu nhiều dòng ở Task không ảnh
+- MD có dòng thụt lề dưới câu đánh số (Task không ảnh) làm hỏng nhập ("Cannot read properties of undefined (reading 'includes')"). Nay câu không ảnh giữ `text` có `\n` và in xuống dòng; câu có ảnh vẫn là ô nhiều dòng. Chi tiết spec mục 16.13. Test mới `test27.py`, dữ liệu `tests/real/nhieu-dong-user.md`.
+
+## AB. BÀN GIAO (2026-10-26, bản v79) — đọc mục này đầu tiên khi mở thread mới
+- **Bản v79** sửa lỗi câu nhiều dòng (mục AQ). **Bản v78** ô chữ giải đố (mục AP; v77 dọn việc nhỏ, mục AO; v76 điểm trên ảnh chung, mục AN; v75 bài đọc có chỗ trống / chọn / đánh dấu / cắt theo đoạn, mục AM; v74 G-Text kiểu Ảnh, mục AL; v73 kiểu Chữ, mục AK; v72 cỡ chữ phiếu, mục AJ). **Việc tiếp theo:** điểm neo kiểu B (dây nối ra ô viết) nếu cần, rồi lưới tự do (ô chữ; cần hình mẫu duyệt trước). Đã chạy trên bản cuối v77: test1–25 và audit; `test2` so với v76.
 - **Không còn dùng artifact.** Xong việc thì commit và đẩy lên GitHub `khanhtoaninv/WS-Editor`, nhánh main (người dùng yêu cầu). Repo: file chính `ws-editor-prototype.html`, `docs/`, `tests/`, `fonts/`, `samples/`.
 - **Đã chạy trên bản cuối v70:** test1, 3–19, audit (0 vấn đề), audit2 (không tràn), cmp_paste (20 bài dán giống v69), ws_sea (3 trang, 0 lỗi) đạt, 0 lỗi console. `test2` so với v69: 31/32, chỗ lệch duy nhất là Task 5 phiếu mẫu (đã định, xem mục AI).
 - **Cách chạy:** `bash tests/run_all.sh <mới.html> <cũ.html>`; `cmp_paste.py <mới> <cũ>`; `ws_sea.py` ghi ra `/home/claude/ws/ws-sea-sample.json` (cần tạo thư mục), bản đó khác `ws-sea-sample.json` trong repo ở trường `part:""` từ v68 (không phải lỗi v70, chưa tái xuất mẫu).

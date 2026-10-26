@@ -1,4 +1,4 @@
-# Báo cáo phiên 26/10/2026 (v73 → v78) — đọc đầu tiên khi mở phiên mới
+# Báo cáo phiên 26/10/2026 (v73 → v79) — đọc đầu tiên khi mở phiên mới
 
 ## Đã làm trong phiên (đều đã commit và đẩy lên main, trừ v78 ghi rõ ở dưới)
 - v73 G-Text kiểu Chữ · v74 G-Text kiểu Ảnh + 4 khung chữ · v75 bài đọc có chỗ trống đánh số / {a|b} / đậm nghiêng gạch chân / đáp án chỗ trống / cắt theo đoạn · v76 điểm trên ảnh chung (số trong chấm / ô trống, tròn / vuông, bấm để thêm, kéo để dời) · v77 mặc định theo cấu hình, ẩn số câu ở lề, A4 Tự động chọn Tự xuống dòng, nhãn "Self-check:" vào `Hướng dẫn:`.
@@ -31,6 +31,12 @@
   1. Khối chữ: danh sách số chỉ giữ số bắt đầu, số sau tự tăng. Gợi ý ô chữ kiểu "Across 1, 3, 4" phải tách bằng dòng trống (`1. …` / dòng trống / `3. …`) mới giữ được số 3.
   2. Khung từ không hiện ở Task "chỉ có ảnh" (danh sách câu tắt hoặc 0 câu). Demo dùng khối chữ thay.
   3. Bài đọc có danh sách câu tắt (`list:false`) vẫn báo "Chưa có câu nào" (vàng), trong khi đặc tả coi đây là trường hợp hợp lệ (mục V, v57).
+
+## v79 (phiên 2): sửa lỗi câu nhiều dòng
+- Người dùng nhập MD (Task 8 Conversation, Task 9 Rewrite the sentences) → lỗi "Cannot read properties of undefined (reading 'includes')". Lớp lỗi: bộ đọc hiểu sai (dòng thụt lề luôn thành "ô nhiều dòng" của bài có ảnh). Sửa: câu không ảnh giữ một câu, xuống dòng trong chữ; phiếu, cột trái, xuất MD theo đó. Spec 16.13, bổ sung AQ, `test27.py`, dữ liệu `tests/real/nhieu-dong-user.md`.
+- Test kiểm số bản (test19–21, 26, 27) đổi thành "≥ bản lúc viết test" để không hỏng mỗi lần nâng bản.
+- Kết quả trên bản cuối v79: test1–27 và audit đạt, 0 lỗi console, 0 tràn; test2 so với v78: 32/32. Chưa chạy: audit2, cmp_paste, ws_sea.
+- **Lưu ý khi chạy test2:** bản cũ để so phải có thư mục `fonts/` bên cạnh (vd `ln -s <repo>/fonts <thư mục bản cũ>/fonts`); thiếu font thì bản cũ dùng font dự phòng, chữ rộng hơn và test2 báo lệch giả (lần này: Task 14 cao hơn 10 px).
 
 ## Cách chạy kiểm thử
 `bash tests/run_all.sh <mới.html> <cũ.html>` (từng test một, mỗi cái riêng; không chạy hai Chromium cùng lúc).

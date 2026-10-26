@@ -404,7 +404,7 @@ dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 .tg[data-ln="h"] .tn.c0.r0{border-top-left-radius:2mm}.tg[data-ln="h"] .tn.cl.r0{border-top-right-radius:2mm}
 .a2box{display:block;min-width:0}
 .fr{display:flex;flex-wrap:wrap;column-gap:.28em;align-items:flex-end}
-.fr .w{line-height:1.4}.fr .tl{margin-left:-.28em}
+.fr .w{line-height:1.4}.fr .tl{margin-left:-.28em}.fr .brk{flex-basis:100%;height:0}
 .fr .fl{flex:1 1 18mm;min-width:18mm;height:1.15em;border-bottom:.3mm solid var(--ink);margin-bottom:.12em}
 .fr .nofl{flex:none;vertical-align:baseline;margin-bottom:.12em}
 .xl{display:block;height:var(--lh2);border-bottom:.3mm solid var(--ink);max-width:100%}
@@ -715,7 +715,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 
 <div class="app">
   <header class="top">
-    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v78</span> <small id="wsTitle"></small></div>
+    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v79</span> <small id="wsTitle"></small></div>
     <div class="tb">
       <label for="age" class="hint" style="margin:0">Độ tuổi</label>
       <select id="age"><option value="5-6">5–6</option><option value="7-9">7–9</option><option value="10-12">10–12</option></select>
@@ -3433,7 +3433,7 @@ const isJoined = t => !!t && t.layout && t.layout.break === 'join' && ws.tasks.i
 const gapOf = t => isJoined(t) ? spacingOf(t).groupGap : spacingOf(t).gapTask;
 function attachOpts(t) {
   const a = t.answer, q = ck(t) === 'questions';
-  const gap = ck(t) === 'dialogue' || (q && its(t).some(x => x.text.includes('___')));
+  const gap = ck(t) === 'dialogue' || (q && its(t).some(x => (x.text || '').includes('___')));
   if (a.kind === 'word') return [...(gap ? ['inline'] : []), 'item', ...(q ? ['block'] : [])];
   if (a.kind === 'sentence') return ['item', ...(q ? ['block'] : [])];
   if (a.kind === 'choice') { const o = []; if (q && its(t).some(x => x.opts)) o.push('item'); if (hasMarkup(t)) o.push('inline'); return o.length ? o : [a.attach]; }
@@ -3530,10 +3530,10 @@ function a2inline(t, raw, num, item) {
   const fixedBlank = () => `<span class="a a2" ${nd} style="width:${fixedW}"></span>`;
   const lab = () => num ? `(${num()}) ` : '';
   const eligible = a2end(raw) && (c.mode === 'fill' || c.lines > 1 || c.start === 'below');
-  if (!eligible) return parts.reduce((a, part, i) => a + (i ? lab() + fixedBlank() : '') + esc(part), '');
+  if (!eligible) return parts.reduce((a, part, i) => a + (i ? lab() + fixedBlank() : '') + esc(part).replace(/\n/g, '<br>'), '');
   // chỗ trống cuối câu: dựng hàng flex để gạch kéo dài hết phần còn lại của dòng cuối
-  const tok = '\u0001', head = parts.slice(0, -1).map((x, i) => esc(x) + (i < last ? lab() + tok : '')).join('');
-  const words = head.split(/\s+/).filter(Boolean).map(w => `<span class="w">${w.split(tok).join(fixedBlank())}</span>`);
+  const tok = '\u0001', head = parts.slice(0, -1).map((x, i) => esc(x).replace(/\s*\n\s*/g, ' \u0002 ') + (i < last ? lab() + tok : '')).join('');
+  const words = head.split(/\s+/).filter(Boolean).map(w => w === '\u0002' ? '<span class="brk"></span>' : `<span class="w">${w.split(tok).join(fixedBlank())}</span>`);
   const tail = parts[parts.length - 1].trim(), keepTail = /[?!:…]/.test(tail) ? tail.replace(/[.,;]/g, '') : '';
   const label = lab();
   let row = words.join(''), extra = c.lines - 1;
@@ -3554,10 +3554,10 @@ function inlChoice(t, escaped) {
   return escaped.replace(CHOICE_RE, (m, g) => `<span class="a a4i" data-node="${t.id}:G3">${g.split('|').map(o => `<b>${o.trim()}</b>`).join('&nbsp;/ ')}</span>`);
 }
 function qtext(t, q) {
-  const s = esc(q.text);
-  if (t.answer.attach === 'inline' && t.answer.layout === 'A4') return inlChoice(t, s);
-  if (t.answer.attach === 'inline' && q.text.includes('___')) return t.answer.layout === 'A2' ? a2inline(t, q.text, null, q) : s.split('___').join(ans(t, q));
-  return s.replace(/___/g, '<span class="gap">______</span>');
+  const s = esc(q.text || ''), br = h => h.replace(/\n/g, '<br>');   // câu nhiều dòng (dòng thụt lề trong MD): \n trong chữ câu là xuống dòng
+  if (t.answer.attach === 'inline' && t.answer.layout === 'A4') return br(inlChoice(t, s));
+  if (t.answer.attach === 'inline' && (q.text || '').includes('___')) return t.answer.layout === 'A2' ? a2inline(t, q.text, null, q) : br(s.split('___').join(ans(t, q)));
+  return br(s.replace(/___/g, '<span class="gap">______</span>'));
 }
 /* ---- Ô chữ giải đố (v78): bảng có layout.table.cross = true. Ô: '' hoặc '#' = không có ô; '.' = ô trống chưa biết đáp án; 'A' = ô có đáp án A; '(A)' = chữ cho sẵn ---- */
 function crossCell(v) { if (typeof v !== 'string') return { k: 'none' }; const x = v.trim(); if (!x || x === '#') return { k: 'none' }; if (x === '.') return { k: 'empty' }; const m = /^\((.)\)$/.exec(x); return m ? { k: 'given', ch: m[1] } : { k: 'ans', ch: x[0] }; }
@@ -5404,7 +5404,7 @@ function edItems(t) {
       ? `<div class="er2 pairimg"><div class="imgblk">${thumbHtml(t, '@' + x.id)}${eIn(`it.${i}.pli`, x.pair.l.img, 'Tên ảnh', { label: `Ảnh vế trái ${i + 1}` })}${eIn(`it.${i}.pl`, fieldVal(x, 'pl'), 'Chữ dưới ảnh', { label: `Chữ dưới ảnh vế trái ${i + 1}` })}</div><span class="eto">↔</span>${eIn(`it.${i}.pr`, fieldVal(x, 'pr'), 'Vế phải', { label: `Vế phải ${i + 1}` })}</div>`
       : `<div class="er2">${eIn(`it.${i}.pl`, fieldVal(x, 'pl'), 'Vế trái', { label: `Vế trái ${i + 1}` })}<span class="eto">↔</span>${eIn(`it.${i}.pr`, fieldVal(x, 'pr'), 'Vế phải', { label: `Vế phải ${i + 1}` })}</div>`;
     else if (x.lines) f += eIn(`it.${i}.lines`, fieldVal(x, 'lines'), 'Mỗi dòng một dòng chữ; {a|b} = chọn', { area: 1, rows: Math.max(2, x.lines.length), label: `Các dòng câu ${i + 1}` });
-    else f += eIn(`it.${i}.text`, x.text || '', k === 'trace' ? 'Từ để tô' : 'Chữ (___ chỗ trống, {a|b} chọn)', { label: `Chữ câu ${i + 1}` });
+    else f += eIn(`it.${i}.text`, x.text || '', k === 'trace' ? 'Từ để tô' : 'Chữ (___ chỗ trống, {a|b} chọn)', { label: `Chữ câu ${i + 1}`, area: /\n/.test(x.text || ''), rows: ((x.text || '').match(/\n/g) || []).length + 1 });
     if (x.img != null) f = `<div class="imgblk">${thumbHtml(t, '@' + x.id)}${eIn(`it.${i}.img`, x.img, 'Chữ dưới ảnh / tên ảnh', { label: `Chữ dưới ảnh câu ${i + 1}` })}</div>` + f;
     if (x.imgs) f += `<div class="imgsgrid" style="--n:${x.imgs.length}">${x.imgs.map((im, j) => `<div class="imgblk">${thumbHtml(t, `@${x.id}.${j}`)}${eIn(`it.${i}.imgs.${j}`, im, 'Chữ dưới ảnh', { label: `Chữ dưới ảnh ${j + 1} của câu ${i + 1}` })}</div>`).join('')}</div>`;
     if (x.opts) f += `<div class="er2"><span class="elb">Chọn</span>${eIn(`it.${i}.opts`, fieldVal(x, 'opts'), 'a / b / c', { label: `Lựa chọn câu ${i + 1}` })}</div>`;
@@ -6219,7 +6219,7 @@ function mdTask(b, keys) {
   const passage = sec.passage.reduce((s, x) => x === '' ? s + '\n\n' : s + (s && !s.endsWith('\n') ? ' ' : '') + x, '');   // giữ đoạn văn (dòng trống = sang đoạn mới)
   const r = parseTask(body.map(x => x.s).join('\n'), force, { title: b.title, instruction: F.instruction || '', audio: F.audio || '', passage, match: !!F.kind && /^nối/i.test(F.kind.trim()), box });
   const t = r.t; let conf = r.conf, explicit = !!force;
-  its(t).forEach(x => { if ((x.text || '').includes('\u2028')) { x.lines = x.text.split('\u2028').map(y => y.trim()); delete x.text; delete x.len; } });
+  its(t).forEach(x => { if (!(x.text || '').includes('\u2028')) return; if (x.img || x.imgs) { x.lines = x.text.split('\u2028').map(y => y.trim()); delete x.text; delete x.len; } else x.text = x.text.split('\u2028').map(y => y.trim()).filter(Boolean).join('\n'); });   // câu có ảnh: ô nhiều dòng (T5); câu không ảnh: giữ một câu, xuống dòng trong chữ (v79)
   if (sec.grid.length || sec.cross.length) {         // ô chữ: bảng chữ cái, mỗi dòng một hàng (có dấu cách thì tách theo dấu cách); crossword: # ô trống '.' ô chưa đáp án
     const cr = sec.cross.length > 0, rows = cr ? crossParse(sec.cross) : sec.grid.map(x => /\s/.test(x) ? x.split(/\s+/) : [...x]), n = Math.max(...rows.map(x => x.length));
     t.content = { form: 'table', corner: '', cols: Array(n).fill(''), rows: rows.map(x => ({ head: '', cells: x.concat(Array(n - x.length).fill('')) })) };
@@ -6231,7 +6231,7 @@ function mdTask(b, keys) {
     t.content = { form: 'list', items: sec.dialogue.map(x => { const m = /^([^:]{1,40}):\s*(.*)$/.exec(x); return { who: m[1].trim(), text: normGap(m[2]) }; }) };
     if (F.intro) t.content.lead = { kind: 'text', text: F.intro };
     if (!F.image) delete t.image;      // thân Task không có câu nên bộ đoán đã thêm ảnh tô màu giả: bỏ
-    ensureIds(t); setKind(t, its(t).some(x => x.text.includes('___')) ? 'word' : 'none'); explicit = true;
+    ensureIds(t); setKind(t, its(t).some(x => (x.text || '').includes('___')) ? 'word' : 'none'); explicit = true;
     if (other) notes.push(`bỏ ${other} dòng ngoài khối hội thoại`);
   }
   if (F.bank) { const w = F.bank.split(/\s*[,;|]\s*|\s\/\s/).map(x => x.trim()).filter(Boolean), dl = ck(t) === 'dialogue'; t.wordBank = { words: w, placement: dl ? 'right' : 'top', style: dl ? 'list' : 'chips', label: 'lower' }; }
@@ -6283,7 +6283,8 @@ function taskToMd(t, asPart) {
     if (x.pair) o.push(n + ((x.pair.l && (x.pair.l.img ? `[ảnh: ${x.pair.l.img}]` : x.pair.l.text)) || '') + ' - ' + ((x.pair.r && x.pair.r.text) || ''));
     else if (x.lines) { o.push(n + im + (x.lines[0] || '')); x.lines.slice(1).forEach(l => o.push('   ' + l)); }
     else if (x.imgs) o.push(n + (x.text || '') + ' ' + x.imgs.map((m, j) => `${'ABCD'[j]}. ${m}`).join(' '));
-    else o.push(n + im + (x.text || '') + (x.opts && a.kind === 'choice' && a.attach === 'item' ? ' ' + x.opts.map((p, j) => (a.params || {}).lab === 'box' ? `☐ ${p}` : `${'ABCD'[j]}. ${p}`).join(' ') : ''));
+    else { const ml = /\n/.test(x.text || ''), op = x.opts && a.kind === 'choice' && a.attach === 'item' ? x.opts.map((p, j) => (a.params || {}).lab === 'box' ? `☐ ${p}` : `${'ABCD'[j]}. ${p}`).join(' ') : '';
+      o.push(n + im + (x.text || '').replace(/\n/g, '\n   ') + (op ? (ml ? '\n   ' : ' ') + op : '')); }
   });
   return o.join('\n');
 }

@@ -467,6 +467,11 @@ P3 (thử 5–10 PDF thật qua đường chat, đo số Task đúng và chỗ p
 - **Chưa làm:** cỡ chữ của G-Text (Theo phiếu / Nhỏ / Vừa / To, mục 17).
 - **Kiểm thử:** `test20.py` (25 phép kiểm: mặc định To không lưu, ba mức đúng pt trên trang, 0 tràn, tổng chiều cao To > Vừa > Nhỏ, hoàn tác, khứ hồi JSON, giá trị lạ, đổi độ tuổi). Bố cục mức To giống hệt v71 (`test2`).
 
+### 16.13 Câu nhiều dòng ở Task không ảnh (v79, 26/10/2026, sửa lỗi)
+- **Lỗi:** người dùng nhập MD có câu viết hai dòng (dòng thụt lề dưới câu đánh số, vd câu gốc rồi `He used to ___ .`; câu hỏi rồi `‘ ___ ’` + lựa chọn A–D) → cả hai Task báo "Cannot read properties of undefined (reading 'includes')", không nhập được. Phân loại: **bộ đọc hiểu sai** (dòng thụt lề luôn bị đổi thành "ô nhiều dòng" `lines[]`, kiểu chỉ dành cho câu có ảnh ở T5; câu mất trường `text`) và code đọc `text` không kiểm tra (`attachOpts`). MD do AI viết đúng quy ước.
+- **Sửa:** câu **có ảnh** (`img` / `imgs`) giữ như v65 (ô nhiều dòng). Câu **không ảnh**: giữ một câu, dòng tiếp nằm trong `text` sau ký tự `\n`. Trên phiếu `\n` là xuống dòng (`qtext`; chỗ trống cuối câu A2 vẫn kéo dài hết dòng cuối nhờ phần tử ngắt `.brk` trong hàng flex). Cột trái: câu có `\n` dùng ô nhập nhiều dòng. Xuất MD: dòng tiếp viết thụt lề 3 dấu cách; lựa chọn A–D của câu nhiều dòng ra một dòng thụt lề riêng. JSON: `text` có `\n` hiển thị như trên.
+- Dữ liệu thật: `tests/real/nhieu-dong-user.md` (giữ nguyên). Test: `test27.py`.
+
 ---
 
 ## 17. G-Text và ba năng lực còn thiếu (chốt 26/10/2026; G-Text kiểu Chữ đã làm ở v73, mục 17.4)

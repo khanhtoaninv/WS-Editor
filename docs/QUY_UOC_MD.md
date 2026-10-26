@@ -77,7 +77,7 @@ Không ghi `Trả lời:` thì app đoán theo ký hiệu như khi dán chữ, v
   `___` chỗ trống · `{a|b}` chọn trong câu · `A. … B. … C. …` lựa chọn (cùng dòng, hoặc mỗi lựa chọn một dòng ngay dưới câu, thụt lề hay không đều được) · `☐ …` lựa chọn có ô tick (cũng nhận `[ ]`, `□`; cùng dòng hoặc mỗi dòng một lựa chọn) · `[ảnh: tên]` ảnh của câu · `trái - phải` một cặp nối (vế trái là ảnh: `[ảnh: apple] - pear`).
 - **Câu chỉ có lựa chọn** (không có thân câu, vd chọn ý chính của bài đọc): `1. A. … B. … C. …` hoặc `☐ a cake ☐ a football ☐ balloons`.
 - **Task chỉ có một câu** thì trên phiếu không đánh số câu (vẫn chừa lề cho chữ thẳng hàng với các Task khác).
-- **Câu nhiều dòng:** dòng **thụt lề** (≥ 2 dấu cách) ngay dưới một câu đánh số là dòng tiếp của câu đó.
+- **Câu nhiều dòng:** dòng **thụt lề** (≥ 2 dấu cách) ngay dưới một câu đánh số là dòng tiếp của câu đó. Câu không ảnh: in xuống dòng trong cùng một câu (vd câu gốc rồi `He used to ___ .` ở bài viết lại câu). Câu có `[ảnh: …]`: mỗi dòng là một dòng của ô nhiều dòng (như bài Read and underline).
 - **Bài đọc:** dòng `Bài đọc:` rồi các đoạn văn; **dòng trống giữa hai đoạn = sang đoạn mới** (giữ trên phiếu). Hết bài đọc khi gặp câu đánh số, lựa chọn, dòng bảng hoặc dòng trường.
 - **Hội thoại:** dòng `Hội thoại:` rồi mỗi lượt một dòng `Tên: lời`. **Chỉ nhận hội thoại qua khối này** (từ v67): câu đánh số dạng `Place of the party: ___` là câu điền, không phải lời người nói. Tên được có số (“Students 1 and 2”). Có `___` thì thành điền chỗ trống, không có thì không có chỗ trả lời.
 - **Bảng:** các dòng ô cách nhau bằng ` | ` (hoặc Tab). Dòng đầu là tiêu đề cột (ô đầu là góc bảng). Ô trống = để học sinh viết; `[ ]` = ô tick; `[ảnh: tên]` = ô ảnh.

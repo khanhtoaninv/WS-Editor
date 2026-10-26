@@ -8,7 +8,7 @@ with sync_playwright() as p:
     pg.on('console',lambda m: errs.append(m.text) if m.type=='error' and 'ERR_' not in m.text and 'font' not in m.text.lower() else None)
     pg.on('pageerror',lambda e: errs.append('PAGEERR '+str(e)))
     pg.goto(F); pg.wait_for_timeout(1500)
-    chk('badge v7x', pg.evaluate("document.getElementById('verBadge').textContent").startswith('v7'))
+    chk('badge ≥ v72', int(__import__('re').sub(r'\D','',pg.evaluate("document.getElementById('verBadge').textContent")) or 0) >= 72)
     chk('mặc định To, không lưu size', pg.evaluate("sizeKey()")=='l' and pg.evaluate("ws.size")==None)
     chk('To = 14 pt cho 7-9', pg.evaluate("fontPt()")==14)
     def info():
