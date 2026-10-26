@@ -32,3 +32,12 @@
 1. Người dùng thử v81, góp ý bộ chọn Bố cục / Dạng câu hỏi.
 2. P3: PDF thật + MD AI tạo theo prompt v81 + ảnh sau khi nạp.
 3. Tiêu đề phiếu / Họ tên Lớp Ngày / header footer.
+
+## 6. Ghi chú kỹ thuật cho phiên mới (đọc trước khi sửa code)
+- **Khối v81 trong `ws-editor-prototype.html`** nằm cuối file, ngay trước `window.__ws = {`, giữa hai dòng chú thích `v81: Kiến trúc trình bày mới` và `hết v81`. Nó **ghi đè** hàm cũ theo kiểu bọc (`layoutPicker`, `answerPanel`, `framePanel`, `bankPanel`, `renderInspector`, `edHtml`, `setKind`, `toggleField`, `blankItem`, `itemKeys`, `labelOf`, `tidy`, `applyField`, `keyExtra`, `layoutReasons`, `autoLayout`). Muốn sửa giao diện T/Q thì sửa ở khối này; hàm gốc vẫn còn phía trên.
+- **Hàm chính:** `tnOf` / `setTN` qua `qCmd(t,'tn',v)` (Bố cục), `qDerived` / `qOf` / `setQ` / `qStyles` / `qArr` / `qReasons` (Dạng câu hỏi), `blkAdd` / `blkDel` / `blkAddable` (khối), `itemAct` (thao tác câu), `mdForm` (đọc `Dạng:` trong MD). Lõi vẽ: `qnum`, `inoT`, `inoN`, `g3row`, `leadIntro`, `g4Html`, `ans` (bọc `ans0` để in đáp án câu ví dụ), `qtext` (bọc `qtext0`).
+- **Quy tắc đã chốt khi làm:** không đổi schema; T/Q chỉ suy ra; `t.q` chỉ lưu khi Task không có chỗ trả lời; câu ví dụ `ex` và dòng chữ `gt` không được đếm vào số câu hay đáp án; mọi lệnh đổi dạng là một bước hoàn tác; Task bài đọc chỉ đi với Q1, Q2, Q3, Q5.
+- **Cạm bẫy đã gặp:** (1) test so HTML phải bỏ dấu chọn (`cur`) vì chọn Task đổi class; (2) xóa khối đang được chọn phải đưa lựa chọn về Task **trước** khi vẽ lại, nếu không panel cũ đọc dữ liệu đã mất; (3) câu có ảnh (`[ảnh: x]`) mà `Dạng:` là điền từ / viết câu / chọn thì phải giữ ảnh, chỉ đổi cách trả lời; (4) hai ảnh chung và "câu hỏi trước bài đọc" khóa bố cục Ảnh trái / phải / trong bài đọc.
+- **Kiểm thử so với v80:** `git show backup/v80:ws-editor-prototype.html` lưu ra một thư mục có `fonts/` cạnh nó, rồi `python3 tests/cmp_v80.py <mới.html> <v80.html>`. Chạy test từng cái một: `bash tests/run_all.sh <mới.html> <v80.html>` (test2 cần bản cũ). Toàn bộ mất khoảng 8 phút (audit ~106 s).
+- **Phiếu mẫu mới:** `tests/md/v81-cu-phap.md` (mọi cú pháp mới, do Claude viết), `tests/md/birthday6-dang.md` (phiếu thật birthday6 viết bằng `Dạng:`).
+- **Việc mở, theo thứ tự gợi ý:** (1) người dùng thử v81 và góp ý; (2) P3: PDF thật + MD AI tạo theo prompt v81, phân lỗi vào 5 nhóm rồi thêm vào `tests/real/`; (3) tiêu đề phiếu / Họ tên Lớp Ngày / header footer; (4) G3 chia nhóm (hoãn); (5) cân nhắc bỏ "Áp mẫu" và chọn loại đáp án cũ ở cột trái mục 1.
