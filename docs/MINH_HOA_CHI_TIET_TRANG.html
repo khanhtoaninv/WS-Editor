@@ -1,0 +1,56 @@
+<!doctype html><html lang="vi"><meta charset="utf-8"><title>Chi tiết trang</title>
+<style>
+body{font:13px/1.45 system-ui,sans-serif;background:#eef0f3;margin:0;padding:16px;width:1180px;color:#222}
+h2{font-size:15px;margin:0 0 2px}.sub{color:#555;font-size:12.5px;margin:0 0 8px}
+.row{display:flex;gap:14px;margin-bottom:18px}.col{flex:1}
+.pg{background:#fff;border:1px solid #cfd4dc;border-radius:4px;height:330px;position:relative;padding:20px 22px;overflow:hidden;font-size:10.5px}
+.tag{display:inline-block;background:#0a6b75;color:#fff;border-radius:9px;padding:1px 9px;font-size:11.5px;font-weight:700;margin-bottom:6px}
+.t1{font-size:19px;font-weight:700;color:#1d3a5f;margin:0 0 3px}
+.meta{color:#777;font-size:9.5px}.meta u{display:inline-block;width:70px;text-decoration:none;border-bottom:1px solid #888}
+.goal{margin:5px 0 8px;font-size:10px}
+.task{border-radius:6px;background:#e6f3f1;padding:3px 8px;font-weight:700;font-size:10.5px;margin:6px 0 3px;display:flex;justify-content:space-between}
+.ln{height:7px;background:#e8eaee;border-radius:3px;margin:4px 0}
+.ft{position:absolute;left:22px;right:22px;bottom:8px;border-top:1px solid #ddd;padding-top:3px;font-size:9px;color:#888;display:flex;justify-content:space-between}
+.band{height:9px;background:#0a6b75;position:absolute;left:0;right:0;top:0}
+.kick{color:#0a6b75;font-weight:700;font-size:9px;letter-spacing:.08em}
+.chips span{display:inline-block;border:1px solid #bcd;border-radius:9px;padding:0 7px;margin-right:4px;font-size:9px;color:#456}
+.nm{display:flex;justify-content:flex-end;gap:12px;font-size:9.5px;color:#666;margin-bottom:4px}.nm u{display:inline-block;width:80px;text-decoration:none;border-bottom:1px solid #888}
+.panel{background:#fff;border:1px solid #cfd4dc;border-radius:10px;padding:10px 14px;width:100%}
+.panel .f{display:flex;align-items:center;gap:8px;margin:5px 0}.panel label{width:130px;color:#555;font-size:12px}
+.i{border:1px solid #cfd4dc;border-radius:5px;background:#fbfbfc;padding:2px 8px;flex:1}
+.sw{display:inline-flex;border:1px solid #cfd4dc;border-radius:6px;overflow:hidden;font-size:12px}.sw b{padding:1px 9px;font-weight:500}.sw b.on{background:#0a6b75;color:#fff}
+.rec{background:#dcfce7;color:#166534;border-radius:9px;padding:0 8px;font-weight:700;font-size:11.5px}
+</style>
+<h2>Chi tiết trang: ba kiểu đầu phiếu và chân trang (lấy từ hai phiếu PDF thật trong tests/real)</h2>
+<p class="sub">Đầu phiếu chỉ ở trang 1. Chân trang lặp ở mọi trang (có số trang). Mỗi phần bật / tắt riêng.</p>
+<div class="row">
+<div class="col"><span class="tag">A · Tiêu đề + dòng thông tin</span> <span class="rec">đề xuất</span>
+<div class="pg"><div class="t1">A Visit to Sunny Farm</div>
+<div class="meta">Name: <u></u> Class: <u style="width:40px"></u> Date: <u style="width:50px"></u> | A1 Movers · 25 minutes</div>
+<div class="goal">My goal: I can understand a short story, find details…</div>
+<div class="task"><span>TASK 1 · Before you read</span><span>3 min</span></div><div class="ln"></div><div class="ln" style="width:70%"></div>
+<div class="task"><span>TASK 2 · Main idea</span><span>6 min</span></div><div class="ln"></div><div class="ln"></div>
+<div class="ft"><span>A1 Movers reading practice · Independent homework</span><span>1</span></div></div></div>
+<div class="col"><span class="tag">B · Banner + tên ở chân trang</span>
+<div class="pg"><div class="band"></div><div class="kick" style="margin-top:6px">READING WORKSHEET</div><div class="t1">A Surprise Birthday Party</div>
+<div class="chips"><span>Cambridge A1 Movers</span><span>Homework</span><span>25–30 minutes</span></div>
+<div class="task"><span>TASK 1 · Look &amp; predict</span><span>3 min</span></div><div class="ln"></div><div class="ln" style="width:60%"></div>
+<div class="task"><span>TASK 2 · Read &amp; choose</span><span>6 min</span></div><div class="ln"></div><div class="ln"></div>
+<div class="ft"><span>Name: <u style="display:inline-block;width:80px;border-bottom:1px solid #888"></u> &nbsp; Class: ______</span><span>Page 1</span></div></div></div>
+<div class="col"><span class="tag">C · Gọn: một dòng Name / Class / Date</span>
+<div class="pg"><div class="nm">Name: <u></u> Class: <u style="width:40px"></u> Date: <u style="width:50px"></u></div>
+<div class="task"><span>1 · Look and write.</span></div><div class="ln"></div><div class="ln" style="width:70%"></div>
+<div class="task"><span>2 · Look and match.</span></div><div class="ln"></div><div class="ln"></div>
+<div class="ft"><span></span><span>1 / 3</span></div></div></div>
+</div>
+<h2>Cách chỉnh (một mục "Trang" mới, cấp cả phiếu)</h2>
+<div class="row"><div class="panel">
+<div class="f"><label>Tiêu đề phiếu</label><span class="i">A Visit to Sunny Farm</span><span class="sw"><b class="on">Hiện</b><b>Ẩn</b></span></div>
+<div class="f"><label>Dòng phụ (cấp độ, thời gian)</label><span class="i">A1 Movers · 25 minutes</span><span class="sw"><b class="on">Hiện</b><b>Ẩn</b></span></div>
+<div class="f"><label>Họ tên / Lớp / Ngày</label><span class="sw"><b class="on">Họ tên</b></span><span class="sw"><b class="on">Lớp</b></span><span class="sw"><b class="on">Ngày</b></span><label style="width:auto">Vị trí</label><span class="sw"><b class="on">Đầu phiếu</b><b>Chân trang</b></span></div>
+<div class="f"><label>Mục tiêu (My goal)</label><span class="i">I can understand a short story…</span><span class="sw"><b>Hiện</b><b class="on">Ẩn</b></span></div>
+<div class="f"><label>Chân trang</label><span class="i">A1 Movers reading practice · Independent homework</span><span class="sw"><b class="on">Hiện</b><b>Ẩn</b></span><label style="width:auto">Số trang</label><span class="sw"><b class="on">1</b><b>1 / 3</b><b>Ẩn</b></span></div>
+<div class="f"><label>Kiểu đầu phiếu</label><span class="sw"><b class="on">A Tiêu đề</b><b>B Banner</b><b>C Gọn</b></span></div>
+</div></div>
+<p class="sub"><b>Phiếu cũ không đổi</b> (mặc định tắt hết). Nhập MD: dòng <code>Họ tên: có</code>, <code>Dòng phụ: A1 Movers · 25 minutes</code>, <code>Mục tiêu: …</code>, <code>Chân trang: …</code>, <code>Số trang: có</code>. Trang tính thêm chiều cao đầu phiếu và chân trang vào vùng chứa nội dung, nên Task cắt trang vẫn đúng.</p>
+</html>
