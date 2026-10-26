@@ -8,7 +8,7 @@ with sync_playwright() as p:
     pg.on('console',lambda m: errs.append(m.text) if m.type=='error' and 'ERR_' not in m.text and 'font' not in m.text.lower() else None)
     pg.on('pageerror',lambda e: errs.append('PAGEERR '+str(e)))
     pg.goto(F); pg.wait_for_timeout(1500)
-    chk('badge v71', pg.evaluate("document.getElementById('verBadge').textContent")=='v71')
+    chk('badge v7x', __import__('re').fullmatch(r'v7\d', pg.evaluate("document.getElementById('verBadge').textContent")) is not None)
     # 1. 80/20 cho T4 + A6
     chk('T4+A6 mặc định 80', pg.evaluate("ratioOf(ws.tasks[12])")==80)
     chk('T4+A6 khoảng 50-90', pg.evaluate("rmeta(ws.tasks[12],'T4').range")==[50,90])

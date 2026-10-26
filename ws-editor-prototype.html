@@ -2,6 +2,7 @@
 <title>WS Editor</title>
 <!-- v71: nhãn lựa chọn (Ⓐ / ☐) nằm ngang dòng đầu của lựa chọn, không còn canh giữa khi lựa chọn dài hai dòng; khoảng cách nhãn → chữ 2 mm (trước 1,2 / 1,6 mm). -->
 <!-- v70: Đáp án Đúng/Sai (A6) trong Hai cột mặc định 80/20; A4 "Tự động" quyết một lần cho cả Task; nút Xuất MD -->
+<!-- v72: Cỡ chữ phiếu Nhỏ / Vừa / To (ws.size, mức To = cỡ cũ) -->
 <!-- v69: Font chữ phiếu (Andika / Be Vietnam Pro / Lexend) ở panel Phiếu, lưu ở ws.font -->
 <!-- v68: Task nối vào Task trên (một Task của phiếu gốc có nhiều phần, mỗi phần giữ đáp án riêng): lựa chọn thứ 4 của mục Ngắt trang, không số / tiêu đề, giữ liền Task trên, cách trên bằng khoảng cách giữa các nhóm; MD: "### Phần: …" trong "## Task"; nhãn lựa chọn A. B. C. giữ chữ hoa; câu duy nhất không đánh số. v67: nhập MD theo phiếu thật đầu tiên — lựa chọn A/B/C mỗi dòng một lựa chọn, ô tick ☐ thành Lựa chọn (A4) nhãn ô tick, bỏ dòng "Nội dung:" / "My answer" / dòng kẻ / gạch ___ thừa, lời nhắc cuối bài và "Ghi chú:" vào hướng dẫn, bài đọc giữ đoạn, hội thoại chỉ qua khối "Hội thoại:", dòng nhãn lạ có ghi chú; cảnh báo mới (lỗi chữ, câu giống tiêu đề, chỗ trả lời trùng, ký hiệu ô tick sót). v66: font Andika + Be Vietnam Pro nhúng sẵn (thư mục fonts/), nạp trước nhóm ký tự tiếng Việt, đổi font không dựng lại cột trái. v65: P2 nhập file — quy ước MD trung gian ("## Task: …", trường "Tên: giá trị", khối Bài đọc / Hội thoại / Ô chữ, "## Đáp án" riêng), bộ đọc readMd dùng chung lớp nhập. v64: P1 nhập file — cột trái chỉ còn "+ Task" (thẻ Mẫu có sẵn | Từ file / dán, Task luôn vào cuối phiếu) và "+ Phiếu" (từ file / dán, để trống = phiếu rỗng, xác nhận + tải JSON cũ trước khi thay); bỏ nút "Dán…"; bảng nhận diện sơ bộ (số theo file, tiêu đề, mô tả, số câu, cảnh báo, ước tính số trang); một lần nhập = một bước hoàn tác. v63: P0 nhập file — nạp JSON thiếu trường tự bù (fillSheet/fillTask), nạp lỗi không đổi phiếu đang mở, Task không tên lấy tiêu đề/mô tả, hộp Dán nhận ra JSON, tự chọn "Cả đề", cảnh báo dán dài, báo vị trí chèn. v62: bảng có thể kèm khung từ (ô chữ = bảng chữ cái + khung từ). v61: mở Task nào cũng chỉ mở khu vực 3 Nội dung (1, 2, 4 thu lại), bất kể lần trước mở gì. v60: dán bài — bộ đoán trả về cấu hình (khung + thành phần + loại đáp án), mẫu chỉ áp khi người dùng chọn. v59: gọn mẫu 15 → 13 (gộp 3 mẫu bảng thành "Bảng", "Tranh" → "Tô màu / vẽ"). v58: "Công thức" → "Áp mẫu…" (áp một lần, mẫu chia nhóm); thẻ dạng bài và tóm tắt hiện mô tả thành phần (descOf). v57: bỏ dạng "Tranh" — Task chỉ có ảnh = Danh sách câu 0 câu + Ảnh chung; công tắc "Danh sách câu" (tắt = ẩn, giữ câu + đáp án). v56: QR bo góc. v55: mã QR nghe cho bài có Track. v54: thẻ câu không tô đậm lề trái. v53: viền Task xám, đệm hai bên rộng hơn, thanh tên Task cao bằng thanh khu vực và nền xanh. v52: Task mở nằm trong một thẻ có viền; Task đang thao tác được đánh dấu trên trang; cột trái rộng 360. v51: mặc định chỉ mở thẻ Nội dung. v50: bảng — chiều cao hàng mặc định 14 mm (cả hàng tiêu đề). v49: ảnh chung giữ khung cố định, ảnh thật nằm trong khung; T5 Fit dọc giữ tỉ lệ. v48: khung ảnh cố định cho mọi bài ảnh từng câu (bảng, danh sách, lưới T5). v47: Dùng ảnh này không còn qua fetch/blob. v46: popup ảnh — chỉnh nháp, chỉ lưu khi bấm Dùng ảnh này -->
 <!-- v37: cột trái dạng accordion + khu vực + kéo độ rộng -->
@@ -684,7 +685,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 
 <div class="app">
   <header class="top">
-    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v71</span> <small id="wsTitle"></small></div>
+    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v72</span> <small id="wsTitle"></small></div>
     <div class="tb">
       <label for="age" class="hint" style="margin:0">Độ tuổi</label>
       <select id="age"><option value="5-6">5–6</option><option value="7-9">7–9</option><option value="10-12">10–12</option></select>
@@ -3067,6 +3068,11 @@ const AGE = {
   '7-9':  { font: 14, line: 10, maxCols: 3 },
   '10-12':{ font: 12, line: 8,  maxCols: 4 }
 };
+// Cỡ chữ phiếu (v72): ba mức Nhỏ / Vừa / To theo độ tuổi, ghi rõ từng số pt. Mức To = cỡ chữ cũ của độ tuổi (không lưu vào phiếu).
+const SIZES = { s: 'Nhỏ', m: 'Vừa', l: 'To' };
+const FSZ = { '5-6': { s: 12, m: 14, l: 16 }, '7-9': { s: 10, m: 12, l: 14 }, '10-12': { s: 9, m: 10.5, l: 12 } };
+const sizeKey = () => SIZES[ws.size] && ws.size !== 'l' ? ws.size : 'l';
+const fontPt = () => FSZ[ws.age][sizeKey()];
 const PRESETS = {
   compact: { gapTask: 6,  padTask: 2, headGap: 2, groupGap: 3, itemGap: 3 },
   normal:  { gapTask: 8,  padTask: 3, headGap: 3, groupGap: 4, itemGap: 4 },
@@ -3432,7 +3438,7 @@ const srcOf = (t, key) => (t.uploads || {})[key];
 
 // Hướng xếp đáp án A4: theo từng câu (perItem) > chung (dir). 'auto' = ngắn thì một hàng cột đều, dài thì mỗi đáp án một dòng.
 const A4DIRS = { auto: 'Tự động', h: 'Ngang', g2: '2 cột', v: 'Dọc', fl: 'Tự xuống dòng' };
-const a4autoDef = () => Math.round(22 * 14 / AGE[ws.age].font);
+const a4autoDef = () => Math.round(22 * 14 / fontPt());
 function a4autoMax(t) { const p = t.answer.params || {}; return p.autoMax || a4autoDef(); }
 function a4dir(t, item) {
   const p = pOf(t, item); let d = p.dir || 'auto';
@@ -3517,7 +3523,7 @@ const AI = { top: 'start', center: 'center', bottom: 'end' };
 function renderTask(t, frag, mt) {
   const L = layoutOf(t), sp = spacingOf(t), age = AGE[ws.age], cont = !!(frag && frag.cont), lay = t.layout, fr = frOf(t);
   const first = !frag || (frag.a === 0 && !frag.cont);
-  let style = `--pad:${sp.padTask}mm;--hg:${sp.headGap}mm;--gg:${sp.groupGap}mm;--ig:${sp.itemGap}mm;--fs:${age.font}pt;--nd:${(age.font * 0.3528 * 1.35).toFixed(2)}mm;--ng:2.5mm;--gut:calc(var(--nd) + var(--ng));--padx:${sheetSpacing().padTask}mm;--padt:${isJoined(t) ? 0 : 3}mm;--cols:${colsOf(t)};--tpl:${tplOf(t)};--img:${fr.scale || 100};--ar:${t.image && t.image.ar ? t.image.ar : '4/3'}${imgStyle(t)}`;
+  let style = `--pad:${sp.padTask}mm;--hg:${sp.headGap}mm;--gg:${sp.groupGap}mm;--ig:${sp.itemGap}mm;--fs:${fontPt()}pt;--nd:${(fontPt() * 0.3528 * 1.35).toFixed(2)}mm;--ng:2.5mm;--gut:calc(var(--nd) + var(--ng));--padx:${sheetSpacing().padTask}mm;--padt:${isJoined(t) ? 0 : 3}mm;--cols:${colsOf(t)};--tpl:${tplOf(t)};--img:${fr.scale || 100};--ar:${t.image && t.image.ar ? t.image.ar : '4/3'}${imgStyle(t)}`;
   const t6w = L === 'T6' && !(t.wordBank && t.wordBank.placement === 'right');
   if (lay.width && t6w) style += `;--cw:${lay.width}`;
   if (lay.rowH && L === 'T7') style += `;--mrh:${lay.rowH}mm`;
@@ -3741,7 +3747,7 @@ const FILL_MAX = 8; // mm thêm tối đa vào mỗi khoảng giữa hai Task kh
 function drawPages(res) {
   const n = res.pages.length, s = scaleNow(), sh = sheetSpacing(), age = AGE[ws.age];
   stage.style.setProperty('--s', s);
-  const A = 14 + sh.padTask, B = A + age.font * 0.3528 * 1.35 + 2.5, C = 210 - 14 - sh.padTask;
+  const A = 14 + sh.padTask, B = A + fontPt() * 0.3528 * 1.35 + 2.5, C = 210 - 14 - sh.padTask;
   const gd = guides ? `<div class="guides" aria-hidden="true"><i style="left:${A}mm"></i><i class="b" style="left:${B.toFixed(2)}mm"></i><i style="left:${C}mm"></i></div>` : '';
   stage.innerHTML = res.pages.map((p, i) => {
     const free = Math.max(0, (res.H - p.used) / MM), over = p.items.some(x => x.over), k = p.items.length;
@@ -4445,6 +4451,7 @@ function sheetPanel() {
     ${d.map(diagBox).join('')}
     <h3>Xếp trang</h3><div class="field"><div class="seg">${[['cont', 'Liền trang'], ['page', 'Tách trang']].map(([k, n]) => `<button data-act="flow" data-v="${k}" class="${(ws.flow || 'cont') === k ? 'on' : ''}">${n}</button>`).join('')}</div><p class="hint" style="margin:0">${(ws.flow || 'cont') === 'page' ? 'Tách trang: mỗi trang chỉ chứa các Task trọn vẹn. Task không vừa chỗ còn lại sẽ sang trang mới.' : 'Liền trang: các Task nối tiếp nhau, lấp đầy trang; Task dài được cắt giữa 2 trang ở ranh giới item, hàng hoặc câu.'} Muốn một Task luôn sang trang mới hoặc giữ liền Task sau: chọn Task đó, mục Ngắt trang.</p></div>
     <h3>Font chữ phiếu</h3><div class="field"><div class="seg">${Object.keys(FONTS).map(k => `<button data-act="font" data-v="${k}" class="${fontKey() === k ? 'on' : ''}" style="font-family:${FONTS[k].css}">${FONTS[k].name}</button>`).join('')}</div><p class="hint" style="margin:0">${FONTS[fontKey()].hint} Đổi font có thể đổi số trang; phiếu được dàn lại ngay.</p></div>
+    <h3>Cỡ chữ phiếu</h3><div class="field"><div class="seg">${Object.keys(SIZES).map(k => `<button data-act="size" data-v="${k}" class="${sizeKey() === k ? 'on' : ''}" title="${FSZ[ws.age][k]} pt">${SIZES[k]} · ${FSZ[ws.age][k]} pt</button>`).join('')}</div><p class="hint" style="margin:0">Áp cho chữ nội dung và câu hỏi của mọi Task. Mức To là cỡ hiện tại của độ tuổi ${ws.age}. Dòng viết của học sinh vẫn theo độ tuổi (tối thiểu ${AGE[ws.age].line} mm). Đổi cỡ chữ có thể đổi số trang.</p></div>
     <h3>Khoảng cách</h3><div class="field"><div class="seg">${[...Object.keys(PRESETS).map(k => [k, PRESET_NAME[k]]), ['free', 'Tự do']].map(([k, n]) => `<button data-act="sheet-preset" data-v="${k}" class="${sh === k ? 'on' : ''}">${n}</button>`).join('')}</div></div>
     <p class="hint" style="margin:0 0 4px">${sh === 'free' ? 'Tự do: các số do bạn nhập. Bấm Gọn, Vừa hoặc Thoáng để về bộ số chuẩn.' : 'Các số đi theo mức đã chọn. Sửa tay một số bất kỳ thì chuyển sang Tự do.'}</p>
     ${Object.keys(SP_LABEL).map(k => numRow('sheet', k, sp[k], sp[k], sh === 'free')).join('')}
@@ -4453,7 +4460,7 @@ function sheetPanel() {
       <h4>Mặc định theo dạng bài${keys.length ? ` (${keys.length})` : ''}</h4>
       ${keys.length ? `<ul class="plist">${keys.map(k => `<li><b>${esc(k)}</b><button class="lnk2" data-act="preset-del" data-v="${esc(k)}">Xóa</button></li>`).join('')}</ul>` : '<p class="hint" style="margin:0">Chưa lưu. Chọn một Task đã chỉnh vừa ý, bấm "Lưu làm mặc định cho dạng này"; các phiếu sau mở ra sẽ tự áp.</p>'}
       <div class="stack" style="margin-top:6px"><button class="btn" data-act="import">Nạp phiếu khác (JSON / MD)…</button></div>
-      <h4>Quy tắc in</h4><p class="hint" style="margin:0">Dòng viết tối thiểu ${AGE[ws.age].line} mm, cỡ chữ ${AGE[ws.age].font} pt, tối đa ${AGE[ws.age].maxCols} cột (độ tuổi ${ws.age}).</p>
+      <h4>Quy tắc in</h4><p class="hint" style="margin:0">Dòng viết tối thiểu ${AGE[ws.age].line} mm, cỡ chữ ${fontPt()} pt (${SIZES[sizeKey()]}; mức To của độ tuổi này là ${FSZ[ws.age].l} pt), tối đa ${AGE[ws.age].maxCols} cột (độ tuổi ${ws.age}).</p>
     </details>`;
 }
 let sheetExtra = () => '';
@@ -4520,6 +4527,7 @@ document.getElementById('insp').addEventListener('click', e => {
   if (extraActs[act]) return extraActs[act](b, v);
   if (act === 'layout') commit(w => { const t = curT(w), fit = t.layout.frame.fit; Object.assign(t.layout, { task: v, split: null, cols: null, cw: null, width: null, align: null, valign: null }); t.layout.frame = fit ? { fit } : {}; });
   else if (act === 'font') commit(w => { if (v === 'andika') delete w.font; else w.font = v; }, 'Font phiếu: ' + FONTS[v].name);
+  else if (act === 'size') commit(w => { if (v === 'l') delete w.size; else w.size = v; }, 'Cỡ chữ phiếu: ' + SIZES[v]);
   else if (act === 'flow') commit(w => { w.flow = v; }, v === 'page' ? 'Tách trang' : 'Liền trang');
   else if (act === 'sheet-preset') keepG0(() => commit(w => { if (v === 'free') { if (w.spacing.preset !== 'free') { w.spacing.overrides = sheetSpacing(); w.spacing.preset = 'free'; } } else { w.spacing.preset = v; w.spacing.overrides = {}; } }));
   else if (act === 'task-preset') keepG0(() => commit(w => { const t = curT(w); if (v === 'free') { if (t.spacing.preset !== 'free') { t.spacing.overrides = spacingOf(t); t.spacing.preset = 'free'; } } else { t.spacing.preset = v || null; t.spacing.overrides = {}; } }));
@@ -5841,6 +5849,7 @@ function fillSheet(o0, notes) {
   if (!['cont', 'page'].includes(o.flow)) { add('xếp trang'); o.flow = 'cont'; }
   if (o.fill !== true) delete o.fill;
   if (o.font != null && (!FONTS[o.font] || o.font === 'andika')) { if (o.font !== 'andika') add('font không có trong danh sách'); delete o.font; }
+  if (o.size != null && (!SIZES[o.size] || o.size === 'l')) { if (o.size !== 'l') add('cỡ chữ không hợp lệ'); delete o.size; }
   const used = new Set();
   o.tasks = o.tasks.map((t, i) => { let x; try { x = fillTask(t, notes); } catch (e) { throw new Error(`Task ${i + 1}: ${e.message}`); } if (used.has(x.id)) x.id = newId(used, 't'); else used.add(x.id); return x; });
   o.schema = SCHEMA;

@@ -272,7 +272,13 @@ python3 -c "from PIL import Image; Image.new('RGB',(64,48),(200,200,200)).save('
 - test1: cột trái, khu vực, độ rộng · test2: bố cục 18 Task, thao tác soạn, cột trái chỉ có + Task / + Phiếu · test3: popup ảnh · test4: ô ảnh, khung trong popup · test5: bảng khung cố định · test6: khung cố định mọi bài ảnh · test7: mã QR · test8: Danh sách câu tắt/bật · test9: Áp mẫu, mô tả thành phần · test10: 13 mẫu · test11: dán bài → cấu hình · **test12: P0 (bù trường, nạp lỗi không đổi phiếu, Task không tên, nhận JSON, tự chọn Cả đề, cảnh báo dán dài, vị trí chèn)** · **test13: P1 (+ Task / + Phiếu, chèn cuối, chọn file, bảng nhận diện, ước tính trang, xác nhận + tải JSON cũ, lỗi, ID, Ctrl+V, PDF + hook)** · **test14: P2 (MD)** · cmp_paste.py: so kết quả đoán của 20 bài dán giữa hai bản · audit.py / audit2.py: tải ảnh dọc/ngang vào mọi ô, mọi tỉ lệ · ws_sea.py: dựng phiếu Sea, xuất `ws-sea-sample.json` · shot.py: chụp màn hình.
 - Bản cũ để so sánh: lấy từ artifact (đọc `index.html`, bỏ dòng khung `<!doctype…><body>` đầu và `</body></html>` cuối), hoặc giữ bản `ws-editor-prototype.html` cũ trước khi sửa.
 
-## AB. BÀN GIAO (2026-10-25, bản v71) — đọc mục này đầu tiên khi mở thread mới
+## AJ. v72 — Cỡ chữ phiếu Nhỏ / Vừa / To
+- Chi tiết ở spec chính mục 16.12. `ws.size` = `s` | `m` (To không lưu); bảng `FSZ` theo độ tuổi; panel Phiếu → "Cỡ chữ phiếu". Test mới: `test20.py` (25 phép kiểm). `test19` đổi phép kiểm tên phiên bản thành `v7x`.
+- Số Nhỏ / Vừa là đề xuất để người dùng xem, chưa chốt.
+- Kế hoạch G-Text và ba năng lực còn thiếu: spec chính mục 17.
+
+## AB. BÀN GIAO (2026-10-26, bản v72) — đọc mục này đầu tiên khi mở thread mới
+- **Bản v72** thêm cỡ chữ phiếu (mục AJ). **Việc tiếp theo: G-Text (spec mục 17).** Đã chạy trên bản cuối v72: test1–20 và audit đạt, 0 lỗi console, 0 tràn; `test2` so với v71: bố cục mức To giống hệt.
 - **Không còn dùng artifact.** Xong việc thì commit và đẩy lên GitHub `khanhtoaninv/WS-Editor`, nhánh main (người dùng yêu cầu). Repo: file chính `ws-editor-prototype.html`, `docs/`, `tests/`, `fonts/`, `samples/`.
 - **Đã chạy trên bản cuối v70:** test1, 3–19, audit (0 vấn đề), audit2 (không tràn), cmp_paste (20 bài dán giống v69), ws_sea (3 trang, 0 lỗi) đạt, 0 lỗi console. `test2` so với v69: 31/32, chỗ lệch duy nhất là Task 5 phiếu mẫu (đã định, xem mục AI).
 - **Cách chạy:** `bash tests/run_all.sh <mới.html> <cũ.html>`; `cmp_paste.py <mới> <cũ>`; `ws_sea.py` ghi ra `/home/claude/ws/ws-sea-sample.json` (cần tạo thư mục), bản đó khác `ws-sea-sample.json` trong repo ở trường `part:""` từ v68 (không phải lỗi v70, chưa tái xuất mẫu).

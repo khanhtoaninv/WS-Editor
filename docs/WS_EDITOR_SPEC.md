@@ -3,7 +3,7 @@
 > File này là nguồn sự thật duy nhất cho WS Editor. Nó thay thế bản MASTER_SPEC v10 (quá nặng) và Claude Doc "Đặc tả Layout Task & Answer" (cũ hơn bản này).
 > Prototype chạy được: `ws-editor-prototype.html` (một file HTML, mở bằng trình duyệt). Dữ liệu mẫu: `ws-sample.json` (schema 0.2).
 > Khi bản prototype và file này lệch nhau, prototype là bản đúng hơn về hành vi; hãy báo để cập nhật file này.
-> **Cập nhật 25/10/2026 (lần 4):** prototype hiện là **v71** (v70 + nhãn lựa chọn thẳng dòng đầu và cách chữ 2 mm, mục 16.9c). v70 (v69 + Đúng/Sai mặc định 80/20, hướng A4 "Tự động" quyết theo cả Task, nút Xuất MD; mục 16.11). v69 = v68 + chọn font chữ phiếu (mục 16.10). v68 = (v67 + Task nhiều phần "Nối vào Task trên", MD `### Phần:`, nhãn A. B. C. giữ chữ hoa, câu duy nhất không đánh số; mục 16.9). v67 = v66 + sửa bộ đọc MD theo phiếu thật đầu tiên, A4 có nhãn ô tick (mục 16.8). v66 = v65 + font nhúng sẵn trong `fonts/` (mục 16.7). Thay đổi v37–v68 ghi chi tiết ở `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục cuối "BÀN GIAO"). Nhập file (P0–P2) tóm tắt ở **mục 16**; quy ước MD ở `claude/QUY_UOC_MD.md`.
+> **Cập nhật 26/10/2026:** prototype hiện là **v72** (v71 + cỡ chữ phiếu Nhỏ / Vừa / To, mục 16.12; kế hoạch G-Text và ba năng lực còn thiếu ở mục 17). Trước đó (25/10/2026, lần 4): **v71** (v70 + nhãn lựa chọn thẳng dòng đầu và cách chữ 2 mm, mục 16.9c). v70 (v69 + Đúng/Sai mặc định 80/20, hướng A4 "Tự động" quyết theo cả Task, nút Xuất MD; mục 16.11). v69 = v68 + chọn font chữ phiếu (mục 16.10). v68 = (v67 + Task nhiều phần "Nối vào Task trên", MD `### Phần:`, nhãn A. B. C. giữ chữ hoa, câu duy nhất không đánh số; mục 16.9). v67 = v66 + sửa bộ đọc MD theo phiếu thật đầu tiên, A4 có nhãn ô tick (mục 16.8). v66 = v65 + font nhúng sẵn trong `fonts/` (mục 16.7). Thay đổi v37–v68 ghi chi tiết ở `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục cuối "BÀN GIAO"). Nhập file (P0–P2) tóm tắt ở **mục 16**; quy ước MD ở `claude/QUY_UOC_MD.md`.
 
 ---
 
@@ -454,3 +454,31 @@ P3 (thử 5–10 PDF thật qua đường chat, đo số Task đúng và chỗ p
 - **Nút Xuất MD** cạnh "Xem JSON": mở cùng hộp thoại với `sheetToMd(ws)`, có nút Sao chép, ghi chú MD không giữ chỉnh layout, kích thước hay ảnh đã tải lên (muốn giữ đủ dùng JSON).
 - **Hoãn theo người dùng:** công tắc Name / Class ở đầu phiếu.
 - Kiểm thử: `test19.py` (badge v70; T4+A6 = 80 và khoảng 50–90; T4 khác vẫn 60; kẹp 90; A4 toàn ngắn → ngang cả Task, một câu dài → dọc cả Task; Xuất MD mở/đọc lại được; Xem JSON vẫn đúng tiêu đề; 0 lỗi console).
+
+### 16.12 Cỡ chữ phiếu Nhỏ / Vừa / To (v72, 26/10/2026)
+- **Yêu cầu:** chữ nội dung và câu hỏi hiện tương đối lớn; người dùng coi cỡ hiện tại là mức **To**, muốn thêm **Nhỏ** và **Vừa** để xem và đánh giá. Là thông số chuẩn hóa cho cả phiếu, không phải chỉnh từng Task.
+- **Quy trình:** bước 2 (thêm một thông số cấp phiếu, cùng loại với `ws.font`), không thêm format.
+- **Dữ liệu:** `ws.size` = `'s'` | `'m'`; mức To không lưu (như Andika với `font`). Giá trị lạ khi nạp bị bỏ và ghi chú "cỡ chữ không hợp lệ".
+- **Bảng cỡ (pt), khai báo rõ, không dùng hệ số ẩn** (`FSZ`): 5–6 tuổi 12 / 14 / 16; 7–9 tuổi 10 / 12 / 14; 10–12 tuổi 9 / 10,5 / 12 (Nhỏ / Vừa / To). *Các số Nhỏ và Vừa là đề xuất để người dùng xem, chưa chốt.*
+- **Áp cho:** cỡ chữ Task (`--fs`: tiêu đề, hướng dẫn, nội dung, câu hỏi), độ rộng lề số, đường dóng B, ngưỡng "đáp án ngắn" của A4 tự động. **Không đổi:** dòng viết tối thiểu theo độ tuổi (`AGE.line`), mọi khoảng cách và kích thước đã khai báo bằng mm, khung ảnh. Vì vậy chữ nhỏ lại không làm Task thấp tương ứng (ảnh và dòng viết giữ chiều cao).
+- **Giao diện:** panel Phiếu → "Cỡ chữ phiếu" giữa "Font chữ phiếu" và "Khoảng cách", ba nút hiện sẵn số pt. Đổi cỡ thì dàn lại trang, hoàn tác được.
+- **Chưa làm:** cỡ chữ của G-Text (Theo phiếu / Nhỏ / Vừa / To, mục 17).
+- **Kiểm thử:** `test20.py` (25 phép kiểm: mặc định To không lưu, ba mức đúng pt trên trang, 0 tràn, tổng chiều cao To > Vừa > Nhỏ, hoàn tác, khứ hồi JSON, giá trị lạ, đổi độ tuổi). Bố cục mức To giống hệt v71 (`test2`).
+
+---
+
+## 17. Kế hoạch: G-Text và ba năng lực còn thiếu (chốt 26/10/2026, **chưa làm**)
+
+> Thảo luận ngày 25–26/10/2026. Header / footer / tên phiếu làm riêng, không nằm trong mục này.
+
+### 17.1 Đã quyết
+- **Không làm kéo đổi chỗ tổng quát G1–G4** (cấp Task hay cấp G2). Lý do: bằng chứng cần còn ít (một trường hợp trong hai phiếu thật: bài đọc sau câu hỏi, đã có lối đi `### Phần:`); chi phí lớn (tách `body()` thành danh sách khối, tổng quát hóa phân trang vì G1 / G4 / bài đọc hiện chỉ ở mảnh đầu, hai nguồn sự thật `layout.task` và `layout.order`, đổi định danh `data-node`). Xem lại khi gặp 2–3 phiếu thật cần G1 / G4 ở vị trí lạ mà G-Text không thay được.
+- **G-Text (khối tự do, cấp Task):** thêm / xóa tự do, một Task có thể có nhiều khối; không đánh số, không đáp án, không chịu ảnh hưởng của Task layout; là băng ngang full chiều rộng nằm **trên hoặc dưới** khối bài (cách A), đổi chỗ được với nhau và với khối bài. Ba dạng: **Chữ** (đoạn văn, gạch đầu dòng `- `, đánh số `1. `, in đậm / nghiêng, căn lề, kiểu khung không / viền / nền nhẹ, **cỡ chữ Theo phiếu / Nhỏ / Vừa / To**, cỡ theo cả khối chứ không theo đoạn bôi chọn, không có trình soạn WYSIWYG); **Ảnh** (dùng lại khung ảnh); **Thẻ** (một hàng 2–6 thẻ, mỗi thẻ ảnh + chữ như một ô T5 Ảnh trên, không có chỗ trả lời; dùng làm khung từ có ảnh). Cần thêm khái niệm "mảnh cuối" khi Task bị cắt trang; G-Text là khối không cắt được.
+- **Ba năng lực còn thiếu**, làm lần lượt, mỗi bước chạy lại toàn bộ test: (1) G-Text; (2) chỗ trống và đánh dấu ngay trong bài đọc (cloze, khoanh, gạch chân; mở rộng bài đọc, dùng lại A2 và khung từ, kèm cắt bài đọc theo đoạn); (3) điểm neo trên ảnh (gắn nhãn, khoanh, tick, nối; điểm neo tính theo ảnh nên khi Fit cắt ảnh có thể rơi ra ngoài khung → cảnh báo; đặt tay bằng cách bấm lên ảnh, AI đọc PDF khó cho tọa độ đáng tin); (4) lưới tự do, bắt đầu từ crossword (ô đen và ô số, mở rộng T9). Bước 3 và 4 có giao diện mới nên **đưa hình minh họa cho người dùng duyệt trước khi viết code**.
+- **Việc nhỏ cùng đợt đầu:** "Mặc định theo dạng bài" khóa theo cấu hình thay vì `typeId` (hiện mọi Task `custom` dùng chung một mặc định).
+
+### 17.2 Ước lượng độ phủ (26/10/2026, phán đoán của Claude, không phải số đo)
+Trong danh sách 40 dạng bài tiếng Anh tự lập: 24 dạng (60%) đáp ứng trực tiếp, 9 (22%) làm được nhưng phải lách, 7 (18%) chưa hỗ trợ. Với bài cho học sinh 5–12 tuổi thực tế khoảng 90% trở lên. Phần thiếu dồn vào ba loại: điểm neo trên ảnh, tương tác trong văn bản liền mạch, lưới và sơ đồ tự do. Nên đối chiếu với các bộ sách đang dùng (Our World, Family and Friends, Global Success) để biết loại nào thực sự hay gặp.
+
+### 17.3 Việc còn chờ từ phiếu Sunny Farm (mục 16.9c)
+Header phiếu (làm riêng); bài 1 sai thứ tự (tạm dùng `### Phần:`); bài xếp thứ tự (số câu ở lề trùng số phải điền); ô tick 4 lựa chọn một hàng gãy chữ ("Tự động" chưa chọn "Tự xuống dòng"); nhãn "Self-check:" của phần không hiển thị.
