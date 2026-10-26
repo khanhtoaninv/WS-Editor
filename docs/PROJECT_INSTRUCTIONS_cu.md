@@ -1,3 +1,5 @@
+> Bản cũ (trước khi chuyển sang CLAUDE.md ở gốc repo). Không còn dùng; xem `CLAUDE.md`.
+
 Dán đoạn dưới đây vào ô "Instructions" của Project.
 
 ---
