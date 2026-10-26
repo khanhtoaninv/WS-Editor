@@ -611,5 +611,31 @@ Cú pháp đầy đủ ở `docs/QUY_UOC_MD.md` mục 2, 2b, 4c, 5. Trường m�
 ### 18.7 Chưa làm / giới hạn
 - G3 chia nhóm (hai nhóm câu với hai cách trả lời trong một Task) vẫn hoãn; dùng `### Phần:` / Nối vào Task trên.
 - Chưa thử P3 với phiếu do AI khác tạo theo prompt v81 (cần người dùng gửi PDF + MD).
-- "Áp mẫu" và chọn loại đáp án cũ vẫn còn ở cột trái mục 1 (trùng một phần với bộ chọn Q); chưa bỏ để không phá test cũ.
+- ~~"Áp mẫu" và chọn loại đáp án cũ vẫn còn ở cột trái mục 1~~ → đã bỏ ở v82 (mục 19).
 - Câu hỏi trước bài đọc không dùng với Ảnh trong bài đọc / bài đọc cạnh câu hỏi (khóa, có lý do).
+
+## 19. Cột trái theo khối (v82, 26/10/2026)
+Người dùng đề xuất, đã duyệt qua hình `docs/MINH_HOA_COT_TRAI.html`. Chỉ đổi giao diện cột trái; **không đổi dữ liệu, không đổi dàn trang** (cmp_v80 giữ nguyên). Mục đích: sau khi nhập file vẫn vào từng khối để thêm / sửa / xóa, khối trên trang và mục ở cột trái khớp nhau.
+
+### 19.1 Các mục (thay 5 mục cũ: Dạng bài & đáp án · Tiêu đề & hướng dẫn · Nội dung · Thành phần · Khối tự do)
+| Mục (`data-sec`) | Nội dung | Nhãn bên phải |
+|---|---|---|
+| ⚙ **Cấu hình** (`cfg`) | thẻ mô tả (chip), Bố cục Task (T), Dạng câu hỏi (Q), tùy chọn của Q, **Tùy chọn của câu**, **Khối của bài** | `T2 · Q5` (luôn hiện, không phụ thuộc nút hiện mã) |
+| **G0** Tiêu đề (`g0`) | tiêu đề, hướng dẫn, track, mã QR | |
+| **G1** Ảnh chung (`g1`) | ảnh 1, ảnh 2, nút + Ảnh thứ hai | |
+| **G2** Bài đọc / Lời dẫn (`g2`) | bài đọc + đáp án chỗ trống, hoặc lời dẫn (hội thoại) | `theo T…` (vị trí bài đọc do Bố cục quyết) |
+| **G3** Câu hỏi / Bảng (`g3`) | tỉ lệ ô ảnh, danh sách câu (cả dòng chữ G3-Text), hoặc bảng | `theo Q…` |
+| **G4** Khung từ (`g4`) | ô từ, ô ảnh của khung từ ảnh | |
+| **GT** Khối tự do (`gt`) | như cũ | |
+- **Khối chưa có**: mục vẫn hiện nhưng mờ, không mở ra được, có nút thêm ngay tại mục (`data-eact="blkaddb"`, dùng `blkAdd`): G1 "+ Thêm", G2 "+ Bài đọc" / "+ Lời dẫn" (theo `blkAddable`), G3 "+ Thêm" hoặc "+ Bật lại" (khi danh sách tắt nhưng còn giữ câu), G4 "+ Chữ" / "+ Ảnh". Không thêm được thì ghi "không dùng cho dạng này". Bỏ ô chọn "Thêm khối" cũ.
+- **Thành phần cũ tách đôi** (cùng `fieldToggles`, cùng `toggleField`): công tắc bật / tắt khối (Ảnh chung, Bài đọc, Lời dẫn, Câu hỏi = `list`, Khung từ) vào "Khối của bài"; tính năng của câu (Ảnh mỗi câu, Nhiều ảnh lựa chọn, Người nói, Vế ghép, Ô nhiều dòng, Ghi đáp án đúng) vào "Tùy chọn của câu", chỉ hiện công tắc dùng được.
+- **Bỏ khỏi cột trái**: ô "Áp mẫu" và ô chọn loại "Đáp án" (trùng bộ chọn Q). Áp mẫu vẫn còn ở hộp **+ Task** (tạo Task mới); hàm `applyRecipe` / `setKind` giữ nguyên.
+- G3 không có bố cục riêng: Q được suy ra từ nội dung G3, sửa G3 thì nhãn `theo Q…` tự đổi. G2 chưa có bố cục riêng ngoài vị trí trong T (người dùng đồng ý để sau).
+- Mặc định khi mở Task: mở G1–G4, thu Cấu hình / G0 / GT (`SECT_DEF`, nhớ trong `localStorage` khóa cũ `wsEditor.sections.v2`, các khóa cũ bị bỏ qua). `focusK` tự mở mục đang thu nếu ô cần gõ nằm trong đó. Chip "đáp án" trên thẻ mở mục Cấu hình.
+
+### 19.2 Mã
+Khối `v82` cuối file, ngay sau `hết v81`: bọc `edHtml` (dựng HTML v81 rồi phân các phần của mục "Nội dung" cũ vào G1 / G2 / G3 / G4 theo `data-k`: `image.*`/`.imgrow` → G1, `lead.*` → G2, `wb.*`/`.wbth` → G4, còn lại → G3), bọc `secSums` (tóm tắt theo khóa mới), bọc `focusK`, thêm xử lý `blkaddb`. CSS `/* v82 */` sau `.qbt`.
+
+### 19.3 Kiểm thử
+`tests/test31.py` (18 Task: thứ tự mục, nhãn T · Q khớp `tnOf`/`qOf`, khối có / chưa có khớp dữ liệu, không còn ô cũ; Cấu hình tách công tắc; + Thêm ở G1 / G4 / G2 lời dẫn / G3 rồi hoàn tác; Bảng; `focusK` mở mục thu; tóm tắt cập nhật khi gõ). Sửa test1, 2, 7, 8, 9, 10, 15, 21, 22, 23, 29 theo tên mục mới; test9 / test10 áp mẫu bằng `applyRecipe` thay ô chọn đã bỏ.
+

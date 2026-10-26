@@ -9,7 +9,7 @@ with sync_playwright() as p:
     pg.on('pageerror',lambda e: errs.append('PAGEERR '+str(e)))
     pg.goto(F); pg.wait_for_timeout(1500)
     tid=pg.evaluate("ws.tasks[0].id"); H0=pg.evaluate("lastRes.pages.length")
-    pg.evaluate(f"sel={{type:'task',id:'{tid}'}}; openTask='{tid}'; refreshSel()"); pg.evaluate("SECT.free=true; renderTree()"); pg.wait_for_timeout(300)
+    pg.evaluate(f"sel={{type:'task',id:'{tid}'}}; openTask='{tid}'; refreshSel()"); pg.evaluate("SECT.gt=true; renderTree()"); pg.wait_for_timeout(300)
     pg.click(f'.ed[data-ed="{tid}"] [data-eact=gtadd][data-kind=image]'); pg.wait_for_timeout(400)
     ex=pg.evaluate("ws.tasks[0].extras")
     chk('thêm khối ảnh', len(ex)==1 and ex[0]['kind']=='image' and ex[0]['pos']=='bottom', ex)
@@ -40,7 +40,7 @@ with sync_playwright() as p:
     r=pg.evaluate("""(()=>{const n=[];const t=fillTask({id:'z',title:'',instruction:'',content:{form:'list',items:[]},answer:{kind:'none'},extras:[{kind:'image',w:500,label:5,frame:'line',size:'s'}]},n);return {n,e:t.extras}})()""")
     chk('nạp xấu: w sai bị bỏ, frame/size bỏ', r['e'][0].get('w') is None and 'frame' not in r['e'][0] and 'size' not in r['e'][0] and r['e'][0]['label']=='5', r)
     # trang trí chữ
-    pg.evaluate(f"sel={{type:'task',id:'{tid}'}}; openTask='{tid}'; refreshSel()"); pg.evaluate("SECT.free=true; renderTree()"); pg.wait_for_timeout(300)
+    pg.evaluate(f"sel={{type:'task',id:'{tid}'}}; openTask='{tid}'; refreshSel()"); pg.evaluate("SECT.gt=true; renderTree()"); pg.wait_for_timeout(300)
     pg.click(f'.ed[data-ed="{tid}"] [data-eact=gtadd]:not([data-kind])'); pg.wait_for_timeout(400)
     tx=pg.evaluate("ws.tasks[0].extras[1].id"); pg.fill(f'#tree [data-k="x.{tx}.text"]','Hello'); pg.wait_for_timeout(400)
     pg.click('.gt:not(:has(.pic)) .gtb'); pg.wait_for_timeout(300)

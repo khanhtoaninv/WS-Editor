@@ -30,7 +30,7 @@ with sync_playwright() as p:
     chk('cảnh báo lệch đáp án chỗ trống', any('đáp án chỗ trống' in str(x) for x in w), w)
     # ghi đáp án qua cột trái
     pg.evaluate("(txt)=>{ws.tasks[0].content.lead.text=txt;render()}",TXT)
-    pg.evaluate("openTask='p1'; sel={type:'task',id:'p1'}; refreshSel()"); pg.evaluate("SECT.content=true; renderTree()"); pg.wait_for_timeout(300)
+    pg.evaluate("openTask='p1'; sel={type:'task',id:'p1'}; refreshSel()"); pg.evaluate("SECT.g3=true; renderTree()"); pg.wait_for_timeout(300)
     pg.fill('#tree [data-k="lead.keys"]','am, go, play'); pg.wait_for_timeout(500)
     chk('đáp án chỗ trống lưu thành mảng', pg.evaluate("ws.tasks[0].content.lead.keys")==['am','go','play'])
     md=pg.evaluate("taskToMd(ws.tasks[0])")

@@ -18,8 +18,8 @@ with sync_playwright() as p:
     chk('Task 17 khớp Tô màu / vẽ', m[16]=='colour-draw', m[16])
     # áp mẫu Bảng cho Task câu hỏi: thành bảng, mỗi câu một hàng
     pg.click('#tree .tnode[data-sel=task][data-id=t8]'); pg.wait_for_timeout(300)
-    pg.evaluate("SECT.kind=true;SECT.parts=true;refreshSel()"); pg.wait_for_timeout(200)
-    pg.select_option('#tree .ed select[data-eact=recipe]','table'); pg.wait_for_timeout(400)
+    pg.evaluate("SECT.cfg=true;refreshSel()"); pg.wait_for_timeout(200)
+    pg.evaluate("commit(w=>applyRecipe(w.tasks.find(t=>t.id==='t8'),recipeById('table')))"); pg.wait_for_timeout(400)
     r = pg.evaluate("(()=>{const t=ws.tasks.find(t=>t.id==='t8');return [t.content.form,t.content.rows.length,t.content.rows[0].head]})()")
     chk('áp mẫu Bảng: 6 câu thành 6 hàng', r[0]=='table' and r[1]==6 and r[2]=='What is your name?', r)
     # sửa ô thành ✓ -> mô tả đổi sang ô tick, vẫn khớp mẫu Bảng

@@ -1,0 +1,75 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Minh họa cột trái Task</title>
+<style>
+body{font:14px/1.45 system-ui,sans-serif;margin:0;padding:20px;background:#f4f5f7;color:#222}
+h1{font-size:18px;margin:0 0 4px}h2{font-size:15px;margin:22px 0 8px;padding:6px 10px;background:#222;color:#fff;border-radius:6px}
+.row{display:flex;gap:18px;flex-wrap:wrap}.col{flex:1;min-width:300px}
+.lab{font-weight:700;margin:0 0 6px}.bad .lab{color:#b3261e}.good .lab{color:#1b7f3b}
+.panel{background:#fff;border:1.5px solid #cfd3da;border-radius:10px;padding:10px;font-size:13px}
+.sec{border:1px solid #d9dce2;border-radius:8px;margin:6px 0;overflow:hidden}
+.sh{display:flex;gap:8px;align-items:center;padding:6px 9px;background:#eef0f4;font-weight:600}
+.sh .tag{margin-left:auto;font-weight:600;font-size:11px;background:#dfe9ff;color:#1a4fb4;border-radius:10px;padding:1px 8px}
+.sh.off{opacity:.5;background:#f6f6f6}.sh.off .tag{background:#eee;color:#666}
+.sb{padding:7px 9px}.chip{display:inline-block;border:1px solid #bbb;border-radius:12px;padding:2px 9px;margin:2px 3px 2px 0;background:#fafafa}
+.chip.on{background:#d7f0df;border-color:#58a972}.chip.dup{background:#ffe3e0;border-color:#d46a60}
+.note{font-size:12px;color:#555;margin-top:5px}.warn{color:#b3261e;font-weight:600}.ok{color:#1b7f3b;font-weight:600}
+button.b{border:1px solid #888;background:#fff;border-radius:6px;padding:2px 9px;font-size:12px}
+.sel{display:inline-block;border:1px solid #888;border-radius:6px;padding:2px 20px 2px 8px;background:#fff}
+.arrow{font-size:12px;color:#888;margin:4px 0}
+.cut{text-decoration:line-through;color:#999}
+</style></head><body>
+<h1>Cột trái Task: trước và sau</h1>
+<div style="color:#555">Hình minh họa tĩnh (không phải app thật). Đỏ = đang rối, xanh = đề xuất.</div>
+
+<h2>Việc 1 · Mục "Thành phần" đang trộn hai loại công tắc</h2>
+<div class="row">
+<div class="col bad"><p class="lab">Bây giờ: một chỗ nhưng 2 loại lẫn nhau</p>
+<div class="panel">
+<div class="sec"><div class="sh">Bố cục &amp; dạng câu hỏi <span class="tag">Q5 Nối</span></div></div>
+<div class="sec"><div class="sh">Thành phần của bài</div><div class="sb">
+<span class="chip on">Ảnh chung</span><span class="chip on">Danh sách câu</span><span class="chip">Khung từ</span><span class="chip on">Bài đọc</span><br>
+<span class="chip dup">Vế ghép (nối)</span><span class="chip dup">Người nói</span><span class="chip dup">Ảnh mỗi câu</span><span class="chip dup">Ô nhiều dòng</span>
+<div class="note warn">4 công tắc đỏ là tính năng của câu: chọn Q "Nối" thì Vế ghép đã tự bật. Bạn bật tay ở đây lại có thể mâu thuẫn với Q.</div>
+</div></div></div></div>
+
+<div class="col good"><p class="lab">Đề xuất: tách làm hai chỗ, mỗi thứ một nơi</p>
+<div class="panel">
+<div class="sec"><div class="sh">Cấu hình <span class="tag">T2 · Q5</span></div><div class="sb">
+Bố cục T: <span class="sel">T2 ▾</span> &nbsp; Dạng câu hỏi Q: <span class="sel">Q5 Nối ▾</span>
+<div class="note"><b>Tùy chọn của Q5</b> (tính năng của câu nằm ở đây):<br>
+<span class="chip on">Vế ghép</span><span class="chip">Người nói</span><span class="chip">Ảnh mỗi câu</span><span class="chip">Ô nhiều dòng</span></div>
+<div class="note"><b>Khối của bài</b> (chỉ bật/tắt khối):<br>
+<span class="chip on">Ảnh chung</span><span class="chip on">Bài đọc</span><span class="chip on">Câu hỏi</span><span class="chip">Khung từ</span></div>
+</div></div></div>
+<div class="note ok">Chọn Q thì tính năng câu tự khớp, và chỉ có một chỗ để chỉnh. Không còn mâu thuẫn.</div></div>
+</div>
+
+<h2>Việc 4 · Hai chỗ chọn trùng với bộ chọn Q</h2>
+<div class="row">
+<div class="col bad"><p class="lab">Bây giờ: 3 chỗ cùng đổi một thứ</p>
+<div class="panel"><div class="sec"><div class="sh">Bố cục &amp; dạng câu hỏi</div><div class="sb">
+① Bộ chọn T, ② Bộ chọn Q (12 kiểu)<br>
+③ <b>Áp mẫu</b> &nbsp;<span class="sel">Chọn mẫu để áp… ▾</span><br>
+④ <b>Đáp án</b> &nbsp;<span class="sel">Điền từ ▾</span>
+<div class="note warn">③ và ④ làm lại việc của ②. Chọn ② là "Nối" nhưng ④ lại ghi "Điền từ" thì hiểu thế nào? Giáo viên không biết bấm cái nào.</div>
+</div></div></div></div>
+<div class="col good"><p class="lab">Đề xuất: bỏ ③ và ④, chỉ còn T và Q</p>
+<div class="panel"><div class="sec"><div class="sh">Cấu hình <span class="tag">T2 · Q5</span></div><div class="sb">
+① Bộ chọn T &nbsp; ② Bộ chọn Q<br>
+<span class="cut">③ Áp mẫu</span> &nbsp;<span class="cut">④ Đáp án</span>
+<div class="note ok">Một con đường duy nhất: chọn T rồi chọn Q.</div>
+<div class="note">"Áp mẫu" không mất hẳn: vẫn dùng khi tạo Task mới ở nút <button class="b">+ Task → Mẫu có sẵn</button></div>
+</div></div></div></div>
+</div>
+
+<h2>Cột trái hoàn chỉnh sau khi làm cả 4 việc</h2>
+<div class="row"><div class="col"><div class="panel">
+<div class="sec"><div class="sh">Cấu hình <span class="tag">T2 · Q5</span></div></div>
+<div class="sec"><div class="sh">G0. Tiêu đề</div></div>
+<div class="sec"><div class="sh">G1. Ảnh chung</div></div>
+<div class="sec"><div class="sh">G2. Bài đọc <span class="tag">theo T2</span></div></div>
+<div class="sec"><div class="sh">G3. Câu hỏi <span class="tag">theo Q5</span></div></div>
+<div class="sec"><div class="sh off">G4. Khung từ <span class="tag">chưa có · + Thêm</span></div></div>
+<div class="sec"><div class="sh">G-Text. Khối tự do</div></div>
+</div></div>
+<div class="col"><div class="note" style="font-size:13px"><b>Cách đọc:</b><br>• Nhãn xanh bên phải = mục đó đang đi theo T hay Q nào.<br>• G4 mờ = khối chưa dùng, bấm "+ Thêm" ngay tại mục.<br>• Mỗi mục sửa/thêm/xóa nội dung độc lập, kể cả sau khi nhập file.</div></div></div>
+</body></html>

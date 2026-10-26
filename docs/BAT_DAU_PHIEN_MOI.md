@@ -1,15 +1,15 @@
 # Bắt đầu phiên mới — WS Editor
 
-Cập nhật 26/10/2026 (tối). App: **v81** (kiến trúc trình bày mới). Bản v80 lưu ở nhánh `backup/v80`. Nguồn sự thật là **git repo này**, không dùng Claude Project hay artifact nữa.
+Cập nhật 26/10/2026. App: **v82** (cột trái theo khối Cấu hình · G0–G4 · G-Text, trên nền kiến trúc trình bày v81). Bản v80 lưu ở nhánh `backup/v80`. Nguồn sự thật là **git repo này**, không dùng Claude Project hay artifact nữa.
 
 ## Mở phiên mới (Claude Code, gắn repo `khanhtoaninv/WS-Editor`, nhánh `main`)
 CLAUDE.md ở gốc repo tự được nạp. Dán câu này làm tin nhắn đầu:
 
-> Đọc CLAUDE.md và docs/BAO_CAO_PHIEN_2026-10-26_phien4.md, rồi mục 18 của docs/WS_EDITOR_SPEC.md. Tóm tắt trạng thái ngắn gọn và hỏi tôi muốn tiếp tục việc nào. Chưa cần làm gì cả.
+> Đọc CLAUDE.md và docs/BAO_CAO_PHIEN_2026-10-26_phien5.md, rồi mục 18–19 của docs/WS_EDITOR_SPEC.md. Tóm tắt trạng thái ngắn gọn và hỏi tôi muốn tiếp tục việc nào. Chưa cần làm gì cả.
 
 ## Thứ tự đọc
-1. `docs/BAO_CAO_PHIEN_2026-10-26_phien4.md` — v81 đã làm gì, đã kiểm thử gì, việc tiếp theo.
-2. `docs/WS_EDITOR_SPEC.md` mục 18 (v81) + mục "BÀN GIAO" cuối `docs/WS_EDITOR_SPEC_v37_bo_sung.md`.
+1. `docs/BAO_CAO_PHIEN_2026-10-26_phien5.md` — v82 (cột trái theo khối); `docs/BAO_CAO_PHIEN_2026-10-26_phien4.md` — v81.
+2. `docs/WS_EDITOR_SPEC.md` mục 18 (v81), mục 19 (v82) + mục "BÀN GIAO" cuối `docs/WS_EDITOR_SPEC_v37_bo_sung.md`.
 3. `docs/KIEN_TRUC_TRINH_BAY_MOI.html` (bản duyệt kiến trúc), `docs/RA_SOAT_DANG_BAI.md`.
 4. Khi cần: `docs/QUY_UOC_MD.md` (v81: `Dạng:` …), `docs/PROMPT_PDF_SANG_PHIEU.md` (v81), `docs/PHUONG_AN_NHAP_FILE.md`, `samples/`.
 

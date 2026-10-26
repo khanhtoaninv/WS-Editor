@@ -14,7 +14,7 @@ with sync_playwright() as p:
     tid=pg.evaluate("ws.tasks[0].id")
     # thêm khối qua cột trái
     pg.evaluate(f"sel={{type:'task',id:'{tid}'}}; refreshSel()"); pg.wait_for_timeout(300)
-    pg.evaluate("SECT.free=true; renderTree()"); pg.wait_for_timeout(200)
+    pg.evaluate("SECT.gt=true; renderTree()"); pg.wait_for_timeout(200)
     pg.click(f'.ed[data-ed="{tid}"] [data-eact=gtadd]'); pg.wait_for_timeout(400)
     chk('thêm 1 khối', pg.evaluate("ws.tasks[0].extras.length")==1)
     chk('mặc định phía dưới', pg.evaluate("ws.tasks[0].extras[0].pos")=='bottom')
@@ -70,7 +70,7 @@ with sync_playwright() as p:
     # nhân đôi Task giữ khối
     # xóa
     tid=pg.evaluate("ws.tasks[0].id")
-    pg.evaluate(f"sel={{type:'task',id:'{tid}'}}; openTask='{tid}'; SECT.free=true; refreshSel()"); pg.wait_for_timeout(300)
+    pg.evaluate(f"sel={{type:'task',id:'{tid}'}}; openTask='{tid}'; SECT.gt=true; refreshSel()"); pg.wait_for_timeout(300)
     pg.click(f'.ed[data-ed="{tid}"] [data-eact=gtrm] >> nth=0'); pg.wait_for_timeout(300)
     pg.click(f'.ed[data-ed="{tid}"] [data-eact=gtrm] >> nth=0'); pg.wait_for_timeout(300)
     chk('xóa hết → bỏ key extras', pg.evaluate("'extras' in ws.tasks[0]")==False)

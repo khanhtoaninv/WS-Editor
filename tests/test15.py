@@ -16,7 +16,7 @@ with sync_playwright() as p:
     chk('Andika dùng được cho chữ Việt', pg.evaluate("document.fonts.check('14pt Andika','ă')") and pg.evaluate("document.fonts.check('bold 14pt Andika','Đ')"))
     n0=pg.evaluate('window.__ws.renders'); res0=pg.evaluate('window.__ws.res.pages.length')
     pg.click('#tree .tnode[data-id=t3]'); pg.wait_for_timeout(300)
-    pg.evaluate("(()=>{const e=document.querySelector('#tree .sec[data-sec=info]'); if(!e.classList.contains('open')) e.querySelector('.sech').click()})()")
+    pg.evaluate("(()=>{const e=document.querySelector('#tree .sec[data-sec=g0]'); if(!e.classList.contains('open')) e.querySelector('.sech').click()})()")
     pg.focus('#tree .ed [data-k=title]'); pg.keyboard.press('Control+A'); pg.keyboard.type('Nghe và đánh dấu ✓ ở ô đúng ABC', delay=40); pg.wait_for_timeout(600)
     chk('gõ chữ Việt: ô giữ nguyên chữ và focus', pg.input_value('#tree .ed [data-k=title]')=='Nghe và đánh dấu ✓ ở ô đúng ABC' and pg.evaluate("document.activeElement.dataset.k")=='title')
     chk('trang cập nhật tiêu đề', 'Nghe và đánh dấu' in pg.inner_text('#stage'))

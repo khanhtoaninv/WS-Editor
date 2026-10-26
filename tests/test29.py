@@ -11,7 +11,7 @@ with sync_playwright() as p:
     pg.on('console', lambda m: errs.append(m.text) if m.type == 'error' and 'ERR_' not in m.text and 'font' not in m.text.lower() else None)
     pg.goto(F); pg.wait_for_timeout(1200)
     pg.evaluate("window.confirm = () => true")
-    chk('badge v81', pg.inner_text('#verBadge').strip() == 'v81')
+    chk('badge >= v81', int(pg.inner_text('#verBadge').strip()[1:]) >= 81)
     E = pg.evaluate
     ids = E("ws.tasks.map(t=>t.id)")
     def pick(tid, g=None, item=None):
@@ -75,9 +75,9 @@ with sync_playwright() as p:
     # 7. Khối: thêm ảnh chung, ảnh thứ hai, khung từ ảnh (cột trái), khung từ dưới câu hỏi
     pick(t15)
     def addblk(v):
-        pg.select_option('#tree .tk.open select[data-eact=blkadd]', v); pg.wait_for_timeout(30)
-    opts = E("[...document.querySelectorAll('#tree .tk.open select[data-eact=blkadd] option')].map(o=>o.value).filter(Boolean)")
-    chk('Thêm khối: có Ảnh chung, Bài đọc, Khung từ chữ / ảnh, Khối chữ / ảnh', set(opts) >= {'G1', 'G2', 'G4', 'G4i', 'GTt', 'GTi'}, opts)
+        pg.click(f'#tree .tk.open [data-eact=blkaddb][data-v={v}]'); pg.wait_for_timeout(30)
+    opts = E("[...document.querySelectorAll('#tree .tk.open [data-eact=blkaddb]')].map(o=>o.dataset.v)")
+    chk('v82: khối chưa có hiện mờ, nút thêm ngay tại mục: Ảnh chung, Bài đọc, Khung từ chữ / ảnh', set(opts) >= {'G1', 'G2', 'G4', 'G4i'} and E("document.querySelectorAll('#tree .tk.open .sec.off').length") >= 3, opts)
     addblk('G1'); addblk('G1b'); addblk('G4i')
     r = T(t15, "[!!t.image,!!(t.image&&t.image.two),t.wordBank&&t.wordBank.kind,(t.wordBank||{}).words?.length]")
     pics = E(f"[document.querySelectorAll('#stage .task[data-task=\"{t15}\"] .g1 .pic, #stage .task[data-task=\"{t15}\"] .g1 [data-slot]').length, document.querySelectorAll('#stage .task[data-task=\"{t15}\"] .g4.wimg .wim').length]")

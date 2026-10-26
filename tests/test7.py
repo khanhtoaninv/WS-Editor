@@ -12,7 +12,7 @@ with sync_playwright() as p:
     print('có Track',withTrack)
     tid=withTrack[0]
     pg.click(f'#tree .tnode[data-sel=task][data-id={tid}]'); pg.wait_for_timeout(300)
-    pg.click('#tree .sech[data-stg=info]'); pg.wait_for_timeout(200)
+    pg.click('#tree .sech[data-stg=g0]'); pg.wait_for_timeout(200)
     chk('có mục Mã QR nghe', pg.locator('#tree .ed [data-eact=qrsrc]').count()==3)
     chk('chưa nhập: không có QR trên phiếu', pg.locator(f'.task[data-task={tid}] .qrb').count()==0)
     pg.fill('#tree .ed [data-k="qr.base"]','https://pinta.vn/audio/'); pg.fill('#tree .ed [data-k="qr.link"]','unit3/track05.mp3'); pg.wait_for_timeout(500)
@@ -38,7 +38,7 @@ with sync_playwright() as p:
     fc.value.set_files('ref.png'); pg.wait_for_timeout(600)
     chk('hook WSAudioUpload được dùng', pg.evaluate(f"ws.tasks.find(t=>t.id==='{tid}').qr.url")=='https://cdn.pinta.vn/a/ref.png')
     # Task không có Track: không có mục
-    nt=noTrack[0]; pg.click(f'#tree .tnode[data-sel=task][data-id={nt}]'); pg.wait_for_timeout(300); pg.click('#tree .sech[data-stg=info]') if not pg.evaluate("document.querySelector('#tree .sec[data-sec=info]').classList.contains('open')") else None
+    nt=noTrack[0]; pg.click(f'#tree .tnode[data-sel=task][data-id={nt}]'); pg.wait_for_timeout(300); pg.click('#tree .sech[data-stg=g0]') if not pg.evaluate("document.querySelector('#tree .sec[data-sec=g0]').classList.contains('open')") else None
     chk('Task không Track: không có mục QR', pg.locator('#tree .ed [data-eact=qrsrc]').count()==0)
     # hoàn tác
     pg.click('#undo'); pg.wait_for_timeout(300)

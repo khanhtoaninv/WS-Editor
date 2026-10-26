@@ -304,7 +304,15 @@ python3 -c "from PIL import Image; Image.new('RGB',(64,48),(200,200,200)).save('
 ## AS. v81 — Kiến trúc trình bày mới (T / Q / G), bậc 0–5
 - Spec chính mục 18. Bố cục Task 4 kiểu, Dạng câu hỏi 12 kiểu (suy ra từ dữ liệu cũ, không đổi schema), khối thêm / xóa thống nhất, câu ví dụ, dòng chữ, hai ảnh, khung từ ảnh, bốn ô li, khung vẽ, nhãn A–D, nhãn Đúng/Sai tự đặt, câu hỏi trước bài đọc, cú pháp MD mới, quy ước MD + prompt viết lại. Test mới `test29.py`, `test30.py`, `cmp_v80.py`; mẫu `tests/md/v81-cu-phap.md`, `tests/md/birthday6-dang.md`. Bản v80 lưu ở nhánh `backup/v80`.
 
-## AB. BÀN GIAO (2026-10-26 tối, bản v81) — đọc mục này đầu tiên khi mở thread mới
+## AT. v82 — Cột trái theo khối (Cấu hình · G0 · G1 · G2 · G3 · G4 · G-Text)
+- Spec chính mục 19. Gộp "Bố cục & dạng câu hỏi" + "Thành phần" thành **Cấu hình** (nhãn `T · Q`); tách "Nội dung" thành G1 Ảnh chung, G2 Bài đọc (`theo T`), G3 Câu hỏi (`theo Q`), G4 Khung từ; khối chưa có hiện mờ với nút thêm tại chỗ; công tắc tính năng câu chuyển vào "Tùy chọn của câu" dưới Q; bỏ "Áp mẫu" và ô "Đáp án" cũ ở cột trái. Không đổi dữ liệu / dàn trang. Test mới `test31.py`. Hình duyệt: `docs/MINH_HOA_COT_TRAI.html`.
+
+## AB. BÀN GIAO (2026-10-26, bản v82) — đọc mục này đầu tiên khi mở thread mới
+- **Bản v82** (mục AT, spec mục 19): cột trái theo khối. Báo cáo: `docs/BAO_CAO_PHIEN_2026-10-26_phien5.md`.
+- **Việc tiếp theo:** người dùng thử cột trái mới; P3 (PDF thật + MD AI tạo theo prompt v81); tiêu đề phiếu / Họ tên Lớp Ngày / header footer (thread "chi tiết trang" mới mở đầu, chưa bàn); G2 bố cục riêng (để sau); G3 chia nhóm (hoãn).
+- Cách chạy test, nhập file, nguyên tắc: như mục AB-cũ (v81) dưới đây. Test2 so với bản v81 (`git show <commit v81>:ws-editor-prototype.html`, có `fonts/` cạnh file).
+
+## AB-cũ. BÀN GIAO (2026-10-26 tối, bản v81)
 - **Bản v81** (mục AS, spec mục 18): kiến trúc trình bày mới đã vào `main`. Phiếu cũ mở ra giống v80 (cmp_v80 16/16). Khôi phục v80: nhánh `backup/v80`.
 - **Đã chạy trên bản cuối v81:** xem báo cáo `docs/BAO_CAO_PHIEN_2026-10-26_phien4.md` (test1–30, audit, cmp_v80).
 - **Việc tiếp theo:** P3 với PDF thật + MD do AI tạo theo prompt v81 (người dùng gửi); sau đó tiêu đề phiếu / Họ tên Lớp Ngày / header footer; G3 chia nhóm (hoãn); cân nhắc bỏ "Áp mẫu" / chọn loại đáp án cũ ở cột trái khi người dùng quen bộ chọn Q.
