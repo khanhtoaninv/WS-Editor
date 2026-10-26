@@ -283,8 +283,11 @@ python3 -c "from PIL import Image; Image.new('RGB',(64,48),(200,200,200)).save('
 ## AL. v74 — G-Text kiểu Ảnh, khung chữ 4 kiểu
 - Spec chính mục 17.5. `test22.py`. Thẻ bị bỏ tạm theo yêu cầu người dùng.
 
-## AB. BÀN GIAO (2026-10-26, bản v74) — đọc mục này đầu tiên khi mở thread mới
-- **Bản v74** thêm G-Text kiểu Ảnh và khung chữ 4 kiểu (mục AL; v73 kiểu Chữ, mục AK; v72 cỡ chữ phiếu, mục AJ). **Việc tiếp theo:** chỗ trống và đánh dấu trong bài đọc (spec mục 17), rồi điểm neo trên ảnh. Đã chạy trên bản cuối v74: test1–22 và audit; `test2` so với v73.
+## AM. v75 — Bài đọc có chỗ trống, chọn, đánh dấu, cắt theo đoạn
+- Spec chính mục 17.6. `passageHtml`, `passInline`, `passCut`, `units` (đoạn rồi câu), `lead.keys`, `test23.py`. Sửa kèm: khung từ trước đây không hiện ở Task bài đọc.
+
+## AB. BÀN GIAO (2026-10-26, bản v75) — đọc mục này đầu tiên khi mở thread mới
+- **Bản v75** thêm bài đọc có chỗ trống / chọn / đánh dấu / cắt theo đoạn (mục AM; v74 G-Text kiểu Ảnh, mục AL; v73 kiểu Chữ, mục AK; v72 cỡ chữ phiếu, mục AJ). **Việc tiếp theo:** điểm neo trên ảnh (cần hình mẫu duyệt trước), rồi lưới tự do. Đã chạy trên bản cuối v75: test1–23 và audit; `test2` so với v74.
 - **Không còn dùng artifact.** Xong việc thì commit và đẩy lên GitHub `khanhtoaninv/WS-Editor`, nhánh main (người dùng yêu cầu). Repo: file chính `ws-editor-prototype.html`, `docs/`, `tests/`, `fonts/`, `samples/`.
 - **Đã chạy trên bản cuối v70:** test1, 3–19, audit (0 vấn đề), audit2 (không tràn), cmp_paste (20 bài dán giống v69), ws_sea (3 trang, 0 lỗi) đạt, 0 lỗi console. `test2` so với v69: 31/32, chỗ lệch duy nhất là Task 5 phiếu mẫu (đã định, xem mục AI).
 - **Cách chạy:** `bash tests/run_all.sh <mới.html> <cũ.html>`; `cmp_paste.py <mới> <cũ>`; `ws_sea.py` ghi ra `/home/claude/ws/ws-sea-sample.json` (cần tạo thư mục), bản đó khác `ws-sea-sample.json` trong repo ở trường `part:""` từ v68 (không phải lỗi v70, chưa tái xuất mẫu).

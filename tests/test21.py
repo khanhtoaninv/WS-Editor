@@ -8,7 +8,7 @@ with sync_playwright() as p:
     pg.on('console',lambda m: errs.append(m.text) if m.type=='error' and 'ERR_' not in m.text and 'font' not in m.text.lower() else None)
     pg.on('pageerror',lambda e: errs.append('PAGEERR '+str(e)))
     pg.goto(F); pg.wait_for_timeout(1500)
-    chk('badge v74', pg.evaluate("document.getElementById('verBadge').textContent")=='v74')
+    chk('badge v7x', pg.evaluate("document.getElementById('verBadge').textContent").startswith('v7'))
     chk('không extras: không có .gt', pg.evaluate("document.querySelectorAll('.gt').length")==0)
     H0=pg.evaluate("lastRes.pages.length")
     tid=pg.evaluate("ws.tasks[0].id")
