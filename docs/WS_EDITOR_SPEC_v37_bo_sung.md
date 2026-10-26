@@ -307,7 +307,16 @@ python3 -c "from PIL import Image; Image.new('RGB',(64,48),(200,200,200)).save('
 ## AT. v82 — Cột trái theo khối (Cấu hình · G0 · G1 · G2 · G3 · G4 · G-Text)
 - Spec chính mục 19. Gộp "Bố cục & dạng câu hỏi" + "Thành phần" thành **Cấu hình** (nhãn `T · Q`); tách "Nội dung" thành G1 Ảnh chung, G2 Bài đọc (`theo T`), G3 Câu hỏi (`theo Q`), G4 Khung từ; khối chưa có hiện mờ với nút thêm tại chỗ; công tắc tính năng câu chuyển vào "Tùy chọn của câu" dưới Q; bỏ "Áp mẫu" và ô "Đáp án" cũ ở cột trái. Không đổi dữ liệu / dàn trang. Test mới `test31.py`. Hình duyệt: `docs/MINH_HOA_COT_TRAI.html`.
 
-## AB. BÀN GIAO (2026-10-26, bản v82) — đọc mục này đầu tiên khi mở thread mới
+## AC. v83 (2026-10-26) — xem WS_EDITOR_SPEC.md mục 20
+Thu gọn theo thẻ + liên kết chọn khối, Nối Task / xóa có hỏi, G1 ô ảnh lớn, ⓘ thủ thuật viết, câu ảnh + chữ hai cột, Q7 tick đáp án, câu ví dụ hiện trên trang, nhớ dạng câu hỏi (`qmem`, `qmemLin`).
+
+## AB. BÀN GIAO (2026-10-26, bản v83) — đọc mục này đầu tiên khi mở thread mới
+- **Bản v83** (spec mục 20, báo cáo `docs/BAO_CAO_PHIEN_2026-10-26_phien5.md`) hoàn thành V1–V10. Bản v82 là cột trái theo khối (mục 19).
+- **Chờ người dùng:** (1) "khoảng cách / ký hiệu trên dòng trống" ở ⓘ nghĩa là gì; (2) xác nhận nhớ dạng câu hỏi lưu trong file JSON phiếu (MD không mang); (3) Q3 có cần tick như Q7; (4) cách hiểu câu ví dụ.
+- **Việc tiếp theo:** chi tiết trang (tiêu đề phiếu, Họ tên/Lớp/Ngày, header/footer); P3 với PDF thật; G2 có bố cục riêng.
+- Cách chạy và quy tắc như bàn giao v82 bên dưới. test16 có thể báo không ổn định khi chạy cả bộ.
+
+## AB-cũ. BÀN GIAO (2026-10-26, bản v82) — đọc mục này đầu tiên khi mở thread mới
 - **Bản v82** (mục AT, spec mục 19): cột trái theo khối. Báo cáo: `docs/BAO_CAO_PHIEN_2026-10-26_phien5.md`.
 - **Việc tiếp theo:** người dùng thử cột trái mới; P3 (PDF thật + MD AI tạo theo prompt v81); tiêu đề phiếu / Họ tên Lớp Ngày / header footer (thread "chi tiết trang" mới mở đầu, chưa bàn); G2 bố cục riêng (để sau); G3 chia nhóm (hoãn).
 - **Chờ duyệt (chưa code):** `docs/VAN_DE_CAN_XU_LY.md` (V1 ô ảnh G1, V2 ⓘ thủ thuật viết + thanh chèn ký hiệu, V3 câu có ảnh chia 2 cột).

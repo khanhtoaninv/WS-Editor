@@ -642,3 +642,18 @@ Khối `v82` cuối file, ngay sau `hết v81`: bọc `edHtml` (dựng HTML v81 
 ### 19.4 Sửa lỗi sau v82: giữ chỗ `{…|…}` sót lại (26/10/2026)
 Chọn Q4 (Chọn trong câu) cho câu chưa có lựa chọn thì `setQ` điền giữ chỗ `{…|…}` để giáo viên điền (cố ý). Lỗi: đổi tiếp sang dạng khác (Q1, Q2, Q3, Q5, Q9…) thì chuỗi này nằm lại trong chữ câu, hiện nguyên trên phiếu (Q3 còn sinh hai lựa chọn "…"). Sửa: rời Q4, `setQ` bỏ giữ chỗ chưa điền (cuối câu: bỏ; giữa câu: về `___`). Lựa chọn đã điền thật không bị đụng. Kiểm thử: `test31` mục 7.
 
+
+
+## 20. Hoàn thiện cột trái và nhớ dạng câu hỏi (v83, 26/10/2026)
+Làm theo danh sách V1–V10 (`docs/VAN_DE_CAN_XU_LY.md`). Dàn trang không đổi, trừ Q7 (dấu ✓ đáp án) và câu ví dụ.
+
+- **Thu gọn theo thẻ (V7, V10).** Chỉ một mục mở tại một thời điểm (`sectOne`, `syncSec`, `sectClick`). Chọn khối trên trang hay trong cây thì mục tương ứng mở và khối đó được chọn (bản đồ `SEC_G` / `G_SEC`); mục đang làm việc nền đậm hơn. Câu có ảnh riêng mà Task không có G1 thì ánh xạ về G3.
+- **Thanh Task (V5, V6).** Nút biểu tượng; "↳ Nối Task" / "↳ Đã nối" (`data-eact="tjoin"`); thùng rác đỏ xóa Task phải hỏi qua hộp `askConfirm` (`<dialog id="cfmDlg">`).
+- **G1 (V1).** Ô ảnh lớn (`.ithumb.big`) có nút tải / tạo ảnh, dán, kéo thả.
+- **ⓘ thủ thuật viết (V2).** Nút `.tinfo` ở ô nhiều dòng mở bảng `#txHelp` (bảng `TXH` / `TXB`, `txInsert`): chỉ chèn ký hiệu app đã có (đậm, nghiêng, gạch chân, ___ , {a|b}, …). Nghĩa "khoảng cách / ký hiệu trên dòng trống" người dùng chưa xác nhận.
+- **Câu ảnh + chữ hai cột (V3).** `.imgrow2`: trái ô ảnh, phải `.imgcol` hai dòng.
+- **Q7 (V8).** Không còn ô gõ đáp án: ô tick xanh cạnh ảnh (`.tkq`, `tickopt`), ghi vào `item.key` (chữ A/B/C). Dữ liệu `answer` không đổi.
+- **Câu ví dụ (V9).** Nút xanh đậm; không bắt buộc đáp án (có cảnh báo nhẹ nếu ví dụ chưa chọn đáp án ở dạng cần); hiện trên trang dàn trang.
+- **Nhớ dạng câu hỏi (V4).** `setQMem` (dùng ở cột trái / Inspector qua `qCmd 'q'`; nhập file vẫn dùng `setQ` trần). Khi rời dạng Q0 cất `t.qmem[Q0]` = bản chụp (câu / hàng, đáp án, bố cục `QM_L`) + trạng thái "after" ngay sau khi chuyển. Vào lại Q0 (`qmRestore`): nếu từ lúc rời chưa ai sửa → trả nguyên bản cất; nếu đã sửa → gộp ba bên theo từng trường (bản cất / trạng thái trước đổi / after): chỗ chưa đụng lấy bản cất, chỗ đã sửa giữ bản sửa, câu mới thêm giữ, câu người dùng xóa bỏ. Đi qua dạng trung gian (a→b→c→a): `t.qmemLin` = {q, origin, sig} nhớ dạng gốc và chữ ký trạng thái; nếu mọi bước chỉ là đổi dạng thì về gốc trả nguyên bản. Gộp ra trạng thái sai dạng thì hoàn về kết quả chuyển thường (rollback). `qmem` và `qmemLin` nằm trong JSON phiếu; **MD không mang theo**.
+- **Kiểm thử.** `tests/test32.py` (a→b→a 172 cặp trên mọi Task, a→b→c→a 156 vòng, sửa chữ giữa chừng, thêm / xóa câu, qmem trong JSON, Bảng); test31 mở rộng; test1/2/3/4/7/8/9/10/15/17/21/22/23/29 sửa theo thẻ thu gọn, hộp xác nhận, imgrow2.
+- **Giới hạn đã biết.** Q3 chưa có ô tick (chỉ Q7). test16 thỉnh thoảng báo "element is not stable" khi chạy cả bộ, chạy riêng thì đạt.

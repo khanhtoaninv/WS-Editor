@@ -95,7 +95,7 @@ with sync_playwright() as p:
     chk('Chọn chỗ trả lời của câu: panel có Thêm / Nhân đôi / Ví dụ / Xóa', E("['iadd','idup','iex','idel'].every(a=>document.querySelector('#insp [data-act='+a+']'))"))
     pg.evaluate("document.activeElement && document.activeElement.blur()"); pg.keyboard.press('Delete'); pg.wait_for_timeout(30)
     chk('Delete trên câu 2: còn ít hơn 1 câu, câu 2 đã đi', T(t15, "its(t).length") == n0 - 1 and T(t15, f"!its(t).some(x=>x.id==='{k2}')"))
-    pick(t15); pg.click('#tree .tk.open [data-eact=blkdel][data-v=G1b]'); pg.click('#tree .tk.open [data-eact=blkdel][data-v=G1]')
+    pick(t15); E("sectOne('g1');syncSec()"); pg.click('#tree .tk.open [data-eact=blkdel][data-v=G1b]'); pg.click('#tree .tk.open [data-eact=blkdel][data-v=G1]')
     chk('Nút ✕ ở cột trái: xóa ảnh thứ hai rồi ảnh chung', T(t15, "!t.image"))
     # 9. Câu ví dụ (số 0, hiện đáp án) và dòng chữ giữa các câu (không số)
     t7 = ids[6]; pick(t7)

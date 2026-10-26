@@ -70,7 +70,7 @@ with sync_playwright() as p:
     # ---- 4) Công tắc nối: cột trái + Inspector, hoàn tác, Task đầu không nối được
     pg.evaluate(f"sel={{type:'task', id:'{ids[2]}'}}; openTask='{ids[2]}'; refreshSel()"); pg.wait_for_timeout(300)
     btn = pg.locator(f'#tree .tk.open [data-eact="tjoin"]')
-    chk('cột trái: nút “Nối vào Task trên”', btn.count() == 1 and 'Nối vào Task trên' in btn.inner_text())
+    chk('cột trái: nút “Nối Task”', btn.count() == 1 and 'Nối Task' in btn.inner_text())
     btn.click(); pg.wait_for_timeout(500)
     chk('bấm nối: Task 3 thành phần b của Task 2, các số dịch', pg.evaluate("ws.tasks[2].layout.break") == 'join' and pg.evaluate("ws.tasks.map(t=>t.number+(t.part||'')).join(' ')") == '1 2a 2b 3 4 5a 5b 5c', pg.evaluate("ws.tasks.map(t=>t.number+(t.part||'')).join(' ')"))
     chk('nối xong vẫn 0 tràn', pg.inner_text('#diagBadge') == 'Không lỗi tràn', pg.inner_text('#diagBadge'))

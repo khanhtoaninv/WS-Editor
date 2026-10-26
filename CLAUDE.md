@@ -4,8 +4,8 @@ Dự án: bước dàn trang phiếu bài tập tiếng Anh (A4, đầu ra HTML,
 
 ## Đọc theo thứ tự
 0. `docs/BAT_DAU_PHIEN_MOI.md`: lệnh mở phiên và thứ tự đọc.
-1. `docs/BAO_CAO_PHIEN_2026-10-26_phien5.md` (**mới nhất**): **v82 = cột trái theo khối** (Cấu hình · G0–G4 · G-Text; spec mục 19). Trước đó `docs/BAO_CAO_PHIEN_2026-10-26_phien4.md`: **v81 = kiến trúc trình bày mới đã triển khai** (Bố cục T 4 kiểu, Dạng câu hỏi Q 12 kiểu, khối G, cú pháp MD `Dạng:`…), đã kiểm thử gì, việc tiếp theo. Bản duyệt: `docs/KIEN_TRUC_TRINH_BAY_MOI.html`; rà soát dạng bài: `docs/RA_SOAT_DANG_BAI.md`. Lịch sử: `docs/BAO_CAO_PHIEN_2026-10-26_phien3.md` (quyết định kiến trúc), `docs/BAO_CAO_PHIEN_2026-10-26.md` (v73–v80).
-2. `docs/WS_EDITOR_SPEC.md` (đặc tả app; **mục 18 = v81, mục 19 = v82**, các mục T1–T9 / A1–A8 cũ giờ là tầng dữ liệu bên trong) rồi mục "BÀN GIAO" cuối `docs/WS_EDITOR_SPEC_v37_bo_sung.md`.
+1. `docs/BAO_CAO_PHIEN_2026-10-26_phien5.md` (**mới nhất**): **v83 = hoàn thiện cột trái + nhớ dạng câu hỏi** (spec mục 20; trước đó v82 mục 19). Trước đó `docs/BAO_CAO_PHIEN_2026-10-26_phien4.md`: **v81 = kiến trúc trình bày mới đã triển khai** (Bố cục T 4 kiểu, Dạng câu hỏi Q 12 kiểu, khối G, cú pháp MD `Dạng:`…), đã kiểm thử gì, việc tiếp theo. Bản duyệt: `docs/KIEN_TRUC_TRINH_BAY_MOI.html`; rà soát dạng bài: `docs/RA_SOAT_DANG_BAI.md`. Lịch sử: `docs/BAO_CAO_PHIEN_2026-10-26_phien3.md` (quyết định kiến trúc), `docs/BAO_CAO_PHIEN_2026-10-26.md` (v73–v80).
+2. `docs/WS_EDITOR_SPEC.md` (đặc tả app; **mục 18 = v81, mục 19 = v82, mục 20 = v83**, các mục T1–T9 / A1–A8 cũ giờ là tầng dữ liệu bên trong) rồi mục "BÀN GIAO" cuối `docs/WS_EDITOR_SPEC_v37_bo_sung.md`.
 3. Khi cần: `docs/PHUONG_AN_NHAP_FILE.md` (nhập file), `docs/QUY_UOC_MD.md` (cú pháp MD), `docs/PROMPT_PDF_SANG_PHIEU.md` (prompt cho AI đọc PDF), `ws-sample.json` / `samples/`.
 Không dùng MASTER_SPEC v10 hay đặc tả cũ nếu mâu thuẫn. Nếu hành vi thật khác đặc tả, nói rõ chỗ lệch, đừng tự chọn một bên.
 

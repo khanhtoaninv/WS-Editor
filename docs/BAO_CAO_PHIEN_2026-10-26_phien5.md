@@ -36,3 +36,9 @@ Người dùng đề xuất (thread "Sắp cột Task theo khối G"): gộp "B�
 - Khóa mục mới: `cfg g0 g1 g2 g3 g4 gt` (`SECT_DEF` bị thay trong khối v82; khóa cũ `kind info content parts free` không còn). Test cũ dùng `SECT.free` / `data-stg=parts` phải đổi.
 - `blkaddb` (nút) dùng `blkAdd` của v81 rồi mở mục tương ứng (`BLK_SEC`).
 - Môi trường đám mây: cần `pip install playwright==1.63.0` để khớp Chromium cài sẵn; bản v80 để so lấy bằng `git fetch origin backup/v80`.
+
+## Phần 2: v83 (V1–V10)
+Làm hết danh sách vấn đề người dùng tổng hợp theo thứ tự V7+V9 → V5/V6 → V8 → V1–V3 → V4. Chi tiết: spec mục 20.
+- Điểm khó nhất là V4 (nhớ dạng câu hỏi): ba lần viết lại. Bản cuối: cất bản chụp khi rời dạng, trả nguyên bản nếu chưa ai sửa, gộp ba bên nếu đã sửa, thêm `qmemLin` cho vòng a→b→c→a.
+- Đã chạy: test32 (8/8) trên bản cuối; kết quả cả bộ xem cuối báo cáo chat.
+- Chưa làm / hỏi lại: nghĩa "khoảng cách / ký hiệu trên dòng trống"; Q3 tick; MD không mang `qmem`.
