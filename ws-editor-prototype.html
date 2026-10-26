@@ -6903,6 +6903,7 @@ function setQ(t, q) {
     if (!Object.keys(t.layout.table).length) t.layout.table = null;
   } else {
     toList();
+    if (q !== 'Q4') its(t).forEach(x => { if (!x.gt && /\{…\|…\}/.test(x.text || '')) x.text = x.text.replace(/\s*\{…\|…\}\s*$/, '').replace(/\{…\|…\}/g, '___'); });   // rời Q4: bỏ chỗ giữ chỗ {…|…} chưa điền (cuối câu: bỏ; giữa câu: về ___)
     if (q === 'Q6') { if (ck(t) !== 'items' || t.content.variant === 'multi') { if (t.content.variant === 'multi') toggleField(t, 'multi', false); else toggleField(t, 'img', true); } if (!['word', 'sentence', 'choice'].includes(t.answer.kind)) setKind(t, 'word'); }
     else if (q === 'Q7') { if (ck(t) !== 'items') toggleField(t, 'img', true); if (t.content.variant !== 'multi') toggleField(t, 'multi', true); setKind(t, 'tick'); }
     else {

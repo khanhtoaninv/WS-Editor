@@ -65,6 +65,19 @@ with sync_playwright() as p:
     pg.keyboard.type(' XYZ'); pg.wait_for_timeout(500)
     chk('tóm tắt G0 cập nhật khi gõ', 'XYZ' in pg.inner_text('#tree .ed .sec[data-sec=g0] .secs'))
     E('document.activeElement.blur()'); pg.click('#undo'); pg.wait_for_timeout(200)
+    # 7. Chọn Q4 rồi rời sang dạng khác: không còn chỗ giữ chỗ {…|…} trong câu (lỗi thấy ở Task 1)
+    E("window.__ws.pick({type:'task',id:'t1'})"); pg.wait_for_timeout(50)
+    E("commit(w=>setQ(w.tasks[0],'Q4'))"); pg.wait_for_timeout(80)
+    chk('Q4 điền giữ chỗ {…|…} cho câu chưa có lựa chọn', E("its(ws.tasks[0]).every(x=>/\\{…\\|…\\}/.test(x.text))"))
+    bad = []
+    for q in ['Q1', 'Q2', 'Q3', 'Q5', 'Q9', 'Q6', 'Q7', 'Q8']:
+        E(f"commit(w=>setQ(w.tasks[0],'{q}'))"); pg.wait_for_timeout(50)
+        if E("its(ws.tasks[0]).some(x=>/…\\|…/.test(x.text||'')||(x.opts||[]).some(o=>o==='…'))") or '{…|…}' in pg.inner_text('.task[data-task=t1]'): bad.append(q)
+        E("commit(w=>setQ(w.tasks[0],'Q4'))"); pg.wait_for_timeout(50)
+    chk('rời Q4 sang Q1 / Q2 / Q3 / Q5 / Q9 / Q6 / Q7 / Q8: hết giữ chỗ {…|…}', not bad, bad)
+    for _ in range(60):
+        if pg.eval_on_selector('#undo', 'e=>e.disabled'): break
+        pg.click('#undo')
     pg.locator('#tree').screenshot(path='/tmp/test31_tree.png')
     chk('cuối: 0 lỗi tràn', pg.inner_text('#diagBadge') == 'Không lỗi tràn')
     print('ERRS', errs); print('ALL OK' if ok and not errs else 'SOME FAIL')

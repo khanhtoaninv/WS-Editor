@@ -17,6 +17,10 @@ Người dùng đề xuất (thread "Sắp cột Task theo khối G"): gộp "B�
 - Mới: `test31.py` (cấu trúc mục trên 18 Task, nhãn T · Q, khối có / chưa có, tách công tắc, nút thêm tại mục + hoàn tác, Bảng, mở mục thu khi cần gõ).
 - Sửa test theo tên mục mới: test1, 2, 7, 8, 9, 10, 15, 21, 22, 23, 29 (test9 / test10 áp mẫu bằng `applyRecipe` vì ô chọn đã bỏ; test29 dùng nút thêm tại mục).
 
+## 3b. Sửa lỗi sau v82 (người dùng hỏi về Task 1 demo)
+Đổi Dạng câu hỏi ở Task 1 thấy `{…|…}` trên phiếu. Nguyên nhân: Q4 cố ý điền giữ chỗ `{…|…}` cho câu chưa có lựa chọn, nhưng đổi sang dạng khác thì nó không bị dọn nên hiện nguyên chữ. Đã sửa (spec mục 19.4), thêm kiểm tra vào test31; chạy lại đủ bộ + cmp_v80 đạt. Nên tách rõ: dấu này ở Q4 là chỗ để giáo viên điền, không phải lỗi; chỉ việc nó sót lại sau khi đổi dạng mới là lỗi.
+- test16 lỗi chập chờn ("element is not stable" khi bấm) trong lượt chạy đủ bộ, hai lượt liền (cả lúc trước khi sửa), chạy riêng đều đạt. Chưa tìm ra nguyên nhân, nghi tương tranh chờ tải font / cuộn.
+
 ## 4. Chưa kiểm thử / giới hạn
 - Chưa xem trên màn hình nhỏ. Inspector (cột phải) không đổi.
 - Người dùng chưa thử bản v82 trên máy.

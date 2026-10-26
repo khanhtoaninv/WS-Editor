@@ -639,3 +639,6 @@ Khối `v82` cuối file, ngay sau `hết v81`: bọc `edHtml` (dựng HTML v81 
 ### 19.3 Kiểm thử
 `tests/test31.py` (18 Task: thứ tự mục, nhãn T · Q khớp `tnOf`/`qOf`, khối có / chưa có khớp dữ liệu, không còn ô cũ; Cấu hình tách công tắc; + Thêm ở G1 / G4 / G2 lời dẫn / G3 rồi hoàn tác; Bảng; `focusK` mở mục thu; tóm tắt cập nhật khi gõ). Sửa test1, 2, 7, 8, 9, 10, 15, 21, 22, 23, 29 theo tên mục mới; test9 / test10 áp mẫu bằng `applyRecipe` thay ô chọn đã bỏ.
 
+### 19.4 Sửa lỗi sau v82: giữ chỗ `{…|…}` sót lại (26/10/2026)
+Chọn Q4 (Chọn trong câu) cho câu chưa có lựa chọn thì `setQ` điền giữ chỗ `{…|…}` để giáo viên điền (cố ý). Lỗi: đổi tiếp sang dạng khác (Q1, Q2, Q3, Q5, Q9…) thì chuỗi này nằm lại trong chữ câu, hiện nguyên trên phiếu (Q3 còn sinh hai lựa chọn "…"). Sửa: rời Q4, `setQ` bỏ giữ chỗ chưa điền (cuối câu: bỏ; giữa câu: về `___`). Lựa chọn đã điền thật không bị đụng. Kiểm thử: `test31` mục 7.
+
