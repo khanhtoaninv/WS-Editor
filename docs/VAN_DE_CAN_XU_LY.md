@@ -35,6 +35,33 @@ Trạng thái: **chỉ thảo luận, chưa code** cho đến khi người dùng
 - **Ảnh hưởng / rủi ro:** thêm trường tùy chọn `qmem` (JSON lưu theo, MD không mang theo; nên ghi rõ trong spec; schema thêm, không phá phiếu cũ); không ảnh hưởng dàn trang vì bộ vẽ bỏ qua `qmem`. Phần khó là gộp khi người dùng đã sửa giữa chừng và dạng Bảng. Đo nghiệm thu: với mọi Task, mọi cặp a → b → a và một vòng dài a → b → c → a: **HTML vẽ ra giống hệt ban đầu**, nội dung đã gõ ở dạng khác không mất.
 - **Cần hỏi:** bản nhớ lưu **trong file phiếu** (mở lại hôm sau vẫn đi vòng được, đúng ý "update bài") hay chỉ trong phiên đang mở? Mình nghiêng về lưu trong file.
 
+### V5. Nút "Nối vào Task trên" → "Nối Task" / "Đã nối"
+- **Hiện trạng:** nút dài ở hàng thao tác Task, bật / tắt `layout.break='join'`; Task đầu phiếu không nối được.
+- **Đề xuất:** một nút ngắn kiểu công tắc: chưa nối hiện **Nối Task**, đang nối hiện **Đã nối** (nền nhấn, bấm lại để bỏ nối). Task đầu phiếu mờ. Đổi nhãn + trạng thái, không đổi dữ liệu. Lưu ý trùng chữ "Nối" với dạng câu hỏi Nối (Q8), nên title nói rõ "Nối vào Task phía trên".
+
+### V6. Hàng thao tác Task: icon, Xóa Task màu đỏ và phải hỏi trước khi xóa
+- **Hiện trạng:** ↑ ↓ ⧉ Nhân đôi, ↪ Nối vào Task trên, "✕ Xóa Task" (chữ đỏ, xóa ngay, chỉ có toast "Ctrl+Z để hoàn tác").
+- **Đề xuất:** gọn thành hàng icon: ↑ ↓ ⧉ (icon, có tooltip), **Nối Task**, và icon thùng rác **đỏ** cho Xóa Task. Bấm Xóa → hỏi xác nhận ("Xóa Task n «tên»? Hoàn tác được bằng Ctrl+Z") rồi mới xóa. Dùng hộp xác nhận trong app (không dùng `confirm()` của trình duyệt vì bị chặn ở một số nơi). Test cũ bấm tdel phải thêm bước xác nhận.
+
+### V7. Chỉ một thẻ mở tại một thời điểm (accordion) + V10 liên kết cột trái ↔ trang
+- **Hiện trạng:** mở Task đã là một Task mở một lúc. Nhưng trong Task, các mục G1–G4 mở cùng lúc (mặc định mở G1–G4). Bấm tiêu đề mục G ở cột trái **không** đổi vùng chọn trên trang (`sel` vẫn là cả Task). Chọn khối trên trang (vd G3) thì cột trái **không** nhấn mạnh mục G3, chỉ tự mở. Các mục đều nền xám như nhau.
+- **Hiểu "thẻ" = mục (Cấu hình, G0, G1, G2, G3, G4, G-Text).** Đề xuất làm chung một cơ chế:
+  1. Mở mục nào là **chọn khối đó** (`sel = {group, g}`): trang vẽ viền xanh khối G tương ứng, Inspector phải hiện bảng của khối đó. Cấu hình = chọn cả Task.
+  2. Chọn khối trên trang → cột trái mở đúng mục, thu các mục khác (accordion).
+  3. Mục đang làm việc **nền đậm hơn / viền nhấn** + chấm màu; mục khác nền xám nhạt. Gõ trong ô thuộc mục nào thì mục đó là mục đang làm việc.
+  - Cho phép thu mục đang mở (không mục nào mở).
+- **Ảnh hưởng / rủi ro:** `SECT` đổi từ nhiều mục mở sang một mục mở; phải đồng bộ **không dựng lại cột trái** khi chỉ đổi mục đang làm việc (dựng lại sẽ mất con trỏ khi đang gõ), chỉ bật / tắt class. Test dùng `SECT.g3=true`, `data-sec` cần sửa; test1 (mở/thu mục) sửa theo accordion. Nếu mở G2 trong khi đang xem Cấu hình: không còn xem cùng lúc hai mục (đổi thói quen so với v82, người dùng đã yêu cầu).
+
+### V8. Q7 (Nhiều ảnh lựa chọn): bỏ ô nhập đáp án, thay bằng ô tick ngay cạnh khung ảnh
+- **Hiện trạng:** mỗi câu Q7 có ô chữ "Đáp án" (`item.key`, chuỗi). Bộ vẽ chỉ dùng `key` ở câu ví dụ (`exFill`, A5: tô ô tick **đầu tiên** bất kể `key` là gì) và cảnh báo thiếu đáp án; nghĩa là phiếu chưa biết ô nào đúng.
+- **Đánh giá ý kiến: không phá kiến trúc.** `key` vẫn là chuỗi, chỉ đổi cách nhập: tick vào ô nào thì ghi chữ cái ô đó vào `key` ("A", "B", "C"; một đáp án đúng mỗi câu, bấm lại ô khác thì chuyển). Ô đúng hiện dấu ✓ xanh trong cột trái. Nhập MD / JSON có sẵn `key` đọc vẫn đúng. Phần cần làm thêm: `exFill` phải tô **đúng ô** theo `key` (hiện luôn tô ô đầu), cảnh báo "thiếu đáp án" dùng chung.
+- **Mở rộng:** làm cùng cách cho Q3 (A/B/C, tick đúng cạnh lựa chọn) và Q5 nếu muốn, để mọi dạng chọn nhập đáp án đúng bằng một thao tác. Đề xuất làm Q7 trước.
+
+### V9. Câu ví dụ: phải hiện được trên bản dàn trang
+- **Hiện trạng (đã thử Task 3):** (1) nút "Ví dụ" bật nền xanh nhạt, khó thấy; (2) bật ví dụ nhưng chưa nhập đáp án đúng thì trên trang chỉ đổi số thành "0", chưa thấy đáp án mẫu; (3) khi có `key`, đáp án mẫu chỉ hiện ở một số dạng (A1–A6), và với Q7 luôn tô ô đầu.
+- **Đề xuất:** (1) nút "Ví dụ" khi bật dùng màu đậm (nền xanh đậm, chữ trắng), hàng câu ví dụ có viền / nền riêng; (2) ví dụ **không bắt buộc** gõ ô Đáp án: với Q3 / Q5 / Q7 chọn đáp án mẫu bằng ô tick như V8, các dạng điền chữ vẫn gõ đáp án mẫu; (3) trên trang, câu ví dụ luôn có dấu hiệu "0" và đáp án mẫu hiện đúng chỗ (ô tick ✓, lựa chọn khoanh / gạch, chữ điền sẵn). Nếu chưa chọn đáp án mẫu thì cảnh báo nhẹ "Câu ví dụ chưa có đáp án mẫu".
+- **Cần hỏi:** ý (2) của người dùng hiểu như trên (đáp án mẫu chọn bằng thao tác trực tiếp, không bắt buộc gõ vào ô Đáp án) có đúng không?
+
 ## Việc mở khác (từ trước)
 - Chi tiết trang: tiêu đề phiếu / Họ tên Lớp Ngày / header footer (đã đặt câu hỏi, chưa chốt).
 - P3 PDF thật + MD AI tạo theo prompt v81; G2 bố cục riêng; G3 chia nhóm.
