@@ -3,7 +3,7 @@
 > File này là nguồn sự thật duy nhất cho WS Editor. Nó thay thế bản MASTER_SPEC v10 (quá nặng) và Claude Doc "Đặc tả Layout Task & Answer" (cũ hơn bản này).
 > Prototype chạy được: `ws-editor-prototype.html` (một file HTML, mở bằng trình duyệt). Dữ liệu mẫu: `ws-sample.json` (schema 0.2).
 > Khi bản prototype và file này lệch nhau, prototype là bản đúng hơn về hành vi; hãy báo để cập nhật file này.
-> **Cập nhật 26/10/2026:** prototype hiện là **v75** (v74 + bài đọc có chỗ trống, chọn, đánh dấu chữ, cắt theo đoạn, mục 17.6; v74 = G-Text kiểu Ảnh và khung chữ 4 kiểu, mục 17.5; v73 = G-Text kiểu Chữ, mục 17.4; v72 = cỡ chữ phiếu Nhỏ / Vừa / To, mục 16.12; kế hoạch ba năng lực còn thiếu ở mục 17). Trước đó (25/10/2026, lần 4): **v71** (v70 + nhãn lựa chọn thẳng dòng đầu và cách chữ 2 mm, mục 16.9c). v70 (v69 + Đúng/Sai mặc định 80/20, hướng A4 "Tự động" quyết theo cả Task, nút Xuất MD; mục 16.11). v69 = v68 + chọn font chữ phiếu (mục 16.10). v68 = (v67 + Task nhiều phần "Nối vào Task trên", MD `### Phần:`, nhãn A. B. C. giữ chữ hoa, câu duy nhất không đánh số; mục 16.9). v67 = v66 + sửa bộ đọc MD theo phiếu thật đầu tiên, A4 có nhãn ô tick (mục 16.8). v66 = v65 + font nhúng sẵn trong `fonts/` (mục 16.7). Thay đổi v37–v68 ghi chi tiết ở `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục cuối "BÀN GIAO"). Nhập file (P0–P2) tóm tắt ở **mục 16**; quy ước MD ở `claude/QUY_UOC_MD.md`.
+> **Cập nhật 26/10/2026:** prototype hiện là **v76** (v75 + điểm trên ảnh chung, mục 17.7; v75 = v74 + bài đọc có chỗ trống, chọn, đánh dấu chữ, cắt theo đoạn, mục 17.6; v74 = G-Text kiểu Ảnh và khung chữ 4 kiểu, mục 17.5; v73 = G-Text kiểu Chữ, mục 17.4; v72 = cỡ chữ phiếu Nhỏ / Vừa / To, mục 16.12; kế hoạch ba năng lực còn thiếu ở mục 17). Trước đó (25/10/2026, lần 4): **v71** (v70 + nhãn lựa chọn thẳng dòng đầu và cách chữ 2 mm, mục 16.9c). v70 (v69 + Đúng/Sai mặc định 80/20, hướng A4 "Tự động" quyết theo cả Task, nút Xuất MD; mục 16.11). v69 = v68 + chọn font chữ phiếu (mục 16.10). v68 = (v67 + Task nhiều phần "Nối vào Task trên", MD `### Phần:`, nhãn A. B. C. giữ chữ hoa, câu duy nhất không đánh số; mục 16.9). v67 = v66 + sửa bộ đọc MD theo phiếu thật đầu tiên, A4 có nhãn ô tick (mục 16.8). v66 = v65 + font nhúng sẵn trong `fonts/` (mục 16.7). Thay đổi v37–v68 ghi chi tiết ở `claude/WS_EDITOR_SPEC_v37_bo_sung.md` (mục cuối "BÀN GIAO"). Nhập file (P0–P2) tóm tắt ở **mục 16**; quy ước MD ở `claude/QUY_UOC_MD.md`.
 
 ---
 
@@ -498,6 +498,14 @@ P3 (thử 5–10 PDF thật qua đường chat, đo số Task đúng và chỗ p
 - **Cắt theo đoạn:** layout T1 / T6 (bài đọc không ảnh hoặc ảnh phía trên), chế độ Liền trang: các đơn vị cắt là từng đoạn rồi từng câu hỏi (không cắt giữa đoạn). Trang tiếp theo không lặp tiêu đề; khung từ và ảnh chung chỉ ở mảnh đầu. T8 vẫn: bài đọc + ảnh đi cùng, chỉ các câu sau cắt được; T2 / T3 / T4 chưa cắt.
 - **Chưa làm:** gợi ý trong chỗ trống như `(1) (be)`; khoanh / gạch chân do học sinh làm trên bài đọc (không cần cú pháp, học sinh tự vẽ); cắt theo đoạn cho T2 / T3 / T4; đáp án chỗ trống trong bảng đáp án cuối MD.
 - Test mới: `test23.py`.
+
+### 17.7 Điểm trên ảnh chung (v76, 26/10/2026) — kiểu A và C của hình mẫu
+- **Dữ liệu:** `image.marks = [{x, y}]` (% theo **tọa độ ảnh**, 0–100, tối đa 20 điểm) và `image.mk = {shape?:'square', label?:'none'}` (vắng = chấm tròn có số). Chỉ cho ảnh chung G1.
+- **Hiển thị:** chấm cỡ cố định 5,5 mm (ô trống 7,5 × 6 mm), viền đỏ `#c0392b`, nền trắng; điểm thứ n mang số n, ứng với câu n. Lớp `.mk` mô phỏng đúng vùng của ảnh (kể cả khi khung cắt ảnh theo kiểu cover, và khi Fit ngang / dọc, zoom, lệch tâm), nên điểm bám theo ảnh.
+- **Thao tác:** panel Ảnh → "Điểm trên ảnh" → **Đặt điểm** rồi bấm vào ảnh trên trang; kéo điểm để dời (mọi lúc, không cần bật chế độ đặt); chip "n ✕" xóa từng điểm; Xóa hết; chọn Hình (Tròn / Vuông) và Bên trong (Số / Ô trống).
+- **Cảnh báo (nhẹ):** số điểm khác số câu; ảnh đang Fit nên điểm có thể rơi ngoài khung.
+- **Chưa làm:** kiểu B (dây nối ra ô viết); điểm cho ảnh của từng câu / ô lưới; MD không mang điểm (dùng JSON).
+- Test mới: `test24.py`.
 
 ### 17.2 Ước lượng độ phủ (26/10/2026, phán đoán của Claude, không phải số đo)
 Trong danh sách 40 dạng bài tiếng Anh tự lập: 24 dạng (60%) đáp ứng trực tiếp, 9 (22%) làm được nhưng phải lách, 7 (18%) chưa hỗ trợ. Với bài cho học sinh 5–12 tuổi thực tế khoảng 90% trở lên. Phần thiếu dồn vào ba loại: điểm neo trên ảnh, tương tác trong văn bản liền mạch, lưới và sơ đồ tự do. Nên đối chiếu với các bộ sách đang dùng (Our World, Family and Friends, Global Success) để biết loại nào thực sự hay gặp.
