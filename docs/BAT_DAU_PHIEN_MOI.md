@@ -1,5 +1,7 @@
 # Bắt đầu phiên mới — WS Editor
 
+> **Đang thảo luận (27/10/2026): chuyển app sang React + Cloudflare.** Kế hoạch `docs/KE_HOACH_REACT.md` (chưa code; chờ duyệt TypeScript / Zustand / build một file). Trong lúc chuyển: đóng băng tính năng.
+
 Cập nhật 27/10/2026 (phiên 8). App: **v101** (điền từ vào đoạn văn bằng câu hỏi, ô câu nhiều dòng, T/F căn dọc; spec mục 33; báo cáo `docs/BAO_CAO_PHIEN_2026-10-27_phien10.md`). Trước đó **v100** (thử phiếu thật 7: nhãn `(a)`, `Số câu: a b c`, T/F cùng hàng, spec mục 32; báo cáo `docs/BAO_CAO_PHIEN_2026-10-27_phien9.md`). Trước đó **v99** (v95–v99 làm hết Kế hoạch v95+, spec mục 27–31; Ô chữ: `docs/TRAI_NGHIEM_O_CHU.md`). Trước đó v94 (popup "+ Task" chọn Q rồi T, spec mục 26; báo cáo `docs/BAO_CAO_PHIEN_2026-10-27_phien8.md`). Trước đó v93 (đáp án đúng ngay trong khung soạn cho mọi dạng Q, spec mục 24). Trước đó v86 (sửa theo `docs/DANH_SACH_VIEC_v85.md`: Fit ảnh thứ hai / ảnh khung từ, bỏ "Khối của bài", G3 có thanh B I U, khoảng cách mặc định Gọn…; trên nền v84 và kiến trúc trình bày v81). Bản v80 lưu ở nhánh `backup/v80`. Nguồn sự thật là **git repo này**, không dùng Claude Project hay artifact nữa.
 
 ## Mở phiên mới (Claude Code, gắn repo `khanhtoaninv/WS-Editor`, nhánh `main`)
