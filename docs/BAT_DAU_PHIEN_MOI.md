@@ -1,11 +1,11 @@
 # Bắt đầu phiên mới — WS Editor
 
-Cập nhật 26/10/2026 (phiên 7). App: **v93** (đáp án đúng ngay trong khung soạn cho mọi dạng Q, spec mục 24). Trước đó v86 (sửa theo `docs/DANH_SACH_VIEC_v85.md`: Fit ảnh thứ hai / ảnh khung từ, bỏ "Khối của bài", G3 có thanh B I U, khoảng cách mặc định Gọn…; trên nền v84 và kiến trúc trình bày v81). Bản v80 lưu ở nhánh `backup/v80`. Nguồn sự thật là **git repo này**, không dùng Claude Project hay artifact nữa.
+Cập nhật 27/10/2026 (phiên 8). App: **v94** (popup "+ Task" chọn Q rồi T, spec mục 26; báo cáo `docs/BAO_CAO_PHIEN_2026-10-27_phien8.md`). Trước đó v93 (đáp án đúng ngay trong khung soạn cho mọi dạng Q, spec mục 24). Trước đó v86 (sửa theo `docs/DANH_SACH_VIEC_v85.md`: Fit ảnh thứ hai / ảnh khung từ, bỏ "Khối của bài", G3 có thanh B I U, khoảng cách mặc định Gọn…; trên nền v84 và kiến trúc trình bày v81). Bản v80 lưu ở nhánh `backup/v80`. Nguồn sự thật là **git repo này**, không dùng Claude Project hay artifact nữa.
 
 ## Mở phiên mới (Claude Code, gắn repo `khanhtoaninv/WS-Editor`, nhánh `main`)
 CLAUDE.md ở gốc repo tự được nạp. Dán câu này làm tin nhắn đầu:
 
-> Đọc CLAUDE.md và mục 0 "BÀN GIAO" của docs/BAO_CAO_PHIEN_2026-10-26_phien7.md, rồi mục 18–24 của docs/WS_EDITOR_SPEC.md. Tóm tắt trạng thái ngắn gọn và hỏi tôi muốn tiếp tục việc nào. Chưa cần làm gì cả.
+> Đọc CLAUDE.md và mục 0 "BÀN GIAO" của docs/BAO_CAO_PHIEN_2026-10-27_phien8.md, rồi mục 18–26 của docs/WS_EDITOR_SPEC.md. Tóm tắt trạng thái ngắn gọn và hỏi tôi muốn tiếp tục việc nào. Chưa cần làm gì cả.
 
 ## Thứ tự đọc
 0. `docs/BAO_CAO_PHIEN_2026-10-26_phien7.md` mục 0 — bàn giao (trạng thái v92). `docs/BAO_CAO_PHIEN_2026-10-26_phien6.md` mục 0 — v86 + `docs/DANH_SACH_VIEC_v85.md`. Trước đó `docs/BAO_CAO_PHIEN_2026-10-26_phien5.md` (v82–v84, 4 câu hỏi còn chờ). `docs/VAN_DE_CAN_XU_LY.md` — lịch sử vấn đề V1–V10 (đã làm trong v83).

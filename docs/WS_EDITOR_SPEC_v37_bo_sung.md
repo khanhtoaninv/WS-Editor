@@ -313,7 +313,10 @@ Thu gọn theo thẻ + liên kết chọn khối, Nối Task / xóa có hỏi, G
 ## AD. v84 (2026-10-26) — xem WS_EDITOR_SPEC.md mục 21
 Ảnh chung ở mọi dạng, chọn đúng khối G3 / GT, căn lề Task kéo theo ảnh, cỡ chữ mặc định Vừa, hàng bảng 12 mm, nhãn a b c, khối tự do + Thêm / nhiều ảnh, độ rộng ảnh %, hội thoại cắt trang.
 
-## AB. BÀN GIAO (2026-10-26, bản v93) — đọc mục này đầu tiên khi mở thread mới
+## AB. BÀN GIAO (2026-10-27, bản v94) — đọc mục này đầu tiên khi mở thread mới
+- **Bản v94** (spec mục 26): popup "+ Task" làm lại: chọn Dạng câu hỏi (Q) rồi Bố cục (T), có xem trước lorem, chọn vị trí chèn. Báo cáo `docs/BAO_CAO_PHIEN_2026-10-27_phien8.md`.
+- **Gác lại (người dùng): G1 + G2 kiểu báo chí** (chữ bao quanh ảnh có sẵn ở Bố cục "Ảnh trong bài đọc"; kiểu mỗi hàng một ảnh + một ô chữ cần G2 thành danh sách đoạn có ảnh riêng, câu hỏi mở: xen kẽ trái / phải tự động hay chọn từng hàng). Hình ở nhánh `claude/project-thread-171y6n`.
+## AB-cũ. BÀN GIAO (2026-10-26, bản v93)
 - **Bản v93** (spec mục 25): MD mang `Chữ câu hỏi: đậm`, `Xáo vế phải: có`, `Khối ảnh: tên (n ảnh)`. Nền là v92 (mục dưới).
 - **Đang chờ người dùng chọn việc lớn tiếp theo** (đã hỏi, Claude đề xuất chi tiết trang): chi tiết trang (tiêu đề phiếu, Họ tên / Lớp / Ngày, header / footer) · bản đáp án giáo viên · G2 bố cục riêng. Cả ba là tính năng mới: vẽ phương án, chờ duyệt rồi mới code.
 - **Chờ người dùng:** PDF thật để làm P3; câu hỏi 1, 2, 4 của bàn giao v84 (câu 3 "Q3 có cần ô tick" đã giải quyết ở v87).

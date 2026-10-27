@@ -73,7 +73,7 @@ with sync_playwright() as p:
     chk('chọn khối Đáp án trên trang: Inspector đổi (v81: panel Câu hỏi / chỗ trả lời), Task vẫn mở', any(w in pn.inner_text('#insp') for w in ['Đáp án', 'Câu hỏi', 'chỗ trả lời']) and pn.eval_on_selector_all('#tree .tk.open','e=>e.length')==1)
     pn.keyboard.press('Escape'); pn.wait_for_timeout(100)
     pn.click('#tree [data-lib]'); pn.wait_for_timeout(300)
-    pn.click('#libGrid [data-r]:first-child'); pn.wait_for_timeout(500)
+    pn.click('#lnQ [data-lq=Q2]'); pn.click('#libAdd'); pn.wait_for_timeout(500)
     chk('+ Task: Task mới mở sẵn, ô nội dung được focus', pn.evaluate("window.__ws.ws.tasks.length")==19 and pn.evaluate("!!(document.activeElement && document.activeElement.dataset && document.activeElement.dataset.k)"))
     pn.click('#undo'); pn.wait_for_timeout(300)
     pn.click('#tree .tnode[data-sel=task][data-id=t17]'); pn.wait_for_timeout(300)
