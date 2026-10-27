@@ -36,8 +36,8 @@ with sync_playwright() as p:
     pg.click('#libClose')
     # + Task Tô màu / vẽ
     pg.click('#tree [data-lib]'); pg.wait_for_timeout(300)
-    chk('thư viện: 13 ô mẫu', pg.locator('#libGrid [data-r]').count()==13)
-    pg.click('#libGrid [data-r=colour-draw]'); pg.wait_for_timeout(400)
+    chk('popup + Task (v94): 13 thẻ dạng bài', pg.locator('#lnQ [data-lq]').count()==13)
+    pg.click('#lnQ [data-lq=IMG]'); pg.click('#libAdd'); pg.wait_for_timeout(400)
     nt = pg.evaluate("ws.tasks.find(t=>t.id===window.__ws.sel.id)")
     chk('+ Task Tô màu / vẽ: danh sách tắt, ảnh lớn', nt['content'].get('list') is False and nt['image']['size']=='large', nt)
     pg.click('#undo'); pg.wait_for_timeout(300)

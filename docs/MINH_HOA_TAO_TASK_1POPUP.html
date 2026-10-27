@@ -1,0 +1,77 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Minh họa tạo Task một popup</title>
+<style>
+body{font:14px/1.45 system-ui,sans-serif;margin:0;padding:20px;background:#f4f5f7;color:#222;width:1180px}
+h1{font-size:18px;margin:0 0 10px}
+.dlg{background:#fff;border:1.5px solid #cfd3da;border-radius:12px;box-shadow:0 4px 14px #0002;display:flex;height:640px;overflow:hidden}
+.left{width:640px;padding:14px;border-right:1px solid #e3e5e9;display:flex;flex-direction:column}
+.right{flex:1;background:#e9ebef;padding:14px;display:flex;flex-direction:column;align-items:center}
+h3{margin:0 0 6px;font-size:15px}
+.sec{font-size:12px;font-weight:700;color:#1a4fb4;margin:4px 0 5px}
+.grp{font-size:10px;font-weight:700;color:#777;text-transform:uppercase;margin:6px 0 3px;letter-spacing:.04em}
+.g{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.card{border:1px solid #cfd3da;border-radius:8px;padding:4px 7px;background:#fafbfc;font-size:11px;line-height:1.3}
+.card b{display:block;font-size:12px}.card span{color:#777}
+.card.sel{border:2px solid #1a4fb4;background:#eaf1ff}
+hr{border:0;border-top:1px dashed #bbb;margin:8px 0}
+.lay{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.lc{border:1px solid #cfd3da;border-radius:8px;padding:5px;background:#fafbfc;font-size:11px;text-align:center}
+.lc.sel{border:2px solid #1a4fb4;background:#eaf1ff}.lc.off{opacity:.4}
+.lc b{display:block;margin-top:3px}
+.pg{width:36px;height:46px;border:1px solid #999;background:#fff;border-radius:3px;margin:0 auto;position:relative}
+.pg i{position:absolute;background:#c9d4ea;border-radius:2px}.pg u{position:absolute;left:4px;right:4px;height:3px;background:#bbb}
+.chip{display:inline-block;border:1px solid #bbb;border-radius:12px;padding:1px 9px;margin:1px 3px 1px 0;background:#fff;font-size:11px}.chip.on{background:#d7f0df;border-color:#58a972}
+.note{font-size:11px;color:#b3261e}
+.foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#555;border-top:1px solid #e3e5e9;padding-top:8px}
+.btn{display:inline-block;background:#1a4fb4;color:#fff;border-radius:6px;padding:4px 16px;font-weight:600}.btn.g2{background:#fff;color:#333;border:1px solid #999}
+.pv{font-size:11px;font-weight:700;color:#555;margin-bottom:6px;align-self:flex-start}
+.a4{width:300px;background:#fff;box-shadow:0 2px 8px #0003;padding:16px 18px;font-size:8px;line-height:1.5;color:#333;border-radius:2px;height:400px;overflow:hidden}
+.ttl{display:flex;gap:6px;align-items:baseline;font-weight:700;font-size:10px}
+.ttl em{background:#1a4fb4;color:#fff;border-radius:50%;width:15px;height:15px;display:inline-block;text-align:center;line-height:15px;font-style:normal;font-size:9px}
+.ins{color:#777;font-style:italic;margin:2px 0 6px}
+.q{margin:5px 0}.opt{display:flex;gap:10px;margin-left:12px;color:#555}
+.ph{background:#dfe4ee;border-radius:4px;color:#8a93a6;text-align:center;font-size:8px}
+.lor{color:#999}
+.tabs{display:flex;gap:4px;margin-top:8px;font-size:10px;color:#555;align-items:center}
+.tabs span{border:1px solid #bbb;border-radius:10px;padding:0 8px;background:#fff}
+.cap{font-size:11px;color:#555;margin-top:6px;text-align:center;width:300px}
+</style></head><body>
+<h1>Thêm Task: một popup, chọn bên trái, xem trước bên phải</h1>
+<div class="dlg">
+<div class="left">
+<h3>Thêm Task <span style="float:right;font-weight:400">✕</span></h3>
+<div class="sec">① Dạng câu hỏi</div>
+<div class="grp">Viết</div><div class="g">
+<div class="card"><b>Q1 Điền từ</b><span>chỗ trống, hội thoại</span></div><div class="card"><b>Q2 Viết câu</b><span>trả lời câu hỏi</span></div><div class="card"><b>Q12 Viết tự do</b><span>khung / dòng kẻ</span></div><div class="card"><b>Q9 Tô chữ</b><span>luyện viết</span></div></div>
+<div class="grp">Chọn</div><div class="g">
+<div class="card sel"><b>Q3 Chọn A/B/C</b><span>vài lựa chọn</span></div><div class="card"><b>Q4 Trong câu</b><span>khoanh, gạch chân</span></div><div class="card"><b>Q5 Đúng/Sai</b><span>cột T/F, ô tick</span></div><div class="card"><b>Q7 Chọn ảnh</b><span>tick ảnh đúng</span></div></div>
+<div class="grp">Ghép · Ảnh · Bảng</div><div class="g">
+<div class="card"><b>Q8 Nối</b><span>vế trái–phải</span></div><div class="card"><b>Q6 Nhìn ảnh viết</b><span>một ảnh mỗi câu</span></div><div class="card"><b>Q10 Bảng</b><span>ô chữ, ô trống</span></div><div class="card"><b>Q11 Ô chữ / lưới</b><span></span></div></div>
+<hr>
+<div class="sec">② Bố cục <span style="font-weight:400;color:#777">· hợp với Q3</span></div>
+<div class="lay">
+<div class="lc sel"><div class="pg"><u style="top:6px"></u><u style="top:14px"></u><u style="top:22px"></u><u style="top:30px"></u></div><b>Tự động</b></div>
+<div class="lc"><div class="pg"><i style="left:4px;right:4px;top:4px;height:12px"></i><u style="top:22px"></u><u style="top:30px"></u></div><b>Xếp dọc</b></div>
+<div class="lc off"><div class="pg"><i style="left:3px;width:13px;top:4px;height:26px"></i><u style="top:6px;left:19px"></u><u style="top:14px;left:19px"></u></div><b>Ảnh trái</b></div>
+<div class="lc off"><div class="pg"><i style="right:3px;width:13px;top:4px;height:26px"></i><u style="top:6px;right:19px"></u><u style="top:14px;right:19px"></u></div><b>Ảnh phải</b></div>
+<div class="lc off"><div class="pg"><u style="top:5px"></u><i style="right:3px;width:13px;top:10px;height:12px"></i><u style="top:12px;right:19px"></u><u style="top:20px;right:19px"></u></div><b>Ảnh trong bài đọc</b></div>
+</div>
+<div style="margin-top:6px"><span class="chip">+ Ảnh chung</span><span class="chip">+ Bài đọc</span><span class="chip">+ Khung từ</span> <span class="note">mờ = cần tick khối tương ứng</span></div>
+<div class="foot"><span>Vị trí: <span class="chip">Cuối phiếu</span><span class="chip on">Sau Task 3</span></span><span><span class="btn g2">Hủy</span> <span class="btn">Thêm Task</span></span></div>
+</div>
+
+<div class="right">
+<div class="pv">Xem trước (chữ mẫu lorem, đổi ngay khi bấm chọn)</div>
+<div class="a4">
+<div class="ttl"><em>4</em> Choose the correct answer.</div>
+<div class="ins">Circle A, B or C.</div>
+<div class="q"><b>1.</b> <span class="lor">Lorem ipsum dolor sit amet, consectetur?</span><div class="opt"><span>A. lorem</span><span>B. ipsum</span><span>C. dolor</span></div></div>
+<div class="q"><b>2.</b> <span class="lor">Sed do eiusmod tempor incididunt ut labore?</span><div class="opt"><span>A. lorem</span><span>B. ipsum</span><span>C. dolor</span></div></div>
+<div class="q"><b>3.</b> <span class="lor">Ut enim ad minim veniam, quis nostrud?</span><div class="opt"><span>A. lorem</span><span>B. ipsum</span><span>C. dolor</span></div></div>
+<div class="q"><b>4.</b> <span class="lor">Duis aute irure dolor in reprehenderit?</span><div class="opt"><span>A. lorem</span><span>B. ipsum</span><span>C. dolor</span></div></div>
+<div class="q"><b>5.</b> <span class="lor">Excepteur sint occaecat cupidatat?</span><div class="opt"><span>A. lorem</span><span>B. ipsum</span><span>C. dolor</span></div></div>
+</div>
+<div class="tabs">Xem thử: <span style="background:#1a4fb4;color:#fff">Trang A4</span><span>Chỉ Task này, 2 cột</span></div>
+<div class="cap">Q3 · Tự động → máy chọn Xếp dọc, 1 cột. Đổi Bố cục thì preview đổi ngay. Chưa có ảnh nên "Ảnh trái / phải" mờ.</div>
+</div>
+</div>
+</body></html>

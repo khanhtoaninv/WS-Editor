@@ -21,15 +21,15 @@ with sync_playwright() as p:
     # 2) + Task: hai thẻ, mặc định Mẫu có sẵn
     pg.click('#tree [data-lib]'); pg.wait_for_timeout(300)
     tabs = pg.eval_on_selector_all('#imTabs [data-tab]','e=>e.map(x=>x.innerText+":"+x.classList.contains("on"))')
-    chk('+ Task: hai thẻ Mẫu có sẵn | Từ file / dán, mở ở Mẫu có sẵn', tabs==['Mẫu có sẵn:true','Từ file / dán:false'] and pg.is_visible('#libGrid') and not pg.is_visible('#pasteTa'), tabs)
+    chk('+ Task: hai thẻ Chọn dạng bài | Từ file / dán, mở ở Chọn dạng bài', tabs==['Chọn dạng bài:true','Từ file / dán:false'] and pg.is_visible('#lnQ') and not pg.is_visible('#pasteTa'), tabs)
     pg.click('#libDlg [data-tab=src]'); pg.wait_for_timeout(200)
-    chk('bấm thẻ Từ file / dán: hiện chọn file + ô dán, ẩn thư viện', pg.is_visible('#pasteTa') and pg.is_visible('#impPick') and not pg.is_visible('#libGrid'))
+    chk('bấm thẻ Từ file / dán: hiện chọn file + ô dán, ẩn thư viện', pg.is_visible('#pasteTa') and pg.is_visible('#impPick') and not pg.is_visible('#lnQ'))
     chk('ô trống: nút thêm tắt', pg.is_disabled('#pasteOk'))
     pg.click('#libDlg [data-tab=lib]'); pg.wait_for_timeout(200)
     # 3) mẫu có sẵn: luôn thêm vào CUỐI, dù đang chọn Task giữa phiếu
     pg.click('#libClose'); pg.click('#tree .tnode[data-sel=task][data-id=t3]'); pg.wait_for_timeout(200)
-    i0 = ids(); pg.click('#tree [data-lib]'); pg.wait_for_timeout(300); pg.click('#libGrid [data-r=answer-q]'); pg.wait_for_timeout(500)
-    i1 = ids(); chk('mẫu có sẵn: thêm vào cuối phiếu (không chèn sau Task đang chọn)', i1[:-1]==i0 and len(i1)==len(i0)+1, i1[-3:])
+    i0 = ids(); pg.click('#tree [data-lib]'); pg.wait_for_timeout(300); pg.click('#lnQ [data-lq=Q2]'); pg.click('#libAdd'); pg.wait_for_timeout(500)
+    i1 = ids(); chk('chọn dạng bài: mặc định thêm vào cuối phiếu (không chèn sau Task đang chọn)', i1[:-1]==i0 and len(i1)==len(i0)+1, i1[-3:])
     chk('toast: vào cuối phiếu', 'cuối phiếu' in pg.inner_text('#toast'), pg.inner_text('#toast'))
     pg.click('#undo'); pg.wait_for_timeout(300)
     # 4) chọn file JSON có 1 Task: chèn luôn
@@ -114,7 +114,7 @@ with sync_playwright() as p:
     chk('phiếu hiện tại trống: không cần xác nhận', len(ids())==3 and not pg.evaluate("document.getElementById('libDlg').open"))
     # 12) + Task vào phiếu trống
     pg.click('#tree [data-newsheet]'); pg.wait_for_timeout(300); pg.click('#pasteOk'); pg.click('#pasteOk'); pg.wait_for_timeout(500)
-    pg.click('#tree [data-lib]'); pg.wait_for_timeout(300); pg.click('#libGrid [data-r=trace]'); pg.wait_for_timeout(500)
+    pg.click('#tree [data-lib]'); pg.wait_for_timeout(300); pg.click('#lnQ [data-lq=Q9]'); pg.click('#libAdd'); pg.wait_for_timeout(500)
     chk('phiếu trống + mẫu có sẵn: 1 Task', len(ids())==1 and pg.inner_text('#diagBadge')=='Không lỗi tràn')
     # 13) Nâng cao → Nạp phiếu khác mở hộp + Phiếu
     pg.click('#tree .tnode[data-sel=sheet]'); pg.wait_for_timeout(200); pg.click('#insp details.adv summary'); pg.click('#insp [data-act=import]'); pg.wait_for_timeout(300)

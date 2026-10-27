@@ -713,3 +713,11 @@ Nguồn: góp ý người dùng sau v86; đề xuất `docs/DE_XUAT_CHON_DAP_AN_
 - `Khối ảnh: <tên> (3 ảnh)` ↔ khối ảnh tự do nhiều ảnh cạnh nhau `x.n` (2–4).
 - `qmem` (nhớ dạng câu hỏi) vẫn chỉ lưu trong JSON, chờ người dùng trả lời câu hỏi 2 của bàn giao v84.
 - Kiểm thử: `tests/test36.py` mục v93 (xuất MD rồi đọc lại).
+
+## 26. Popup "+ Task": chọn Dạng câu hỏi rồi Bố cục, có xem trước (v94, 27/10/2026)
+- Người dùng: tạo Task mới thì giáo viên nghĩ **dạng bài trước, bố cục sau**; một popup, nửa trên chọn Q, nửa dưới chọn T, bên phải xem trước kiểu lorem.
+- Hộp `libDlg`, tab đầu đổi tên **"Chọn dạng bài"** (tab "Từ file / dán" không đổi). Trái: ① **Dạng câu hỏi** (13 thẻ: Q1, Q2, Q12, Q9 / Q3, Q4, Q5, Q7 / Q8, Q6, Q10, Q11 + "Chỉ có ảnh" = tô màu / vẽ, nhóm Viết / Chọn / Ghép · Ảnh · Bảng) → ② **Bố cục** (Tự động, Xếp dọc, Ảnh trái, Ảnh phải, Ảnh trong bài đọc; ô không hợp bị mờ, bấm ra toast kèm lý do từ `tnReasons`) → **Kèm theo** (chip Ảnh chung, Bài đọc, Khung từ; Bài đọc chỉ đi với Q1, Q2, Q3, Q5, theo `qReasons`) → **Vị trí** (mặc định **Cuối phiếu**, giữ quy tắc cũ; "Sau Task đang chọn" chọn được, dùng `insertTask`). Phải: xem trước một Task thật (`renderTask`) cùng cấu hình, chữ lorem (`lnLorem`, chỉ trên bản xem trước), kèm dòng "Tự động → <bố cục máy chọn>". Nút **Thêm Task** (`#libAdd`) ở chân hộp.
+- Dữ liệu: mỗi Q ứng với một công thức `RECIPES` (bảng `LN_REC`; Q11 và Q12 qua `setQ`), rồi `blkAdd` cho khối kèm theo, rồi `tnTarget` cho bố cục. `lnBuild` dựng Task; chọn đổi làm bố cục không hợp thì tự về Tự động. **RECIPES giữ nguyên** (còn dùng cho `recipeMatch`, `applyRecipe`, mô tả Task); popup không còn lưới 13 công thức, `renderLibGrid` và `#libGrid` bỏ.
+- Chưa làm: xem thử 2 cột / cả trang A4; nhớ lựa chọn lần trước; "Hội thoại" (Q1 có người nói) và "Đọc và trả lời" nay là Q1 / Q2 / Q3 / Q5 + chip Bài đọc, hội thoại bật ở khối Câu hỏi sau khi thêm.
+- Kiểm thử: `tests/test37.py` (13 Q × khối × bố cục dựng được xem trước; mờ / khóa; thêm đúng Q, T, vị trí; hoàn tác; hai tab). Đổi test2, test9, test10, test13 theo giao diện mới. Đính chính: class `.lnT` trùng `.lnt` vì trang chạy chế độ quirks (CSS không phân biệt hoa thường); container đặt tên khác.
+

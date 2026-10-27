@@ -146,6 +146,30 @@ select{border:1px solid var(--line);background:var(--panel);border-radius:6px;pa
 .imtabs{margin:8px 0 4px}.imsrc{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0 6px}
 .imrow.bad{border-color:var(--danger)}.diag.info{background:var(--accent-soft);color:var(--fg)}.diag.warn{background:#fff3d6;color:#6b4700}.imconf .fixes{margin-top:8px}
 #libDlg{max-height:92vh}
+/* v94: popup + Task: chọn Q (trên), T (dưới), xem trước (phải) */
+#libDlg[data-tab="lib"]{width:min(96vw,1060px)}
+.lnw{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:14px;margin-top:6px}
+.lnsec{font-size:12.5px;font-weight:700;color:var(--accent);margin:8px 0 4px;display:flex;align-items:center;gap:6px}
+.lnn{display:inline-grid;place-items:center;width:17px;height:17px;border:1.5px solid var(--accent);border-radius:50%;font-size:10.5px}
+.lnqg{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:6px 0 3px}
+.lnqc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.lnq,.lnt{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:4px 7px;text-align:left;color:var(--fg);line-height:1.3}
+.lnq{display:block}.lnq b{display:block;font-size:12px}.lnq span{display:block;font-size:10.5px;color:var(--muted)}
+.lnq:hover,.lnt:hover{border-color:var(--accent)}
+.lnq.on,.lnt.on{border:2px solid var(--accent);background:var(--accent-soft);padding:3px 6px}
+.lntrow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+.lnt{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:1px;text-align:center;font-size:11.5px;padding:5px 3px}.lnt b{font-weight:600;font-size:11px;line-height:1.2}.lnt svg{width:34px;height:28px;color:var(--muted);display:block;margin:0 auto 2px}
+.lnt .i1{fill:var(--g1);fill-opacity:.35;stroke:var(--g1)}.lnt .i3{fill:var(--g3);fill-opacity:.3;stroke:var(--g3)}
+.lnt.off{opacity:.42}.lnt .au{display:block;font-size:20px;line-height:28px;color:var(--muted)}
+.lnbrow{margin-top:6px;display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.lnbrow .chip{border:1px solid var(--line);border-radius:12px;padding:1px 10px;font-size:11.5px;background:var(--panel);color:var(--fg)}.lnbrow .chip.on{background:#d7f0df;border-color:#58a972}.lnbrow .chip:disabled{opacity:.4}
+.lnr{background:var(--bg);border-radius:8px;padding:8px;display:flex;flex-direction:column;align-items:center;min-width:0}
+.lnpvh{font-size:11px;font-weight:700;color:var(--muted);align-self:flex-start;margin-bottom:4px}
+.lnpv{width:calc(210mm * .42);height:calc(190mm * .42);position:relative;overflow:hidden;background:var(--paper);box-shadow:0 1px 3px rgba(20,30,40,.2);--s:.42;pointer-events:none}
+.lnpg{width:210mm;height:297mm;background:var(--paper);position:absolute;left:0;top:0;transform:scale(var(--s));transform-origin:0 0}
+#lnCap{margin:6px 0 0;text-align:center}
+.lnf{display:flex;align-items:center;gap:8px;margin-top:8px;border-top:1px solid var(--line);padding-top:8px}
+
 .pmode{margin:6px 0}
 .pout{max-height:42vh;overflow:auto;margin-top:8px}
 .prv{border:1px solid var(--line);border-radius:8px;padding:8px;margin:6px 0}
@@ -839,7 +863,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 
 <div class="app">
   <header class="top">
-    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v93</span> <small id="wsTitle"></small></div>
+    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v94</span> <small id="wsTitle"></small></div>
     <div class="tb">
       <label for="age" class="hint" style="margin:0">Độ tuổi</label>
       <select id="age"><option value="5-6">5–6</option><option value="7-9">7–9</option><option value="10-12">10–12</option></select>
@@ -868,15 +892,17 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 </div>
 <input type="file" id="upfile" accept="image/*" hidden>
 <dialog id="cfmDlg" aria-labelledby="cfmTitle"><h3 id="cfmTitle" style="margin:4px 0"></h3><p class="hint" id="cfmMsg" style="margin:6px 0 0"></p><div class="row"><button class="btn" id="cfmNo">Hủy</button><button class="btn dngb" id="cfmYes">Xóa</button></div></dialog>
-<dialog id="libDlg" aria-labelledby="libTitle"><h3 id="libTitle" style="margin:4px 0">Thêm Task: mẫu có sẵn hoặc từ file / dán</h3>
-<div class="seg imtabs" id="imTabs" role="tablist"><button data-tab="lib" role="tab">Mẫu có sẵn</button><button data-tab="src" role="tab">Từ file / dán</button></div>
-<div id="libPane"><p class="hint" style="margin:6px 0 0">Mẫu chỉ là điểm bắt đầu. Sau khi thêm, bật / tắt thành phần ở mục 4 và đổi đáp án tùy ý. Task mới thêm vào cuối phiếu.</p><div id="libGrid"></div></div>
+<dialog id="libDlg" aria-labelledby="libTitle"><h3 id="libTitle" style="margin:4px 0">Thêm Task: chọn dạng bài hoặc từ file / dán</h3>
+<div class="seg imtabs" id="imTabs" role="tablist"><button data-tab="lib" role="tab">Chọn dạng bài</button><button data-tab="src" role="tab">Từ file / dán</button></div>
+<div id="libPane"><div class="lnw"><div class="lnl"><div class="lnsec"><span class="lnn">1</span> Dạng câu hỏi</div><div id="lnQ"></div><div class="lnsec"><span class="lnn">2</span> Bố cục <span class="hint" id="lnTh"></span></div><div id="lnT" class="lntrow"></div><div id="lnB" class="lnbrow"></div></div>
+<div class="lnr"><div class="lnpvh">Xem trước · chữ mẫu lorem</div><div id="lnPv" class="lnpv"></div><p class="hint" id="lnCap"></p></div></div>
+<div class="lnf"><span class="hint">Vị trí:</span><span class="seg" id="lnPos"></span></div></div>
 <div id="srcPane" hidden><div id="srcIn"><div class="imsrc"><button class="btn" id="impPick">Chọn file…</button><span class="hint" id="impName"></span><span class="hint">JSON (nguồn chính) · MD theo quy ước · TXT</span></div>
 <input type="file" id="impFile" accept=".json,.md,.markdown,.txt,.pdf,application/json,text/markdown,text/plain" hidden>
 <textarea id="pasteTa" placeholder="…hoặc dán JSON, MD theo quy ước, hay chữ của bài vào đây" aria-label="Nội dung cần nhập"></textarea>
 <div class="pmode seg" hidden><button data-pm="task">Một Task</button><button data-pm="test">Cả đề</button></div></div>
 <div id="pasteOut" class="pout"></div></div>
-<div class="row"><button class="btn" id="libClose">Đóng</button><button class="btn pri" id="pasteOk" hidden disabled>Thêm vào cuối phiếu</button></div></dialog>
+<div class="row"><button class="btn" id="libClose">Đóng</button><button class="btn pri" id="libAdd">Thêm Task</button><button class="btn pri" id="pasteOk" hidden disabled>Thêm vào cuối phiếu</button></div></dialog>
 <dialog id="pasteDlg" aria-labelledby="pasteTitle"><h3 id="pasteTitle" style="margin:4px 0">Dán nhiều dòng vào Task đang soạn</h3><textarea id="itemsTa" placeholder="Mỗi dòng một câu" aria-label="Các dòng cần thêm"></textarea><div id="itemsOut" class="pout"></div><div class="row"><button class="btn" id="itemsCancel">Hủy</button><button class="btn pri" id="itemsOk" disabled>Thêm</button></div></dialog>
 <dialog id="genDlg" aria-labelledby="genTitle"><div class="gen">
   <div class="genh"><h3 id="genTitle">Ảnh</h3><button class="btn ghost" id="genClose" aria-label="Đóng">✕</button></div>
@@ -6094,17 +6120,18 @@ function openImport(mode, tab, text) {
   impMode = mode === 'sheet' ? 'sheet' : 'task'; impTab = impMode === 'sheet' ? 'src' : (tab || 'lib');
   impJ = null; impConfirm = false; impFile = ''; pasteMode = 'task'; pasteManual = false;
   d.dataset.mode = impMode;
-  d.querySelector('#libTitle').textContent = impMode === 'sheet' ? 'Phiếu mới: từ file hoặc dán' : 'Thêm Task: mẫu có sẵn hoặc từ file / dán';
+  d.querySelector('#libTitle').textContent = impMode === 'sheet' ? 'Phiếu mới: từ file hoặc dán' : 'Thêm Task: chọn dạng bài hoặc từ file / dán';
   d.querySelector('#imTabs').hidden = impMode === 'sheet';
   d.querySelector('#pasteTa').value = text || ''; d.querySelector('#impName').textContent = ''; d.querySelector('#impFile').value = '';
-  renderLibGrid(); impShowTab();
+  lnReset(); impShowTab();
   if (!d.open) d.showModal();
-  if (impTab === 'src') { impAnalyze(); d.querySelector('#pasteTa').focus(); } else { const b = d.querySelector('#libGrid button'); if (b) b.focus(); }
+  if (impTab === 'src') { impAnalyze(); d.querySelector('#pasteTa').focus(); } else { const b = d.querySelector('#lnQ .lnq.on'); if (b) b.focus(); }
 }
 function impShowTab() {
   const d = impDlg(), src = impTab === 'src';
   d.querySelectorAll('#imTabs [data-tab]').forEach(b => { const on = b.dataset.tab === impTab; b.classList.toggle('on', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); });
-  d.querySelector('#libPane').hidden = src; d.querySelector('#srcPane').hidden = !src; d.querySelector('#pasteOk').hidden = !src;
+  d.dataset.tab = impTab; d.querySelector('#libPane').hidden = src; d.querySelector('#srcPane').hidden = !src; d.querySelector('#pasteOk').hidden = !src; d.querySelector('#libAdd').hidden = src;
+  if (!src) lnRender();
   if (src) impAnalyze();
 }
 // Đọc ô nhập thành một lô Task: { src, kind, sheet, sheetNotes, tasks:[{t, notes, err, conf, raw, force, rid, skip}], err }
@@ -6753,19 +6780,81 @@ function imgCtl(t, key) {
 }
 
 /* ---- Thư viện mẫu có sẵn (thẻ 1 của "+ Task") ---- */
-function renderLibGrid() {
-  const g = document.getElementById('libGrid');
-  g.innerHTML = libGroups().map(([gn, rs]) => `<section class="libgrp"><h4>${esc(gn)}</h4><div class="libg">${rs.map(r => `<button class="libt" data-r="${r.id}">${layIcon(r.icon)}<b>${esc(r.name)}</b><span>${esc(r.desc)}</span></button>`).join('')}</div></section>`).join('');
+/* v94: chọn Dạng câu hỏi (Q) rồi Bố cục (T), xem trước bằng chữ lorem. Mỗi Q dựa trên một công thức (RECIPES) rồi setQ / blkAdd / tn. */
+const LN_REC = { Q1: 'gap-fill', Q2: 'answer-q', Q3: 'choose-abc', Q4: 'choose-inline', Q5: 'true-false', Q6: 'look-write', Q7: 'listen-tick', Q8: 'match', Q9: 'trace', Q10: 'table', Q11: 'table', Q12: 'answer-q', IMG: 'colour-draw' };
+const LN_GROUPS = [['Viết', ['Q1', 'Q2', 'Q12', 'Q9']], ['Chọn', ['Q3', 'Q4', 'Q5', 'Q7']], ['Ghép · Ảnh · Bảng', ['Q8', 'Q6', 'Q10', 'Q11', 'IMG']]];
+const lnName = q => q === 'IMG' ? 'Chỉ có ảnh' : q === 'Q11' ? 'Ô chữ / lưới' : QN[q];
+const LN_HINT = { Q1: 'chỗ trống ___, hội thoại', Q2: 'trả lời câu hỏi', Q3: 'vài lựa chọn A B C', Q4: 'khoanh, gạch chân, tìm lỗi', Q5: 'cột T/F hoặc ô tick', Q6: 'một ảnh mỗi câu', Q7: 'tick ảnh đúng', Q8: 'nối vế trái, vế phải', Q9: 'luyện viết', Q10: 'ô chữ, ô trống', Q11: 'giải đố, tìm từ', Q12: 'dòng kẻ hoặc khung vẽ', IMG: 'tô màu / vẽ' };
+const LN_TS = [['auto', 'Tự động'], ['T1', 'Xếp dọc'], ['T2', 'Ảnh trái'], ['T3', 'Ảnh phải'], ['T4', 'Ảnh trong bài đọc']];
+const LN_BLK = [['G1', 'Ảnh chung'], ['G2', 'Bài đọc'], ['G4', 'Khung từ']];
+const LN_LOREM = ['Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 'Sed do eiusmod tempor incididunt ut labore et dolore.', 'Ut enim ad minim veniam, quis nostrud exercitation.', 'Duis aute irure dolor in reprehenderit in voluptate.', 'Excepteur sint occaecat cupidatat non proident.'];
+let ln = { q: 'Q3', T: 'auto', G1: false, G2: false, G4: false, pos: 'end' };
+function lnReset() { ln = { q: 'Q3', T: 'auto', G1: false, G2: false, G4: false, pos: 'end' }; }   // mặc định cuối phiếu (giữ quy tắc cũ: nhập / thêm Task không chen vào giữa); "Sau Task đang chọn" là lựa chọn
+// Khối không dùng được với dạng này: trả lý do ('' = được)
+function lnBlkWhy(g) {
+  if (ln.q === 'IMG') return g === 'G1' ? 'Dạng này luôn có ảnh' : 'Dạng này chỉ có ảnh';
+  if (g === 'G2' && !['Q1', 'Q2', 'Q3', 'Q5'].includes(ln.q)) return 'Bài đọc đi với Điền từ, Viết câu, Chọn A/B/C, Đúng / Sai';
+  return '';
 }
-function openLib() { openImport('task', 'lib'); }
-document.getElementById('libGrid').addEventListener('click', e => {
-  const b = e.target.closest('[data-r]'); if (!b) return; const r = recipeById(b.dataset.r); let nid;
+// Dựng Task theo lựa chọn hiện tại (w = bản phiếu để lấy mã số; Task chưa được thêm vào đâu)
+function lnBuild(w) {
+  const t = newTaskFrom(recipeById(LN_REC[ln.q]), w);
+  if (ln.q === 'Q11' || ln.q === 'Q12') setQ(t, ln.q);
+  ['G1', 'G2', 'G4'].forEach(g => { if (ln[g] && !lnBlkWhy(g) && blkAddable(t).includes(g)) blkAdd(t, g); });
+  const rs = tnReasons(t); if (ln.T !== 'auto' && rs[ln.T]) ln.T = 'auto';
+  if (ln.T !== 'auto') { const L = tnTarget(t, ln.T); t.layout.task = L; if (layoutReasons(t)[L]) t.layout.task = 'auto'; }
+  tidy(t); return t;
+}
+// Chữ mẫu cho xem trước (chỉ chạy trên bản xem trước, không đụng Task thật)
+function lnLorem(t) {
+  let n = 0; const L = () => LN_LOREM[n++ % LN_LOREM.length], c = t.content, blank = x => !String(x || '').replace(/[?\s]/g, '');
+  if (c.lead && c.lead.kind === 'passage' && blank(c.lead.text)) c.lead.text = LN_LOREM.slice(0, 3).join(' ') + '\n\n' + LN_LOREM.slice(3).join(' ');
+  if (c.form === 'table') { if (blank(c.cols[0]) && blank(c.cols[1]) && !(t.layout.table && t.layout.table.cross)) { c.cols = ['Lorem', 'Ipsum']; c.rows.forEach((r, i) => { r.head = ['dolor', 'sit', 'amet'][i % 3]; }); } }
+  its(t).forEach(x => {
+    if (x.pair) { if (x.pair.l && !x.pair.l.img && blank(x.pair.l.text)) x.pair.l.text = 'lorem'; if (x.pair.r && blank(x.pair.r.text)) x.pair.r.text = 'ipsum'; return; }
+    if (c.form === 'table' || x.img || x.imgs) { if (x.opts) x.opts = x.opts.map((o, i) => o || ['lorem', 'ipsum', 'dolor'][i]); return; }
+    if (blank(x.text) && t.answer.layout !== 'A8') x.text = L(); if (x.opts) x.opts = x.opts.map((o, i) => o || ['lorem', 'ipsum', 'dolor'][i]);
+  });
+  if (ck(t) === 'trace') its(t).forEach((x, i) => { if (blank(x.text)) x.text = ['lorem', 'ipsum', 'dolor'][i % 3]; });
+  if (t.wordBank && t.wordBank.kind !== 'image' && !t.wordBank.words.length) t.wordBank.words = ['lorem', 'ipsum', 'dolor', 'amet'];
+}
+function lnRender() {
+  const d = impDlg(); if (!d.querySelector('#lnQ')) return;
+  d.querySelector('#lnQ').innerHTML = LN_GROUPS.map(([g, qs]) => `<div class="lnqg">${g}</div><div class="lnqc">${qs.map(q => `<button type="button" class="lnq ${ln.q === q ? 'on' : ''}" data-lq="${q}" title="${esc(q === 'IMG' ? 'Một ảnh lớn, không có câu hỏi; thêm câu sau nếu cần' : QHINT[q])}"><b>${q === 'IMG' ? '' : q + ' '}${esc(lnName(q))}</b><span>${esc(LN_HINT[q])}</span></button>`).join('')}</div>`).join('');
+  // khối đi kèm trước, vì Bố cục phụ thuộc vào ảnh / bài đọc
+  const forceImg = ln.q === 'IMG';
+  d.querySelector('#lnB').innerHTML = '<span class="hint">Kèm theo:</span>' + LN_BLK.map(([g, n]) => { const why = lnBlkWhy(g), on = forceImg && g === 'G1' ? true : ln[g] && !why; return `<button type="button" class="chip ${on ? 'on' : ''}" data-lb="${g}" ${why ? `disabled title="${esc(why)}"` : ''}>${on ? '✓ ' : '+ '}${n}</button>`; }).join('');
+  const t = lnBuild(ws), rs = tnReasons(t);
+  d.querySelector('#lnT').innerHTML = LN_TS.map(([v, n]) => { const why = v === 'auto' ? '' : rs[v]; return `<button type="button" class="lnt ${ln.T === v ? 'on' : ''} ${why ? 'off' : ''}" data-lt="${v}" ${why ? `data-why="${esc(why)}"` : ''} title="${esc(why || (v === 'auto' ? 'Máy chọn kiểu hợp nhất' : TN_HINT[v]))}" aria-disabled="${why ? 'true' : 'false'}">${v === 'auto' ? '<span class="au">✦</span>' : layIcon(v === 'T4' ? 'T8' : v)}<b>${n}</b></button>`; }).join('');
+  d.querySelector('#lnTh').textContent = `· hợp với ${q0name()}`;
+  d.querySelector('#lnPos').innerHTML = [['end', 'Cuối phiếu'], ['after', 'Sau Task đang chọn']].map(([v, n]) => { const off = v === 'after' && !(sel.type !== 'sheet' && ws.tasks.some(x => x.id === sel.id)); return `<button type="button" data-lp="${v}" class="${ln.pos === v ? 'on' : ''}" ${off ? 'disabled' : ''}>${n}</button>`; }).join('');
+  // xem trước: Task cùng cấu hình, chữ lorem, số thứ tự như khi thêm
+  const p = lnBuild(ws); lnLorem(p); p.id = 'tpv'; p.number = ws.tasks.length + 1; tidy(p);
+  const pv = d.querySelector('#lnPv'); let html = '';
+  try { html = renderTask(p, null, 0); } catch (e) { html = `<p class="hint">Không dựng được bản xem trước: ${esc(e.message)}</p>`; }
+  pv.innerHTML = `<div class="lnpg"><div class="flow">${html}</div></div>`;   // không dùng class "page": mã khác tìm .page .task trong cả tài liệu
+  d.querySelector('#lnCap').textContent = `${q0name()} · ${ln.T === 'auto' ? 'Tự động → ' + TN[tnOf(p)] : TN[ln.T]}. Chữ mẫu chỉ để xem, Task thật dùng câu mẫu để bạn sửa.`;
+}
+const q0name = () => ln.q === 'IMG' ? 'Chỉ có ảnh' : `${ln.q} ${lnName(ln.q)}`;
+function lnAdd() {
+  let nid, nm = q0name();
   impDlg().close();
-  commit(w => { const t = newTaskFrom(r, w); nid = t.id; w.tasks.push(t); }, `Đã thêm Task “${r.name}” vào cuối phiếu`);
+  commit(w => { const t = lnBuild(w); nid = t.id; if (ln.pos === 'after') insertTask(t, w); else w.tasks.push(t); }, `Đã thêm Task “${nm}” ${ln.pos === 'after' ? 'sau Task đang chọn' : 'vào cuối phiếu'}`);
   sel = { type: 'task', id: nid }; multi = []; sectReset(nid); refreshSel();
   const tk = stage.querySelector(`.task[data-task="${nid}"]`); if (tk) tk.scrollIntoView({ block: 'center' });
   const first = document.querySelector('#tree .ed .eitems [data-k], #tree .ed .etbl [data-k]'); if (first) first.focus();
+}
+function openLib() { openImport('task', 'lib'); }
+document.getElementById('libPane').addEventListener('click', e => {
+  const q = e.target.closest('[data-lq]'), tb = e.target.closest('[data-lt]'), b = e.target.closest('[data-lb]'), p = e.target.closest('[data-lp]');
+  if (q) { const was = ln.q; ln.q = q.dataset.lq; if (was === 'IMG' && ln.q !== 'IMG') ln.G1 = false; if (ln.q === 'IMG') { ln.G1 = true; ln.G2 = false; ln.G4 = false; } else if (lnBlkWhy('G2')) ln.G2 = false; }
+  else if (tb) { if (tb.dataset.why) { toast(tb.dataset.why); return; } ln.T = tb.dataset.lt; }
+  else if (b && !b.disabled) ln[b.dataset.lb] = !ln[b.dataset.lb];
+  else if (p && !p.disabled) ln.pos = p.dataset.lp; else return;
+  lnRender();
 });
+document.getElementById('libAdd').onclick = lnAdd;
+impDlg().addEventListener('close', () => { const pv = document.getElementById('lnPv'); if (pv) pv.innerHTML = ''; });   // bỏ bản xem trước khi đóng hộp (tránh lẫn với Task thật)
 document.getElementById('libClose').onclick = () => impDlg().close();
 treeEl.addEventListener('click', e => { const b = e.target.closest('[data-lib],[data-newsheet]'); if (!b) return; if (b.dataset.lib) openImport('task', 'lib'); else openImport('sheet'); });
 /* ---- Hộp nhập: sự kiện ---- */
