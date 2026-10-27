@@ -1,6 +1,6 @@
 # Quy ước MD trung gian cho WS Editor
 
-Cập nhật: 2026-10-26 · áp dụng từ bản **v81** (kiến trúc trình bày mới: trường `Dạng:` cho 12 dạng câu hỏi, `Bố cục:`, câu ví dụ `0.`, dòng chữ `> `, khung từ ảnh, khối chữ / ảnh, điểm trên ảnh, hai ảnh chung, bốn ô li, đáp án `0.` và `Chỗ trống:`; mục **2b**, **4c**, **5**, **Ví dụ 5**). Mọi cú pháp cũ (v65–v80) vẫn đọc được như trước; `Trả lời:` vẫn dùng được, có `Dạng:` thì `Dạng:` thắng.
+Cập nhật: 2026-10-27 · thêm **v100**: `Số câu:`, `Dạng: đúng/sai (cùng hàng)`, bài đọc có `___` nhãn `(a)` không tạo dòng câu (mục bảng trường và mục 2b). Trước đó áp dụng từ bản **v81** (kiến trúc trình bày mới: trường `Dạng:` cho 12 dạng câu hỏi, `Bố cục:`, câu ví dụ `0.`, dòng chữ `> `, khung từ ảnh, khối chữ / ảnh, điểm trên ảnh, hai ảnh chung, bốn ô li, đáp án `0.` và `Chỗ trống:`; mục **2b**, **4c**, **5**, **Ví dụ 5**). Mọi cú pháp cũ (v65–v80) vẫn đọc được như trước; `Trả lời:` vẫn dùng được, có `Dạng:` thì `Dạng:` thắng.
 
 MD (Markdown) là cách viết một phiếu bằng chữ thường mà app đọc **chắc chắn**, không phải đoán. Dùng khi:
 - tự soạn phiếu trong Word / Notes rồi dán vào app;
@@ -52,6 +52,7 @@ Khoảng cách: vừa               ← tùy chọn: gọn | vừa | thoáng
 | `Mẫu:` | ép theo một mẫu có sẵn (tên hoặc mã), thay cho `Trả lời:` | `Mẫu: Đúng/Sai` |
 | `Ghi chú:` | lời nhắc của bài (vd câu nằm dưới bài trong bản gốc); app nối vào cuối hướng dẫn | `Ghi chú: Check them after reading.` |
 | `Dạng:` (v81) | dạng câu hỏi, một trong 12 dạng ở mục 2b; chi tiết trong ngoặc. **Nên ghi** (thay cho `Trả lời:`) | `Dạng: đúng/sai (Yes/No)` |
+| `Số câu:` (v100) | nhãn số câu: `a b c` (chữ a, b, c…), `ẩn` (không số câu), `1 2 3` (mặc định). Dùng khi PDF đánh a–h; viết các dòng là `1.`, `2.`… (không viết `a.` đầu dòng, vì app hiểu là lựa chọn) | `Số câu: a b c` |
 | `Bố cục:` (v81) | bố cục Task: `xếp dọc` / `ảnh trái` / `ảnh phải` / `ảnh trong bài đọc`. Chỉ ghi khi muốn khác Tự động | `Bố cục: ảnh trái` |
 | `Ảnh: A; B` (v81) | hai ảnh chung đứng cạnh nhau, cùng cỡ (chỉ dùng với Xếp dọc) | `Ảnh: phòng ngủ; phòng khách` |
 | `Khung từ ảnh:` (v81) | khung từ bằng ảnh (ô ảnh cùng cỡ, nhãn A B C, tên ảnh in dưới); không trộn chữ và ảnh | `Khung từ ảnh: apple, banana, cherry` |
@@ -72,7 +73,7 @@ Tên trường viết hoa hay thường đều được; có bản tiếng Anh: 
 | `viết câu` | Q2 | dòng kẻ để viết câu (`Dòng viết: N`) | `(bốn ô li)` |
 | `chọn A/B/C` (`khoanh A/B/C`) | Q3 | lựa chọn A, B, C dưới câu | `(ô tick)` = ☐ thay vòng khoanh; `(A.)` = nhãn chữ thường có chấm |
 | `chọn trong câu` (`gạch chân`) | Q4 | `{a\|b}` trong câu, học sinh gạch / khoanh | `(nhãn A-D)` = bài tìm lỗi sai: viết các đoạn gạch chân `<u>…</u>`, app in A B C D dưới từng đoạn |
-| `đúng/sai` | Q5 | khoanh T / F | nhãn tự đặt 2–3 cái: `(Yes/No)`, `(True/False)`, `(T/F/NG)`, `(Right/Wrong)`; `(ô tick)` = ô tick |
+| `đúng/sai` | Q5 | khoanh T / F | nhãn tự đặt 2–3 cái: `(Yes/No)`, `(True/False)`, `(T/F/NG)`, `(Right/Wrong)`; `(ô tick)` = ô tick; `(cùng hàng)` (v100) = T F nằm cuối hàng, bên phải câu (kết hợp: `(Yes/No, cùng hàng)`) |
 | `nhìn ảnh viết` | Q6 | mỗi câu một ảnh `[ảnh: x]`, viết từ / câu | |
 | `chọn ảnh` (`tick ảnh`) | Q7 | mỗi câu 2–4 ảnh, tick ảnh đúng | |
 | `nối` | Q8 | chấm nối hai vế `trái - phải` | |
