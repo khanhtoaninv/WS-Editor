@@ -5768,7 +5768,7 @@ function arSegHtml(t) {
 }
 function edTable(t) {
   const c = t.content;
-  if (tblOpts(t).cross) { const n = crossCount(c); return `<p class="hint">Mỗi dòng một hàng. <b>#</b> không có ô · <b>.</b> ô trống chưa có đáp án · chữ cái = ô có đáp án · <b>(a)</b> chữ cho sẵn. Số 1, 2, 3 tự đánh.</p><div class="ef col xgin"><span class="elb">Lưới ô chữ</span>${eIn('cross.grid', crossLines(c).join('\n'), '#C#S#\n#A#U#\n#TEN#', { area: 1, rows: Math.min(14, Math.max(4, c.rows.length + 1)), label: 'Lưới ô chữ' })}</div><p class="hint" id="xcount">${n.cells} ô · ${n.words} từ (${n.across} ngang, ${n.down} dọc). Lời gợi ý: thêm khối chữ ở mục 5.</p>`; }
+  if (tblOpts(t).cross) { const n = crossCount(c); return `<p class="hint">Mỗi dòng một hàng. <b>#</b> không có ô · <b>.</b> ô trống chưa có đáp án · chữ cái = ô có đáp án · <b>(a)</b> chữ cho sẵn. Số 1, 2, 3 tự đánh.</p><div class="ef col xgin"><span class="elb">Lưới ô chữ</span>${eIn('cross.grid', crossLines(c).join('\n'), '#C#S#\n#A#U#\n#TEN#', { area: 1, rows: Math.min(14, Math.max(4, c.rows.length + 1)), label: 'Lưới ô chữ' })}</div><p class="hint"><span id="xcount">${n.cells} ô · ${n.words} từ (${n.across} ngang, ${n.down} dọc).</span> Lời gợi ý: thêm ở Khối tự do (+ Chữ).</p>`; }
   const head = `<div class="etr"><span class="ino">·</span>${eIn('tb.corner', c.corner || '', 'Góc', { label: 'Ô góc' })}${c.cols.map((x, j) => eIn(`tb.col.${j}`, x, `Cột ${j + 1}`, { label: `Tên cột ${j + 1}` })).join('')}<span class="eb0"></span></div>`;
   const cTxt = v => v && typeof v === 'object' && v.img && !v.tick ? (v.text || '') : fmtCell(v);   // v99: ô có ảnh: ảnh nhỏ bên trái, ô gõ chỉ chữ
   const imB = (v, i, j) => v && typeof v === 'object' && (v.tick || v.ans != null) ? '' : `<button type="button" class="eimb${v && v.img ? ' x' : ''}" data-eact="tbimg" data-i="${i}" data-j="${j}" title="${v && v.img ? 'Gỡ ảnh khỏi ô (giữ chữ)' : 'Thêm ảnh vào ô'}" aria-label="${v && v.img ? 'Gỡ ảnh' : 'Thêm ảnh'}">${v && v.img ? '×' : '+ảnh'}</button>`;   // v99
@@ -5867,6 +5867,7 @@ treeEl.addEventListener('input', e => {
   if (!edSnap) edSnap = clone(ws);
   applyField(t, i.dataset.k, i.value); edDirty = true;
   if (/^tb\.r\.\d+\.c\./.test(i.dataset.k)) i.classList.toggle('etka', /^\s*=\s*\S/.test(i.value));   // v92: ô "=…" tô xanh ngay khi gõ
+  if (i.dataset.k === 'cross.grid') { const x = document.getElementById('xcount'), n = crossCount(t.content); if (x) x.textContent = `${n.cells} ô · ${n.words} từ (${n.across} ngang, ${n.down} dọc).`; }   // v99: số ô / số từ cập nhật khi gõ lưới
   clearTimeout(edTimer); edTimer = setTimeout(liveRender, 140);
 });
 treeEl.addEventListener('focusout', e => { if (e.target.closest('.ed [data-k]')) { clearTimeout(edTimer); if (edDirty) { ws.tasks.forEach(tidy); liveRender(); kcntSync(); } edFlush(); } });

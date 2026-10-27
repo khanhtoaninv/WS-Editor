@@ -47,6 +47,10 @@ with sync_playwright() as p:
     chk('Task bảng tích: ô tích không có nút +ảnh', pg.evaluate("(()=>{const t=ws.tasks.find(t=>t.id==='t16');return t.content.rows[0].cells.every(v=>v.tick)})()"))
     pg.click('#tree .tnode[data-sel=task][data-id=t16]'); pg.wait_for_timeout(400)
     chk('…và ô đầu hàng có ảnh sẵn hiện −ảnh', pg.locator('#tree [data-eact=tbimg][data-j=h]').count()==5 and pg.locator('#tree [data-eact=tbimg]').count()==5 and pg.locator('#tree [data-eact=tbimg]').first.get_attribute('aria-label')=='Gỡ ảnh')
+    # Ô chữ: đếm ô / từ cập nhật khi gõ lưới
+    pg.click('#tree [data-lib]'); pg.wait_for_timeout(300); pg.click('#lnPos [data-lp=end]'); pg.click('#lnQ [data-lq=Q11]'); pg.click('#libAdd'); pg.wait_for_timeout(700)
+    ta = pg.locator('#tree textarea[data-k="cross.grid"]'); ta.fill("#####B##\nCAT##I##\n#P###R##\n#PIZZA##\n#L###D##\n#E######"); pg.wait_for_timeout(400)
+    chk('Ô chữ: số ô / số từ cập nhật khi gõ', pg.locator('#xcount').inner_text()=='15 ô · 4 từ (2 ngang, 2 dọc).', pg.locator('#xcount').inner_text())
     chk('0 lỗi console', not errs, errs[:3])
     b.close()
 print('ALL OK' if ok else 'SOME FAIL')
