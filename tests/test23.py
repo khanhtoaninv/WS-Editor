@@ -1,4 +1,4 @@
-import json, sys
+import json, sys, re
 from playwright.sync_api import sync_playwright
 F='file://'+sys.argv[1]; ok=True
 def chk(n,c,x=''):
@@ -16,7 +16,7 @@ with sync_playwright() as p:
     gaps=pg.evaluate("[...document.querySelectorAll('.passage .pgap')].map(e=>e.textContent)")
     chk('3 chỗ trống đánh số (1)(2)(3)', gaps==['(1)','(2)','(3)'], gaps)
     h=pg.evaluate("document.querySelector('.passage').innerHTML")
-    chk('chọn {him|he} in đậm', '<span class="pch"><b>him</b>&nbsp;/ <b>he</b></span>' in h, h)
+    chk('chọn {him|he} in đậm', re.search(r'<span class="pch"( data-ans="[^"]+")?><b>him</b>&nbsp;/ <b>he</b></span>', h) is not None, h)   # GĐ0: pch có data-ans
     chk('gạch chân, đậm, nghiêng', '<u>runs</u>' in h and '<b>jumps</b>' in h and '<i>hops</i>' in h)
     chk('3 đoạn <p>', pg.evaluate("document.querySelectorAll('.passage p').length")==3)
     chk('khung từ hiện cạnh bài đọc', pg.evaluate("document.querySelectorAll('.g4').length")==1)

@@ -1,0 +1,252 @@
+{
+ "src": "tests/md/nghe-bang.md",
+ "title": "Listening and reading – Unit 5",
+ "tasks": [
+  {
+   "id": "t1",
+   "number": 1,
+   "q": "Q10",
+   "title": "Listen and complete the table."
+  },
+  {
+   "id": "t2",
+   "number": 2,
+   "q": "Q8",
+   "title": "Match."
+  },
+  {
+   "id": "t3",
+   "number": 3,
+   "q": "Q1",
+   "title": "Complete the conversation."
+  },
+  {
+   "id": "t4",
+   "number": 4,
+   "q": "Q4",
+   "title": "Read and underline."
+  },
+  {
+   "id": "t5",
+   "number": 5,
+   "q": null,
+   "title": "Listen and colour."
+  }
+ ],
+ "slots": [
+  {
+   "id": "t1.cell.r2.0",
+   "task": "t1",
+   "label": "hàng 2 cột 1",
+   "q": "Q10",
+   "interaction": "cell",
+   "grading": "manual",
+   "item": "r2"
+  },
+  {
+   "id": "t1.cell.r2.1",
+   "task": "t1",
+   "label": "hàng 2 cột 2",
+   "q": "Q10",
+   "interaction": "cell",
+   "grading": "manual",
+   "item": "r2"
+  },
+  {
+   "id": "t1.cell.r3.0",
+   "task": "t1",
+   "label": "hàng 3 cột 1",
+   "q": "Q10",
+   "interaction": "cell",
+   "grading": "manual",
+   "item": "r3"
+  },
+  {
+   "id": "t1.cell.r3.1",
+   "task": "t1",
+   "label": "hàng 3 cột 2",
+   "q": "Q10",
+   "interaction": "cell",
+   "grading": "manual",
+   "item": "r3"
+  },
+  {
+   "id": "t2.q1",
+   "task": "t2",
+   "label": "1",
+   "q": "Q8",
+   "interaction": "match",
+   "grading": "manual",
+   "item": "q1",
+   "options": [
+    {
+     "id": "q1",
+     "text": "meow"
+    },
+    {
+     "id": "q2",
+     "text": "woof"
+    },
+    {
+     "id": "q3",
+     "text": "moo"
+    }
+   ]
+  },
+  {
+   "id": "t2.q2",
+   "task": "t2",
+   "label": "2",
+   "q": "Q8",
+   "interaction": "match",
+   "grading": "manual",
+   "item": "q2",
+   "options": [
+    {
+     "id": "q1",
+     "text": "meow"
+    },
+    {
+     "id": "q2",
+     "text": "woof"
+    },
+    {
+     "id": "q3",
+     "text": "moo"
+    }
+   ]
+  },
+  {
+   "id": "t2.q3",
+   "task": "t2",
+   "label": "3",
+   "q": "Q8",
+   "interaction": "match",
+   "grading": "manual",
+   "item": "q3",
+   "options": [
+    {
+     "id": "q1",
+     "text": "meow"
+    },
+    {
+     "id": "q2",
+     "text": "woof"
+    },
+    {
+     "id": "q3",
+     "text": "moo"
+    }
+   ]
+  },
+  {
+   "id": "t3.q2",
+   "task": "t3",
+   "label": "(1)",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual",
+   "item": "q2"
+  },
+  {
+   "id": "t3.q4",
+   "task": "t3",
+   "label": "(2)",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual",
+   "item": "q4"
+  },
+  {
+   "id": "t3.q6",
+   "task": "t3",
+   "label": "(3)",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual",
+   "item": "q6"
+  },
+  {
+   "id": "t4.q1.1",
+   "task": "t4",
+   "label": "1.1",
+   "q": "Q4",
+   "interaction": "choice-one",
+   "grading": "auto",
+   "item": "q1",
+   "options": [
+    {
+     "id": "a",
+     "text": "windy"
+    },
+    {
+     "id": "b",
+     "text": "rainy"
+    }
+   ]
+  },
+  {
+   "id": "t4.q1.2",
+   "task": "t4",
+   "label": "1.2",
+   "q": "Q4",
+   "interaction": "choice-one",
+   "grading": "auto",
+   "item": "q1",
+   "options": [
+    {
+     "id": "a",
+     "text": "on"
+    },
+    {
+     "id": "b",
+     "text": "off"
+    }
+   ]
+  },
+  {
+   "id": "t4.q2.1",
+   "task": "t4",
+   "label": "2.1",
+   "q": "Q4",
+   "interaction": "choice-one",
+   "grading": "auto",
+   "item": "q2",
+   "options": [
+    {
+     "id": "a",
+     "text": "cloudy"
+    },
+    {
+     "id": "b",
+     "text": "sunny"
+    }
+   ]
+  },
+  {
+   "id": "t4.q2.2",
+   "task": "t4",
+   "label": "2.2",
+   "q": "Q4",
+   "interaction": "choice-one",
+   "grading": "auto",
+   "item": "q2",
+   "options": [
+    {
+     "id": "a",
+     "text": "swimming costume"
+    },
+    {
+     "id": "b",
+     "text": "coat"
+    }
+   ]
+  }
+ ],
+ "warn": [
+  "Task 1 (Q10 Bảng): 4 chỗ hàng 2 cột 1, hàng 2 cột 2, hàng 3 cột 1, hàng 3 cột 2: chưa có đáp án → chấm tay",
+  "Task 2 (Q8 Nối): 3 chỗ 1, 2, 3: chưa có đáp án → chấm tay",
+  "Task 2 (Q8 Nối): Bài nối chưa bật \"Xáo vế phải\": chưa xác định được cặp đúng → chấm tay",
+  "Task 3 (Q1 Điền từ): 3 chỗ (1), (2), (3): chưa có đáp án → chấm tay"
+ ]
+}

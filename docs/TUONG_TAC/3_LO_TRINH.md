@@ -27,15 +27,15 @@ GĐ1 và GĐ3 có thể chạy **song song** sau khi GĐ2 chốt định dạng 
 - **Hết đóng băng tính năng** (đã chốt 27/10/2026). Phần chuyển React còn lại (`KE_HOACH_REACT.md` 8.3) làm song song khi đụng tới.
 - **Kiểm id:** mọi Task và câu đều có `id` ổn định (đã có `t1`, `i1`…). Kiểm các thao tác: thêm, nhân đôi, xóa, đổi thứ tự, đổi dạng Q (`setQ`), nhập MD, dán nhiều dòng → id không đổi với câu cũ, câu mới có id mới không trùng.
 - **Hàm liệt kê chỗ trả lời** `slotsOf(task)` theo bảng 6.1 của Tài liệu 2 (thuần, không đụng DOM), kèm `keyOf(task)` chuyển đáp án WS Editor (`key`, `*`, `=chữ`, `lead.keys`, cặp nối) sang khối đáp án chuẩn. Dùng lại `needKey`, `hasKey`, `itemKeys` sẵn có.
-- **Gắn `data-slot`** vào HTML do `renderTask` sinh ra cho mọi chỗ trả lời (không đổi hình: đường chuẩn phải vẫn 120/120).
+- **Gắn `data-ans`** vào HTML do `renderTask` sinh ra cho mọi chỗ trả lời (không đổi hình: đường chuẩn phải vẫn 120/120).
 - **Khởi tạo `ws-shared`** (thư mục `shared/` trong repo hoặc gói riêng): lược đồ `wsp/0`, kiểu TypeScript, hàm chuẩn hóa chữ, `grade()`, bộ mẫu đầu tiên (3–5 phiếu thật từ `tests/real/`).
 - **Quyết định tổ chức mã:** một repo chung (monorepo) hay tách repo cho TeacherResource. Đề xuất: monorepo, ít nhất cho tới GĐ3.
 
-**Nghiệm thu GĐ0:** đường chuẩn 120/120, giaodien 2497/2497, bộ test cũ đạt; `slotsOf` + `keyOf` chạy trên 24 phiếu chuẩn không lỗi, mọi `data-slot` trên trang khớp `slotsOf`; test đơn vị `grade()` trên bộ mẫu đạt.
+**Nghiệm thu GĐ0:** đường chuẩn 120/120, giaodien 2497/2497, bộ test cũ đạt; `slotsOf` + `keyOf` chạy trên 24 phiếu chuẩn không lỗi, mọi `data-ans` trên trang khớp `slotsOf`; test đơn vị `grade()` trên bộ mẫu đạt.
 
 ## 4. GĐ1. Thử tương tác trong WS Editor
 
-- **Trình xem** (trong `ws-shared`, React): nhận trang + slots, phủ lớp tương tác theo `data-slot`, các chế độ `preview` và `teach`.
+- **Trình xem** (trong `ws-shared`, React): nhận trang + slots, phủ lớp tương tác theo `data-ans`, các chế độ `preview` và `teach`.
 - **Nút "Thử làm"** trong WS Editor: mở trình xem trên phiếu đang soạn; làm như học sinh; **Chấm thử** tô đúng / sai, hiện điểm; chỗ chấm tay ghi rõ.
 - **Chế độ chiếu** (`teach`): toàn màn hình, lật trang, thu phóng; hiện đáp án theo cả phiếu / từng Task / từng câu.
 - Các tương tác theo bảng 5.3: `text`, `text-long`, `choice-one`, `choice-many`, `tf`, `match`, `cell`. `draw` để GĐ5.
@@ -84,7 +84,7 @@ GĐ1 và GĐ3 có thể chạy **song song** sau khi GĐ2 chốt định dạng 
 
 | Việc | WS Editor | `ws-shared` | TeacherResource |
 |---|---|---|---|
-| id ổn định, `slotsOf`, `keyOf`, `data-slot` | ✔ | | |
+| id ổn định, `slotsOf`, `keyOf`, `data-ans` | ✔ | | |
 | Lược đồ `wsp`, chuẩn hóa, `grade()`, bộ mẫu | | ✔ | dùng |
 | Trình xem (mọi chế độ) | dùng (`preview`, `teach`) | ✔ | dùng (mọi chế độ) |
 | Xuất, ký, mã hóa gói | ✔ | đọc / ghi / kiểm | đọc / kiểm / giải mã |
@@ -94,7 +94,7 @@ GĐ1 và GĐ3 có thể chạy **song song** sau khi GĐ2 chốt định dạng 
 
 | Rủi ro | Giảm thiểu |
 |---|---|
-| `data-slot` làm lệch dàn trang | Chỉ thêm thuộc tính, không thêm phần tử; đường chuẩn 120/120 là cổng bắt buộc |
+| `data-ans` làm lệch dàn trang | Chỉ thêm thuộc tính, không thêm phần tử; đường chuẩn 120/120 là cổng bắt buộc |
 | Chấm lệch giữa editor và máy chủ | Một hàm `grade()` duy nhất + bộ mẫu có kết quả mong đợi |
 | AI viết TeacherResource hiểu sai chuẩn | Lược đồ tự kiểm + `wsp inspect` + bộ mẫu; dev người duyệt từng giai đoạn |
 | Lộ đáp án | Tách khối từ lúc xuất; test quét phản hồi API |

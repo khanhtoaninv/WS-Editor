@@ -1,0 +1,221 @@
+{
+ "src": "tests/md/v81-cu-phap.md",
+ "title": "Phiếu thử cú pháp v81",
+ "tasks": [
+  {
+   "id": "t1",
+   "number": 1,
+   "q": "Q1",
+   "title": "Look and write"
+  },
+  {
+   "id": "t2",
+   "number": 2,
+   "q": "Q5",
+   "title": "Read and answer"
+  },
+  {
+   "id": "t3",
+   "number": 3,
+   "q": "Q4",
+   "title": "Find the mistake"
+  },
+  {
+   "id": "t4",
+   "number": 4,
+   "q": "Q12",
+   "title": "Draw your room"
+  },
+  {
+   "id": "t5",
+   "number": 5,
+   "q": "Q2",
+   "title": "Write the words"
+  },
+  {
+   "id": "t6",
+   "number": 6,
+   "q": "Q1",
+   "title": "Choose the fruit"
+  },
+  {
+   "id": "t7",
+   "number": 7,
+   "q": "Q2",
+   "title": "Look at the town"
+  }
+ ],
+ "slots": [
+  {
+   "id": "t1.q2",
+   "task": "t1",
+   "label": "1",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "auto",
+   "item": "q2"
+  },
+  {
+   "id": "t1.q4",
+   "task": "t1",
+   "label": "2",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "auto",
+   "item": "q4"
+  },
+  {
+   "id": "t2.q1",
+   "task": "t2",
+   "label": "1",
+   "q": "Q5",
+   "interaction": "tf",
+   "grading": "auto",
+   "item": "q1",
+   "options": [
+    {
+     "id": "Yes",
+     "text": "Yes"
+    },
+    {
+     "id": "No",
+     "text": "No"
+    }
+   ]
+  },
+  {
+   "id": "t2.q2",
+   "task": "t2",
+   "label": "2",
+   "q": "Q5",
+   "interaction": "tf",
+   "grading": "auto",
+   "item": "q2",
+   "options": [
+    {
+     "id": "Yes",
+     "text": "Yes"
+    },
+    {
+     "id": "No",
+     "text": "No"
+    }
+   ]
+  },
+  {
+   "id": "t3.q1",
+   "task": "t3",
+   "label": "1",
+   "q": "Q4",
+   "interaction": "choice-one",
+   "grading": "manual",
+   "item": "q1",
+   "options": [
+    {
+     "id": "a",
+     "text": "a. go"
+    },
+    {
+     "id": "b",
+     "text": "b. school"
+    },
+    {
+     "id": "c",
+     "text": "c. day"
+    },
+    {
+     "id": "d",
+     "text": "d. bus"
+    }
+   ]
+  },
+  {
+   "id": "t3.q2",
+   "task": "t3",
+   "label": "2",
+   "q": "Q4",
+   "interaction": "choice-one",
+   "grading": "manual",
+   "item": "q2",
+   "options": [
+    {
+     "id": "a",
+     "text": "a. is"
+    },
+    {
+     "id": "b",
+     "text": "b. best"
+    },
+    {
+     "id": "c",
+     "text": "c. at"
+    },
+    {
+     "id": "d",
+     "text": "d. school"
+    }
+   ]
+  },
+  {
+   "id": "t5.q1",
+   "task": "t5",
+   "label": "1",
+   "q": "Q2",
+   "interaction": "text-long",
+   "grading": "manual",
+   "item": "q1"
+  },
+  {
+   "id": "t5.q2",
+   "task": "t5",
+   "label": "2",
+   "q": "Q2",
+   "interaction": "text-long",
+   "grading": "manual",
+   "item": "q2"
+  },
+  {
+   "id": "t6.q1",
+   "task": "t6",
+   "label": "1",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual",
+   "item": "q1"
+  },
+  {
+   "id": "t6.q2",
+   "task": "t6",
+   "label": "2",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual",
+   "item": "q2"
+  },
+  {
+   "id": "t7.q1",
+   "task": "t7",
+   "label": "1",
+   "q": "Q2",
+   "interaction": "text-long",
+   "grading": "manual",
+   "item": "q1"
+  },
+  {
+   "id": "t7.q2",
+   "task": "t7",
+   "label": "2",
+   "q": "Q2",
+   "interaction": "text-long",
+   "grading": "manual",
+   "item": "q2"
+  }
+ ],
+ "warn": [
+  "Task 3 (Q4 Chọn trong câu): 2 chỗ 1, 2: chưa có đáp án → chấm tay",
+  "Task 4 (Q12 Viết tự do): Viết tự do, khung vẽ: chỉ xem (vẽ trên máy làm sau)",
+  "Task 5 (Q2 Viết câu): 2 chỗ 1, 2: chưa có đáp án → chấm tay",
+  "Task 6 (Q1 Điền từ): 2 chỗ 1, 2: chưa có đáp án → chấm tay",
+  "Task 7 (Q2 Viết câu): 2 chỗ 1, 2: chưa có đáp án → chấm tay"
+ ]
+}

@@ -829,3 +829,12 @@ Khác biệt nhỏ so với v106 (đều là sửa lỗi hiển thị):
 - Nút chọn font trong panel Phiếu hiện đúng font của nút (v106: dấu `"` trong tên font làm hỏng thuộc tính style).
 - Khi đang gõ, tên Task ở danh sách giữ đúng nhãn dạng bài như lúc vừa mở (v106 đổi sang tên kiểu cũ `typeName` cho tới lần dựng lại); số "x/y câu có đáp án" cập nhật ngay khi gõ, không đợi rời ô.
 
+
+## 41. GĐ0 phiếu tương tác: máy hiểu chỗ trả lời (v110, 27/10/2026)
+Không đổi hình phiếu, không đổi thao tác. Chuẩn bị cho phiếu tương tác / TeacherResource (`docs/TUONG_TAC/`, kế hoạch `KE_HOACH_GD0.md`).
+- **Lõi đáp án** `app/src/core/answers.js`: `itemKeys`, `optsOfKey`, `gapN`, `needKey`, `hasKey`, `keyState` chuyển nguyên văn từ `legacy/app.js` (bộ lọc bỏ dòng chữ `gt` nay nằm sẵn trong `itemKeys`).
+- **Liệt kê chỗ trả lời** `app/src/core/slots.js`: `sheetSlots(ws)` → `{slots, key, warn}`, `taskSlots(t)`. Mã chỗ: `<task>.<câu>`, `<task>.<câu>.<n>` (chỗ thứ n), `<task>.lead.<n>` / `.leadc.<n>` (bài đọc), `<task>.cell.<hàng>.<cột>` (bảng, ô chữ), `<task>.cell.<hàng>` (hàng tick), bài nối `<task>.<câu vế trái>`. Cách làm: `text`, `text-long`, `choice-one`, `choice-many`, `tf`, `match`, `cell`. Đáp án nhiều cách viết ghi cách nhau ` / ` (`isn't / is not`). Chỗ chưa có đáp án → chấm tay + cảnh báo. Tô chữ (Q9), khung vẽ, lưới tìm từ: không có chỗ trả lời, chỉ ghi chú "chỉ xem".
+- **Đánh dấu trên trang**: `renderTask` gắn `data-ans="<mã chỗ>"` vào phần tử của từng chỗ trả lời (gạch điền, nhóm chọn, nhãn T/F, ô bảng, ô chữ, ô nối…). Chỉ thêm thuộc tính, không thêm phần tử. (`data-slot` đã có nghĩa là ô ảnh nên không dùng.)
+- **Thư viện chung** `shared/` (TypeScript, không thư viện ngoài, dùng được cho TeacherResource): `normalize`, `grade`, `validate`, kiểu `Slot`/`Key`/`Result`. Bộ phiếu mẫu `shared/fixtures/` (6 phiếu, mỗi phiếu 3 bài làm mẫu kèm kết quả mong đợi). Chạy `cd shared && node --test test/*.test.ts`.
+- **Bộ đọc MD sửa lỗi**: dòng đáp án của Task hội thoại chỉ gán cho lượt có chỗ trống (trước đây gán cả lượt không có `___`, làm lệch đáp án).
+- Công cụ: `tests/gd0/slots_phieu.py` (liệt kê trên mọi phiếu mẫu), `kiem_slots.mjs --dom` (kiểm khuôn + khớp 1–1 trang), `tao_mau.mjs` (sinh `shared/fixtures`), `bang_duyet.mjs` (→ `docs/TUONG_TAC/DUYET_GD0.md`). Phiếu mẫu có đáp án đủ dạng: `tests/gd0/mau-du-dang.md`.

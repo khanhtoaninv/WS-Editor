@@ -1,0 +1,255 @@
+{
+ "src": "tests/md/mau-tron.md",
+ "title": "Unit 3 · My home – ôn tập",
+ "tasks": [
+  {
+   "id": "t1",
+   "number": 1,
+   "q": "Q6",
+   "title": "Look and write."
+  },
+  {
+   "id": "t2",
+   "number": 2,
+   "q": "Q3",
+   "title": "Choose the correct answer."
+  },
+  {
+   "id": "t3",
+   "number": 3,
+   "q": "Q1",
+   "title": "Complete the sentences."
+  },
+  {
+   "id": "t4",
+   "number": 4,
+   "q": "Q5",
+   "title": "Look at the picture. True or False?"
+  },
+  {
+   "id": "t5",
+   "number": 5,
+   "q": "Q2",
+   "title": "Read and answer."
+  }
+ ],
+ "slots": [
+  {
+   "id": "t1.q1",
+   "task": "t1",
+   "label": "1",
+   "q": "Q6",
+   "interaction": "text",
+   "grading": "auto",
+   "item": "q1"
+  },
+  {
+   "id": "t1.q2",
+   "task": "t1",
+   "label": "2",
+   "q": "Q6",
+   "interaction": "text",
+   "grading": "auto",
+   "item": "q2"
+  },
+  {
+   "id": "t1.q3",
+   "task": "t1",
+   "label": "3",
+   "q": "Q6",
+   "interaction": "text",
+   "grading": "auto",
+   "item": "q3"
+  },
+  {
+   "id": "t1.q4",
+   "task": "t1",
+   "label": "4",
+   "q": "Q6",
+   "interaction": "text",
+   "grading": "auto",
+   "item": "q4"
+  },
+  {
+   "id": "t2.q1",
+   "task": "t2",
+   "label": "1",
+   "q": "Q3",
+   "interaction": "choice-one",
+   "grading": "auto",
+   "item": "q1",
+   "options": [
+    {
+     "id": "a",
+     "text": "am"
+    },
+    {
+     "id": "b",
+     "text": "is"
+    },
+    {
+     "id": "c",
+     "text": "are"
+    }
+   ]
+  },
+  {
+   "id": "t2.q2",
+   "task": "t2",
+   "label": "2",
+   "q": "Q3",
+   "interaction": "choice-one",
+   "grading": "auto",
+   "item": "q2",
+   "options": [
+    {
+     "id": "a",
+     "text": "is"
+    },
+    {
+     "id": "b",
+     "text": "are"
+    },
+    {
+     "id": "c",
+     "text": "be"
+    }
+   ]
+  },
+  {
+   "id": "t2.q3",
+   "task": "t2",
+   "label": "3",
+   "q": "Q3",
+   "interaction": "choice-one",
+   "grading": "auto",
+   "item": "q3",
+   "options": [
+    {
+     "id": "a",
+     "text": "a"
+    },
+    {
+     "id": "b",
+     "text": "an"
+    },
+    {
+     "id": "c",
+     "text": "the"
+    }
+   ]
+  },
+  {
+   "id": "t3.q1",
+   "task": "t3",
+   "label": "1",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "auto",
+   "item": "q1"
+  },
+  {
+   "id": "t3.q2",
+   "task": "t3",
+   "label": "2",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "auto",
+   "item": "q2"
+  },
+  {
+   "id": "t3.q3",
+   "task": "t3",
+   "label": "3",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "auto",
+   "item": "q3"
+  },
+  {
+   "id": "t4.q1",
+   "task": "t4",
+   "label": "1",
+   "q": "Q5",
+   "interaction": "tf",
+   "grading": "auto",
+   "item": "q1",
+   "options": [
+    {
+     "id": "T",
+     "text": "T"
+    },
+    {
+     "id": "F",
+     "text": "F"
+    }
+   ]
+  },
+  {
+   "id": "t4.q2",
+   "task": "t4",
+   "label": "2",
+   "q": "Q5",
+   "interaction": "tf",
+   "grading": "auto",
+   "item": "q2",
+   "options": [
+    {
+     "id": "T",
+     "text": "T"
+    },
+    {
+     "id": "F",
+     "text": "F"
+    }
+   ]
+  },
+  {
+   "id": "t4.q3",
+   "task": "t4",
+   "label": "3",
+   "q": "Q5",
+   "interaction": "tf",
+   "grading": "auto",
+   "item": "q3",
+   "options": [
+    {
+     "id": "T",
+     "text": "T"
+    },
+    {
+     "id": "F",
+     "text": "F"
+    }
+   ]
+  },
+  {
+   "id": "t5.q1",
+   "task": "t5",
+   "label": "1",
+   "q": "Q2",
+   "interaction": "text-long",
+   "grading": "auto",
+   "item": "q1"
+  },
+  {
+   "id": "t5.q2",
+   "task": "t5",
+   "label": "2",
+   "q": "Q2",
+   "interaction": "text-long",
+   "grading": "auto",
+   "item": "q2"
+  },
+  {
+   "id": "t5.q3",
+   "task": "t5",
+   "label": "3",
+   "q": "Q2",
+   "interaction": "text-long",
+   "grading": "auto",
+   "item": "q3"
+  }
+ ],
+ "warn": []
+}

@@ -1,0 +1,102 @@
+{
+ "t1.q1": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "cat"
+  ]
+ },
+ "t1.q2": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "dog"
+  ]
+ },
+ "t1.q3": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "fish"
+  ]
+ },
+ "t1.q4": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "bird"
+  ]
+ },
+ "t2.q1": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "b"
+ },
+ "t2.q2": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "b"
+ },
+ "t2.q3": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "b"
+ },
+ "t3.q1": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "kitchen"
+  ]
+ },
+ "t3.q2": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "bedroom"
+  ]
+ },
+ "t3.q3": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "garden"
+  ]
+ },
+ "t4.q1": {
+  "type": "tf",
+  "score": 1,
+  "correct": "T"
+ },
+ "t4.q2": {
+  "type": "tf",
+  "score": 1,
+  "correct": "F"
+ },
+ "t4.q3": {
+  "type": "tf",
+  "score": 1,
+  "correct": "T"
+ },
+ "t5.q1": {
+  "type": "text-long",
+  "score": 1,
+  "accept": [
+   "She is nine years old."
+  ]
+ },
+ "t5.q2": {
+  "type": "text-long",
+  "score": 1,
+  "accept": [
+   "His name is Max."
+  ]
+ },
+ "t5.q3": {
+  "type": "text-long",
+  "score": 1,
+  "accept": [
+   "In the park."
+  ]
+ }
+}

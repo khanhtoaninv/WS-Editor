@@ -1,0 +1,11 @@
+{
+  "name": "ws-shared",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Phần dùng chung giữa WS Editor và TeacherResource: kiểu chuẩn gói wsp/0, chuẩn hóa chữ, chấm điểm, kiểm khuôn (docs/TUONG_TAC/2_CHUAN_GOI_PHIEU.md)",
+  "scripts": {
+    "test": "node --test test/*.test.ts",
+    "typecheck": "../app/node_modules/.bin/tsc -p tsconfig.json"
+  }
+}

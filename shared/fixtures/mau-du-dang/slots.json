@@ -1,0 +1,590 @@
+{
+ "src": "tests/gd0/mau-du-dang.md",
+ "title": "GĐ0 · Phiếu mẫu đủ dạng có đáp án",
+ "tasks": [
+  {
+   "id": "t1",
+   "number": 1,
+   "q": "Q1",
+   "title": "Complete the sentences."
+  },
+  {
+   "id": "t2",
+   "number": 2,
+   "q": "Q1",
+   "title": "Complete the conversation."
+  },
+  {
+   "id": "t3",
+   "number": 3,
+   "q": "Q2",
+   "title": "Read and fill in the gaps."
+  },
+  {
+   "id": "t4",
+   "number": 4,
+   "q": "Q3",
+   "title": "Choose the correct answer."
+  },
+  {
+   "id": "t5",
+   "number": 5,
+   "q": "Q4",
+   "title": "Circle the correct word."
+  },
+  {
+   "id": "t6",
+   "number": 6,
+   "q": "Q4",
+   "title": "Find the mistake."
+  },
+  {
+   "id": "t7",
+   "number": 7,
+   "q": "Q5",
+   "title": "True or false?"
+  },
+  {
+   "id": "t8",
+   "number": 8,
+   "q": "Q6",
+   "title": "Look and write."
+  },
+  {
+   "id": "t9",
+   "number": 9,
+   "q": "Q7",
+   "title": "Tick the picture."
+  },
+  {
+   "id": "t10",
+   "number": 10,
+   "q": "Q8",
+   "title": "Match."
+  },
+  {
+   "id": "t11",
+   "number": 11,
+   "q": "Q10",
+   "title": "Complete the table."
+  },
+  {
+   "id": "t12",
+   "number": 12,
+   "q": "Q10",
+   "title": "Where do they live?"
+  },
+  {
+   "id": "t13",
+   "number": 13,
+   "q": "Q11",
+   "title": "Crossword."
+  },
+  {
+   "id": "t14",
+   "number": 14,
+   "q": "Q12",
+   "title": "Write about your day."
+  }
+ ],
+ "slots": [
+  {
+   "id": "t1.q1.1",
+   "task": "t1",
+   "label": "1.1",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "auto",
+   "item": "q1"
+  },
+  {
+   "id": "t1.q1.2",
+   "task": "t1",
+   "label": "1.2",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "auto",
+   "item": "q1"
+  },
+  {
+   "id": "t1.q2",
+   "task": "t1",
+   "label": "2",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "auto",
+   "item": "q2"
+  },
+  {
+   "id": "t1.q3",
+   "task": "t1",
+   "label": "3",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "auto",
+   "item": "q3"
+  },
+  {
+   "id": "t2.q1",
+   "task": "t2",
+   "label": "(1)",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "auto",
+   "item": "q1"
+  },
+  {
+   "id": "t2.q3",
+   "task": "t2",
+   "label": "(2)",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "auto",
+   "item": "q3"
+  },
+  {
+   "id": "t3.lead.1",
+   "task": "t3",
+   "label": "(1)",
+   "q": "Q2",
+   "interaction": "text",
+   "grading": "auto"
+  },
+  {
+   "id": "t3.lead.2",
+   "task": "t3",
+   "label": "(2)",
+   "q": "Q2",
+   "interaction": "text",
+   "grading": "auto"
+  },
+  {
+   "id": "t3.q1",
+   "task": "t3",
+   "label": "1",
+   "q": "Q2",
+   "interaction": "text-long",
+   "grading": "auto",
+   "item": "q1"
+  },
+  {
+   "id": "t4.q1",
+   "task": "t4",
+   "label": "1",
+   "q": "Q3",
+   "interaction": "choice-one",
+   "grading": "auto",
+   "item": "q1",
+   "options": [
+    {
+     "id": "a",
+     "text": "am"
+    },
+    {
+     "id": "b",
+     "text": "is"
+    },
+    {
+     "id": "c",
+     "text": "are"
+    }
+   ]
+  },
+  {
+   "id": "t4.q2",
+   "task": "t4",
+   "label": "2",
+   "q": "Q3",
+   "interaction": "choice-many",
+   "grading": "auto",
+   "item": "q2",
+   "options": [
+    {
+     "id": "a",
+     "text": "apple"
+    },
+    {
+     "id": "b",
+     "text": "chair"
+    },
+    {
+     "id": "c",
+     "text": "banana"
+    }
+   ]
+  },
+  {
+   "id": "t5.q1.1",
+   "task": "t5",
+   "label": "1.1",
+   "q": "Q4",
+   "interaction": "choice-one",
+   "grading": "auto",
+   "item": "q1",
+   "options": [
+    {
+     "id": "a",
+     "text": "goes"
+    },
+    {
+     "id": "b",
+     "text": "go"
+    }
+   ]
+  },
+  {
+   "id": "t5.q1.2",
+   "task": "t5",
+   "label": "1.2",
+   "q": "Q4",
+   "interaction": "choice-one",
+   "grading": "auto",
+   "item": "q1",
+   "options": [
+    {
+     "id": "a",
+     "text": "play"
+    },
+    {
+     "id": "b",
+     "text": "plays"
+    }
+   ]
+  },
+  {
+   "id": "t5.q2",
+   "task": "t5",
+   "label": "2",
+   "q": "Q4",
+   "interaction": "choice-one",
+   "grading": "auto",
+   "item": "q2",
+   "options": [
+    {
+     "id": "a",
+     "text": "am"
+    },
+    {
+     "id": "b",
+     "text": "is"
+    },
+    {
+     "id": "c",
+     "text": "are"
+    }
+   ]
+  },
+  {
+   "id": "t6.q1",
+   "task": "t6",
+   "label": "1",
+   "q": "Q4",
+   "interaction": "choice-one",
+   "grading": "auto",
+   "item": "q1",
+   "options": [
+    {
+     "id": "a",
+     "text": "a. go"
+    },
+    {
+     "id": "b",
+     "text": "b. school"
+    },
+    {
+     "id": "c",
+     "text": "c. day"
+    },
+    {
+     "id": "d",
+     "text": "d. bus"
+    }
+   ]
+  },
+  {
+   "id": "t7.q1",
+   "task": "t7",
+   "label": "1",
+   "q": "Q5",
+   "interaction": "tf",
+   "grading": "auto",
+   "item": "q1",
+   "options": [
+    {
+     "id": "True",
+     "text": "True"
+    },
+    {
+     "id": "False",
+     "text": "False"
+    }
+   ]
+  },
+  {
+   "id": "t7.q2",
+   "task": "t7",
+   "label": "2",
+   "q": "Q5",
+   "interaction": "tf",
+   "grading": "auto",
+   "item": "q2",
+   "options": [
+    {
+     "id": "True",
+     "text": "True"
+    },
+    {
+     "id": "False",
+     "text": "False"
+    }
+   ]
+  },
+  {
+   "id": "t8.q1",
+   "task": "t8",
+   "label": "1",
+   "q": "Q6",
+   "interaction": "text",
+   "grading": "auto",
+   "item": "q1"
+  },
+  {
+   "id": "t8.q2",
+   "task": "t8",
+   "label": "2",
+   "q": "Q6",
+   "interaction": "text",
+   "grading": "auto",
+   "item": "q2"
+  },
+  {
+   "id": "t9.q1",
+   "task": "t9",
+   "label": "1",
+   "q": "Q7",
+   "interaction": "choice-one",
+   "grading": "auto",
+   "item": "q1",
+   "options": [
+    {
+     "id": "a",
+     "img": "[ảnh: pizza]"
+    },
+    {
+     "id": "b",
+     "img": "[ảnh: rice]"
+    },
+    {
+     "id": "c",
+     "img": "[ảnh: cake]"
+    }
+   ]
+  },
+  {
+   "id": "t10.q1",
+   "task": "t10",
+   "label": "1",
+   "q": "Q8",
+   "interaction": "match",
+   "grading": "auto",
+   "item": "q1",
+   "options": [
+    {
+     "id": "q1",
+     "text": "cold"
+    },
+    {
+     "id": "q2",
+     "text": "small"
+    },
+    {
+     "id": "q3",
+     "text": "slow"
+    },
+    {
+     "id": "q4",
+     "text": "happy"
+    }
+   ]
+  },
+  {
+   "id": "t10.q2",
+   "task": "t10",
+   "label": "2",
+   "q": "Q8",
+   "interaction": "match",
+   "grading": "auto",
+   "item": "q2",
+   "options": [
+    {
+     "id": "q1",
+     "text": "cold"
+    },
+    {
+     "id": "q2",
+     "text": "small"
+    },
+    {
+     "id": "q3",
+     "text": "slow"
+    },
+    {
+     "id": "q4",
+     "text": "happy"
+    }
+   ]
+  },
+  {
+   "id": "t10.q3",
+   "task": "t10",
+   "label": "3",
+   "q": "Q8",
+   "interaction": "match",
+   "grading": "auto",
+   "item": "q3",
+   "options": [
+    {
+     "id": "q1",
+     "text": "cold"
+    },
+    {
+     "id": "q2",
+     "text": "small"
+    },
+    {
+     "id": "q3",
+     "text": "slow"
+    },
+    {
+     "id": "q4",
+     "text": "happy"
+    }
+   ]
+  },
+  {
+   "id": "t11.cell.r1.1",
+   "task": "t11",
+   "label": "hàng 1 cột 2",
+   "q": "Q10",
+   "interaction": "cell",
+   "grading": "auto",
+   "item": "r1"
+  },
+  {
+   "id": "t11.cell.r2.0",
+   "task": "t11",
+   "label": "hàng 2 cột 1",
+   "q": "Q10",
+   "interaction": "cell",
+   "grading": "auto",
+   "item": "r2"
+  },
+  {
+   "id": "t11.cell.r2.1",
+   "task": "t11",
+   "label": "hàng 2 cột 2",
+   "q": "Q10",
+   "interaction": "cell",
+   "grading": "auto",
+   "item": "r2"
+  },
+  {
+   "id": "t12.cell.r1",
+   "task": "t12",
+   "label": "hàng 1",
+   "q": "Q10",
+   "interaction": "choice-many",
+   "grading": "auto",
+   "item": "r1",
+   "options": [
+    {
+     "id": "0",
+     "text": "Farm"
+    },
+    {
+     "id": "1",
+     "text": "Zoo"
+    }
+   ]
+  },
+  {
+   "id": "t12.cell.r2",
+   "task": "t12",
+   "label": "hàng 2",
+   "q": "Q10",
+   "interaction": "choice-many",
+   "grading": "auto",
+   "item": "r2",
+   "options": [
+    {
+     "id": "0",
+     "text": "Farm"
+    },
+    {
+     "id": "1",
+     "text": "Zoo"
+    }
+   ]
+  },
+  {
+   "id": "t13.cell.r1.0",
+   "task": "t13",
+   "label": "ô 1-1",
+   "q": "Q11",
+   "interaction": "cell",
+   "grading": "auto",
+   "item": "r1",
+   "maxLength": 1
+  },
+  {
+   "id": "t13.cell.r1.1",
+   "task": "t13",
+   "label": "ô 1-2",
+   "q": "Q11",
+   "interaction": "cell",
+   "grading": "auto",
+   "item": "r1",
+   "maxLength": 1
+  },
+  {
+   "id": "t13.cell.r1.2",
+   "task": "t13",
+   "label": "ô 1-3",
+   "q": "Q11",
+   "interaction": "cell",
+   "grading": "auto",
+   "item": "r1",
+   "maxLength": 1
+  },
+  {
+   "id": "t13.cell.r2.2",
+   "task": "t13",
+   "label": "ô 2-3",
+   "q": "Q11",
+   "interaction": "cell",
+   "grading": "auto",
+   "item": "r2",
+   "maxLength": 1
+  },
+  {
+   "id": "t13.cell.r3.2",
+   "task": "t13",
+   "label": "ô 3-3",
+   "q": "Q11",
+   "interaction": "cell",
+   "grading": "auto",
+   "item": "r3",
+   "maxLength": 1
+  },
+  {
+   "id": "t14.q1",
+   "task": "t14",
+   "label": "1",
+   "q": "Q12",
+   "interaction": "text-long",
+   "grading": "manual",
+   "item": "q1"
+  }
+ ],
+ "warn": []
+}

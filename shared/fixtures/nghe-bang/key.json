@@ -1,0 +1,72 @@
+{
+ "t1.cell.r2.0": {
+  "type": "cell",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t1.cell.r2.1": {
+  "type": "cell",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t1.cell.r3.0": {
+  "type": "cell",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t1.cell.r3.1": {
+  "type": "cell",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t2.q1": {
+  "type": "match",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t2.q2": {
+  "type": "match",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t2.q3": {
+  "type": "match",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t3.q2": {
+  "type": "text",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t3.q4": {
+  "type": "text",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t3.q6": {
+  "type": "text",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t4.q1.1": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "b"
+ },
+ "t4.q1.2": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "a"
+ },
+ "t4.q2.1": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "b"
+ },
+ "t4.q2.2": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "a"
+ }
+}

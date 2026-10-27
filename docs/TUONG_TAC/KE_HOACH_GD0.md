@@ -1,6 +1,6 @@
 # Kế hoạch GĐ0: chuẩn bị trong WS Editor
 
-> 27/10/2026 · Thuộc `3_LO_TRINH.md` mục 3. **Chưa code**, chờ người dùng nói "ok làm".
+> 27/10/2026 · Thuộc `3_LO_TRINH.md` mục 3. **Đã làm xong B1–B7 (v110)**; còn chờ người dùng duyệt `DUYET_GD0.md`. Thuộc tính trên trang là `data-ans` (không phải `data-slot`, xem B4).
 > Kết quả: không đổi gì người dùng nhìn thấy; có mã chỗ trả lời, bộ liệt kê đáp án, bộ chấm dùng chung, bộ phiếu mẫu.
 
 ## 0. Hiện trạng đã kiểm (đọc mã 27/10)
@@ -35,7 +35,7 @@
 - `sheetSlots(ws)` gộp cả phiếu, kèm danh sách cảnh báo: câu thiếu đáp án (dùng `keyState`), dạng chỉ xem (Q9, lưới tìm từ, ô tick trong bảng).
 - Không ghi gì vào dữ liệu phiếu (chỉ đọc).
 
-### B4. Gắn `data-slot` lên trang
+### B4. Gắn `data-ans` lên trang (kế hoạch ghi `data-slot`, đã đổi vì trùng thuộc tính ô ảnh)
 - `renderTask` thêm thuộc tính `data-slot="<id>"` vào phần tử của từng chỗ trả lời (gạch điền, nhóm lựa chọn, nhãn T/F, ô bảng, vế nối…). **Chỉ thêm thuộc tính, không thêm phần tử, không đổi CSS.**
 - Đường chuẩn so hình học và ảnh từng trang: phải vẫn 120/120. Nếu `chuan.py` so cả chuỗi HTML thì bỏ qua thuộc tính `data-slot` khi so (ghi rõ trong `tests/chuan/README.md`).
 - Kiểm thêm: mọi `data-slot` trên trang ↔ đúng một chỗ trong `sheetSlots`, và ngược lại, trên 24 phiếu chuẩn.
@@ -55,10 +55,10 @@
 - Spec mục mới (GĐ0), `KE_HOACH_REACT.md` nếu đụng mảnh nào, báo cáo phiên, badge `vNN` (tăng một bản vì `renderTask` đổi HTML), commit và push.
 
 ## 2. Nghiệm thu GĐ0
-- [ ] Typecheck, build ra `ws-editor.html` một file.
-- [ ] Đường chuẩn 120/120; giaodien 2497/2497; 49 test cũ đạt; 0 lỗi console.
-- [ ] 24 phiếu chuẩn: `sheetSlots` chạy không lỗi; `data-slot` khớp 1–1.
-- [ ] `node --test` trong `shared/`: chuẩn hóa, chấm, kiểm khuôn đều đạt trên bộ mẫu.
+- [x] Typecheck, build ra `ws-editor.html` một file.
+- [x] Đường chuẩn 120/120; giaodien 2497/2497; 49 test cũ đạt; 0 lỗi console.
+- [x] 24 phiếu chuẩn + phiếu mẫu: `sheetSlots` chạy không lỗi; `data-ans` khớp 1–1 (739 chỗ).
+- [x] `node --test` trong `shared/`: chuẩn hóa, chấm, kiểm khuôn đều đạt trên bộ mẫu.
 - [ ] Người dùng duyệt bảng B6, xác nhận máy đọc đúng đáp án.
 
 ## 3. Rủi ro

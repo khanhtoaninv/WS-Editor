@@ -1,0 +1,355 @@
+{
+ "src": "tests/real/phieu7-ai-v99.md",
+ "title": "Unit 6 – Lesson 1",
+ "tasks": [
+  {
+   "id": "t1",
+   "number": 1,
+   "q": "Q1",
+   "title": "LISTEN AND FILL IN THE BLANK"
+  },
+  {
+   "id": "t2",
+   "number": 2,
+   "q": "Q1",
+   "title": "CHOOSE THE SUITABLE WORD WITH ITS DEFINITION"
+  },
+  {
+   "id": "t3",
+   "number": 3,
+   "q": "Q3",
+   "title": "LISTEN AND CHOOSE THE CORRECT ANSWER"
+  },
+  {
+   "id": "t4",
+   "number": 4,
+   "q": "Q5",
+   "title": "READ THE INTRODUCTION THEN READ THE STATEMENTS BELOW"
+  }
+ ],
+ "slots": [
+  {
+   "id": "t1.lead.1",
+   "task": "t1",
+   "label": "(1)",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual"
+  },
+  {
+   "id": "t1.lead.2",
+   "task": "t1",
+   "label": "(2)",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual"
+  },
+  {
+   "id": "t1.lead.3",
+   "task": "t1",
+   "label": "(3)",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual"
+  },
+  {
+   "id": "t1.lead.4",
+   "task": "t1",
+   "label": "(4)",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual"
+  },
+  {
+   "id": "t1.lead.5",
+   "task": "t1",
+   "label": "(5)",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual"
+  },
+  {
+   "id": "t1.lead.6",
+   "task": "t1",
+   "label": "(6)",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual"
+  },
+  {
+   "id": "t1.lead.7",
+   "task": "t1",
+   "label": "(7)",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual"
+  },
+  {
+   "id": "t1.lead.8",
+   "task": "t1",
+   "label": "(8)",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual"
+  },
+  {
+   "id": "t1.q1",
+   "task": "t1",
+   "label": "1",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual",
+   "item": "q1"
+  },
+  {
+   "id": "t2.q1",
+   "task": "t2",
+   "label": "1",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual",
+   "item": "q1"
+  },
+  {
+   "id": "t2.q2",
+   "task": "t2",
+   "label": "2",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual",
+   "item": "q2"
+  },
+  {
+   "id": "t2.q3",
+   "task": "t2",
+   "label": "3",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual",
+   "item": "q3"
+  },
+  {
+   "id": "t2.q4",
+   "task": "t2",
+   "label": "4",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual",
+   "item": "q4"
+  },
+  {
+   "id": "t2.q5",
+   "task": "t2",
+   "label": "5",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual",
+   "item": "q5"
+  },
+  {
+   "id": "t2.q6",
+   "task": "t2",
+   "label": "6",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual",
+   "item": "q6"
+  },
+  {
+   "id": "t2.q7",
+   "task": "t2",
+   "label": "7",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual",
+   "item": "q7"
+  },
+  {
+   "id": "t2.q8",
+   "task": "t2",
+   "label": "8",
+   "q": "Q1",
+   "interaction": "text",
+   "grading": "manual",
+   "item": "q8"
+  },
+  {
+   "id": "t3.q1",
+   "task": "t3",
+   "label": "1",
+   "q": "Q3",
+   "interaction": "choice-one",
+   "grading": "manual",
+   "item": "q1",
+   "options": [
+    {
+     "id": "a",
+     "text": "He visited his friend"
+    },
+    {
+     "id": "b",
+     "text": "He visited his family"
+    },
+    {
+     "id": "c",
+     "text": "He lived there"
+    }
+   ]
+  },
+  {
+   "id": "t3.q2",
+   "task": "t3",
+   "label": "2",
+   "q": "Q3",
+   "interaction": "choice-one",
+   "grading": "manual",
+   "item": "q2",
+   "options": [
+    {
+     "id": "a",
+     "text": "2 months ago"
+    },
+    {
+     "id": "b",
+     "text": "2 years ago"
+    },
+    {
+     "id": "c",
+     "text": "one year ago"
+    }
+   ]
+  },
+  {
+   "id": "t3.q3",
+   "task": "t3",
+   "label": "3",
+   "q": "Q3",
+   "interaction": "choice-one",
+   "grading": "manual",
+   "item": "q3",
+   "options": [
+    {
+     "id": "a",
+     "text": "They want to live in newer homes"
+    },
+    {
+     "id": "b",
+     "text": "They want their homes will fall during an earthquake"
+    },
+    {
+     "id": "c",
+     "text": "They want their homes won’t fall during an earthquake"
+    }
+   ]
+  },
+  {
+   "id": "t3.q4",
+   "task": "t3",
+   "label": "4",
+   "q": "Q3",
+   "interaction": "choice-one",
+   "grading": "manual",
+   "item": "q4",
+   "options": [
+    {
+     "id": "a",
+     "text": "It’s more international"
+    },
+    {
+     "id": "b",
+     "text": "It’s more comfortable"
+    },
+    {
+     "id": "c",
+     "text": "It’s more economical"
+    }
+   ]
+  },
+  {
+   "id": "t3.q5",
+   "task": "t3",
+   "label": "5",
+   "q": "Q3",
+   "interaction": "choice-one",
+   "grading": "manual",
+   "item": "q5",
+   "options": [
+    {
+     "id": "a",
+     "text": "The Goal Bridge"
+    },
+    {
+     "id": "b",
+     "text": "The Golden Gate Bridge"
+    },
+    {
+     "id": "c",
+     "text": "The Gate Bridge"
+    }
+   ]
+  },
+  {
+   "id": "t4.q1",
+   "task": "t4",
+   "label": "1",
+   "q": "Q5",
+   "interaction": "tf",
+   "grading": "manual",
+   "item": "q1",
+   "options": [
+    {
+     "id": "T",
+     "text": "T"
+    },
+    {
+     "id": "F",
+     "text": "F"
+    }
+   ]
+  },
+  {
+   "id": "t4.q2",
+   "task": "t4",
+   "label": "2",
+   "q": "Q5",
+   "interaction": "tf",
+   "grading": "manual",
+   "item": "q2",
+   "options": [
+    {
+     "id": "T",
+     "text": "T"
+    },
+    {
+     "id": "F",
+     "text": "F"
+    }
+   ]
+  },
+  {
+   "id": "t4.q3",
+   "task": "t4",
+   "label": "3",
+   "q": "Q5",
+   "interaction": "tf",
+   "grading": "manual",
+   "item": "q3",
+   "options": [
+    {
+     "id": "T",
+     "text": "T"
+    },
+    {
+     "id": "F",
+     "text": "F"
+    }
+   ]
+  }
+ ],
+ "warn": [
+  "Task 1 (Q1 Điền từ): 9 chỗ (1), (2), (3), (4), (5), (6), (7), (8), 1: chưa có đáp án → chấm tay",
+  "Task 2 (Q1 Điền từ): 8 chỗ 1, 2, 3, 4, 5, 6, 7, 8: chưa có đáp án → chấm tay",
+  "Task 3 (Q3 Chọn A/B/C): 5 chỗ 1, 2, 3, 4, 5: chưa có đáp án → chấm tay",
+  "Task 4 (Q5 Đúng / Sai): 3 chỗ 1, 2, 3: chưa có đáp án → chấm tay"
+ ]
+}

@@ -1,0 +1,220 @@
+{
+ "t1.q1.1": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "went"
+  ]
+ },
+ "t1.q1.2": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "played"
+  ]
+ },
+ "t1.q2": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "doesn't",
+   "does not"
+  ]
+ },
+ "t1.q3": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "one"
+  ]
+ },
+ "t2.q1": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "were"
+  ]
+ },
+ "t2.q3": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "do"
+  ]
+ },
+ "t3.lead.1": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "has"
+  ]
+ },
+ "t3.lead.2": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "drinks"
+  ]
+ },
+ "t3.q1": {
+  "type": "text-long",
+  "score": 1,
+  "accept": [
+   "Tom"
+  ]
+ },
+ "t4.q1": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "b"
+ },
+ "t4.q2": {
+  "type": "choice-many",
+  "score": 1,
+  "correct": [
+   "a",
+   "c"
+  ]
+ },
+ "t5.q1.1": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "a"
+ },
+ "t5.q1.2": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "b"
+ },
+ "t5.q2": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "a"
+ },
+ "t6.q1": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "a"
+ },
+ "t7.q1": {
+  "type": "tf",
+  "score": 1,
+  "correct": "True"
+ },
+ "t7.q2": {
+  "type": "tf",
+  "score": 1,
+  "correct": "False"
+ },
+ "t8.q1": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "cat"
+  ]
+ },
+ "t8.q2": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "ice cream",
+   "ice-cream"
+  ]
+ },
+ "t9.q1": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "a"
+ },
+ "t10.q1": {
+  "type": "match",
+  "score": 1,
+  "correct": "q1"
+ },
+ "t10.q2": {
+  "type": "match",
+  "score": 1,
+  "correct": "q2"
+ },
+ "t10.q3": {
+  "type": "match",
+  "score": 1,
+  "correct": "q3"
+ },
+ "t11.cell.r1.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "swimming"
+  ]
+ },
+ "t11.cell.r2.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "10"
+  ]
+ },
+ "t11.cell.r2.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "reading",
+   "books"
+  ]
+ },
+ "t12.cell.r1": {
+  "type": "choice-many",
+  "score": 1,
+  "correct": [
+   "0"
+  ]
+ },
+ "t12.cell.r2": {
+  "type": "choice-many",
+  "score": 1,
+  "correct": [
+   "1"
+  ]
+ },
+ "t13.cell.r1.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "C"
+  ]
+ },
+ "t13.cell.r1.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "A"
+  ]
+ },
+ "t13.cell.r1.2": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "T"
+  ]
+ },
+ "t13.cell.r2.2": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "O"
+  ]
+ },
+ "t13.cell.r3.2": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "P"
+  ]
+ },
+ "t14.q1": {
+  "type": "text-long",
+  "score": 1,
+  "grading": "manual"
+ }
+}

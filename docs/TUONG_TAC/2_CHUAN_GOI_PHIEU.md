@@ -68,7 +68,7 @@ Một file `.wsp` = **phong bì** (đọc được, không mã hóa) + **lõi** 
 
 - Mỗi trang là **một đoạn HTML tĩnh** do WS Editor dàn: đúng như bản in. Không `<script>`, không thuộc tính sự kiện (`on*`), không đường dẫn ngoài; ảnh trỏ `media/…`; phông trỏ `fonts/…`. WS Editor làm sạch khi xuất, bên nhập kiểm lại (PHẢI).
 - Trang dùng đơn vị mm (như WS Editor). Trình xem đặt trang vào khung kích thước cố định rồi thu phóng bằng `transform: scale`.
-- **Chỗ trả lời trong HTML:** mỗi phần tử là chỗ trả lời mang `data-slot="<slotId>"`. Trình xem tìm theo thuộc tính này để phủ ô nhập / nút chọn đúng chỗ. Không dùng tọa độ tuyệt đối làm nguồn chính (tọa độ trong `slots.json` chỉ để kiểm tra và cho máy chủ vẽ báo cáo).
+- **Chỗ trả lời trong HTML:** mỗi phần tử là chỗ trả lời mang `data-ans="<slotId>"` (GĐ0 đổi tên từ `data-slot` vì `data-slot` đã dùng cho ô ảnh `.pic`). Trình xem tìm theo thuộc tính này để phủ ô nhập / nút chọn đúng chỗ. Không dùng tọa độ tuyệt đối làm nguồn chính (tọa độ trong `slots.json` chỉ để kiểm tra và cho máy chủ vẽ báo cáo).
 - Bản đáp án in sẵn (câu ví dụ `ex`, số 0) giữ nguyên trên trang, không phải chỗ trả lời.
 - Đáp án **không bao giờ** có trong HTML trang (kể cả ẩn bằng CSS). Phần hiển thị đáp án do trình xem vẽ từ `key.json` khi được phép.
 
@@ -79,9 +79,14 @@ Một file `.wsp` = **phong bì** (đọc được, không mã hóa) + **lõi** 
 slotId = "<taskId>.<itemId>"            # câu có một chỗ trả lời
        | "<taskId>.<itemId>.<n>"        # chỗ thứ n trong câu (n từ 1)
        | "<taskId>.lead.<n>"            # chỗ trống trong bài đọc
-       | "<taskId>.cell.<r>.<c>"        # ô bảng (Q10, Q11)
-       | "<taskId>.pair.<itemId>"       # vế trái bài nối (Q8)
+       | "<taskId>.leadc.<n>"           # nhóm chọn {a|b} trong bài đọc
+       | "<taskId>.cell.<rowId>.<c>"    # ô bảng / ô chữ (Q10, Q11), c = chỉ số cột từ 0
+       | "<taskId>.cell.<rowId>"        # hàng tick của bảng (chọn một / nhiều ô trong hàng)
+       | "<taskId>.<leftItemId>"        # vế trái bài nối (Q8); phương án = id các câu (vế phải)
 ```
+(GĐ0 đã làm, 27/10: bài nối không dùng tiền tố `pair.`; câu hội thoại đánh nhãn `(1)`, `(2)`… theo chỗ trống, bỏ lượt không có chỗ trống.)
+- **Nhiều đáp án đúng cho một chỗ viết:** trong WS Editor ghi cách nhau ` / ` (có dấu cách hai bên): `isn't / is not` → `accept: ["isn't","is not"]`. Dấu `/` không có cách (`and/or`) giữ nguyên là chữ.
+- **Câu chưa có đáp án** → chỗ đó `grading: "manual"`, kèm cảnh báo; không đoán.
 `taskId`, `itemId` là `id` sẵn có trong JSON WS Editor (`t1`, `i3`…). WS Editor PHẢI giữ các id này khi người soạn sửa chữ, đổi thứ tự (đổi thứ tự không đổi id).
 
 ### 5.2 Một chỗ trả lời
@@ -201,7 +206,7 @@ Không dùng so khớp "chứa" (đặc tả tham khảo đề xuất cho câu n
 | Chữ ký, hash từng file | (ký) | PHẢI đúng, sai → từ chối |
 | `format` đọc được | | không đọc được → từ chối, báo cần nâng cấp |
 | Lược đồ `manifest`, `slots`, `key` | PHẢI qua | PHẢI qua |
-| Mỗi `data-slot` trong trang ↔ một mục `slots.json`, và ngược lại | PHẢI khớp | PHẢI khớp |
+| Mỗi `data-ans` trong trang ↔ một mục `slots.json`, và ngược lại | PHẢI khớp | PHẢI khớp |
 | Mỗi chỗ `auto` có mục trong `key.json` | thiếu → **chặn xuất**, chỉ ra câu thiếu (dùng lại chip "x/y câu có đáp án" v88) | thiếu → từ chối |
 | HTML trang sạch (không script, không `on*`, không URL ngoài) | làm sạch | kiểm lại, vi phạm → từ chối |
 | Ảnh, phông được tham chiếu đều có | PHẢI | PHẢI |

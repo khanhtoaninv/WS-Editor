@@ -2,6 +2,8 @@
 import { ws } from './state.js';
 import { AGE, ANS_DEF, IMP_MAX, IMP_MAX_CH, LAYOUT_DEF, QN, RECIPES, attachOpts, choiceTexts, ck, clone, ensureIds, ensureRowIds, featOf, fillSheet, fillTask, gapCount, hasChoiceMarkup, hasMarkup, isFreeW, isGridTbl, isObj, its, kindsOk, newId, normAnswer, qTidy, recipeMatch, tidy } from './model.js';
 import { A2MM, TA, a2cfg, autoLayout, crossCell, gtN, layoutOf, layoutReasons, leadText, qOf, qnum, renderTask, taOf } from './layout.js';
+// Câu nhận dòng đáp án: bỏ câu ví dụ, dòng chữ, và lượt hội thoại không có chỗ trống (GĐ0)
+const keyable = x => !x.ex && !x.gt && !(x.who != null && !/___|\{/.test(x.text || ''));
 
 export const PRESET_NAME = { compact: 'Gọn', normal: 'Vừa', airy: 'Thoáng' };
 
@@ -421,7 +423,7 @@ export function readMd(raw) {
     const g = tasks.filter(r => r.grp === +n);
     if (!g.length) { notes.push(`đáp án của Task ${n} không có Task tương ứng`); return; }
     if (g.length === 1) return;
-    const all = g.filter(r => r.t).flatMap(r => its(r.t).filter(x => !x.ex && !x.gt)); all.forEach((x, i) => { if (keys[n][i] != null && keys[n][i] !== '') x.key = keys[n][i]; });
+    const all = g.filter(r => r.t).flatMap(r => its(r.t).filter(keyable)); all.forEach((x, i) => { if (keys[n][i] != null && keys[n][i] !== '') x.key = keys[n][i]; });
     if (keys[n].length > all.length) g[0].notes.push(`đáp án có ${keys[n].length} dòng, Task ${n} (cả các phần) có ${all.length} câu`);
   });
   const sheetNotes = [];
@@ -555,7 +557,7 @@ export function mdTask(b, keys) {
   // gạch ___ ở cuối câu khi đáp án đã có chỗ trả lời riêng (Đúng/Sai, viết câu, viết từ theo câu): bỏ để không trùng
   if (dupGapKind(t)) { let n = 0; its(t).forEach(x => { if (x.text && /\s*_{3,}\s*[.?!]?\s*$/.test(x.text) && x.text.split('___').length === 2 && !/:\s*_{3,}\s*$/.test(x.text)) { x.text = x.text.replace(/\s*_{3,}(\s*[.?!]?)\s*$/, '$1').replace(/\s+([.?!])$/, '$1'); n++; } }); if (n) notes.push(`bỏ gạch ___ ở cuối ${n} câu (app tự vẽ chỗ trả lời)`); }
   if (F.lines) { const n = Math.max(1, Math.min(t.answer.layout === 'A1' ? 20 : 8, parseInt(F.lines, 10) || 1)); if (['A1', 'A2'].includes(t.answer.layout)) t.answer.params.lines = n; else notes.push('“Dòng viết” chỉ dùng cho đáp án viết câu / điền chỗ trống'); }
-  if (keys && keys.length) { const it = its(t).filter(x => !x.ex && !x.gt); if (it.length) { it.forEach((x, i) => { if (keys[i] != null && keys[i] !== '') x.key = keys[i]; }); if (keys.length > it.length) notes.push(`đáp án có ${keys.length} dòng, Task có ${it.length} câu`); } else notes.push('Task không có câu: bỏ phần đáp án'); }
+  if (keys && keys.length) { const it = its(t).filter(keyable); if (it.length) { it.forEach((x, i) => { if (keys[i] != null && keys[i] !== '') x.key = keys[i]; }); if (keys.length > it.length) notes.push(`đáp án có ${keys.length} dòng, Task có ${it.length} câu`); } else notes.push('Task không có câu: bỏ phần đáp án'); }
   if (keys && keys.ex != null) { const x = its(t).find(y => y.ex); if (x) x.key = keys.ex; else notes.push('đáp án có dòng “0.” nhưng Task không có câu ví dụ'); }
   its(t).forEach(x => { if (x.ex && x.key == null) x.key = ''; });
   if (keys && keys.gap) { if (t.content.lead && t.content.lead.kind === 'passage') t.content.lead.keys = keys.gap; else notes.push('“Chỗ trống:” trong đáp án nhưng Task không có bài đọc'); }

@@ -1,6 +1,6 @@
 // src/core/layout.js — tách nguyên văn từ v106 (app/scripts/tach-core.mjs). Không dùng trạng thái giao diện (chọn, cột trái, hoàn tác).
 import { ws } from './state.js';
-import { AGE, GAPLAB, GAPP, PK_STAR, PRESETS, QN, SCHEMA, SIZES, ck, clone, gapCount, its, keyParts, migTask, qDerived } from './model.js';
+import { AGE, GAPLAB, GAPP, PK_STAR, PRESETS, QN, SCHEMA, SIZES, ck, clone, gapCount, isGridTbl, its, keyParts, migTask, pkGroups, pkSrc, qDerived } from './model.js';
 
 /* ================= Hằng số & chính sách ================= */
 export const MM = 96 / 25.4;                 // px trên mỗi mm (CSS)
@@ -143,18 +143,18 @@ export const leadText = t => (t.content.lead && t.content.lead.text) || '';
 /* Bài đọc (v75): ___ chỗ trống tự đánh số khi có từ 2 chỗ; {a|b} chọn; **đậm**, *nghiêng*, __gạch chân__ */
 export const passageParas = t => { const x = leadText(t); return /\n/.test(x) ? x.split(/\n\s*\n/).map(p => p.replace(/\s*\n\s*/g, ' ').trim()).filter(Boolean) : [x]; };
 
-export function passInline(raw, n0, total) {
-  let k = n0;
-  return rich(esc(pkPre(raw)).replace(GAPP, (m, at, str) => { k++; return `<span class="pgap">${total > 1 && !GAPLAB.test(str.slice(0, at)) ? `(${k})` : '&nbsp;'}</span>`; })
-    .replace(/\{([^{}|]+(?:\|[^{}|]+)+)\}/g, (m, g) => `<span class="pch">${g.split('|').map(o => `<b>${o.replace(/\u0003/g, '').trim()}</b>`).join('&nbsp;/ ')}</span>`)
+export function passInline(raw, n0, total, tid, c0) {
+  let k = n0, c = c0 || 0;
+  return rich(esc(pkPre(raw)).replace(GAPP, (m, at, str) => { k++; return `<span class="pgap"${tid ? slotAt(`${tid}.lead.${k}`) : ''}>${total > 1 && !GAPLAB.test(str.slice(0, at)) ? `(${k})` : '&nbsp;'}</span>`; })
+    .replace(/\{([^{}|]+(?:\|[^{}|]+)+)\}/g, (m, g) => `<span class="pch"${tid ? slotAt(`${tid}.leadc.${++c}`) : ''}>${g.split('|').map(o => `<b>${o.replace(/\u0003/g, '').trim()}</b>`).join('&nbsp;/ ')}</span>`)
     .replace(/(?<!_)__(?!_)(.+?)(?<!_)__(?!_)/g, '<u>$1</u>'));   // __gạch chân__ (cũ, v75) và <u>…</u>, **đậm**, *nghiêng* đều dùng được
 }
 
 export function passageHtml(t, idx) {
-  const ps = passageParas(t), total = gapCount(leadText(t)); let n = 0; const off = ps.map(p => { const o = n; n += gapCount(p); return o; });
-  if (!/\n/.test(leadText(t))) return passInline(ps[0], 0, total);
+  const ps = passageParas(t), total = gapCount(leadText(t)), nCh = p => (p.match(/\{[^{}|]+(?:\|[^{}|]+)+\}/g) || []).length; let n = 0, nc = 0; const off = ps.map(p => { const o = n; n += gapCount(p); return o; }), offc = ps.map(p => { const o = nc; nc += nCh(p); return o; });
+  if (!/\n/.test(leadText(t))) return passInline(ps[0], 0, total, t.id, 0);
   const lab = ps.filter(p => /^[A-H][.)]\s+\S/.test(p)).length >= 2;   // v81: đoạn có nhãn A–F (bài nối tiêu đề với đoạn)
-  return ps.map((p, i) => { if (idx && !idx.includes(i)) return ''; const m = lab && /^([A-H])[.)]\s+([\s\S]*)$/.exec(p); return m ? `<p class="plb"><b class="plt">${m[1]}</b><span>${passInline(m[2], off[i], total)}</span></p>` : `<p>${passInline(p, off[i], total)}</p>`; }).join('');
+  return ps.map((p, i) => { if (idx && !idx.includes(i)) return ''; const m = lab && /^([A-H])[.)]\s+([\s\S]*)$/.exec(p); return m ? `<p class="plb"><b class="plt">${m[1]}</b><span>${passInline(m[2], off[i], total, t.id, offc[i])}</span></p>` : `<p>${passInline(p, off[i], total, t.id, offc[i])}</p>`; }).join('');
 }
 
 export const passCut = (t, L) => ck(t) === 'passage' && (L === 'T1' || L === 'T6') && t.layout.order !== 'qfirst';   // v81: câu hỏi trước bài đọc thì không cắt theo đoạn
@@ -352,7 +352,20 @@ export function a4dir(t, item) {
 // v95: Q2 viết câu với gạch tính từ câu hỏi (điểm bắt đầu cuối câu / dòng dưới, chiều dài cố định / hết dòng, số hàng): dùng bộ dựng a2inline trên "câu + ___"
 export const q2end = t => t.answer.kind === 'sentence' && t.answer.layout === 'A2' && t.answer.attach === 'item' && !!(t.answer.params || {}).lenMode && qOf(t) === 'Q2';
 
-export function ans(t, item) { if (item && typeof item === 'object' && !item.gt && q2end(t)) return ''; const h = ans0(t, item); return item && typeof item === 'object' && item.ex && String(item.key ?? '').trim() ? exFill(t, item, h) : h; }
+// GĐ0 phiếu tương tác: data-ans = mã chỗ trả lời (core/slots.js; data-slot đã dùng cho ô ảnh). Chỉ thêm thuộc tính, không đổi hình.
+// sk = { base, ofs, multi }: chỗ thứ j (từ 1) trong một đoạn chữ → base hoặc base.(ofs + j)
+export const slotAt = id => id ? ` data-ans="${id}"` : '';
+export const skId = (sk, j) => !sk ? '' : sk.multi ? `${sk.base}.${sk.ofs + j}` : sk.base;
+export const skOf = (t, q, n) => q && q.id && !q.ex && !q.gt ? { base: `${t.id}.${q.id}`, ofs: 0, multi: n > 1 } : null;
+const nGaps = x => (pkSrc(x).match(/___/g) || []).length;
+// Câu nhiều dòng (ô lưới T5): mã chỗ của từng dòng, đánh số liên tục qua các dòng
+export function linesSk(t, it) {
+  const inl = t.answer.attach === 'inline' && t.answer.layout === 'A4', cnt = l => inl ? (String(l).match(/\{[^{}|]+(?:\|[^{}|]+)+\}/g) || []).length : (String(l).match(/___/g) || []).length;
+  const tot = inl ? pkGroups(it).length : nGaps(it); let o = 0;
+  return it.lines.map(l => { const sk = it.id && !it.ex ? { base: `${t.id}.${it.id}`, ofs: o, multi: tot > 1 } : null; o += cnt(typeof l === 'string' ? l : (l && l.text) || ''); return sk; });
+}
+
+export function ans(t, item, sk) { if (item && typeof item === 'object' && !item.gt && q2end(t)) return ''; const h = ans0(t, item, sk); return item && typeof item === 'object' && item.ex && String(item.key ?? '').trim() ? exFill(t, item, h) : h; }
 
 // v90: thứ tự xáo vế phải bài nối: cố định theo mã Task + số lần "Xáo lại", tránh để vế nào đứng yên chỗ
 export function pairPerm(t, n) {
@@ -383,9 +396,10 @@ export function exFill(t, item, h) {
 // Câu nhiều ảnh lựa chọn (Q7): chỉ ô của ảnh đúng trong câu ví dụ được tích sẵn (✓)
 export function ansI(t, item, j) { const h = ans0(t, item); return item.ex && String(item.key ?? '').trim() && t.answer.layout === 'A5' ? (exPicks(t, item, item.imgs || []).includes(j) ? h.replace('class="a a5"', 'class="a a5 pk"') : h) : h; }
 
-export function ans0(t, item) {
+export function ans0(t, item, sk) {
   const a = t.answer, p = pOf(t, item), age = AGE[ws.age], key = item && typeof item === 'object' ? item.id : null;
-  const nd = `data-node="${t.id}:G3${key ? ':' + key : ''}"${p.align ? ` data-aa="${p.align}"` : ''}`;
+  const sid = sk === false ? '' : typeof sk === 'string' ? sk : key && !item.ex && !item.gt && a.layout !== 'A8' && !(a.layout === 'A1' && p.frame === 'box') && !(a.attach === 'inline' && a.layout === 'A4') ? `${t.id}.${key}` : '';
+  const nd = `data-node="${t.id}:G3${key ? ':' + key : ''}"${p.align ? ` data-aa="${p.align}"` : ''}${slotAt(sid)}`;
   const lh = Math.max(p.lineMm || age.line, age.line), aw = p.w ? `;--aw:${p.w}` : '', as = p.size ? ` style="--as:${p.size}mm"` : '';
   switch (a.layout) {
     case 'A1': if (p.frame === 'box') return `<div class="a a1 abox" ${nd} style="--bh:${p.boxH || 80}mm${aw}"></div>`;
@@ -417,25 +431,28 @@ export function a2cfg(t, item) {
 // Chỗ trống cuối câu (sau nó chỉ còn dấu câu) mới kéo dài / nhiều dòng được; chỗ trống giữa câu luôn là gạch cố định.
 export function a2end(raw) { const i = raw.lastIndexOf('___'); return i >= 0 && /^\s*[.?!…:,;]*\s*$/.test(raw.slice(i + 3)); }
 
-export function a2inline(t, raw, num, item) {
-  const c = a2cfg(t, item), key = item && item.id, nd = `data-node="${t.id}:G3${key ? ':' + key : ''}"`, parts = raw.split('___'), last = parts.length - 2;
+export function a2inline(t, raw, num, item, sk) {
+  const c = a2cfg(t, item), key = item && item.id, nd0 = `data-node="${t.id}:G3${key ? ':' + key : ''}"`, parts = raw.split('___'), last = parts.length - 2;
+  if (sk === undefined) sk = skOf(t, item, parts.length - 1);
+  const nd = j => nd0 + slotAt(skId(sk, j));
   const fixedW = c.mode === 'legacy' ? `${(c.ch || 10)}ch` : `${c.mm}mm`;
-  const fixedBlank = () => `<span class="a a2" ${nd} style="width:${fixedW}"></span>`;
+  const fixedBlank = j => `<span class="a a2" ${nd(j)} style="width:${fixedW}"></span>`;
   const lab = () => num ? `(${num()}) ` : '';
   const eligible = a2end(raw) && (c.mode === 'fill' || c.lines > 1 || c.start === 'below');
-  if (!eligible) return parts.reduce((a, part, i) => a + (i ? lab() + fixedBlank() : '') + er(part).replace(/\n/g, '<br>'), '');
+  if (!eligible) return parts.reduce((a, part, i) => a + (i ? lab() + fixedBlank(i) : '') + er(part).replace(/\n/g, '<br>'), '');
   // chỗ trống cuối câu: dựng hàng flex để gạch kéo dài hết phần còn lại của dòng cuối
   const tok = '\u0001', head = parts.slice(0, -1).map((x, i) => rich(esc(x), true).replace(/\s*\n\s*/g, ' \u0002 ') + (i < last ? lab() + tok : '')).join('');
-  const words = head.split(/\s+/).filter(Boolean).map(w => w === '\u0002' ? '<span class="brk"></span>' : `<span class="w">${w.split(tok).join(fixedBlank())}</span>`);
+  let gi = 0;
+  const words = head.split(/\s+/).filter(Boolean).map(w => w === '\u0002' ? '<span class="brk"></span>' : `<span class="w">${w.split(tok).map((x, ix) => ix ? fixedBlank(++gi) + x : x).join('')}</span>`);
   const tail = parts[parts.length - 1].trim(), keepTail = /[?!:…]/.test(tail) ? tail.replace(/[.,;]/g, '') : '';
   const label = lab();
   let row = words.join(''), extra = c.lines - 1;
   if (c.start === 'inline') {
     row += label ? `<span class="w">${label.trim()}</span>` : '';
-    row += c.mode === 'fill' ? `<span class="a fl" ${nd}></span>` : `<span class="a a2 nofl" ${nd} style="width:${fixedW}"></span>`;
+    row += c.mode === 'fill' ? `<span class="a fl" ${nd(last + 1)}></span>` : `<span class="a a2 nofl" ${nd(last + 1)} style="width:${fixedW}"></span>`;
     row += tail ? `<span class="w tl">${esc(tail)}</span>` : '';
   } else { extra = c.lines; if (label) row += `<span class="w">${label.trim()}</span>`; if (keepTail) row += `<span class="w tl">${esc(keepTail)}</span>`; }
-  const xl = Array.from({ length: Math.max(0, extra) }, () => `<span class="a xl" ${nd} style="${c.mode === 'fill' ? '' : `width:${c.mm}mm;`}--lh2:${AGE[ws.age].line}mm"></span>`).join('');
+  const xl = Array.from({ length: Math.max(0, extra) }, () => `<span class="a xl" ${nd(last + 1)} style="${c.mode === 'fill' ? '' : `width:${c.mm}mm;`}--lh2:${AGE[ws.age].line}mm"></span>`).join('');
   return `<span class="a2box"><span class="fr">${row}</span>${xl}</span>`;
 }
 
@@ -446,12 +463,13 @@ export const pkPre = s => String(s).replace(/\{([^{}|]+(?:\|[^{}|]+)+)\}/g, (m, 
 
 export const pkB = o => { const ok = o.includes('\u0003'); return `<b${ok ? ' class="ok"' : ''}>${o.replace(/\u0003/g, '').trim()}</b>`; };
 
-export function inlChoice(t, escaped) {
-  return escaped.replace(CHOICE_RE, (m, g) => `<span class="a a4i" data-node="${t.id}:G3">${g.split('|').map(pkB).join('&nbsp;/ ')}</span>`);
+export function inlChoice(t, escaped, sk) {
+  let j = 0;
+  return escaped.replace(CHOICE_RE, (m, g) => `<span class="a a4i" data-node="${t.id}:G3"${slotAt(skId(sk, ++j))}>${g.split('|').map(pkB).join('&nbsp;/ ')}</span>`);
 }
 
-export function qtext(t, q) {
-  let h = qtext0(t, q); const p = t.answer.params || {};
+export function qtext(t, q, sk) {
+  let h = qtext0(t, q, sk); const p = t.answer.params || {};
   if (p.ulab && t.answer.kind === 'choice') { let n = 0; h = h.replace(/<u>([\s\S]*?)<\/u>/g, (m, x) => `<span class="ulb"><u>${x}</u><i>${(p.upper ? 'ABCDEFGH' : 'abcdefgh')[n++] || ''}</i></span>`); }
   if (q && q.ex && t.answer.attach === 'inline' && t.answer.layout === 'A4') h = h.replace(/<b class="ok">/g, '<b class="pk">');   // v89: câu ví dụ khoanh sẵn vế có *
   h = h.replace(/<b class="ok">/g, '<b>').replace(/\u0003/g, '');
@@ -461,14 +479,15 @@ export function qtext(t, q) {
     if (t.answer.layout === 'A4') { const L = k.toLowerCase(); h = h.replace(/<b>([^<]*)<\/b>/g, (m, x) => x.trim().toLowerCase() === L ? `<b class="pk">${x}</b>` : m); }
     else { const g = keyGaps(q); let j = 0; h = g.length > 1 ? h.replace(/(<span class="(?:a (?:a2|fl)[^"]*|gap)"[^>]*>)(<\/span>)/g, (m, a, b) => `${a}<span class="exk">${esc(g[j++] || '')}</span>${b}`) : h.replace(/(<span class="(?:a (?:a2|fl)[^"]*|gap)"[^>]*>)(<\/span>)/, `$1<span class="exk">${k}</span>$2`); }   // v91: nhiều chỗ trống
   }
+  if (p.ulab && t.answer.kind === 'choice' && q && q.id && !q.ex) h = h.replace(/<span class="ulb( pk)?">/g, m => m.slice(0, -1) + slotAt(`${t.id}.${q.id}`) + '>');   // tìm lỗi sai: mỗi phần gạch chân là một lựa chọn của câu
   return h;
 }
 
-export function qtext0(t, q) {
+export function qtext0(t, q, sk) {
   const s = er(q.text || ''), br = h => h.replace(/\n/g, '<br>');   // câu nhiều dòng (dòng thụt lề trong MD): \n trong chữ câu là xuống dòng
-  if (q && !q.gt && q2end(t)) return a2inline(t, String(q.text || '').replace(/\s+$/, '') + ' ___', null, q);
-  if (t.answer.attach === 'inline' && t.answer.layout === 'A4') return br(inlChoice(t, s));
-  if (t.answer.attach === 'inline' && (q.text || '').includes('___')) return t.answer.layout === 'A2' ? a2inline(t, q.text, null, q) : br(s.split('___').join(ans(t, q)));
+  if (q && !q.gt && q2end(t)) return a2inline(t, String(q.text || '').replace(/\s+$/, '') + ' ___', null, q, sk !== undefined ? sk : skOf(t, q, 1));
+  if (t.answer.attach === 'inline' && t.answer.layout === 'A4') return br(inlChoice(t, s, sk !== undefined ? sk : skOf(t, q, pkGroups(q).length)));
+  if (t.answer.attach === 'inline' && (q.text || '').includes('___')) { if (t.answer.layout === 'A2') return a2inline(t, q.text, null, q, sk); const ps = s.split('___'), k0 = sk !== undefined ? sk : skOf(t, q, ps.length - 1); return br(ps.reduce((a, x, i) => a + (i ? ans(t, q, skId(k0, i)) : '') + x, '')); }
   return br(s.replace(/___/g, '<span class="gap"></span>'));
 }
 
@@ -481,7 +500,7 @@ export function crossHtml(t) {
   mat.forEach((row, r) => row.forEach((x, k) => {
     if (x.k === 'none') { cells.push('<span class="xs"></span>'); return; }
     const st = (!a(r, k - 1) && a(r, k + 1)) || (!a(r - 1, k) && a(r + 1, k)), nn = st ? ++num : 0, show = x.k === 'given' || (o.key && x.k === 'ans');
-    cells.push(`<span class="xc${x.k === 'given' ? ' gv' : ''}">${nn ? `<i class="xn">${nn}</i>` : ''}${show ? esc(x.ch.toUpperCase()) : ''}</span>`);
+    cells.push(`<span class="xc${x.k === 'given' ? ' gv' : ''}"${x.k === 'ans' || x.k === 'empty' ? slotAt(`${t.id}.cell.${c.rows[r].id}.${k}`) : ''}>${nn ? `<i class="xn">${nn}</i>` : ''}${show ? esc(x.ch.toUpperCase()) : ''}</span>`);
   }));
   const al = (t.layout.table || {}).align || 'center';
   return `<div class="g2 xg ${al === 'left' ? 'xl' : al === 'right' ? 'xr' : 'xm'}" data-node="${t.id}:G2" style="--xn:${n};--xc:${o.xc || 10}mm">${cells.join('')}</div>`;
@@ -642,9 +661,11 @@ export function body0n(t, L, frag, first) {
         const isRH = rh && ci2 === 0, tint = (o.fh && r.head) || (o.fr === 'zebra' && !r.head && (r.i % 2 === 1)) || (o.fc && isRH && !r.head);
         const cc = `${cl}${ci2 === 0 ? ' c0' : ''}${ci2 === r.cells.length - 1 ? ' cl' : ''}${tint ? ' tn' : ''}${o.fh && r.head ? ' hd' : ''}${tkey && !r.head && v && v.tick && v.ok ? ' tok' : ''}`;
         const rid = !r.head && c.rows[r.i] ? c.rows[r.i].id : null, sk = rid ? (isRH ? '@' + rid : `@${rid}.${ci2 - (rh ? 1 : 0)}`) : null;
+        const tsl = !r.head && rid && !isRH ? (v && typeof v === 'object' && v.ans != null) || (v === '' && !isGridTbl(t)) ? `${id}.cell.${rid}.${ci2 - (rh ? 1 : 0)}` : v && typeof v === 'object' && v.tick ? `${id}.cell.${rid}` : '' : '';
         let bd = isRH && v && typeof v === 'object' ? `<span class="rhx">${sk ? tpic(t, sk, v.img, 'sm') : pic(v.img, 'sm')}<span>${esc(v.text || '')}</span></span>` : cellHtml(v, sk);
+        if (tsl && v && v.tick) bd = bd.replace(/(<span class="a a5[^"]*")/, `$1${slotAt(tsl)}`);
         if (o.nm === 'in' && ci2 === 0 && !r.head) bd = `<span class="nin"><span class="ino">${r.i + 1}</span><span class="nib">${bd}</span></span>`;
-        return `<div class="${r.head ? 'th' : 'tc'}${isRH ? ' rh' : ''}${cc}" data-rk="${rk}"${rst} ${r.head ? '' : `data-node="${id}:G2"`}>${bd}</div>`;
+        return `<div class="${r.head ? 'th' : 'tc'}${isRH ? ' rh' : ''}${cc}" data-rk="${rk}"${rst} ${r.head ? '' : `data-node="${id}:G2"`}${tsl && !(v && v.tick) ? slotAt(tsl) : ''}>${bd}</div>`;
       }).join('');
     }).join('');
     return `<div class="body b1">${withBank(`<div class="g2 tg" data-node="${id}:G2" data-ln="${o.lines}" data-al="${o.align}" style="--tcols:${tpl};--nmw:${o.num ? 'var(--gut)' : '0px'};--rh:${rhmm}mm;--ta:${ta}${o.rows === 'equal' && nBody ? `;grid-template-rows:${showHead ? 'auto ' : ''}repeat(${nBody},1fr)` : ''}">${out}</div>`)}</div>`;
@@ -653,14 +674,14 @@ export function body0n(t, L, frag, first) {
   if (k === 'dialogue') {
     // v84: hội thoại cắt được theo lượt (Liền trang); số chỗ trống (1) (2)… đếm tiếp từ các lượt ở trang trước
     let n = frag ? c.items.slice(0, frag.a).reduce((a, l) => a + ((l.text || '').match(/___/g) || []).length, 0) : 0;
-    const fill = (tx, li) => t.answer.layout === 'A2' && t.answer.attach === 'inline' ? a2inline(t, tx, () => ++n, { id: c.items[li].id }) : er(tx).split('___').reduce((a, part, i) => a + (i ? `(${++n}) ${ans(t, { id: c.items[li].id })}` : '') + part, '');
+    const fill = (tx, li) => { const lid = c.items[li].id, g = (tx.match(/___/g) || []).length, sid = i => `${id}.${lid}${g > 1 ? '.' + i : ''}`; return t.answer.layout === 'A2' && t.answer.attach === 'inline' ? a2inline(t, tx, () => ++n, { id: lid }) : er(tx).split('___').reduce((a, part, i) => a + (i ? `(${++n}) ${ans(t, { id: lid }, sid(i))}` : '') + part, ''); };
     const intro = first ? leadText(t) : '', rows = (intro ? `<div class="dl intro">${er(intro)}</div>` : '') + range(c.items, frag).map(([l, li]) => `<div class="dl"><span class="who">${esc(l.who || '')}:</span><span>${fill(l.text || '', li)}</span></div>`).join('');
     return `<div class="body b1">${withBank(`<div class="g2 dialogue" data-node="${id}:G2">${rows}</div>`)}</div>`;
   }
 
   if (k === 'pairs' && c.shuffle) {   // v90: cặp gõ cạnh nhau = cặp đúng; vế trái giữ thứ tự, vế phải (cả vế thừa) in theo thứ tự xáo cố định
     const Ls = c.items.filter(x => x.pair && x.pair.l), Rs = c.items.filter(x => x.pair && x.pair.r), pm = pairPerm(t, Rs.length), n = Math.max(Ls.length, Rs.length);
-    const hd = c.heads && c.heads.some(Boolean) ? `<div class="ml mh" data-node="${id}:G2">${esc(c.heads[0] || '')}</div><div class="md"></div><div class="mr mh" data-node="${id}:G2">${esc(c.heads[1] || '')}</div>` : '', mid = (t.answer.params || {}).mid, mdH = (l, r, it) => mid === 'box' ? `<div class="md mbox" data-node="${id}:G3">${l ? `<span class="a mbx" data-node="${id}:G3"></span>` : ''}</div>` : mid === 'none' ? `<div class="md"></div>` : `<div class="md" data-node="${id}:G3">${l ? ans(t, it) : '<span></span>'}${r ? ans(t, it) : '<span></span>'}</div>`;   // v105: tiêu đề hai cột; giữa = chấm nối / ô viết chữ / không có
+    const hd = c.heads && c.heads.some(Boolean) ? `<div class="ml mh" data-node="${id}:G2">${esc(c.heads[0] || '')}</div><div class="md"></div><div class="mr mh" data-node="${id}:G2">${esc(c.heads[1] || '')}</div>` : '', mid = (t.answer.params || {}).mid, mdH = (l, r, it) => mid === 'box' ? `<div class="md mbox" data-node="${id}:G3">${l ? `<span class="a mbx" data-node="${id}:G3"${slotAt(`${id}.${it.id}`)}></span>` : ''}</div>` : mid === 'none' ? `<div class="md"></div>` : `<div class="md" data-node="${id}:G3">${l ? ans(t, it) : '<span></span>'}${r ? ans(t, it, false) : '<span></span>'}</div>`;   // v105: tiêu đề hai cột; giữa = chấm nối / ô viết chữ / không có
   let rows = hd;
     for (let i = 0; i < n; i++) {
       const lx = Ls[i], l = lx && lx.pair.l, rx = Rs[pm[i]], r = rx && rx.pair.r, it = { id: (lx || rx).id };
@@ -672,7 +693,7 @@ export function body0n(t, L, frag, first) {
   }
   if (k === 'pairs') {
     const n = c.items.length;
-    const hd = c.heads && c.heads.some(Boolean) ? `<div class="ml mh" data-node="${id}:G2">${esc(c.heads[0] || '')}</div><div class="md"></div><div class="mr mh" data-node="${id}:G2">${esc(c.heads[1] || '')}</div>` : '', mid = (t.answer.params || {}).mid, mdH = (l, r, it) => mid === 'box' ? `<div class="md mbox" data-node="${id}:G3">${l ? `<span class="a mbx" data-node="${id}:G3"></span>` : ''}</div>` : mid === 'none' ? `<div class="md"></div>` : `<div class="md" data-node="${id}:G3">${l ? ans(t, it) : '<span></span>'}${r ? ans(t, it) : '<span></span>'}</div>`;   // v105: tiêu đề hai cột; giữa = chấm nối / ô viết chữ / không có
+    const hd = c.heads && c.heads.some(Boolean) ? `<div class="ml mh" data-node="${id}:G2">${esc(c.heads[0] || '')}</div><div class="md"></div><div class="mr mh" data-node="${id}:G2">${esc(c.heads[1] || '')}</div>` : '', mid = (t.answer.params || {}).mid, mdH = (l, r, it) => mid === 'box' ? `<div class="md mbox" data-node="${id}:G3">${l ? `<span class="a mbx" data-node="${id}:G3"${slotAt(`${id}.${it.id}`)}></span>` : ''}</div>` : mid === 'none' ? `<div class="md"></div>` : `<div class="md" data-node="${id}:G3">${l ? ans(t, it) : '<span></span>'}${r ? ans(t, it, false) : '<span></span>'}</div>`;   // v105: tiêu đề hai cột; giữa = chấm nối / ô viết chữ / không có
   let rows = hd;
     for (let i = 0; i < n; i++) {
       const pr = c.items[i].pair || {}, l = pr.l, r = pr.r, it = { id: c.items[i].id };
@@ -689,7 +710,7 @@ export function body0n(t, L, frag, first) {
       const dir = cellDirOf(t);
       const cellS = (it, i) => {
         const inner = it.lines
-          ? it.lines.map(l => `<div class="cl">${qtext(t, { text: l })}</div>`).join('')
+          ? ((sks) => it.lines.map((l, li) => `<div class="cl">${qtext(t, { text: l }, sks[li])}</div>`).join(''))(linesSk(t, it))
           : (it.text ? `<div class="itx">${qtext(t, it)}</div>` : '') + ans(t, it);
         const img = ci(t, it.id, it.img, srcOf(t, '@' + it.id));
         // Ảnh trái: hàng gồm 2 container: ô ảnh | ô chữ, mỗi ô có cấu hình riêng

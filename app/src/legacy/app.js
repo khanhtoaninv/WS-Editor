@@ -6,6 +6,8 @@ import { askConfirm } from '../ui/Dialogs';
 import { toast } from '../ui/Toast';
 import { ws, setWs } from '../core/state.js';
 import { AGE, AL, ANS_DEF, CELL_NAME, F01, FEAT_NAME, FONTS, FORM_NAME, GAPLAB, GAPP, GT_SIZE, IMP_MAX, IMP_MAX_CH, KIND_A, KIND_NAME, L2KIND, LAYOUT_DEF, MINS, PK_STAR, PRESETS, QN, RECIPES, SCHEMA, SIZES, alOpts, attachOpts, choiceTexts, ck, ckOf, clone, ensureIds, ensureRowIds, featOf, featVal, fillSheet, fillTask, gapCount, hasChoiceMarkup, hasMarkup, isFreeW, isGridTbl, isObj, its, keyParts, kindsOk, migTask, newId, normAnswer, pkGroups, pkMig, pkSrc, pkToggle, prune, qDerived, qTidy, recipeMatch, sigOk, sv, tidy, toForm } from '../core/model.js';
+import { gapN, hasKey, itemKeys, keyState, needKey, optsOfKey } from '../core/answers.js';
+import { sheetSlots, taskSlots } from '../core/slots.js';   // GĐ0 phiếu tương tác (test và bước sau dùng)
 import { A2MM, AI, AR_OPTS, CHOICE_RE, CONTENT_H, FSZ, G1_TOP, IW8, JS, MM, PH, PHC, SAMPLE, SAMPLE2, T, T7CW, TA, TBL_DEF, TBL_ROW_MM, TL, a2cfg, a2end, a2inline, a4autoDef, a4autoMax, a4dir, alignOf, ans, ans0, ansI, arLabel, arNum, autoLayout, body, body0, body0n, cellCfg, cellDirOf, cellFr, cellSplit, ci, colsDefault, colsOf, colsRange, crossCell, crossHtml, er, esc, exFill, exPick, exPicks, fitOf, fixedImg, fixesFor, fontPt, frOf, frameH, g1Of, g1bFit, g1bFr, g3row, g4Html, gapOf, gtBody, gtHtml, gtInline, gtKeys, gtN, imgArOf, imgStyle, inheritedSpacing, inlChoice, ino, inoN, inoT, isColI, isJoined, keyGaps, layoutOf, layoutReasons, leadIntro, leadOf, leadText, measEl, measure, migrate, natAr, nlab, ownFit, pOf, paginate, pairPerm, passCut, passInline, passageHtml, passageParas, pic, pkB, pkPre, place, q2end, qFirst, qOf, qReal, qnum, qrHtml, qrInner, qrUrl, qtext, qtext0, qwho, range, ratioOf, renderTask, rich, rmeta, sheetSpacing, sizeKey, spacingOf, srcOf, t7cw, taOf, tblAr, tblOpts, tpic, tplOf, units, withMarks, xOfKey } from '../core/layout.js';
 import { A_SHORT, BARE_RE, BOX, BRX, HEADX, HEAD_RE, LABS, MD_EX, MD_FIELD, MD_FKEY, MD_FORM, MD_GT, MD_KIND, MD_KNAME, MD_LABEL, MD_RULE, MD_SCAF, MD_SECT, MD_SKIP, MD_TLAY, NUM_RE, OPT_LINE, PRESET_NAME, QM_C, QM_L, QORDER, T1FAM, TN, TN_OLD, VERB_RE, applyRecipe, boxSplit, brIn, brOut, crossLines, crossParse, descOf, dupGapKind, fmtCell, impSheetObj, inlineOpts, isHead, isInstr, looksJson, mdForm, mdTask, normGap, optStr, parseCell, parseTask, q2cfg, q2set, qCmd, qReasons, qStyles, qmC, qmEq, qmForm, qmHead, qmList, qmPick, qmRest, qmRestore, qmRows, qmUnits, readJson, readMd, recipeById, setHasAns, setKind, setQ, setQMem, sheetToMd, splitOptsLine, stripNum, t1Old, taskToMd, tnOf, tnReasons, tnTarget, toggleField, withoutGt } from '../core/md.js';
 
@@ -34,8 +36,6 @@ function cellKeys(t, kind) {
   if (kind === 'crow') return cellDirOf(t) === 'row' ? L.map(it => it.id) : [];
   return t.content.variant === 'multi' ? L.flatMap(it => it.imgs.map((_, j) => `${it.id}.${j}`)) : L.map(it => it.id);
 }
-// Khóa từng đáp án (ghi đè theo câu)
-function itemKeys(t) { const k = ck(t); if (k === 'table' || k === 'empty') return []; if (k === 'dialogue') return its(t).filter(x => (x.text || '').includes('___')).map(x => x.id); if (k === 'pairs') return its(t).filter(x => x.pair && x.pair.l).map(x => x.id); return its(t).map(x => x.id); }
 function labelOf(t, k) {
   const [a, b] = String(k).split('.'), ks = itemKeys(t), i = ks.indexOf(a);
   return (i >= 0 ? i + 1 : a) + (b != null ? '.' + (+b + 1) : '');
@@ -69,14 +69,6 @@ function slotsOf(t) {
 const A4DIRS = { auto: 'Tự động', h: 'Ngang', g2: '2 cột', v: 'Dọc', fl: 'Tự xuống dòng' };
 // Mặc định căn ngang của đáp án theo chỗ đặt
 function ansAlignDef(t) { const L = layoutOf(t); if (L === 'T4' || L === 'T7' || t.content.variant === 'multi') return 'center'; if (L === 'T5' && t.layout.align) return t.layout.align; return 'left'; }
-// v86 (F2): một câu có thể có nhiều đáp án đúng, ghi "a, c" (hoặc chữ của lựa chọn, cách nhau dấu phẩy)
-function optsOfKey(t, x) { if (x.imgs) return x.imgs; if (x.opts) return x.opts; if (t.answer.layout === 'A6') return [...ans0(t, x).matchAll(/<span>([^<]*)<\/span>/g)].map(m => m[1]); return []; }
-// v91: câu nhiều chỗ trống: key = đáp án từng chỗ, cách nhau " | "
-const gapN = x => (pkSrc(x).match(/___/g) || []).length;
-// v88: câu nào cần đáp án đúng (trừ tô theo nét, viết tự do, bảng, dòng chữ), câu nào đã có
-function needKey(t, x) { if (!x || x.gt) return false; const k = ck(t), a = t.answer; if (['table', 'empty', 'trace'].includes(k) || ['none', 'trace'].includes(a.kind) || isFreeW(t)) return false; if (k === 'pairs') return !!(x.pair && x.pair.l && x.pair.r); if (k === 'dialogue') return !!x.ex || /___|\{[^{}|]+\|/.test(x.text || ''); return true; }
-function hasKey(t, x) { if (ck(t) === 'pairs') return !!t.content.shuffle; if (!x.opts && !x.imgs && gapN(x) > 1) { const g = keyGaps(x); return Array.from({ length: gapN(x) }, (_, j) => g[j] || '').every(Boolean); } const gs = x.opts || x.imgs ? [] : pkGroups(x); if (gs.length) return gs.every(g => g.some(o => o.ok)) || String(x.key ?? '').trim() !== ''; const op = optsOfKey(t, x); if ((x.opts || x.imgs || t.answer.layout === 'A6') && op.length > 1) return exPicks(t, x, op).length > 0; return String(x.key ?? '').trim() !== ''; }
-function keyState(t) { const need = [], miss = []; its(t).forEach((x, i) => { if (needKey(t, x)) { need.push(i); if (!hasKey(t, x)) miss.push(i); } }); return { need, miss }; }
 function crossCount(c) {
   const mat = c.rows.map(r => r.cells.map(crossCell)), a = (r, k) => !!(mat[r] && mat[r][k] && mat[r][k].k !== 'none'); let n = 0, ac = 0, dn = 0, cells = 0;
   mat.forEach((row, r) => row.forEach((x, k) => { if (x.k === 'none') return; cells++; const A = !a(r, k - 1) && a(r, k + 1), D = !a(r - 1, k) && a(r + 1, k); if (A) ac++; if (D) dn++; if (A || D) n++; }));
@@ -1965,7 +1957,6 @@ function itemAct(t, act, id) {
     multi = []; refreshSel(); if (m) toast(m); }); }; });
 extraActs.change = (i => { const prev = extraActs.change; return el => { if (prev) prev(el); if (el.dataset.itx != null) { const t0 = curT(ws), id = el.dataset.itx, f = el.dataset.f || 'text', v = el.value; commit(w => { const x = its(curT(w)).find(y => y.id === id); if (!x) return; if (f === 'key') { if (v.trim()) x.key = v; else if (x.ex) x.key = ''; else delete x.key; } else if (f === 'who') { if (v.trim()) x.who = v; } else x[f] = v; }); } }; })();
 blankItem = (f => t => withoutGt(t, () => f(t)))(blankItem);
-itemKeys = (f => t => { const g = new Set(its(t).filter(x => x.gt).map(x => x.id)); return f(t).filter(id => !g.has(id)); })(itemKeys);
 labelOf = (f => (t, k) => { const [a, b] = String(k).split('.'), i = its(t).findIndex(x => x.id === a); return i >= 0 && !its(t)[i].gt ? qnum(t, i) + (b != null ? '.' + (+b + 1) : '') : f(t, k); })(labelOf);
 Object.assign(GNAME, { G2: 'Câu hỏi', G3: 'Câu hỏi' });
 const _renderInspector81 = renderInspector;

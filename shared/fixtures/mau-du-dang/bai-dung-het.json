@@ -1,0 +1,43 @@
+{
+ "t1.q1.1": "WENT",
+ "t1.q1.2": "  played  ",
+ "t1.q2": "doesn’t",
+ "t1.q3": "one",
+ "t2.q1": "were.",
+ "t2.q3": "DO",
+ "t3.lead.1": "  has  ",
+ "t3.lead.2": "drinks",
+ "t3.q1": "Tom",
+ "t4.q1": "b",
+ "t4.q2": [
+  "c",
+  "a"
+ ],
+ "t5.q1.1": "a",
+ "t5.q1.2": "b",
+ "t5.q2": "a",
+ "t6.q1": "a",
+ "t7.q1": "True",
+ "t7.q2": "False",
+ "t8.q1": "cat",
+ "t8.q2": "ice  cream",
+ "t9.q1": "a",
+ "t10.q1": "q1",
+ "t10.q2": "q2",
+ "t10.q3": "q3",
+ "t11.cell.r1.1": "swimming",
+ "t11.cell.r2.0": "10.",
+ "t11.cell.r2.1": "READING",
+ "t12.cell.r1": [
+  "0"
+ ],
+ "t12.cell.r2": [
+  "1"
+ ],
+ "t13.cell.r1.0": "C",
+ "t13.cell.r1.1": "A.",
+ "t13.cell.r1.2": "T",
+ "t13.cell.r2.2": "  O  ",
+ "t13.cell.r3.2": "P",
+ "t14.q1": "Bài làm của học sinh."
+}

@@ -1,0 +1,66 @@
+{
+ "t1.q2": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "pen"
+  ]
+ },
+ "t1.q4": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "bag"
+  ]
+ },
+ "t2.q1": {
+  "type": "tf",
+  "score": 1,
+  "correct": "No"
+ },
+ "t2.q2": {
+  "type": "tf",
+  "score": 1,
+  "correct": "Yes"
+ },
+ "t3.q1": {
+  "type": "choice-one",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t3.q2": {
+  "type": "choice-one",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t5.q1": {
+  "type": "text-long",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t5.q2": {
+  "type": "text-long",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t6.q1": {
+  "type": "text",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t6.q2": {
+  "type": "text",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t7.q1": {
+  "type": "text-long",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t7.q2": {
+  "type": "text-long",
+  "score": 1,
+  "grading": "manual"
+ }
+}
