@@ -88,6 +88,7 @@ Tiếp bước 3 theo mục 8.3.
 | 2b | `app/src/core/`: `model` (60 tên), `layout` (129), `md` (82), `state` (`ws`, chỉ đổi qua `setWs`). Tách tự động, nguyên văn: `app/scripts/tach-core.mjs` + phân tích phụ thuộc có xét phạm vi `app/scripts/phu-thuoc.mjs` | 120/120; 49/49 |
 | 3 mảnh 1 | Thanh trên cùng + hộp "Thao tác nhanh" → React (`app/src/ui/TopBar.tsx`), kho Zustand `app/src/ui/store.ts`, hành động `app/src/ui/actions.ts` | ảnh thanh trên giống v106; thao tác tay giống hệt |
 | 3 mảnh 2 | Hộp "Xem JSON / Xuất MD" + hộp hỏi xác nhận `askConfirm` → React (`app/src/ui/Dialogs.tsx`). Nút "Nạp phiếu này" trong hộp JSON của v106 không bao giờ hiện → bỏ | mở / đóng / Esc / bấm ngoài / sao chép / hỏi xác nhận giống hệt v106. Mảnh 1+2 trên bản cuối: 120/120; 49/49; audit 0 lỗi |
+| 3 mảnh 3 | Thông báo `toast` (`app/src/ui/Toast.tsx`) + thanh kéo độ rộng cột trái (`app/src/ui/LeftSplit.tsx`, giữ khóa localStorage cũ) | so tay với v106 giống hệt (kéo, bấm đúp, phím mũi tên, đổi cỡ cửa sổ, nhớ độ rộng). 120/120; 49/49 (test35 bắt được `LW_DEF` thiếu trên window, đã gắn lại); audit 0 lỗi |
 
 Badge bản dựng Vite: **v107** (cùng tính năng v106, khác cách dựng).
 
@@ -102,7 +103,6 @@ Badge bản dựng Vite: **v107** (cùng tính năng v106, khác cách dựng).
 8. Mỗi mảnh: `npm run typecheck`, `npm run build`, `python3 tests/chuan/chuan.py so ws-editor.html`, `bash tests/run_all.sh ws-editor.html ws-editor-prototype.html`, so ảnh mảnh đó với v106. **Không build ra `ws-editor.html` khi test đang chạy trên nó** (dùng `WS_OUT=…`).
 
 ### 8.3 Còn lại của bước 3 (theo thứ tự đề xuất)
-- Thông báo (toast), độ rộng cột trái (`#lsplit`).
 - Popup "+ Task" (`#libDlg`), hộp dán nhiều dòng (`#pasteDlg`), hộp ảnh (`#genDlg`).
 - Inspector (cột phải, `renderInspector`).
 - Cột trái soạn bài (`renderTree`, các khung soạn `edHtml` của 12 dạng Q) — phần lớn nhất (~1.500 dòng, nhiều hàm bị "vá" chồng qua các bản v81–v85).

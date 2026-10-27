@@ -1,6 +1,7 @@
 import { publish } from '../ui/store';
 import { actions } from '../ui/actions';
 import { askConfirm } from '../ui/Dialogs';
+import { toast } from '../ui/Toast';
 import { ws, setWs } from '../core/state.js';
 import { AGE, AL, ANS_DEF, CELL_NAME, F01, FEAT_NAME, FONTS, FORM_NAME, GAPLAB, GAPP, GT_SIZE, IMP_MAX, IMP_MAX_CH, KIND_A, KIND_NAME, L2KIND, LAYOUT_DEF, MINS, PK_STAR, PRESETS, QN, RECIPES, SCHEMA, SIZES, alOpts, attachOpts, choiceTexts, ck, ckOf, clone, ensureIds, ensureRowIds, featOf, featVal, fillSheet, fillTask, gapCount, hasChoiceMarkup, hasMarkup, isFreeW, isGridTbl, isObj, its, keyParts, kindsOk, migTask, newId, normAnswer, pkGroups, pkMig, pkSrc, pkToggle, prune, qDerived, qTidy, recipeMatch, sigOk, sv, tidy, toForm } from '../core/model.js';
 import { A2MM, AI, AR_OPTS, CHOICE_RE, CONTENT_H, FSZ, G1_TOP, IW8, JS, MM, PH, PHC, SAMPLE, SAMPLE2, T, T7CW, TA, TBL_DEF, TBL_ROW_MM, TL, a2cfg, a2end, a2inline, a4autoDef, a4autoMax, a4dir, alignOf, ans, ans0, ansI, arLabel, arNum, autoLayout, body, body0, body0n, cellCfg, cellDirOf, cellFr, cellSplit, ci, colsDefault, colsOf, colsRange, crossCell, crossHtml, er, esc, exFill, exPick, exPicks, fitOf, fixedImg, fixesFor, fontPt, frOf, frameH, g1Of, g1bFit, g1bFr, g3row, g4Html, gapOf, gtBody, gtHtml, gtInline, gtKeys, gtN, imgArOf, imgStyle, inheritedSpacing, inlChoice, ino, inoN, inoT, isColI, isJoined, keyGaps, layoutOf, layoutReasons, leadIntro, leadOf, leadText, meas, measure, migrate, natAr, nlab, ownFit, pOf, paginate, pairPerm, passCut, passInline, passageHtml, passageParas, pic, pkB, pkPre, place, q2end, qFirst, qOf, qReal, qnum, qrHtml, qrInner, qrUrl, qtext, qtext0, qwho, range, ratioOf, renderTask, rich, rmeta, sheetSpacing, sizeKey, spacingOf, srcOf, t7cw, taOf, tblAr, tblOpts, tpic, tplOf, units, withMarks, xOfKey } from '../core/layout.js';
@@ -894,8 +895,7 @@ const curT = w => w.tasks.find(x => x.id === sel.id);
 // v84: đổi căn lề nội dung cả Task (lưới ô) thì khung ảnh các ô đi theo: bỏ căn riêng từng ô
 const commitSet = (p, v) => commit(w => selTargets(w).forEach(([t, s]) => { setPath(t, s, p, v); if (p === 'align' && s.type === 'task' && t.layout.cells) Object.values(t.layout.cells).forEach(c => { if (c && c.frame) delete c.frame.align; }); }));
 const parseV = v => v === 'true' ? true : v === 'false' ? false : /^-?\d+(\.\d+)?$/.test(v) ? +v : v;
-let toastTimer;
-function toast(m) { const e = document.getElementById('toast'); e.textContent = m; e.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => e.classList.remove('show'), 2600); }
+// toast(): React (src/ui/Toast.tsx)
 function applyFix(id, v) {
   commit(w => {
     const t = w.tasks.find(x => x.id === id); if (!t) return; const p = t.answer.params, fr = t.layout.frame;
@@ -1047,6 +1047,8 @@ stage.addEventListener('pointerdown', e => {
 // Thanh trên cùng là React (src/ui/TopBar.tsx): đăng ký hành động cho các nút
 actions.undo = undo;
 actions.toast = toast;
+actions.draw = () => draw();
+actions.liveScale = () => { if (zoom == null) stage.style.setProperty('--s', scaleNow()); };
 actions.redo = redo;
 actions.setAge = v => commit(w => { w.age = v; }, `Đã đổi độ tuổi: ${v}`);
 actions.zoomIn = () => { zoom = Math.min(1.5, Math.round((scaleNow() + .1) * 10) / 10); draw(); };
@@ -2667,26 +2669,7 @@ treeEl.addEventListener('click', e => { const b = e.target.closest('.g3tb [data-
 const qm3 = (th, ou, ba) => qmEq(ou, ba) ? qmC(th) : ou;
 function qmObj3(th, ou, ba) { const o = {}; new Set([...Object.keys(th || {}), ...Object.keys(ou || {}), ...Object.keys(ba || {})]).forEach(k => { const v = qm3((th || {})[k], (ou || {})[k], (ba || {})[k]); if (v !== undefined) o[k] = v; }); return o; }
 window.__ws = { pick: s => pick(s), get ws() { return ws; }, get res() { return lastRes; }, get renders() { return renderCount; }, get sel() { return sel; }, get multi() { return multi; }, render, setZoom(z) { zoom = z; draw(); } };
-// Độ rộng cột trái (khung nhập liệu): kéo thanh ở mép phải, bấm đúp về mặc định, nhớ trong trình duyệt
-const LW_KEY = 'wsEditor.leftW.v2', LW_DEF = 420, appEl = document.querySelector('.app'), lsEl = document.getElementById('lsplit');
-let leftW = LW_DEF; try { const v = parseInt(localStorage.getItem(LW_KEY), 10); if (v >= 240 && v <= 900) leftW = v; } catch (_) {}
-const lwMax = () => Math.max(320, Math.min(720, window.innerWidth - 312 - 32 - 40 - 420)); // chừa tối thiểu ~420px cho trang A4
-function setLeftW(px, save) {
-  leftW = clampN(Math.round(px), 240, lwMax()); appEl.style.setProperty('--lw', leftW + 'px');
-  lsEl.setAttribute('aria-valuenow', leftW); lsEl.setAttribute('aria-valuemin', 240); lsEl.setAttribute('aria-valuemax', lwMax());
-  if (save) { try { localStorage.setItem(LW_KEY, String(leftW)); } catch (_) {} }
-}
-setLeftW(leftW, false);
-lsEl.addEventListener('pointerdown', e => {
-  e.preventDefault(); lsEl.setPointerCapture(e.pointerId); lsEl.classList.add('drag');
-  const x0 = e.clientX, w0 = leftW; let raf = 0;
-  const mv = ev => { setLeftW(w0 + ev.clientX - x0, false); lsEl.dataset.w = leftW + ' px'; if (!raf) raf = requestAnimationFrame(() => { raf = 0; if (zoom == null) stage.style.setProperty('--s', scaleNow()); }); };
-  const up = () => { lsEl.removeEventListener('pointermove', mv); lsEl.removeEventListener('pointerup', up); lsEl.removeEventListener('pointercancel', up); lsEl.classList.remove('drag'); setLeftW(leftW, true); draw(); };
-  lsEl.addEventListener('pointermove', mv); lsEl.addEventListener('pointerup', up); lsEl.addEventListener('pointercancel', up);
-});
-lsEl.addEventListener('dblclick', () => { setLeftW(LW_DEF, true); draw(); });
-lsEl.addEventListener('keydown', e => { if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { e.preventDefault(); setLeftW(leftW + (e.key === 'ArrowRight' ? 1 : -1) * (e.shiftKey ? 60 : 20), true); draw(); } });
-window.addEventListener('resize', () => setLeftW(leftW, false));
+// Độ rộng cột trái (#lsplit): React (src/ui/LeftSplit.tsx)
 // Chờ font của phiếu tải xong rồi mới đo; font đổi sau đó thì đo lại.
 const fontsReady = document.fonts
   ? Promise.all(['14pt Andika', 'bold 14pt Andika'].flatMap(f => [document.fonts.load(f), document.fonts.load(f, 'ăâđêôơưáàảãạéèẻẽẹíìỉĩịóòỏõọúùủũụýỳỷỹỵ'), document.fonts.load(f, 'ÀÁẠĐÊÔƠƯ')])).catch(() => {}).then(() => document.fonts.ready)

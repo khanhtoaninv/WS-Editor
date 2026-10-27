@@ -16,11 +16,13 @@ export type UiState = {
   codes: boolean;         // hiện mã kỹ thuật (T1, G0, A1…)
   dataDlg: { kind: 'json' | 'md'; text: string } | null;   // hộp Xem JSON / Xuất MD
   cfm: { title: string; msg: string; yes: string } | null;  // hộp hỏi xác nhận
+  toastMsg: string;
+  toastShow: boolean;
 };
 
 export const useUi = create<UiState>(() => ({
   title: '', age: '7-9', canUndo: false, canRedo: false, zoomLabel: 'Vừa khung', guides: false,
-  pages: null, diags: null, helpOpen: false, dataDlg: null, cfm: null, codes: (() => { try { return localStorage.getItem('wsEditor.codes.v1') === '1'; } catch (_) { return false; } })(),
+  pages: null, diags: null, helpOpen: false, dataDlg: null, cfm: null, toastMsg: '', toastShow: false, codes: (() => { try { return localStorage.getItem('wsEditor.codes.v1') === '1'; } catch (_) { return false; } })(),
 }));
 
 // Cập nhật đồng bộ: code cũ (và test) đọc DOM ngay sau render(), nên React phải vẽ xong trước khi publish trả về.

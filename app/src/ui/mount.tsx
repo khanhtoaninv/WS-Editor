@@ -5,6 +5,8 @@ import { flushSync } from 'react-dom';
 import type { ReactNode } from 'react';
 import { TopBar, HelpPop } from './TopBar';
 import { DataDlg, ConfirmDlg, askConfirm } from './Dialogs';
+import { Toast, toast } from './Toast';
+import { LeftSplit, LW_DEF, LW_KEY, lwMax } from './LeftSplit';
 
 function mount(id: string, node: ReactNode) {
   const el = document.getElementById(id);
@@ -13,9 +15,11 @@ function mount(id: string, node: ReactNode) {
   flushSync(() => root.render(node));
 }
 mount('r-top', <TopBar />);
+mount('r-lsplit', <LeftSplit />);
 mount('r-help', <HelpPop />);
 mount('r-dlg', <DataDlg />);
 mount('r-cfm', <ConfirmDlg />);
+mount('r-toast', <Toast />);
 
 // Cầu nối test: hàm của v106 đã chuyển sang src/ui vẫn gọi được trên window như trước
-Object.assign(window, { askConfirm });
+Object.assign(window, { askConfirm, toast, LW_DEF, LW_KEY, lwMax });

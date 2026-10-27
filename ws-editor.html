@@ -14091,6 +14091,8 @@ var useUi = create(() => ({
 	helpOpen: false,
 	dataDlg: null,
 	cfm: null,
+	toastMsg: "",
+	toastShow: false,
 	codes: (() => {
 		try {
 			return localStorage.getItem("wsEditor.codes.v1") === "1";
@@ -14114,7 +14116,9 @@ var actions = {
 	toggleGuides: noop,
 	showJson: noop,
 	showMd: noop,
-	toast: noop
+	toast: noop,
+	draw: noop,
+	liveScale: noop
 };
 // node_modules/react/cjs/react-jsx-runtime.production.js
 /**
@@ -14504,6 +14508,108 @@ function ConfirmDlg() {
 		]
 	});
 }
+// src/ui/Toast.tsx
+var timer;
+function toast(m) {
+	publish({
+		toastMsg: m,
+		toastShow: true
+	});
+	clearTimeout(timer);
+	timer = setTimeout(() => publish({ toastShow: false }), 2600);
+}
+function Toast() {
+	const { toastMsg, toastShow } = useUi();
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "toast" + (toastShow ? " show" : ""),
+		id: "toast",
+		role: "status",
+		children: toastMsg
+	});
+}
+// src/ui/LeftSplit.tsx
+var LW_KEY = "wsEditor.leftW.v2";
+var lwMax = () => Math.max(320, Math.min(720, window.innerWidth - 312 - 32 - 40 - 420));
+var clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+var saved = () => {
+	try {
+		const v = parseInt(localStorage.getItem("wsEditor.leftW.v2") || "", 10);
+		if (v >= 240 && v <= 900) return v;
+	} catch (_) {}
+	return 420;
+};
+function LeftSplit() {
+	const w = (0, import_react.useRef)(saved()), [, setTick] = (0, import_react.useState)(0), [drag, setDrag] = (0, import_react.useState)(false), [label, setLabel] = (0, import_react.useState)(null), ref = (0, import_react.useRef)(null);
+	const setLeftW = (px, save) => {
+		w.current = clamp(Math.round(px), 240, lwMax());
+		document.querySelector(".app").style.setProperty("--lw", w.current + "px");
+		if (save) try {
+			localStorage.setItem(LW_KEY, String(w.current));
+		} catch (_) {}
+		setTick((n) => n + 1);
+	};
+	(0, import_react.useLayoutEffect)(() => {
+		setLeftW(w.current, false);
+	}, []);
+	(0, import_react.useEffect)(() => {
+		const f = () => setLeftW(w.current, false);
+		window.addEventListener("resize", f);
+		return () => window.removeEventListener("resize", f);
+	}, []);
+	const down = (e) => {
+		e.preventDefault();
+		const el = ref.current;
+		el.setPointerCapture(e.pointerId);
+		const x0 = e.clientX, w0 = w.current;
+		let raf = 0;
+		setDrag(true);
+		const mv = (ev) => {
+			setLeftW(w0 + ev.clientX - x0, false);
+			setLabel(w.current + " px");
+			if (!raf) raf = requestAnimationFrame(() => {
+				raf = 0;
+				actions.liveScale();
+			});
+		};
+		const up = () => {
+			el.removeEventListener("pointermove", mv);
+			el.removeEventListener("pointerup", up);
+			el.removeEventListener("pointercancel", up);
+			setDrag(false);
+			setLeftW(w.current, true);
+			actions.draw();
+		};
+		el.addEventListener("pointermove", mv);
+		el.addEventListener("pointerup", up);
+		el.addEventListener("pointercancel", up);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "lsplit" + (drag ? " drag" : ""),
+		id: "lsplit",
+		role: "separator",
+		"aria-orientation": "vertical",
+		"aria-label": "Độ rộng khung nhập liệu",
+		tabIndex: 0,
+		title: "Kéo để đổi độ rộng khung nhập liệu. Bấm đúp để về mặc định.",
+		ref,
+		"aria-valuenow": w.current,
+		"aria-valuemin": 240,
+		"aria-valuemax": lwMax(),
+		"data-w": label ?? void 0,
+		onPointerDown: down,
+		onDoubleClick: () => {
+			setLeftW(420, true);
+			actions.draw();
+		},
+		onKeyDown: (e) => {
+			if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+				e.preventDefault();
+				setLeftW(w.current + (e.key === "ArrowRight" ? 1 : -1) * (e.shiftKey ? 60 : 20), true);
+				actions.draw();
+			}
+		}
+	});
+}
 // src/ui/mount.tsx
 function mount(id, node) {
 	const el = document.getElementById(id);
@@ -14512,10 +14618,18 @@ function mount(id, node) {
 	(0, import_react_dom.flushSync)(() => root.render(node));
 }
 mount("r-top", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TopBar, {}));
+mount("r-lsplit", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LeftSplit, {}));
 mount("r-help", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HelpPop, {}));
 mount("r-dlg", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DataDlg, {}));
 mount("r-cfm", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ConfirmDlg, {}));
-Object.assign(window, { askConfirm });
+mount("r-toast", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toast, {}));
+Object.assign(window, {
+	askConfirm,
+	toast,
+	LW_DEF: 420,
+	LW_KEY,
+	lwMax
+});
 // src/core/state.js
 var ws = null;
 function setWs(v) {
@@ -24578,14 +24692,6 @@ var commitSet = (p, v) => commit((w) => selTargets(w).forEach(([t, s]) => {
 	});
 }));
 var parseV = (v) => v === "true" ? true : v === "false" ? false : /^-?\d+(\.\d+)?$/.test(v) ? +v : v;
-var toastTimer;
-function toast(m) {
-	const e = document.getElementById("toast");
-	e.textContent = m;
-	e.classList.add("show");
-	clearTimeout(toastTimer);
-	toastTimer = setTimeout(() => e.classList.remove("show"), 2600);
-}
 function applyFix(id, v) {
 	commit((w) => {
 		const t = w.tasks.find((x) => x.id === id);
@@ -25046,6 +25152,10 @@ stage.addEventListener("pointerdown", (e) => {
 });
 actions.undo = undo;
 actions.toast = toast;
+actions.draw = () => draw();
+actions.liveScale = () => {
+	if (zoom == null) stage.style.setProperty("--s", scaleNow());
+};
 actions.redo = redo;
 actions.setAge = (v) => commit((w) => {
 	w.age = v;
@@ -29690,65 +29800,6 @@ window.__ws = {
 		draw();
 	}
 };
-var LW_KEY = "wsEditor.leftW.v2";
-var LW_DEF = 420;
-var appEl = document.querySelector(".app");
-var lsEl = document.getElementById("lsplit");
-var leftW = LW_DEF;
-try {
-	const v = parseInt(localStorage.getItem(LW_KEY), 10);
-	if (v >= 240 && v <= 900) leftW = v;
-} catch (_) {}
-var lwMax = () => Math.max(320, Math.min(720, window.innerWidth - 312 - 32 - 40 - 420));
-function setLeftW(px, save) {
-	leftW = clampN(Math.round(px), 240, lwMax());
-	appEl.style.setProperty("--lw", leftW + "px");
-	lsEl.setAttribute("aria-valuenow", leftW);
-	lsEl.setAttribute("aria-valuemin", 240);
-	lsEl.setAttribute("aria-valuemax", lwMax());
-	if (save) try {
-		localStorage.setItem(LW_KEY, String(leftW));
-	} catch (_) {}
-}
-setLeftW(leftW, false);
-lsEl.addEventListener("pointerdown", (e) => {
-	e.preventDefault();
-	lsEl.setPointerCapture(e.pointerId);
-	lsEl.classList.add("drag");
-	const x0 = e.clientX, w0 = leftW;
-	let raf = 0;
-	const mv = (ev) => {
-		setLeftW(w0 + ev.clientX - x0, false);
-		lsEl.dataset.w = leftW + " px";
-		if (!raf) raf = requestAnimationFrame(() => {
-			raf = 0;
-			if (zoom == null) stage.style.setProperty("--s", scaleNow());
-		});
-	};
-	const up = () => {
-		lsEl.removeEventListener("pointermove", mv);
-		lsEl.removeEventListener("pointerup", up);
-		lsEl.removeEventListener("pointercancel", up);
-		lsEl.classList.remove("drag");
-		setLeftW(leftW, true);
-		draw();
-	};
-	lsEl.addEventListener("pointermove", mv);
-	lsEl.addEventListener("pointerup", up);
-	lsEl.addEventListener("pointercancel", up);
-});
-lsEl.addEventListener("dblclick", () => {
-	setLeftW(LW_DEF, true);
-	draw();
-});
-lsEl.addEventListener("keydown", (e) => {
-	if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
-		e.preventDefault();
-		setLeftW(leftW + (e.key === "ArrowRight" ? 1 : -1) * (e.shiftKey ? 60 : 20), true);
-		draw();
-	}
-});
-window.addEventListener("resize", () => setLeftW(leftW, false));
 var fontsReady = document.fonts ? Promise.all(["14pt Andika", "bold 14pt Andika"].flatMap((f) => [
 	document.fonts.load(f),
 	document.fonts.load(f, "ăâđêôơưáàảãạéèẻẽẹíìỉĩịóòỏõọúùủũụýỳỷỹỵ"),
@@ -29929,15 +29980,6 @@ try {
 		get: () => sheetExtra,
 		set: (v) => {
 			sheetExtra = v;
-		}
-	});
-} catch (_) {}
-try {
-	Object.defineProperty(window, "toastTimer", {
-		configurable: true,
-		get: () => toastTimer,
-		set: (v) => {
-			toastTimer = v;
 		}
 	});
 } catch (_) {}
@@ -30190,15 +30232,6 @@ try {
 		get: () => txField,
 		set: (v) => {
 			txField = v;
-		}
-	});
-} catch (_) {}
-try {
-	Object.defineProperty(window, "leftW", {
-		configurable: true,
-		get: () => leftW,
-		set: (v) => {
-			leftW = v;
 		}
 	});
 } catch (_) {}
@@ -30938,12 +30971,6 @@ try {
 	Object.defineProperty(window, "parseV", {
 		configurable: true,
 		get: () => parseV
-	});
-} catch (_) {}
-try {
-	Object.defineProperty(window, "toast", {
-		configurable: true,
-		get: () => toast
 	});
 } catch (_) {}
 try {
@@ -32039,42 +32066,6 @@ try {
 	});
 } catch (_) {}
 try {
-	Object.defineProperty(window, "LW_KEY", {
-		configurable: true,
-		get: () => LW_KEY
-	});
-} catch (_) {}
-try {
-	Object.defineProperty(window, "LW_DEF", {
-		configurable: true,
-		get: () => LW_DEF
-	});
-} catch (_) {}
-try {
-	Object.defineProperty(window, "appEl", {
-		configurable: true,
-		get: () => appEl
-	});
-} catch (_) {}
-try {
-	Object.defineProperty(window, "lsEl", {
-		configurable: true,
-		get: () => lsEl
-	});
-} catch (_) {}
-try {
-	Object.defineProperty(window, "lwMax", {
-		configurable: true,
-		get: () => lwMax
-	});
-} catch (_) {}
-try {
-	Object.defineProperty(window, "setLeftW", {
-		configurable: true,
-		get: () => setLeftW
-	});
-} catch (_) {}
-try {
 	Object.defineProperty(window, "fontsReady", {
 		configurable: true,
 		get: () => fontsReady
@@ -32959,7 +32950,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 <div class="app">
   <div id="r-top" style="display:contents"></div>
   <aside class="pane tree" id="tree" aria-label="Cây container"></aside>
-  <div class="lsplit" id="lsplit" role="separator" aria-orientation="vertical" aria-label="Độ rộng khung nhập liệu" tabindex="0" title="Kéo để đổi độ rộng khung nhập liệu. Bấm đúp để về mặc định."></div>
+  <div id="r-lsplit" style="display:contents"></div>
   <main class="pane stage paper" id="stage"></main>
   <aside class="pane insp" id="insp" aria-label="Inspector"></aside>
 </div>
@@ -33000,7 +32991,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 <input type="file" id="qrImgFile" accept="image/*" hidden><input type="file" id="qrAudFile" accept="audio/*,.mp3,.m4a,.wav,.ogg" hidden>
 <input type="file" id="genRefFile" accept="image/*" multiple hidden><input type="file" id="genUp" accept="image/*" hidden>
 <div id="measure" class="paper" aria-hidden="true"></div>
-<div class="toast" id="toast" role="status"></div>
+<div id="r-toast" style="display:contents"></div>
 <div id="r-help" style="display:contents"></div>
 <div id="r-dlg" style="display:contents"></div>
 
