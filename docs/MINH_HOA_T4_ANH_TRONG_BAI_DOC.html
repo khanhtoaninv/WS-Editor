@@ -1,0 +1,51 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Minh họa T4 Ảnh trong bài đọc</title>
+<style>
+body{font:14px/1.4 system-ui,sans-serif;background:#eef1f5;margin:0;padding:20px;color:#222}
+h1{font-size:18px;margin:0 0 4px}.sub{color:#555;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:#fff;border-radius:10px;padding:12px;box-shadow:0 1px 4px #0002}
+.card h2{font-size:14px;margin:0 0 2px}.tag{font-size:11px;font-weight:600;padding:1px 7px;border-radius:9px;background:#dff3e4;color:#17692f}
+.tag.n{background:#fff0d6;color:#8a5a00}.card p.d{font-size:12px;color:#555;margin:4px 0 8px;min-height:48px}
+.pg{border:1px solid #bbb;border-radius:4px;padding:10px;background:#fff;height:300px;overflow:hidden;font-size:10px;line-height:1.35}
+.g0{font-weight:700;margin-bottom:5px;font-size:11px}
+.img{background:#cfe1f7;border:1.5px solid #4a86d4;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#2a5ca0;font-weight:700;font-size:10px}
+.txt{text-align:left;color:#444}.txt.j{text-align:justify}
+.wrap .img{width:38%;height:62px}.wrap.r .img{float:right;margin:2px 0 3px 8px}.wrap.l .img{float:left;margin:2px 8px 3px 0}
+.wrap.big .img{width:58%;height:84px}.wrap.small .img{width:26%;height:44px}
+.cols{display:flex;gap:8px}.cols .img{width:38%;height:110px;flex:none}.cols.rv{flex-direction:row-reverse}
+.band .img{width:100%;height:60px;margin:5px 0}
+.g3{margin-top:6px;border-top:1px dashed #aaa;padding-top:4px}.g3 div{margin:2px 0}
+.gap{height:2px}
+.note{margin-top:14px;font-size:12px;color:#444;background:#fff;border-radius:8px;padding:10px}
+</style></head><body>
+<h1>T4 — Ảnh trong bài đọc: các phương án bố trí</h1>
+<div class="sub">Mỗi khung là một Task: G0 tiêu đề, G1 ảnh, G2 bài đọc (cùng một khối), G3 câu hỏi ở dưới. <span class="tag">đã có ở v93</span> <span class="tag n">đề xuất thêm</span></div>
+<div class="grid">
+
+<div class="card"><h2>1. Bao quanh, ảnh phải <span class="tag">đã có</span></h2><p class="d">Ảnh float phải, chữ chạy bên trái rồi tràn xuống dưới ảnh. Kiểu báo chí.</p>
+<div class="pg"><div class="g0">1. Read and answer.</div><div class="wrap r"><div class="img">G1 ảnh</div><div class="txt">The city council met on Monday to discuss a new plan for the old river park. Many residents said they wanted more trees and fewer cars near the water. The mayor promised that work would begin next spring and that the park would stay open during the building. Some shop owners were worried about noise, but most people agreed the change was good for the town. Children from the nearby school will help plant the first trees in April, and local artists will paint a long wall beside the path.</div></div>
+<div class="g3"><div>1. When will work begin?</div><div>2. Who will plant the trees?</div></div></div></div>
+
+<div class="card"><h2>2. Bao quanh, ảnh trái <span class="tag">đã có</span></h2><p class="d">Ảnh float trái, chữ chạy bên phải. Căn chữ trái hoặc đều hai bên.</p>
+<div class="pg"><div class="g0">1. Read and answer.</div><div class="wrap l"><div class="img">G1 ảnh</div><div class="txt j">The city council met on Monday to discuss a new plan for the old river park. Many residents said they wanted more trees and fewer cars near the water. The mayor promised that work would begin next spring and that the park would stay open during the building. Some shop owners were worried about noise, but most people agreed the change was good for the town. Children from the nearby school will help plant the first trees in April, and local artists will paint a long wall beside the path.</div></div>
+<div class="g3"><div>1. When will work begin?</div><div>2. Who will plant the trees?</div></div></div></div>
+
+<div class="card"><h2>3. Hai cột <span class="tag n">đề xuất</span></h2><p class="d">Ảnh một cột, chữ nằm trọn cột còn lại, không chảy xuống dưới ảnh. Có thể đảo ảnh sang phải. Đây là "T báo chí" của phương án B.</p>
+<div class="pg"><div class="g0">1. Read and answer.</div><div class="cols"><div class="img">G1 ảnh</div><div class="txt">The city council met on Monday to discuss a new plan for the old river park. Many residents said they wanted more trees and fewer cars near the water. The mayor promised that work would begin next spring and that the park would stay open during the building. Some shop owners were worried about noise, but most people agreed the change was good for the town.</div></div>
+<div class="g3"><div>1. When will work begin?</div><div>2. Who will plant the trees?</div></div></div></div>
+
+<div class="card"><h2>4. Ảnh riêng một dải <span class="tag n">đề xuất</span></h2><p class="d">Ảnh chiếm cả bề ngang, chữ chỉ ở trên và dưới ảnh, không có chữ bên cạnh.</p>
+<div class="pg"><div class="g0">1. Read and answer.</div><div class="txt">The city council met on Monday to discuss a new plan for the old river park. Many residents said they wanted more trees and fewer cars near the water.</div><div class="band"><div class="img">G1 ảnh (cả bề ngang)</div></div><div class="txt">The mayor promised that work would begin next spring and that the park would stay open during the building. Some shop owners were worried about noise, but most people agreed the change was good for the town.</div>
+<div class="g3"><div>1. When will work begin?</div><div>2. Who will plant the trees?</div></div></div></div>
+
+<div class="card"><h2>5. Ảnh sau đoạn N, bao quanh <span class="tag n">đề xuất (làm sau)</span></h2><p class="d">Đoạn 1 đứng trên cùng, ảnh vào từ đoạn 2 và chữ bao quanh. Giống báo thật hơn nhưng nặng hơn về phân trang.</p>
+<div class="pg"><div class="g0">1. Read and answer.</div><div class="txt">The city council met on Monday to discuss a new plan for the old river park. Many residents said they wanted more trees.</div><div class="gap"></div><div class="wrap r"><div class="img">G1 ảnh</div><div class="txt">The mayor promised that work would begin next spring and that the park would stay open during the building. Some shop owners were worried about noise, but most people agreed the change was good for the town. Children from the nearby school will help plant the first trees in April, and local artists will paint a long wall beside the path.</div></div>
+<div class="g3"><div>1. When will work begin?</div><div>2. Who will plant the trees?</div></div></div></div>
+
+<div class="card"><h2>6. Kích thước ảnh 25% so với 60% <span class="tag">đã có</span></h2><p class="d">Rộng ảnh kéo từ 25 đến 60% bài đọc. Ảnh càng to thì cột chữ bên cạnh càng hẹp.</p>
+<div class="pg" style="display:flex;gap:6px;padding:6px"><div style="flex:1"><div class="g0">25%</div><div class="wrap r small"><div class="img">G1</div><div class="txt">The city council met on Monday to discuss a new plan for the old river park. Many residents said they wanted more trees and fewer cars near the water. The mayor promised that work would begin next spring and that the park would stay open.</div></div></div>
+<div style="flex:1"><div class="g0">60%</div><div class="wrap r big"><div class="img">G1</div><div class="txt">The city council met on Monday to discuss a new plan for the old river park. Many residents said they wanted more trees and fewer cars near the water. The mayor promised that work would begin next spring and that the park would stay open.</div></div></div></div></div>
+
+</div>
+<div class="note"><b>Đề xuất cấu hình:</b> Vị trí ảnh (Trái / Phải) · Kiểu chữ (Bao quanh / Hai cột / Ảnh riêng dải) · Rộng ảnh 25–60% · Căn chữ · (sau) Ảnh đặt sau đoạn N. Mã MD dự kiến: <code>Ảnh bài đọc: phải, bao quanh, 40%</code>.</div>
+</body></html>
