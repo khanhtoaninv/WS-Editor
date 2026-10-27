@@ -5,7 +5,7 @@
 #   4. ảnh chụp từng trang (biến thể gốc), cho phép lệch rất ít điểm ảnh do khử răng cưa
 # Mỗi phiếu chạy thêm 4 biến thể: đổi kiểu xếp trang, khoảng cách Thoáng, cỡ chữ Nhỏ, font Lexend.
 # Cách dùng:
-#   python3 tests/chuan/chuan.py tao <app.html> [thư mục, mặc định tests/chuan/v106]
+#   python3 tests/chuan/chuan.py tao <app.html> [thư mục, mặc định tests/chuan/v108]
 #   python3 tests/chuan/chuan.py so  <app.html> [thư mục]
 # Chạy một Chromium, không chạy song song với test khác.
 import sys, os, glob, json, io
@@ -14,7 +14,7 @@ from PIL import Image, ImageChops
 
 MODE, APP = sys.argv[1], os.path.abspath(sys.argv[2])
 HERE = os.path.dirname(os.path.abspath(__file__)); TESTS = os.path.dirname(HERE); ROOT = os.path.dirname(TESTS)
-OUT = os.path.abspath(sys.argv[3]) if len(sys.argv) > 3 else os.path.join(HERE, 'v106')
+OUT = os.path.abspath(sys.argv[3]) if len(sys.argv) > 3 else os.path.join(HERE, 'v108')
 URL = APP if APP.startswith('http') else 'file://' + APP
 
 srcs = [('demo', None)]

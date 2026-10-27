@@ -14199,7 +14199,7 @@ function TopBar() {
 							padding: "1px 7px",
 							marginLeft: 4
 						},
-						children: "v107"
+						children: "v108"
 					}),
 					" ",
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", {
@@ -18228,7 +18228,9 @@ function a4dir(t, item) {
 	let d = pOf(t, item).dir || "auto";
 	if (d === "auto") {
 		const ml = Math.max(0, ...its(t).flatMap((i) => (i.opts || []).map((o) => String(o).replace(/<[^>]*>|\*+/g, "").length))), n = Math.max(0, ...its(t).map((i) => (i.opts || []).length));
-		d = ml > a4autoMax(t) ? "v" : n * (ml * fontPt() * .3528 * .5 + 14) <= 150 ? "h" : "fl";
+		const mm = (k) => k * fontPt() * .3528 * .5, cw = mm(ml) + 14;
+		const tight = [...Array(n).keys()].reduce((s, j) => s + mm(Math.max(0, ...its(t).map((i) => String((i.opts || [])[j] ?? "").replace(/<[^>]*>|\*+/g, "").length))) + 7, 0) + (n - 1) * 7;
+		d = ml > a4autoMax(t) ? "v" : n * cw <= 150 ? "h" : tight <= 160 ? "hc" : n > 2 && 2 * cw <= 150 ? "g2" : "v";
 	}
 	return d === "h" ? "h" : d;
 }
@@ -18328,7 +18330,9 @@ function ans0(t, item) {
 		case "A3": return `<span class="a a3" ${nd}${p.boxW ? ` style="--bw:${p.boxW}mm"` : ""}>${"<i></i>".repeat(item && item.len || p.boxes || 6)}</span>`;
 		case "A4": {
 			const d = a4dir(t, item), os = item.opts || [], up = p.upper ? "ABCD" : "abcd";
-			return `<div class="a a4 ${d}" ${nd} style="--oc:${d === "g2" ? 2 : os.length}${p.gap != null ? `;--og:${p.gap}mm` : ""}">${os.map((o, i) => `<span class="opt">${p.lab === "circle" ? `<b>${up[i]}</b>` : p.lab === "box" ? "<b class=\"bx\"></b>" : `<i>${up[i]}.</i>`}<span>${er(o)}</span></span>`).join("")}</div>`;
+			const oc = d === "g2" ? 2 : d === "h" || d === "hc" ? Math.max(os.length, ...its(t).filter((i) => i && i.opts && a4dir(t, i) === d).map((i) => i.opts.length)) : os.length;
+			const col = (i) => d === "g2" ? i % 2 : i, sz = (i) => d === "hc" || p.align && (d === "h" || d === "g2") ? `<span class="osz" aria-hidden="true">${its(t).flatMap((x) => (x && x.opts && a4dir(t, x) === d ? x.opts : []).filter((_, k) => col(k) === col(i))).map((x) => `<span>${er(x)}</span>`).join("")}</span>` : "";
+			return `<div class="a a4 ${d}" ${nd} style="--oc:${oc}${p.gap != null ? `;--og:${p.gap}mm` : ""}">${os.map((o, i) => `<span class="opt">${p.lab === "circle" ? `<b>${up[i]}</b>` : p.lab === "box" ? "<b class=\"bx\"></b>" : `<i>${up[i]}.</i>`}<span>${er(o)}${sz(i)}</span></span>`).join("")}</div>`;
 		}
 		case "A5": return `<span class="a a5" ${nd}${as}></span>`;
 		case "A6": {
@@ -24941,7 +24945,7 @@ function answerPanel(t, s, key) {
 			unit: "mm",
 			def: D("gap", 7)
 		});
-		content = fSeg("dir", "Cách xếp", o.dir, Object.entries(A4DIRS), D("dir", "auto"), { hint: key ? "" : "Tự động: nếu mọi câu trong Task đều ngắn thì xếp một hàng, chỉ cần một câu dài thì cả Task xếp mỗi đáp án một dòng." }) + (key ? "" : fNum("autoMax", "Đáp án “ngắn” khi dài tối đa", o.autoMax, {
+		content = fSeg("dir", "Cách xếp", o.dir, Object.entries(A4DIRS), D("dir", "auto"), { hint: key ? "" : "Tự động: lựa chọn ngắn thì xếp một hàng; không vừa thì 2 cột; dài nữa thì mỗi đáp án một dòng. Luôn thẳng cột giữa các câu." }) + (key ? "" : fNum("autoMax", "Đáp án “ngắn” khi dài tối đa", o.autoMax, {
 			min: 6,
 			max: 60,
 			unit: "ký tự",
@@ -32987,6 +32991,8 @@ dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 .a4{display:grid;grid-template-columns:repeat(var(--oc,3),minmax(0,1fr));gap:1.5mm var(--og,7mm)}
 .a4.v{grid-template-columns:minmax(0,1fr)}
 .a4.fl{display:flex;flex-wrap:wrap}
+.a4.hc{grid-template-columns:repeat(var(--oc,3),auto);justify-content:start}
+.osz{display:block;height:0;overflow:hidden;visibility:hidden}.osz>span{display:block}
 .opt{display:flex;align-items:baseline;min-width:0}
 .opt>span{min-width:0}
 .opt i{font-style:normal;font-weight:700;margin-right:2mm;flex:none}

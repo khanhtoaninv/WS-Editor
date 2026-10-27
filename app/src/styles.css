@@ -455,6 +455,8 @@ dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 .a4{display:grid;grid-template-columns:repeat(var(--oc,3),minmax(0,1fr));gap:1.5mm var(--og,7mm)}
 .a4.v{grid-template-columns:minmax(0,1fr)}
 .a4.fl{display:flex;flex-wrap:wrap}
+.a4.hc{grid-template-columns:repeat(var(--oc,3),auto);justify-content:start}
+.osz{display:block;height:0;overflow:hidden;visibility:hidden}.osz>span{display:block}
 .opt{display:flex;align-items:baseline;min-width:0}
 .opt>span{min-width:0}
 .opt i{font-style:normal;font-weight:700;margin-right:2mm;flex:none}

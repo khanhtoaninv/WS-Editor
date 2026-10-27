@@ -5,10 +5,11 @@
 **Việc của phiên này: chuyển app sang React.** Kế hoạch đầy đủ + tiến độ: `docs/KE_HOACH_REACT.md` (mục 8 là phần quan trọng nhất: đã làm gì, cách làm từng mảnh, còn gì).
 
 Trạng thái cuối phiên:
-- Bản đang dùng: **`ws-editor.html`** (badge **v107**) — dựng từ `app/` bằng Vite, **một file**, mở bằng bấm đúp, font lấy từ `fonts/`. Tính năng y hệt v106.
+- Bản đang dùng: **`ws-editor.html`** (badge **v108**) — dựng từ `app/` bằng Vite, **một file**, mở bằng bấm đúp, font lấy từ `fonts/`. Tính năng y hệt v106.
 - Bản cũ: `ws-editor-prototype.html` (v106) vẫn giữ nguyên để so sánh; nhánh `backup/v106`. `chay.bat` giờ mở bản React, `chay-v106.bat` mở bản cũ.
 - Đã xong: bước 1 (đường chuẩn), bước 2 (Vite + tách lõi), bước 3 mảnh 1–6 (toàn bộ khung app và mọi hộp thoại là React).
 - Còn lại: nội dung ba cột (inspector, cột trái soạn bài, trang xem trước) vẫn do bộ dựng HTML cũ sinh ra; xem `docs/KE_HOACH_REACT.md` mục 8.3.
+- **v108** (sau khi người dùng thử): Chọn A/B/C đáp án không thẳng cột giữa các câu. Lỗi có từ v106, sửa ở cả hai bản; Tự động không còn tự chọn Tự xuống dòng; đường chuẩn lập lại thành `tests/chuan/v108/` (spec mục 39). Danh sách cho người dùng kiểm tra tay: `docs/KIEM_TRA_v107.md`; người dùng đã thử, chỉ báo mục 15 (đã sửa).
 - **Đóng băng tính năng** cho tới khi chuyển xong. Lỗi nặng thì sửa ở cả hai bản.
 
 Kiểm thử sau mỗi mảnh (bắt buộc, chạy từng cái một):

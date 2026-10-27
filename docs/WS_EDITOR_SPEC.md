@@ -815,3 +815,10 @@ Nguồn: phiếu 14 ("Unit 6 – Lesson 9"), `tests/md/phieu14.md`.
 - **a/b/c/d thẳng cột:** đo độ dài lựa chọn bỏ thẻ `<u>`, `**` nên không còn bị coi là dài rồi chuyển sang xuống dòng tự do.
 - **Tay kéo T/F:** gắn vào mảnh Task có cột T/F (Task bị cắt qua trang vẫn có tay kéo); tip hiện "câu X / T-F Y · cách lề phải Z mm"; Hai cột: bài đọc + T/F mặc định 60/40, kéo 40–90; câu hỏi + T/F mặc định 80/20, kéo 50–90.
 - Kiểm thử: `tests/test49.py`.
+
+## 39. a/b/c thẳng cột giữa các câu (v108, 27/10/2026)
+Người dùng thử bản React báo: Chọn A/B/C các đáp án không thẳng hàng. Lỗi có sẵn từ v106 (không do chuyển React); sửa ở cả `app/` và `ws-editor-prototype.html`.
+- **Cách xếp Tự động** (`a4dir`): lựa chọn ngắn vừa cột đều → `h` (cột đều 1fr như cũ). Không vừa → `hc`: cột co theo chữ, **dùng chung cả Task** (độ rộng cột j = lựa chọn thứ j dài nhất trong mọi câu), xếp sát trái; ước lượng tổng ≤ 160 mm. Vẫn không vừa → `g2` (2 cột đều) nếu có hơn 2 lựa chọn, rồi `v` (dọc). **Tự xuống dòng (`fl`) chỉ còn khi người dùng chọn**, máy không tự chọn nữa. `hc` không có trong ô chọn Cách xếp (vẫn hiện là "Tự động").
+- **Ngang có Căn lề** (`params.align` trái / giữa / phải, cột co theo chữ): trước đây mỗi câu tự tính độ rộng cột nên lệch nhau; giờ dùng chung độ rộng cột cả Task như `hc`.
+- **Cách làm cột chung:** mỗi ô lựa chọn kèm `<span class="osz" aria-hidden>` chứa bản ẩn mọi lựa chọn cùng cột trong Task (`height:0; visibility:hidden`), nên ô rộng bằng lựa chọn dài nhất cột đó mà không thêm chiều cao. Ngang / `hc` lấy số cột theo câu nhiều lựa chọn nhất.
+- Đổi bố cục trên mẫu: `phieu9`, `phieu14`, `dieu-chinh-v80` (từ xuống dòng tự do sang cột chung, cùng số dòng); `samples/ws-demo-day-du.json` Task tick 5 lựa chọn dài (sang 2 cột, thêm 1 dòng). Đường chuẩn lập lại: `tests/chuan/v108/` (thay `v106/`).

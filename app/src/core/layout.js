@@ -340,7 +340,10 @@ export function a4dir(t, item) {
   if (d === 'auto') {
     // Tự động (v77): quá dài thì xếp dọc; vừa một hàng cột đều thì Ngang; còn lại Tự xuống dòng (không gãy chữ trong ô).
     const ml = Math.max(0, ...its(t).flatMap(i => (i.opts || []).map(o => String(o).replace(/<[^>]*>|\*+/g, '').length))), n = Math.max(0, ...its(t).map(i => (i.opts || []).length));   // v106: đo chữ thật, không tính thẻ <u> / ** (đáp án gạch chân bị coi là dài nên xuống dòng lệch cột)
-    d = ml > a4autoMax(t) ? 'v' : n * (ml * fontPt() * 0.3528 * 0.5 + 14) <= 150 ? 'h' : 'fl';
+    // v108: luôn thẳng cột giữa các câu: cột đều không vừa thì cột co theo chữ (dùng chung cả Task, 'hc'), rồi 2 cột, rồi dọc; Tự xuống dòng chỉ khi người dùng chọn
+    const mm = k => k * fontPt() * 0.3528 * 0.5, cw = mm(ml) + 14;
+    const tight = [...Array(n).keys()].reduce((s, j) => s + mm(Math.max(0, ...its(t).map(i => String((i.opts || [])[j] ?? '').replace(/<[^>]*>|\*+/g, '').length))) + 7, 0) + (n - 1) * 7;
+    d = ml > a4autoMax(t) ? 'v' : n * cw <= 150 ? 'h' : tight <= 160 ? 'hc' : n > 2 && 2 * cw <= 150 ? 'g2' : 'v';
   }
   return d === 'h' ? 'h' : d;
 }
@@ -391,7 +394,10 @@ export function ans0(t, item) {
       return `<span class="a a2" ${nd} style="width:${w}${p.width && !p.lenMode ? ' !important' : ''}"></span>`; }
     case 'A3': return `<span class="a a3" ${nd}${p.boxW ? ` style="--bw:${p.boxW}mm"` : ''}>${'<i></i>'.repeat((item && item.len) || p.boxes || 6)}</span>`;
     case 'A4': { const d = a4dir(t, item), os = item.opts || [], up = p.upper ? 'ABCD' : 'abcd';
-      return `<div class="a a4 ${d}" ${nd} style="--oc:${d === 'g2' ? 2 : os.length}${p.gap != null ? `;--og:${p.gap}mm` : ''}">${os.map((o, i) => `<span class="opt">${p.lab === 'circle' ? `<b>${up[i]}</b>` : p.lab === 'box' ? '<b class="bx"></b>' : `<i>${up[i]}.</i>`}<span>${er(o)}</span></span>`).join('')}</div>`; }
+      // v108: a/b/c thẳng cột giữa các câu: Ngang lấy số cột theo câu nhiều lựa chọn nhất; có Căn lề (cột co theo chữ) thì mỗi ô kèm bản ẩn mọi lựa chọn cùng cột trong Task, cột rộng theo lựa chọn dài nhất
+      const oc = d === 'g2' ? 2 : d === 'h' || d === 'hc' ? Math.max(os.length, ...its(t).filter(i => i && i.opts && a4dir(t, i) === d).map(i => i.opts.length)) : os.length;
+      const col = i => d === 'g2' ? i % 2 : i, sz = i => d === 'hc' || p.align && (d === 'h' || d === 'g2') ? `<span class="osz" aria-hidden="true">${its(t).flatMap(x => (x && x.opts && a4dir(t, x) === d ? x.opts : []).filter((_, k) => col(k) === col(i))).map(x => `<span>${er(x)}</span>`).join('')}</span>` : '';
+      return `<div class="a a4 ${d}" ${nd} style="--oc:${oc}${p.gap != null ? `;--og:${p.gap}mm` : ''}">${os.map((o, i) => `<span class="opt">${p.lab === 'circle' ? `<b>${up[i]}</b>` : p.lab === 'box' ? '<b class="bx"></b>' : `<i>${up[i]}.</i>`}<span>${er(o)}${sz(i)}</span></span>`).join('')}</div>`; }
     case 'A5': return `<span class="a a5" ${nd}${as}></span>`;
     case 'A6': { const lb = Array.isArray(p.labs) && p.labs.length >= 2 ? p.labs.slice(0, 3) : null; return `<span class="a a6${lb ? ' lb' : ''}" ${nd}${as}>${(lb || ['T', 'F']).map(x => `<span>${esc(x)}</span>`).join('')}</span>`; }
     case 'A7': return `<span class="a a7" ${nd}${as}></span>`;

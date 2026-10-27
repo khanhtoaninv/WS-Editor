@@ -93,7 +93,7 @@ Tiếp bước 3 theo mục 8.3.
 | 3 mảnh 5 | Hộp ảnh (`#genDlg`) → `app/src/ui/GenDlg.tsx` (khung hộp + mở / đóng) | so tay 7 phép đo giống hệt v106 |
 | 3 mảnh 6 | Khung app: `.app`, ba cột `#tree` / `#stage` / `#insp`, ô đo `#measure` → `app/src/ui/AppShell.tsx`. `index.html` giờ chỉ còn `<head>`, các ô gắn React và vài `<input type=file>` ẩn | mảnh 4+5+6 trên bản cuối: 120/120; 49/49; audit 0 lỗi |
 
-Badge bản dựng Vite: **v107** (cùng tính năng v106, khác cách dựng).
+Badge bản dựng Vite: **v108** (v107 = cùng tính năng v106, khác cách dựng; v108 = sửa a/b/c thẳng cột, spec mục 39, sửa ở cả hai bản). Đường chuẩn giờ là `tests/chuan/v108/`.
 
 ### 8.2 Cách làm đã chốt khi chuyển một mảnh giao diện sang React
 1. Thay khối HTML trong `app/index.html` bằng chỗ gắn `<div id="r-…" style="display:contents">` (không thêm hộp bọc, CSS grid / flex giữ nguyên).

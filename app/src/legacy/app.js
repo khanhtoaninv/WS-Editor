@@ -813,7 +813,7 @@ function answerPanel(t, s, key) {
   else if (L === 'A4' && inl) { size = `<p class="hint" data-na="size">Lựa chọn nằm trong câu nên cỡ theo chữ.</p>`; content = `<p class="hint">Viết lựa chọn dạng {từ 1|từ 2} trong nội dung; hiện thành từ 1 / từ 2, mỗi từ in đậm. Học sinh gạch chân hoặc khoanh từ đúng.</p>`; }
   else if (L === 'A4') {
     size = fNum('gap', 'Khoảng cách các lựa chọn', o.gap, { min: 2, max: 20, unit: 'mm', def: D('gap', 7) });
-    content = fSeg('dir', 'Cách xếp', o.dir, Object.entries(A4DIRS), D('dir', 'auto'), { hint: key ? '' : 'Tự động: nếu mọi câu trong Task đều ngắn thì xếp một hàng, chỉ cần một câu dài thì cả Task xếp mỗi đáp án một dòng.' })
+    content = fSeg('dir', 'Cách xếp', o.dir, Object.entries(A4DIRS), D('dir', 'auto'), { hint: key ? '' : 'Tự động: lựa chọn ngắn thì xếp một hàng; không vừa thì 2 cột; dài nữa thì mỗi đáp án một dòng. Luôn thẳng cột giữa các câu.' })
       + (key ? '' : fNum('autoMax', 'Đáp án “ngắn” khi dài tối đa', o.autoMax, { min: 6, max: 60, unit: 'ký tự', def: a4autoDef() }) + fSeg('qv', 'Căn dọc (số câu, chữ câu, lựa chọn)', o.qv, [['top', 'Trên'], ['center', 'Giữa'], ['bottom', 'Dưới']], 'top', { hint: 'Áp cho mọi câu của Task: số câu, chữ câu và dòng lựa chọn cùng đường căn.' }) + fSeg('lab', 'Nhãn', o.lab, [['circle', 'ⓐ'], ['dot', 'a.'], ['box', '☐ ô tick']], 'dot') + (o.lab === 'box' ? '' : fSeg('upper', 'Chữ nhãn', o.upper, [[false, 'a b c'], [true, 'A B C']], false)));
   } else if (L === 'A5') size = fNum('size', 'Cỡ ô tick', o.size, { min: 4, max: 12, step: .5, unit: 'mm', def: D('size', 6.5) });
   else if (L === 'A6') size = fNum('size', 'Cỡ ô T/F', o.size, { min: 5, max: 12, step: .5, unit: 'mm', def: D('size', 7.5) });
