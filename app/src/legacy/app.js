@@ -1,3 +1,6 @@
+import { publish } from '../ui/store';
+import { actions } from '../ui/actions';
+import { askConfirm } from '../ui/Dialogs';
 import { ws, setWs } from '../core/state.js';
 import { AGE, AL, ANS_DEF, CELL_NAME, F01, FEAT_NAME, FONTS, FORM_NAME, GAPLAB, GAPP, GT_SIZE, IMP_MAX, IMP_MAX_CH, KIND_A, KIND_NAME, L2KIND, LAYOUT_DEF, MINS, PK_STAR, PRESETS, QN, RECIPES, SCHEMA, SIZES, alOpts, attachOpts, choiceTexts, ck, ckOf, clone, ensureIds, ensureRowIds, featOf, featVal, fillSheet, fillTask, gapCount, hasChoiceMarkup, hasMarkup, isFreeW, isGridTbl, isObj, its, keyParts, kindsOk, migTask, newId, normAnswer, pkGroups, pkMig, pkSrc, pkToggle, prune, qDerived, qTidy, recipeMatch, sigOk, sv, tidy, toForm } from '../core/model.js';
 import { A2MM, AI, AR_OPTS, CHOICE_RE, CONTENT_H, FSZ, G1_TOP, IW8, JS, MM, PH, PHC, SAMPLE, SAMPLE2, T, T7CW, TA, TBL_DEF, TBL_ROW_MM, TL, a2cfg, a2end, a2inline, a4autoDef, a4autoMax, a4dir, alignOf, ans, ans0, ansI, arLabel, arNum, autoLayout, body, body0, body0n, cellCfg, cellDirOf, cellFr, cellSplit, ci, colsDefault, colsOf, colsRange, crossCell, crossHtml, er, esc, exFill, exPick, exPicks, fitOf, fixedImg, fixesFor, fontPt, frOf, frameH, g1Of, g1bFit, g1bFr, g3row, g4Html, gapOf, gtBody, gtHtml, gtInline, gtKeys, gtN, imgArOf, imgStyle, inheritedSpacing, inlChoice, ino, inoN, inoT, isColI, isJoined, keyGaps, layoutOf, layoutReasons, leadIntro, leadOf, leadText, meas, measure, migrate, natAr, nlab, ownFit, pOf, paginate, pairPerm, passCut, passInline, passageHtml, passageParas, pic, pkB, pkPre, place, q2end, qFirst, qOf, qReal, qnum, qrHtml, qrInner, qrUrl, qtext, qtext0, qwho, range, ratioOf, renderTask, rich, rmeta, sheetSpacing, sizeKey, spacingOf, srcOf, t7cw, taOf, tblAr, tblOpts, tpic, tplOf, units, withMarks, xOfKey } from '../core/layout.js';
@@ -926,7 +929,7 @@ document.getElementById('insp').addEventListener('click', e => {
   if (act === 'scope') return applyScope(v);
   if (act === 'center') return commit(w => selTargets(w).forEach(([t, s]) => { const c = cfgOf(t, s, true); c.frame = c.frame || {}; c.frame.ox = c.frame.oy = c.frame.zoom = null; }));
   if (act === 'fix') return applyFix(b.dataset.id, v);
-  if (act === 'guides') { guides = v === '1'; document.getElementById('guidesBtn').classList.toggle('pri', guides); draw(); renderInspector(); return; }
+  if (act === 'guides') { guides = v === '1'; publish({ guides }); draw(); renderInspector(); return; }
   if (extraActs[act]) return extraActs[act](b, v);
   if (act === 'layout') commit(w => { const t = curT(w), fit = t.layout.frame.fit; Object.assign(t.layout, { task: v, split: null, cols: null, cw: null, width: null, align: null, valign: null }); t.layout.frame = fit ? { fit } : {}; });
   else if (act === 'font') commit(w => { if (v === 'andika') delete w.font; else w.font = v; }, 'Font phiếu: ' + FONTS[v].name);
@@ -1041,28 +1044,18 @@ stage.addEventListener('pointerdown', e => {
   const [id, g, item] = n.dataset.node.split(':');
   pick(g ? (item ? { type: 'group', id, g, item } : { type: 'group', id, g }) : { type: 'task', id }, e.shiftKey || e.ctrlKey || e.metaKey);
 });
-document.getElementById('undo').onclick = undo;
-document.getElementById('redo').onclick = redo;
-document.getElementById('age').onchange = e => commit(w => { w.age = e.target.value; }, `Đã đổi độ tuổi: ${e.target.value}`);
-document.getElementById('zoomIn').onclick = () => { zoom = Math.min(1.5, Math.round((scaleNow() + .1) * 10) / 10); draw(); };
-document.getElementById('zoomOut').onclick = () => { zoom = Math.max(.3, Math.round((scaleNow() - .1) * 10) / 10); draw(); };
-document.getElementById('zoomFit').onclick = () => { zoom = null; draw(); };
-document.getElementById('guidesBtn').onclick = () => { guides = !guides; document.getElementById('guidesBtn').classList.toggle('pri', guides); draw(); if (sel.type === 'sheet') renderInspector(); };
-const JSON_HINT = document.getElementById('dlgHint').textContent;
-document.getElementById('mdBtn').onclick = () => {
-  document.getElementById('dlgTitle').textContent = 'Phiếu dạng Markdown (MD)';
-  document.getElementById('dlgHint').textContent = 'Chỉ giữ nội dung và loại bài, không giữ chỉnh layout, kích thước hay ảnh đã tải lên. Muốn giữ đủ thì dùng Xem JSON.';
-  document.getElementById('jsonOut').value = sheetToMd(ws);
-  document.getElementById('dlg').showModal();
-};
-document.getElementById('jsonBtn').onclick = () => { document.getElementById('dlgTitle').textContent = 'Dữ liệu phiếu (JSON)'; document.getElementById('dlgHint').textContent = JSON_HINT; document.getElementById('jsonOut').value = JSON.stringify(ws, null, 2); document.getElementById('dlg').showModal(); };
-document.getElementById('closeDlg').onclick = () => document.getElementById('dlg').close();
-document.getElementById('copyJson').onclick = () => {
-  const isMd = document.getElementById('dlgTitle').textContent.includes('MD');
-  const ta = document.getElementById('jsonOut');
-  const fall = () => { ta.focus(); ta.select(); toast('Đã chọn toàn bộ, bấm Ctrl+C để sao chép'); };
-  try { navigator.clipboard.writeText(ta.value).then(() => toast(isMd ? 'Đã sao chép MD' : 'Đã sao chép JSON'), fall); } catch (_) { fall(); }
-};
+// Thanh trên cùng là React (src/ui/TopBar.tsx): đăng ký hành động cho các nút
+actions.undo = undo;
+actions.toast = toast;
+actions.redo = redo;
+actions.setAge = v => commit(w => { w.age = v; }, `Đã đổi độ tuổi: ${v}`);
+actions.zoomIn = () => { zoom = Math.min(1.5, Math.round((scaleNow() + .1) * 10) / 10); draw(); };
+actions.zoomOut = () => { zoom = Math.max(.3, Math.round((scaleNow() - .1) * 10) / 10); draw(); };
+actions.zoomFit = () => { zoom = null; draw(); };
+actions.toggleGuides = () => { guides = !guides; publish({ guides }); draw(); if (sel.type === 'sheet') renderInspector(); };
+// Hộp Xem JSON / Xuất MD là React (src/ui/Dialogs.tsx)
+actions.showMd = () => publish({ dataDlg: { kind: 'md', text: sheetToMd(ws) } });
+actions.showJson = () => publish({ dataDlg: { kind: 'json', text: JSON.stringify(ws, null, 2) } });
 // Esc: lên một cấp (câu/ô → nhóm → Task → Phiếu)
 function upLevel() {
   if (sel.type === 'group' && sel.item) sel = { type: 'group', id: sel.id, g: sel.g };
@@ -1289,8 +1282,7 @@ taskPanel = (t, s) => {
   const extra = `<button class="btn" data-act="preset-save">Lưu làm mặc định cho dạng ${esc(taskLabel(t))}</button>${has ? `<button class="btn" data-act="preset-apply">Áp mặc định đã lưu của dạng ${esc(taskLabel(t))}</button>` : ''}`;
   return _taskPanel(t, s).replace('<div class="stack"><button class="btn" data-act="auto"', `<div class="stack">${extra}<button class="btn" data-act="auto"`);
 };
-document.getElementById('loadJson').onclick = () => { const ta = document.getElementById('jsonOut'); const r = readJson(ta.value); if (r.err) { toast(r.err + ' Phiếu đang mở giữ nguyên.'); return; } const bad = r.tasks.find(x => x.err); if (bad) { toast(bad.err + ' Phiếu đang mở giữ nguyên.'); return; } const obj = r.kind === 'sheet' ? r.sheet : { tasks: r.tasks.map(x => x.t) }; if (loadSheet(obj, 'Đã nạp phiếu')) document.getElementById('dlg').close(); };
-document.getElementById('dlg').addEventListener('close', () => { const ta = document.getElementById('jsonOut'); ta.readOnly = true; document.getElementById('loadJson').hidden = true; document.getElementById('dlgTitle').textContent = 'Dữ liệu phiếu (JSON)'; document.getElementById('dlgHint').textContent = JSON_HINT; });
+// (v106: nút "Nạp phiếu này" trong hộp JSON không bao giờ hiện, đã bỏ khi chuyển sang React)
 // Danh sách mẫu theo nhóm (thứ tự LIB_GROUPS)
 const libGroups = () => LIB_GROUPS.map(g => [g, RECIPES.filter(r => (r.group || 'Danh sách câu') === g)]).filter(x => x[1].length);
 const libOpts = (selId, mark) => libGroups().map(([g, rs]) => `<optgroup label="${esc(g)}">${rs.map(r => `<option value="${r.id}" ${selId === r.id ? 'selected' : ''}>${esc(r.name)}${mark && mark(r) ? mark(r) : ''}</option>`).join('')}</optgroup>`).join('');
@@ -1594,10 +1586,9 @@ function liveRender() {
     document.querySelectorAll('#tree .qrp').forEach(e => { e.innerHTML = qrInner(t0) || 'Chưa có mã'; });
     const sm = secSums(t0); document.querySelectorAll('#tree .sec').forEach(e => { const o = e.querySelector('.secs'); if (o && sm[e.dataset.sec] != null) o.textContent = sm[e.dataset.sec]; }); }
   const tn = document.querySelector(`#tree .tnode[data-sel="task"][data-id="${eid}"] .tnm`); if (tn && t0) tn.textContent = t0.typeName;
-  document.getElementById('pageBadge').textContent = `${res.pages.length} trang A4`;
-  const db = document.getElementById('diagBadge'); db.textContent = res.diags.length ? `${res.diags.length} lỗi tràn trang` : 'Không lỗi tràn'; db.classList.toggle('bad', !!res.diags.length);
+  publish({ pages: res.pages.length, diags: res.diags.length });
 }
-function edFlush() { if (edSnap && edDirty) { hist.push(edSnap); fut = []; document.getElementById('undo').disabled = false; } edSnap = null; edDirty = false; }
+function edFlush() { if (edSnap && edDirty) { hist.push(edSnap); fut = []; publish({ canUndo: true }); } edSnap = null; edDirty = false; }
 const treeEl = document.getElementById('tree');
 treeEl.addEventListener('focusin', e => { if (e.target.closest('.ed [data-k]')) { edFlush(); edSnap = clone(ws); } });
 treeEl.addEventListener('input', e => {
@@ -2058,7 +2049,7 @@ extraActs['img-del'] = () => delFrame(curT(ws).id);
 extraActs['img-ar'] = (b, v) => { const [k, a] = v.split('|'); setAr(curT(ws).id, k, a); };
 
 /* ================= Vòng render ================= */
-function draw() { if (lastRes) { drawPages(lastRes); document.getElementById('zoomFit').textContent = zoom == null ? 'Vừa khung' : Math.round(scaleNow() * 100) + '%'; } }
+function draw() { if (lastRes) { drawPages(lastRes); publish({ zoomLabel: zoom == null ? 'Vừa khung' : Math.round(scaleNow() * 100) + '%' }); } }
 let ready = false;
 const fontKey = () => FONTS[ws.font] ? ws.font : 'andika';
 let fontApplied = '';
@@ -2067,7 +2058,7 @@ function applyFont() {
   fontApplied = k; document.documentElement.style.setProperty('--f-sheet', FONTS[k].css);
   if (document.fonts && k !== 'andika') {
     const n = FONTS[k].name, vi = 'ăâđêôơưáàảãạéèẻẽẹíìỉĩịóòỏõọúùủũụýỳỷỹỵ';
-    Promise.all(['14pt ', 'bold 14pt '].flatMap(f => [document.fonts.load(f + '"' + n + '"'), document.fonts.load(f + '"' + n + '"', vi)])).catch(() => {}).then(() => document.fonts.ready).then(() => { if (ready && fontApplied === k) { const res = paginate(); lastRes = res; draw(); document.getElementById('pageBadge').textContent = `${res.pages.length} trang A4`; const db = document.getElementById('diagBadge'); db.textContent = res.diags.length ? `${res.diags.length} lỗi tràn trang` : 'Không lỗi tràn'; db.classList.toggle('bad', !!res.diags.length); } });
+    Promise.all(['14pt ', 'bold 14pt '].flatMap(f => [document.fonts.load(f + '"' + n + '"'), document.fonts.load(f + '"' + n + '"', vi)])).catch(() => {}).then(() => document.fonts.ready).then(() => { if (ready && fontApplied === k) { const res = paginate(); lastRes = res; draw(); publish({ pages: res.pages.length, diags: res.diags.length }); } });
   }
   return true;
 }
@@ -2076,18 +2067,12 @@ function render() {
   renderCount++;
   applyFont();
   ws.tasks.forEach(ensureRowIds);
-  document.getElementById('wsTitle').textContent = ws.title;
-  document.getElementById('age').value = ws.age;
-  document.getElementById('undo').disabled = !hist.length;
-  document.getElementById('redo').disabled = !fut.length;
+  publish({ title: ws.title, age: ws.age, canUndo: !!hist.length, canRedo: !!fut.length });
   if (!ready) return;
   const res = paginate(); lastRes = res;
   resChanged = false; renderTree(); draw(); renderInspector();
   if (resChanged) { resChanged = false; renderTree(); renderInspector(); }
-  document.getElementById('pageBadge').textContent = `${res.pages.length} trang A4`;
-  const db = document.getElementById('diagBadge');
-  db.textContent = res.diags.length ? `${res.diags.length} lỗi tràn trang` : 'Không lỗi tràn';
-  db.classList.toggle('bad', !!res.diags.length);
+  publish({ pages: res.pages.length, diags: res.diags.length });
   // Báo Task đổi trang
   const start = {}; res.pages.forEach((p, i) => p.items.forEach(x => { if (!(x.t.id in start)) start[x.t.id] = i + 1; }));
   if (lastStart) {
@@ -2234,25 +2219,10 @@ function tidyHints(root) {
   renderTree = function () { rt(); tidyHints(document.getElementById('tree')); }; }
 document.addEventListener('click', e => { const h = e.target.closest('.hint.fold'); if (h) h.classList.toggle('x'); });
 document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.hint.fold')) { e.preventDefault(); e.target.classList.toggle('x'); } });
-{ const hb = document.getElementById('helpBtn'), hp = document.getElementById('helpPop'), cc = document.getElementById('codesChk'), CK = 'wsEditor.codes.v1';
-  const setCodes = on => { document.documentElement.classList.toggle('codes', on); cc.checked = on; };
-  try { setCodes(localStorage.getItem(CK) === '1'); } catch (_) {}
-  cc.addEventListener('change', () => { setCodes(cc.checked); try { localStorage.setItem(CK, cc.checked ? '1' : '0'); } catch (_) {} });
-  const shut = () => { hp.hidden = true; hb.setAttribute('aria-expanded', 'false'); };
-  hb.addEventListener('click', e => { e.stopPropagation(); hp.hidden = !hp.hidden; hb.setAttribute('aria-expanded', hp.hidden ? 'false' : 'true'); });
-  document.addEventListener('click', e => { if (!hp.hidden && !hp.contains(e.target)) shut(); });
-  window.addEventListener('keydown', e => { if (e.key === 'Escape' && !hp.hidden) { shut(); e.stopPropagation(); e.preventDefault(); } }, true); }
+// Hộp "Thao tác nhanh" + ô Hiện mã kỹ thuật: React (src/ui/TopBar.tsx, HelpPop)
 // Hộp hỏi xác nhận (thay confirm() của trình duyệt): trả về Promise<true|false>
 // v85: bấm ra ngoài hộp hỏi (vùng nền mờ) = Hủy. Chỉ tính khi cả lúc nhấn và lúc thả đều ở ngoài, để kéo bôi chữ không làm đóng hộp
-{ const d = document.getElementById('cfmDlg'); let downOut = false;
-  const out = e => { const r = d.getBoundingClientRect(); return e.target === d && (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom); };
-  d.addEventListener('mousedown', e => { downOut = out(e); });
-  d.addEventListener('click', e => { if (downOut && out(e) && d.open) d.close(); downOut = false; }); }
-function askConfirm(title, msg, yes) {
-  const d = document.getElementById('cfmDlg'); document.getElementById('cfmTitle').textContent = title; document.getElementById('cfmMsg').textContent = msg || ''; document.getElementById('cfmYes').textContent = yes || 'Đồng ý';
-  return new Promise(res => { const done = v => { d.removeEventListener('close', onc); document.getElementById('cfmYes').onclick = document.getElementById('cfmNo').onclick = null; if (d.open) d.close(); res(v); }, onc = () => done(false);
-    document.getElementById('cfmYes').onclick = () => done(true); document.getElementById('cfmNo').onclick = () => done(false); d.addEventListener('close', onc); d.showModal(); document.getElementById('cfmNo').focus(); });
-}
+// Hộp hỏi xác nhận askConfirm(): React (src/ui/Dialogs.tsx)
 const TN_HINT = { T1: 'Ảnh (nếu có) ở trên, rồi bài đọc, câu hỏi', T2: 'Ảnh một cột bên trái, chữ cột bên phải', T3: 'Ảnh một cột bên phải, chữ cột bên trái', T4: 'Bài đọc chạy bao quanh ảnh' };
 const QHINT = {
   Q1: 'Gạch ___ trong câu, hoặc ô chữ cái', Q2: 'Câu hỏi + dòng kẻ để viết', Q3: 'Mỗi câu có lựa chọn A, B, C', Q4: 'Viết {a|b} trong câu; học sinh gạch / khoanh. Có nhãn A–D dưới đoạn gạch chân (tìm lỗi sai)',
@@ -2723,5 +2693,5 @@ const fontsReady = document.fonts
   : Promise.resolve();
 fontsReady.then(() => { ready = true; render(); });
 // Font nạp thêm nhóm ký tự giữa chừng: chỉ dàn lại trang, không dựng lại cột trái (đang gõ dở thì không mất chữ)
-if (document.fonts) document.fonts.addEventListener('loadingdone', e => { if (ready && e.fontfaces.some(f => /Andika|Be Vietnam|Lexend/.test(f.family))) { const res = paginate(); lastRes = res; draw(); document.getElementById('pageBadge').textContent = `${res.pages.length} trang A4`; const db = document.getElementById('diagBadge'); db.textContent = res.diags.length ? `${res.diags.length} lỗi tràn trang` : 'Không lỗi tràn'; db.classList.toggle('bad', !!res.diags.length); } });
+if (document.fonts) document.fonts.addEventListener('loadingdone', e => { if (ready && e.fontfaces.some(f => /Andika|Be Vietnam|Lexend/.test(f.family))) { const res = paginate(); lastRes = res; draw(); publish({ pages: res.pages.length, diags: res.diags.length }); } });
 render();

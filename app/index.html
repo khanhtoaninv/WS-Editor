@@ -17,36 +17,14 @@
 <body>
 
 <div class="app">
-  <header class="top">
-    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này (bản dựng Vite, đang chuyển sang React)" style="font-size:11px;padding:1px 7px;margin-left:4px">v107</span> <small id="wsTitle"></small></div>
-    <div class="tb">
-      <label for="age" class="hint" style="margin:0">Độ tuổi</label>
-      <select id="age"><option value="5-6">5–6</option><option value="7-9">7–9</option><option value="10-12">10–12</option></select>
-    </div>
-    <div class="tb">
-      <button class="btn" id="undo" title="Hoàn tác (Ctrl+Z)">↶ Hoàn tác</button>
-      <button class="btn" id="redo" title="Làm lại (Ctrl+Shift+Z)">↷ Làm lại</button>
-    </div>
-    <div class="tb">
-      <button class="btn" id="zoomOut" aria-label="Thu nhỏ">−</button>
-      <button class="btn" id="zoomFit" style="min-width:64px">Vừa khung</button>
-      <button class="btn" id="zoomIn" aria-label="Phóng to">+</button>
-    </div>
-    <div class="tb"><button class="btn ghost" id="guidesBtn" title="Hiện các đường dóng (không in)">Đường dóng</button></div>
-    <span class="sp"></span>
-    <span class="badge" id="pageBadge">–</span>
-    <span class="badge" id="diagBadge">–</span>
-    <button class="btn ghost" id="jsonBtn">Xem JSON</button>
-    <button class="btn ghost" id="mdBtn">Xuất MD</button>
-    <button class="btn ghost" id="helpBtn" aria-haspopup="dialog" aria-expanded="false" title="Thao tác nhanh">?</button>
-  </header>
+  <div id="r-top" style="display:contents"></div>
   <aside class="pane tree" id="tree" aria-label="Cây container"></aside>
   <div class="lsplit" id="lsplit" role="separator" aria-orientation="vertical" aria-label="Độ rộng khung nhập liệu" tabindex="0" title="Kéo để đổi độ rộng khung nhập liệu. Bấm đúp để về mặc định."></div>
   <main class="pane stage paper" id="stage"></main>
   <aside class="pane insp" id="insp" aria-label="Inspector"></aside>
 </div>
 <input type="file" id="upfile" accept="image/*" hidden>
-<dialog id="cfmDlg" aria-labelledby="cfmTitle"><h3 id="cfmTitle" style="margin:4px 0"></h3><p class="hint" id="cfmMsg" style="margin:6px 0 0"></p><div class="row"><button class="btn" id="cfmNo">Hủy</button><button class="btn dngb" id="cfmYes">Xóa</button></div></dialog>
+<div id="r-cfm" style="display:contents"></div>
 <dialog id="libDlg" aria-labelledby="libTitle"><h3 id="libTitle" style="margin:4px 0">Thêm Task: chọn dạng bài hoặc từ file / dán</h3>
 <div class="seg imtabs" id="imTabs" role="tablist"><button data-tab="lib" role="tab">Chọn dạng bài</button><button data-tab="src" role="tab">Từ file / dán</button></div>
 <div id="libPane"><div class="lnw"><div class="lnl"><div class="lnsec"><span class="lnn">1</span> Dạng câu hỏi</div><div id="lnQ"></div><div class="lnsec"><span class="lnn">2</span> Bố cục <span class="hint" id="lnTh"></span></div><div id="lnT" class="lntrow"></div><div id="lnB" class="lnbrow"></div></div>
@@ -83,15 +61,8 @@
 <input type="file" id="genRefFile" accept="image/*" multiple hidden><input type="file" id="genUp" accept="image/*" hidden>
 <div id="measure" class="paper" aria-hidden="true"></div>
 <div class="toast" id="toast" role="status"></div>
-<div class="helppop" id="helpPop" hidden role="dialog" aria-label="Thao tác nhanh"><b>Thao tác nhanh</b><ul>
-<li>Kéo thanh hoặc cạnh trên trang = đổi kích thước; bấm đúp = về tự động</li><li>Esc = lên cấp · Tab = container kế · Shift+bấm = chọn thêm</li><li>Mũi tên = chỉnh nhanh (Shift = bước lớn)</li><li>Ctrl+C / Ctrl+V = chép kiểu giữa container cùng loại</li><li>Ctrl+Z / Ctrl+Shift+Z = hoàn tác / làm lại</li></ul>
-<label><input type="checkbox" id="codesChk"> Hiện mã kỹ thuật (T1, G0, A1…)</label></div>
-<dialog id="dlg">
-  <h2 id="dlgTitle" style="margin:0 0 8px;font-size:15px">Dữ liệu phiếu (JSON)</h2>
-  <p class="hint" id="dlgHint">Nội dung gốc, cấu hình layout và các override. Sao chép để lưu hoặc gửi cho hệ thống khác.</p>
-  <textarea id="jsonOut" readonly></textarea>
-  <div class="row"><button class="btn pri" id="loadJson" hidden>Nạp phiếu này</button><button class="btn" id="copyJson">Sao chép</button><button class="btn pri" id="closeDlg">Đóng</button></div>
-</dialog>
+<div id="r-help" style="display:contents"></div>
+<div id="r-dlg" style="display:contents"></div>
 
 <script type="module" src="/src/main.ts"></script>
 </body>

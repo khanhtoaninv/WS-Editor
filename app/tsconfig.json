@@ -8,8 +8,9 @@
     "allowJs": true,
     "checkJs": false,
     "noEmit": true,
+    "jsx": "react-jsx",
     "skipLibCheck": true,
-    "types": []
+    "types": ["react", "react-dom"]
   },
   "include": ["src", "scripts/*.ts", "vite.config.ts"]
 }
