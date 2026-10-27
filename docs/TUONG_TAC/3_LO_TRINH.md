@@ -1,6 +1,6 @@
 # Tài liệu 3. Lộ trình: phiếu tương tác và TeacherResource
 
-> Bản nháp **v0** · 27/10/2026 · Đọc kèm `1_TONG_QUAN_KIEN_TRUC.md`, `2_CHUAN_GOI_PHIEU.md`.
+> Bản nháp **v0.1** (GĐ3 = phiên trên lớp, học sinh vào bằng mã; bài về nhà dời sang GĐ5) · 27/10/2026 · Đọc kèm `1_TONG_QUAN_KIEN_TRUC.md`, `2_CHUAN_GOI_PHIEU.md`.
 
 ## 1. Nguyên tắc
 
@@ -16,9 +16,9 @@
 | 0 | Chuẩn bị | WS Editor | Mã chỗ trả lời ổn định, lõi chấm tách riêng, `ws-shared` khởi tạo | — |
 | 1 | Thử tương tác trong WS Editor | WS Editor + `ws-shared` | Người soạn làm thử, chấm thử; giáo viên chiếu, hiện đáp án (V1 cơ bản) | 0 |
 | 2 | Xuất gói `.wsp` | WS Editor + `ws-shared` | File gói đã ký, mã hóa, có kiểm tra; công cụ đọc gói | 1 |
-| 3 | TeacherResource lõi | TeacherResource | Đăng nhập, lớp, import, giao bài về nhà, làm, nộp, chấm, kết quả, chữa từng em, thống kê cơ bản | 2 |
-| 4 | Buổi trực tiếp | TeacherResource | Quét mã vào làm, theo dõi tức thời, `live-board` chữa bài, thống kê đầy đủ | 3 |
-| 5 | Mở rộng | cả hai | Bút vẽ, công cụ trình chiếu, xáo phương án, … (chọn theo nhu cầu) | 1 (bút), 3 |
+| 3 | TeacherResource lõi: phiên trên lớp | TeacherResource | Tài khoản giáo viên, lớp + danh sách học sinh có key, import, mở phiên (mã + QR), học sinh vào bằng key, làm, nộp, chấm, điểm tổng thời gian thực, chốt phiên, kết quả từng câu | 2 |
+| 4 | Chữa bài và thống kê | TeacherResource | `review` từng em, chấm tay, `live-board`, thống kê lớp / câu / Task, lịch sử từng em qua các phiên, nhật ký | 3 |
+| 5 | Mở rộng | cả hai | Bài về nhà, bút vẽ, công cụ trình chiếu, xáo phương án, … (chọn theo nhu cầu) | 1 (bút), 3 |
 
 GĐ1 và GĐ3 có thể chạy **song song** sau khi GĐ2 chốt định dạng (TeacherResource dùng gói mẫu trong `ws-shared/fixtures`).
 
@@ -52,31 +52,33 @@ GĐ1 và GĐ3 có thể chạy **song song** sau khi GĐ2 chốt định dạng 
 
 **Nghiệm thu GĐ2:** xuất 24 phiếu chuẩn → `wsp inspect` đạt hết; gói bị sửa một byte → bị từ chối; gói học sinh nhìn thấy (qua API ở GĐ3) không có chuỗi đáp án nào; mở lại gói ra đúng phiếu gốc.
 
-## 6. GĐ3. TeacherResource lõi (bài về nhà)
+## 6. GĐ3. TeacherResource lõi: phiên trên lớp
 
-- Tài khoản, vai trò (quản trị nội dung, giáo viên, học sinh), lớp và danh sách học sinh.
-- **Import gói:** kiểm, lưu phiên bản, tách đáp án vào kho riêng, báo cáo import.
-- Thư viện phiếu (theo mã phiếu, các phiên bản).
-- **Lần giao:** chọn phiên bản, lớp, hạn, số lần làm, có cho xem đáp án sau khi nộp không.
-- Học sinh: danh sách bài được giao → làm (`answer`, tự lưu nháp) → nộp → kết quả (`result`).
-- Giáo viên: danh sách bài nộp, **chữa từng em** (`review`, chấm tay, nhận xét), thống kê cơ bản (điểm từng em, % đúng từng chỗ / từng Task).
+- **Tài khoản giáo viên**, vai trò quản trị nội dung.
+- **Lớp và danh sách học sinh** (ảnh đại diện, thông tin, **key cá nhân**; in / phát key; đổi key khi lộ). Học sinh không có tài khoản.
+- **Import gói:** kiểm, lưu phiên bản, tách đáp án vào kho riêng, báo cáo import. Thư viện phiếu theo mã phiếu và phiên bản.
+- **Mở phiên** cho một lớp: chọn phiên bản, thời hạn, số lần làm (lấy lần cao nhất / lần cuối), sau khi chốt có hiện đáp án đúng không. Tạo mã phiên + QR + đường dẫn chung. **Mỗi lớp một phiên hoạt động**: mở mới thì hỏi xác nhận, đóng phiên cũ, nộp tự động bài dở.
+- **Học sinh vào** bằng QR hoặc đường dẫn chung + mã phiên, rồi nhập key → xác nhận tên / ảnh → làm (`answer`), tự lưu nháp, chịu được mất mạng ngắn, chuyển máy.
+- **Nộp** → chấm ngay → học sinh thấy điểm tổng của mình + bảng điểm lớp (thời gian thực), **chưa** thấy từng câu.
+- **Màn giáo viên thời gian thực:** danh sách lớp, trạng thái, tiến độ, điểm, trung bình.
+- **Chốt phiên** (hoặc hết hạn tự chốt) → học sinh xem kết quả từng câu (`result`). Mở lại phiên được.
 - Chấm lại khi import phiên bản chỉ đổi đáp án.
-- Bảo mật theo Tài liệu 1 mục 8.3–8.5 (phục vụ trang có kiểm quyền, dấu mờ, nhật ký).
+- Bảo mật theo Tài liệu 1 mục 8.3–8.5 (vé truy cập theo phiên, dấu mờ, nhật ký theo tài khoản giáo viên).
 
-**Nghiệm thu GĐ3:** một lớp giả lập 30 học sinh làm một phiếu thật từ đầu tới cuối; điểm máy chủ trùng điểm Chấm thử ở WS Editor cho cùng bài làm; quét mọi phản hồi API gửi học sinh trước khi nộp không có đáp án; học sinh lớp khác không mở được bài.
+**Nghiệm thu GĐ3:** phiên thử với ≥ 30 thiết bị thật (điện thoại, máy tính bảng) trên Wi‑Fi trường; điểm máy chủ trùng Chấm thử ở WS Editor cho cùng bài làm; quét mọi phản hồi gửi học sinh trước khi chốt phiên không có đáp án; key lớp khác không vào được; mở phiên mới đóng đúng phiên cũ của lớp đó (không đụng lớp khác); mất mạng rồi vào lại không mất bài.
 
-## 7. GĐ4. Buổi trực tiếp trên lớp
+## 7. GĐ4. Chữa bài và thống kê
 
-- Mở buổi → mã QR + mã ngắn; học sinh quét, đăng nhập, vào thẳng phiếu.
-- Kênh cập nhật tức thời; màn giáo viên: ai đã vào, tiến độ, đã nộp; khóa nộp.
-- `live-board`: phiếu chiếu kèm % đúng từng chỗ, phương án sai phổ biến, ẩn tên mặc định.
-- Thống kê đầy đủ: phân bố điểm, chỗ sai nhiều nhất, so sánh các lần giao cùng đề.
+- `review`: bài từng em (theo thứ tự gốc), đúng / sai, đáp án, chấm tay bài viết mở, sửa điểm, nhận xét, em trước / em sau.
+- `live-board`: phiếu chiếu trước lớp kèm % đúng từng chỗ, phương án sai phổ biến, ẩn tên mặc định.
+- Thống kê: điểm từng em, phân bố, trung bình, % đúng theo câu / Task, chỗ sai nhiều nhất; so sánh các phiên cùng đề; **lịch sử từng em qua các phiên** (dựa vào mã học sinh cố định).
+- Nhật ký phiên tra cứu lại theo giáo viên, lớp, ngày.
 
-**Nghiệm thu GĐ4:** buổi thử với ≥ 30 thiết bị (điện thoại, máy tính bảng) trên Wi‑Fi trường; mất mạng giữa chừng rồi vào lại không mất bài; người dùng chữa bài bằng `live-board` trên máy chiếu thật.
+**Nghiệm thu GĐ4:** người dùng chữa bài bằng `live-board` trên máy chiếu thật; số liệu thống kê khớp tính tay trên một phiên mẫu; tra lại được phiên cũ.
 
 ## 8. GĐ5. Mở rộng (chọn theo nhu cầu, tham khảo đặc tả)
 
-Bút vẽ chú thích và lưu nét theo tài khoản (M7, M12) · công cụ trình chiếu (M8) · phóng một bài, ghim, ghi chú (M9) · bảng nhanh / bảng trắng (M10) · Quiz một câu mỗi lần, phản hồi vui (M11) · xáo phương án theo học sinh, bảng xếp hạng (M15) · `draw` cho Q9 / Q12 · dùng không mạng.
+**Bài về nhà** (Tài liệu 1 mục 6.3) · bút vẽ chú thích và lưu nét (M7, M12) · công cụ trình chiếu (M8) · phóng một bài, ghim, ghi chú (M9) · bảng nhanh / bảng trắng (M10) · Quiz một câu mỗi lần, phản hồi vui (M11) · xáo phương án theo học sinh, bảng xếp hạng (M15) · `draw` cho Q9 / Q12 · dùng không mạng.
 
 ## 9. Phân việc theo nơi làm
 
@@ -86,7 +88,7 @@ Bút vẽ chú thích và lưu nét theo tài khoản (M7, M12) · công cụ tr
 | Lược đồ `wsp`, chuẩn hóa, `grade()`, bộ mẫu | | ✔ | dùng |
 | Trình xem (mọi chế độ) | dùng (`preview`, `teach`) | ✔ | dùng (mọi chế độ) |
 | Xuất, ký, mã hóa gói | ✔ | đọc / ghi / kiểm | đọc / kiểm / giải mã |
-| Tài khoản, lớp, giao bài, lưu, thống kê, buổi trực tiếp | | | ✔ |
+| Tài khoản giáo viên, lớp + học sinh, phiên, lưu, thống kê, nhật ký | | | ✔ |
 
 ## 10. Rủi ro chính
 
@@ -101,5 +103,5 @@ Bút vẽ chú thích và lưu nét theo tài khoản (M7, M12) · công cụ tr
 | Phạm vi phình | GĐ5 chỉ làm khi người dùng chọn từng mục |
 
 ## 11. Bước tiếp theo ngay
-1. Người dùng duyệt 3 tài liệu, chốt H1–H3 (Tài liệu 1 mục 11).
+1. ~~Chốt G3–G5, H1–H3~~ (đã chốt 27/10). Người dùng duyệt bản v0.1.
 2. Lập kế hoạch chi tiết GĐ0 (một trang), chờ "ok làm".

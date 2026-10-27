@@ -23,3 +23,10 @@ Trạng thái: **đang thảo luận, chưa code.** Đã viết nháp v0 ba tài
 - H1: Claude chọn dịch vụ ký, đăng nhập một lần, Xuất bản tự ký.
 - H2: sau khi nộp thấy điểm tổng mình + lớp (thời gian thực); kết quả từng câu sau khi giáo viên chốt phiên.
 - H3: giáo viên cài số lần làm.
+
+## Chốt G3 (27/10/2026)
+- Học sinh nằm trong **danh sách lớp** (cập nhật thời gian thực, có ảnh đại diện, thông tin, mỗi em một mã / key). Không tài khoản.
+- Mở phiên thì danh sách lớp đi kèm. Học sinh quét QR vào link bài (hoặc vào link chung + nhập mã phiên), rồi nhập key của mình.
+- "Mỗi buổi một phiên" áp **theo lớp**; giáo viên chỉ mở và điều hành phiên.
+- **Bài về nhà tính sau**, làm trên lớp trước.
+- Đã sửa tài liệu 1 và 3 thành v0.1 theo các điểm này.
