@@ -776,3 +776,10 @@ Nguyên tắc (người dùng): **mọi thứ cần đáp án đều là câu h�
 - Chưa làm: tiêu đề bài đọc căn giữa; căn lề chữ ô câu hỏi (người dùng nói để sau); thanh kéo (drag) nhóm T/F; ô nhập đáp án riêng theo từng chỗ trống trong file MD (`## Đáp án` của câu nhiều chỗ trống chưa kiểm).
 - Kiểm thử: `tests/test44.py` (và test43 cập nhật theo MD phiếu cũ).
 
+## 34. Nhãn lựa chọn mặc định a. b. c. (v102, 27/10/2026)
+- Mọi câu Lựa chọn A/B/C (A4, theo câu) hiện nhãn **a. b. c.** mặc định (chữ thường, không vòng tròn; "Chữ nhãn: A B C" vẫn chọn được). Vòng tròn ⓐ và ô tick ☐ là lựa chọn riêng: `answer.params.lab` = `'circle'` / `'box'`; vắng = `a.`.
+- Cột trái, Dạng Chọn A/B/C: nút **a. b. c. / Khoanh ⓐ / ☐ Ô tick** (mặc định a. b. c.); bảng Đáp án có mục Nhãn cùng ba lựa chọn.
+- MD: `Dạng: chọn A/B/C (khoanh)` = vòng tròn; `(ô tick)` = ô tick; không ghi = a. b. c. Xuất MD ghi lại `(khoanh)` khi có.
+- **Đổi hành vi với phiếu cũ:** phiếu đã lưu không có `lab` trước đây hiện vòng tròn ⓐ, nay hiện `a.`. Muốn giữ vòng tròn thì chọn lại Khoanh ⓐ.
+- Kiểm thử: `tests/test45.py`.
+
