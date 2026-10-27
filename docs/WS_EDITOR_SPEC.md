@@ -754,3 +754,14 @@ Nguồn: góp ý người dùng sau v86; đề xuất `docs/DE_XUAT_CHON_DAP_AN_
 - MD: `[ảnh: tên] chữ` trong ô, đọc lại giữ cả ảnh và chữ.
 - Ô chữ (Q11): dòng đếm ô / từ cập nhật khi gõ lưới; gợi ý trỏ đúng Khối tự do. Trải nghiệm và các vấn đề còn lại: `docs/TRAI_NGHIEM_O_CHU.md`.
 - Kiểm thử: `tests/test42.py`.
+
+## 32. Tái hiện phiếu 7: nhãn chỗ trống, nhãn câu a b c, T/F cùng hàng (v100, 27/10/2026)
+Nguồn: phiếu thật "Unit 6 – Lesson 1" (`tests/real/phieu7.pdf`), MD do AI tạo theo prompt v99 (`tests/real/phieu7-ai-v99.md`), MD đã sửa (`tests/md/phieu7.md`).
+- **Chỗ trống trong bài đọc có nhãn sẵn:** `___` đứng ngay sau `(a)`, `(1)`… không thêm số `(n)` (vẫn đếm thứ tự cho đáp án `Chỗ trống:`). Chỗ trống không có nhãn vẫn đánh `(1)(2)…` như trước.
+- **Bài đọc có `___`, không có câu đánh số** (MD): Task không có dòng câu; `content.list = false`. Trước đó app tự thêm 3 dòng kẻ trống đánh số.
+- **Kiểu số câu:** `layout.nlab = 'a'` hiện số câu thành a, b, c… (đến z; sau đó giữ số). Cột trái, mục Câu hỏi: nút **Kiểu số câu: 1 2 3 / a b c** (ẩn khi Số câu ở lề = Ẩn). MD `Số câu: a b c` / `Số câu: ẩn` / `Số câu: 1 2 3`; Xuất MD ghi lại (`Số câu: ẩn` chỉ khi Task nhiều hơn 1 câu). Số trong cột trái (soạn câu) vẫn là số.
+- **Đúng/Sai cùng hàng:** `answer.params.row = true` (chỉ A6 khoanh T/F): hai ô T / F nằm cuối hàng bên phải chữ câu. Cột trái, mục Dạng câu hỏi Đúng / Sai: nút **Vị trí T / F: Dưới câu / Cùng hàng với câu**. MD `Dạng: đúng/sai (cùng hàng)`, kèm nhãn `(Yes/No, cùng hàng)`. Ô tick (A5) không dùng được.
+- Prompt PDF→MD: thêm quy tắc 16–20 (tiêu đề bài đọc vào đầu `Bài đọc:`, bỏ `Hướng dẫn:` trùng tiêu đề, không bịa `Tuổi:`, nhãn `(a)` giữ nguyên trong bài đọc, nhãn a–h dùng `1.` + `Số câu: a b c`, T/F cùng hàng).
+- **Chưa làm (ghi để biết):** tiêu đề bài đọc căn giữa như PDF (hiện in đậm, căn trái); thụt đầu đoạn / căn đều hai bên của bài đọc; hiện số Task theo PDF (PDF đánh 1, 2, 4, 5, app đánh lại 1–4); ảnh thật (app chỉ có khung giữ chỗ theo tên).
+- Kiểm thử: `tests/test43.py`.
+

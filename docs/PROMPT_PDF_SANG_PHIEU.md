@@ -1,6 +1,6 @@
 # Prompt đưa PDF phiếu bài tập vào WS Editor
 
-Cập nhật: 2026-10-26 (**v81**, kiến trúc trình bày mới): AI ghi **`Dạng:`** (12 dạng câu hỏi) thay cho `Trả lời:`; thêm câu ví dụ `0.`, dòng chữ `> `, khung từ ảnh, khối chữ / ảnh, hai ảnh chung, nhãn Đúng/Sai tự đặt, bài tìm lỗi sai (nhãn A–D), khung vẽ, bốn ô li, đoạn có nhãn A. B., `Bố cục:` và `Thứ tự:` khi cần (quy tắc 12–15). Các quy tắc v67–v80 giữ nguyên: một bài của PDF = một `## Task`, phần phụ dùng `### Phần:`, bỏ giàn giáo, kiểu chữ chỉ khi ý bài cần. File MD theo prompt cũ (`Trả lời:`) vẫn nạp được.
+Cập nhật: 2026-10-27 (**v100**: quy tắc 16–20 sau phiếu thật “Unit 6 – Lesson 1”: tiêu đề bài đọc, bỏ Hướng dẫn trùng tiêu đề, không bịa Tuổi, nhãn (a) trong bài đọc, `Số câu: a b c`, `Dạng: đúng/sai (cùng hàng)`). Trước đó 2026-10-26 (**v81**, kiến trúc trình bày mới): AI ghi **`Dạng:`** (12 dạng câu hỏi) thay cho `Trả lời:`; thêm câu ví dụ `0.`, dòng chữ `> `, khung từ ảnh, khối chữ / ảnh, hai ảnh chung, nhãn Đúng/Sai tự đặt, bài tìm lỗi sai (nhãn A–D), khung vẽ, bốn ô li, đoạn có nhãn A. B., `Bố cục:` và `Thứ tự:` khi cần (quy tắc 12–15). Các quy tắc v67–v80 giữ nguyên: một bài của PDF = một `## Task`, phần phụ dùng `### Phần:`, bỏ giàn giáo, kiểu chữ chỉ khi ý bài cần. File MD theo prompt cũ (`Trả lời:`) vẫn nạp được.
 
 Cách dùng: mở một AI đọc được PDF (Claude, ChatGPT, Gemini…), đính kèm PDF, dán MỘT trong hai prompt dưới đây. Lưu kết quả thành file `.md` (hoặc `.json`), rồi trong app bấm **+ Phiếu** (cả phiếu) hoặc **+ Task** (thêm vào phiếu đang mở) → Chọn file. Xem bảng nhận diện trước khi bấm tạo: dòng xanh là app đã tự xử lý, dòng đỏ là chỗ phải sửa. Dòng đầu bảng nên khớp số bài của PDF (vd “6 Task (Task 6 có 3 phần)”).
 
@@ -37,10 +37,15 @@ NGUYÊN TẮC
 13. DÒNG CHỮ GIỮA CÁC CÂU (tiêu đề nhóm nhỏ, không có chỗ trả lời, số câu KHÔNG bắt đầu lại): viết "> <dòng chữ>". Nếu số câu bắt đầu lại từ 1 thì dùng "### Phần:" (quy tắc 10).
 14. KHUNG TỪ BẰNG ẢNH (hộp tranh A, B, C… để chọn): "Khung từ ảnh: tên1, tên2, tên3". Hộp từ nằm dưới các câu: thêm "Vị trí khung từ: dưới" (bên phải: "phải"). Hai tranh chung cạnh nhau: "Ảnh: tên1; tên2". Chữ / tranh tự do ngang cả bài (ghi chú dài, luật chơi, sơ đồ) không thuộc câu nào: "Khối chữ:" + các dòng thụt lề 2 dấu cách bên dưới, hoặc "Khối ảnh: tên" (thêm "trên" nếu nằm trên bài: "Khối chữ trên:", "Khối ảnh trên:").
 15. BỐ CỤC: thường KHÔNG ghi (app tự chọn). Chỉ ghi "Bố cục: ảnh trái" / "ảnh phải" / "ảnh trong bài đọc" khi PDF đặt tranh chung rõ ràng như vậy và điều đó giúp học sinh. Câu hỏi in TRƯỚC bài đọc trong PDF: "Thứ tự: câu hỏi trước". Điểm đánh số trên tranh chung: "Điểm trên ảnh: x y; x y" (x, y theo % chiều ngang / dọc của tranh, ước lượng; thêm "(ô trống)" nếu điểm không in số).
+16. TIÊU ĐỀ BÀI ĐỌC: chữ in đậm đứng ngay trên bài đọc (tên truyện, tên đoạn văn) viết là dòng đầu của "Bài đọc:", dạng "**TIÊU ĐỀ**", rồi một dòng trống rồi mới tới đoạn văn. KHÔNG viết nó trước "Bài đọc:" như một dòng riêng (app sẽ hiểu nhầm thành một câu).
+17. "Hướng dẫn:" CHỈ ghi khi PDF có câu lệnh riêng NGOÀI tiêu đề bài. Nếu tiêu đề bài chính là câu lệnh (vd "1 LISTEN AND FILL IN THE BLANK" và không có dòng nào dưới nó), KHÔNG chép lại vào "Hướng dẫn:". Dòng "Tuổi:" chỉ ghi khi PDF ghi rõ độ tuổi; không đoán (PDF chỉ có "Level 0" hay mã phiếu thì bỏ dòng Tuổi).
+18. BÀI ĐIỀN TỪ TRONG BÀI ĐỌC: chỗ trống có nhãn in sẵn "(a) ______" thì viết đúng "(a) ___" trong bài đọc, không thêm số, và KHÔNG viết thêm dòng câu nào dưới bài đọc. App tự bỏ số (1)(2)… khi chỗ trống đã có nhãn.
+19. NHÃN CÂU LÀ CHỮ a, b, c… (bài nối từ với nghĩa: "a. ______ nghĩa", "b. ______ nghĩa"): viết mỗi dòng là "1. ___ nghĩa" (đánh số, KHÔNG viết "a." ở đầu dòng vì app hiểu là lựa chọn của câu trên), và thêm dòng "Số câu: a b c" ngay dưới "Dạng:". Muốn bỏ hẳn số câu (không nhãn) thì ghi "Số câu: ẩn".
+20. ĐÚNG/SAI MÀ T F NẰM CÙNG HÀNG VỚI CÂU (T F ở cuối dòng bên phải câu, không xuống dòng dưới): ghi "Dạng: đúng/sai (cùng hàng)". Có nhãn khác thì "Dạng: đúng/sai (Yes/No, cùng hàng)". Bài đọc có tranh cạnh bên rồi các câu ngay dưới: thêm "Ảnh:" và "Bố cục: ảnh phải" như thường.
 
 QUY ƯỚC
 # Tên phiếu
-Tuổi: 7-9                                  (5-6 | 7-9 | 10-12)
+Tuổi: 7-9                                  (5-6 | 7-9 | 10-12; CHỈ khi PDF ghi độ tuổi, không đoán)
 
 ## Task: <tiêu đề bài>                     (mỗi bài của PDF bắt đầu bằng dòng này)
 Hướng dẫn: <lệnh / hướng dẫn của bài>
@@ -48,6 +53,7 @@ Dạng: <BẮT BUỘC, một trong: điền từ | viết câu | chọn A/B/C | 
 Trả lời: không                             (CHỈ khi bài không có chỗ trả lời: tô màu, hỏi đáp miệng, từ điển tranh)
 Dòng viết: 1                               (chỉ với "viết câu": số dòng mỗi câu; "viết tự do": tổng số dòng, tới 20)
 Dòng kẻ: bốn ô li                          (chỉ khi PDF dùng dòng tập viết 4 ô li)
+Số câu: a b c                             (chỉ khi nhãn câu trong PDF là chữ a, b, c…; "ẩn" = không số câu)
 Khung từ: từ1, từ2, từ3                    (nếu có hộp từ)
 Khung từ ảnh: tên1, tên2                   (nếu hộp là tranh)
 Vị trí khung từ: dưới                      (chỉ khi hộp từ nằm dưới / bên phải câu hỏi)
