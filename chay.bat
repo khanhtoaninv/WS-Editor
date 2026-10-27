@@ -36,6 +36,11 @@ if errorlevel 1 (
 goto open
 
 :open
+rem Ban React (ws-editor.html) la ban chinh dang chuyen doi; neu chua co thi mo ban cu v106.
+if exist "%DIR%ws-editor.html" (
+  start "" "%DIR%ws-editor.html"
+  exit /b 0
+)
 if not exist "%DIR%ws-editor-prototype.html" goto nofile
 start "" "%DIR%ws-editor-prototype.html"
 exit /b 0
