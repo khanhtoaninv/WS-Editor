@@ -437,6 +437,7 @@ dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 .tg[data-ln="h"] .r0{border-top:.3mm solid var(--ln)}
 .tg[data-ln="h"] .tn.c0.r0{border-top-left-radius:2mm}.tg[data-ln="h"] .tn.cl.r0{border-top-right-radius:2mm}
 .a2box{display:block;min-width:0}
+.q2ck{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;cursor:pointer}.q2n b{display:inline-block;min-width:44px;text-align:center;font-weight:600;font-size:12px;align-self:center}
 .fr{display:flex;flex-wrap:wrap;column-gap:.28em;align-items:flex-end}
 .fr .w{line-height:1.4}.fr .tl{margin-left:-.28em}.fr .brk{flex-basis:100%;height:0}
 .fr .fl{flex:1 1 18mm;min-width:18mm;height:1.15em;border-bottom:.3mm solid var(--ink);margin-bottom:.12em}
@@ -863,7 +864,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 
 <div class="app">
   <header class="top">
-    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v94</span> <small id="wsTitle"></small></div>
+    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v95</span> <small id="wsTitle"></small></div>
     <div class="tb">
       <label for="age" class="hint" style="margin:0">Độ tuổi</label>
       <select id="age"><option value="5-6">5–6</option><option value="7-9">7–9</option><option value="10-12">10–12</option></select>
@@ -3682,7 +3683,20 @@ function a4dir(t, item) {
 // Mặc định căn ngang của đáp án theo chỗ đặt
 function ansAlignDef(t) { const L = layoutOf(t); if (L === 'T4' || L === 'T7' || t.content.variant === 'multi') return 'center'; if (L === 'T5' && t.layout.align) return t.layout.align; return 'left'; }
 // v81: câu ví dụ hiện sẵn đáp án (key) trong chỗ trả lời
-function ans(t, item) { const h = ans0(t, item); return item && typeof item === 'object' && item.ex && String(item.key ?? '').trim() ? exFill(t, item, h) : h; }
+// v95: Q2 viết câu với gạch tính từ câu hỏi (điểm bắt đầu cuối câu / dòng dưới, chiều dài cố định / hết dòng, số hàng): dùng bộ dựng a2inline trên "câu + ___"
+const q2end = t => t.answer.kind === 'sentence' && t.answer.layout === 'A2' && t.answer.attach === 'item' && !!(t.answer.params || {}).lenMode && qOf(t) === 'Q2';
+function q2cfg(t) {
+  const p = t.answer.params || {};
+  if (t.answer.layout === 'A1') return { start: 'below', len: 'fill', mm: p.lenMm || A2MM[ws.age] || 35, lines: Math.max(1, p.lines || 1) };
+  const c = a2cfg(t, null); return { start: c.start === 'below' ? 'below' : 'end', len: c.mode === 'fill' ? 'fill' : 'fixed', mm: c.mm, lines: c.lines };
+}
+function q2set(t, patch) {
+  const c = Object.assign(q2cfg(t), patch), p = t.answer.params = Object.assign({}, t.answer.params || {});
+  t.answer.layout = 'A2'; t.answer.attach = 'item';
+  p.lenMode = c.len === 'fill' ? 'fill' : 'fixed'; p.lenMm = Math.min(150, Math.max(15, c.mm)); p.lines = Math.min(20, Math.max(1, c.lines)); p.start = c.start === 'below' ? 'below' : 'inline';
+  delete p.width; delete p.frame; delete p.boxH;
+}
+function ans(t, item) { if (item && typeof item === 'object' && !item.gt && q2end(t)) return ''; const h = ans0(t, item); return item && typeof item === 'object' && item.ex && String(item.key ?? '').trim() ? exFill(t, item, h) : h; }
 // v86 (F2): một câu có thể có nhiều đáp án đúng, ghi "a, c" (hoặc chữ của lựa chọn, cách nhau dấu phẩy)
 function optsOfKey(t, x) { if (x.imgs) return x.imgs; if (x.opts) return x.opts; if (t.answer.layout === 'A6') return [...ans0(t, x).matchAll(/<span>([^<]*)<\/span>/g)].map(m => m[1]); return []; }
 const keyParts = item => String(item.key ?? '').split(/\s*[,;]\s*/).map(x => x.trim()).filter(Boolean);
@@ -3797,7 +3811,7 @@ function qtext(t, q) {
   if (q && q.ex && t.answer.attach === 'inline' && t.answer.layout === 'A4') h = h.replace(/<b class="ok">/g, '<b class="pk">');   // v89: câu ví dụ khoanh sẵn vế có *
   h = h.replace(/<b class="ok">/g, '<b>').replace(/\u0003/g, '');
   if (q && q.ex && p.ulab && String(q.key ?? '').trim()) { const L = String(q.key).trim().toUpperCase(); h = h.replace(/<span class="ulb">([\s\S]*?)<i>([A-Ha-h])<\/i><\/span>/g, (m, u, c) => c.toUpperCase() === L ? `<span class="ulb pk">${u}<i>${c}</i></span>` : m); }
-  if (q && q.ex && String(q.key ?? '').trim() && t.answer.attach === 'inline') {
+  if (q && q.ex && String(q.key ?? '').trim() && (t.answer.attach === 'inline' || q2end(t))) {
     const k = esc(String(q.key).trim());
     if (t.answer.layout === 'A4') { const L = k.toLowerCase(); h = h.replace(/<b>([^<]*)<\/b>/g, (m, x) => x.trim().toLowerCase() === L ? `<b class="pk">${x}</b>` : m); }
     else { const g = keyGaps(q); let j = 0; h = g.length > 1 ? h.replace(/(<span class="(?:a (?:a2|fl)[^"]*|gap)"[^>]*>)(<\/span>)/g, (m, a, b) => `${a}<span class="exk">${esc(g[j++] || '')}</span>${b}`) : h.replace(/(<span class="(?:a (?:a2|fl)[^"]*|gap)"[^>]*>)(<\/span>)/, `$1<span class="exk">${k}</span>$2`); }   // v91: nhiều chỗ trống
@@ -3806,6 +3820,7 @@ function qtext(t, q) {
 }
 function qtext0(t, q) {
   const s = er(q.text || ''), br = h => h.replace(/\n/g, '<br>');   // câu nhiều dòng (dòng thụt lề trong MD): \n trong chữ câu là xuống dòng
+  if (q && !q.gt && q2end(t)) return a2inline(t, String(q.text || '').replace(/\s+$/, '') + ' ___', null, q);
   if (t.answer.attach === 'inline' && t.answer.layout === 'A4') return br(inlChoice(t, s));
   if (t.answer.attach === 'inline' && (q.text || '').includes('___')) return t.answer.layout === 'A2' ? a2inline(t, q.text, null, q) : br(s.split('___').join(ans(t, q)));
   return br(s.replace(/___/g, '<span class="gap"></span>'));
@@ -7217,7 +7232,7 @@ function qStyles(t) {
   if (a.kind === 'none') return out;
   const gapIn = attachOpts(t).includes('inline') && a.kind === 'word';
   if (q === 'Q1') { S('gap', gapIn ? 'Gạch trong câu' : 'Gạch dưới câu', A === 'A2', x => { x.answer.layout = 'A2'; x.answer.attach = gapIn ? 'inline' : 'item'; }); S('box', 'Ô chữ cái', A === 'A3', x => { x.answer.layout = 'A3'; x.answer.attach = 'item'; }); }
-  if (q === 'Q2') { S('line', 'Dòng kẻ', A === 'A1', x => { x.answer.layout = 'A1'; x.answer.attach = 'item'; }); S('gap', 'Gạch cuối câu', A === 'A2', x => { x.answer.layout = 'A2'; x.answer.attach = 'item'; }); }
+  // v95: Q2 không còn hai nút Dòng kẻ / Gạch cuối câu; thay bằng Điểm bắt đầu · Chiều dài · Số hàng (qOptsHtml, lệnh q2)
   if (q === 'Q3') { [['circle', 'Khoanh Ⓐ'], ['dot', 'A. B. C.'], ['box', '☐ Ô tick']].forEach(([v, n]) => S(v, n, (p.lab || 'circle') === v, x => { x.answer.params.lab = v === 'circle' ? null : v; })); }
   if (q === 'Q4') { const tx = choiceTexts(t); if (tx.some(hasChoiceMarkup)) S('pick', 'Gạch / khoanh từ', !p.ulab, x => { delete x.answer.params.ulab; }); if (tx.some(v => /<u>/.test(v))) S('ulab', 'Nhãn A–D dưới đoạn gạch chân', !!p.ulab, x => { x.answer.params.ulab = true; }); }
   if (q === 'Q5') { S('tf', 'Khoanh Đúng / Sai', A === 'A6', x => { if (x.answer.kind !== 'tf') setKind(x, 'tf'); }); S('tick', 'Ô tick', A === 'A5', x => { if (x.answer.kind !== 'tick') setKind(x, 'tick'); }); }
@@ -7272,6 +7287,13 @@ function qOptsHtml(t, side) {
   let h = '';
   if (!tbl && ck(t) !== 'empty') h += `<div class="field"><span>Có chỗ trả lời</span><div class="seg"><button ${at}="hasans" data-v="1" class="${ha ? 'on' : ''}">Có</button><button ${at}="hasans" data-v="0" class="${!ha ? 'on' : ''}">Không (chỉ hiển thị)</button></div></div>`;
   if (st.length > 1) h += `<div class="field"><span>Cách trả lời</span><div class="seg wrapseg">${st.map(x => `<button ${at}="qst" data-v="${x.id}" class="${x.on ? 'on' : ''}">${x.name}</button>`).join('')}</div></div>`;
+  if (q === 'Q2' && ha && p.frame !== 'box') {   // v95
+    const c = q2cfg(t), B = (v, lab, on) => `<button ${at}="q2" data-v="${v}" class="${on ? 'on' : ''}">${lab}</button>`;
+    h += `<div class="field q2f"><span>Điểm bắt đầu</span><label class="q2ck"><input type="checkbox" ${at}="q2" data-v="start:${c.start === 'end' ? 'below' : 'end'}" ${c.start === 'end' ? 'checked' : ''}> Từ cuối câu hỏi</label></div>`;
+    h += `<div class="field q2f"><span>Chiều dài</span><div class="seg">${B('len:fixed', 'Cố định', c.len === 'fixed')}${B('len:fill', 'Hết dòng', c.len === 'fill')}</div>${c.len === 'fixed' ? `<div class="seg q2n">${B('mm:-5', '−', false)}<b data-q2v="mm">${c.mm} mm</b>${B('mm:+5', '+', false)}</div>` : ''}</div>`;
+    h += `<div class="field q2f"><span>Số hàng</span><div class="seg q2n">${B('ln:-1', '−', false)}<b data-q2v="ln">${c.lines}</b>${B('ln:+1', '+', false)}</div></div>`;
+    h += `<p class="hint">${c.start === 'end' ? (c.lines > 1 ? `Gạch ngay sau câu hỏi, thêm ${c.lines - 1} hàng bên dưới.` : 'Gạch ngay sau câu hỏi, cùng hàng.') : `${c.lines} hàng bên dưới câu hỏi.`}</p>`;
+  }
   if (q === 'Q5' && t.answer.layout === 'A6') { const k = labsKey(p); h += `<div class="field"><span>Nhãn lựa chọn</span><div class="seg wrapseg">${Object.keys(LABS).map(x => `<button ${at}="labs" data-v="${x}" class="${k === x ? 'on' : ''}">${LABS[x].join(' / ')}</button>`).join('')}</div></div>`; }
   if (['A1', 'A8'].includes(t.answer.layout) && p.frame !== 'box') h += `<div class="field"><span>Kiểu dòng</span><div class="seg"><button ${at}="ruling" data-v="" class="${p.ruling !== '4' ? 'on' : ''}">Dòng thường</button><button ${at}="ruling" data-v="4" class="${p.ruling === '4' ? 'on' : ''}">Bốn ô li (tập viết)</button></div></div>`;
   if (ar.length) h += `<div class="field"><span>Cách xếp câu</span><div class="seg">${ar.map(([v, n, on]) => `<button ${at}="qarr" data-v="${v}" class="${on ? 'on' : ''}">${n}</button>`).join('')}</div></div>`;
@@ -7284,12 +7306,15 @@ function qCmd(t, act, v) {
   if (act === 'q') { return setQMem(t, v) ? 'Dạng câu hỏi: ' + QN[v] : null; }
   if (act === 'hasans') { setHasAns(t, v === '1'); return v === '1' ? 'Có chỗ trả lời' : 'Không có chỗ trả lời (chỉ hiển thị câu)'; }
   if (act === 'qst') { const s = qStyles(t).find(x => x.id === v); if (s) { s.fn(t); normAnswer(t); } return s ? 'Cách trả lời: ' + s.name : null; }
+  if (act === 'q2') { const [k, x] = v.split(':'), c = q2cfg(t);
+    if (k === 'start') q2set(t, { start: x }); else if (k === 'len') q2set(t, { len: x }); else if (k === 'mm') q2set(t, { mm: c.mm + (+x), len: 'fixed' }); else if (k === 'ln') q2set(t, { lines: c.lines + (+x) });
+    const n = q2cfg(t); return `Q2: ${n.start === 'end' ? 'từ cuối câu' : 'dòng dưới'} · ${n.len === 'fill' ? 'hết dòng' : n.mm + ' mm'} · ${n.lines} hàng`; }
   if (act === 'labs') { if (v === 'tf') delete t.answer.params.labs; else t.answer.params.labs = LABS[v].slice(); return 'Nhãn: ' + LABS[v].join(' / '); }
   if (act === 'ruling') { if (v === '4') t.answer.params.ruling = '4'; else delete t.answer.params.ruling; return v === '4' ? 'Dòng kẻ bốn ô li' : 'Dòng kẻ thường'; }
   if (act === 'qarr') { const fit = t.layout.frame.fit; Object.assign(t.layout, { task: v, split: null, cols: null, cw: null, width: null, align: null, valign: null }); t.layout.frame = fit ? { fit } : {}; return 'Đã đổi cách xếp câu'; }
   return null;
 }
-const Q_ACTS = ['tn', 'q', 'hasans', 'qst', 'labs', 'ruling', 'qarr'];
+const Q_ACTS = ['tn', 'q', 'hasans', 'qst', 'labs', 'ruling', 'qarr', 'q2'];
 Q_ACTS.forEach(a => { extraActs[a] = (b, v) => { let msg = null; commit(w => { msg = qCmd(curT(w), a, v); }, null, () => { if (msg) toast(msg); }); }; });
 
 // ---- Khối (G): thêm / xóa thống nhất ----
