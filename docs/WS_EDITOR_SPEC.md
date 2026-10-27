@@ -808,3 +808,10 @@ Nguồn: phiếu 14 ("Unit 6 – Lesson 9"), `tests/md/phieu14.md`.
 - Chưa làm: tên bố cục T6 "Chỉ nội dung" vẫn khác tên T1 "Xếp dọc" trong bảng quy tắc nội bộ (người dùng thấy "Xếp dọc" ở popup T, bên trong là T1 hoặc T6).
 - Kiểm thử: `tests/test48.py`. Prompt quy tắc 24–25.
 
+
+## 38. Chỉnh sau phiếu 14 (v106, 27/10/2026)
+- **Bài nối số câu ở lề:** `.mrows` thụt ra `--hang` như danh sách khác, nên số câu thẳng hàng với số của các Task khác; tiêu đề cột và chữ hai vế căn trái với dòng hướng dẫn (khi không viền, vế không còn đệm 3mm; có viền thì đệm nằm trong viền). Đã rà bằng đo tọa độ trên 3 JSON mẫu và 12 MD thử.
+- **Căn dọc Chọn A/B/C:** `answer.params.qv` = `top` (mặc định) / `center` / `bottom`; áp cho số câu, chữ câu và lựa chọn cùng lúc (`data-qv` trên Task, chỉ khi A4 + nhãn theo câu). MD: `Dạng: chọn A/B/C (căn giữa)` / `(căn dưới)`. Câu không có chữ câu thì dòng chữ rỗng không còn chiếm chỗ.
+- **a/b/c/d thẳng cột:** đo độ dài lựa chọn bỏ thẻ `<u>`, `**` nên không còn bị coi là dài rồi chuyển sang xuống dòng tự do.
+- **Tay kéo T/F:** gắn vào mảnh Task có cột T/F (Task bị cắt qua trang vẫn có tay kéo); tip hiện "câu X / T-F Y · cách lề phải Z mm"; Hai cột: bài đọc + T/F mặc định 60/40, kéo 40–90; câu hỏi + T/F mặc định 80/20, kéo 50–90.
+- Kiểm thử: `tests/test49.py`.
