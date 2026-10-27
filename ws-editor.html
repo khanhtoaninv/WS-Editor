@@ -14093,6 +14093,9 @@ var useUi = create(() => ({
 	cfm: null,
 	toastMsg: "",
 	toastShow: false,
+	imp: null,
+	paste: null,
+	genOpen: false,
 	codes: (() => {
 		try {
 			return localStorage.getItem("wsEditor.codes.v1") === "1";
@@ -14118,7 +14121,11 @@ var actions = {
 	showMd: noop,
 	toast: noop,
 	draw: noop,
-	liveScale: noop
+	liveScale: noop,
+	lnAdd: noop,
+	impOk: noop,
+	impClosed: noop,
+	pasteItems: noop
 };
 // node_modules/react/cjs/react-jsx-runtime.production.js
 /**
@@ -14132,6 +14139,7 @@ var actions = {
 */
 var require_react_jsx_runtime_production = /* @__PURE__ */ __commonJSMin(((exports) => {
 	var REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element");
+	var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
 	function jsxProd(type, config, maybeKey) {
 		var key = null;
 		void 0 !== maybeKey && (key = "" + maybeKey);
@@ -14149,6 +14157,7 @@ var require_react_jsx_runtime_production = /* @__PURE__ */ __commonJSMin(((expor
 			props: maybeKey
 		};
 	}
+	exports.Fragment = REACT_FRAGMENT_TYPE;
 	exports.jsx = jsxProd;
 	exports.jsxs = jsxProd;
 }));
@@ -14367,6 +14376,117 @@ function HelpPop() {
 		]
 	});
 }
+// src/ui/LeftSplit.tsx
+var LW_KEY = "wsEditor.leftW.v2";
+var lwMax = () => Math.max(320, Math.min(720, window.innerWidth - 312 - 32 - 40 - 420));
+var clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+var saved = () => {
+	try {
+		const v = parseInt(localStorage.getItem("wsEditor.leftW.v2") || "", 10);
+		if (v >= 240 && v <= 900) return v;
+	} catch (_) {}
+	return 420;
+};
+function LeftSplit() {
+	const w = (0, import_react.useRef)(saved()), [, setTick] = (0, import_react.useState)(0), [drag, setDrag] = (0, import_react.useState)(false), [label, setLabel] = (0, import_react.useState)(null), ref = (0, import_react.useRef)(null);
+	const setLeftW = (px, save) => {
+		w.current = clamp(Math.round(px), 240, lwMax());
+		document.querySelector(".app").style.setProperty("--lw", w.current + "px");
+		if (save) try {
+			localStorage.setItem(LW_KEY, String(w.current));
+		} catch (_) {}
+		setTick((n) => n + 1);
+	};
+	(0, import_react.useLayoutEffect)(() => {
+		setLeftW(w.current, false);
+	}, []);
+	(0, import_react.useEffect)(() => {
+		const f = () => setLeftW(w.current, false);
+		window.addEventListener("resize", f);
+		return () => window.removeEventListener("resize", f);
+	}, []);
+	const down = (e) => {
+		e.preventDefault();
+		const el = ref.current;
+		el.setPointerCapture(e.pointerId);
+		const x0 = e.clientX, w0 = w.current;
+		let raf = 0;
+		setDrag(true);
+		const mv = (ev) => {
+			setLeftW(w0 + ev.clientX - x0, false);
+			setLabel(w.current + " px");
+			if (!raf) raf = requestAnimationFrame(() => {
+				raf = 0;
+				actions.liveScale();
+			});
+		};
+		const up = () => {
+			el.removeEventListener("pointermove", mv);
+			el.removeEventListener("pointerup", up);
+			el.removeEventListener("pointercancel", up);
+			setDrag(false);
+			setLeftW(w.current, true);
+			actions.draw();
+		};
+		el.addEventListener("pointermove", mv);
+		el.addEventListener("pointerup", up);
+		el.addEventListener("pointercancel", up);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "lsplit" + (drag ? " drag" : ""),
+		id: "lsplit",
+		role: "separator",
+		"aria-orientation": "vertical",
+		"aria-label": "Độ rộng khung nhập liệu",
+		tabIndex: 0,
+		title: "Kéo để đổi độ rộng khung nhập liệu. Bấm đúp để về mặc định.",
+		ref,
+		"aria-valuenow": w.current,
+		"aria-valuemin": 240,
+		"aria-valuemax": lwMax(),
+		"data-w": label ?? void 0,
+		onPointerDown: down,
+		onDoubleClick: () => {
+			setLeftW(420, true);
+			actions.draw();
+		},
+		onKeyDown: (e) => {
+			if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+				e.preventDefault();
+				setLeftW(w.current + (e.key === "ArrowRight" ? 1 : -1) * (e.shiftKey ? 60 : 20), true);
+				actions.draw();
+			}
+		}
+	});
+}
+// src/ui/AppShell.tsx
+function AppShell() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "app",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TopBar, {}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("aside", {
+				className: "pane tree",
+				id: "tree",
+				"aria-label": "Cây container"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LeftSplit, {}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", {
+				className: "pane stage paper",
+				id: "stage"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("aside", {
+				className: "pane insp",
+				id: "insp",
+				"aria-label": "Inspector"
+			})
+		]
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		id: "measure",
+		className: "paper",
+		"aria-hidden": "true"
+	})] });
+}
 // src/ui/Dialogs.tsx
 var JSON_HINT = "Nội dung gốc, cấu hình layout và các override. Sao chép để lưu hoặc gửi cho hệ thống khác.";
 var MD_HINT = "Chỉ giữ nội dung và loại bài, không giữ chỉnh layout, kích thước hay ảnh đã tải lên. Muốn giữ đủ thì dùng Xem JSON.";
@@ -14527,87 +14647,431 @@ function Toast() {
 		children: toastMsg
 	});
 }
-// src/ui/LeftSplit.tsx
-var LW_KEY = "wsEditor.leftW.v2";
-var lwMax = () => Math.max(320, Math.min(720, window.innerWidth - 312 - 32 - 40 - 420));
-var clamp = (v, a, b) => Math.min(b, Math.max(a, v));
-var saved = () => {
-	try {
-		const v = parseInt(localStorage.getItem("wsEditor.leftW.v2") || "", 10);
-		if (v >= 240 && v <= 900) return v;
-	} catch (_) {}
-	return 420;
+// src/ui/ImportDlg.tsx
+var IMP_DEF = {
+	mode: "task",
+	tab: "lib",
+	okHidden: true,
+	okDisabled: true,
+	okText: "Thêm vào cuối phiếu",
+	addHidden: false,
+	pmHidden: true,
+	pmMode: "task",
+	srcInHidden: false,
+	fileName: ""
 };
-function LeftSplit() {
-	const w = (0, import_react.useRef)(saved()), [, setTick] = (0, import_react.useState)(0), [drag, setDrag] = (0, import_react.useState)(false), [label, setLabel] = (0, import_react.useState)(null), ref = (0, import_react.useRef)(null);
-	const setLeftW = (px, save) => {
-		w.current = clamp(Math.round(px), 240, lwMax());
-		document.querySelector(".app").style.setProperty("--lw", w.current + "px");
-		if (save) try {
-			localStorage.setItem(LW_KEY, String(w.current));
-		} catch (_) {}
-		setTick((n) => n + 1);
-	};
+function ImportDlg() {
+	const u = useUi((s) => s.imp), ref = (0, import_react.useRef)(null);
 	(0, import_react.useLayoutEffect)(() => {
-		setLeftW(w.current, false);
-	}, []);
-	(0, import_react.useEffect)(() => {
-		const f = () => setLeftW(w.current, false);
-		window.addEventListener("resize", f);
-		return () => window.removeEventListener("resize", f);
-	}, []);
-	const down = (e) => {
-		e.preventDefault();
 		const el = ref.current;
-		el.setPointerCapture(e.pointerId);
-		const x0 = e.clientX, w0 = w.current;
-		let raf = 0;
-		setDrag(true);
-		const mv = (ev) => {
-			setLeftW(w0 + ev.clientX - x0, false);
-			setLabel(w.current + " px");
-			if (!raf) raf = requestAnimationFrame(() => {
-				raf = 0;
-				actions.liveScale();
-			});
-		};
-		const up = () => {
-			el.removeEventListener("pointermove", mv);
-			el.removeEventListener("pointerup", up);
-			el.removeEventListener("pointercancel", up);
-			setDrag(false);
-			setLeftW(w.current, true);
-			actions.draw();
-		};
-		el.addEventListener("pointermove", mv);
-		el.addEventListener("pointerup", up);
-		el.addEventListener("pointercancel", up);
-	};
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-		className: "lsplit" + (drag ? " drag" : ""),
-		id: "lsplit",
-		role: "separator",
-		"aria-orientation": "vertical",
-		"aria-label": "Độ rộng khung nhập liệu",
-		tabIndex: 0,
-		title: "Kéo để đổi độ rộng khung nhập liệu. Bấm đúp để về mặc định.",
+		if (u && !el.open) el.showModal();
+		else if (!u && el.open) el.close();
+	}, [!!u]);
+	const s = u || IMP_DEF, sheet = s.mode === "sheet", src = s.tab === "src";
+	const tab = (v, n) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+		"data-tab": v,
+		role: "tab",
+		className: s.tab === v ? "on" : "",
+		"aria-selected": s.tab === v ? "true" : "false",
+		children: n
+	}, v);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("dialog", {
+		id: "libDlg",
+		"aria-labelledby": "libTitle",
 		ref,
-		"aria-valuenow": w.current,
-		"aria-valuemin": 240,
-		"aria-valuemax": lwMax(),
-		"data-w": label ?? void 0,
-		onPointerDown: down,
-		onDoubleClick: () => {
-			setLeftW(420, true);
-			actions.draw();
+		"data-mode": s.mode,
+		"data-tab": s.tab,
+		onClose: () => {
+			if (useUi.getState().imp) publish({ imp: null });
+			actions.impClosed();
 		},
-		onKeyDown: (e) => {
-			if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
-				e.preventDefault();
-				setLeftW(w.current + (e.key === "ArrowRight" ? 1 : -1) * (e.shiftKey ? 60 : 20), true);
-				actions.draw();
-			}
-		}
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+				id: "libTitle",
+				style: { margin: "4px 0" },
+				children: sheet ? "Phiếu mới: từ file hoặc dán" : "Thêm Task: chọn dạng bài hoặc từ file / dán"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "seg imtabs",
+				id: "imTabs",
+				role: "tablist",
+				hidden: sheet,
+				children: [tab("lib", "Chọn dạng bài"), tab("src", "Từ file / dán")]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				id: "libPane",
+				hidden: src,
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "lnw",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "lnl",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "lnsec",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "lnn",
+									children: "1"
+								}), " Dạng câu hỏi"]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { id: "lnQ" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "lnsec",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "lnn",
+										children: "2"
+									}),
+									" Bố cục ",
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "hint",
+										id: "lnTh"
+									})
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								id: "lnT",
+								className: "lntrow"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								id: "lnB",
+								className: "lnbrow"
+							})
+						]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "lnr",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "lnpvh",
+								children: "Xem trước · chữ mẫu lorem"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								id: "lnPv",
+								className: "lnpv"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "hint",
+								id: "lnCap"
+							})
+						]
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "lnf",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "hint",
+						children: "Vị trí:"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "seg",
+						id: "lnPos"
+					})]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				id: "srcPane",
+				hidden: !src,
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					id: "srcIn",
+					hidden: s.srcInHidden,
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "imsrc",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									className: "btn",
+									id: "impPick",
+									children: "Chọn file…"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "hint",
+									id: "impName",
+									children: s.fileName
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "hint",
+									children: "JSON (nguồn chính) · MD theo quy ước · TXT"
+								})
+							]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							type: "file",
+							id: "impFile",
+							accept: ".json,.md,.markdown,.txt,.pdf,application/json,text/markdown,text/plain",
+							hidden: true
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+							id: "pasteTa",
+							placeholder: "…hoặc dán JSON, MD theo quy ước, hay chữ của bài vào đây",
+							"aria-label": "Nội dung cần nhập",
+							defaultValue: ""
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "pmode seg",
+							hidden: s.pmHidden,
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								"data-pm": "task",
+								className: s.pmMode === "task" ? "on" : "",
+								children: "Một Task"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								"data-pm": "test",
+								className: s.pmMode === "test" ? "on" : "",
+								children: "Cả đề"
+							})]
+						})
+					]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					id: "pasteOut",
+					className: "pout"
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "row",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "btn",
+						id: "libClose",
+						onClick: () => publish({ imp: null }),
+						children: "Đóng"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "btn pri",
+						id: "libAdd",
+						hidden: src,
+						onClick: () => actions.lnAdd(),
+						children: "Thêm Task"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "btn pri",
+						id: "pasteOk",
+						hidden: s.okHidden,
+						disabled: s.okDisabled,
+						onClick: () => actions.impOk(),
+						children: s.okText
+					})
+				]
+			})
+		]
+	});
+}
+function PasteDlg() {
+	const p = useUi((s) => s.paste), ref = (0, import_react.useRef)(null), ta = (0, import_react.useRef)(null);
+	(0, import_react.useLayoutEffect)(() => {
+		const el = ref.current;
+		if (p && !el.open) {
+			el.showModal();
+			ta.current.value = "";
+			ta.current.focus();
+		} else if (!p && el.open) el.close();
+	}, [!!p]);
+	const n = p ? p.lines : 0;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("dialog", {
+		id: "pasteDlg",
+		"aria-labelledby": "pasteTitle",
+		ref,
+		onClose: () => {
+			if (useUi.getState().paste) publish({ paste: null });
+		},
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+				id: "pasteTitle",
+				style: { margin: "4px 0" },
+				children: "Dán nhiều dòng vào Task đang soạn"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+				id: "itemsTa",
+				placeholder: "Mỗi dòng một câu",
+				"aria-label": "Các dòng cần thêm",
+				ref: ta,
+				onInput: () => publish({ paste: {
+					...useUi.getState().paste,
+					lines: ta.current.value.split("\n").filter((x) => x.trim()).length
+				} })
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				id: "itemsOut",
+				className: "pout",
+				children: p && n ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "hint",
+					children: [
+						n,
+						" dòng → ",
+						n,
+						" ",
+						p.unit,
+						" mới."
+					]
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "hint",
+					children: "Mỗi dòng một câu (bảng: mỗi dòng một hàng, ô cách nhau bằng Tab hoặc |). Số thứ tự ở đầu dòng sẽ được bỏ."
+				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "row",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "btn",
+					id: "itemsCancel",
+					onClick: () => publish({ paste: null }),
+					children: "Hủy"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "btn pri",
+					id: "itemsOk",
+					disabled: !n,
+					onClick: () => {
+						const raw = ta.current.value, id = p.id;
+						publish({ paste: null });
+						actions.pasteItems(raw, id);
+					},
+					children: n ? `Thêm ${n} dòng` : "Thêm"
+				})]
+			})
+		]
+	});
+}
+// src/ui/GenDlg.tsx
+function GenDlg() {
+	const open = useUi((s) => s.genOpen), ref = (0, import_react.useRef)(null);
+	(0, import_react.useLayoutEffect)(() => {
+		const el = ref.current;
+		if (open && !el.open) el.showModal();
+		else if (!open && el.open) el.close();
+	}, [open]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("dialog", {
+		id: "genDlg",
+		"aria-labelledby": "genTitle",
+		ref,
+		onClose: () => {
+			if (useUi.getState().genOpen) publish({ genOpen: false });
+		},
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "gen",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "genh",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+						id: "genTitle",
+						children: "Ảnh"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "btn ghost",
+						id: "genClose",
+						"aria-label": "Đóng",
+						onClick: () => publish({ genOpen: false }),
+						children: "✕"
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "genbody",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "genfr",
+							id: "genFr"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "genvs",
+							id: "genVs",
+							"aria-label": "Các ảnh đã tạo"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "genframe",
+							id: "genFrame",
+							hidden: true,
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "genrow",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Hiển thị" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "seg",
+									id: "genFit"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "genrow",
+								id: "genZoomRow",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Zoom" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										type: "range",
+										id: "genZoom",
+										min: "50",
+										max: "300",
+										step: "5",
+										"aria-label": "Zoom ảnh"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("output", { id: "genZoomOut" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										className: "btn",
+										id: "genCenter",
+										children: "Về giữa"
+									})
+								]
+							})]
+						})
+					] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "gencol",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+								htmlFor: "genPrompt",
+								children: "Mô tả ảnh (prompt)"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+								id: "genPrompt",
+								placeholder: "Ví dụ: a cute cat sitting on a sofa, flat illustration for kids, white background",
+								defaultValue: ""
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: ["Ảnh tham chiếu ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "hint",
+								style: { fontWeight: 400 },
+								children: "(không bắt buộc, tối đa 4)"
+							})] }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "genrefs",
+								id: "genRefs"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "genrow",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Tỷ lệ" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "seg",
+									id: "genAr"
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+								className: "hint",
+								id: "genNote",
+								style: { margin: 0 }
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									className: "btn pri",
+									id: "genGo",
+									children: "Tạo ảnh"
+								}),
+								" ",
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "hint",
+									children: "Ctrl+Enter"
+								})
+							] })
+						]
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "genfoot",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							className: "btn",
+							id: "genUpload",
+							children: "Tải ảnh từ máy…"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							className: "btn",
+							id: "genRm",
+							children: "Gỡ ảnh"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "sp" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							className: "btn pri",
+							id: "genUse",
+							disabled: true,
+							children: "Dùng ảnh này"
+						})
+					]
+				})
+			]
+		})
 	});
 }
 // src/ui/mount.tsx
@@ -14617,12 +15081,14 @@ function mount(id, node) {
 	const root = (0, import_client.createRoot)(el);
 	(0, import_react_dom.flushSync)(() => root.render(node));
 }
-mount("r-top", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TopBar, {}));
-mount("r-lsplit", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LeftSplit, {}));
+mount("r-app", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppShell, {}));
 mount("r-help", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HelpPop, {}));
 mount("r-dlg", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DataDlg, {}));
 mount("r-cfm", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ConfirmDlg, {}));
 mount("r-toast", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toast, {}));
+mount("r-lib", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ImportDlg, {}));
+mount("r-paste", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PasteDlg, {}));
+mount("r-gen", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(GenDlg, {}));
 Object.assign(window, {
 	askConfirm,
 	toast,
@@ -26911,6 +27377,7 @@ var pasteTimer = null;
 var pasteManual = false;
 var PASTE_LONG = 40;
 var impDlg = () => document.getElementById("libDlg");
+var impUi = (o) => publish({ imp: Object.assign({}, useUi.getState().imp || IMP_DEF, o) });
 function autoPasteMode(raw) {
 	return String(raw).split("\n").filter((x) => HEAD_RE.test(x.trim()) || BARE_RE.test(x) && isHead(x.replace(BARE_RE, ""))).length >= 2 || splitTest(raw).length > 1 ? "test" : "task";
 }
@@ -26923,15 +27390,14 @@ function openImport(mode, tab, text) {
 	impFile = "";
 	pasteMode = "task";
 	pasteManual = false;
-	d.dataset.mode = impMode;
-	d.querySelector("#libTitle").textContent = impMode === "sheet" ? "Phiếu mới: từ file hoặc dán" : "Thêm Task: chọn dạng bài hoặc từ file / dán";
-	d.querySelector("#imTabs").hidden = impMode === "sheet";
+	publish({ imp: Object.assign({}, IMP_DEF, {
+		mode: impMode,
+		tab: impTab
+	}) });
 	d.querySelector("#pasteTa").value = text || "";
-	d.querySelector("#impName").textContent = "";
 	d.querySelector("#impFile").value = "";
 	lnReset();
 	impShowTab();
-	if (!d.open) d.showModal();
 	if (impTab === "src") {
 		impAnalyze();
 		d.querySelector("#pasteTa").focus();
@@ -26941,17 +27407,12 @@ function openImport(mode, tab, text) {
 	}
 }
 function impShowTab() {
-	const d = impDlg(), src = impTab === "src";
-	d.querySelectorAll("#imTabs [data-tab]").forEach((b) => {
-		const on = b.dataset.tab === impTab;
-		b.classList.toggle("on", on);
-		b.setAttribute("aria-selected", on ? "true" : "false");
+	const src = impTab === "src";
+	impUi({
+		tab: impTab,
+		okHidden: !src,
+		addHidden: src
 	});
-	d.dataset.tab = impTab;
-	d.querySelector("#libPane").hidden = src;
-	d.querySelector("#srcPane").hidden = !src;
-	d.querySelector("#pasteOk").hidden = !src;
-	d.querySelector("#libAdd").hidden = src;
 	if (!src) lnRender();
 	if (src) impAnalyze();
 }
@@ -26986,9 +27447,9 @@ function impRead(raw) {
 	};
 }
 function impAnalyze() {
-	const d = impDlg(), raw = d.querySelector("#pasteTa").value;
+	const raw = impDlg().querySelector("#pasteTa").value;
 	impConfirm = false;
-	d.querySelector("#srcIn").hidden = false;
+	impUi({ srcInHidden: false });
 	const keep = impJ;
 	impJ = raw.trim() ? impRead(raw) : null;
 	if (impJ && keep && impJ.src !== "text" && keep.src === impJ.src && keep.raw === raw) impJ = keep;
@@ -27002,19 +27463,33 @@ var SRC_NAME = {
 	text: "chữ thô"
 };
 function impRender() {
-	const d = impDlg(), out = d.querySelector("#pasteOut"), ok = d.querySelector("#pasteOk"), pm = d.querySelector(".pmode"), J = impJ, sheet = impMode === "sheet";
-	pm.hidden = !(J && J.src === "text");
-	d.querySelectorAll(".pmode [data-pm]").forEach((x) => x.classList.toggle("on", x.dataset.pm === pasteMode));
+	const out = impDlg().querySelector("#pasteOut"), J = impJ, sheet = impMode === "sheet";
+	const ok = {
+		disabled: false,
+		textContent: ""
+	};
+	impUi({
+		pmHidden: !(J && J.src === "text"),
+		pmMode: pasteMode
+	});
 	if (!J) {
 		out.innerHTML = sheet ? "<p class=\"hint\">Ô đang trống: bấm “Tạo phiếu trống” để bắt đầu một phiếu rỗng. Hoặc chọn file / dán JSON (nguồn chính), MD theo quy ước, chữ thô.</p>" : "<p class=\"hint\">Chọn file hoặc dán vào ô trên. Nguồn chính là JSON (vd. Claude đọc PDF ra JSON). MD theo quy ước cũng nhập chính xác. Chữ thô thì hệ thống đoán. Task mới luôn thêm vào cuối phiếu.</p>";
 		ok.disabled = !sheet;
 		ok.textContent = sheet ? "Tạo phiếu trống" : "Thêm vào cuối phiếu";
+		impUi({
+			okDisabled: ok.disabled,
+			okText: ok.textContent
+		});
 		return;
 	}
 	if (J.err) {
 		out.innerHTML = `<div class="diag">${esc(J.err)} Phiếu đang mở không đổi.</div>`;
 		ok.disabled = true;
 		ok.textContent = sheet ? "Tạo phiếu mới" : "Thêm vào cuối phiếu";
+		impUi({
+			okDisabled: ok.disabled,
+			okText: ok.textContent
+		});
 		return;
 	}
 	const n = J.tasks.length, bad = J.tasks.filter((r) => r.err).length, list = impOk(J);
@@ -27048,6 +27523,10 @@ function impRender() {
 	out.innerHTML = h;
 	ok.disabled = sheet ? !!bad || !n : !list.length;
 	ok.textContent = sheet ? `Tạo phiếu mới (${n} Task)` : `Thêm ${list.length} Task vào cuối phiếu`;
+	impUi({
+		okDisabled: ok.disabled,
+		okText: ok.textContent
+	});
 }
 function impRowHtml(r, i, o) {
 	const t = r.t, n = t ? ck(t) === "table" ? `${t.content.rows.length} hàng` : ck(t) === "empty" ? "chỉ có ảnh" : `${its(t).length} ${ck(t) === "dialogue" ? "lượt" : "câu"}` : "";
@@ -27082,29 +27561,32 @@ function impCommit() {
 	if (impMode === "task") {
 		const list = impOk(J).map((r) => r.t);
 		if (!list.length) return;
-		d.close();
+		publish({ imp: null });
 		addTasks(list, J.kind === "sheet" ? " · chỉ lấy các Task, bỏ cài đặt cấp phiếu" : "");
 		return;
 	}
 	if (J && (J.err || J.tasks.some((r) => r.err))) return;
 	if (!impConfirm && ws.tasks.length) {
 		impConfirm = true;
-		d.querySelector("#srcIn").hidden = true;
-		d.querySelector(".pmode").hidden = true;
+		impUi({
+			srcInHidden: true,
+			pmHidden: true
+		});
 		d.querySelector("#pasteOut").innerHTML = `<div class="diag imconf"><b>Thay phiếu hiện tại?</b><div>Phiếu “${esc(ws.title)}” (${ws.tasks.length} Task) sẽ được thay bằng phiếu mới${J ? ` (${J.tasks.length} Task)` : " trống"}. Nạp phiếu xóa lịch sử Hoàn tác, nên không quay lại được.</div><div class="fixes"><button class="btn" data-imp="dl">Tải JSON phiếu cũ</button><button class="btn" data-imp="back">Quay lại</button></div></div>`;
-		const ok = d.querySelector("#pasteOk");
-		ok.disabled = false;
-		ok.textContent = "Thay phiếu hiện tại";
+		impUi({
+			okDisabled: false,
+			okText: "Thay phiếu hiện tại"
+		});
 		return;
 	}
 	const obj = impSheetObj(J);
-	if (loadSheet(obj, J ? `Đã tạo phiếu mới (${obj.tasks.filter((t) => !(t.layout && t.layout.break === "join")).length} Task${obj.tasks.some((t) => t.layout && t.layout.break === "join") ? `, ${obj.tasks.length} khối` : ""})` : "Đã tạo phiếu trống")) d.close();
+	if (loadSheet(obj, J ? `Đã tạo phiếu mới (${obj.tasks.filter((t) => !(t.layout && t.layout.break === "join")).length} Task${obj.tasks.some((t) => t.layout && t.layout.break === "join") ? `, ${obj.tasks.length} khối` : ""})` : "Đã tạo phiếu trống")) publish({ imp: null });
 }
 async function impPickFile(f) {
 	if (!f) return;
 	const d = impDlg(), ta = d.querySelector("#pasteTa");
 	impFile = f.name;
-	d.querySelector("#impName").textContent = f.name;
+	impUi({ fileName: f.name });
 	const ext = (f.name.split(".").pop() || "").toLowerCase();
 	if ([
 		"json",
@@ -27147,32 +27629,15 @@ async function impPickFile(f) {
 	impAnalyze();
 	if (impMode === "task" && impJ && !impJ.err && impJ.src !== "text" && impJ.tasks.length === 1 && impOk(impJ).length === 1) impCommit();
 }
-var itemsTarget = null;
 function openPaste(mode, target) {
-	itemsTarget = target || null;
-	const d = document.getElementById("pasteDlg");
-	d.querySelector("#itemsTa").value = "";
-	d.querySelector("#itemsOut").innerHTML = "<p class=\"hint\">Mỗi dòng một câu (bảng: mỗi dòng một hàng, ô cách nhau bằng Tab hoặc |). Số thứ tự ở đầu dòng sẽ được bỏ.</p>";
-	d.querySelector("#itemsOk").disabled = true;
-	d.querySelector("#itemsOk").textContent = "Thêm";
-	d.showModal();
-	d.querySelector("#itemsTa").focus();
+	const t = ws.tasks.find((x) => x.id === target);
+	publish({ paste: {
+		id: target || "",
+		unit: t && ck(t) === "table" ? "hàng" : "câu",
+		lines: 0
+	} });
 }
-{
-	const d = document.getElementById("pasteDlg"), ta = d.querySelector("#itemsTa");
-	ta.addEventListener("input", () => {
-		const n = ta.value.split("\n").filter((x) => x.trim()).length, t = ws.tasks.find((x) => x.id === itemsTarget);
-		d.querySelector("#itemsOut").innerHTML = `<p class="hint">${n} dòng → ${n} ${t && ck(t) === "table" ? "hàng" : "câu"} mới.</p>`;
-		d.querySelector("#itemsOk").disabled = !n;
-		d.querySelector("#itemsOk").textContent = `Thêm ${n} dòng`;
-	});
-	d.querySelector("#itemsCancel").onclick = () => d.close();
-	d.querySelector("#itemsOk").onclick = () => {
-		const raw = ta.value;
-		d.close();
-		pasteItems(raw, itemsTarget);
-	};
-}
+actions.pasteItems = (raw, id) => pasteItems(raw, id);
 function pasteItems(raw, id) {
 	commit((w) => {
 		const t = w.tasks.find((x) => x.id === id), c = t.content, lines = raw.split("\n").map((x) => x.replace(/\s+$/, "")).filter((x) => x.trim());
@@ -27624,7 +28089,7 @@ function lnRender() {
 var q0name = () => ln.q === "IMG" ? "Chỉ có ảnh" : `${ln.q} ${lnName(ln.q)}`;
 function lnAdd() {
 	let nid, nm = q0name();
-	impDlg().close();
+	publish({ imp: null });
 	commit((w) => {
 		const t = lnBuild(w);
 		nid = t.id;
@@ -27668,12 +28133,11 @@ document.getElementById("libPane").addEventListener("click", (e) => {
 	else return;
 	lnRender();
 });
-document.getElementById("libAdd").onclick = lnAdd;
-impDlg().addEventListener("close", () => {
+actions.lnAdd = lnAdd;
+actions.impClosed = () => {
 	const pv = document.getElementById("lnPv");
 	if (pv) pv.innerHTML = "";
-});
-document.getElementById("libClose").onclick = () => impDlg().close();
+};
 treeEl.addEventListener("click", (e) => {
 	const b = e.target.closest("[data-lib],[data-newsheet]");
 	if (!b) return;
@@ -27723,7 +28187,7 @@ treeEl.addEventListener("click", (e) => {
 		} else if (b.dataset.imp === "dl") impDownloadOld();
 		else if (b.dataset.imp === "back") {
 			impConfirm = false;
-			d.querySelector("#srcIn").hidden = false;
+			impUi({ srcInHidden: false });
 			impRender();
 		}
 	});
@@ -27746,7 +28210,7 @@ treeEl.addEventListener("click", (e) => {
 			impRender();
 		}
 	});
-	d.querySelector("#pasteOk").onclick = () => {
+	actions.impOk = () => {
 		clearTimeout(pasteTimer);
 		if (!impConfirm && impJ == null && ta.value.trim()) impAnalyze();
 		impCommit();
@@ -28061,10 +28525,9 @@ function openGen(id, key) {
 		oy: fc0.frame.oy || null
 	} : null;
 	if (st.fd && !st.fd.fit && !srcOf(t, key)) st.fd.fit = "width";
-	const d = document.getElementById("genDlg");
+	publish({ genOpen: true });
 	document.getElementById("genPrompt").value = st.prompt;
 	genRender();
-	if (!d.open) d.showModal();
 	document.getElementById("genPrompt").focus();
 }
 async function genRun() {
@@ -28111,7 +28574,7 @@ function imgWH(src) {
 async function genUse() {
 	const c = genCtx, st = c.st;
 	if (st.busy) return;
-	document.getElementById("genDlg").close();
+	publish({ genOpen: false });
 	genApplyFrame(c);
 	if (st.cur >= 0) {
 		const src = st.results[st.cur], wh = (st.resWH || [])[st.cur] || await imgWH(src) || {
@@ -28141,7 +28604,6 @@ async function genUse() {
 		}
 	}, true);
 	extraActs["img-gen"] = (b, v) => openGen(curT(ws).id, v);
-	$("genClose").onclick = () => d.close();
 	$("genGo").onclick = genRun;
 	$("genUse").onclick = genUse;
 	$("genPrompt").addEventListener("input", (e) => {
@@ -30164,15 +30626,6 @@ try {
 	});
 } catch (_) {}
 try {
-	Object.defineProperty(window, "itemsTarget", {
-		configurable: true,
-		get: () => itemsTarget,
-		set: (v) => {
-			itemsTarget = v;
-		}
-	});
-} catch (_) {}
-try {
 	Object.defineProperty(window, "lowRes", {
 		configurable: true,
 		get: () => lowRes,
@@ -31391,6 +31844,12 @@ try {
 	Object.defineProperty(window, "impDlg", {
 		configurable: true,
 		get: () => impDlg
+	});
+} catch (_) {}
+try {
+	Object.defineProperty(window, "impUi", {
+		configurable: true,
+		get: () => impUi
 	});
 } catch (_) {}
 try {
@@ -32947,50 +33406,14 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 </head>
 <body>
 
-<div class="app">
-  <div id="r-top" style="display:contents"></div>
-  <aside class="pane tree" id="tree" aria-label="Cây container"></aside>
-  <div id="r-lsplit" style="display:contents"></div>
-  <main class="pane stage paper" id="stage"></main>
-  <aside class="pane insp" id="insp" aria-label="Inspector"></aside>
-</div>
+<div id="r-app" style="display:contents"></div>
 <input type="file" id="upfile" accept="image/*" hidden>
 <div id="r-cfm" style="display:contents"></div>
-<dialog id="libDlg" aria-labelledby="libTitle"><h3 id="libTitle" style="margin:4px 0">Thêm Task: chọn dạng bài hoặc từ file / dán</h3>
-<div class="seg imtabs" id="imTabs" role="tablist"><button data-tab="lib" role="tab">Chọn dạng bài</button><button data-tab="src" role="tab">Từ file / dán</button></div>
-<div id="libPane"><div class="lnw"><div class="lnl"><div class="lnsec"><span class="lnn">1</span> Dạng câu hỏi</div><div id="lnQ"></div><div class="lnsec"><span class="lnn">2</span> Bố cục <span class="hint" id="lnTh"></span></div><div id="lnT" class="lntrow"></div><div id="lnB" class="lnbrow"></div></div>
-<div class="lnr"><div class="lnpvh">Xem trước · chữ mẫu lorem</div><div id="lnPv" class="lnpv"></div><p class="hint" id="lnCap"></p></div></div>
-<div class="lnf"><span class="hint">Vị trí:</span><span class="seg" id="lnPos"></span></div></div>
-<div id="srcPane" hidden><div id="srcIn"><div class="imsrc"><button class="btn" id="impPick">Chọn file…</button><span class="hint" id="impName"></span><span class="hint">JSON (nguồn chính) · MD theo quy ước · TXT</span></div>
-<input type="file" id="impFile" accept=".json,.md,.markdown,.txt,.pdf,application/json,text/markdown,text/plain" hidden>
-<textarea id="pasteTa" placeholder="…hoặc dán JSON, MD theo quy ước, hay chữ của bài vào đây" aria-label="Nội dung cần nhập"></textarea>
-<div class="pmode seg" hidden><button data-pm="task">Một Task</button><button data-pm="test">Cả đề</button></div></div>
-<div id="pasteOut" class="pout"></div></div>
-<div class="row"><button class="btn" id="libClose">Đóng</button><button class="btn pri" id="libAdd">Thêm Task</button><button class="btn pri" id="pasteOk" hidden disabled>Thêm vào cuối phiếu</button></div></dialog>
-<dialog id="pasteDlg" aria-labelledby="pasteTitle"><h3 id="pasteTitle" style="margin:4px 0">Dán nhiều dòng vào Task đang soạn</h3><textarea id="itemsTa" placeholder="Mỗi dòng một câu" aria-label="Các dòng cần thêm"></textarea><div id="itemsOut" class="pout"></div><div class="row"><button class="btn" id="itemsCancel">Hủy</button><button class="btn pri" id="itemsOk" disabled>Thêm</button></div></dialog>
-<dialog id="genDlg" aria-labelledby="genTitle"><div class="gen">
-  <div class="genh"><h3 id="genTitle">Ảnh</h3><button class="btn ghost" id="genClose" aria-label="Đóng">✕</button></div>
-  <div class="genbody">
-    <div><div class="genfr" id="genFr"></div><div class="genvs" id="genVs" aria-label="Các ảnh đã tạo"></div>
-      <div class="genframe" id="genFrame" hidden>
-        <div class="genrow"><b>Hiển thị</b><span class="seg" id="genFit"></span></div>
-        <div class="genrow" id="genZoomRow"><span>Zoom</span><input type="range" id="genZoom" min="50" max="300" step="5" aria-label="Zoom ảnh"><output id="genZoomOut"></output><button class="btn" id="genCenter">Về giữa</button></div>
-      </div></div>
-    <div class="gencol">
-      <label for="genPrompt">Mô tả ảnh (prompt)</label>
-      <textarea id="genPrompt" placeholder="Ví dụ: a cute cat sitting on a sofa, flat illustration for kids, white background"></textarea>
-      <label>Ảnh tham chiếu <span class="hint" style="font-weight:400">(không bắt buộc, tối đa 4)</span></label>
-      <div class="genrefs" id="genRefs"></div>
-      <div class="genrow"><span>Tỷ lệ</span><span class="seg" id="genAr"></span></div>
-      <p class="hint" id="genNote" style="margin:0"></p>
-      <div><button class="btn pri" id="genGo">Tạo ảnh</button> <span class="hint">Ctrl+Enter</span></div>
-    </div>
-  </div>
-  <div class="genfoot"><button class="btn" id="genUpload">Tải ảnh từ máy…</button><button class="btn" id="genRm">Gỡ ảnh</button><span class="sp"></span><button class="btn pri" id="genUse" disabled>Dùng ảnh này</button></div>
-</div></dialog>
+<div id="r-lib" style="display:contents"></div>
+<div id="r-paste" style="display:contents"></div>
+<div id="r-gen" style="display:contents"></div>
 <input type="file" id="qrImgFile" accept="image/*" hidden><input type="file" id="qrAudFile" accept="audio/*,.mp3,.m4a,.wav,.ogg" hidden>
 <input type="file" id="genRefFile" accept="image/*" multiple hidden><input type="file" id="genUp" accept="image/*" hidden>
-<div id="measure" class="paper" aria-hidden="true"></div>
 <div id="r-toast" style="display:contents"></div>
 <div id="r-help" style="display:contents"></div>
 <div id="r-dlg" style="display:contents"></div>

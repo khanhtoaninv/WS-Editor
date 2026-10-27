@@ -89,6 +89,9 @@ Tiếp bước 3 theo mục 8.3.
 | 3 mảnh 1 | Thanh trên cùng + hộp "Thao tác nhanh" → React (`app/src/ui/TopBar.tsx`), kho Zustand `app/src/ui/store.ts`, hành động `app/src/ui/actions.ts` | ảnh thanh trên giống v106; thao tác tay giống hệt |
 | 3 mảnh 2 | Hộp "Xem JSON / Xuất MD" + hộp hỏi xác nhận `askConfirm` → React (`app/src/ui/Dialogs.tsx`). Nút "Nạp phiếu này" trong hộp JSON của v106 không bao giờ hiện → bỏ | mở / đóng / Esc / bấm ngoài / sao chép / hỏi xác nhận giống hệt v106. Mảnh 1+2 trên bản cuối: 120/120; 49/49; audit 0 lỗi |
 | 3 mảnh 3 | Thông báo `toast` (`app/src/ui/Toast.tsx`) + thanh kéo độ rộng cột trái (`app/src/ui/LeftSplit.tsx`, giữ khóa localStorage cũ) | so tay với v106 giống hệt (kéo, bấm đúp, phím mũi tên, đổi cỡ cửa sổ, nhớ độ rộng). 120/120; 49/49 (test35 bắt được `LW_DEF` thiếu trên window, đã gắn lại); audit 0 lỗi |
+| 3 mảnh 4 | Popup "+ Task" / "+ Phiếu" (`#libDlg`) và hộp "Dán nhiều dòng" (`#pasteDlg`) → `app/src/ui/ImportDlg.tsx`. React giữ khung hộp + các cờ (thẻ đang chọn, nút hiện / tắt / chữ nút); nội dung sinh theo dữ liệu (thư viện dạng bài, xem trước, bảng nhận diện) vẫn do legacy dựng HTML đặt vào ô rỗng | so tay 13 phép đo giống hệt v106 |
+| 3 mảnh 5 | Hộp ảnh (`#genDlg`) → `app/src/ui/GenDlg.tsx` (khung hộp + mở / đóng) | so tay 7 phép đo giống hệt v106 |
+| 3 mảnh 6 | Khung app: `.app`, ba cột `#tree` / `#stage` / `#insp`, ô đo `#measure` → `app/src/ui/AppShell.tsx`. `index.html` giờ chỉ còn `<head>`, các ô gắn React và vài `<input type=file>` ẩn | mảnh 4+5+6 trên bản cuối: 120/120; 49/49; audit 0 lỗi |
 
 Badge bản dựng Vite: **v107** (cùng tính năng v106, khác cách dựng).
 
@@ -103,10 +106,11 @@ Badge bản dựng Vite: **v107** (cùng tính năng v106, khác cách dựng).
 8. Mỗi mảnh: `npm run typecheck`, `npm run build`, `python3 tests/chuan/chuan.py so ws-editor.html`, `bash tests/run_all.sh ws-editor.html ws-editor-prototype.html`, so ảnh mảnh đó với v106. **Không build ra `ws-editor.html` khi test đang chạy trên nó** (dùng `WS_OUT=…`).
 
 ### 8.3 Còn lại của bước 3 (theo thứ tự đề xuất)
-- Popup "+ Task" (`#libDlg`), hộp dán nhiều dòng (`#pasteDlg`), hộp ảnh (`#genDlg`).
-- Inspector (cột phải, `renderInspector`).
-- Cột trái soạn bài (`renderTree`, các khung soạn `edHtml` của 12 dạng Q) — phần lớn nhất (~1.500 dòng, nhiều hàm bị "vá" chồng qua các bản v81–v85).
-- Trang xem trước A4 (`drawPages`), tay kéo, đường dóng. Ghi chú: HTML các trang do `core/layout` dựng; có thể giữ nguyên chuỗi HTML này trong React (an toàn nhất cho đường chuẩn) và chỉ chuyển phần tay kéo / chọn.
+Khung app và mọi hộp thoại đã là React. Còn lại là **nội dung ba cột**, hiện vẫn do bộ dựng HTML của legacy sinh ra rồi đặt vào ô rỗng của `AppShell`:
+- Inspector (cột phải, `renderInspector` + các panel) — khoảng 600 dòng.
+- Cột trái soạn bài (`renderTree`, `edHtml` của 12 dạng Q) — phần lớn nhất, khoảng 1.000 dòng, nhiều hàm bị "vá" chồng qua các bản v81–v85.
+- Trang xem trước A4 (`drawPages`), tay kéo, đường dóng. HTML từng Task do `core/layout.renderTask` dựng: **nên giữ nguyên chuỗi HTML này** (đường chuẩn so đúng từng phần tử), chỉ chuyển phần khung trang, tay kéo và chọn.
+Cách chuyển từng phần: tách một khối HTML ra JSX, giữ y nguyên class / data-*; sau mỗi khối chạy lại đường chuẩn + test.
 - Khi hết legacy: chuyển dần `core/*.js` sang `.ts` có kiểu.
 
 ### 8.4 Lưu ý về test

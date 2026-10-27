@@ -3,10 +3,13 @@
 import { createRoot } from 'react-dom/client';
 import { flushSync } from 'react-dom';
 import type { ReactNode } from 'react';
-import { TopBar, HelpPop } from './TopBar';
+import { HelpPop } from './TopBar';
+import { AppShell } from './AppShell';
 import { DataDlg, ConfirmDlg, askConfirm } from './Dialogs';
 import { Toast, toast } from './Toast';
-import { LeftSplit, LW_DEF, LW_KEY, lwMax } from './LeftSplit';
+import { LW_DEF, LW_KEY, lwMax } from './LeftSplit';
+import { ImportDlg, PasteDlg } from './ImportDlg';
+import { GenDlg } from './GenDlg';
 
 function mount(id: string, node: ReactNode) {
   const el = document.getElementById(id);
@@ -14,12 +17,14 @@ function mount(id: string, node: ReactNode) {
   const root = createRoot(el);
   flushSync(() => root.render(node));
 }
-mount('r-top', <TopBar />);
-mount('r-lsplit', <LeftSplit />);
+mount('r-app', <AppShell />);
 mount('r-help', <HelpPop />);
 mount('r-dlg', <DataDlg />);
 mount('r-cfm', <ConfirmDlg />);
 mount('r-toast', <Toast />);
+mount('r-lib', <ImportDlg />);
+mount('r-paste', <PasteDlg />);
+mount('r-gen', <GenDlg />);
 
 // Cầu nối test: hàm của v106 đã chuyển sang src/ui vẫn gọi được trên window như trước
 Object.assign(window, { askConfirm, toast, LW_DEF, LW_KEY, lwMax });

@@ -1,4 +1,5 @@
-import { publish } from '../ui/store';
+import { publish, useUi } from '../ui/store';
+import { IMP_DEF } from '../ui/ImportDlg';
 import { actions } from '../ui/actions';
 import { askConfirm } from '../ui/Dialogs';
 import { toast } from '../ui/Toast';
@@ -1711,24 +1712,22 @@ function taskToText(t) {
 let impMode = 'task', impTab = 'lib', impJ = null, impConfirm = false, impFile = '', pasteMode = 'task', pasteTimer = null, pasteManual = false;
 const PASTE_LONG = 40;   // dán quá số dòng này vào một Task thì cảnh báo
 const impDlg = () => document.getElementById('libDlg');
+// Khung popup là React (src/ui/ImportDlg.tsx); legacy đổi cờ qua impUi() và vẫn tự dựng HTML cho các ô bên trong
+const impUi = o => publish({ imp: Object.assign({}, useUi.getState().imp || IMP_DEF, o) });
 // Chữ có nhiều hoạt động (dòng "Task 1", "Activity 2", "1 Look and…", hoặc cắt được ≥ 2 phần) → Cả đề
 function autoPasteMode(raw) { const L = String(raw).split('\n'); const heads = L.filter(x => HEAD_RE.test(x.trim()) || (BARE_RE.test(x) && isHead(x.replace(BARE_RE, '')))).length; return heads >= 2 || splitTest(raw).length > 1 ? 'test' : 'task'; }
 function openImport(mode, tab, text) {
   const d = impDlg();
   impMode = mode === 'sheet' ? 'sheet' : 'task'; impTab = impMode === 'sheet' ? 'src' : (tab || 'lib');
   impJ = null; impConfirm = false; impFile = ''; pasteMode = 'task'; pasteManual = false;
-  d.dataset.mode = impMode;
-  d.querySelector('#libTitle').textContent = impMode === 'sheet' ? 'Phiếu mới: từ file hoặc dán' : 'Thêm Task: chọn dạng bài hoặc từ file / dán';
-  d.querySelector('#imTabs').hidden = impMode === 'sheet';
-  d.querySelector('#pasteTa').value = text || ''; d.querySelector('#impName').textContent = ''; d.querySelector('#impFile').value = '';
+  publish({ imp: Object.assign({}, IMP_DEF, { mode: impMode, tab: impTab }) });   // mở hộp (React)
+  d.querySelector('#pasteTa').value = text || ''; d.querySelector('#impFile').value = '';
   lnReset(); impShowTab();
-  if (!d.open) d.showModal();
   if (impTab === 'src') { impAnalyze(); d.querySelector('#pasteTa').focus(); } else { const b = d.querySelector('#lnQ .lnq.on'); if (b) b.focus(); }
 }
 function impShowTab() {
-  const d = impDlg(), src = impTab === 'src';
-  d.querySelectorAll('#imTabs [data-tab]').forEach(b => { const on = b.dataset.tab === impTab; b.classList.toggle('on', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); });
-  d.dataset.tab = impTab; d.querySelector('#libPane').hidden = src; d.querySelector('#srcPane').hidden = !src; d.querySelector('#pasteOk').hidden = !src; d.querySelector('#libAdd').hidden = src;
+  const src = impTab === 'src';
+  impUi({ tab: impTab, okHidden: !src, addHidden: src });
   if (!src) lnRender();
   if (src) impAnalyze();
 }
@@ -1744,7 +1743,7 @@ function impRead(raw) {
 }
 function impAnalyze() {
   const d = impDlg(), raw = d.querySelector('#pasteTa').value;
-  impConfirm = false; d.querySelector('#srcIn').hidden = false;
+  impConfirm = false; impUi({ srcInHidden: false });
   const keep = impJ; impJ = raw.trim() ? impRead(raw) : null;
   if (impJ && keep && impJ.src !== 'text' && keep.src === impJ.src && keep.raw === raw) impJ = keep;   // giữ các ô đã bỏ chọn
   if (impJ) impJ.raw = raw;
@@ -1753,15 +1752,15 @@ function impAnalyze() {
 const impOk = J => J && !J.err ? J.tasks.filter(r => r.t && !r.err && !r.skip) : [];
 const SRC_NAME = { json: 'JSON', md: 'MD theo quy ước', text: 'chữ thô' };
 function impRender() {
-  const d = impDlg(), out = d.querySelector('#pasteOut'), ok = d.querySelector('#pasteOk'), pm = d.querySelector('.pmode'), J = impJ, sheet = impMode === 'sheet';
-  pm.hidden = !(J && J.src === 'text');
-  d.querySelectorAll('.pmode [data-pm]').forEach(x => x.classList.toggle('on', x.dataset.pm === pasteMode));
+  const d = impDlg(), out = d.querySelector('#pasteOut'), J = impJ, sheet = impMode === 'sheet';
+  const ok = { disabled: false, textContent: '' };   // cờ nút "Thêm / Tạo phiếu", đẩy sang React ở cuối hàm
+  impUi({ pmHidden: !(J && J.src === 'text'), pmMode: pasteMode });
   if (!J) {
     out.innerHTML = sheet ? '<p class="hint">Ô đang trống: bấm “Tạo phiếu trống” để bắt đầu một phiếu rỗng. Hoặc chọn file / dán JSON (nguồn chính), MD theo quy ước, chữ thô.</p>'
       : '<p class="hint">Chọn file hoặc dán vào ô trên. Nguồn chính là JSON (vd. Claude đọc PDF ra JSON). MD theo quy ước cũng nhập chính xác. Chữ thô thì hệ thống đoán. Task mới luôn thêm vào cuối phiếu.</p>';
-    ok.disabled = !sheet; ok.textContent = sheet ? 'Tạo phiếu trống' : 'Thêm vào cuối phiếu'; return;
+    ok.disabled = !sheet; ok.textContent = sheet ? 'Tạo phiếu trống' : 'Thêm vào cuối phiếu'; impUi({ okDisabled: ok.disabled, okText: ok.textContent }); return;
   }
-  if (J.err) { out.innerHTML = `<div class="diag">${esc(J.err)} Phiếu đang mở không đổi.</div>`; ok.disabled = true; ok.textContent = sheet ? 'Tạo phiếu mới' : 'Thêm vào cuối phiếu'; return; }
+  if (J.err) { out.innerHTML = `<div class="diag">${esc(J.err)} Phiếu đang mở không đổi.</div>`; ok.disabled = true; ok.textContent = sheet ? 'Tạo phiếu mới' : 'Thêm vào cuối phiếu'; impUi({ okDisabled: ok.disabled, okText: ok.textContent }); return; }
   const n = J.tasks.length, bad = J.tasks.filter(r => r.err).length, list = impOk(J);
   const nParts = J.tasks.filter(r => r.joined).length, nTop = n - nParts, multi = {}; J.tasks.forEach(r => { if (r.joined) multi[r.grp] = (multi[r.grp] || 1) + 1; });
   const partTxt = nParts ? ` (${Object.keys(multi).map(g => `Task ${g} có ${multi[g]} phần`).join(', ')})` : '';
@@ -1780,6 +1779,7 @@ function impRender() {
   out.innerHTML = h;
   ok.disabled = sheet ? !!bad || !n : !list.length;
   ok.textContent = sheet ? `Tạo phiếu mới (${n} Task)` : `Thêm ${list.length} Task vào cuối phiếu`;
+  impUi({ okDisabled: ok.disabled, okText: ok.textContent });
 }
 // Bảng nhận diện: mỗi dòng = số theo file, tiêu đề, mô tả cấu hình, số câu/hàng, cảnh báo; chữ thô có thêm độ chắc + chọn mẫu
 function impRowHtml(r, i, o) {
@@ -1803,20 +1803,20 @@ function impCommit() {
   const d = impDlg(), J = impJ;
   if (impMode === 'task') {
     const list = impOk(J).map(r => r.t); if (!list.length) return;
-    d.close(); addTasks(list, J.kind === 'sheet' ? ' · chỉ lấy các Task, bỏ cài đặt cấp phiếu' : ''); return;
+    publish({ imp: null }); addTasks(list, J.kind === 'sheet' ? ' · chỉ lấy các Task, bỏ cài đặt cấp phiếu' : ''); return;
   }
   if (J && (J.err || J.tasks.some(r => r.err))) return;
   if (!impConfirm && ws.tasks.length) {     // thay phiếu hiện tại: xác nhận, kèm tải JSON phiếu cũ
-    impConfirm = true; d.querySelector('#srcIn').hidden = true; d.querySelector('.pmode').hidden = true;
+    impConfirm = true; impUi({ srcInHidden: true, pmHidden: true });
     d.querySelector('#pasteOut').innerHTML = `<div class="diag imconf"><b>Thay phiếu hiện tại?</b><div>Phiếu “${esc(ws.title)}” (${ws.tasks.length} Task) sẽ được thay bằng phiếu mới${J ? ` (${J.tasks.length} Task)` : ' trống'}. Nạp phiếu xóa lịch sử Hoàn tác, nên không quay lại được.</div><div class="fixes"><button class="btn" data-imp="dl">Tải JSON phiếu cũ</button><button class="btn" data-imp="back">Quay lại</button></div></div>`;
-    const ok = d.querySelector('#pasteOk'); ok.disabled = false; ok.textContent = 'Thay phiếu hiện tại'; return;
+    impUi({ okDisabled: false, okText: 'Thay phiếu hiện tại' }); return;
   }
   const obj = impSheetObj(J);
-  if (loadSheet(obj, J ? `Đã tạo phiếu mới (${obj.tasks.filter(t => !(t.layout && t.layout.break === 'join')).length} Task${obj.tasks.some(t => t.layout && t.layout.break === 'join') ? `, ${obj.tasks.length} khối` : ''})` : 'Đã tạo phiếu trống')) d.close();
+  if (loadSheet(obj, J ? `Đã tạo phiếu mới (${obj.tasks.filter(t => !(t.layout && t.layout.break === 'join')).length} Task${obj.tasks.some(t => t.layout && t.layout.break === 'join') ? `, ${obj.tasks.length} khối` : ''})` : 'Đã tạo phiếu trống')) publish({ imp: null });
 }
 // Chọn file: JSON / MD / TXT đọc như chữ; file khác (PDF…) chỉ đọc được khi WS Studio gắn window.WSImport.extract(file) → {tasks:[…]}
 async function impPickFile(f) {
-  if (!f) return; const d = impDlg(), ta = d.querySelector('#pasteTa'); impFile = f.name; d.querySelector('#impName').textContent = f.name;
+  if (!f) return; const d = impDlg(), ta = d.querySelector('#pasteTa'); impFile = f.name; impUi({ fileName: f.name });
   const ext = (f.name.split('.').pop() || '').toLowerCase();
   if (['json', 'md', 'markdown', 'txt', 'text'].includes(ext) || /^text\/|json/.test(f.type || '')) {
     if (f.size > IMP_MAX_CH) { impJ = { src: 'json', err: `File quá lớn (${(f.size / 1e6).toFixed(1)} MB).` }; impRender(); return; }
@@ -1831,18 +1831,11 @@ async function impPickFile(f) {
   if (impMode === 'task' && impJ && !impJ.err && impJ.src !== 'text' && impJ.tasks.length === 1 && impOk(impJ).length === 1) impCommit();
 }
 // ---- Hộp "Dán nhiều dòng vào Task đang soạn" (riêng, không phải nhập file) ----
-let itemsTarget = null;
-function openPaste(mode, target) {
-  itemsTarget = target || null; const d = document.getElementById('pasteDlg');
-  d.querySelector('#itemsTa').value = ''; d.querySelector('#itemsOut').innerHTML = '<p class="hint">Mỗi dòng một câu (bảng: mỗi dòng một hàng, ô cách nhau bằng Tab hoặc |). Số thứ tự ở đầu dòng sẽ được bỏ.</p>';
-  d.querySelector('#itemsOk').disabled = true; d.querySelector('#itemsOk').textContent = 'Thêm';
-  d.showModal(); d.querySelector('#itemsTa').focus();
+function openPaste(mode, target) {   // hộp là React (src/ui/ImportDlg.tsx, PasteDlg)
+  const t = ws.tasks.find(x => x.id === target);
+  publish({ paste: { id: target || '', unit: t && ck(t) === 'table' ? 'hàng' : 'câu', lines: 0 } });
 }
-{ const d = document.getElementById('pasteDlg'), ta = d.querySelector('#itemsTa');
-  ta.addEventListener('input', () => { const n = ta.value.split('\n').filter(x => x.trim()).length, t = ws.tasks.find(x => x.id === itemsTarget);
-    d.querySelector('#itemsOut').innerHTML = `<p class="hint">${n} dòng → ${n} ${t && ck(t) === 'table' ? 'hàng' : 'câu'} mới.</p>`; d.querySelector('#itemsOk').disabled = !n; d.querySelector('#itemsOk').textContent = `Thêm ${n} dòng`; });
-  d.querySelector('#itemsCancel').onclick = () => d.close();
-  d.querySelector('#itemsOk').onclick = () => { const raw = ta.value; d.close(); pasteItems(raw, itemsTarget); }; }
+actions.pasteItems = (raw, id) => pasteItems(raw, id);
 function pasteItems(raw, id) {
   commit(w => {
     const t = w.tasks.find(x => x.id === id), c = t.content, lines = raw.split('\n').map(x => x.replace(/\s+$/, '')).filter(x => x.trim());
@@ -1993,7 +1986,7 @@ function lnRender() {
 const q0name = () => ln.q === 'IMG' ? 'Chỉ có ảnh' : `${ln.q} ${lnName(ln.q)}`;
 function lnAdd() {
   let nid, nm = q0name();
-  impDlg().close();
+  publish({ imp: null });
   commit(w => { const t = lnBuild(w); nid = t.id; if (ln.pos === 'after') insertTask(t, w); else w.tasks.push(t); }, `Đã thêm Task “${nm}” ${ln.pos === 'after' ? 'sau Task đang chọn' : 'vào cuối phiếu'}`);
   sel = { type: 'task', id: nid }; multi = []; sectReset(nid); refreshSel();
   const tk = stage.querySelector(`.task[data-task="${nid}"]`); if (tk) tk.scrollIntoView({ block: 'center' });
@@ -2008,9 +2001,8 @@ document.getElementById('libPane').addEventListener('click', e => {
   else if (p && !p.disabled) ln.pos = p.dataset.lp; else return;
   lnRender();
 });
-document.getElementById('libAdd').onclick = lnAdd;
-impDlg().addEventListener('close', () => { const pv = document.getElementById('lnPv'); if (pv) pv.innerHTML = ''; });   // bỏ bản xem trước khi đóng hộp (tránh lẫn với Task thật)
-document.getElementById('libClose').onclick = () => impDlg().close();
+actions.lnAdd = lnAdd;
+actions.impClosed = () => { const pv = document.getElementById('lnPv'); if (pv) pv.innerHTML = ''; };   // bỏ bản xem trước khi đóng hộp (tránh lẫn với Task thật)
 treeEl.addEventListener('click', e => { const b = e.target.closest('[data-lib],[data-newsheet]'); if (!b) return; if (b.dataset.lib) openImport('task', 'lib'); else openImport('sheet'); });
 /* ---- Hộp nhập: sự kiện ---- */
 (() => {
@@ -2025,14 +2017,14 @@ treeEl.addEventListener('click', e => { const b = e.target.closest('[data-lib],[
     if (b.dataset.pm2) { pasteMode = b.dataset.pm2; pasteManual = true; impJ = null; impAnalyze(); }
     else if (b.dataset.imp === 'tosheet') { const raw = ta.value, fn = impFile; openImport('sheet', null, raw); impFile = fn; impRender(); }
     else if (b.dataset.imp === 'dl') impDownloadOld();
-    else if (b.dataset.imp === 'back') { impConfirm = false; d.querySelector('#srcIn').hidden = false; impRender(); }
+    else if (b.dataset.imp === 'back') { impConfirm = false; impUi({ srcInHidden: false }); impRender(); }
   });
   d.querySelector('#pasteOut').addEventListener('change', e => {
     const x = e.target, J = impJ; if (!J) return;
     if (x.dataset.pr != null && J.src === 'text') { const r = J.tasks[+x.dataset.pr], n = parseTask(r.raw, x.value || null); Object.assign(r, { t: n.t, notes: n.notes, conf: n.conf, rid: n.rid, force: x.value || null }); impRender(); }
     if (x.dataset.jk != null) { J.tasks[+x.dataset.jk].skip = !x.checked; impRender(); }
   });
-  d.querySelector('#pasteOk').onclick = () => { clearTimeout(pasteTimer); if (!impConfirm && impJ == null && ta.value.trim()) impAnalyze(); impCommit(); };
+  actions.impOk = () => { clearTimeout(pasteTimer); if (!impConfirm && impJ == null && ta.value.trim()) impAnalyze(); impCommit(); };
 })();
 /* ---- Ảnh: kéo thả lên trang, Ctrl+V, nút trong panel ---- */
 stage.addEventListener('dragover', e => { if (!e.dataTransfer || ![...e.dataTransfer.types].includes('Files')) return; const tk = e.target.closest('.task'); if (!tk) return; e.preventDefault(); stage.querySelectorAll('.dov').forEach(x => x.classList.remove('dov')); (e.target.closest('[data-slot]') || tk).classList.add('dov'); });
@@ -2147,8 +2139,9 @@ function openGen(id, key) {
   st.ar = String(imgArOf(t, key) || '4/3'); st.msg = ''; st.rm = false; st.arTouched = false; genCtx = { id, key, st };
   const fc0 = genFrameCfg(t, key); st.fd = fc0 ? { fit: fc0.frame.fit || null, zoom: fc0.frame.zoom || null, ox: fc0.frame.ox || null, oy: fc0.frame.oy || null } : null;
   if (st.fd && !st.fd.fit && !srcOf(t, key)) st.fd.fit = 'width';      // ô chưa có ảnh: mặc định Fit ngang
-  const d = document.getElementById('genDlg'); document.getElementById('genPrompt').value = st.prompt; genRender();
-  if (!d.open) d.showModal(); document.getElementById('genPrompt').focus();
+  publish({ genOpen: true });   // hộp là React (src/ui/GenDlg.tsx)
+  document.getElementById('genPrompt').value = st.prompt; genRender();
+  document.getElementById('genPrompt').focus();
 }
 async function genRun() {
   const c = genCtx, st = c.st; st.prompt = document.getElementById('genPrompt').value.trim();
@@ -2162,7 +2155,7 @@ async function genRun() {
 function imgWH(src) { return new Promise(ok => { const im = new Image(); im.onload = () => ok({ w: im.naturalWidth, h: im.naturalHeight }); im.onerror = () => ok(null); im.src = src; }); }
 async function genUse() {
   const c = genCtx, st = c.st; if (st.busy) return;
-  document.getElementById('genDlg').close();
+  publish({ genOpen: false });
   genApplyFrame(c);
   if (st.cur >= 0) { const src = st.results[st.cur], wh = (st.resWH || [])[st.cur] || (await imgWH(src)) || { w: 1, h: 1 };
     await dropImages(c.id, [{ type: 'image/png', name: 'gen.png' }], c.key, [{ src, w: wh.w, h: wh.h, ar: +(wh.w / wh.h).toFixed(4) }]); }
@@ -2171,7 +2164,6 @@ async function genUse() {
 { const d = document.getElementById('genDlg'), $ = id => document.getElementById(id);
   document.getElementById('tree').addEventListener('click', e => { const b = e.target.closest('[data-gen]'); if (!b) return; const ed = b.closest('.ed'); if (ed) { e.stopPropagation(); openGen(ed.dataset.ed, b.dataset.gen); } }, true);
   extraActs['img-gen'] = (b, v) => openGen(curT(ws).id, v);
-  $('genClose').onclick = () => d.close();
   $('genGo').onclick = genRun; $('genUse').onclick = genUse;
   $('genPrompt').addEventListener('input', e => { genCtx.st.prompt = e.target.value; });
   $('genPrompt').addEventListener('keydown', e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); genRun(); } });

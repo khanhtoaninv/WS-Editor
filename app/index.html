@@ -16,50 +16,14 @@
 </head>
 <body>
 
-<div class="app">
-  <div id="r-top" style="display:contents"></div>
-  <aside class="pane tree" id="tree" aria-label="Cây container"></aside>
-  <div id="r-lsplit" style="display:contents"></div>
-  <main class="pane stage paper" id="stage"></main>
-  <aside class="pane insp" id="insp" aria-label="Inspector"></aside>
-</div>
+<div id="r-app" style="display:contents"></div>
 <input type="file" id="upfile" accept="image/*" hidden>
 <div id="r-cfm" style="display:contents"></div>
-<dialog id="libDlg" aria-labelledby="libTitle"><h3 id="libTitle" style="margin:4px 0">Thêm Task: chọn dạng bài hoặc từ file / dán</h3>
-<div class="seg imtabs" id="imTabs" role="tablist"><button data-tab="lib" role="tab">Chọn dạng bài</button><button data-tab="src" role="tab">Từ file / dán</button></div>
-<div id="libPane"><div class="lnw"><div class="lnl"><div class="lnsec"><span class="lnn">1</span> Dạng câu hỏi</div><div id="lnQ"></div><div class="lnsec"><span class="lnn">2</span> Bố cục <span class="hint" id="lnTh"></span></div><div id="lnT" class="lntrow"></div><div id="lnB" class="lnbrow"></div></div>
-<div class="lnr"><div class="lnpvh">Xem trước · chữ mẫu lorem</div><div id="lnPv" class="lnpv"></div><p class="hint" id="lnCap"></p></div></div>
-<div class="lnf"><span class="hint">Vị trí:</span><span class="seg" id="lnPos"></span></div></div>
-<div id="srcPane" hidden><div id="srcIn"><div class="imsrc"><button class="btn" id="impPick">Chọn file…</button><span class="hint" id="impName"></span><span class="hint">JSON (nguồn chính) · MD theo quy ước · TXT</span></div>
-<input type="file" id="impFile" accept=".json,.md,.markdown,.txt,.pdf,application/json,text/markdown,text/plain" hidden>
-<textarea id="pasteTa" placeholder="…hoặc dán JSON, MD theo quy ước, hay chữ của bài vào đây" aria-label="Nội dung cần nhập"></textarea>
-<div class="pmode seg" hidden><button data-pm="task">Một Task</button><button data-pm="test">Cả đề</button></div></div>
-<div id="pasteOut" class="pout"></div></div>
-<div class="row"><button class="btn" id="libClose">Đóng</button><button class="btn pri" id="libAdd">Thêm Task</button><button class="btn pri" id="pasteOk" hidden disabled>Thêm vào cuối phiếu</button></div></dialog>
-<dialog id="pasteDlg" aria-labelledby="pasteTitle"><h3 id="pasteTitle" style="margin:4px 0">Dán nhiều dòng vào Task đang soạn</h3><textarea id="itemsTa" placeholder="Mỗi dòng một câu" aria-label="Các dòng cần thêm"></textarea><div id="itemsOut" class="pout"></div><div class="row"><button class="btn" id="itemsCancel">Hủy</button><button class="btn pri" id="itemsOk" disabled>Thêm</button></div></dialog>
-<dialog id="genDlg" aria-labelledby="genTitle"><div class="gen">
-  <div class="genh"><h3 id="genTitle">Ảnh</h3><button class="btn ghost" id="genClose" aria-label="Đóng">✕</button></div>
-  <div class="genbody">
-    <div><div class="genfr" id="genFr"></div><div class="genvs" id="genVs" aria-label="Các ảnh đã tạo"></div>
-      <div class="genframe" id="genFrame" hidden>
-        <div class="genrow"><b>Hiển thị</b><span class="seg" id="genFit"></span></div>
-        <div class="genrow" id="genZoomRow"><span>Zoom</span><input type="range" id="genZoom" min="50" max="300" step="5" aria-label="Zoom ảnh"><output id="genZoomOut"></output><button class="btn" id="genCenter">Về giữa</button></div>
-      </div></div>
-    <div class="gencol">
-      <label for="genPrompt">Mô tả ảnh (prompt)</label>
-      <textarea id="genPrompt" placeholder="Ví dụ: a cute cat sitting on a sofa, flat illustration for kids, white background"></textarea>
-      <label>Ảnh tham chiếu <span class="hint" style="font-weight:400">(không bắt buộc, tối đa 4)</span></label>
-      <div class="genrefs" id="genRefs"></div>
-      <div class="genrow"><span>Tỷ lệ</span><span class="seg" id="genAr"></span></div>
-      <p class="hint" id="genNote" style="margin:0"></p>
-      <div><button class="btn pri" id="genGo">Tạo ảnh</button> <span class="hint">Ctrl+Enter</span></div>
-    </div>
-  </div>
-  <div class="genfoot"><button class="btn" id="genUpload">Tải ảnh từ máy…</button><button class="btn" id="genRm">Gỡ ảnh</button><span class="sp"></span><button class="btn pri" id="genUse" disabled>Dùng ảnh này</button></div>
-</div></dialog>
+<div id="r-lib" style="display:contents"></div>
+<div id="r-paste" style="display:contents"></div>
+<div id="r-gen" style="display:contents"></div>
 <input type="file" id="qrImgFile" accept="image/*" hidden><input type="file" id="qrAudFile" accept="audio/*,.mp3,.m4a,.wav,.ogg" hidden>
 <input type="file" id="genRefFile" accept="image/*" multiple hidden><input type="file" id="genUp" accept="image/*" hidden>
-<div id="measure" class="paper" aria-hidden="true"></div>
 <div id="r-toast" style="display:contents"></div>
 <div id="r-help" style="display:contents"></div>
 <div id="r-dlg" style="display:contents"></div>
