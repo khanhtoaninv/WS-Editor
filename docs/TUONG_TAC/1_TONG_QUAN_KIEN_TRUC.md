@@ -184,9 +184,9 @@ Không thể chống chụp màn hình, quay phim màn hình hay chép tay. Mã 
 |---|---|---|
 | G1 | TeacherResource là web app, viết mới, dựa theo WS Editor; AI viết, dev người giám sát | Đã xác nhận |
 | G2 | Học sinh chỉ thấy kết quả sau khi nộp | Đã xác nhận |
-| G3 | Học sinh có tài khoản trong TeacherResource (kể cả khi quét mã ở buổi trực tiếp) | Giả định |
-| G4 | Điểm mặc định: mỗi chỗ trả lời 1 điểm; người soạn đổi được trọng số theo Task | Giả định |
-| G5 | Câu viết mở (Q2 nhiều đáp án, Q12) mặc định chấm tay | Giả định |
-| H1 | Ký gói: dịch vụ ký của công ty hay chỉ xuất trong TeacherResource (mục 8.6) | Chờ chốt |
-| H2 | Sau khi nộp có hiện đáp án đúng cho học sinh không, mặc định thế nào | Chờ chốt (đề xuất: tùy lần giao, mặc định không) |
-| H3 | Một học sinh được làm lại bao nhiêu lần, lấy điểm lần nào | Chờ chốt (đề xuất: mặc định 1 lần) |
+| G3 | **Học sinh nhiều khả năng không có tài khoản.** Vào bằng **mã phiên** giáo viên cấp. Nhật ký tham gia lưu theo tài khoản giáo viên để xem lại. Phiên có thời hạn; **mỗi buổi chỉ một phiên hoạt động**: tạo phiên mới thì các phiên cũ tự tắt | Người dùng nghiêng về (27/10), chờ chốt phạm vi (xem THAO_LUAN.md) |
+| G4 | Điểm mặc định: mỗi chỗ trả lời 1 điểm; người soạn đổi được trọng số theo Task | Đã xác nhận |
+| G5 | **Chỉ bài viết mở chấm tay.** Câu viết ngắn, câu có nhiều đáp án đúng đều chấm máy (danh sách đáp án chấp nhận) | Đã xác nhận |
+| H1 | Ký gói: Claude chọn, miễn bảo mật mà không cản thao tác. Chọn: dịch vụ ký của công ty, người soạn đăng nhập một lần trong WS Editor, sau đó Xuất bản tự ký, không thêm bước | Đã chốt |
+| H2 | Sau khi nộp: học sinh thấy **điểm tổng của mình và của lớp, theo thời gian thực**. Kết quả từng câu chỉ xem được **sau khi giáo viên "chốt phiên"** | Đã xác nhận |
+| H3 | Số lần làm: giáo viên cài đặt cho từng phiên | Đã xác nhận |

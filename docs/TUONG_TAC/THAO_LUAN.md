@@ -16,3 +16,10 @@ Trạng thái: **đang thảo luận, chưa code.** Đã viết nháp v0 ba tài
 - **Phiên bản**: mỗi lần xuất là một bản độc lập, không sửa đè; lần giao bài trỏ đúng một bản; sửa đáp án thì "chấm lại" trên cùng bản.
 - **Bảo mật**: chỉ chạy trên TeacherResource hoặc WS Editor của công ty. Bỏ ý "một file .html mở đâu cũng chạy"; gói định dạng riêng (`.wsp`), mã hóa + ký số; người dùng không cầm file (xem sau đăng nhập, theo quyền, không tải về); đáp án chỉ ở máy chủ; dấu mờ tên tài khoản. Giới hạn đã nói rõ với người dùng: không chống được chụp màn hình.
 - **Hết đóng băng tính năng** (chọn phương án b): phần chuyển React còn lại (KE_HOACH_REACT 8.3) làm song song.
+
+## Trả lời giả định (27/10/2026, sau nháp v0)
+- G3: đang cân nhắc **không tạo tài khoản học sinh**. Học sinh vào bằng mã phiên giáo viên cấp; nhật ký tham gia lưu theo tài khoản giáo viên. Phiên có thời hạn; mỗi buổi chỉ một phiên hoạt động (tạo phiên mới thì phiên cũ tự tắt). **Mâu thuẫn với nháp v0** (vai trò học sinh có tài khoản, bài về nhà theo tài khoản, thống kê từng em theo thời gian) → cần sửa tài liệu 1 mục 4, 6.2, 6.3, 8.5 và tài liệu 3 GĐ3 sau khi chốt hai câu hỏi đang hỏi người dùng: (1) danh sách lớp không tài khoản (học sinh chọn tên + mã ngắn) hay tự gõ tên; (2) luật "một phiên" áp theo giáo viên hay theo lớp, bài về nhà có tính là phiên không.
+- G4 ok. G5: chỉ bài viết mở chấm tay; viết ngắn / nhiều đáp án chấm máy.
+- H1: Claude chọn dịch vụ ký, đăng nhập một lần, Xuất bản tự ký.
+- H2: sau khi nộp thấy điểm tổng mình + lớp (thời gian thực); kết quả từng câu sau khi giáo viên chốt phiên.
+- H3: giáo viên cài số lần làm.
