@@ -10,6 +10,7 @@ import { Toast, toast } from './Toast';
 import { LW_DEF, LW_KEY, lwMax } from './LeftSplit';
 import { ImportDlg, PasteDlg } from './ImportDlg';
 import { GenDlg } from './GenDlg';
+import { ShowRoot } from '../viewer/ShowRoot';
 
 function mount(id: string, node: ReactNode) {
   const el = document.getElementById(id);
@@ -25,6 +26,7 @@ mount('r-toast', <Toast />);
 mount('r-lib', <ImportDlg />);
 mount('r-paste', <PasteDlg />);
 mount('r-gen', <GenDlg />);
+mount('r-show', <ShowRoot />);
 
 // Cầu nối test: hàm của v106 đã chuyển sang src/ui vẫn gọi được trên window như trước
 Object.assign(window, { askConfirm, toast, LW_DEF, LW_KEY, lwMax });

@@ -1,0 +1,90 @@
+/* ====== GĐ1a trình chiếu (src/viewer) ====== */
+.showfab{position:fixed;right:calc(312px + 20px + 18px);bottom:18px;z-index:50;height:40px;padding:0 18px;border-radius:20px;font-size:15px;font-weight:600;box-shadow:0 3px 12px rgba(20,30,40,.25)}
+@media print{.showfab{display:none}}
+.show{position:fixed;inset:0;z-index:1000;background:#26282c;color:#e8e8e8;font:14px system-ui,-apple-system,"Segoe UI",sans-serif;user-select:none}
+.show .vstage{position:absolute;inset:0;overflow:auto;scrollbar-width:thin}
+.show .vwrap{position:relative;display:flex;min-width:100%;min-height:100%}
+.show .vbox{margin:auto;position:relative;flex:none}
+.show .vsurf{position:absolute;left:0;top:0;transform-origin:0 0;background:var(--paper,#fff);color:var(--ink,#111);box-shadow:0 2px 18px rgba(0,0,0,.45)}
+.show .vpage{width:210mm;height:297mm}
+.show .vtask{width:198mm}
+.show .vflow{display:flex;flex-direction:column}
+.show .vsurf .task{scroll-margin-top:0}
+.show .vcap{position:absolute;inset:0;z-index:5;cursor:crosshair;touch-action:none}
+.show .vrect{position:absolute;border:2px dashed #4da3ff;background:rgba(77,163,255,.12);border-radius:4px}
+.show .vhint{position:absolute;left:50%;top:16px;transform:translateX(-50%);background:rgba(0,0,0,.72);padding:6px 12px;border-radius:8px}
+.show .vpic{position:absolute;inset:0;z-index:20;background:rgba(0,0,0,.86);display:grid;place-items:center;cursor:zoom-out}
+.show .vpic img{max-width:92vw;max-height:92vh;object-fit:contain;background:#fff;border-radius:6px}
+.show .vbar{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:30;display:flex;flex-wrap:nowrap;align-items:center;gap:8px;max-width:calc(100vw - 24px);padding:6px 8px;border-radius:12px;background:rgba(20,21,24,.92);box-shadow:0 4px 18px rgba(0,0,0,.4);transition:opacity .25s,transform .25s}
+.show.nobar .vbar{opacity:0;pointer-events:none;transform:translate(-50%,20px)}
+.show .vgrp{display:flex;align-items:center;gap:4px;padding-right:8px;border-right:1px solid #3a3e44}
+.show .vgrp:last-child{border-right:0;padding-right:0}
+.show .vsp{flex:1}
+.show .vb{min-width:38px;height:38px;padding:0 9px;border:1px solid #444a52;border-radius:8px;background:#33373d;color:#eee;font:inherit;cursor:pointer;white-space:nowrap}
+.show .vb:hover{background:#3f444b}
+.show .vb.on{background:#1f6feb;border-color:#1f6feb;color:#fff}
+.show .vb.x{background:#5a2b2b;border-color:#6d3434}
+.show .vcur{min-width:110px;text-align:center;font-variant-numeric:tabular-nums}
+.show .vsel{height:38px;border-radius:8px;background:#33373d;color:#eee;border:1px solid #444a52;width:150px;font:inherit}
+/* B4 đáp án */
+.show .vsurf .vrel{position:relative}
+.show .vsurf .vans{position:absolute;left:-2mm;right:-2mm;bottom:.6mm;text-align:center;color:#1565c0;font-weight:700;white-space:nowrap;line-height:1.1;pointer-events:none;font-size:1em}
+.show .vsurf .ln>.vans{text-align:left;left:2mm}
+.show .vsurf .vans.vin{position:static;margin-left:1mm;font-size:1.25em}
+.show .vsurf .xc>.vans,.show .vsurf .tc>.vans{bottom:auto;top:50%;transform:translateY(-50%)}
+.show .vsurf svg.vline{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.show .vsurf svg.vline line{stroke:#1565c0;stroke-width:.7mm;stroke-linecap:round}
+.show .vsurf .vok{outline-color:#1565c0 !important}
+.show .vsurf .opt.vok>b,.show .vsurf .opt.vok>i{outline:.6mm solid #1565c0;outline-offset:.5mm;border-radius:50%;color:#1565c0}
+.show .vsurf .a6 span.vok{box-shadow:0 0 0 .6mm #1565c0;color:#1565c0;border-radius:1.5mm}
+.show .vsurf .a5.vok::after{color:#1565c0}
+.show .vsurf .a4i b.vok{outline:.55mm solid #1565c0;color:#1565c0}
+.show .vsurf .ulb.vok i{outline:.5mm solid #1565c0;color:#1565c0}
+.show .vsurf .pch b.vok{border-radius:1.5mm;outline:.55mm solid #1565c0;outline-offset:.3mm;color:#1565c0}
+.show .vsurf [data-ans]{cursor:pointer}
+.show .vsurf .vtk{position:absolute;right:1mm;top:1mm;width:8mm;height:8mm;border-radius:50%;border:.35mm solid #9aa6ad;background:#fff;color:#9aa6ad;font:700 4.5mm/1 system-ui,sans-serif;cursor:pointer;opacity:.55}
+.show .vsurf .vtk:hover{opacity:1}
+.show .vsurf .vtk.on{background:#1565c0;border-color:#1565c0;color:#fff;opacity:1}
+.show .vnote{font-size:12px;color:#f0b35a;white-space:nowrap}
+.show .vmsg{position:absolute;left:50%;top:18px;transform:translateX(-50%);z-index:40;background:rgba(0,0,0,.8);padding:8px 14px;border-radius:8px}
+/* B5 bút */
+.show .vstage.inking{touch-action:none;cursor:crosshair}
+.show .vstage.inking .vsurf *{cursor:crosshair !important}
+.show .vstage[data-tool="eraser"] .vsurf *{cursor:cell !important}
+.show .vink{position:absolute;inset:0;pointer-events:none;z-index:3}
+.show .vink svg{position:absolute;overflow:visible}
+.show .vink path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.show .vpal{position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 6px;border-radius:12px;background:rgba(20,21,24,.92);box-shadow:0 4px 18px rgba(0,0,0,.4);transition:opacity .25s}
+.show .vpal.off{opacity:0;pointer-events:none}
+.show .vpal .vb{width:42px;min-width:0;padding:0;font-size:18px}
+.show .vpal .vb:disabled{opacity:.35;cursor:default}
+.show .vpsep{width:28px;height:1px;background:#444a52;margin:2px 0}
+.show .vdot{width:26px;height:26px;border-radius:50%;border:2px solid #555;cursor:pointer}
+.show .vdot.on{border-color:#fff;box-shadow:0 0 0 2px #1f6feb}
+.show .vw i{display:block;width:22px;margin:auto;background:#eee;border-radius:4px}
+.show .hlic{display:inline-block;width:18px;height:9px;background:rgba(255,213,0,.85);border-radius:2px}
+/* B6 che / hé */
+.show .vsurf .vcov{position:relative}
+.show .vsurf .vcv{position:absolute;inset:-.6mm -1mm;z-index:2;border-radius:1.5mm;background:repeating-linear-gradient(45deg,#dfe3e8 0 2.5mm,#d3d8de 2.5mm 5mm);display:flex;align-items:center;justify-content:center;color:#5b6570;font:600 3.2mm/1 system-ui,sans-serif;cursor:pointer}
+.show .vsurf .vcv:hover{background:repeating-linear-gradient(45deg,#e8ebef 0 2.5mm,#dde1e6 2.5mm 5mm)}
+.show .vsurf [data-vu]:not(.vcov){cursor:pointer}
+@media (max-width:1700px){.show .vbar .vt{display:none}.show .vnote{display:none}}
+@media (max-width:1100px){.show .vsel{width:110px}}
+/* B7 đồng hồ, bảng trắng */
+.show .vtimer{position:absolute;right:16px;top:16px;z-index:35;padding:10px;border-radius:14px;background:rgba(20,21,24,.94);box-shadow:0 4px 18px rgba(0,0,0,.45);display:flex;flex-direction:column;align-items:center;gap:6px}
+.show .vtimer.big{right:50%;top:50%;transform:translate(50%,-50%);padding:18px 22px}
+.show .vtnum{font:700 44px/1 ui-monospace,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;cursor:pointer;padding:2px 8px}
+.show .vtimer.big .vtnum{font-size:min(24vw,220px)}
+.show .vtimer.done .vtnum{color:#ff5a52;animation:vblink .6s steps(2) infinite}
+@keyframes vblink{50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.show .vtimer.done .vtnum{animation:none}}
+.show .vtrow{display:flex;gap:4px}
+.show .vb.go{background:#2e7d32;border-color:#2e7d32}
+.show .vboard{position:absolute;inset:0;z-index:25;background:#26282c;display:flex;flex-direction:column}
+.show .vbsurf{flex:1;margin:12px 12px 0 72px;border-radius:8px;background:#fff;position:relative;touch-action:none;cursor:crosshair;overflow:hidden}
+.show .vbsurf.bg-lines{background:#fff repeating-linear-gradient(to bottom,transparent 0 55px,#c9d6e8 55px 57px)}
+.show .vbsurf.bg-grid{background:#fff;background-image:linear-gradient(#dfe6ef 1px,transparent 1px),linear-gradient(90deg,#dfe6ef 1px,transparent 1px);background-size:36px 36px}
+.show .vbsurf svg{position:absolute;inset:0;width:100%;height:100%}
+.show .vbsurf path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.show .vbtools{display:flex;gap:6px;justify-content:center;padding:10px}
+.show.boarding .vbar{display:none}

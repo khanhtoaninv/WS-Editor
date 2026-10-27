@@ -34,3 +34,10 @@ Trạng thái cuối phiên:
 
 ## 4. Kết quả chạy trên bản cuối
 Bản `ws-editor.html` v110: đường chuẩn 120/120, giaodien 2497/2497, 49/49 test đạt (0 lỗi console), audit PROBLEMS 0; `sheetSlots` 739 chỗ, khớp 1–1 với trang; `shared` 11/11 test.
+
+## 5. GĐ1a trình chiếu (v111, cùng phiên)
+- Người dùng chia GĐ1 thành **1a trình chiếu**, **1b giáo viên tự tương tác** (mở phiếu, gõ / chọn thử, máy báo đúng sai để giảng), **1c làm bài trên lớp** (tạo phiên, học sinh vào làm; cần TeacherResource nên đi sau GĐ2). Đã chốt 8 công cụ 1a (`docs/TUONG_TAC/DE_XUAT_1A_TRINH_CHIEU.md`), "hiện đáp án" thuộc 1a.
+- Làm xong B1–B8 theo `KE_HOACH_GD1A.md`: spec mục 42. Mã ở `app/src/viewer/`.
+- Kiểm thử: `tests/gd1a/test_chieu.py` 73/73, `tests/gd1a/quet_phieu.py` 25 phiếu; bộ test cũ trên bản cuối: đường chuẩn 120/120, giaodien 2497/2497, 49/49 test + audit PROBLEMS 0, `sheetSlots` 739 chỗ khớp 1–1.
+- Chưa kiểm: máy chiếu / TV / bảng tương tác thật, bút trình chiếu thật (chỉ giả lập phím PageDown / PageUp), chạm thật (chỉ thử chuột). Chuông hết giờ chưa nghe thử (headless). Người dùng cần thử tay: `docs/TUONG_TAC/KIEM_TRA_GD1A.md`.
+- Việc tiếp theo: người dùng thử tay 1a, rồi kế hoạch 1b.

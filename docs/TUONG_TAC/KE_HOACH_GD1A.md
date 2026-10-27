@@ -1,6 +1,6 @@
 # Kế hoạch GĐ1a: trình chiếu phiếu
 
-> 27/10/2026 · Theo `DE_XUAT_1A_TRINH_CHIEU.md` (người dùng đã chốt 8 công cụ; "hiện đáp án" thuộc 1a, 1b chỉ còn giáo viên gõ / chọn thử). **Chưa code**, chờ người dùng nói "ok làm".
+> 27/10/2026 · Theo `DE_XUAT_1A_TRINH_CHIEU.md` (người dùng đã chốt 8 công cụ; "hiện đáp án" thuộc 1a, 1b chỉ còn giáo viên gõ / chọn thử). **Đã làm xong B1–B8 (v111, spec mục 42).** Lệch so với kế hoạch: nút Chiếu là nút nổi góc dưới khung trang (thanh trên không còn chỗ, thêm nút làm thanh trên xuống dòng); bút ở thanh dọc bên trái; che / hé chừa số câu.
 > Kết quả: trong WS Editor có nút **Chiếu**; mở ra là màn hình trình chiếu đủ 8 công cụ. Phiếu soạn và bản in không đổi.
 
 ## 0. Hiện trạng đã kiểm (đọc mã 27/10)

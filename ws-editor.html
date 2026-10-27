@@ -14109,6 +14109,7 @@ var useUi = create(() => ({
 	treeRev: 0,
 	liveRev: 0,
 	pageView: null,
+	show: null,
 	codes: (() => {
 		try {
 			return localStorage.getItem("wsEditor.codes.v1") === "1";
@@ -14138,7 +14139,8 @@ var actions = {
 	lnAdd: noop,
 	impOk: noop,
 	impClosed: noop,
-	pasteItems: noop
+	pasteItems: noop,
+	present: noop
 };
 // node_modules/react/cjs/react-jsx-runtime.production.js
 /**
@@ -14212,7 +14214,7 @@ function TopBar() {
 							padding: "1px 7px",
 							marginLeft: 4
 						},
-						children: "v110"
+						children: "v111"
 					}),
 					" ",
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", {
@@ -16477,7 +16479,7 @@ var layout_exports = /* @__PURE__ */ __exportAll({
 	tblOpts: () => tblOpts$2,
 	tpic: () => tpic,
 	tplOf: () => tplOf,
-	units: () => units,
+	units: () => units$1,
 	withMarks: () => withMarks,
 	xOfKey: () => xOfKey
 });
@@ -18415,7 +18417,7 @@ function measure(t, frag) {
 	meas.innerHTML = renderTask(t, frag);
 	return meas.firstElementChild.getBoundingClientRect().height;
 }
-function units(t) {
+function units$1(t) {
 	const L = layoutOf$1(t), c = t.content, k0 = ck$3(t), chunk = (n, k) => {
 		const u = [];
 		for (let i = 0; i < n; i += k) u.push([i, Math.min(n, i + k) - 1]);
@@ -18451,7 +18453,7 @@ function fixesFor(t) {
 		v: "cols",
 		label: `Chia ${colsOf$1(t) + 1} cột`
 	});
-	if (ws.flow === "page" && units(t)) f.push({
+	if (ws.flow === "page" && units$1(t)) f.push({
 		v: "cont",
 		label: "Chuyển sang Liền trang"
 	});
@@ -18512,7 +18514,7 @@ function paginate() {
 		});
 	};
 	const firstPart = (t) => {
-		const U = ws.flow === "page" || ck$3(t) === "dialogue" && measure(t, null) <= H ? null : units(t);
+		const U = ws.flow === "page" || ck$3(t) === "dialogue" && measure(t, null) <= H ? null : units$1(t);
 		return U ? measure(t, {
 			a: U[0][0],
 			b: U[0][1],
@@ -18532,7 +18534,7 @@ function paginate() {
 			put(t, null, full);
 			return;
 		}
-		const U = ws.flow === "page" || ck$3(t) === "dialogue" && full <= H ? null : units(t);
+		const U = ws.flow === "page" || ck$3(t) === "dialogue" && full <= H ? null : units$1(t);
 		if (full <= H && !U) {
 			newPage();
 			put(t, null, full);
@@ -19409,7 +19411,7 @@ try {
 try {
 	Object.defineProperty(window, "units", {
 		configurable: true,
-		get: () => units
+		get: () => units$1
 	});
 } catch (_) {}
 try {
@@ -26276,6 +26278,1692 @@ function GenDlg() {
 		})
 	});
 }
+// src/viewer/data.ts
+function hashOf(s) {
+	let h = 2166136261;
+	for (let i = 0; i < s.length; i++) {
+		h ^= s.charCodeAt(i);
+		h = Math.imul(h, 16777619);
+	}
+	return (h >>> 0).toString(36);
+}
+function prep(d) {
+	const tasks = [], byId = {}, pageOf = {};
+	return {
+		pages: d.pages.map((html, p) => {
+			const box = document.createElement("div");
+			box.innerHTML = html;
+			box.querySelectorAll("section.task[data-task]").forEach((sec) => {
+				const id = sec.dataset.task;
+				let t = byId[id];
+				if (!t) {
+					const num = sec.querySelector(".g0 .num")?.textContent?.trim() || String(tasks.length + 1);
+					const title = sec.querySelector(".g0 .ttl")?.textContent?.trim() || "";
+					t = byId[id] = {
+						id,
+						num,
+						title,
+						frags: []
+					};
+					tasks.push(t);
+					pageOf[id] = p;
+				}
+				sec.dataset.frag = String(t.frags.length);
+				t.frags.push({
+					task: id,
+					page: p,
+					k: t.frags.length,
+					html: sec.outerHTML
+				});
+			});
+			return box.innerHTML;
+		}),
+		tasks,
+		pageOf,
+		hash: hashOf(d.pages.join("\n"))
+	};
+}
+// src/viewer/answers.ts
+var SEL = (id) => `[data-ans="${CSS.escape(id)}"]`;
+var norm = (s) => s.replace(/\s+/g, " ").trim().toLowerCase();
+function ansText(k) {
+	if (!k) return null;
+	if (k.accept && k.accept.length) return k.accept[0];
+	if (k.sample) return k.sample;
+	return null;
+}
+var hasAns$1 = (s, key) => {
+	const k = key[s.id];
+	return !!k && (k.correct != null || !!ansText(k));
+};
+function clearAnswers(root) {
+	root.querySelectorAll(".vans").forEach((e) => e.remove());
+	root.querySelectorAll("svg.vline").forEach((e) => e.remove());
+	root.querySelectorAll(".vok").forEach((e) => e.classList.remove("vok", "pk"));
+	root.querySelectorAll(".vrel").forEach((e) => e.classList.remove("vrel"));
+}
+function putText(el, text) {
+	const sp = document.createElement("span");
+	sp.className = "vans";
+	sp.textContent = text;
+	if (el.classList.contains("pgap")) {
+		sp.classList.add("vin");
+		el.appendChild(sp);
+		return;
+	}
+	const host = el.querySelector(".ln") || el;
+	if (getComputedStyle(host).position === "static") host.classList.add("vrel");
+	host.appendChild(sp);
+}
+function mark(el) {
+	if (el && !el.classList.contains("pk")) el.classList.add("pk", "vok");
+}
+function optEl(els, j) {
+	if (els.length > 1) return els[j];
+	const el = els[0];
+	if (!el) return null;
+	return (el.querySelectorAll(":scope > .opt").length ? el.querySelectorAll(":scope > .opt") : el.querySelectorAll(":scope > b").length ? el.querySelectorAll(":scope > b") : el.querySelectorAll(":scope > span"))[j] || null;
+}
+function lineBetween(sec, a, b) {
+	const r = sec.getBoundingClientRect(), k = r.width / sec.offsetWidth || 1;
+	const c = (e) => {
+		const q = e.getBoundingClientRect();
+		return [(q.left + q.width / 2 - r.left) / k, (q.top + q.height / 2 - r.top) / k];
+	};
+	const [x1, y1] = c(a), [x2, y2] = c(b);
+	const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	svg.setAttribute("class", "vline");
+	svg.innerHTML = `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" />`;
+	sec.appendChild(svg);
+}
+function showMatch(root, s, els, cid) {
+	const o = (s.options || []).find((x) => x.id === cid);
+	if (!o) return;
+	const left = els[0], sec = left.closest("section.task") || root;
+	const mr = [...sec.querySelectorAll(".mr")].find((m) => norm(m.textContent || "").endsWith(norm(String(o.text ?? ""))));
+	if (left.classList.contains("mbx")) {
+		putText(left, mr?.querySelector("i")?.textContent?.replace(/\W+$/, "") || String(o.text ?? ""));
+		return;
+	}
+	const md = mr && mr.previousElementSibling, dots = md ? md.querySelectorAll(".a7") : null, right = dots && dots[dots.length - 1];
+	if (right) lineBetween(sec, left, right);
+	else putText(left, String(o.text ?? ""));
+}
+function showSlot(root, s, key) {
+	const els = [...root.querySelectorAll(SEL(s.id))];
+	if (!els.length) return;
+	const k = key[s.id];
+	if (!k) return;
+	if (s.interaction === "match") {
+		if (typeof k.correct === "string") showMatch(root, s, els, k.correct);
+		return;
+	}
+	if (k.correct != null) {
+		[].concat(k.correct).forEach((id) => mark(optEl(els, (s.options || []).findIndex((o) => o.id === id))));
+		return;
+	}
+	const t = ansText(k);
+	if (t) putText(els[0], t);
+}
+function applyAnswers(root, slots, key, shown) {
+	clearAnswers(root);
+	for (const s of slots) if (shown.has(s.id)) showSlot(root, s, key);
+}
+function slotsInView(root) {
+	const seen = /* @__PURE__ */ new Set(), out = [];
+	root.querySelectorAll("[data-ans]").forEach((e) => {
+		const id = e.dataset.ans;
+		if (!seen.has(id)) {
+			seen.add(id);
+			out.push(id);
+		}
+	});
+	return out;
+}
+// src/viewer/ink.ts
+var COLORS = [
+	["#e53935", "Đỏ"],
+	["#1e63d6", "Xanh dương"],
+	["#2e9d4b", "Xanh lá"],
+	["#222222", "Đen"]
+];
+var WIDTHS = [
+	[2.5, "Mảnh"],
+	[4.5, "Vừa"],
+	[8, "Dày"]
+];
+var HL = "rgba(255,213,0,.42)";
+function pathOf(s) {
+	const p = s.pts;
+	if (!p.length) return "";
+	if (p.length === 1) return `M${p[0][0]} ${p[0][1]}l.01 0`;
+	return "M" + p.map((q) => `${q[0].toFixed(1)} ${q[1].toFixed(1)}`).join("L");
+}
+var segD = (p, a, b) => {
+	const dx = b[0] - a[0], dy = b[1] - a[1], l = dx * dx + dy * dy, t = l ? Math.max(0, Math.min(1, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / l)) : 0;
+	return Math.hypot(p[0] - a[0] - t * dx, p[1] - a[1] - t * dy);
+};
+function hit(s, p, r) {
+	const q = s.pts, rr = r + s.w / 2;
+	if (q.length === 1) return Math.hypot(p[0] - q[0][0], p[1] - q[0][1]) <= rr;
+	for (let i = 1; i < q.length; i++) if (segD(p, q[i - 1], q[i]) <= rr) return true;
+	return false;
+}
+function lockLine(a, b) {
+	return Math.abs(b[0] - a[0]) >= Math.abs(b[1] - a[1]) ? [b[0], a[1]] : [a[0], b[1]];
+}
+var LS = (name) => "wsShow.ink:" + name;
+function loadInk(name, hash) {
+	try {
+		const raw = localStorage.getItem(LS(name));
+		if (!raw) return {
+			ink: {},
+			dropped: false
+		};
+		const o = JSON.parse(raw);
+		if (o && o.hash === hash && o.ink && typeof o.ink === "object") return {
+			ink: o.ink,
+			dropped: false
+		};
+		return {
+			ink: {},
+			dropped: !!(o && o.ink && Object.values(o.ink).some((a) => Array.isArray(a) && a.length))
+		};
+	} catch (_) {
+		return {
+			ink: {},
+			dropped: false
+		};
+	}
+}
+function saveInk(name, hash, ink) {
+	try {
+		if (!Object.values(ink).some((a) => a.length)) localStorage.removeItem(LS(name));
+		else localStorage.setItem(LS(name), JSON.stringify({
+			hash,
+			ink
+		}));
+		return true;
+	} catch (_) {
+		return false;
+	}
+}
+// src/viewer/Tools.tsx
+var fmt = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+function ring() {
+	try {
+		const A = window.AudioContext || window.webkitAudioContext;
+		if (!A) return;
+		const ac = new A();
+		[0, .45].forEach((t0) => [880, 1320].forEach((f, i) => {
+			const o = ac.createOscillator(), g = ac.createGain(), t = ac.currentTime + t0 + i * .12;
+			o.frequency.value = f;
+			o.type = "sine";
+			g.gain.setValueAtTime(1e-4, t);
+			g.gain.exponentialRampToValueAtTime(.3, t + .02);
+			g.gain.exponentialRampToValueAtTime(1e-4, t + .35);
+			o.connect(g).connect(ac.destination);
+			o.start(t);
+			o.stop(t + .4);
+		}));
+		setTimeout(() => ac.close().catch(() => {}), 1500);
+	} catch (_) {}
+}
+function Timer({ onClose }) {
+	const [total, setTotal] = (0, import_react.useState)(180), [left, setLeft] = (0, import_react.useState)(180), [run, setRun] = (0, import_react.useState)(false);
+	const [big, setBig] = (0, import_react.useState)(true), [mute, setMute] = (0, import_react.useState)(false), [done, setDone] = (0, import_react.useState)(false);
+	const end = (0, import_react.useRef)(0);
+	(0, import_react.useEffect)(() => {
+		if (!run) return;
+		end.current = Date.now() + left * 1e3;
+		const id = window.setInterval(() => {
+			const l = Math.max(0, Math.ceil((end.current - Date.now()) / 1e3));
+			setLeft(l);
+			if (l === 0) {
+				setRun(false);
+				setDone(true);
+				if (!mute) ring();
+			}
+		}, 200);
+		return () => clearInterval(id);
+	}, [run]);
+	const set = (s) => {
+		const v = Math.max(10, Math.min(5940, s));
+		setTotal(v);
+		setLeft(v);
+		setRun(false);
+		setDone(false);
+	};
+	const add = (d) => {
+		if (run) {
+			end.current += d * 1e3;
+			setLeft((l) => Math.max(0, l + d));
+		} else set(left + d);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "vtimer" + (big ? " big" : "") + (done ? " done" : ""),
+		role: "timer",
+		"aria-label": "Đồng hồ đếm ngược",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "vtnum",
+				id: "timerNum",
+				onClick: () => setBig(!big),
+				title: big ? "Thu nhỏ vào góc" : "Phóng to giữa màn hình",
+				children: fmt(left)
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "vtrow",
+				children: [
+					[
+						1,
+						3,
+						5,
+						10
+					].map((m) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						className: "vb" + (total === m * 60 && !run ? " on" : ""),
+						onClick: () => set(m * 60),
+						children: [m, "′"]
+					}, m)),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "vb",
+						onClick: () => add(-60),
+						"aria-label": "Bớt 1 phút",
+						children: "−1′"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "vb",
+						onClick: () => add(60),
+						"aria-label": "Thêm 1 phút",
+						children: "+1′"
+					})
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "vtrow",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "vb" + (run ? "" : " go"),
+						id: "timerGo",
+						onClick: () => {
+							if (left === 0) {
+								setLeft(total);
+								setDone(false);
+							}
+							setRun(!run);
+						},
+						children: run ? "❚❚ Dừng" : "▶ Bắt đầu"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "vb",
+						onClick: () => set(total),
+						title: "Đặt lại",
+						children: "↺"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "vb" + (mute ? " on" : ""),
+						onClick: () => setMute(!mute),
+						title: "Tắt / bật chuông",
+						children: mute ? "🔕" : "🔔"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "vb",
+						onClick: () => setBig(!big),
+						title: big ? "Thu nhỏ vào góc" : "Phóng to",
+						children: big ? "↘" : "↖"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "vb x",
+						onClick: onClose,
+						title: "Đóng đồng hồ (G)",
+						"aria-label": "Đóng đồng hồ",
+						children: "✕"
+					})
+				]
+			})
+		]
+	});
+}
+function Board({ st, setSt, color, width, onClose }) {
+	const [tool, setTool] = (0, import_react.useState)("pen");
+	const [live, setLive] = (0, import_react.useState)(null);
+	const cur = (0, import_react.useRef)(null), hist = (0, import_react.useRef)([]);
+	const pt = (e) => {
+		const r = e.currentTarget.getBoundingClientRect();
+		return [e.clientX - r.left, e.clientY - r.top];
+	};
+	const erase = (p) => {
+		const keep = st.strokes.filter((s) => !hit(s, p, 14));
+		if (keep.length === st.strokes.length) return;
+		if (!cur.current.erased) {
+			cur.current.erased = true;
+			hist.current.push(st.strokes);
+		}
+		setSt({
+			...st,
+			strokes: keep
+		});
+	};
+	const down = (e) => {
+		if (e.pointerType === "mouse" && e.button !== 0) return;
+		e.currentTarget.setPointerCapture(e.pointerId);
+		const p = pt(e);
+		if (tool === "eraser") {
+			cur.current = {
+				s: null,
+				erased: false,
+				shift: false
+			};
+			erase(p);
+			return;
+		}
+		const t = e.shiftKey ? "line" : tool;
+		const s = {
+			t,
+			c: t === "hl" ? HL : color,
+			w: t === "hl" ? width * 4 : width,
+			pts: [p]
+		};
+		cur.current = {
+			s,
+			erased: false,
+			shift: e.shiftKey
+		};
+		setLive(s);
+	};
+	const move = (e) => {
+		const c = cur.current;
+		if (!c) return;
+		const p = pt(e);
+		if (!c.s) {
+			erase(p);
+			return;
+		}
+		const q = c.s.pts;
+		c.s = c.s.t === "line" ? {
+			...c.s,
+			pts: [q[0], lockLine(q[0], p)]
+		} : {
+			...c.s,
+			pts: [...q, p]
+		};
+		setLive(c.s);
+	};
+	const up = () => {
+		const c = cur.current;
+		cur.current = null;
+		setLive(null);
+		if (c && c.s) {
+			hist.current.push(st.strokes);
+			setSt({
+				...st,
+				strokes: [...st.strokes, c.s]
+			});
+		}
+	};
+	const undo = () => {
+		const p = hist.current.pop();
+		if (p) setSt({
+			...st,
+			strokes: p
+		});
+	};
+	(0, import_react.useEffect)(() => {
+		const k = (e) => {
+			if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
+				e.preventDefault();
+				e.stopPropagation();
+				undo();
+			}
+		};
+		window.addEventListener("keydown", k, true);
+		return () => window.removeEventListener("keydown", k, true);
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "vboard",
+		role: "dialog",
+		"aria-label": "Bảng trắng",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "vbsurf bg-" + st.bg,
+			id: "boardSurf",
+			onPointerDown: down,
+			onPointerMove: move,
+			onPointerUp: up,
+			onPointerCancel: up,
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", { children: [...st.strokes, ...live ? [live] : []].map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+				d: pathOf(s),
+				stroke: s.c,
+				strokeWidth: s.w
+			}, i)) })
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "vbtools",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "vb" + (tool === "pen" ? " on" : ""),
+					onClick: () => setTool("pen"),
+					title: "Bút (giữ Shift = đường thẳng)",
+					children: "✎"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "vb" + (tool === "hl" ? " on" : ""),
+					onClick: () => setTool("hl"),
+					title: "Bút tô",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", { className: "hlic" })
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "vb" + (tool === "eraser" ? " on" : ""),
+					onClick: () => setTool("eraser"),
+					title: "Tẩy",
+					children: "⌫"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+					className: "vsel",
+					"aria-label": "Nền bảng",
+					value: st.bg,
+					onChange: (e) => setSt({
+						...st,
+						bg: e.target.value
+					}),
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+							value: "plain",
+							children: "Nền trắng"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+							value: "lines",
+							children: "Kẻ dòng"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+							value: "grid",
+							children: "Kẻ ô"
+						})
+					]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "vb",
+					onClick: undo,
+					title: "Hoàn tác (Ctrl+Z)",
+					children: "↶"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "vb",
+					id: "boardClear",
+					onClick: () => {
+						if (st.strokes.length) {
+							hist.current.push(st.strokes);
+							setSt({
+								...st,
+								strokes: []
+							});
+						}
+					},
+					title: "Xóa bảng (hoàn tác được)",
+					children: "🗑 Xóa"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "vb x",
+					id: "boardClose",
+					onClick: onClose,
+					title: "Về phiếu (Esc, B)",
+					children: "Về phiếu"
+				})
+			]
+		})]
+	});
+}
+// src/viewer/Presenter.tsx
+var PX = 96 / 25.4;
+var PAGE_W = 210 * PX;
+var PAGE_H = 297 * PX;
+var TASK_PAD = 8;
+var TASK_W = 198 * PX;
+var GAP = 24;
+var READ = 1.5;
+var Z_MIN = .5;
+var Z_MAX = 6;
+var INK_TOOLS = [
+	"pen",
+	"hl",
+	"line",
+	"eraser"
+];
+var UNITS = ".q, .dl, .g2.passage, .tbl > .c2, .tbl > .c3, .mrows > .ml, .mrows > .mr, .tg";
+function units(sec) {
+	const all = [...sec.querySelectorAll(UNITS)].filter((u, _i, a) => !a.some((o) => o !== u && o.contains(u)));
+	if (all.length) return all.map((u) => u.querySelector(":scope > .qb") || u);
+	const b = sec.querySelector(":scope > .body");
+	return b ? [b] : [];
+}
+function Presenter({ data, onClose }) {
+	const P = (0, import_react.useMemo)(() => prep(data), [data]);
+	const nP = P.pages.length, nT = P.tasks.length;
+	const startT = Math.max(0, P.tasks.findIndex((t) => t.id === data.start));
+	const [mode, setMode] = (0, import_react.useState)("page");
+	const [pi, setPi] = (0, import_react.useState)(() => data.start && P.pageOf[data.start] != null ? P.pageOf[data.start] : 0);
+	const [ti, setTi] = (0, import_react.useState)(startT);
+	const [z, setZ] = (0, import_react.useState)(1);
+	const [tool, setTool] = (0, import_react.useState)("pointer");
+	const [bar, setBar] = (0, import_react.useState)(true);
+	const [vp, setVp] = (0, import_react.useState)({
+		w: window.innerWidth,
+		h: window.innerHeight
+	});
+	const [taskH, setTaskH] = (0, import_react.useState)(PAGE_H);
+	const [pic, setPic] = (0, import_react.useState)(null);
+	const [rect, setRect] = (0, import_react.useState)(null);
+	const stageRef = (0, import_react.useRef)(null), surfRef = (0, import_react.useRef)(null), barRef = (0, import_react.useRef)(null);
+	const ansIds = (0, import_react.useMemo)(() => new Set(data.slots.filter((x) => hasAns$1(x, data.key)).map((x) => x.id)), [data]);
+	const noKey = data.slots.length - ansIds.size;
+	const [shown, setShown] = (0, import_react.useState)(() => /* @__PURE__ */ new Set());
+	const order = (0, import_react.useRef)([]);
+	const [clickAns, setClickAns] = (0, import_react.useState)(false);
+	const toggle = (ids) => setShown((old) => {
+		const n = new Set(old), on = ids.some((i) => !n.has(i));
+		ids.forEach((i) => on ? n.add(i) : n.delete(i));
+		if (on) order.current.push(...ids.filter((i) => !old.has(i)));
+		return n;
+	});
+	const allOn = shown.size > 0 && shown.size >= ansIds.size;
+	const toggleAll = () => {
+		order.current = [];
+		setShown(allOn ? /* @__PURE__ */ new Set() : new Set(ansIds));
+	};
+	const nextAns = () => {
+		const id = surfRef.current ? slotsInView(surfRef.current).find((i) => ansIds.has(i) && !shown.has(i)) : void 0;
+		if (!id) {
+			flash("Đã hiện hết đáp án trong phần đang xem");
+			return false;
+		}
+		order.current.push(id);
+		setShown((old) => new Set(old).add(id));
+		return true;
+	};
+	const prevAns = () => {
+		const id = order.current.pop();
+		if (id) setShown((old) => {
+			const n = new Set(old);
+			n.delete(id);
+			return n;
+		});
+	};
+	const [msg, setMsg] = (0, import_react.useState)("");
+	const msgT = (0, import_react.useRef)(0);
+	const flash = (m) => {
+		setMsg(m);
+		clearTimeout(msgT.current);
+		msgT.current = window.setTimeout(() => setMsg(""), 2200);
+	};
+	const store = data.store || data.title || "phieu";
+	const [ink, setInkRaw] = (0, import_react.useState)(() => loadInk(store, P.hash).ink);
+	const undoS = (0, import_react.useRef)([]), redoS = (0, import_react.useRef)([]);
+	const setInk = (n) => {
+		undoS.current.push(ink);
+		if (undoS.current.length > 100) undoS.current.shift();
+		redoS.current = [];
+		setInkRaw(n);
+	};
+	const undo = () => {
+		const p = undoS.current.pop();
+		if (p) {
+			redoS.current.push(ink);
+			setInkRaw(p);
+		}
+	};
+	const redo = () => {
+		const n = redoS.current.pop();
+		if (n) {
+			undoS.current.push(ink);
+			setInkRaw(n);
+		}
+	};
+	const [color, setColor] = (0, import_react.useState)(COLORS[0][0]);
+	const [width, setWidth] = (0, import_react.useState)(WIDTHS[1][0]);
+	const [inkHidden, setInkHidden] = (0, import_react.useState)(false);
+	const [live, setLive] = (0, import_react.useState)(null);
+	const [anchors, setAnchors] = (0, import_react.useState)([]);
+	const drawing = (0, import_react.useRef)(null);
+	const hasInk = Object.values(ink).some((a) => a.length);
+	(0, import_react.useEffect)(() => {
+		if (loadInk(store, P.hash).dropped) flash("Phiếu đã sửa sau lần chiếu trước: bỏ nét vẽ cũ");
+	}, []);
+	const saveWarned = (0, import_react.useRef)(false);
+	(0, import_react.useEffect)(() => {
+		if (!saveInk(store, P.hash, ink) && !saveWarned.current) {
+			saveWarned.current = true;
+			flash("Trình duyệt không cho lưu: nét vẽ sẽ mất khi đóng trình chiếu");
+		}
+	}, [ink]);
+	const [timer, setTimer] = (0, import_react.useState)(false), [board, setBoard] = (0, import_react.useState)(false);
+	const [boardSt, setBoardSt] = (0, import_react.useState)({
+		strokes: [],
+		bg: "lines"
+	});
+	const [cover, setCover] = (0, import_react.useState)(false);
+	const [open, setOpen] = (0, import_react.useState)(() => /* @__PURE__ */ new Set());
+	const toggleCover = () => {
+		setOpen(/* @__PURE__ */ new Set());
+		setCover(!cover);
+	};
+	const pendScroll = (0, import_react.useRef)("top");
+	const keep = (0, import_react.useRef)(null);
+	(0, import_react.useLayoutEffect)(() => {
+		const el = stageRef.current, ro = new ResizeObserver(() => setVp({
+			w: el.clientWidth,
+			h: el.clientHeight
+		}));
+		ro.observe(el);
+		setVp({
+			w: el.clientWidth,
+			h: el.clientHeight
+		});
+		return () => ro.disconnect();
+	}, []);
+	const W0 = mode === "page" ? PAGE_W : TASK_W, H0 = mode === "page" ? PAGE_H : taskH;
+	const fit = mode === "page" ? Math.min((vp.w - GAP) / PAGE_W, (vp.h - GAP) / PAGE_H) : Math.min((vp.w - GAP) / TASK_W, Math.max((vp.h - GAP) / taskH, READ));
+	const s = Math.max(.05, fit * z);
+	const taskHtml = mode === "task" && P.tasks[ti] ? P.tasks[ti].frags.map((f) => f.html).join("") : "";
+	(0, import_react.useLayoutEffect)(() => {
+		if (mode !== "task" || !surfRef.current) return;
+		const h = surfRef.current.offsetHeight;
+		if (h && Math.abs(h - taskH) > .5) setTaskH(h);
+	});
+	(0, import_react.useLayoutEffect)(() => {
+		const root = surfRef.current;
+		if (!root) return;
+		applyAnswers(root, data.slots, data.key, shown);
+		root.querySelectorAll("section.task[data-frag=\"0\"]").forEach((sec) => {
+			const id = sec.dataset.task, ids = data.slots.filter((x) => x.task === id && ansIds.has(x.id)).map((x) => x.id);
+			let b = sec.querySelector(":scope > .vtk");
+			if (!ids.length) {
+				b?.remove();
+				return;
+			}
+			if (!b) {
+				b = document.createElement("button");
+				b.className = "vtk";
+				b.dataset.vt = id;
+				b.title = "Hiện / ẩn đáp án Task này";
+				b.textContent = "✓";
+				sec.appendChild(b);
+			}
+			b.classList.toggle("on", ids.every((i) => shown.has(i)));
+		});
+		root.querySelectorAll(".vcv").forEach((e) => e.remove());
+		root.querySelectorAll("[data-vu]").forEach((e) => {
+			e.removeAttribute("data-vu");
+			e.classList.remove("vcov");
+		});
+		if (cover) root.querySelectorAll("section.task[data-frag]").forEach((sec) => units(sec).forEach((u, i) => {
+			const id = `${sec.dataset.task}#${sec.dataset.frag}:${i}`;
+			u.dataset.vu = id;
+			if (open.has(id)) return;
+			u.classList.add("vcov");
+			const c = document.createElement("div");
+			c.className = "vcv";
+			c.textContent = "Bấm để hé";
+			u.appendChild(c);
+		}));
+		const sr = root.getBoundingClientRect(), k = sr.width / root.offsetWidth || 1;
+		const an = [...root.querySelectorAll("section.task[data-frag]")].map((sec) => {
+			const r = sec.getBoundingClientRect();
+			return {
+				key: `${sec.dataset.task}#${sec.dataset.frag}`,
+				x: (r.left - sr.left) / k,
+				y: (r.top - sr.top) / k,
+				w: r.width / k,
+				h: r.height / k
+			};
+		});
+		if (mode === "page") an.push({
+			key: `page#${pi}`,
+			x: 0,
+			y: 0,
+			w: PAGE_W,
+			h: PAGE_H
+		});
+		if (JSON.stringify(an.map((a) => [
+			a.key,
+			Math.round(a.x),
+			Math.round(a.y),
+			Math.round(a.w),
+			Math.round(a.h)
+		])) !== JSON.stringify(anchors.map((a) => [
+			a.key,
+			Math.round(a.x),
+			Math.round(a.y),
+			Math.round(a.w),
+			Math.round(a.h)
+		]))) setAnchors(an);
+	});
+	(0, import_react.useLayoutEffect)(() => {
+		const st = stageRef.current, p = pendScroll.current;
+		if (keep.current) {
+			const k = keep.current;
+			keep.current = null;
+			st.scrollLeft = k.fx * st.scrollWidth - st.clientWidth / 2;
+			st.scrollTop = k.fy * st.scrollHeight - st.clientHeight / 2;
+			return;
+		}
+		if (p === "top") {
+			st.scrollTop = 0;
+			st.scrollLeft = (st.scrollWidth - st.clientWidth) / 2;
+		} else if (p && p !== "keep") {
+			st.scrollLeft = p.x;
+			st.scrollTop = p.y;
+		}
+		pendScroll.current = null;
+	}, [
+		mode,
+		pi,
+		ti,
+		s,
+		taskH
+	]);
+	const zoomTo = (0, import_react.useCallback)((nz) => {
+		const st = stageRef.current;
+		keep.current = {
+			fx: (st.scrollLeft + st.clientWidth / 2) / st.scrollWidth,
+			fy: (st.scrollTop + st.clientHeight / 2) / st.scrollHeight
+		};
+		setZ(Math.min(Z_MAX, Math.max(Z_MIN, Math.round(nz * 100) / 100)));
+	}, []);
+	const zoomFit = (0, import_react.useCallback)(() => {
+		pendScroll.current = "top";
+		setZ(1);
+	}, []);
+	const go = (0, import_react.useCallback)((d, clicker = false) => {
+		const st = stageRef.current;
+		if (clicker && clickAns) {
+			if (d > 0 && surfRef.current && slotsInView(surfRef.current).some((i) => ansIds.has(i) && !shown.has(i))) {
+				nextAns();
+				return;
+			}
+		}
+		if (mode === "page") {
+			if (z > 1) {
+				const max = st.scrollHeight - st.clientHeight;
+				if (d > 0 && st.scrollTop < max - 4) {
+					st.scrollTop += st.clientHeight * .85;
+					return;
+				}
+				if (d < 0 && st.scrollTop > 4) {
+					st.scrollTop -= st.clientHeight * .85;
+					return;
+				}
+			}
+			const np = Math.min(nP - 1, Math.max(0, pi + d));
+			if (np !== pi) {
+				pendScroll.current = "top";
+				setPi(np);
+			}
+			return;
+		}
+		const max = st.scrollHeight - st.clientHeight;
+		if (d > 0 && st.scrollTop < max - 4) {
+			st.scrollTop = Math.min(max, st.scrollTop + st.clientHeight * .85);
+			return;
+		}
+		if (d < 0 && st.scrollTop > 4) {
+			st.scrollTop = Math.max(0, st.scrollTop - st.clientHeight * .85);
+			return;
+		}
+		const nt = Math.min(nT - 1, Math.max(0, ti + d));
+		if (nt !== ti) {
+			pendScroll.current = "top";
+			setTi(nt);
+		}
+	}, [
+		mode,
+		pi,
+		ti,
+		nP,
+		nT,
+		z,
+		clickAns,
+		shown,
+		ansIds
+	]);
+	const toMode = (0, import_react.useCallback)((m) => {
+		if (m === mode) return;
+		if (m === "task") {
+			const i = P.tasks.findIndex((t) => t.frags.some((f) => f.page === pi));
+			setTi(i >= 0 ? P.tasks[ti] && P.tasks[ti].frags.some((f) => f.page === pi) ? ti : i : ti);
+		} else if (P.tasks[ti]) setPi(P.tasks[ti].frags[0].page);
+		pendScroll.current = "top";
+		setZ(1);
+		setMode(m);
+	}, [
+		mode,
+		pi,
+		ti,
+		P
+	]);
+	const goTask = (i) => {
+		pendScroll.current = "top";
+		setZ(1);
+		if (mode === "task") setTi(i);
+		else {
+			setTi(i);
+			setPi(P.tasks[i].frags[0].page);
+		}
+	};
+	const [fs, setFs] = (0, import_react.useState)(false);
+	(0, import_react.useEffect)(() => {
+		const on = () => setFs(!!document.fullscreenElement);
+		document.addEventListener("fullscreenchange", on);
+		try {
+			document.documentElement.requestFullscreen?.().catch(() => {});
+		} catch (_) {}
+		return () => {
+			document.removeEventListener("fullscreenchange", on);
+			if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
+		};
+	}, []);
+	const toggleFs = () => {
+		try {
+			if (document.fullscreenElement) document.exitFullscreen();
+			else document.documentElement.requestFullscreen().catch(() => {});
+		} catch (_) {}
+	};
+	const hideT = (0, import_react.useRef)(0);
+	const poke = (0, import_react.useCallback)(() => {
+		setBar(true);
+		clearTimeout(hideT.current);
+		hideT.current = window.setTimeout(() => {
+			if (!barRef.current?.matches(":hover")) setBar(false);
+		}, 3e3);
+	}, []);
+	(0, import_react.useEffect)(() => {
+		poke();
+		return () => clearTimeout(hideT.current);
+	}, [poke]);
+	(0, import_react.useEffect)(() => {
+		const k = (e) => {
+			const t = e.target;
+			if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT")) return;
+			let used = true;
+			if (board) {
+				const kk = e.key.toLowerCase();
+				if (kk === "escape" || kk === "b") setBoard(false);
+				else if (kk === "g") setTimer(!timer);
+				else {
+					if (!e.ctrlKey && !e.metaKey) e.stopPropagation();
+					return;
+				}
+				e.preventDefault();
+				e.stopPropagation();
+				return;
+			}
+			if ((e.ctrlKey || e.metaKey) && !e.altKey) {
+				const kk = e.key.toLowerCase();
+				if (kk === "z" && !e.shiftKey) undo();
+				else if (kk === "z" && e.shiftKey || kk === "y") redo();
+				else {
+					e.stopPropagation();
+					return;
+				}
+				e.preventDefault();
+				e.stopPropagation();
+				return;
+			}
+			switch (e.key) {
+				case "p":
+				case "P":
+					setTool(tool === "pen" ? "pointer" : "pen");
+					break;
+				case "e":
+				case "E":
+					setTool(tool === "eraser" ? "pointer" : "eraser");
+					break;
+				case "ArrowRight":
+				case "ArrowDown":
+					go(1);
+					break;
+				case "ArrowLeft":
+				case "ArrowUp":
+					go(-1);
+					break;
+				case "PageDown":
+					go(1, true);
+					break;
+				case "PageUp":
+					go(-1, true);
+					break;
+				case " ":
+					if (e.shiftKey) prevAns();
+					else nextAns();
+					break;
+				case "a":
+				case "A":
+					if (!e.ctrlKey && !e.metaKey) toggleAll();
+					else used = false;
+					break;
+				case "Home":
+					if (mode === "page") {
+						pendScroll.current = "top";
+						setPi(0);
+					} else goTask(0);
+					break;
+				case "End":
+					if (mode === "page") {
+						pendScroll.current = "top";
+						setPi(nP - 1);
+					} else goTask(nT - 1);
+					break;
+				case "t":
+				case "T":
+					toMode(mode === "page" ? "task" : "page");
+					break;
+				case "+":
+				case "=":
+					zoomTo(z * 1.25);
+					break;
+				case "-":
+				case "_":
+					zoomTo(z / 1.25);
+					break;
+				case "0":
+					zoomFit();
+					break;
+				case "z":
+				case "Z":
+					setTool(tool === "zoomrect" ? "pointer" : "zoomrect");
+					break;
+				case "f":
+				case "F":
+					toggleFs();
+					break;
+				case "h":
+				case "H":
+					toggleCover();
+					break;
+				case "g":
+				case "G":
+					setTimer(!timer);
+					break;
+				case "b":
+				case "B":
+					setBoard(true);
+					break;
+				case "Escape":
+					if (pic) setPic(null);
+					else if (tool !== "pointer") setTool("pointer");
+					else if (z !== 1) zoomFit();
+					else onClose();
+					break;
+				default: used = false;
+			}
+			if (used) {
+				e.preventDefault();
+				e.stopPropagation();
+				poke();
+			} else e.stopPropagation();
+		};
+		window.addEventListener("keydown", k, true);
+		return () => window.removeEventListener("keydown", k, true);
+	});
+	(0, import_react.useEffect)(() => {
+		const st = stageRef.current, w = (e) => {
+			if (!e.ctrlKey) return;
+			e.preventDefault();
+			zoomTo(z * (e.deltaY < 0 ? 1.12 : 1 / 1.12));
+		};
+		st.addEventListener("wheel", w, { passive: false });
+		return () => st.removeEventListener("wheel", w);
+	}, [z, zoomTo]);
+	const touches = (0, import_react.useRef)(/* @__PURE__ */ new Map()), pinch0 = (0, import_react.useRef)(null);
+	const dist = () => {
+		const [a, b] = [...touches.current.values()];
+		return Math.hypot(a.x - b.x, a.y - b.y);
+	};
+	const onRectDown = (e) => {
+		e.target.setPointerCapture(e.pointerId);
+		setRect({
+			x0: e.clientX,
+			y0: e.clientY,
+			x1: e.clientX,
+			y1: e.clientY
+		});
+	};
+	const onRectMove = (e) => {
+		if (rect) setRect({
+			...rect,
+			x1: e.clientX,
+			y1: e.clientY
+		});
+	};
+	const onRectUp = () => {
+		if (!rect) return;
+		const r = rect;
+		setRect(null);
+		setTool("pointer");
+		const w = Math.abs(r.x1 - r.x0), h = Math.abs(r.y1 - r.y0);
+		if (w < 20 || h < 10) return;
+		const b = surfRef.current.getBoundingClientRect();
+		const ux = (Math.min(r.x0, r.x1) - b.left) / s, uy = (Math.min(r.y0, r.y1) - b.top) / s, uw = w / s, uh = h / s;
+		const nz = Math.min(Z_MAX, Math.max(Z_MIN, Math.min((vp.w - GAP) / uw, (vp.h - GAP) / uh) / fit)), ns = fit * nz;
+		pendScroll.current = "keep";
+		setZ(nz);
+		requestAnimationFrame(() => {
+			const st = stageRef.current, bx = st.querySelector(".vbox");
+			st.scrollLeft = bx.offsetLeft + ux * ns - (vp.w - uw * ns) / 2;
+			st.scrollTop = bx.offsetTop + uy * ns - (vp.h - uh * ns) / 2;
+		});
+	};
+	const surfPt = (e) => {
+		const b = surfRef.current.getBoundingClientRect();
+		return [(e.clientX - b.left) / s, (e.clientY - b.top) / s];
+	};
+	const anchorAt = (p) => {
+		const ins = (a) => p[0] >= a.x && p[0] <= a.x + a.w && p[1] >= a.y && p[1] <= a.y + a.h;
+		const secs = anchors.filter((a) => !a.key.startsWith("page#"));
+		return secs.find(ins) || anchors.find((a) => a.key.startsWith("page#")) || secs.reduce((m, a) => {
+			const d = Math.abs(p[1] - Math.min(Math.max(p[1], a.y), a.y + a.h));
+			return !m || d < Math.abs(p[1] - Math.min(Math.max(p[1], m.y), m.y + m.h)) ? a : m;
+		}, null);
+	};
+	const local = (a, p) => [Math.round((p[0] - a.x) * 10) / 10, Math.round((p[1] - a.y) * 10) / 10];
+	const eraseAt = (p) => {
+		const r = 12 / s;
+		let changed = false;
+		const n = {};
+		for (const a of anchors) {
+			const L = local(a, p), arr = ink[a.key] || [], keep = arr.filter((st) => !hit(st, L, r));
+			if (keep.length !== arr.length) changed = true;
+			n[a.key] = keep;
+		}
+		if (!changed) return;
+		const merged = {
+			...ink,
+			...n
+		};
+		if (!drawing.current.cut) {
+			drawing.current.cut = true;
+			setInk(merged);
+		} else setInkRaw(merged);
+	};
+	const inkDown = (e) => {
+		const quick = tool === "pointer" && e.pointerType === "mouse" ? e.ctrlKey || e.metaKey ? "hl" : e.shiftKey ? "line" : null : null;
+		const t = INK_TOOLS.includes(tool) ? tool : quick;
+		if (!t || e.pointerType === "mouse" && e.button !== 0) return false;
+		const p = surfPt(e), a = anchorAt(p);
+		if (!a) return false;
+		e.preventDefault();
+		stageRef.current.setPointerCapture(e.pointerId);
+		if (t === "eraser") {
+			drawing.current = {
+				key: a.key,
+				s: {
+					t: "pen",
+					c: "",
+					w: 0,
+					pts: []
+				},
+				erase: true,
+				shift: false,
+				cut: false
+			};
+			eraseAt(p);
+			return true;
+		}
+		const st = {
+			t,
+			c: t === "hl" ? HL : color,
+			w: Math.round((t === "hl" ? width * 4 : width) / s * 10) / 10,
+			pts: [local(a, p)]
+		};
+		drawing.current = {
+			key: a.key,
+			s: st,
+			erase: false,
+			shift: !!quick && t === "line",
+			cut: false
+		};
+		setLive({
+			key: a.key,
+			s: st
+		});
+		return true;
+	};
+	const inkMove = (e) => {
+		const d = drawing.current;
+		if (!d) return false;
+		const p = surfPt(e);
+		if (d.erase) {
+			eraseAt(p);
+			return true;
+		}
+		const a = anchors.find((x) => x.key === d.key);
+		if (!a) return true;
+		const q = local(a, p), pts = d.s.pts;
+		if (d.s.t === "line") d.s = {
+			...d.s,
+			pts: [pts[0], e.shiftKey || d.shift ? lockLine(pts[0], q) : q]
+		};
+		else {
+			const l = pts[pts.length - 1];
+			if (Math.hypot(q[0] - l[0], q[1] - l[1]) * s < 1.5) return true;
+			d.s = {
+				...d.s,
+				pts: [...pts, q]
+			};
+		}
+		setLive({
+			key: d.key,
+			s: d.s
+		});
+		return true;
+	};
+	const inkUp = () => {
+		const d = drawing.current;
+		if (!d) return false;
+		drawing.current = null;
+		setLive(null);
+		drew.current = Date.now();
+		if (!d.erase) setInk({
+			...ink,
+			[d.key]: [...ink[d.key] || [], d.s]
+		});
+		return true;
+	};
+	const clearInk = () => {
+		if (!hasInk) return;
+		setInk({});
+		flash("Đã xóa nét vẽ. Bấm ↶ để hoàn tác.");
+	};
+	const inkTool = INK_TOOLS.includes(tool);
+	const drew = (0, import_react.useRef)(0);
+	const onSurfClick = (e) => {
+		if (tool !== "pointer" || Date.now() - drew.current < 300) return;
+		const tg = e.target, tb = tg.closest(".vtk");
+		if (cover) {
+			const u = tg.closest("[data-vu]");
+			if (u && (tg.closest(".vcv") || !tg.closest("[data-ans]"))) {
+				const id = u.dataset.vu;
+				setOpen((o) => {
+					const n = new Set(o);
+					if (n.has(id)) n.delete(id);
+					else n.add(id);
+					return n;
+				});
+				e.stopPropagation();
+				return;
+			}
+		}
+		if (tb) {
+			toggle(data.slots.filter((x) => x.task === tb.dataset.vt && ansIds.has(x.id)).map((x) => x.id));
+			e.stopPropagation();
+			return;
+		}
+		const sl = tg.closest("[data-ans]");
+		if (sl && ansIds.has(sl.dataset.ans)) {
+			toggle([sl.dataset.ans]);
+			e.stopPropagation();
+			return;
+		}
+		const p = e.target.closest(".pic");
+		const img = p && p.querySelector("img");
+		if (img && img.getAttribute("src")) {
+			setPic(img.getAttribute("src"));
+			e.stopPropagation();
+		}
+	};
+	const cur = mode === "page" ? `Trang ${pi + 1}/${nP}` : P.tasks[ti] ? `Task ${P.tasks[ti].num} · ${ti + 1}/${nT}` : "";
+	const html = mode === "page" ? P.pages[pi] || "" : taskHtml;
+	const surf = (0, import_react.useMemo)(() => ({ __html: html }), [html]);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		id: "wsShow",
+		className: "show" + (bar ? "" : " nobar") + (board ? " boarding" : ""),
+		role: "dialog",
+		"aria-label": "Trình chiếu phiếu",
+		onPointerMove: poke,
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "vstage" + (inkTool ? " inking" : ""),
+				ref: stageRef,
+				"data-mode": mode,
+				"data-tool": tool,
+				onPointerDown: (e) => {
+					if (inkDown(e)) return;
+					if (e.pointerType === "touch") {
+						touches.current.set(e.pointerId, {
+							x: e.clientX,
+							y: e.clientY
+						});
+						if (touches.current.size === 2) pinch0.current = {
+							d: dist(),
+							z
+						};
+					}
+				},
+				onPointerMove: (e) => {
+					if (inkMove(e)) return;
+					if (touches.current.has(e.pointerId)) {
+						touches.current.set(e.pointerId, {
+							x: e.clientX,
+							y: e.clientY
+						});
+						if (pinch0.current && touches.current.size === 2) zoomTo(pinch0.current.z * dist() / pinch0.current.d);
+					}
+				},
+				onPointerUp: (e) => {
+					if (inkUp()) return;
+					touches.current.delete(e.pointerId);
+					if (touches.current.size < 2) pinch0.current = null;
+				},
+				onPointerCancel: (e) => {
+					inkUp();
+					touches.current.delete(e.pointerId);
+					pinch0.current = null;
+				},
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "vwrap",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "vbox",
+						style: {
+							width: W0 * s,
+							height: H0 * s
+						},
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "vsurf paper " + (mode === "page" ? "vpage" : "vtask"),
+							ref: surfRef,
+							style: { transform: `scale(${s})` },
+							onClick: onSurfClick,
+							children: [mode === "page" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "flow",
+								dangerouslySetInnerHTML: surf
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "pfoot",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: data.title }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: `Trang ${pi + 1}/${nP}` })]
+							})] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "vflow",
+								style: { padding: `${TASK_PAD}mm` },
+								dangerouslySetInnerHTML: surf
+							}), inkHidden ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "vink",
+								"aria-hidden": "true",
+								children: anchors.map((a) => {
+									const arr = ink[a.key] || [], lv = live && live.key === a.key ? [live.s] : [];
+									return arr.length || lv.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+										style: {
+											left: a.x,
+											top: a.y,
+											width: a.w,
+											height: a.h
+										},
+										children: [...arr, ...lv].map((st, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+											d: pathOf(st),
+											stroke: st.c,
+											strokeWidth: st.w
+										}, i))
+									}, a.key) : null;
+								})
+							})]
+						})
+					})
+				})
+			}),
+			tool === "zoomrect" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "vcap zoomrect",
+				onPointerDown: onRectDown,
+				onPointerMove: onRectMove,
+				onPointerUp: onRectUp,
+				children: rect ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", {
+					className: "vrect",
+					style: {
+						left: Math.min(rect.x0, rect.x1),
+						top: Math.min(rect.y0, rect.y1),
+						width: Math.abs(rect.x1 - rect.x0),
+						height: Math.abs(rect.y1 - rect.y0)
+					}
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "vhint",
+					children: "Kéo khung quanh vùng cần phóng · Esc để thôi"
+				})
+			}) : null,
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "vpal" + (bar || inkTool ? "" : " off"),
+				role: "toolbar",
+				"aria-label": "Bút vẽ",
+				onPointerEnter: () => setBar(true),
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "vb" + (tool === "pointer" ? " on" : ""),
+						onClick: () => setTool("pointer"),
+						title: "Con trỏ (Esc)",
+						"aria-label": "Con trỏ",
+						children: "↖"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "vb" + (tool === "pen" ? " on" : ""),
+						id: "inkPen",
+						onClick: () => setTool(tool === "pen" ? "pointer" : "pen"),
+						title: "Bút (P)",
+						"aria-label": "Bút",
+						children: "✎"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "vb" + (tool === "hl" ? " on" : ""),
+						id: "inkHl",
+						onClick: () => setTool(tool === "hl" ? "pointer" : "hl"),
+						title: "Bút tô vàng (giữ Ctrl kéo cũng được)",
+						"aria-label": "Bút tô",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", { className: "hlic" })
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "vb" + (tool === "line" ? " on" : ""),
+						id: "inkLine",
+						onClick: () => setTool(tool === "line" ? "pointer" : "line"),
+						title: "Đường thẳng (giữ Shift = ngang / dọc; giữ Shift kéo cũng được)",
+						"aria-label": "Đường thẳng",
+						children: "╱"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "vb" + (tool === "eraser" ? " on" : ""),
+						id: "inkEraser",
+						onClick: () => setTool(tool === "eraser" ? "pointer" : "eraser"),
+						title: "Tẩy: kéo qua nét để xóa (E)",
+						"aria-label": "Tẩy",
+						children: "⌫"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "vpsep" }),
+					COLORS.map(([c, n]) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "vdot" + (color === c ? " on" : ""),
+						style: { background: c },
+						title: n,
+						"aria-label": "Màu " + n,
+						onClick: () => {
+							setColor(c);
+							if (tool !== "pen" && tool !== "line") setTool("pen");
+						}
+					}, c)),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "vpsep" }),
+					WIDTHS.map(([w, n]) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "vb vw" + (width === w ? " on" : ""),
+						title: "Nét " + n,
+						"aria-label": "Nét " + n,
+						onClick: () => setWidth(w),
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", { style: { height: w } })
+					}, w)),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "vpsep" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "vb",
+						id: "inkUndo",
+						onClick: undo,
+						disabled: !undoS.current.length,
+						title: "Hoàn tác (Ctrl+Z)",
+						"aria-label": "Hoàn tác",
+						children: "↶"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "vb",
+						onClick: redo,
+						disabled: !redoS.current.length,
+						title: "Làm lại (Ctrl+Shift+Z)",
+						"aria-label": "Làm lại",
+						children: "↷"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "vb",
+						id: "inkClear",
+						onClick: clearInk,
+						disabled: !hasInk,
+						title: "Xóa hết nét vẽ (hoàn tác được)",
+						"aria-label": "Xóa hết",
+						children: "🗑"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "vb" + (inkHidden ? " on" : ""),
+						onClick: () => setInkHidden(!inkHidden),
+						disabled: !hasInk && !inkHidden,
+						title: "Ẩn / hiện nét vẽ",
+						"aria-label": "Ẩn nét vẽ",
+						children: inkHidden ? "◌" : "◉"
+					})
+				]
+			}),
+			board ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Board, {
+				st: boardSt,
+				setSt: setBoardSt,
+				color,
+				width,
+				onClose: () => setBoard(false)
+			}) : null,
+			timer ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Timer, { onClose: () => setTimer(false) }) : null,
+			msg ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "vmsg",
+				role: "status",
+				children: msg
+			}) : null,
+			pic ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "vpic",
+				onClick: () => setPic(null),
+				role: "dialog",
+				"aria-label": "Ảnh phóng to",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+					src: pic,
+					alt: ""
+				})
+			}) : null,
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "vbar",
+				ref: barRef,
+				onPointerEnter: () => setBar(true),
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "vgrp",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								className: "vb",
+								onClick: () => go(-1),
+								"aria-label": "Trước",
+								title: "Trước (←, PageUp)",
+								children: "◀"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "vcur",
+								id: "showCur",
+								children: cur
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								className: "vb",
+								onClick: () => go(1),
+								"aria-label": "Sau",
+								title: "Sau (→, PageDown)",
+								children: "▶"
+							})
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "vgrp",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								className: "vb" + (mode === "page" ? " on" : ""),
+								onClick: () => toMode("page"),
+								title: "Cả trang (T)",
+								children: ["▭", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "vt",
+									children: " Cả trang"
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								className: "vb" + (mode === "task" ? " on" : ""),
+								onClick: () => toMode("task"),
+								title: "Từng Task (T)",
+								children: ["☰", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "vt",
+									children: " Từng Task"
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+								className: "vsel",
+								"aria-label": "Đi tới Task",
+								value: "",
+								onChange: (e) => {
+									const i = +e.target.value;
+									if (i >= 0) goTask(i);
+									e.target.blur();
+								},
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+									value: "",
+									children: "Đi tới…"
+								}), P.tasks.map((t, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+									value: i,
+									children: `Task ${t.num}: ${t.title}`.slice(0, 60)
+								}, t.id))]
+							})
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "vgrp",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								className: "vb",
+								onClick: () => zoomTo(z / 1.25),
+								"aria-label": "Thu nhỏ",
+								title: "Thu nhỏ (−)",
+								children: "−"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								className: "vb",
+								onClick: zoomFit,
+								title: "Vừa màn hình (0)",
+								id: "showZoom",
+								children: z === 1 ? "Vừa" : `${Math.round(z * 100)}%`
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								className: "vb",
+								onClick: () => zoomTo(z * 1.25),
+								"aria-label": "Phóng to",
+								title: "Phóng to (+)",
+								children: "+"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								className: "vb" + (tool === "zoomrect" ? " on" : ""),
+								onClick: () => setTool(tool === "zoomrect" ? "pointer" : "zoomrect"),
+								title: "Phóng vùng: kéo khung (Z)",
+								children: ["⬚", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "vt",
+									children: " Phóng vùng"
+								})]
+							})
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "vgrp",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								className: "vb" + (timer ? " on" : ""),
+								id: "showTimer",
+								onClick: () => setTimer(!timer),
+								title: "Đồng hồ đếm ngược (G)",
+								children: ["⏱", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "vt",
+									children: " Đồng hồ"
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								className: "vb" + (board ? " on" : ""),
+								id: "showBoard",
+								onClick: () => setBoard(!board),
+								title: "Bảng trắng (B)",
+								children: ["▢", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "vt",
+									children: " Bảng"
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								className: "vb" + (cover ? " on" : ""),
+								id: "showCover",
+								onClick: toggleCover,
+								title: "Che từng câu, bấm để hé dần (H). Bấm lại để bỏ che",
+								children: ["▤", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "vt",
+									children: " Che"
+								})]
+							}),
+							cover ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								className: "vb",
+								id: "showOpenAll",
+								onClick: () => {
+									const r = surfRef.current;
+									if (r) setOpen((o) => {
+										const n = new Set(o);
+										r.querySelectorAll("[data-vu]").forEach((u) => n.add(u.dataset.vu));
+										return n;
+									});
+								},
+								title: "Hé hết phần đang xem",
+								children: "Hé hết"
+							}) : null,
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								className: "vb" + (allOn ? " on" : ""),
+								id: "showAns",
+								onClick: toggleAll,
+								title: `Hiện / ẩn đáp án cả phiếu (A) · Space: hiện lần lượt, Shift+Space: ẩn lại · bấm vào chỗ trả lời để hiện từng chỗ${noKey ? ` · ${noKey} chỗ chưa có đáp án` : ""}`,
+								children: ["✓", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "vt",
+									children: " Đáp án"
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								className: "vb" + (clickAns ? " on" : ""),
+								id: "showClick",
+								onClick: () => setClickAns(!clickAns),
+								title: "Bật: nút Sau của bút trình chiếu hiện đáp án kế tiếp, hết đáp án mới lật",
+								children: ["⏭", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "vt",
+									children: " Clicker: đáp án"
+								})]
+							}),
+							noKey ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "vnote",
+								title: "Các chỗ này chưa nhập đáp án trong WS Editor",
+								children: [noKey, " chỗ chưa có đáp án"]
+							}) : null
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "vgrp",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							className: "vb",
+							onClick: toggleFs,
+							title: fs ? "Thu cửa sổ (F)" : "Toàn màn hình (F)",
+							children: ["⛶", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "vt",
+								children: fs ? " Thu cửa sổ" : " Toàn màn hình"
+							})]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							className: "vb x",
+							onClick: onClose,
+							title: "Thoát trình chiếu (Esc)",
+							id: "showClose",
+							children: ["✕", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "vt",
+								children: " Thoát"
+							})]
+						})]
+					})
+				]
+			})
+		]
+	});
+}
+// src/viewer/ShowRoot.tsx
+function ShowRoot() {
+	const d = useUi((s) => s.show), pages = useUi((s) => s.pages);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [d ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+		className: "btn pri showfab",
+		id: "showBtn",
+		title: "Trình chiếu phiếu lên lớp (toàn màn hình)",
+		disabled: !pages,
+		onClick: () => actions.present(),
+		children: "▶ Chiếu"
+	}), d ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presenter, {
+		data: d,
+		onClose: () => publish({ show: null })
+	}) : null] });
+}
 // src/ui/mount.tsx
 function mount(id, node) {
 	const el = document.getElementById(id);
@@ -26291,6 +27979,7 @@ mount("r-toast", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Toast, {}));
 mount("r-lib", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ImportDlg, {}));
 mount("r-paste", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PasteDlg, {}));
 mount("r-gen", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(GenDlg, {}));
+mount("r-show", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShowRoot, {}));
 Object.assign(window, {
 	askConfirm,
 	toast,
@@ -29055,6 +30744,18 @@ actions.zoomOut = () => {
 actions.zoomFit = () => {
 	zoom = null;
 	draw();
+};
+actions.present = () => {
+	const pv = useUi.getState().pageView;
+	if (!pv) return;
+	const r = sheetSlots(ws);
+	publish({ show: {
+		title: ws.title,
+		pages: pv.pages.map((p) => p.html),
+		slots: r.slots,
+		key: r.key,
+		start: sel.type !== "sheet" ? sel.id : null
+	} });
 };
 actions.toggleGuides = () => {
 	guides = !guides;
@@ -36038,6 +37739,96 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 .ino.ex{color:var(--accent)}
 .eb.xb{margin-left:4px;font-size:10px;padding:0 4px;width:auto;vertical-align:1px}
 .ef.wbth{display:flex;flex-wrap:wrap;gap:6px}.wbt{display:flex;flex-direction:column;align-items:center;width:56px;font-size:10px}.wbt small{max-width:56px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* ====== GĐ1a trình chiếu (src/viewer) ====== */
+.showfab{position:fixed;right:calc(312px + 20px + 18px);bottom:18px;z-index:50;height:40px;padding:0 18px;border-radius:20px;font-size:15px;font-weight:600;box-shadow:0 3px 12px rgba(20,30,40,.25)}
+@media print{.showfab{display:none}}
+.show{position:fixed;inset:0;z-index:1000;background:#26282c;color:#e8e8e8;font:14px system-ui,-apple-system,"Segoe UI",sans-serif;user-select:none}
+.show .vstage{position:absolute;inset:0;overflow:auto;scrollbar-width:thin}
+.show .vwrap{position:relative;display:flex;min-width:100%;min-height:100%}
+.show .vbox{margin:auto;position:relative;flex:none}
+.show .vsurf{position:absolute;left:0;top:0;transform-origin:0 0;background:var(--paper,#fff);color:var(--ink,#111);box-shadow:0 2px 18px rgba(0,0,0,.45)}
+.show .vpage{width:210mm;height:297mm}
+.show .vtask{width:198mm}
+.show .vflow{display:flex;flex-direction:column}
+.show .vsurf .task{scroll-margin-top:0}
+.show .vcap{position:absolute;inset:0;z-index:5;cursor:crosshair;touch-action:none}
+.show .vrect{position:absolute;border:2px dashed #4da3ff;background:rgba(77,163,255,.12);border-radius:4px}
+.show .vhint{position:absolute;left:50%;top:16px;transform:translateX(-50%);background:rgba(0,0,0,.72);padding:6px 12px;border-radius:8px}
+.show .vpic{position:absolute;inset:0;z-index:20;background:rgba(0,0,0,.86);display:grid;place-items:center;cursor:zoom-out}
+.show .vpic img{max-width:92vw;max-height:92vh;object-fit:contain;background:#fff;border-radius:6px}
+.show .vbar{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:30;display:flex;flex-wrap:nowrap;align-items:center;gap:8px;max-width:calc(100vw - 24px);padding:6px 8px;border-radius:12px;background:rgba(20,21,24,.92);box-shadow:0 4px 18px rgba(0,0,0,.4);transition:opacity .25s,transform .25s}
+.show.nobar .vbar{opacity:0;pointer-events:none;transform:translate(-50%,20px)}
+.show .vgrp{display:flex;align-items:center;gap:4px;padding-right:8px;border-right:1px solid #3a3e44}
+.show .vgrp:last-child{border-right:0;padding-right:0}
+.show .vsp{flex:1}
+.show .vb{min-width:38px;height:38px;padding:0 9px;border:1px solid #444a52;border-radius:8px;background:#33373d;color:#eee;font:inherit;cursor:pointer;white-space:nowrap}
+.show .vb:hover{background:#3f444b}
+.show .vb.on{background:#1f6feb;border-color:#1f6feb;color:#fff}
+.show .vb.x{background:#5a2b2b;border-color:#6d3434}
+.show .vcur{min-width:110px;text-align:center;font-variant-numeric:tabular-nums}
+.show .vsel{height:38px;border-radius:8px;background:#33373d;color:#eee;border:1px solid #444a52;width:150px;font:inherit}
+/* B4 đáp án */
+.show .vsurf .vrel{position:relative}
+.show .vsurf .vans{position:absolute;left:-2mm;right:-2mm;bottom:.6mm;text-align:center;color:#1565c0;font-weight:700;white-space:nowrap;line-height:1.1;pointer-events:none;font-size:1em}
+.show .vsurf .ln>.vans{text-align:left;left:2mm}
+.show .vsurf .vans.vin{position:static;margin-left:1mm;font-size:1.25em}
+.show .vsurf .xc>.vans,.show .vsurf .tc>.vans{bottom:auto;top:50%;transform:translateY(-50%)}
+.show .vsurf svg.vline{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.show .vsurf svg.vline line{stroke:#1565c0;stroke-width:.7mm;stroke-linecap:round}
+.show .vsurf .vok{outline-color:#1565c0 !important}
+.show .vsurf .opt.vok>b,.show .vsurf .opt.vok>i{outline:.6mm solid #1565c0;outline-offset:.5mm;border-radius:50%;color:#1565c0}
+.show .vsurf .a6 span.vok{box-shadow:0 0 0 .6mm #1565c0;color:#1565c0;border-radius:1.5mm}
+.show .vsurf .a5.vok::after{color:#1565c0}
+.show .vsurf .a4i b.vok{outline:.55mm solid #1565c0;color:#1565c0}
+.show .vsurf .ulb.vok i{outline:.5mm solid #1565c0;color:#1565c0}
+.show .vsurf .pch b.vok{border-radius:1.5mm;outline:.55mm solid #1565c0;outline-offset:.3mm;color:#1565c0}
+.show .vsurf [data-ans]{cursor:pointer}
+.show .vsurf .vtk{position:absolute;right:1mm;top:1mm;width:8mm;height:8mm;border-radius:50%;border:.35mm solid #9aa6ad;background:#fff;color:#9aa6ad;font:700 4.5mm/1 system-ui,sans-serif;cursor:pointer;opacity:.55}
+.show .vsurf .vtk:hover{opacity:1}
+.show .vsurf .vtk.on{background:#1565c0;border-color:#1565c0;color:#fff;opacity:1}
+.show .vnote{font-size:12px;color:#f0b35a;white-space:nowrap}
+.show .vmsg{position:absolute;left:50%;top:18px;transform:translateX(-50%);z-index:40;background:rgba(0,0,0,.8);padding:8px 14px;border-radius:8px}
+/* B5 bút */
+.show .vstage.inking{touch-action:none;cursor:crosshair}
+.show .vstage.inking .vsurf *{cursor:crosshair !important}
+.show .vstage[data-tool="eraser"] .vsurf *{cursor:cell !important}
+.show .vink{position:absolute;inset:0;pointer-events:none;z-index:3}
+.show .vink svg{position:absolute;overflow:visible}
+.show .vink path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.show .vpal{position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;align-items:center;gap:5px;padding:8px 6px;border-radius:12px;background:rgba(20,21,24,.92);box-shadow:0 4px 18px rgba(0,0,0,.4);transition:opacity .25s}
+.show .vpal.off{opacity:0;pointer-events:none}
+.show .vpal .vb{width:42px;min-width:0;padding:0;font-size:18px}
+.show .vpal .vb:disabled{opacity:.35;cursor:default}
+.show .vpsep{width:28px;height:1px;background:#444a52;margin:2px 0}
+.show .vdot{width:26px;height:26px;border-radius:50%;border:2px solid #555;cursor:pointer}
+.show .vdot.on{border-color:#fff;box-shadow:0 0 0 2px #1f6feb}
+.show .vw i{display:block;width:22px;margin:auto;background:#eee;border-radius:4px}
+.show .hlic{display:inline-block;width:18px;height:9px;background:rgba(255,213,0,.85);border-radius:2px}
+/* B6 che / hé */
+.show .vsurf .vcov{position:relative}
+.show .vsurf .vcv{position:absolute;inset:-.6mm -1mm;z-index:2;border-radius:1.5mm;background:repeating-linear-gradient(45deg,#dfe3e8 0 2.5mm,#d3d8de 2.5mm 5mm);display:flex;align-items:center;justify-content:center;color:#5b6570;font:600 3.2mm/1 system-ui,sans-serif;cursor:pointer}
+.show .vsurf .vcv:hover{background:repeating-linear-gradient(45deg,#e8ebef 0 2.5mm,#dde1e6 2.5mm 5mm)}
+.show .vsurf [data-vu]:not(.vcov){cursor:pointer}
+@media (max-width:1700px){.show .vbar .vt{display:none}.show .vnote{display:none}}
+@media (max-width:1100px){.show .vsel{width:110px}}
+/* B7 đồng hồ, bảng trắng */
+.show .vtimer{position:absolute;right:16px;top:16px;z-index:35;padding:10px;border-radius:14px;background:rgba(20,21,24,.94);box-shadow:0 4px 18px rgba(0,0,0,.45);display:flex;flex-direction:column;align-items:center;gap:6px}
+.show .vtimer.big{right:50%;top:50%;transform:translate(50%,-50%);padding:18px 22px}
+.show .vtnum{font:700 44px/1 ui-monospace,Menlo,Consolas,monospace;font-variant-numeric:tabular-nums;cursor:pointer;padding:2px 8px}
+.show .vtimer.big .vtnum{font-size:min(24vw,220px)}
+.show .vtimer.done .vtnum{color:#ff5a52;animation:vblink .6s steps(2) infinite}
+@keyframes vblink{50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.show .vtimer.done .vtnum{animation:none}}
+.show .vtrow{display:flex;gap:4px}
+.show .vb.go{background:#2e7d32;border-color:#2e7d32}
+.show .vboard{position:absolute;inset:0;z-index:25;background:#26282c;display:flex;flex-direction:column}
+.show .vbsurf{flex:1;margin:12px 12px 0 72px;border-radius:8px;background:#fff;position:relative;touch-action:none;cursor:crosshair;overflow:hidden}
+.show .vbsurf.bg-lines{background:#fff repeating-linear-gradient(to bottom,transparent 0 55px,#c9d6e8 55px 57px)}
+.show .vbsurf.bg-grid{background:#fff;background-image:linear-gradient(#dfe6ef 1px,transparent 1px),linear-gradient(90deg,#dfe6ef 1px,transparent 1px);background-size:36px 36px}
+.show .vbsurf svg{position:absolute;inset:0;width:100%;height:100%}
+.show .vbsurf path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.show .vbtools{display:flex;gap:6px;justify-content:center;padding:10px}
+.show.boarding .vbar{display:none}
 /*$vite$:1*/</style>
 </head>
 <body>
@@ -36051,6 +37842,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 <input type="file" id="qrImgFile" accept="image/*" hidden><input type="file" id="qrAudFile" accept="audio/*,.mp3,.m4a,.wav,.ogg" hidden>
 <input type="file" id="genRefFile" accept="image/*" multiple hidden><input type="file" id="genUp" accept="image/*" hidden>
 <div id="r-toast" style="display:contents"></div>
+<div id="r-show" style="display:contents"></div>
 <div id="r-help" style="display:contents"></div>
 <div id="r-dlg" style="display:contents"></div>
 

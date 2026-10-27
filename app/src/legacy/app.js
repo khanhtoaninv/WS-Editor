@@ -825,6 +825,10 @@ actions.setAge = v => commit(w => { w.age = v; }, `Đã đổi độ tuổi: ${v
 actions.zoomIn = () => { zoom = Math.min(1.5, Math.round((scaleNow() + .1) * 10) / 10); draw(); };
 actions.zoomOut = () => { zoom = Math.max(.3, Math.round((scaleNow() - .1) * 10) / 10); draw(); };
 actions.zoomFit = () => { zoom = null; draw(); };
+actions.present = () => {   // GĐ1a: mở trình chiếu trên các trang đang dàn
+  const pv = useUi.getState().pageView; if (!pv) return; const r = sheetSlots(ws);
+  publish({ show: { title: ws.title, pages: pv.pages.map(p => p.html), slots: r.slots, key: r.key, start: sel.type !== 'sheet' ? sel.id : null } });
+};
 actions.toggleGuides = () => { guides = !guides; publish({ guides }); draw(); if (sel.type === 'sheet') renderInspector(); };
 // Hộp Xem JSON / Xuất MD là React (src/ui/Dialogs.tsx)
 actions.showMd = () => publish({ dataDlg: { kind: 'md', text: sheetToMd(ws) } });
