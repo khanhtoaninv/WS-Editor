@@ -1,6 +1,6 @@
 # Quy ước MD trung gian cho WS Editor
 
-Cập nhật: 2026-10-26 · áp dụng từ bản **v81** (kiến trúc trình bày mới: trường `Dạng:` cho 12 dạng câu hỏi, `Bố cục:`, câu ví dụ `0.`, dòng chữ `> `, khung từ ảnh, khối chữ / ảnh, điểm trên ảnh, hai ảnh chung, bốn ô li, đáp án `0.` và `Chỗ trống:`; mục **2b**, **4c**, **5**, **Ví dụ 5**). Mọi cú pháp cũ (v65–v80) vẫn đọc được như trước; `Trả lời:` vẫn dùng được, có `Dạng:` thì `Dạng:` thắng.
+Cập nhật: 2026-10-27 · **v99**: thêm `Căn lề chữ:` (mục 2), ô bảng `[x]` / `[ ] chữ` / `[ảnh: x] chữ` (mục 4 và 5). Trước đó áp dụng từ bản **v81** (kiến trúc trình bày mới: trường `Dạng:` cho 12 dạng câu hỏi, `Bố cục:`, câu ví dụ `0.`, dòng chữ `> `, khung từ ảnh, khối chữ / ảnh, điểm trên ảnh, hai ảnh chung, bốn ô li, đáp án `0.` và `Chỗ trống:`; mục **2b**, **4c**, **5**, **Ví dụ 5**). Mọi cú pháp cũ (v65–v80) vẫn đọc được như trước; `Trả lời:` vẫn dùng được, có `Dạng:` thì `Dạng:` thắng.
 
 MD (Markdown) là cách viết một phiếu bằng chữ thường mà app đọc **chắc chắn**, không phải đoán. Dùng khi:
 - tự soạn phiếu trong Word / Notes rồi dán vào app;
@@ -60,6 +60,7 @@ Khoảng cách: vừa               ← tùy chọn: gọn | vừa | thoáng
 | `Thứ tự:` (v81) | `câu hỏi trước` = câu hỏi in trước bài đọc (Task có bài đọc, không dùng với Ảnh trong bài đọc) | `Thứ tự: câu hỏi trước` |
 | `Điểm trên ảnh:` (v81) | các điểm đánh số trên ảnh chung, `x y` theo % (trái → phải, trên → dưới), cách nhau `;`; thêm `(ô trống)` nếu điểm không in số | `Điểm trên ảnh: 20 30; 50 60` |
 | `Khối chữ:` / `Khối chữ trên:` (v81) | khối chữ tự do ngang cả Task (ghi chú, luật chơi, ví dụ dài): các dòng **thụt lề** ngay dưới là nội dung; không có `trên` thì nằm dưới bài | xem mục 4c |
+| `Căn lề chữ:` (v97) | căn lề chữ của hướng dẫn, bài đọc / lời dẫn và khối chữ tự do: `trái` (mặc định, không cần ghi) / `giữa` / `phải` / `hai bên` | `Căn lề chữ: hai bên` |
 | `Khối ảnh:` / `Khối ảnh trên:` (v81) | khối ảnh tự do ngang cả Task (sơ đồ, ảnh minh họa) | `Khối ảnh trên: bản đồ khu vườn` |
 
 Tên trường viết hoa hay thường đều được; có bản tiếng Anh: `Instruction`, `Audio`, `Answer type`, `Words`, `Image`, `Intro`. Mọi trường dùng được ở `## Task` lẫn `### Phần`.
@@ -77,7 +78,7 @@ Tên trường viết hoa hay thường đều được; có bản tiếng Anh: 
 | `chọn ảnh` (`tick ảnh`) | Q7 | mỗi câu 2–4 ảnh, tick ảnh đúng | |
 | `nối` | Q8 | chấm nối hai vế `trái - phải` | |
 | `tô chữ` | Q9 | dòng tô chữ | `(bốn ô li)` |
-| `bảng` | Q10 | bảng ` \| ` (ô trống viết, `[ ]` tick, `[ảnh: x]`) | |
+| `bảng` | Q10 | bảng ` \| ` (ô trống viết, `=chữ` ô điền có đáp án, `[ ]` / `[x]` ô tích, `[ ] chữ` ô tích kèm chữ, `[ảnh: x] chữ` ô ảnh) | |
 | `lưới` (`ô chữ`) | Q11 | `Crossword:` / `Ô chữ:` | |
 | `viết tự do` (`viết đoạn`) | Q12 | không có câu: dòng kẻ (`Dòng viết: N`, tới 20) | `(khung vẽ)` = khung trống để vẽ |
 
@@ -115,7 +116,7 @@ Không ghi `Trả lời:` thì app đoán theo ký hiệu như khi dán chữ, v
 - **Bài bên trong có hai nhóm câu, mỗi nhóm một hướng dẫn riêng (v80):** ví dụ nhóm 1 “… CLOSEST in meaning …” rồi nhóm 2 “… OPPOSITE in meaning …”, số câu bắt đầu lại từ 1. Viết nhóm sau bằng `### Phần:` (xem dưới). Nếu quên, app tự nhận ra khi thấy **một dòng chữ không đánh số, đứng sau dòng trống, ngay trước câu `1.`**: tách nó thành phần mới, dùng dòng đó làm `Hướng dẫn:`, kế thừa `Trả lời:` của phần trên, và **ghi chú ở bảng nhận diện** để người dùng kiểm tra. Cách này chỉ là lưới an toàn, nên viết `### Phần:` rõ ràng.
 - **Bài đọc:** dòng `Bài đọc:` rồi các đoạn văn; **dòng trống giữa hai đoạn = sang đoạn mới** (giữ trên phiếu). Hết bài đọc khi gặp câu đánh số, lựa chọn, dòng bảng hoặc dòng trường.
 - **Hội thoại:** dòng `Hội thoại:` rồi mỗi lượt một dòng `Tên: lời`. **Chỉ nhận hội thoại qua khối này** (từ v67): câu đánh số dạng `Place of the party: ___` là câu điền, không phải lời người nói. Tên được có số (“Students 1 and 2”). Có `___` thì thành điền chỗ trống, không có thì không có chỗ trả lời.
-- **Bảng:** các dòng ô cách nhau bằng ` | ` (hoặc Tab). Dòng đầu là tiêu đề cột (ô đầu là góc bảng). Ô trống = để học sinh viết; `[ ]` = ô tick; `[ảnh: tên]` = ô ảnh.
+- **Bảng:** các dòng ô cách nhau bằng ` | ` (hoặc Tab). Dòng đầu là tiêu đề cột (ô đầu là góc bảng). Ô trống = để học sinh viết; `=chữ` = ô học sinh điền, chữ là đáp án (in trống); `[ ]` = ô tích; `[ ] chữ` = ô tích đứng trước chữ (bảng chọn đáp án); `[x]` / `[x] chữ` = ô tích **đúng** (bản giáo viên tô nền ô, bản học sinh không lộ); `[ảnh: tên]` = ô ảnh, `[ảnh: tên] chữ` = ảnh có chữ dưới (cột đầu hoặc bất kỳ ô nào).
 - **Ô chữ giải đố (crossword):** dòng `Crossword:` rồi mỗi dòng một hàng; `#` = không có ô, `.` = ô trống chưa có đáp án, chữ cái = ô có đáp án, `(a)` = chữ cho sẵn. Số 1, 2, 3 app tự đánh. Lời gợi ý ngang / dọc đưa vào `Hướng dẫn:` hoặc văn bản kèm (chưa có cú pháp riêng; sẽ làm ở bước MD cho G-Text).
 - **Ô chữ (word search):** dòng `Ô chữ:` rồi mỗi dòng một hàng chữ cái (`SUNLIGHT…` hoặc `S U N L …`). Thành bảng chữ cái không tiêu đề, không số, căn giữa; dùng kèm `Khung từ:` cho danh sách từ cần tìm.
 - **Chỉ có ảnh** (tô màu, vẽ): chỉ ghi `Ảnh:` và `Trả lời: không`, không có câu. (Task không có câu mà ghi `Trả lời: viết câu` là Task viết đoạn, xem trên.)
@@ -175,6 +176,9 @@ Task 2: is; are; an ← một dòng, các đáp án cách nhau bằng dấu ;
 - **(v91) Câu nhiều chỗ trống:** một dòng đáp án, các chỗ trống cách nhau ` | `: `3. went | played`.
 - **(v92) Bảng:** ô học sinh điền có đáp án viết `=đáp án` ngay trong ô (`| Tom | 9 | =swimming |`); phiếu in ô trống.
 - **(v90, v93) Bài nối:** cặp viết cạnh nhau là cặp đúng chỉ khi Task có dòng `Xáo vế phải: có` (app xáo vế phải khi in). Không có dòng này thì giữ thứ tự như PDF (Tắt xáo).
+- **(v98) Bảng chọn đáp án:** học sinh chọn một hoặc nhiều ô mỗi hàng: viết `[ ] chữ` ở mọi ô lựa chọn, ô đúng `[x] chữ`. Hàng chỉ có một đáp án đúng vẫn viết như trên; công tắc "Một ô đúng mỗi hàng" chỉ có trong app, không nằm trong MD.
+- **(v97)** `Căn lề chữ: giữa` (hoặc `trái` / `phải` / `hai bên`) áp cho hướng dẫn, bài đọc và khối chữ tự do của Task. Khối chữ nào muốn căn riêng thì chỉnh trong app (chưa có trong MD).
+- **(v99) Ảnh trong bảng:** `[ảnh: tên] chữ` ở cột đầu hoặc ở ô thân bảng; không cần cú pháp riêng cho "bật ảnh cả bảng".
 - **(v93)** `Chữ câu hỏi: đậm` = chữ câu hỏi in đậm; `Khối ảnh: tên (3 ảnh)` = khối ảnh tự do có 3 ảnh cạnh nhau.
 
 ## 6. Khi app đọc MD
