@@ -9,7 +9,7 @@ with sync_playwright() as p:
     b=p.chromium.launch(); pg=b.new_page(viewport={'width':1440,'height':1000}); errs=[]
     pg.on('console', lambda m: errs.append(m.text) if m.type=='error' and 'ERR_' not in m.text and 'fonts' not in m.text else None); pg.on('pageerror', lambda e: errs.append('PAGEERR '+str(e)))
     pg.goto('file://'+sys.argv[1]); pg.wait_for_timeout(1300)
-    chk('badge v106', pg.inner_text('#verBadge').strip()=='v106')
+    chk('badge ≥ v106', int(__import__('re').sub(r'\D','',pg.inner_text('#verBadge')) or 0) >= 106)
     pg.evaluate("md=>{openImport('sheet',null,md)}",MD); pg.wait_for_timeout(600)
     pg.click('#pasteOk'); pg.wait_for_timeout(600)
     try: pg.get_by_role('button',name='Thay phiếu hiện tại').click(timeout=3000)

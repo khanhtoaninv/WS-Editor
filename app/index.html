@@ -1,0 +1,98 @@
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>WS Editor</title>
+<!-- v86: cột trái 420 px; chữ câu hỏi Bình thường / Đậm; thanh B I U dính ở G2, G3; đáp án câu ví dụ + ô tích màu #0a6b75, ô tích chọn nhiều đáp án đúng; ảnh chung ở lưới ảnh có panel riêng (Fit đúng); câu hỏi có ảnh chung cắt được trang -->
+<!-- v85: Q8/Q9 hiện Khung từ; ảnh ô lưới dùng tỉ lệ thật khi Fit; ảnh thứ hai và ảnh khung từ có Fit + zoom riêng; bỏ "Khối của bài"; G3 "Câu hỏi" + thanh B I U; khoảng cách mặc định Gọn; hộp hỏi xóa nền mờ, bấm ngoài để hủy; mỗi bài một câu ví dụ -->
+<!-- v81: kiến trúc trình bày mới — Bố cục Task 4 kiểu (Xếp dọc / Ảnh trái / Ảnh phải / Ảnh trong bài đọc), 12 dạng câu hỏi có hình xem trước, khối thêm / xóa thống nhất, câu ví dụ số 0, dòng chữ giữa các câu, hai ảnh chung, khung từ ảnh, bốn ô li, khung vẽ, nhãn A–D dưới đoạn gạch chân, nhãn Đúng/Sai tự đặt, câu hỏi trước bài đọc. Dữ liệu cũ mở ra giống v80. -->
+<!-- v71: nhãn lựa chọn (Ⓐ / ☐) nằm ngang dòng đầu của lựa chọn, không còn canh giữa khi lựa chọn dài hai dòng; khoảng cách nhãn → chữ 2 mm (trước 1,2 / 1,6 mm). -->
+<!-- v70: Đáp án Đúng/Sai (A6) trong Hai cột mặc định 80/20; A4 "Tự động" quyết một lần cho cả Task; nút Xuất MD -->
+<!-- v106: bài nối số câu thụt ra lề thẳng với Task khác, chữ tiêu đề / cột căn trái với hướng dẫn; Căn dọc Trên/Giữa/Dưới cho Chọn A/B/C (params.qv, MD "(căn giữa)"); a/b/c/d thẳng cột (đo độ dài bỏ thẻ); tay kéo T/F trên Task bị cắt trang, bài đọc + T/F kéo 40–90. v105: bài nối: Dạng nối luôn tách cặp, Tiêu đề cột, Chỗ nối (ô viết chữ), vế thừa "- F. ..."; bài đọc + T/F tự xếp dọc, Hai cột chọn được. v104: xuống dòng trong ô bảng (<br> trong MD / ô soạn, \\n trong dữ liệu, mỗi dòng một dòng trên trang). v103: bài nối hiện số câu ở lề (Số câu ở lề / Kiểu số câu có tác dụng), công tắc Viền hai vế (layout.mbd, mặc định không viền; MD "Viền hai vế: có"); tay kéo cột T / F cùng hàng (params.tfx, chọn cột Đáp án hoặc Task, bấm đúp = về 0). v102: nhãn lựa chọn A/B/C mặc định a. b. c. (không vòng tròn); vòng tròn ⓐ chọn riêng (params.lab = 'circle', MD "Dạng: chọn A/B/C (khoanh)"). v101: điền từ vào đoạn văn = câu hỏi Q1 (chỗ trống trong chữ là chỗ trả lời, không dòng kẻ thừa), "(a) ___" và "a. ___" không bị hiểu là lựa chọn, ô câu nhiều dòng, nhãn (a) ở đáp án từng chỗ trống, T/F căn dọc cả khối + cách lề phải. v100: chỗ trống sau nhãn (a) không thêm số, bài đọc có ___ không tạo dòng câu, Số câu a b c (layout.nlab), Đúng/Sai cùng hàng (params.row). v80: ký hiệu chữ **đậm** *nghiêng* <u>gạch chân</u> (hàm rich), tách phần tự động khi có dòng hướng dẫn trước câu 1 mới, Task viết đoạn không có câu (khung viết tự do, tới 20 dòng), gạch ___ trong câu là một gạch thật, nút Xóa khung ảnh. v78: ô chữ giải đố (bảng layout.table.cross, ô có chữ mới có viền xám, tự đánh số, Crossword: trong MD); G-Text 2 cột + danh sách số bắt đầu từ N. v77: mặc định theo cấu hình, ẩn số câu ở lề, A4 Tự động chọn Tự xuống dòng. v76: điểm trên ảnh chung (số trong chấm / ô trống, tròn / vuông). v75: bài đọc có chỗ trống đánh số, {a|b}, **đậm** *nghiêng* __gạch chân__, đáp án chỗ trống, cắt theo đoạn. v74: G-Text kiểu Ảnh, khung chữ 4 kiểu. v73: G-Text kiểu Chữ (t.extras: khối tự do trên/dưới bài). v72: Cỡ chữ phiếu Nhỏ / Vừa / To (ws.size, mức To = cỡ cũ) -->
+<!-- v69: Font chữ phiếu (Andika / Be Vietnam Pro / Lexend) ở panel Phiếu, lưu ở ws.font -->
+<!-- v68: Task nối vào Task trên (một Task của phiếu gốc có nhiều phần, mỗi phần giữ đáp án riêng): lựa chọn thứ 4 của mục Ngắt trang, không số / tiêu đề, giữ liền Task trên, cách trên bằng khoảng cách giữa các nhóm; MD: "### Phần: …" trong "## Task"; nhãn lựa chọn A. B. C. giữ chữ hoa; câu duy nhất không đánh số. v67: nhập MD theo phiếu thật đầu tiên — lựa chọn A/B/C mỗi dòng một lựa chọn, ô tick ☐ thành Lựa chọn (A4) nhãn ô tick, bỏ dòng "Nội dung:" / "My answer" / dòng kẻ / gạch ___ thừa, lời nhắc cuối bài và "Ghi chú:" vào hướng dẫn, bài đọc giữ đoạn, hội thoại chỉ qua khối "Hội thoại:", dòng nhãn lạ có ghi chú; cảnh báo mới (lỗi chữ, câu giống tiêu đề, chỗ trả lời trùng, ký hiệu ô tick sót). v66: font Andika + Be Vietnam Pro nhúng sẵn (thư mục fonts/), nạp trước nhóm ký tự tiếng Việt, đổi font không dựng lại cột trái. v65: P2 nhập file — quy ước MD trung gian ("## Task: …", trường "Tên: giá trị", khối Bài đọc / Hội thoại / Ô chữ, "## Đáp án" riêng), bộ đọc readMd dùng chung lớp nhập. v64: P1 nhập file — cột trái chỉ còn "+ Task" (thẻ Mẫu có sẵn | Từ file / dán, Task luôn vào cuối phiếu) và "+ Phiếu" (từ file / dán, để trống = phiếu rỗng, xác nhận + tải JSON cũ trước khi thay); bỏ nút "Dán…"; bảng nhận diện sơ bộ (số theo file, tiêu đề, mô tả, số câu, cảnh báo, ước tính số trang); một lần nhập = một bước hoàn tác. v63: P0 nhập file — nạp JSON thiếu trường tự bù (fillSheet/fillTask), nạp lỗi không đổi phiếu đang mở, Task không tên lấy tiêu đề/mô tả, hộp Dán nhận ra JSON, tự chọn "Cả đề", cảnh báo dán dài, báo vị trí chèn. v62: bảng có thể kèm khung từ (ô chữ = bảng chữ cái + khung từ). v61: mở Task nào cũng chỉ mở khu vực 3 Nội dung (1, 2, 4 thu lại), bất kể lần trước mở gì. v60: dán bài — bộ đoán trả về cấu hình (khung + thành phần + loại đáp án), mẫu chỉ áp khi người dùng chọn. v59: gọn mẫu 15 → 13 (gộp 3 mẫu bảng thành "Bảng", "Tranh" → "Tô màu / vẽ"). v58: "Công thức" → "Áp mẫu…" (áp một lần, mẫu chia nhóm); thẻ dạng bài và tóm tắt hiện mô tả thành phần (descOf). v57: bỏ dạng "Tranh" — Task chỉ có ảnh = Danh sách câu 0 câu + Ảnh chung; công tắc "Danh sách câu" (tắt = ẩn, giữ câu + đáp án). v56: QR bo góc. v55: mã QR nghe cho bài có Track. v54: thẻ câu không tô đậm lề trái. v53: viền Task xám, đệm hai bên rộng hơn, thanh tên Task cao bằng thanh khu vực và nền xanh. v52: Task mở nằm trong một thẻ có viền; Task đang thao tác được đánh dấu trên trang; cột trái rộng 360. v51: mặc định chỉ mở thẻ Nội dung. v50: bảng — chiều cao hàng mặc định 14 mm (cả hàng tiêu đề). v49: ảnh chung giữ khung cố định, ảnh thật nằm trong khung; T5 Fit dọc giữ tỉ lệ. v48: khung ảnh cố định cho mọi bài ảnh từng câu (bảng, danh sách, lưới T5). v47: Dùng ảnh này không còn qua fetch/blob. v46: popup ảnh — chỉnh nháp, chỉ lưu khi bấm Dùng ảnh này -->
+<!-- v37: cột trái dạng accordion + khu vực + kéo độ rộng -->
+<meta name="claude:viewport-fit-sides" content="cover">
+<!-- Font nhúng sẵn trong thư mục fonts/ (Andika, Be Vietnam Pro, Lexend; giấy phép SIL OFL), không cần mạng -->
+</head>
+<body>
+
+<div class="app">
+  <header class="top">
+    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này (bản dựng Vite, đang chuyển sang React)" style="font-size:11px;padding:1px 7px;margin-left:4px">v107</span> <small id="wsTitle"></small></div>
+    <div class="tb">
+      <label for="age" class="hint" style="margin:0">Độ tuổi</label>
+      <select id="age"><option value="5-6">5–6</option><option value="7-9">7–9</option><option value="10-12">10–12</option></select>
+    </div>
+    <div class="tb">
+      <button class="btn" id="undo" title="Hoàn tác (Ctrl+Z)">↶ Hoàn tác</button>
+      <button class="btn" id="redo" title="Làm lại (Ctrl+Shift+Z)">↷ Làm lại</button>
+    </div>
+    <div class="tb">
+      <button class="btn" id="zoomOut" aria-label="Thu nhỏ">−</button>
+      <button class="btn" id="zoomFit" style="min-width:64px">Vừa khung</button>
+      <button class="btn" id="zoomIn" aria-label="Phóng to">+</button>
+    </div>
+    <div class="tb"><button class="btn ghost" id="guidesBtn" title="Hiện các đường dóng (không in)">Đường dóng</button></div>
+    <span class="sp"></span>
+    <span class="badge" id="pageBadge">–</span>
+    <span class="badge" id="diagBadge">–</span>
+    <button class="btn ghost" id="jsonBtn">Xem JSON</button>
+    <button class="btn ghost" id="mdBtn">Xuất MD</button>
+    <button class="btn ghost" id="helpBtn" aria-haspopup="dialog" aria-expanded="false" title="Thao tác nhanh">?</button>
+  </header>
+  <aside class="pane tree" id="tree" aria-label="Cây container"></aside>
+  <div class="lsplit" id="lsplit" role="separator" aria-orientation="vertical" aria-label="Độ rộng khung nhập liệu" tabindex="0" title="Kéo để đổi độ rộng khung nhập liệu. Bấm đúp để về mặc định."></div>
+  <main class="pane stage paper" id="stage"></main>
+  <aside class="pane insp" id="insp" aria-label="Inspector"></aside>
+</div>
+<input type="file" id="upfile" accept="image/*" hidden>
+<dialog id="cfmDlg" aria-labelledby="cfmTitle"><h3 id="cfmTitle" style="margin:4px 0"></h3><p class="hint" id="cfmMsg" style="margin:6px 0 0"></p><div class="row"><button class="btn" id="cfmNo">Hủy</button><button class="btn dngb" id="cfmYes">Xóa</button></div></dialog>
+<dialog id="libDlg" aria-labelledby="libTitle"><h3 id="libTitle" style="margin:4px 0">Thêm Task: chọn dạng bài hoặc từ file / dán</h3>
+<div class="seg imtabs" id="imTabs" role="tablist"><button data-tab="lib" role="tab">Chọn dạng bài</button><button data-tab="src" role="tab">Từ file / dán</button></div>
+<div id="libPane"><div class="lnw"><div class="lnl"><div class="lnsec"><span class="lnn">1</span> Dạng câu hỏi</div><div id="lnQ"></div><div class="lnsec"><span class="lnn">2</span> Bố cục <span class="hint" id="lnTh"></span></div><div id="lnT" class="lntrow"></div><div id="lnB" class="lnbrow"></div></div>
+<div class="lnr"><div class="lnpvh">Xem trước · chữ mẫu lorem</div><div id="lnPv" class="lnpv"></div><p class="hint" id="lnCap"></p></div></div>
+<div class="lnf"><span class="hint">Vị trí:</span><span class="seg" id="lnPos"></span></div></div>
+<div id="srcPane" hidden><div id="srcIn"><div class="imsrc"><button class="btn" id="impPick">Chọn file…</button><span class="hint" id="impName"></span><span class="hint">JSON (nguồn chính) · MD theo quy ước · TXT</span></div>
+<input type="file" id="impFile" accept=".json,.md,.markdown,.txt,.pdf,application/json,text/markdown,text/plain" hidden>
+<textarea id="pasteTa" placeholder="…hoặc dán JSON, MD theo quy ước, hay chữ của bài vào đây" aria-label="Nội dung cần nhập"></textarea>
+<div class="pmode seg" hidden><button data-pm="task">Một Task</button><button data-pm="test">Cả đề</button></div></div>
+<div id="pasteOut" class="pout"></div></div>
+<div class="row"><button class="btn" id="libClose">Đóng</button><button class="btn pri" id="libAdd">Thêm Task</button><button class="btn pri" id="pasteOk" hidden disabled>Thêm vào cuối phiếu</button></div></dialog>
+<dialog id="pasteDlg" aria-labelledby="pasteTitle"><h3 id="pasteTitle" style="margin:4px 0">Dán nhiều dòng vào Task đang soạn</h3><textarea id="itemsTa" placeholder="Mỗi dòng một câu" aria-label="Các dòng cần thêm"></textarea><div id="itemsOut" class="pout"></div><div class="row"><button class="btn" id="itemsCancel">Hủy</button><button class="btn pri" id="itemsOk" disabled>Thêm</button></div></dialog>
+<dialog id="genDlg" aria-labelledby="genTitle"><div class="gen">
+  <div class="genh"><h3 id="genTitle">Ảnh</h3><button class="btn ghost" id="genClose" aria-label="Đóng">✕</button></div>
+  <div class="genbody">
+    <div><div class="genfr" id="genFr"></div><div class="genvs" id="genVs" aria-label="Các ảnh đã tạo"></div>
+      <div class="genframe" id="genFrame" hidden>
+        <div class="genrow"><b>Hiển thị</b><span class="seg" id="genFit"></span></div>
+        <div class="genrow" id="genZoomRow"><span>Zoom</span><input type="range" id="genZoom" min="50" max="300" step="5" aria-label="Zoom ảnh"><output id="genZoomOut"></output><button class="btn" id="genCenter">Về giữa</button></div>
+      </div></div>
+    <div class="gencol">
+      <label for="genPrompt">Mô tả ảnh (prompt)</label>
+      <textarea id="genPrompt" placeholder="Ví dụ: a cute cat sitting on a sofa, flat illustration for kids, white background"></textarea>
+      <label>Ảnh tham chiếu <span class="hint" style="font-weight:400">(không bắt buộc, tối đa 4)</span></label>
+      <div class="genrefs" id="genRefs"></div>
+      <div class="genrow"><span>Tỷ lệ</span><span class="seg" id="genAr"></span></div>
+      <p class="hint" id="genNote" style="margin:0"></p>
+      <div><button class="btn pri" id="genGo">Tạo ảnh</button> <span class="hint">Ctrl+Enter</span></div>
+    </div>
+  </div>
+  <div class="genfoot"><button class="btn" id="genUpload">Tải ảnh từ máy…</button><button class="btn" id="genRm">Gỡ ảnh</button><span class="sp"></span><button class="btn pri" id="genUse" disabled>Dùng ảnh này</button></div>
+</div></dialog>
+<input type="file" id="qrImgFile" accept="image/*" hidden><input type="file" id="qrAudFile" accept="audio/*,.mp3,.m4a,.wav,.ogg" hidden>
+<input type="file" id="genRefFile" accept="image/*" multiple hidden><input type="file" id="genUp" accept="image/*" hidden>
+<div id="measure" class="paper" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status"></div>
+<div class="helppop" id="helpPop" hidden role="dialog" aria-label="Thao tác nhanh"><b>Thao tác nhanh</b><ul>
+<li>Kéo thanh hoặc cạnh trên trang = đổi kích thước; bấm đúp = về tự động</li><li>Esc = lên cấp · Tab = container kế · Shift+bấm = chọn thêm</li><li>Mũi tên = chỉnh nhanh (Shift = bước lớn)</li><li>Ctrl+C / Ctrl+V = chép kiểu giữa container cùng loại</li><li>Ctrl+Z / Ctrl+Shift+Z = hoàn tác / làm lại</li></ul>
+<label><input type="checkbox" id="codesChk"> Hiện mã kỹ thuật (T1, G0, A1…)</label></div>
+<dialog id="dlg">
+  <h2 id="dlgTitle" style="margin:0 0 8px;font-size:15px">Dữ liệu phiếu (JSON)</h2>
+  <p class="hint" id="dlgHint">Nội dung gốc, cấu hình layout và các override. Sao chép để lưu hoặc gửi cho hệ thống khác.</p>
+  <textarea id="jsonOut" readonly></textarea>
+  <div class="row"><button class="btn pri" id="loadJson" hidden>Nạp phiếu này</button><button class="btn" id="copyJson">Sao chép</button><button class="btn pri" id="closeDlg">Đóng</button></div>
+</dialog>
+
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>
