@@ -800,3 +800,11 @@ Nguồn: phiếu 11 ("Unit 6 – Lesson 5"), `tests/md/phieu11.md`.
 - Prompt PDF→MD quy tắc 23. Kiểm thử: `tests/test47.py`.
 - Chưa làm: khoảng cách dòng trong ô chỉnh được; số hàng 1, 2 ở lề bảng mặc định hiện (PDF phiếu 11 không có, tắt bằng "Số câu ở lề: Ẩn" hoặc tùy chọn bảng).
 
+## 37. Phiếu 14: bài nối viết chữ cái, bài đọc + T/F xếp dọc (v105, 27/10/2026)
+Nguồn: phiếu 14 ("Unit 6 – Lesson 9"), `tests/md/phieu14.md`.
+- **Bộ đọc:** `Dạng: nối` luôn tách cặp "trái - phải" (trước đó chỉ tách khi tiêu đề / hướng dẫn có chữ match, join, nối vì cờ lấy từ trường `Trả lời:` cũ).
+- **Bài nối mới:** `Tiêu đề cột: A | B` (`content.heads`), `Chỗ nối: ô viết chữ` (`answer.params.mid` = `box` / `none` / mặc định chấm), vế phải thừa `6. - F. very cold` (item có `pair.r` không có `pair.l`). Trang vẽ hàng tiêu đề đậm, ô viết chữ ở cột giữa cạnh vế trái, vế thừa không có số. Cột trái: ô Tiêu đề cột trong danh sách câu; Đáp án → Chỗ nối.
+- **Bố cục bài đọc + T/F:** Tự động chọn xếp dọc (bài đọc trên, câu dưới), trước đó chọn Hai cột. Hai cột vẫn chọn được ở "Cách xếp câu: Cột bên phải" (tỉ lệ mặc định 60/40, kéo được).
+- Chưa làm: tên bố cục T6 "Chỉ nội dung" vẫn khác tên T1 "Xếp dọc" trong bảng quy tắc nội bộ (người dùng thấy "Xếp dọc" ở popup T, bên trong là T1 hoặc T6).
+- Kiểm thử: `tests/test48.py`. Prompt quy tắc 24–25.
+
