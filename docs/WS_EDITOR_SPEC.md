@@ -721,3 +721,36 @@ Nguồn: góp ý người dùng sau v86; đề xuất `docs/DE_XUAT_CHON_DAP_AN_
 - Chưa làm: xem thử 2 cột / cả trang A4; nhớ lựa chọn lần trước; "Hội thoại" (Q1 có người nói) và "Đọc và trả lời" nay là Q1 / Q2 / Q3 / Q5 + chip Bài đọc, hội thoại bật ở khối Câu hỏi sau khi thêm.
 - Kiểm thử: `tests/test37.py` (13 Q × khối × bố cục dựng được xem trước; mờ / khóa; thêm đúng Q, T, vị trí; hoàn tác; hai tab). Đổi test2, test9, test10, test13 theo giao diện mới. Đính chính: class `.lnT` trùng `.lnt` vì trang chạy chế độ quirks (CSS không phân biệt hoa thường); container đặt tên khác.
 
+
+## 27. Q2: điểm bắt đầu, chiều dài, số hàng (v95, 27/10/2026)
+- Câu Q2 (viết câu) có gạch trả lời ngay trong câu (`attach:'item'`, A2): ba tùy chọn trong panel Dạng câu hỏi: **Điểm bắt đầu** (từ cuối câu / dòng dưới), **Chiều dài** (cố định mm / hết dòng), **Số hàng** (mặc định 1). Dùng lại bộ tính A2 (`a2cfg`: `lenMode`, `lenMm`, `lines`, `start`) qua `q2end`, `q2cfg`, `q2set`; lệnh `qCmd` 'q2'.
+- Phiếu cũ (A1 dòng kẻ) hiển thị như trước. Bỏ hai kiểu gạch / khoảng cũ của Q2 trong `qStyles`.
+- Kiểm thử: `tests/test38.py`.
+
+## 28. Bảng: số thứ tự, tùy chọn bảng ở cột trái (v96, 27/10/2026)
+- Lỗi 2a: dữ liệu cũ `layout.table.num:false` làm Số thứ tự thực ra Tắt nhưng nút sáng "Ngoài bảng", bấm không đổi. Nay panel hiện đúng giá trị hiệu lực `nm`; chọn Số thứ tự thì bỏ `num` cũ.
+- Cột trái, ngay dưới tiêu đề G3 của bảng thường: ô tích **Hàng tiêu đề cột · Tô nền hàng tiêu đề · Tô hàng xen kẽ · Cột tiêu đề hàng** và nút **Số thứ tự: Ngoài bảng / Trong cột đầu / Tắt** (`tblo`). Tô nền hàng tiêu đề bật mặc định, màu đậm hơn hàng xen kẽ.
+- Kiểm thử: `tests/test39.py`.
+
+## 29. Căn lề Khối text (v97, 27/10/2026)
+- Thuộc tính Task `layout.ta` = left (mặc định) / center / right / justify, ở mục CĂN LỀ cột phải ("Căn lề Khối text"). Áp cho G0 hướng dẫn, G2 bài đọc / lời dẫn, khối tự do chữ; câu hỏi không bị ảnh hưởng.
+- Gộp công tắc cũ "Căn chữ bài đọc" chỉ có ở T8 (`layout.align:'justify'`): phiếu cũ vẫn đọc là Hai bên (`taOf`); chọn mới thì xóa `align` cũ.
+- Khối tự do chữ có lựa chọn "Theo Task (…)" (mặc định) hoặc chỉnh riêng Trái / Giữa / Phải / Hai bên.
+- Có mã QR file nghe: lề phải của hướng dẫn là mép trái mã QR (đã đúng sẵn; test đo).
+- MD: `Căn lề chữ: trái | giữa | phải | hai bên`.
+- Kiểm thử: `tests/test40.py`.
+
+## 30. Bảng chọn đáp án có ô tích (v98, 27/10/2026)
+- Ô bảng: `{tick:1}` = chỉ ô tích; `{tick:1, text}` = ô tích trước chữ; `ok:true` = ô đúng. Gõ trong ô: `[ ]`, `[x]`, `[ ] chữ`, `[x] chữ` (`✓` cũ vẫn là ô tích).
+- Cột trái mục "Chọn đáp án": **Hiện ô tích trước chữ** (đổi mọi ô chữ ↔ ô tích + chữ; ô trống, ô điền, ảnh giữ nguyên) và **Một ô đúng mỗi hàng** (tắt mặc định; bật thì giữ ô đúng đầu tiên, tích ô khác thì ô cũ tự bỏ). Mỗi ô tích có nút ✓ để đánh dấu ô đúng; mặc định nhiều ô đúng mỗi hàng.
+- Bản giáo viên: "Hiện đáp án (bản giáo viên)" nay hiện cả khi bảng có ô đúng; ô đúng in ✓ và tô nền (`.tok`). Bản học sinh không lộ.
+- MD: ô `[x] chữ` / `[ ] chữ`.
+- Kiểm thử: `tests/test41.py`.
+
+## 31. Ảnh trong ô bảng (v99, 27/10/2026)
+- Dữ liệu có sẵn từ trước: đầu hàng `{img, text}`, ô `{img, text?}`, khóa ảnh `@<hàng>` / `@<hàng>.<cột>`. Ô thân bảng có ảnh nay in ảnh trên, chữ dưới (`.cix`).
+- Cột trái: mỗi ô chữ có nút **+ảnh**; ô có ảnh hiện ảnh nhỏ (bấm để tải / tạo ảnh) và **×** trên ảnh nhỏ để gỡ (giữ chữ). Ô gõ của ô có ảnh chỉ sửa chữ, ảnh giữ nguyên. Ô tích, ô điền không có nút ảnh.
+- Công tắc cả bảng **Ảnh trong bảng: Không / Cột đầu / Mọi ô có chữ** (`cimSet`; Cột đầu tự bật Cột tiêu đề hàng).
+- MD: `[ảnh: tên] chữ` trong ô, đọc lại giữ cả ảnh và chữ.
+- Ô chữ (Q11): dòng đếm ô / từ cập nhật khi gõ lưới; gợi ý trỏ đúng Khối tự do. Trải nghiệm và các vấn đề còn lại: `docs/TRAI_NGHIEM_O_CHU.md`.
+- Kiểm thử: `tests/test42.py`.

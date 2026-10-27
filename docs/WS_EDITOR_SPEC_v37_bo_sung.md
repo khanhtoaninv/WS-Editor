@@ -313,7 +313,12 @@ Thu gọn theo thẻ + liên kết chọn khối, Nối Task / xóa có hỏi, G
 ## AD. v84 (2026-10-26) — xem WS_EDITOR_SPEC.md mục 21
 Ảnh chung ở mọi dạng, chọn đúng khối G3 / GT, căn lề Task kéo theo ảnh, cỡ chữ mặc định Vừa, hàng bảng 12 mm, nhãn a b c, khối tự do + Thêm / nhiều ảnh, độ rộng ảnh %, hội thoại cắt trang.
 
-## AB. BÀN GIAO (2026-10-27, bản v94) — đọc mục này đầu tiên khi mở thread mới
+## AB. BÀN GIAO (2026-10-27, bản v99) — đọc mục này đầu tiên khi mở thread mới
+- **v95–v99** làm hết `docs/KE_HOACH_v95.md` (spec mục 27–31): Q2 điểm bắt đầu / chiều dài / số hàng; bảng số thứ tự + tùy chọn ở cột trái; Căn lề Khối text; bảng chọn đáp án có ô tích; ảnh trong ô bảng. Báo cáo `docs/BAO_CAO_PHIEN_2026-10-27_phien8.md` mục 2.
+- **Ô chữ:** đã tự trải nghiệm, 4 vấn đề chờ người dùng quyết (`docs/TRAI_NGHIEM_O_CHU.md`): tên / câu mẫu sai dạng, chưa có danh sách gợi ý Across / Down gắn số, tìm từ chưa dùng được, gợi ý cú pháp lưới ở cột phải.
+- Vẫn gác: G1 + G2 kiểu báo chí (mục dưới).
+
+## AB-cũ. BÀN GIAO (2026-10-27, bản v94) — đọc mục này đầu tiên khi mở thread mới
 - **Bản v94** (spec mục 26): popup "+ Task" làm lại: chọn Dạng câu hỏi (Q) rồi Bố cục (T), có xem trước lorem, chọn vị trí chèn. Báo cáo `docs/BAO_CAO_PHIEN_2026-10-27_phien8.md`.
 - **Gác lại (người dùng): G1 + G2 kiểu báo chí** (chữ bao quanh ảnh có sẵn ở Bố cục "Ảnh trong bài đọc"; kiểu mỗi hàng một ảnh + một ô chữ cần G2 thành danh sách đoạn có ảnh riêng, câu hỏi mở: xen kẽ trái / phải tự động hay chọn từng hàng). Hình ở nhánh `claude/project-thread-171y6n`.
 ## AB-cũ. BÀN GIAO (2026-10-26, bản v93)
