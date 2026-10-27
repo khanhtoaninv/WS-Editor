@@ -8,3 +8,5 @@ Thứ tự đề xuất: v95 Q2 gạch cuối câu / dòng kẻ → v96 bảng 2
 4. **Ô chữ:** chưa rõ yêu cầu; đề xuất tự trải nghiệm (tạo Task Q11, nhập lưới, chụp) rồi báo lỗi / thiếu sót.
 
 **Đã chốt (27/10, người dùng):** Track đúng như trên; ảnh trong bảng là ảnh trong ô / hàng (không phải G1); bảng chọn đáp án mặc định nhiều ô đúng mỗi hàng, công tắc phụ "một đáp án" (tắt mặc định). Không còn câu hỏi mở; chờ người dùng nói "ok làm" để bắt đầu v95 (Q2).
+
+**Trạng thái (27/10, cuối phiên 8): đã làm hết.** v95 Q2 (test38), v96 bảng 2a + 2c (test39), v97 Căn lề Khối text (test40), v98 bảng chọn đáp án 2d (test41), v99 ảnh trong ô bảng 2b (test42). Ô chữ: đã trải nghiệm, xem `docs/TRAI_NGHIEM_O_CHU.md`. Đính chính: "mã code" ở hướng dẫn được hiểu là **mã QR file nghe** (không phải chip Track); lề phải hướng dẫn = mép trái mã QR.
