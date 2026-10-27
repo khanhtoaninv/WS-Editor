@@ -15,6 +15,9 @@
 
 **Chưa làm / chờ người dùng:** căn lề chữ ô câu hỏi (người dùng nói để sau); tiêu đề bài đọc căn giữa; thanh kéo nhóm T/F; số Task theo PDF (PDF 1, 2, 4, 5); bài 3 của PDF; kiểm `## Đáp án` MD cho câu nhiều chỗ trống; bản prompt trong thư mục project (`prompt/PROMPT_PDF_SANG_MD_v100.txt` đã tạo trước đó, chưa có quy tắc 18 mới, cần xuất lại bản v101); AI tạo lại MD từ prompt mới chưa thử.
 
+## 0e. v105 (phiếu 14)
+Phiếu 14: `Dạng: nối` không tách cặp (lỗi bộ đọc), bài nối kiểu viết chữ cái thiếu tiêu đề cột / vế thừa / ô viết chữ (mô hình), bài đọc + T/F tự chọn Hai cột nên không xếp dọc được (code). Sửa cả ba; prompt quy tắc 24–25; spec mục 37; `tests/test48.py`, `tests/md/phieu14.md`.
+
 ## 0d. v104 (phiếu 11)
 Phiếu 11: ô bảng nhiều dòng bị gộp thành một câu. Sửa: `<br>` xuống dòng trong ô (MD, ô soạn, xuất MD), trang vẽ mỗi dòng riêng; prompt quy tắc 23; spec mục 36; `tests/test47.py`, `tests/md/phieu11.md`.
 
