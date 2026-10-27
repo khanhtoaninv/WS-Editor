@@ -53,6 +53,7 @@ Khoảng cách: vừa               ← tùy chọn: gọn | vừa | thoáng
 | `Ghi chú:` | lời nhắc của bài (vd câu nằm dưới bài trong bản gốc); app nối vào cuối hướng dẫn | `Ghi chú: Check them after reading.` |
 | `Dạng:` (v81) | dạng câu hỏi, một trong 12 dạng ở mục 2b; chi tiết trong ngoặc. **Nên ghi** (thay cho `Trả lời:`) | `Dạng: đúng/sai (Yes/No)` |
 | `Số câu:` (v100) | nhãn số câu: `a b c` (chữ a, b, c…), `ẩn` (không số câu), `1 2 3` (mặc định). Dùng khi PDF đánh a–h; viết các dòng là `1.`, `2.`… (không viết `a.` đầu dòng, vì app hiểu là lựa chọn) | `Số câu: a b c` |
+| `Viền hai vế:` | `có` / `không` | chỉ bài nối: khung viền quanh chữ hai vế (v103, mặc định không viền) |
 | Đoạn văn có chỗ trống (v101) | đoạn văn có `(a) ___` cần đáp án là **câu hỏi**, không phải bài đọc: `Bài đọc:` chỉ tiêu đề, mỗi đoạn là một câu `1.`, `2.`…, kèm `Dạng: điền từ` và `Số câu: ẩn`. Bài đọc có `___` (cách cũ) vẫn nạp được, app ghi chú nên chuyển | `1. In 2005 she began to (a) ___ a cemetery. Many (b) ___ were found.` |
 | `Bố cục:` (v81) | bố cục Task: `xếp dọc` / `ảnh trái` / `ảnh phải` / `ảnh trong bài đọc`. Chỉ ghi khi muốn khác Tự động | `Bố cục: ảnh trái` |
 | `Ảnh: A; B` (v81) | hai ảnh chung đứng cạnh nhau, cùng cỡ (chỉ dùng với Xếp dọc) | `Ảnh: phòng ngủ; phòng khách` |
