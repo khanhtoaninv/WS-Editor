@@ -15,6 +15,9 @@
 
 **Chưa làm / chờ người dùng:** căn lề chữ ô câu hỏi (người dùng nói để sau); tiêu đề bài đọc căn giữa; thanh kéo nhóm T/F; số Task theo PDF (PDF 1, 2, 4, 5); bài 3 của PDF; kiểm `## Đáp án` MD cho câu nhiều chỗ trống; bản prompt trong thư mục project (`prompt/PROMPT_PDF_SANG_MD_v100.txt` đã tạo trước đó, chưa có quy tắc 18 mới, cần xuất lại bản v101); AI tạo lại MD từ prompt mới chưa thử.
 
+## 0c. v103 (sau khi gộp v102): phiếu 9
+Phiếu 9 ("Unit 6 – Lesson 3"): AI ghép cặp nối theo vị trí dù PDF không in đáp án (lỗi prompt → quy tắc 21); bài nối không vẽ số câu (lỗi code, đã sửa); vế phải luôn có viền (nay công tắc Viền hai vế, mặc định không); T/F cùng hàng chưa kéo được (nay có tay kéo). Spec mục 35, `tests/test46.py`, `tests/md/phieu9.md`, prompt `PROMPT_PDF_SANG_MD_v103.txt`. Còn mở: PDF Task 2 / 3 là bài "viết chữ cái vào ô", app chỉ có dạng nối dây; Task 4 cao hơn một trang.
+
 ## 0b. v102 (sau khi gộp v101)
 Người dùng: tất cả câu có đáp án a, b, c để mặc định `a. b. c.` (không vòng tròn). Đã đổi: nhãn A4 mặc định `a.`, vòng tròn `Khoanh ⓐ` là lựa chọn riêng (`params.lab = 'circle'`; MD `(khoanh)`), spec mục 34, `tests/test45.py`. **Đổi hành vi phiếu cũ:** phiếu đã lưu chưa chọn nhãn trước đây hiện vòng tròn, nay hiện `a.`.
 

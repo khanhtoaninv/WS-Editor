@@ -783,3 +783,11 @@ Nguyên tắc (người dùng): **mọi thứ cần đáp án đều là câu h�
 - **Đổi hành vi với phiếu cũ:** phiếu đã lưu không có `lab` trước đây hiện vòng tròn ⓐ, nay hiện `a.`. Muốn giữ vòng tròn thì chọn lại Khoanh ⓐ.
 - Kiểm thử: `tests/test45.py`.
 
+## 35. Bài nối: số câu, viền hai vế; kéo cột T / F (v103, 27/10/2026)
+Nguồn: phiếu 9 ("Unit 6 – Lesson 3"), `tests/md/phieu9.md`.
+- **Số câu ở bài nối:** vế trái hiện số 1, 2, 3… (hoặc a b c theo "Kiểu số câu"); trước v103 hai ô này có trong cột trái nhưng bài nối không vẽ số. "Số câu ở lề: Ẩn" ẩn như mọi dạng khác. Mặc định hiện: **phiếu nối đã lưu từ trước nay có thêm số** (chọn Ẩn để bỏ).
+- **Viền hai vế:** công tắc `layout.mbd` (`'on'` / không có), mặc định **không viền** cho cả vế trái và vế phải (trước v103 vế phải luôn có viền). Cột trái: Task nối → "Viền hai vế: Không / Có". MD: `Viền hai vế: có` (xuất MD ghi lại khi bật).
+- **Tay kéo cột T / F:** Đúng/Sai cùng hàng có tay kéo dọc ở mép trái cột T / F (chọn cột Đáp án, một ô T / F hoặc cả Task); kéo sang trái để đưa T / F lại gần câu, đổi `params.tfx` (mm từ lề phải, bước 1); bấm đúp = về sát lề phải. Ô số "T / F cách lề phải" ở cột trái vẫn dùng được.
+- **Prompt PDF→MD (quy tắc 21–22):** bài nối không có đáp án trong PDF thì không đoán cặp, ghi chú "chưa có đáp án", không `Xáo vế phải`; `Viền hai vế: có` chỉ khi bản gốc có khung.
+- Chưa làm: bài nối kiểu "viết chữ cái vào ô" như PDF phiếu 9 (Task 2, 3 trong PDF học sinh viết a–h chứ không nối dây); Task 4 phiếu 9 cao 433 mm không cắt được nên tràn trang.
+- Kiểm thử: `tests/test46.py`.

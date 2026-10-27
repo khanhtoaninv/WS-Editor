@@ -1,6 +1,6 @@
 # Prompt đưa PDF phiếu bài tập vào WS Editor
 
-Cập nhật: 2026-10-27 (**v100**: quy tắc 16–20 sau phiếu thật “Unit 6 – Lesson 1”: tiêu đề bài đọc, bỏ Hướng dẫn trùng tiêu đề, không bịa Tuổi, nhãn (a) trong bài đọc, `Số câu: a b c`, `Dạng: đúng/sai (cùng hàng)`). Trước đó 2026-10-26 (**v81**, kiến trúc trình bày mới): AI ghi **`Dạng:`** (12 dạng câu hỏi) thay cho `Trả lời:`; thêm câu ví dụ `0.`, dòng chữ `> `, khung từ ảnh, khối chữ / ảnh, hai ảnh chung, nhãn Đúng/Sai tự đặt, bài tìm lỗi sai (nhãn A–D), khung vẽ, bốn ô li, đoạn có nhãn A. B., `Bố cục:` và `Thứ tự:` khi cần (quy tắc 12–15). Các quy tắc v67–v80 giữ nguyên: một bài của PDF = một `## Task`, phần phụ dùng `### Phần:`, bỏ giàn giáo, kiểu chữ chỉ khi ý bài cần. File MD theo prompt cũ (`Trả lời:`) vẫn nạp được.
+Cập nhật: 2026-10-27 (**v103**: quy tắc 21–22 sau phiếu 9: bài nối không tự đoán đáp án, `Viền hai vế: có`. **v100**: quy tắc 16–20 sau phiếu thật “Unit 6 – Lesson 1”: tiêu đề bài đọc, bỏ Hướng dẫn trùng tiêu đề, không bịa Tuổi, nhãn (a) trong bài đọc, `Số câu: a b c`, `Dạng: đúng/sai (cùng hàng)`). Trước đó 2026-10-26 (**v81**, kiến trúc trình bày mới): AI ghi **`Dạng:`** (12 dạng câu hỏi) thay cho `Trả lời:`; thêm câu ví dụ `0.`, dòng chữ `> `, khung từ ảnh, khối chữ / ảnh, hai ảnh chung, nhãn Đúng/Sai tự đặt, bài tìm lỗi sai (nhãn A–D), khung vẽ, bốn ô li, đoạn có nhãn A. B., `Bố cục:` và `Thứ tự:` khi cần (quy tắc 12–15). Các quy tắc v67–v80 giữ nguyên: một bài của PDF = một `## Task`, phần phụ dùng `### Phần:`, bỏ giàn giáo, kiểu chữ chỉ khi ý bài cần. File MD theo prompt cũ (`Trả lời:`) vẫn nạp được.
 
 Cách dùng: mở một AI đọc được PDF (Claude, ChatGPT, Gemini…), đính kèm PDF, dán MỘT trong hai prompt dưới đây. Lưu kết quả thành file `.md` (hoặc `.json`), rồi trong app bấm **+ Phiếu** (cả phiếu) hoặc **+ Task** (thêm vào phiếu đang mở) → Chọn file. Xem bảng nhận diện trước khi bấm tạo: dòng xanh là app đã tự xử lý, dòng đỏ là chỗ phải sửa. Dòng đầu bảng nên khớp số bài của PDF (vd “6 Task (Task 6 có 3 phần)”).
 
@@ -48,6 +48,8 @@ NGUYÊN TẮC
    2. The (c) ___ people lived in simple houses.
 19. NHÃN CÂU LÀ CHỮ a, b, c… (bài nối từ với nghĩa: "a. ______ nghĩa", "b. ______ nghĩa"): viết mỗi dòng là "1. ___ nghĩa" (đánh số, KHÔNG viết "a." ở đầu dòng vì app hiểu là lựa chọn của câu trên), và thêm dòng "Số câu: a b c" ngay dưới "Dạng:". Muốn bỏ hẳn số câu (không nhãn) thì ghi "Số câu: ẩn".
 20. ĐÚNG/SAI MÀ T F NẰM CÙNG HÀNG VỚI CÂU (T F ở cuối dòng bên phải câu, không xuống dòng dưới): ghi "Dạng: đúng/sai (cùng hàng)". Có nhãn khác thì "Dạng: đúng/sai (Yes/No, cùng hàng)". Bài đọc có tranh cạnh bên rồi các câu ngay dưới: thêm "Ảnh:" và "Bố cục: ảnh phải" như thường.
+21. BÀI NỐI (Dạng: nối): vế trái đánh số 1, 2, 3…, vế phải giữ nguyên chữ a., b., c… như bản gốc. Mỗi dòng "<vế trái> - <vế phải>" chỉ là CẶP NỐI. Nếu PDF không in đáp án (bài nghe, hoặc bài viết chữ cái vào ô), KHÔNG tự đoán: ghép theo đúng thứ tự in ra, KHÔNG ghi "Xáo vế phải", và ghi vào GHI CHÚ: "Bài nối Task N: chưa có đáp án đúng, giáo viên điền". Chỉ khi PDF có đáp án mới sắp cặp theo đáp án và ghi "Xáo vế phải: có".
+22. VIỀN BÀI NỐI: mặc định app KHÔNG viền chữ hai vế. Chỉ khi bản gốc có khung viền quanh chữ (cả hai vế) mới ghi "Viền hai vế: có" ngay dưới "Dạng:".
 
 QUY ƯỚC
 # Tên phiếu
@@ -60,6 +62,7 @@ Trả lời: không                             (CHỈ khi bài không có chỗ
 Dòng viết: 1                               (chỉ với "viết câu": số dòng mỗi câu; "viết tự do": tổng số dòng, tới 20)
 Dòng kẻ: bốn ô li                          (chỉ khi PDF dùng dòng tập viết 4 ô li)
 Số câu: a b c                             (chỉ khi nhãn câu trong PDF là chữ a, b, c…; "ẩn" = không số câu)
+Viền hai vế: có                            (chỉ bài nối, khi bản gốc có khung viền quanh chữ hai vế; mặc định không viền)
 Khung từ: từ1, từ2, từ3                    (nếu có hộp từ)
 Khung từ ảnh: tên1, tên2                   (nếu hộp là tranh)
 Vị trí khung từ: dưới                      (chỉ khi hộp từ nằm dưới / bên phải câu hỏi)
