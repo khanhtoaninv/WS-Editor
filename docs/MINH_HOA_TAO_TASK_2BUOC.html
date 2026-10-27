@@ -1,0 +1,71 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Minh họa tạo Task hai bước</title>
+<style>
+body{font:14px/1.45 system-ui,sans-serif;margin:0;padding:20px;background:#f4f5f7;color:#222;width:1180px}
+h1{font-size:18px;margin:0 0 4px}
+.row{display:flex;gap:20px;align-items:flex-start}.col{flex:1}
+.cap{font-weight:700;margin:14px 0 6px;color:#1b7f3b}
+.dlg{background:#fff;border:1.5px solid #cfd3da;border-radius:12px;padding:14px;box-shadow:0 4px 14px #0002}
+.dlg h3{margin:0 0 4px;font-size:15px;display:flex;justify-content:space-between}
+.steps{display:flex;gap:6px;margin:6px 0 10px;font-size:12px}
+.st{padding:3px 12px;border-radius:14px;background:#eee;color:#777}.st.on{background:#1a4fb4;color:#fff;font-weight:700}.st.done{background:#d7f0df;color:#1b7f3b}
+.grp{margin:8px 0 4px;font-size:11px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em}
+.g{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.card{border:1px solid #cfd3da;border-radius:9px;padding:7px 8px;background:#fafbfc;font-size:12px;min-height:54px}
+.card b{display:block;font-size:13px}.card span{color:#666}
+.card .ic{float:right;width:34px;height:26px;border:1px solid #bbb;border-radius:4px;background:#fff;font-size:9px;text-align:center;line-height:26px;color:#888;font-style:normal}
+.card.sel{border:2px solid #1a4fb4;background:#eaf1ff}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px;border-top:1px solid #e3e5e9;padding-top:10px;font-size:12px;color:#555}
+.btn{display:inline-block;background:#1a4fb4;color:#fff;border-radius:6px;padding:4px 16px;font-weight:600}.btn.g2{background:#fff;color:#333;border:1px solid #999}
+.lay{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.lc{border:1px solid #cfd3da;border-radius:9px;padding:8px;background:#fafbfc;font-size:12px;display:flex;gap:9px}
+.lc.sel{border:2px solid #1a4fb4;background:#eaf1ff}.lc.off{opacity:.45;background:#f3f3f3}
+.pg{width:44px;height:58px;border:1px solid #999;background:#fff;border-radius:3px;flex:none;position:relative}
+.pg i{position:absolute;background:#c9d4ea;border-radius:2px}.pg u{position:absolute;left:4px;right:4px;height:3px;background:#bbb;border-radius:1px}
+.lc b{display:block;font-size:13px}.lc span{color:#666}.why{color:#b3261e;font-size:11px}
+.chip{display:inline-block;border:1px solid #bbb;border-radius:12px;padding:1px 9px;margin:2px 3px 2px 0;background:#fff}.chip.on{background:#d7f0df;border-color:#58a972}
+.bar{border:1px solid #d9dce2;border-radius:8px;background:#eef0f4;padding:7px 9px;margin-top:10px;font-size:12px}
+.note{font-size:12px;color:#555;margin-top:6px}
+.arrow{align-self:center;font-size:30px;color:#1a4fb4}
+</style></head><body>
+<h1>Tạo Task mới: hai bước, Dạng câu hỏi rồi Bố cục</h1>
+<div style="color:#555">Hình minh họa tĩnh (không phải app thật).</div>
+<div class="row">
+<div class="col"><div class="cap">Bước 1 · Dạng câu hỏi (Q)</div>
+<div class="dlg"><h3>Thêm Task <span>✕</span></h3>
+<div class="steps"><span class="st on">1 Dạng câu hỏi</span><span class="st">2 Bố cục</span></div>
+<div class="grp">Viết</div><div class="g">
+<div class="card"><i class="ic">___</i><b>Q1 Điền từ</b><span>Chỗ trống, hội thoại</span></div>
+<div class="card"><i class="ic">━━</i><b>Q2 Viết câu</b><span>Trả lời câu hỏi</span></div>
+<div class="card"><i class="ic">▭</i><b>Q12 Viết tự do</b><span>Khung / dòng kẻ</span></div></div>
+<div class="grp">Chọn</div><div class="g">
+<div class="card sel"><i class="ic">A B C</i><b>Q3 Chọn A/B/C</b><span>Mỗi câu vài lựa chọn</span></div>
+<div class="card"><i class="ic">{a|b}</i><b>Q4 Chọn trong câu</b><span>Khoanh, gạch chân, tìm lỗi</span></div>
+<div class="card"><i class="ic">T F</i><b>Q5 Đúng/Sai</b><span>Cột T/F hoặc ô tick</span></div>
+<div class="card"><i class="ic">🖼✓</i><b>Q7 Chọn ảnh</b><span>Tick ảnh đúng</span></div></div>
+<div class="grp">Ghép · Ảnh · Chữ</div><div class="g">
+<div class="card"><i class="ic">⟷</i><b>Q8 Nối</b></div><div class="card"><i class="ic">🖼✎</i><b>Q6 Nhìn ảnh viết</b></div><div class="card"><i class="ic">abc</i><b>Q9 Tô chữ</b></div>
+<div class="card"><i class="ic">▦</i><b>Q10 Bảng</b></div><div class="card"><i class="ic">▩</i><b>Q11 Ô chữ / lưới</b></div><div class="card"><i class="ic">🖼</i><b>Chỉ có ảnh</b><span>Tô màu / vẽ</span></div></div>
+<div class="foot"><span>Đã chọn: <b>Q3 Chọn A/B/C</b></span><span><span class="btn g2">Hủy</span> <span class="btn">Tiếp →</span></span></div>
+</div></div>
+
+<div class="arrow">➜</div>
+
+<div class="col"><div class="cap">Bước 2 · Bố cục (T) cho Q3</div>
+<div class="dlg"><h3>Thêm Task <span>✕</span></h3>
+<div class="steps"><span class="st done">✓ Q3 Chọn A/B/C</span><span class="st on">2 Bố cục</span></div>
+<div class="grp">Khối có sẵn trong Task</div>
+<span class="chip on">Câu hỏi</span><span class="chip">Bài đọc</span><span class="chip">Ảnh chung</span><span class="chip">Khung từ</span>
+<div class="grp">Bố cục (thay đổi theo khối đã tick)</div>
+<div class="lay">
+<div class="lc sel"><div class="pg"><u style="top:6px"></u><u style="top:14px"></u><u style="top:22px"></u><u style="top:30px"></u><u style="top:38px"></u></div><div><b>Tự động</b><span>Máy chọn kiểu gọn nhất</span></div></div>
+<div class="lc"><div class="pg"><i style="left:4px;right:4px;top:5px;height:14px"></i><u style="top:26px"></u><u style="top:34px"></u><u style="top:42px"></u></div><div><b>Xếp dọc</b><span>Ảnh trên, câu hỏi dưới</span></div></div>
+<div class="lc off"><div class="pg"><i style="left:4px;width:16px;top:5px;height:30px"></i><u style="top:8px;left:24px"></u><u style="top:16px;left:24px"></u></div><div><b>Ảnh trái</b><span class="why">Cần có ảnh chung: tick “Ảnh chung”</span></div></div>
+<div class="lc off"><div class="pg"><i style="right:4px;width:16px;top:5px;height:30px"></i><u style="top:8px;right:24px;left:4px"></u></div><div><b>Ảnh phải</b><span class="why">Cần có ảnh chung</span></div></div>
+<div class="lc off"><div class="pg"><u style="top:6px"></u><i style="right:4px;width:16px;top:12px;height:14px"></i><u style="top:14px;right:24px;left:4px"></u><u style="top:22px;right:24px;left:4px"></u></div><div><b>Ảnh trong bài đọc</b><span class="why">Cần có bài đọc và ảnh chung</span></div></div>
+</div>
+<div class="note">Đổi bước 1 → 2 chỉ hiện các bố cục hợp Q3. Tick “Ảnh chung” / “Bài đọc” thì các thẻ mờ sáng lên. Sau khi thêm vẫn đổi được ở cột trái (Cấu hình T · Q).</div>
+<div class="bar">Vị trí: <span class="chip">Cuối phiếu</span><span class="chip on">Sau Task đang chọn (Task 3)</span></div>
+<div class="foot"><span class="btn g2">← Quay lại</span><span class="btn">Thêm Task</span></div>
+</div></div>
+</div>
+</body></html>
