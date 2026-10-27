@@ -1,6 +1,6 @@
 # Phiếu tương tác và TeacherResource: các quyết định đã chốt (thảo luận 27/10/2026)
 
-Trạng thái: **đang thảo luận, chưa code.** Bước tiếp theo: viết chi tiết 3 tài liệu theo `DAU_MUC_3_TAI_LIEU.md` khi người dùng nói "ok viết".
+Trạng thái: **đang thảo luận, chưa code.** Đã viết nháp v0 ba tài liệu: `1_TONG_QUAN_KIEN_TRUC.md`, `2_CHUAN_GOI_PHIEU.md`, `3_LO_TRINH.md` (đầu mục gốc: `DAU_MUC_3_TAI_LIEU.md`). Bước tiếp theo: người dùng duyệt, chốt H1–H3 (tài liệu 1 mục 11), rồi lập kế hoạch GĐ0.
 
 ## Người dùng cần
 1. **Tương tác ngay trên phiếu**: giáo viên thao tác, chữa bài.
