@@ -1,6 +1,6 @@
 # Prompt đưa PDF phiếu bài tập vào WS Editor
 
-Cập nhật: 2026-10-26 (**v81**, kiến trúc trình bày mới): AI ghi **`Dạng:`** (12 dạng câu hỏi) thay cho `Trả lời:`; thêm câu ví dụ `0.`, dòng chữ `> `, khung từ ảnh, khối chữ / ảnh, hai ảnh chung, nhãn Đúng/Sai tự đặt, bài tìm lỗi sai (nhãn A–D), khung vẽ, bốn ô li, đoạn có nhãn A. B., `Bố cục:` và `Thứ tự:` khi cần (quy tắc 12–15). Các quy tắc v67–v80 giữ nguyên: một bài của PDF = một `## Task`, phần phụ dùng `### Phần:`, bỏ giàn giáo, kiểu chữ chỉ khi ý bài cần. File MD theo prompt cũ (`Trả lời:`) vẫn nạp được.
+Cập nhật: 2026-10-27 (**v99**: thêm `Căn lề chữ:`, ô bảng `[x]` / `[ ] chữ` / `[ảnh: x] chữ`). Trước đó 2026-10-26 (**v81**, kiến trúc trình bày mới): AI ghi **`Dạng:`** (12 dạng câu hỏi) thay cho `Trả lời:`; thêm câu ví dụ `0.`, dòng chữ `> `, khung từ ảnh, khối chữ / ảnh, hai ảnh chung, nhãn Đúng/Sai tự đặt, bài tìm lỗi sai (nhãn A–D), khung vẽ, bốn ô li, đoạn có nhãn A. B., `Bố cục:` và `Thứ tự:` khi cần (quy tắc 12–15). Các quy tắc v67–v80 giữ nguyên: một bài của PDF = một `## Task`, phần phụ dùng `### Phần:`, bỏ giàn giáo, kiểu chữ chỉ khi ý bài cần. File MD theo prompt cũ (`Trả lời:`) vẫn nạp được.
 
 Cách dùng: mở một AI đọc được PDF (Claude, ChatGPT, Gemini…), đính kèm PDF, dán MỘT trong hai prompt dưới đây. Lưu kết quả thành file `.md` (hoặc `.json`), rồi trong app bấm **+ Phiếu** (cả phiếu) hoặc **+ Task** (thêm vào phiếu đang mở) → Chọn file. Xem bảng nhận diện trước khi bấm tạo: dòng xanh là app đã tự xử lý, dòng đỏ là chỗ phải sửa. Dòng đầu bảng nên khớp số bài của PDF (vd “6 Task (Task 6 có 3 phần)”).
 
@@ -48,6 +48,7 @@ Dạng: <BẮT BUỘC, một trong: điền từ | viết câu | chọn A/B/C | 
 Trả lời: không                             (CHỈ khi bài không có chỗ trả lời: tô màu, hỏi đáp miệng, từ điển tranh)
 Dòng viết: 1                               (chỉ với "viết câu": số dòng mỗi câu; "viết tự do": tổng số dòng, tới 20)
 Dòng kẻ: bốn ô li                          (chỉ khi PDF dùng dòng tập viết 4 ô li)
+Căn lề chữ: hai bên                        (CHỈ khi PDF căn đều hai bên / giữa / phải cho hướng dẫn và bài đọc; căn trái thì BỎ dòng này)
 Khung từ: từ1, từ2, từ3                    (nếu có hộp từ)
 Khung từ ảnh: tên1, tên2                   (nếu hộp là tranh)
 Vị trí khung từ: dưới                      (chỉ khi hộp từ nằm dưới / bên phải câu hỏi)
@@ -77,7 +78,7 @@ CÁCH VIẾT CÂU
 - Nối: 1. cat - meow   (vế trái là ảnh: 1. [ảnh: apple] - pear)
 - Bài đọc: dòng "Bài đọc:" rồi các đoạn văn, MỖI ĐOẠN CÁCH NHAU MỘT DÒNG TRỐNG; sau đó đến câu hỏi đánh số.
 - Hội thoại: dòng "Hội thoại:" rồi mỗi lượt một dòng "Tên: lời" (chỗ cần điền ghi ___). Chỉ dùng khối này cho hội thoại.
-- Bảng: mỗi hàng một dòng, ô cách nhau " | "; dòng đầu là tiêu đề cột; ô để học sinh viết thì để trống; [ ] = ô tick; [ảnh: x] = ô ảnh.
+- Bảng: mỗi hàng một dòng, ô cách nhau " | "; dòng đầu là tiêu đề cột; ô để học sinh viết thì để trống; [ ] = ô tích; [ ] chữ = ô tích đứng trước chữ (bảng chọn đáp án "Circle / Tick the answer"); [x] chữ = ô tích ĐÚNG (chỉ khi PDF có đáp án, không đoán); [ảnh: x] = ô ảnh, [ảnh: x] chữ = ảnh có chữ dưới; =chữ = ô học sinh điền, chữ là đáp án.
 - Ô chữ giải đố (crossword, có ô trắng tự đánh số và gợi ý Across / Down): dòng "Crossword:" rồi mỗi dòng một hàng của lưới: # = không có ô, . = ô trống, chữ cái = đáp án (nếu suy ra được), (a) = chữ đã cho sẵn. Không đoán đáp án nếu PDF không có: dùng "." cho các ô.
 - Ô chữ (word search): dòng "Ô chữ:" rồi mỗi dòng một hàng chữ cái; từ cần tìm đưa vào "Khung từ:".
 - Bài chỉ có tranh (tô màu): chỉ "Ảnh:" và "Trả lời: không".
@@ -224,7 +225,7 @@ DẠNG NỘI DUNG ("content")
 (g) Bài đọc + câu hỏi: {"form":"list","lead":{"kind":"passage","text":"<đoạn 1>\n\n<đoạn 2>"},"items":[...]}   (các đoạn cách nhau "\n\n")
 (h) Tô chữ: items [{"id":"w1","text":"cat"}]
 (i) Bảng: {"form":"table","corner":"","cols":["Age","Hobby"],"rows":[{"id":"r1","head":"Tom","cells":["9","football"]},{"id":"r2","head":"Lily","cells":["",""]}]}
-    - Ô trống để viết = "". Ô tick = {"tick":1}. Ô ảnh = {"img":"cat"}.
+    - Ô trống để viết = "". Ô tích = {"tick":1}; ô tích kèm chữ = {"tick":1,"text":"Saturday"}; ô tích đúng thêm "ok":true. Ô ảnh = {"img":"cat"}, ảnh có chữ = {"img":"cat","text":"cat"}.
     - Ô chữ (word search): mỗi ô một chữ, "cols" toàn chuỗi rỗng, "head":"" mọi hàng, thêm "layout.table": {"head":false,"rowHead":false,"nm":"off","lines":"all","align":"center","minH":8}; từ cần tìm vào "wordBank".
 (j) Chỉ có tranh: {"form":"list","list":false,"items":[]} và "image" (size "large").
 
