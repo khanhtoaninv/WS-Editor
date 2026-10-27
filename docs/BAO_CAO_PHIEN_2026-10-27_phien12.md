@@ -41,3 +41,13 @@ Bản `ws-editor.html` v110: đường chuẩn 120/120, giaodien 2497/2497, 49/4
 - Kiểm thử: `tests/gd1a/test_chieu.py` 73/73, `tests/gd1a/quet_phieu.py` 25 phiếu; bộ test cũ trên bản cuối: đường chuẩn 120/120, giaodien 2497/2497, 49/49 test + audit PROBLEMS 0, `sheetSlots` 739 chỗ khớp 1–1.
 - Chưa kiểm: máy chiếu / TV / bảng tương tác thật, bút trình chiếu thật (chỉ giả lập phím PageDown / PageUp), chạm thật (chỉ thử chuột). Chuông hết giờ chưa nghe thử (headless). Người dùng cần thử tay: `docs/TUONG_TAC/KIEM_TRA_GD1A.md`.
 - Việc tiếp theo: người dùng thử tay 1a, rồi kế hoạch 1b.
+
+## 6. GĐ1b giáo viên tự làm thử (v112, cùng phiên)
+- Người dùng chốt: bỏ nút Làm thử (phiếu trong trình chiếu lúc nào cũng làm được), con trỏ = làm bài, cầm bút = vẽ; sai mặc định không tự hiện đáp án (có công tắc); thứ tự lớp `KE_HOACH_GD1B.md` mục 8.
+- Làm xong C1–C6: spec mục 43. Mã `app/src/viewer/work.ts` + phần GĐ1b trong `Presenter.tsx`. `answers.ts` tách `optEls`, `rightRow`, `optOfRow`, `rowLabel` để lớp làm bài dùng chung; chấm phải của bài nối giờ chỉ lấy chấm không có `data-ans` (trước có thể lấy nhầm chấm trái ở hàng không có vế phải).
+- Bấm chỗ trả lời ở con trỏ giờ là làm bài (thay "bấm để hiện từng chỗ" của 1a); `tests/gd1a/test_chieu.py` sửa mục đó, còn 72 mục.
+- Ô nối viết chữ: layout không in chữ cái vế phải, nên quy ước a, b, c theo thứ tự hàng khi người soạn không tự ghi "A. …" (`tests/gd1b/mau-noi-o.md`).
+- Kiểm thử: xem mục 7.
+- Chưa kiểm: màn cảm ứng thật (bàn phím ảo), máy chiếu thật. Người dùng thử tay: `docs/TUONG_TAC/KIEM_TRA_GD1B.md`.
+- Việc tiếp theo: người dùng thử tay 1a + 1b; GĐ2 đóng gói (rồi 1c làm bài trên lớp).
+

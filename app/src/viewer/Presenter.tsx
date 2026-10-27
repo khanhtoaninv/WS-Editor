@@ -1,9 +1,12 @@
 // GĐ1a trình chiếu (docs/TUONG_TAC/KE_HOACH_GD1A.md). Một lớp phủ toàn màn hình trên WS Editor:
 // B1 khung chiếu + lật trang, B2 xem từng Task, B3 phóng, B4 hiện đáp án, B5 bút, B6 che / hé, B7 đồng hồ + bảng trắng (Tools.tsx). Trang là bản sao HTML đã dàn, không dàn lại.
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+// GĐ1b (KE_HOACH_GD1B.md): phiếu lúc nào cũng làm được (work.ts): ở con trỏ bấm chỗ trả lời là làm bài, máy chấm xanh / đỏ.
+import { useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { gradeSlot, isBlank, type AnswerValue, type Answers, type SlotResult } from '../../../shared/src/index.ts';
 import { prep, type ShowData } from './data';
-import { applyAnswers, hasAns, slotsInView } from './answers';
+import { applyAnswers, hasAns, optOfRow, slotsInView } from './answers';
 import { Board, Timer, type BoardState } from './Tools';
+import { applyWork, elsOf, kindOf, letterToOpt, needsGo, nextCell, pickIndex, picked, type Hooks, type Pend } from './work';
 import { COLORS, HL, WIDTHS, hit, loadInk, lockLine, pathOf, saveInk, type Anchor, type Ink, type Pt, type Stroke } from './ink';
 
 const PX = 96 / 25.4;                       // px mỗi mm (CSS)
@@ -54,6 +57,66 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
     order.current.push(id); setShown(old => new Set(old).add(id)); return true;
   };
   const prevAns = () => { const id = order.current.pop(); if (id) setShown(old => { const n = new Set(old); n.delete(id); return n; }); };
+  // GĐ1b bài làm: giá trị trong ref (gõ không vẽ lại), `done` = các chỗ đã chốt để chấm
+  const slotBy = useMemo(() => Object.fromEntries(data.slots.map(x => [x.id, x])), [data]);
+  const ans = useRef<Answers>({});
+  const [done, setDone] = useState<Set<string>>(() => new Set());
+  const [pend, setPend] = useState<Pend | null>(null);
+  const [reveal, setReveal] = useState(false);
+  const [, bump] = useReducer((x: number) => x + 1, 0);
+  const res: Record<string, SlotResult> = {};
+  done.forEach(id => { if (slotBy[id]) res[id] = gradeSlot(slotBy[id], data.key[id], ans.current[id]); });
+  const autoIds = useMemo(() => data.slots.filter(x => { const k = data.key[x.id]; return k && (k.grading ?? x.grading) === 'auto' && (k.correct != null || (k.accept && k.accept.length)); }).map(x => x.id), [data]);
+  const nOk = autoIds.filter(i => res[i] && res[i].status === 'correct').length;
+  const anyWork = Object.values(ans.current).some(v => !isBlank(v));
+  const commit = (id: string, v: AnswerValue | null) => {
+    ans.current[id] = v; const blank = isBlank(v);
+    setDone(o => { const n = new Set(o); if (blank) n.delete(id); else n.add(id); return n; });
+    if (!blank && reveal && slotBy[id] && ['wrong', 'partial'].includes(gradeSlot(slotBy[id], data.key[id], v).status) && ansIds.has(id)) setShown(o => new Set(o).add(id));
+  };
+  const draft = (id: string, v: AnswerValue | null) => { ans.current[id] = v; setDone(o => { if (!o.has(id)) return o; const n = new Set(o); n.delete(id); return n; }); };
+  const resetWork = (ids: string[]) => {
+    (document.activeElement as HTMLElement | null)?.blur?.();
+    ids.forEach(i => { delete ans.current[i]; });
+    setDone(o => { const n = new Set(o); ids.forEach(i => n.delete(i)); return n; });
+    setShown(o => { const n = new Set(o); ids.forEach(i => n.delete(i)); return n; });
+    setPend(null); bump();
+  };
+  const lastMany = useRef<string | null>(null);   // chọn nhiều đang chờ Chấm (Enter)
+  const inputs = () => surfRef.current ? [...surfRef.current.querySelectorAll<HTMLElement>('.vwi')] : [];
+  const focusNext = (el: HTMLElement, d: 1 | -1) => { const a = inputs(), i = a.indexOf(el), n = a[i + d]; if (n) { n.focus(); return true; } el.blur(); return false; };
+  const shiftDown = useRef(false);
+  const hooks = useRef<Hooks>(null as unknown as Hooks);
+  hooks.current = {
+    input: (id, el) => {
+      const s = slotBy[id]; if (!s) return;
+      if (el.classList.contains('vwx') || (s.interaction === 'match')) {   // ô chữ, ô nối viết chữ: một chữ, chấm ngay
+        const ch = el.value.replace(/\s+/g, '').slice(-1).toUpperCase(); el.value = ch;
+        commit(id, ch ? (s.interaction === 'match' ? letterToOpt(s, el, ch) : ch) : null);
+        if (ch && el.classList.contains('vwx')) { const c = nextCell(el.parentElement!, shiftDown.current ? 'down' : 1); const ni = c?.querySelector<HTMLElement>(':scope > .vwi'); if (ni) ni.focus(); }
+        return;
+      }
+      draft(id, el.value);
+      if (el.tagName === 'INPUT') { const h = el.parentElement!; h.style.minWidth = ''; if (el.scrollWidth > el.clientWidth + 1) h.style.minWidth = el.scrollWidth + 6 + 'px'; }   // chữ dài hơn gạch: gạch dài ra
+    },
+    key: (id, el, e) => {
+      e.stopPropagation();   // phím khi đang gõ không tới phím tắt của WS Editor
+      shiftDown.current = e.shiftKey;
+      const s = slotBy[id], xw = el.classList.contains('vwx');
+      if (e.key === 'Escape') { el.blur(); e.preventDefault(); return; }
+      if (e.key === 'Tab') { e.preventDefault(); hooks.current.blur(id, el); focusNext(el, e.shiftKey ? -1 : 1); return; }
+      if (e.key === 'Enter' && !(el.tagName === 'TEXTAREA' && +(el.dataset.ml || 1) > 1 && !e.ctrlKey && !e.metaKey)) { e.preventDefault(); hooks.current.blur(id, el); focusNext(el, 1); return; }
+      if (xw && s) {
+        const mv = (d: 1 | -1 | 'down' | 'up') => { const c = nextCell(el.parentElement!, d)?.querySelector<HTMLElement>(':scope > .vwi'); if (c) { e.preventDefault(); c.focus(); } };
+        if (e.key === 'ArrowRight') mv(1); else if (e.key === 'ArrowLeft') mv(-1); else if (e.key === 'ArrowDown') mv('down'); else if (e.key === 'ArrowUp') mv('up');
+        else if (e.key === 'Backspace' && !el.value) mv(shiftDown.current ? 'up' : -1);
+      }
+    },
+    blur: (id, el) => {
+      if (el.classList.contains('vwx') || slotBy[id]?.interaction === 'match') return;
+      const v = el.value; if (!done.has(id) || ans.current[id] !== v) commit(id, v.trim() ? v : null);
+    },
+  };
   const [msg, setMsg] = useState(''); const msgT = useRef(0);
   const flash = (m: string) => { setMsg(m); clearTimeout(msgT.current); msgT.current = window.setTimeout(() => setMsg(''), 2200); };
   // B5 bút: nét theo Task / trang (ink.ts), hoàn tác bằng ảnh chụp trạng thái
@@ -103,12 +166,20 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
   useLayoutEffect(() => {
     const root = surfRef.current; if (!root) return;
     applyAnswers(root, data.slots, data.key, shown);
+    applyWork(root, data.slots, { ans: ans.current, res, pend, shownIds: shown, key: data.key }, hooks);
     root.querySelectorAll<HTMLElement>('section.task[data-frag="0"]').forEach(sec => {
       const id = sec.dataset.task!, ids = data.slots.filter(x => x.task === id && ansIds.has(x.id)).map(x => x.id);
       let b = sec.querySelector<HTMLButtonElement>(':scope > .vtk');
       if (!ids.length) { b?.remove(); return; }
       if (!b) { b = document.createElement('button'); b.className = 'vtk'; b.dataset.vt = id; b.title = 'Hiện / ẩn đáp án Task này'; b.textContent = '✓'; sec.appendChild(b); }
       b.classList.toggle('on', ids.every(i => shown.has(i)));
+    });
+    // nút ⟲ làm lại Task (khi Task đã có bài làm)
+    root.querySelectorAll<HTMLElement>('section.task[data-frag="0"]').forEach(sec => {
+      const id = sec.dataset.task!, on = data.slots.some(x => x.task === id && !isBlank(ans.current[x.id]));
+      let b = sec.querySelector<HTMLButtonElement>(':scope > .vrs');
+      if (!on) { b?.remove(); return; }
+      if (!b) { b = document.createElement('button'); b.className = 'vrs'; b.dataset.vr = id; b.tabIndex = -1; b.title = 'Làm lại Task này (xóa bài làm)'; b.textContent = '⟲'; sec.appendChild(b); }
     });
     // che / hé
     root.querySelectorAll('.vcv').forEach(e => e.remove());
@@ -218,7 +289,8 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
         case 'h': case 'H': toggleCover(); break;
         case 'g': case 'G': setTimer(!timer); break;
         case 'b': case 'B': setBoard(true); break;
-        case 'Escape': if (pic) setPic(null); else if (tool !== 'pointer') setTool('pointer'); else if (z !== 1) zoomFit(); else onClose(); break;
+        case 'Enter': if (lastMany.current) { commit(lastMany.current, ans.current[lastMany.current] ?? null); lastMany.current = null; } else used = false; break;
+        case 'Escape': if (pend) setPend(null); else if (pic) setPic(null); else if (tool !== 'pointer') setTool('pointer'); else if (z !== 1) zoomFit(); else onClose(); break;
         default: used = false;
       }
       if (used) { e.preventDefault(); e.stopPropagation(); poke(); } else e.stopPropagation();
@@ -300,15 +372,61 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
   const onSurfClick = (e: React.MouseEvent) => {
     if (tool !== 'pointer' || Date.now() - drew.current < 300) return;
     const tg = e.target as HTMLElement, tb = tg.closest<HTMLElement>('.vtk');
+    if (tg.closest('.vwi')) return;
     if (cover) {   // bấm tấm che: hé; bấm vào câu đã hé (không phải chỗ trả lời): che lại
       const u = tg.closest<HTMLElement>('[data-vu]');
       if (u && (tg.closest('.vcv') || !tg.closest('[data-ans]'))) { const id = u.dataset.vu!; setOpen(o => { const n = new Set(o); if (n.has(id)) n.delete(id); else n.add(id); return n; }); e.stopPropagation(); return; }
     }
     if (tb) { toggle(data.slots.filter(x => x.task === tb.dataset.vt && ansIds.has(x.id)).map(x => x.id)); e.stopPropagation(); return; }
-    const sl = tg.closest<HTMLElement>('[data-ans]');
-    if (sl && ansIds.has(sl.dataset.ans!)) { toggle([sl.dataset.ans!]); e.stopPropagation(); return; }
+    if (workClick(tg)) { e.stopPropagation(); return; }
     const p = (e.target as HTMLElement).closest('.pic'); const img = p && p.querySelector('img');
     if (img && img.getAttribute('src')) { setPic(img.getAttribute('src')); e.stopPropagation(); }
+  };
+
+  // GĐ1b bấm để làm: chọn phương án, nối, bấm vào chỗ gõ; dấu ✗ = xem đáp án chỗ đó; ⟲ = làm lại Task
+  const workClick = (tg: HTMLElement) => {
+    const m = tg.closest<HTMLElement>('.vwm.tap'); if (m) { toggle([m.dataset.vw!]); return true; }
+    const g = tg.closest<HTMLElement>('.vwgo'); if (g) { commit(g.dataset.vg!, ans.current[g.dataset.vg!] ?? null); lastMany.current = null; return true; }
+    const rs = tg.closest<HTMLElement>('.vrs'); if (rs) { resetWork(data.slots.filter(x => x.task === rs.dataset.vr).map(x => x.id)); flash('Đã xóa bài làm của Task này'); return true; }
+    const ln = tg.closest<SVGElement>('svg.vwl'); if (ln) { commit(ln.dataset.vw!, null); return true; }
+    const root = surfRef.current!;
+    let el = tg.closest<HTMLElement>('[data-ans]');
+    const ml = !el && tg.closest<HTMLElement>('.mrows > .ml:not(.mh)'), mr = !el && (tg.closest<HTMLElement>('.mrows > .mr:not(.mh)') || (tg.closest('.md .a7') ? (tg.closest('.md')!.nextElementSibling as HTMLElement | null) : null));
+    if (ml) el = (ml.nextElementSibling as HTMLElement | null)?.querySelector<HTMLElement>('[data-ans]') || null;   // bấm chữ vế trái = bấm chấm trái
+    if (el) {
+      const id = el.dataset.ans!, s = slotBy[id]; if (!s) return false;
+      const els = elsOf(root, id), kind = kindOf(s, els);
+      if (kind === 'type') { (els[0].querySelector<HTMLElement>(':scope > .vwi'))?.focus(); return true; }
+      if (kind === 'pick') {
+        const j = pickIndex(els, tg), o = j >= 0 ? (s.options || [])[j] : undefined; if (!o) return true;
+        const cur = picked(ans.current[id]);
+        if (s.interaction === 'choice-many') {
+          const nv = cur.includes(o.id) ? cur.filter(x => x !== o.id) : [...cur, o.id].sort((a, b) => (s.options || []).findIndex(x => x.id === a) - (s.options || []).findIndex(x => x.id === b));
+          if (needsGo(s, data.key)) { draft(id, nv.length ? nv : null); lastMany.current = nv.length ? id : null; bump(); } else commit(id, nv.length ? nv : null);
+        } else commit(id, cur[0] === o.id ? null : o.id);
+        return true;
+      }
+      if (kind === 'link') {
+        if (pend && 'row' in pend) {   // đã bấm vế phải trước
+          const sec = el.closest<HTMLElement>('section.task'), mrow = sec && [...sec.querySelectorAll<HTMLElement>('.mr:not(.mh)')].find(x => x.textContent === pend.row);
+          const o = mrow ? optOfRow(s, mrow) : null; setPend(null); if (o) link(id, o.id); return true;
+        }
+        setPend(pend && 'id' in pend && pend.id === id ? null : { id }); return true;
+      }
+      return false;
+    }
+    if (mr) {
+      const sec = mr.closest<HTMLElement>('section.task')!;
+      if (pend && 'id' in pend) { const s = slotBy[pend.id], o = s ? optOfRow(s, mr) : null; setPend(null); if (o) link(pend.id, o.id); return true; }
+      const row = mr.textContent || ''; setPend(pend && 'row' in pend && pend.row === row ? null : { task: sec.dataset.task!, row }); return true;
+    }
+    return false;
+  };
+  // nối một cặp: một vế phải chỉ một đường (vế trái khác đang nối vào đó thì gỡ)
+  const link = (id: string, opt: string) => {
+    const s = slotBy[id]; if (!s) return;
+    data.slots.filter(x => x.task === s.task && x.id !== id && x.interaction === 'match' && ans.current[x.id] === opt).forEach(x => { ans.current[x.id] = null; setDone(o => { const n = new Set(o); n.delete(x.id); return n; }); });
+    commit(id, opt);
   };
 
   const cur = mode === 'page' ? `Trang ${pi + 1}/${nP}` : P.tasks[ti] ? `Task ${P.tasks[ti].num} · ${ti + 1}/${nT}` : '';
@@ -378,19 +496,24 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
           <button className="vb" onClick={() => zoomTo(z / 1.25)} aria-label="Thu nhỏ" title="Thu nhỏ (−)">−</button>
           <button className="vb" onClick={zoomFit} title="Vừa màn hình (0)" id="showZoom">{z === 1 ? 'Vừa' : `${Math.round(z * 100)}%`}</button>
           <button className="vb" onClick={() => zoomTo(z * 1.25)} aria-label="Phóng to" title="Phóng to (+)">+</button>
-          <button className={'vb' + (tool === 'zoomrect' ? ' on' : '')} onClick={() => setTool(tool === 'zoomrect' ? 'pointer' : 'zoomrect')} title="Phóng vùng: kéo khung (Z)">⬚<span className="vt"> Phóng vùng</span></button>
+          <button className={'vb' + (tool === 'zoomrect' ? ' on' : '')} onClick={() => setTool(tool === 'zoomrect' ? 'pointer' : 'zoomrect')} title="Phóng vùng: kéo khung (Z)">⬚<span className="vt vt2"> Phóng vùng</span></button>
         </div>
         <div className="vgrp">
           <button className={'vb' + (timer ? ' on' : '')} id="showTimer" onClick={() => setTimer(!timer)} title="Đồng hồ đếm ngược (G)">⏱<span className="vt"> Đồng hồ</span></button>
           <button className={'vb' + (board ? ' on' : '')} id="showBoard" onClick={() => setBoard(!board)} title="Bảng trắng (B)">▢<span className="vt"> Bảng</span></button>
           <button className={'vb' + (cover ? ' on' : '')} id="showCover" onClick={toggleCover} title="Che từng câu, bấm để hé dần (H). Bấm lại để bỏ che">▤<span className="vt"> Che</span></button>
           {cover ? <button className="vb" id="showOpenAll" onClick={() => { const r = surfRef.current; if (r) setOpen(o => { const n = new Set(o); r.querySelectorAll<HTMLElement>('[data-vu]').forEach(u => n.add(u.dataset.vu!)); return n; }); }} title="Hé hết phần đang xem">Hé hết</button> : null}
-          <button className={'vb' + (allOn ? ' on' : '')} id="showAns" onClick={toggleAll} title={`Hiện / ẩn đáp án cả phiếu (A) · Space: hiện lần lượt, Shift+Space: ẩn lại · bấm vào chỗ trả lời để hiện từng chỗ${noKey ? ` · ${noKey} chỗ chưa có đáp án` : ''}`}>✓<span className="vt"> Đáp án</span></button>
-          <button className={'vb' + (clickAns ? ' on' : '')} id="showClick" onClick={() => setClickAns(!clickAns)} title="Bật: nút Sau của bút trình chiếu hiện đáp án kế tiếp, hết đáp án mới lật">⏭<span className="vt"> Clicker: đáp án</span></button>
+          <button className={'vb' + (allOn ? ' on' : '')} id="showAns" onClick={toggleAll} title={`Hiện / ẩn đáp án cả phiếu (A) · Space: hiện lần lượt, Shift+Space: ẩn lại · nút ✓ đầu Task: hiện Task đó${noKey ? ` · ${noKey} chỗ chưa có đáp án` : ''}`}>✓<span className="vt"> Đáp án</span></button>
+          <button className={'vb' + (clickAns ? ' on' : '')} id="showClick" onClick={() => setClickAns(!clickAns)} title="Bật: nút Sau của bút trình chiếu hiện đáp án kế tiếp, hết đáp án mới lật">⏭<span className="vt vt2"> Clicker: đáp án</span></button>
           {noKey ? <span className="vnote" title="Các chỗ này chưa nhập đáp án trong WS Editor">{noKey} chỗ chưa có đáp án</span> : null}
         </div>
         <div className="vgrp">
-          <button className="vb" onClick={toggleFs} title={fs ? 'Thu cửa sổ (F)' : 'Toàn màn hình (F)'}>⛶<span className="vt">{fs ? ' Thu cửa sổ' : ' Toàn màn hình'}</span></button>
+          {autoIds.length ? <span className="vscore" id="workScore" title="Số chỗ làm đúng / số chỗ máy chấm được. Bấm vào chỗ trả lời để làm thử">{`Đúng ${nOk}/${autoIds.length}`}</span> : null}
+          <button className={'vb' + (reveal ? ' on' : '')} id="workReveal" onClick={() => setReveal(!reveal)} title="Bật: làm sai thì hiện luôn đáp án đúng. Tắt: bấm dấu ✗ để xem">✗→✓<span className="vt"> Sai thì hiện đáp án</span></button>
+          <button className="vb" id="workReset" disabled={!anyWork} onClick={() => { resetWork(data.slots.map(x => x.id)); flash('Đã xóa bài làm cả phiếu'); }} title="Làm lại cả phiếu (xóa bài làm)">⟲<span className="vt"> Làm lại</span></button>
+        </div>
+        <div className="vgrp">
+          <button className="vb" onClick={toggleFs} title={fs ? 'Thu cửa sổ (F)' : 'Toàn màn hình (F)'}>⛶<span className="vt vt2">{fs ? ' Thu cửa sổ' : ' Toàn màn hình'}</span></button>
           <button className="vb x" onClick={onClose} title="Thoát trình chiếu (Esc)" id="showClose">✕<span className="vt"> Thoát</span></button>
         </div>
       </div>

@@ -130,9 +130,9 @@ with sync_playwright() as p:
     key(pg, 'Shift+ ' if False else 'Shift+Space'); n1 = pg.evaluate("() => document.querySelectorAll('#wsShow .vans, #wsShow .vok').length")
     chk('B4 Shift+Space ẩn chỗ vừa hiện', n2 > n1 >= 1, (n2, n1))
     key(pg, 'a'); key(pg, 'a')
-    pg.click("#wsShow .vsurf [data-ans='t1.q2']"); pg.wait_for_timeout(80)
-    chk('B4 bấm một chỗ: hiện chỗ đó', pg.evaluate("() => document.querySelector(\"#wsShow [data-ans='t1.q2'] .vans\")?.textContent") == "doesn't")
-    chk('B4 chỉ chỗ đó', pg.evaluate("() => document.querySelectorAll('#wsShow .vans, #wsShow .vok').length") == 1)
+    pg.click("#wsShow .vsurf [data-ans='t1.q2']"); pg.wait_for_timeout(80)   # 1b: bấm chỗ trả lời là làm bài, không hiện đáp án
+    chk('B4 (1b) bấm một chỗ: vào ô gõ, không hiện đáp án', pg.evaluate("() => document.activeElement && document.activeElement.dataset.for") == 't1.q2' and not pg.query_selector('#wsShow .vans, #wsShow .vok'))
+    pg.keyboard.press('Escape')
     pg.click("#wsShow .vsurf section[data-task='t4'] .vtk"); pg.wait_for_timeout(80)
     chk('B4 nút ✓ đầu Task hiện cả Task', pg.evaluate("() => document.querySelectorAll(\"#wsShow section[data-task='t4'] .vok\").length") == 3)
     pg.click("#wsShow .vsurf section[data-task='t4'] .vtk"); pg.wait_for_timeout(80)

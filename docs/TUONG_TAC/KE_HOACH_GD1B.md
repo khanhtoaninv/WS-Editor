@@ -1,6 +1,6 @@
 # Kế hoạch GĐ1b: giáo viên tự tương tác trên phiếu
 
-> 27/10/2026 · Theo cách chia của người dùng: 1a trình chiếu (xong, v111), **1b giáo viên mở phiếu, tự gõ / chọn một đáp án, máy báo đúng sai ngay để giảng cho học sinh**, 1c làm bài trên lớp (sau GĐ2). **Chưa code**, chờ người dùng nói "ok làm".
+> 27/10/2026 · Theo cách chia của người dùng: 1a trình chiếu (xong, v111), **1b giáo viên mở phiếu, tự gõ / chọn một đáp án, máy báo đúng sai ngay để giảng cho học sinh**, 1c làm bài trên lớp (sau GĐ2). **Đã làm xong C1–C6 (v112, spec mục 43).**
 > Kết quả: phiếu trong trình chiếu **lúc nào cũng làm được** (người dùng chốt bỏ nút Làm thử, 27/10): gõ vào chỗ trống, bấm chọn A/B/C, T/F, ô tick, nối, điền bảng, ô chữ; máy tô **xanh (đúng) / đỏ (sai)** ngay tại chỗ. Không lưu, không gửi đi đâu ("tương tác một chiều").
 
 ## 0. Hiện trạng đã có (từ GĐ0, GĐ1a)

@@ -35,30 +35,45 @@ function mark(el: Element | null | undefined) { if (el && !el.classList.contains
 
 // phương án thứ j của một chỗ chọn: nhiều phần tử cùng mã (ô tick ảnh, gạch chân A–D, hàng tick bảng) = phần tử thứ j;
 // một phần tử = con thứ j (.opt của A/B/C, <b> của {a|b}, nhãn T/F)
-function optEl(els: HTMLElement[], j: number) {
-  if (els.length > 1) return els[j];
-  const el = els[0]; if (!el) return null;
-  const kids = el.querySelectorAll(':scope > .opt').length ? el.querySelectorAll(':scope > .opt') : el.querySelectorAll(':scope > b').length ? el.querySelectorAll(':scope > b') : el.querySelectorAll(':scope > span');
-  return kids[j] || null;
+export function optEls(els: HTMLElement[]): HTMLElement[] {
+  if (els.length !== 1) return els;
+  for (const q of [':scope > .opt', ':scope > b', ':scope > span:not(.vans)']) { const k = els[0].querySelectorAll<HTMLElement>(q); if (k.length) return [...k]; }
+  return els;
 }
+const optEl = (els: HTMLElement[], j: number) => optEls(els)[j] || null;
 
-function lineBetween(sec: HTMLElement, a: Element, b: Element) {
+export function lineBetween(sec: HTMLElement, a: Element, b: Element, cls = 'vline') {
   const r = sec.getBoundingClientRect(), k = r.width / sec.offsetWidth || 1;
   const c = (e: Element) => { const q = e.getBoundingClientRect(); return [(q.left + q.width / 2 - r.left) / k, (q.top + q.height / 2 - r.top) / k]; };
   const [x1, y1] = c(a), [x2, y2] = c(b);
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('class', 'vline');
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('class', cls);
   svg.innerHTML = `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" />`;
-  sec.appendChild(svg);
+  sec.appendChild(svg); return svg;
 }
 
-// bài nối: tìm vế phải có chữ của phương án đúng, nối chấm trái với chấm phải cùng hàng
+// vế phải của một phương án nối: hàng .mr có chữ của phương án (chữ dài nhất khớp), chấm phải của hàng đó, chữ cái nhãn
+export function rightRow(sec: HTMLElement, text: string) {
+  const t = norm(text); if (!t) return null;
+  const rows = [...sec.querySelectorAll<HTMLElement>('.mr:not(.mh)')], tx = (m: HTMLElement) => norm(m.textContent || '');
+  const mr = rows.find(m => tx(m) === t) || rows.find(m => /[\s.)]$/.test(tx(m).slice(0, -t.length)) && tx(m).endsWith(t)) || rows.find(m => tx(m).endsWith(t));
+  if (!mr) return null;
+  const md = mr.previousElementSibling, dots = md ? md.querySelectorAll<HTMLElement>(':scope > .a7:not([data-ans])') : null;
+  return { mr, dot: dots && dots.length ? dots[dots.length - 1] : null, letter: rowLabel(mr) };
+}
+// chữ cái đầu hàng vế phải do người soạn ghi ("A. cold", "b) small"); không có thì ''
+export const rowLabel = (mr: HTMLElement) => ((mr.textContent || '').match(/^\s*([A-Za-z0-9]{1,2})[.)]\s/) || [])[1] || '';
+// phương án của một hàng vế phải (ngược với rightRow)
+export function optOfRow(s: Slot, mr: HTMLElement) {
+  const x = norm(mr.textContent || '');
+  return (s.options || []).filter(o => { const t = norm(String(o.text ?? '')); return t && (x === t || x.endsWith(t)); }).sort((a, b) => String(b.text).length - String(a.text).length)[0] || null;
+}
+
+// bài nối: nối chấm trái với chấm phải của hàng có phương án đúng (ô nối viết chữ: chữ cái của hàng đó)
 function showMatch(root: HTMLElement, s: Slot, els: HTMLElement[], cid: string) {
   const o = (s.options || []).find(x => x.id === cid); if (!o) return;
-  const left = els[0], sec = left.closest<HTMLElement>('section.task') || root;
-  const mr = [...sec.querySelectorAll<HTMLElement>('.mr')].find(m => norm(m.textContent || '').endsWith(norm(String(o.text ?? ''))));
-  if (left.classList.contains('mbx')) { putText(left, mr?.querySelector('i')?.textContent?.replace(/\W+$/, '') || String(o.text ?? '')); return; }
-  const md = mr && mr.previousElementSibling, dots = md ? md.querySelectorAll('.a7') : null, right = dots && dots[dots.length - 1];
-  if (right) lineBetween(sec, left, right); else putText(left, String(o.text ?? ''));
+  const left = els[0], sec = left.closest<HTMLElement>('section.task') || root, r = rightRow(sec, String(o.text ?? ''));
+  if (left.classList.contains('mbx')) { putText(left, r?.letter || String(o.text ?? '')); return; }
+  if (r && r.dot) lineBetween(sec, left, r.dot); else putText(left, String(o.text ?? ''));
 }
 
 export function showSlot(root: HTMLElement, s: Slot, key: Key) {
