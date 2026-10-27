@@ -1,6 +1,6 @@
 # Quy ước MD trung gian cho WS Editor
 
-Cập nhật: 2026-10-27 · thêm **v100**: `Số câu:`, `Dạng: đúng/sai (cùng hàng)`, bài đọc có `___` nhãn `(a)` không tạo dòng câu (mục bảng trường và mục 2b). Trước đó áp dụng từ bản **v81** (kiến trúc trình bày mới: trường `Dạng:` cho 12 dạng câu hỏi, `Bố cục:`, câu ví dụ `0.`, dòng chữ `> `, khung từ ảnh, khối chữ / ảnh, điểm trên ảnh, hai ảnh chung, bốn ô li, đáp án `0.` và `Chỗ trống:`; mục **2b**, **4c**, **5**, **Ví dụ 5**). Mọi cú pháp cũ (v65–v80) vẫn đọc được như trước; `Trả lời:` vẫn dùng được, có `Dạng:` thì `Dạng:` thắng.
+Cập nhật: 2026-10-27 · thêm **v101** (đoạn văn có chỗ trống là câu hỏi) và **v100**: `Số câu:`, `Dạng: đúng/sai (cùng hàng)`, bài đọc có `___` nhãn `(a)` không tạo dòng câu (mục bảng trường và mục 2b). Trước đó áp dụng từ bản **v81** (kiến trúc trình bày mới: trường `Dạng:` cho 12 dạng câu hỏi, `Bố cục:`, câu ví dụ `0.`, dòng chữ `> `, khung từ ảnh, khối chữ / ảnh, điểm trên ảnh, hai ảnh chung, bốn ô li, đáp án `0.` và `Chỗ trống:`; mục **2b**, **4c**, **5**, **Ví dụ 5**). Mọi cú pháp cũ (v65–v80) vẫn đọc được như trước; `Trả lời:` vẫn dùng được, có `Dạng:` thì `Dạng:` thắng.
 
 MD (Markdown) là cách viết một phiếu bằng chữ thường mà app đọc **chắc chắn**, không phải đoán. Dùng khi:
 - tự soạn phiếu trong Word / Notes rồi dán vào app;
@@ -53,6 +53,7 @@ Khoảng cách: vừa               ← tùy chọn: gọn | vừa | thoáng
 | `Ghi chú:` | lời nhắc của bài (vd câu nằm dưới bài trong bản gốc); app nối vào cuối hướng dẫn | `Ghi chú: Check them after reading.` |
 | `Dạng:` (v81) | dạng câu hỏi, một trong 12 dạng ở mục 2b; chi tiết trong ngoặc. **Nên ghi** (thay cho `Trả lời:`) | `Dạng: đúng/sai (Yes/No)` |
 | `Số câu:` (v100) | nhãn số câu: `a b c` (chữ a, b, c…), `ẩn` (không số câu), `1 2 3` (mặc định). Dùng khi PDF đánh a–h; viết các dòng là `1.`, `2.`… (không viết `a.` đầu dòng, vì app hiểu là lựa chọn) | `Số câu: a b c` |
+| Đoạn văn có chỗ trống (v101) | đoạn văn có `(a) ___` cần đáp án là **câu hỏi**, không phải bài đọc: `Bài đọc:` chỉ tiêu đề, mỗi đoạn là một câu `1.`, `2.`…, kèm `Dạng: điền từ` và `Số câu: ẩn`. Bài đọc có `___` (cách cũ) vẫn nạp được, app ghi chú nên chuyển | `1. In 2005 she began to (a) ___ a cemetery. Many (b) ___ were found.` |
 | `Bố cục:` (v81) | bố cục Task: `xếp dọc` / `ảnh trái` / `ảnh phải` / `ảnh trong bài đọc`. Chỉ ghi khi muốn khác Tự động | `Bố cục: ảnh trái` |
 | `Ảnh: A; B` (v81) | hai ảnh chung đứng cạnh nhau, cùng cỡ (chỉ dùng với Xếp dọc) | `Ảnh: phòng ngủ; phòng khách` |
 | `Khung từ ảnh:` (v81) | khung từ bằng ảnh (ô ảnh cùng cỡ, nhãn A B C, tên ảnh in dưới); không trộn chữ và ảnh | `Khung từ ảnh: apple, banana, cherry` |

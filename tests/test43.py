@@ -4,13 +4,13 @@ from playwright.sync_api import sync_playwright
 ok=True
 def chk(n,c,i=''):
     global ok; print(('PASS ' if c else 'FAIL ')+n, i); ok = ok and bool(c)
-MD=open('/home/claude/WS-Editor/tests/md/phieu7.md',encoding='utf8').read()
+MD=open('/home/claude/WS-Editor/tests/md/phieu7-bai-doc-co-cho-trong.md',encoding='utf8').read()
 with sync_playwright() as p:
     b=p.chromium.launch(); pg=b.new_page(viewport={'width':1440,'height':1000}); errs=[]
     pg.on('console', lambda m: errs.append(m.text) if m.type=='error' and 'ERR_' not in m.text and 'fonts' not in m.text else None); pg.on('pageerror', lambda e: errs.append('PAGEERR '+str(e)))
     pg.goto('file://'+sys.argv[1]); pg.wait_for_timeout(1300)
     J=pg.evaluate("md=>{const J=readMd(md); return J.err?J:{n:J.tasks.map(r=>r.notes),t:J.tasks.map(r=>({list:r.t.content.list,items:(r.t.content.items||[]).length,nlab:r.t.layout.nlab,row:(r.t.answer.params||{}).row}))}}",MD)
-    chk('MD đọc được, 4 Task, không ghi chú', 't' in J and len(J['t'])==4 and all(not x for x in J['n']), J)
+    chk('MD đọc được, 4 Task (Task 1 có ghi chú nên chuyển thành câu hỏi)', 't' in J and len(J['t'])==4 and not any(J['n'][1:]) and len(J['n'][0])==1, J)
     chk('Task 1: bài đọc có ___, không có dòng câu', J['t'][0]['list']==False and J['t'][0]['items']==0)
     chk('Task 2: Số câu a b c', J['t'][1]['nlab']=='a' and J['t'][1]['items']==8)
     chk('Task 4: T/F cùng hàng', J['t'][3]['row']==True)

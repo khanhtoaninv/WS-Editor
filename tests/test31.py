@@ -10,7 +10,7 @@ with sync_playwright() as p:
     pg.on('console', lambda m: errs.append(m.text) if m.type == 'error' and 'ERR_' not in m.text and 'font' not in m.text.lower() else None)
     pg.goto(F); pg.wait_for_timeout(1200)
     E = pg.evaluate
-    chk('badge v100', pg.inner_text('#verBadge').strip() == 'v100')
+    chk('badge v101', pg.inner_text('#verBadge').strip() == 'v101')
     ids = E("ws.tasks.map(t=>t.id)")
     def opn(tid): pg.click(f'#tree .tnode[data-sel=task][data-id={tid}]'); pg.wait_for_timeout(120)
     S = "[...document.querySelectorAll('#tree .ed .sec')]"

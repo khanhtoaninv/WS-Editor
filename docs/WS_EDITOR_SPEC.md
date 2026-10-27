@@ -765,3 +765,14 @@ Nguồn: phiếu thật "Unit 6 – Lesson 1" (`tests/real/phieu7.pdf`), MD do A
 - **Chưa làm (ghi để biết):** tiêu đề bài đọc căn giữa như PDF (hiện in đậm, căn trái); thụt đầu đoạn / căn đều hai bên của bài đọc; hiện số Task theo PDF (PDF đánh 1, 2, 4, 5, app đánh lại 1–4); ảnh thật (app chỉ có khung giữ chỗ theo tên).
 - Kiểm thử: `tests/test43.py`.
 
+## 33. Điền từ vào đoạn văn bằng câu hỏi; ô câu nhiều dòng; T/F căn dọc (v101, 27/10/2026)
+Nguyên tắc (người dùng): **mọi thứ cần đáp án đều là câu hỏi; bài đọc chỉ là chữ để đọc.**
+- **Điền từ vào đoạn văn = Q1 (không thêm dạng thứ 13):** bài đọc (G2) chỉ giữ tiêu đề; mỗi đoạn là một câu Q1 chứa nhiều `___` (nhãn `(a)` giữ trong chữ). Chỗ trống nằm trong chữ là chỗ trả lời: khi mọi câu có `___` (kể cả Task có bài đọc) `answer.attach` là `inline` (`attachOpts`, `normAnswer`), không thêm dòng kẻ sau câu; câu Task có bài đọc vẽ bằng `qtext` (chỗ trống thành ô điền). Dòng cuối câu kết thúc bằng chỗ trống là ô `fl` kéo hết dòng.
+- **Bộ đọc:** `(a) ___ … (b) ___` không bị hiểu là lựa chọn (`splitOptsLine`); dòng `a. ___ nghĩa` không bị hiểu là lựa chọn của câu trên (`OPT_LINE`): 8 dòng nối từ thành 8 câu. Nhãn chữ a–h vẫn cần `Số câu: a b c` (v100).
+- **Phiếu cũ** có `___` trong bài đọc: vẫn đọc và dàn trang như v100; bảng nhận diện ghi chú "nên chuyển thành câu hỏi".
+- **Cột trái, mục Câu hỏi:** ô chữ câu là ô nhiều dòng cho mọi dạng (kéo giãn được, dòng trống = sang đoạn, có thanh B I U ___ {a|b}); đáp án từng chỗ trống mang nhãn `(a)`… (`gapLabs`), không có nhãn thì `(1)(2)…`.
+- **Đúng/Sai cùng hàng:** bảng Đáp án (bấm ô T/F) có **Căn dọc cả khối: Trên / Giữa / Dưới** (`params.rowv`, mặc định Giữa; áp cho số câu, chữ câu, ô T/F của mọi câu) và **T / F cách lề phải (mm)** (`params.tfx`, 0 = sát lề phải; tăng thì T/F dịch về phía câu).
+- **Không đổi:** luật cắt trang. Task 3 phiếu 7 không lên trang 1 vì mảnh đầu ≈ 41 mm + 6 mm giữa các Task > chỗ trống 41 mm.
+- Chưa làm: tiêu đề bài đọc căn giữa; căn lề chữ ô câu hỏi (người dùng nói để sau); thanh kéo (drag) nhóm T/F; ô nhập đáp án riêng theo từng chỗ trống trong file MD (`## Đáp án` của câu nhiều chỗ trống chưa kiểm).
+- Kiểm thử: `tests/test44.py` (và test43 cập nhật theo MD phiếu cũ).
+

@@ -1,6 +1,6 @@
 # Kế hoạch v101 (27/10/2026): sau khi thử phiếu 7 với v100
 
-Nguồn: phản hồi của người dùng sau khi nạp MD phiếu 7 (v100). Trạng thái: **chờ người dùng nói "ok làm"** và trả lời các câu hỏi ở mục E.
+Nguồn: phản hồi của người dùng sau khi nạp MD phiếu 7 (v100). Trạng thái: **đã làm xong (v101)**. Hai câu ở mục E lấy đề xuất (giữ phiếu cũ đọc được; ô nhiều dòng cho mọi dạng, trừ dòng chữ giữa câu và câu có ảnh).
 
 ## A. Phân loại: code hay prompt
 | # | Vấn đề | Lớp lỗi | Việc |

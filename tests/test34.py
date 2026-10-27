@@ -67,7 +67,7 @@ with sync_playwright() as p:
     chk('Cấu hình không còn "Khối của bài"', 'Khối của bài' not in E("document.querySelector('#tree .ed .sec[data-sec=cfg]').innerText"))
     sh = E("document.querySelector('#tree .ed .sec[data-sec=g3] .subh').innerText")
     chk('G3 tiêu đề "Câu hỏi", không số câu, có B I U ___ {a|b}', sh.startswith('Câu hỏi') and 'có chỗ trả lời' not in sh and E("document.querySelectorAll('#tree .ed .g3tb [data-tx]').length") == 5, sh)
-    inp = pg.locator('#tree .ed input[data-k="it.0.text"]'); inp.click(); inp.press('End')
+    inp = pg.locator('#tree .ed [data-k="it.0.text"]'); inp.click(); inp.press('End')
     pg.locator('#tree .ed .g3tb [data-tx=gap]').click(); pg.wait_for_timeout(400)
     chk('thanh chèn: ___ vào ô câu đang gõ', E("ws.tasks.find(t=>t.id==='t4').content.items[0].text").endswith('___'))
     pg.locator('#tree .ed .sec[data-sec=g3] .subh .xb').click(); pg.wait_for_timeout(300)
