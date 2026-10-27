@@ -92,8 +92,11 @@ Tiếp bước 3 theo mục 8.3.
 | 3 mảnh 4 | Popup "+ Task" / "+ Phiếu" (`#libDlg`) và hộp "Dán nhiều dòng" (`#pasteDlg`) → `app/src/ui/ImportDlg.tsx`. React giữ khung hộp + các cờ (thẻ đang chọn, nút hiện / tắt / chữ nút); nội dung sinh theo dữ liệu (thư viện dạng bài, xem trước, bảng nhận diện) vẫn do legacy dựng HTML đặt vào ô rỗng | so tay 13 phép đo giống hệt v106 |
 | 3 mảnh 5 | Hộp ảnh (`#genDlg`) → `app/src/ui/GenDlg.tsx` (khung hộp + mở / đóng) | so tay 7 phép đo giống hệt v106 |
 | 3 mảnh 6 | Khung app: `.app`, ba cột `#tree` / `#stage` / `#insp`, ô đo `#measure` → `app/src/ui/AppShell.tsx`. `index.html` giờ chỉ còn `<head>`, các ô gắn React và vài `<input type=file>` ẩn | mảnh 4+5+6 trên bản cuối: 120/120; 49/49; audit 0 lỗi |
+| 3 mảnh 7 | Cột phải (inspector) → `app/src/ui/insp/` (`parts.tsx` ô thông số, `panels.tsx` mọi panel, `Inspector.tsx`). Các panel v81–v85 "vá chồng" bằng `.replace()` đã gộp lại thành một bản JSX. Bỏ ~280 dòng HTML cũ trong legacy | `tests/chuan/giaodien.py` (mới): so DOM cột phải + cột trái với v106 ở 2.497 trạng thái chọn (24 phiếu × mọi Task / khối / câu, mục cột trái đóng và mở, đánh dấu ảnh, chọn nhiều) → 2497/2497 |
+| 3 mảnh 8 | Cột trái (danh sách Task + khung soạn) → `app/src/ui/tree/Tree.tsx`. `edHtml` gốc + 4 lớp vá v81–v84 gộp thành `TaskEditor`. Phần đọc lại khi đang gõ (thẻ mô tả, mã QR, tóm tắt mục, tên Task, số câu có đáp án) là component nghe `liveRev`, ô đang gõ không bị dựng lại. Bỏ ~230 dòng HTML cũ | giaodien 2497/2497 |
+| 3 mảnh 9 | Khung các trang A4 (trang, đường dóng, chân trang, dòng "còn trống") → `app/src/ui/stage/Pages.tsx`. HTML từng Task vẫn từ `renderTask`; chọn (`.sel`, `.cur`) và tay kéo legacy gắn vào DOM Task ngay sau khi React vẽ | chuẩn 120/120; giaodien 2497/2497; bộ test cũ: xem 8.4 |
 
-Badge bản dựng Vite: **v108** (v107 = cùng tính năng v106, khác cách dựng; v108 = sửa a/b/c thẳng cột, spec mục 39, sửa ở cả hai bản). Đường chuẩn giờ là `tests/chuan/v108/`.
+Badge bản dựng Vite: **v109** (= ba cột là React, không đổi tính năng; spec mục 40). Trước đó **v108** (v107 = cùng tính năng v106, khác cách dựng; v108 = sửa a/b/c thẳng cột, spec mục 39, sửa ở cả hai bản). Đường chuẩn giờ là `tests/chuan/v108/`.
 
 ### 8.2 Cách làm đã chốt khi chuyển một mảnh giao diện sang React
 1. Thay khối HTML trong `app/index.html` bằng chỗ gắn `<div id="r-…" style="display:contents">` (không thêm hộp bọc, CSS grid / flex giữ nguyên).
@@ -105,13 +108,17 @@ Badge bản dựng Vite: **v108** (v107 = cùng tính năng v106, khác cách d�
 7. Hàm cũ chuyển sang `src/ui` mà test gọi trên `window` (vd. `askConfirm`) → gắn lại trong `src/ui/mount.tsx`.
 8. Mỗi mảnh: `npm run typecheck`, `npm run build`, `python3 tests/chuan/chuan.py so ws-editor.html`, `bash tests/run_all.sh ws-editor.html ws-editor-prototype.html`, so ảnh mảnh đó với v106. **Không build ra `ws-editor.html` khi test đang chạy trên nó** (dùng `WS_OUT=…`).
 
-### 8.3 Còn lại của bước 3 (theo thứ tự đề xuất)
-Khung app và mọi hộp thoại đã là React. Còn lại là **nội dung ba cột**, hiện vẫn do bộ dựng HTML của legacy sinh ra rồi đặt vào ô rỗng của `AppShell`:
-- Inspector (cột phải, `renderInspector` + các panel) — khoảng 600 dòng.
-- Cột trái soạn bài (`renderTree`, `edHtml` của 12 dạng Q) — phần lớn nhất, khoảng 1.000 dòng, nhiều hàm bị "vá" chồng qua các bản v81–v85.
-- Trang xem trước A4 (`drawPages`), tay kéo, đường dóng. HTML từng Task do `core/layout.renderTask` dựng: **nên giữ nguyên chuỗi HTML này** (đường chuẩn so đúng từng phần tử), chỉ chuyển phần khung trang, tay kéo và chọn.
-Cách chuyển từng phần: tách một khối HTML ra JSX, giữ y nguyên class / data-*; sau mỗi khối chạy lại đường chuẩn + test.
+### 8.3 Còn lại của bước 3
+Toàn bộ giao diện đã do React dựng. Cách đang dùng cho ba cột: legacy vẫn giữ **trạng thái và xử lý sự kiện** (bấm, gõ, kéo đều bắt trên `#tree` / `#insp` / `#stage` bằng `data-act`, `data-eact`, `data-k`…); hàm `renderX()` cũ chỉ còn đăng số lần dựng (`inspRev`, `treeRev`, `pageView`), React dựng lại cả cột với `key` mới (giống innerHTML cũ, ô nhập dùng `defaultValue`). Hàm / hằng của legacy mà JSX cần đọc qua `app/src/ui/legacyApi.ts` (`L`, legacy điền ở cuối `app.js`; trạng thái và hàm hay bị bọc lại là getter).
+Còn lại (không gấp, không đổi giao diện):
+- Chuyển trạng thái chọn (`sel`, `multi`, `openTask`, `SECT`) và các hàm xử lý sự kiện từ legacy sang kho Zustand / component, để bỏ dần `L` và dựng lại từng phần thay vì cả cột.
+- Vài chỗ legacy còn sửa thẳng DOM do React dựng (chỉ thuộc tính / chữ, an toàn vì cả cột dựng lại mỗi lần): `tidyHints`, `syncSec`, ô `etka`, `#xcount`, lớp chọn và tay kéo trên trang.
 - Khi hết legacy: chuyển dần `core/*.js` sang `.ts` có kiểu.
+
+### 8.3b Bẫy khi chuyển ba cột
+- Module `core` không được đọc DOM lúc nạp (vd `document.getElementById('measure')`): React import core trước khi khung app được dựng → `measEl()` đọc lúc gọi.
+- Bọc mỗi cột trong `Guard` (`app/src/ui/Guard.tsx`): một component lỗi không làm trắng cả app (React gỡ cả cây khi lỗi không được bắt).
+- `tests/chuan/giaodien.py <mới.html> <cũ.html> [số phiếu]` so DOM cột phải + cột trái; bỏ qua có chủ ý: thuộc tính `selected` của `<option>` (React ghi thuộc tính, v106 chỉ có `.selected`, giá trị vẫn so) và style nút chọn font (v106 hỏng).
 
 ### 8.4 Lưu ý về test
 - `test34` và `test45` **chập chờn** (phụ thuộc thời gian chờ): hỏng khi máy bận, chạy lại đạt — ở cả v106 lẫn bản Vite. Khi hỏng, chạy riêng lại trước khi kết luận.

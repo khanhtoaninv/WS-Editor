@@ -34,8 +34,8 @@ with sync_playwright() as p:
         task('a2','four16',[['farm animals','a football match','a long walk','the school'],['farm animals','a football match','a long walk','the school']]),
         task('a3','long',[['She was happy that Max helped her.','She did not like cheese.','She wanted to go home.']]*2)]); pg.wait_for_timeout(800)
     cls=pg.evaluate("[...document.querySelectorAll('.task')].map(t=>t.querySelector('.a4').className.replace('a a4 ',''))")
-    chk('3 từ ngắn → Ngang; 4 cụm vừa → Tự xuống dòng; câu dài → Dọc', cls[0].strip()=='h' and cls[1].strip()=='fl' and cls[2].strip()=='v', cls)
-    # không gãy chữ trong ô ở Tự xuống dòng
+    chk('3 từ ngắn → Ngang; 4 cụm vừa → cột co theo chữ (hc, v108: Tự động không chọn Tự xuống dòng nữa); câu dài → Dọc', cls[0].strip()=='h' and cls[1].strip()=='hc' and cls[2].strip()=='v', cls)
+    # không gãy chữ trong ô (cột co theo chữ)
     br=pg.evaluate("""(()=>{const t=document.querySelectorAll('.task')[1];return [...t.querySelectorAll('.opt > span')].every(s=>s.getBoundingClientRect().height<28)})()""")
     chk('ô tick 4 lựa chọn: mỗi lựa chọn một dòng chữ', br)
     pg.locator('.task').nth(1).screenshot(path='/tmp/claude-0/-home-claude/73331d6b-745e-5c34-86b9-740fbb545e58/scratchpad/fl.png')

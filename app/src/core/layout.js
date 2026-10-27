@@ -751,9 +751,10 @@ export function place(L, g1, main) {
 
 
 /* ================= Đo & phân trang ================= */
-export const meas = document.getElementById('measure');
+// ô đo ẩn #measure (React dựng): tìm khi cần, không lấy lúc nạp module (lúc đó React chưa gắn)
+export const measEl = () => document.getElementById('measure');
 
-export function measure(t, frag) { meas.innerHTML = renderTask(t, frag); return meas.firstElementChild.getBoundingClientRect().height; }
+export function measure(t, frag) { const meas = measEl(); meas.innerHTML = renderTask(t, frag); return meas.firstElementChild.getBoundingClientRect().height; }
 
 export function units(t) {
   const L = layoutOf(t), c = t.content, k0 = ck(t), chunk = (n, k) => { const u = []; for (let i = 0; i < n; i += k) u.push([i, Math.min(n, i + k) - 1]); return u; };
@@ -829,7 +830,7 @@ export function paginate() {
       if (s < U.length) newPage();
     }
   });
-  meas.innerHTML = '';
+  measEl().innerHTML = '';
   return { pages, diags, H };
 }
 

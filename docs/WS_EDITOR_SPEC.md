@@ -822,3 +822,10 @@ Người dùng thử bản React báo: Chọn A/B/C các đáp án không thẳn
 - **Ngang có Căn lề** (`params.align` trái / giữa / phải, cột co theo chữ): trước đây mỗi câu tự tính độ rộng cột nên lệch nhau; giờ dùng chung độ rộng cột cả Task như `hc`.
 - **Cách làm cột chung:** mỗi ô lựa chọn kèm `<span class="osz" aria-hidden>` chứa bản ẩn mọi lựa chọn cùng cột trong Task (`height:0; visibility:hidden`), nên ô rộng bằng lựa chọn dài nhất cột đó mà không thêm chiều cao. Ngang / `hc` lấy số cột theo câu nhiều lựa chọn nhất.
 - Đổi bố cục trên mẫu: `phieu9`, `phieu14`, `dieu-chinh-v80` (từ xuống dòng tự do sang cột chung, cùng số dòng); `samples/ws-demo-day-du.json` Task tick 5 lựa chọn dài (sang 2 cột, thêm 1 dòng). Đường chuẩn lập lại: `tests/chuan/v108/` (thay `v106/`).
+
+## 40. Ba cột là React (v109, 27/10/2026)
+Không đổi tính năng. Cột phải (thông số), cột trái (danh sách Task + khung soạn) và khung các trang A4 giờ do React dựng (`app/src/ui/insp/`, `app/src/ui/tree/`, `app/src/ui/stage/`), giữ nguyên thẻ, class, data-*, chữ của v106. HTML bên trong mỗi Task trên trang vẫn do `core/layout` `renderTask` sinh (dùng chung với bộ đo / xếp trang).
+Khác biệt nhỏ so với v106 (đều là sửa lỗi hiển thị):
+- Nút chọn font trong panel Phiếu hiện đúng font của nút (v106: dấu `"` trong tên font làm hỏng thuộc tính style).
+- Khi đang gõ, tên Task ở danh sách giữ đúng nhãn dạng bài như lúc vừa mở (v106 đổi sang tên kiểu cũ `typeName` cho tới lần dựng lại); số "x/y câu có đáp án" cập nhật ngay khi gõ, không đợi rời ô.
+

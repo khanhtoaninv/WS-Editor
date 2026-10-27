@@ -1,11 +1,12 @@
 import { publish, useUi } from '../ui/store';
+import { L } from '../ui/legacyApi';
 import { IMP_DEF } from '../ui/ImportDlg';
 import { actions } from '../ui/actions';
 import { askConfirm } from '../ui/Dialogs';
 import { toast } from '../ui/Toast';
 import { ws, setWs } from '../core/state.js';
 import { AGE, AL, ANS_DEF, CELL_NAME, F01, FEAT_NAME, FONTS, FORM_NAME, GAPLAB, GAPP, GT_SIZE, IMP_MAX, IMP_MAX_CH, KIND_A, KIND_NAME, L2KIND, LAYOUT_DEF, MINS, PK_STAR, PRESETS, QN, RECIPES, SCHEMA, SIZES, alOpts, attachOpts, choiceTexts, ck, ckOf, clone, ensureIds, ensureRowIds, featOf, featVal, fillSheet, fillTask, gapCount, hasChoiceMarkup, hasMarkup, isFreeW, isGridTbl, isObj, its, keyParts, kindsOk, migTask, newId, normAnswer, pkGroups, pkMig, pkSrc, pkToggle, prune, qDerived, qTidy, recipeMatch, sigOk, sv, tidy, toForm } from '../core/model.js';
-import { A2MM, AI, AR_OPTS, CHOICE_RE, CONTENT_H, FSZ, G1_TOP, IW8, JS, MM, PH, PHC, SAMPLE, SAMPLE2, T, T7CW, TA, TBL_DEF, TBL_ROW_MM, TL, a2cfg, a2end, a2inline, a4autoDef, a4autoMax, a4dir, alignOf, ans, ans0, ansI, arLabel, arNum, autoLayout, body, body0, body0n, cellCfg, cellDirOf, cellFr, cellSplit, ci, colsDefault, colsOf, colsRange, crossCell, crossHtml, er, esc, exFill, exPick, exPicks, fitOf, fixedImg, fixesFor, fontPt, frOf, frameH, g1Of, g1bFit, g1bFr, g3row, g4Html, gapOf, gtBody, gtHtml, gtInline, gtKeys, gtN, imgArOf, imgStyle, inheritedSpacing, inlChoice, ino, inoN, inoT, isColI, isJoined, keyGaps, layoutOf, layoutReasons, leadIntro, leadOf, leadText, meas, measure, migrate, natAr, nlab, ownFit, pOf, paginate, pairPerm, passCut, passInline, passageHtml, passageParas, pic, pkB, pkPre, place, q2end, qFirst, qOf, qReal, qnum, qrHtml, qrInner, qrUrl, qtext, qtext0, qwho, range, ratioOf, renderTask, rich, rmeta, sheetSpacing, sizeKey, spacingOf, srcOf, t7cw, taOf, tblAr, tblOpts, tpic, tplOf, units, withMarks, xOfKey } from '../core/layout.js';
+import { A2MM, AI, AR_OPTS, CHOICE_RE, CONTENT_H, FSZ, G1_TOP, IW8, JS, MM, PH, PHC, SAMPLE, SAMPLE2, T, T7CW, TA, TBL_DEF, TBL_ROW_MM, TL, a2cfg, a2end, a2inline, a4autoDef, a4autoMax, a4dir, alignOf, ans, ans0, ansI, arLabel, arNum, autoLayout, body, body0, body0n, cellCfg, cellDirOf, cellFr, cellSplit, ci, colsDefault, colsOf, colsRange, crossCell, crossHtml, er, esc, exFill, exPick, exPicks, fitOf, fixedImg, fixesFor, fontPt, frOf, frameH, g1Of, g1bFit, g1bFr, g3row, g4Html, gapOf, gtBody, gtHtml, gtInline, gtKeys, gtN, imgArOf, imgStyle, inheritedSpacing, inlChoice, ino, inoN, inoT, isColI, isJoined, keyGaps, layoutOf, layoutReasons, leadIntro, leadOf, leadText, measEl, measure, migrate, natAr, nlab, ownFit, pOf, paginate, pairPerm, passCut, passInline, passageHtml, passageParas, pic, pkB, pkPre, place, q2end, qFirst, qOf, qReal, qnum, qrHtml, qrInner, qrUrl, qtext, qtext0, qwho, range, ratioOf, renderTask, rich, rmeta, sheetSpacing, sizeKey, spacingOf, srcOf, t7cw, taOf, tblAr, tblOpts, tpic, tplOf, units, withMarks, xOfKey } from '../core/layout.js';
 import { A_SHORT, BARE_RE, BOX, BRX, HEADX, HEAD_RE, LABS, MD_EX, MD_FIELD, MD_FKEY, MD_FORM, MD_GT, MD_KIND, MD_KNAME, MD_LABEL, MD_RULE, MD_SCAF, MD_SECT, MD_SKIP, MD_TLAY, NUM_RE, OPT_LINE, PRESET_NAME, QM_C, QM_L, QORDER, T1FAM, TN, TN_OLD, VERB_RE, applyRecipe, boxSplit, brIn, brOut, crossLines, crossParse, descOf, dupGapKind, fmtCell, impSheetObj, inlineOpts, isHead, isInstr, looksJson, mdForm, mdTask, normGap, optStr, parseCell, parseTask, q2cfg, q2set, qCmd, qReasons, qStyles, qmC, qmEq, qmForm, qmHead, qmList, qmPick, qmRest, qmRestore, qmRows, qmUnits, readJson, readMd, recipeById, setHasAns, setKind, setQ, setQMem, sheetToMd, splitOptsLine, stripNum, t1Old, taskToMd, tnOf, tnReasons, tnTarget, toggleField, withoutGt } from '../core/md.js';
 
 const SPLIT_MIN = 80;                 // mm trống tối thiểu để cắt bài thay vì đẩy sang trang mới
@@ -100,19 +101,19 @@ function scaleNow() {
   return zoom == null ? Math.max(.3, fit) : zoom;
 }
 const FILL_MAX = 8; // mm thêm tối đa vào mỗi khoảng giữa hai Task khi "Lấp đầy trang"
+let pageN = 0;
 function drawPages(res) {
   const n = res.pages.length, s = scaleNow(), sh = sheetSpacing(), age = AGE[ws.age];
   stage.style.setProperty('--s', s);
   const A = 14 + sh.padTask, B = A + fontPt() * 0.3528 * 1.35 + 2.5, C = 210 - 14 - sh.padTask;
-  const gd = guides ? `<div class="guides" aria-hidden="true"><i style="left:${A}mm"></i><i class="b" style="left:${B.toFixed(2)}mm"></i><i style="left:${C}mm"></i></div>` : '';
-  stage.innerHTML = res.pages.map((p, i) => {
+  const gd = guides ? [A, B.toFixed(2), C] : null;
+  publish({ pageView: { rev: ++pageN, title: ws.title, guides: gd, pages: res.pages.map((p, i) => {   // khung trang là React (src/ui/stage/Pages.tsx)
     const free = Math.max(0, (res.H - p.used) / MM), over = p.items.some(x => x.over), k = p.items.length;
     const extra = ws.fill && i < n - 1 && k > 1 ? Math.min(FILL_MAX, free / (k - 1)) : 0;
     const fill = Math.min(100, (p.used + extra * (k - 1) * MM) / res.H * 100);
-    const tasks = p.items.map((x, j) => { const h = renderTask(x.t, x.frag, j ? gapOf(x.t) + (isJoined(x.t) ? 0 : extra) : 0); return x.over ? h.replace('class="task ', 'class="task over ') : h; }).join('');
-    return `<div class="pg-wrap"><div class="pg-scale"><div class="page" data-page="${i}"><div class="flow">${tasks}</div>${gd}<div class="pfoot"><span>${esc(ws.title)}</span><span>Trang ${i + 1}/${n}</span></div></div></div>` +
-      `<div class="pstat ${over ? 'bad' : ''}">Trang ${i + 1} · ${over ? 'có Task tràn trang' : `còn trống ${Math.round(Math.max(0, free - extra * (k - 1)))} mm`}<span class="bar"><i style="width:${fill}%"></i></span></div></div>`;
-  }).join('');
+    const html = p.items.map((x, j) => { const h = renderTask(x.t, x.frag, j ? gapOf(x.t) + (isJoined(x.t) ? 0 : extra) : 0); return x.over ? h.replace('class="task ', 'class="task over ') : h; }).join('');
+    return { html, over, free: Math.round(Math.max(0, free - extra * (k - 1))), fill };
+  }) } });
   markSelection(); addHandles(); resChanged = checkRes() || resChanged;
 }
 let resChanged = false;
@@ -441,7 +442,6 @@ function addHandles() {
 /* ================= Mô hình container ================= */
 // Mỗi thứ chọn được là một container. Loại container quyết định panel, tay kéo, thông số và cách "Áp cho…".
 const GNAME = { GT: 'Khối tự do', G0: 'Tiêu đề', G1: 'Ảnh', G2: 'Nội dung', G3: 'Đáp án', G4: 'Khung từ' };
-const TLS = { T1: 'Xếp dọc', T2: 'Ảnh trái', T3: 'Ảnh phải', T4: 'Hai cột', T5: 'Lưới', T6: 'Nội dung', T7: 'Nối', T8: 'Bao chữ', T9: 'Bảng' };
 const cd = c => `<small class="cd">${c}</small>`;
 function kindOf(t, s) {
   if (!s || s.type === 'sheet') return 'sheet';
@@ -616,19 +616,13 @@ function hasOverride(t) { return ovOf(t, { type: 'task', id: t.id }) || Object.k
 const isOnSel = s2 => [sel, ...multi].some(x => nodeKey(x) === nodeKey(s2));
 // Task đang mở trong cột trái: chỉ một Task mở một lúc (accordion). Chuyển sang Task khác thì Task cũ tự thu gọn.
 let openTask = null, lastSelTask = null, openedRendered = null;
+let treeN = 0;
 function renderTree() {
   const tree = document.getElementById('tree');
   if (sel.type !== 'sheet') { if (sel.id !== lastSelTask) openTask = sel.id; lastSelTask = sel.id; }
   if (openTask && openTask !== sectFor) sectReset(openTask);
   if (sel.type === 'group' && sel.id === openTask && G_SEC[sel.g]) { const tt = ws.tasks.find(x => x.id === openTask), kk = tt && secOfSel(tt, sel); if (kk && !SECT[kk]) sectOne(kk); }   // ảnh của từng câu (group G1 nhưng không có ảnh chung) thuộc mục G3   // v83: chọn khối trên trang thì cột trái mở đúng mục
-  let h = `<div class="ttools"><button class="btn pri" data-lib="1" title="Thêm Task vào cuối phiếu: từ mẫu có sẵn, hoặc từ file / dán (JSON, MD, chữ)">+ Task</button><button class="btn" data-newsheet="1" title="Tạo phiếu mới: từ file JSON / MD / chữ, hoặc phiếu trống. Thay phiếu đang mở sau khi xác nhận.">+ Phiếu</button></div><button class="tnode ${sel.type === 'sheet' ? 'on' : ''}" data-sel="sheet"><b>Phiếu</b><span class="tag">${ws.tasks.length} Task</span></button><ul class="tks">`;
-  for (const t of ws.tasks) {
-    const open = openTask === t.id, on = isOnSel({ type: 'task', id: t.id });
-    h += `<li class="tk ${open ? 'open' : ''}${open && sel.type !== 'sheet' && sel.id === t.id ? ' cur' : ''}" data-tk="${t.id}"><div class="tkh"><button class="tnode ${on ? 'on' : open ? 'opn' : ''}" data-sel="task" data-id="${t.id}" aria-expanded="${open}"><span class="chev" title="${open ? 'Thu gọn Task' : 'Mở Task để soạn'}">▶</span><span class="n${t.part ? ' pt' : ''}">${t.number}${t.part || ''}</span><span class="tnm">${esc(taskLabel(t))}</span>${hasOverride(t) ? '<span class="ovmark" title="Có chỉnh tay"></span>' : ''}</button></div>`;
-    if (open) h += `<div class="tkb">${edHtml(t)}</div>`;
-    h += '</li>';
-  }
-  tree.innerHTML = h + '</ul>';
+  publish({ treeRev: ++treeN });   // cột trái là React (src/ui/tree): dựng lại cả cột như innerHTML cũ
   if (openTask !== openedRendered) { openedRendered = openTask; const el = tree.querySelector('.tk.open'); if (el) el.scrollIntoView({ block: 'start' }); }
 }
 
@@ -645,233 +639,17 @@ const ICON = {
   T9: '<rect x="2" y="2" width="32" height="4"/><rect class="i1" x="2" y="8" width="32" height="4"/><rect x="2" y="12" width="10" height="15"/><rect x="12" y="12" width="22" height="5"/><rect x="12" y="17" width="22" height="5"/><rect x="12" y="22" width="22" height="5"/>'
 };
 const layIcon = L => `<svg viewBox="0 0 36 29" fill="none" stroke="currentColor" stroke-width="1">${ICON[L]}</svg>`;
-const isSet = v => v !== undefined && v !== null && v !== '';
 const fmtN = v => String(v).replace('.', ',');
-// Ô thông số chuẩn: nhãn, điều khiển, chấm "đã chỉnh tay", nút ↺ về tự động
-function fld(p, label, ctrl, man, def, cls = '') {
-  return `<div class="fld ${cls} ${man ? 'ov' : ''}" data-param="${p}"><span class="fl">${label}</span><span class="fc">${ctrl}</span><button class="rst" data-act="rst" data-p="${p}" ${man ? '' : 'hidden'} title="Về tự động${isSet(def) ? ` (${fmtN(def)})` : ''}" aria-label="Về tự động">↺</button></div>`;
-}
-function fNum(p, label, val, o) {
-  return fld(p, label + (o.unit ? ` (${o.unit})` : ''), `<input type="number" data-pv="${p}" min="${o.min}" max="${o.max}" step="${o.step || 1}" placeholder="${isSet(o.def) ? fmtN(o.def) : 'tự động'}" value="${isSet(val) ? val : ''}" aria-label="${esc(label)}">`, isSet(val), o.def, 'n');
-}
-function fSeg(p, label, val, opts, def, o = {}) {
-  const cur = isSet(val) ? val : def, dn = (opts.find(x => String(x[0]) === String(def)) || [])[1];
-  return fld(p, label, `<span class="seg wrapseg">${opts.map(([v, n, dis]) => `<button data-act="set" data-p="${p}" data-v="${v}" data-def="${def}" class="${String(cur) === String(v) ? 'on' : ''}" ${dis ? `disabled title="${esc(dis)}"` : ''}>${n}</button>`).join('')}</span>${o.hint ? `<span class="hint fh">${o.hint}</span>` : ''}`, isSet(val), dn, 's');
-}
-function fRange(p, label, val, o) {
-  const v = isSet(val) ? val : o.def, f = o.fmt || (x => x);
-  return fld(p, label, `<span class="rng"><input type="range" data-pr="${p}" data-def="${o.def}" data-fmt="${o.fmtKey || ''}" min="${o.min}" max="${o.max}" step="${o.step || 5}" value="${v}" aria-label="${esc(label)}"><output>${f(v)}</output></span>`, isSet(val), f(o.def), 's');
-}
 const sec = (key, name, html) => html ? `<section class="psec" data-sec="${key}"><h3>${name}</h3>${html}</section>` : '';
-function crumb(t, s) {
-  // Chỉ liệt kê cấp cha (bấm để lên); tên mục đang chọn nằm ở tiêu đề bên dưới
-  let h = `<div class="crumb"><button data-sel="sheet">Phiếu</button>`;
-  if (s.type === 'task') return h + '</div>';
-  h += ` › <button data-sel="task" data-id="${t.id}">Task ${t.number}</button>`;
-  if (s.item) h += ` › <button data-sel="group" data-id="${t.id}" data-g="${s.g}">${GNAME[s.g]}</button>`;
-  return h + '</div>';
-}
-function autoSec(t, s, extra = '') {
-  const man = ovOf(t, s);
-  const sc = SCOPES.map(([v, n]) => [v, n, targetsOf(t, s, v).length]).filter(x => x[2]).map(([v, n, c]) => `<button data-act="scope" data-v="${v}" title="Áp cho ${c} container">${n} · ${c}</button>`).join('');
-  const st = (man ? '<button class="btn" data-act="auto">Về tự động</button>' : '') + extra;
-  return (st ? `<div class="stack">${st}</div>` : '') + (sc ? `<div class="field" style="margin-top:10px"><span>Áp thông số của container này cho</span><div class="seg wrapseg scopes">${sc}</div></div>` : '') + `${multi.length ? `<p class="hint">Đang chọn ${multi.length + 1} container cùng loại: mọi thay đổi áp cho tất cả.</p>` : ''}`;
-}
-function panel(t, s, title, o) {
-  return crumb(t, s) + `<h2>${title}</h2>` + (o.diag || '') + (o.top || '') + sec('size', 'Kích thước', o.size) + sec('align', 'Căn lề', o.align) + sec('content', o.cname || 'Nội dung', o.content) + sec('break', 'Ngắt trang', o.brk) + sec('auto', 'Về tự động', autoSec(t, s, o.autoExtra));
-}
-function diagBox(d) {
-  return `<div class="diag"><div>${esc(d.msg)}</div><div class="fixes">${(d.fixes || []).map(f => `<button class="btn" data-act="fix" data-id="${d.id}" data-v="${f.v}">${esc(f.label)}</button>`).join('')}${sel.type === 'sheet' ? `<button class="lnk" data-sel="task" data-id="${d.id}">Mở Task</button>` : ''}</div></div>`;
-}
-const diagFor = t => (lastRes ? lastRes.diags.filter(d => d.id === t.id) : []).map(diagBox).join('');
-function presetSeg(cur, act, withInherit) {
-  const opts = (withInherit ? [['', 'Theo phiếu']] : []).concat(Object.keys(PRESETS).map(k => [k, PRESET_NAME[k]]), [['free', 'Tự do']]);
-  return `<div class="seg wrapseg">${opts.map(([k, n]) => `<button data-act="${act}" data-v="${k}" class="${(cur || '') === k ? 'on' : ''}">${n}</button>`).join('')}</div>`;
-}
-function numRow(scope, key, val, inh, ov) {
-  const label = scope === 'task' && key === 'gapTask' ? 'Cách Task phía trên' : SP_LABEL[key];
-  return `<div class="fld n ${ov ? 'ov' : ''}" data-param="sp.${key}"><label class="fl" for="sp-${scope}-${key}">${label} (mm)</label><span class="fc"><input id="sp-${scope}-${key}" type="number" step="0.5" min="${MINS[key]}" value="${val}" data-sp="${scope}" data-key="${key}"></span><button class="rst" data-act="rst-sp" data-sp="${scope}" data-key="${key}" ${ov ? '' : 'hidden'} title="Về mặc định (${fmtN(inh)} mm)" aria-label="Về mặc định">↺</button></div>`;
-}
 // Thứ tự gợi ý các layout hợp lệ (Tự động đứng đầu); giai đoạn 3 thay bằng điểm số
 function rankLayouts(t) { const why = layoutReasons(t); return Object.keys(TL).filter(k => !why[k]); }
-function layoutPicker(t) {
-  const lay = t.layout, why = layoutReasons(t), locked = Object.keys(TL).filter(k => why[k]), auto = autoLayout(t), rk = rankLayouts(t);
-  const btn = (k, label, extra = '') => `<button class="lay ${lay.task === k ? 'on' : ''}" data-act="layout" data-v="${k}" title="${k === 'auto' ? 'Hệ thống tự chọn' : `${TL[k].name} (${k})`}">${layIcon(k === 'auto' ? auto : k)}<span>${label}</span>${extra}</button>`;
-  return `<h3>Bố cục bài</h3><div class="lay-grid">${btn('auto', 'Tự động', `<small class="cd">${TLS[auto]}</small>`)}${rk.map(k => btn(k, TL[k].name, cd(k) + (rkNote(t, k)))).join('')}</div>` +
-    (locked.length ? `<details class="why"><summary>Vì sao không dùng được (${locked.length})</summary><ul>${locked.map(k => `<li><b>${TL[k].name}</b> ${cd(k)}: ${esc(why[k])}</li>`).join('')}</ul></details>` : '');
-}
 let rkNote = () => '';
-function taskPanel(t, s) {
-  const L = layoutOf(t), lay = t.layout, m = rmeta(t, L), cr = colsRange(t, L), sp = spacingOf(t), inh = inheritedSpacing(t), wbR = t.wordBank && t.wordBank.placement === 'right', row = cellDirOf(t) === 'row';
-  let size = '', align = '', content = '';
-  if (ratioOf(t) != null && !row) size += fRange('split', L === 'T6' ? 'Tỉ lệ nội dung / khung từ' : L === 'T4' ? 'Tỉ lệ câu hỏi / đáp án' : 'Tỉ lệ ảnh / nội dung', lay.split, { min: m.range[0], max: m.range[1], step: 5, def: m.ratio, fmt: r => `${r} / ${100 - r}`, fmtKey: 'split' });
-  if (L === 'T7') { ['Cột trái', 'Cột nối', 'Cột phải'].forEach((n, i) => { size += fNum('cw.' + i, n, lay.cw ? lay.cw[i] : null, { min: 10, max: 80, step: 5, unit: '%', def: T7CW[i] }); }); size += fNum('rowH', 'Chiều cao hàng', lay.rowH, { min: 8, max: 40, unit: 'mm', def: 'tự động' }); }
-  if (cr) { const opts = []; for (let c = cr[0]; c <= cr[1]; c++) opts.push([c, c]); size += fSeg('cols', 'Số cột', lay.cols, opts, Math.min(cr[1], Math.max(cr[0], colsDefault(t, L)))); }
-  if (L === 'T5' && !row && colsOf(t) > 1) size += fNum('colGap', 'Khoảng cách giữa các cột', lay.colGap, { min: 2, max: 20, unit: 'mm', def: sp.itemGap });
-  if (L === 'T6' && !wbR) size += fNum('width', 'Độ rộng khối nội dung', lay.width, { min: 40, max: 100, step: 5, unit: '%', def: 100 });
-  if (ck(t) === 'dialogue') size += fNum('whoW', 'Cột tên người nói', lay.whoW, { min: 6, max: 40, unit: 'mm', def: 'tự động' });
-  if (L === 'T9') size += tblOpts(t).cross ? fNum('tbl.xc', 'Cỡ ô', (t.layout.table || {}).xc, { min: 6, max: 16, step: 1, unit: 'mm', def: 10 }) : tblSize(t);
-  size += `<h4>Khoảng cách</h4><div class="fld s ${t.spacing.preset ? 'ov' : ''}" data-param="sp.preset"><span class="fl">Mức khoảng cách</span><span class="fc">${presetSeg(t.spacing.preset, 'task-preset', true)}</span><button class="rst" data-act="task-preset" data-v="" ${t.spacing.preset ? '' : 'hidden'} title="Về theo phiếu" aria-label="Về tự động">↺</button></div>` + Object.keys(SP_LABEL).map(k => numRow('task', k, sp[k], inh[k], k in t.spacing.overrides)).join('');
-  if (L === 'T5' && !row) align += fSeg('align', 'Căn nội dung trong ô', lay.align, Object.entries(HA), 'left');
-  if (L === 'T6' && !wbR) align += fSeg('align', 'Vị trí khối nội dung', lay.align, Object.entries(HA), 'left', { hint: lay.width ? '' : 'Có tác dụng khi độ rộng nhỏ hơn 100%.' });
-  if (['T2', 'T3', 'T4', 'T7'].includes(L) || (L === 'T6' && wbR) || row) align += fSeg('valign', row ? 'Căn dọc các hàng (mặc định cho mọi ô)' : 'Căn dọc các cột', lay.valign, Object.entries(VA), ['T4', 'T7'].includes(L) || row ? 'center' : 'top');
-  align += fSeg('@ta', 'Căn lề Khối text', taOf(t), TA, 'left', { hint: 'Áp cho hướng dẫn, bài đọc / lời dẫn và khối tự do chữ (khối nào chỉnh riêng thì theo khối đó). Có mã QR file nghe thì lề phải của hướng dẫn là mép trái mã QR.' });   // v97
-  if (L === 'T9') align += tblOpts(t).cross ? fSeg('tbl.align', 'Vị trí ô chữ', (lay.table || {}).align, Object.entries(HA), 'center') : fSeg('tbl.align', 'Căn lề nội dung ô', (lay.table || {}).align, Object.entries(HA), 'left');
-  if (L === 'T1' && ck(t) === 'empty') align += `<p class="hint" data-na="align">Bài chỉ có ảnh: căn lề nằm ở ảnh.</p>`;
-  if (L === 'T5' && t.content.variant !== 'multi') content += fSeg('dir', 'Hướng ô (ảnh so với chữ)', lay.dir, [['col', 'Ảnh trên'], ['row', 'Ảnh trái']], dirDefault(t));
-  if (L === 'T9') content += tblKind(t) + (!tblOpts(t).cross && (t.content.rows || []).some(r => r.cells.some(v => v && (v.ans != null || v.ok))) ? fSeg('tbl.key', 'Hiện đáp án (bản giáo viên)', (t.layout.table || {}).key, [[true, 'Hiện'], [false, 'Ẩn']], false, { hint: 'Ẩn: ô "=…" in trống, ô tích để trống cho học sinh. Hiện: in chữ đáp án vào ô, ô tích đúng có ✓ và tô nền.' }) : '') + (tblOpts(t).cross ? fSeg('tbl.key', 'Hiện đáp án (bản giáo viên)', (t.layout.table || {}).key, [[true, 'Hiện'], [false, 'Ẩn']], false, { hint: 'Ẩn: học sinh thấy ô trống. Hiện: in chữ đáp án vào ô để làm bản đáp án.' }) : tblStyle(t));
-  if (cellImgMode(t)) content += `<p class="hint">Mỗi ảnh là một container: bấm vào ảnh trên trang để chỉnh riêng.</p>`;
-  if (its(t).length > 1 && !['table', 'empty'].includes(ck(t))) content += fSeg('@num', 'Số câu ở lề', lay.num, [['on', 'Hiện'], ['off', 'Ẩn']], 'on', { hint: 'Ẩn khi học sinh phải tự điền số vào chỗ trống (bài xếp thứ tự), để số ở lề khỏi lẫn với số phải điền.' });
-  if (its(t).length > 1 && lay.num !== 'off' && !['table', 'empty'].includes(ck(t))) content += fSeg('@nlab', 'Kiểu số câu', lay.nlab, [['n', '1 2 3'], ['a', 'a b c']], 'n', { hint: 'Chữ a, b, c khi phiếu gốc đánh a–h (vd bài nối từ với nghĩa).' });
-  if (ck(t) === 'pairs') content += fSeg('@mbd', 'Viền hai vế', lay.mbd, [['off', 'Không'], ['on', 'Có']], 'off', { hint: 'Khung viền quanh chữ của vế trái và vế phải (bật / tắt cùng lúc).' });   // v103
-  const brk = fSeg('break', 'Trước và sau Task này', lay.break, [['auto', 'Tự động'], ['page', 'Sang trang mới'], ['keep', 'Giữ liền Task sau'], ['join', 'Nối vào Task trên', ws.tasks[0] === t ? 'Task đầu phiếu không nối được' : '']], 'auto', { hint: lay.break === 'join' ? 'Phần tiếp của Task trên: không số, không tiêu đề (chỉ giữ hướng dẫn riêng nếu có), luôn đi liền Task trên, cách trên bằng khoảng cách giữa các nhóm. Mỗi phần giữ đáp án riêng.' : '' });
-  return panel(t, s, `Task ${t.number} · ${esc(taskLabel(t))} ${cd(t.typeId)}`, { diag: diagFor(t), top: layoutPicker(t), size, align, content, cname: 'Kiểu trình bày', brk });
-}
-function tblSize(t) {
-  const o = tblOpts(t), u = t.layout.table || {}, nC = t.content.cols.length, tot = nC + (o.rowHead ? 1 : 0), cur = tblColPct(t), cwOn = Array.isArray(u.cw) && u.cw.length === tot;
-  let h = fSeg('tbl.cols', 'Độ rộng cột', cwOn ? null : u.cols, [['equal', 'Đều'], ['first', 'Cột đầu rộng'], ['auto', 'Theo nội dung']], 'first', { hint: cwOn ? 'Đang chỉnh tay từng cột (bên dưới). Bấm một mức để về tự động.' : '' });
-  if (o.rowHead && !cwOn && o.cols === 'first') h += fRange('tbl.first', 'Độ rộng cột đầu', u.first, { min: 15, max: 60, step: 1, def: TBL_DEF.first, fmt: x => x + '%' });
-  h += '<h4>Từng cột (%)</h4>' + cur.map((x, i) => fNum('tbl.cw.' + i, i === 0 && o.rowHead ? 'Cột đầu' : `Cột ${o.rowHead ? i : i + 1}`, cwOn ? u.cw[i] : null, { min: 5, max: 90, step: 1, unit: '%', def: Math.round(x) })).join('');
-  h += fSeg('tbl.rows', 'Chiều cao hàng', u.rows, [['auto', 'Theo nội dung'], ['equal', 'Đều nhau']], 'auto') + fNum('tbl.minH', 'Chiều cao hàng tối thiểu', u.minH, { min: 0, max: 60, unit: 'mm', def: TBL_ROW_MM });
-  const keys = [...(o.head ? ['h'] : []), ...t.content.rows.map((_, i) => String(i))], rhs = u.rhs || {};
-  h += `<details ${Object.keys(rhs).length ? 'open' : ''}><summary>Từng hàng (mm) · ${keys.length} hàng</summary>${keys.map(k => fNum('tbl.rhs.' + k, k === 'h' ? 'Hàng tiêu đề' : `Hàng ${+k + 1}`, rhs[k], { min: 6, max: 80, unit: 'mm', def: u.minH ?? TBL_ROW_MM })).join('')}</details>`;
-  return h;
-}
-function tblKind(t) { return fSeg('tbl.cross', 'Kiểu bảng', (t.layout.table || {}).cross, [[false, 'Bảng thường'], [true, 'Ô chữ giải đố']], false, { hint: 'Ô chữ giải đố: chỉ ô có chữ mới có viền xám, không có ô đen; số 1, 2, 3 tự đánh.' }); }
-function tblStyle(t) {
-  const u = t.layout.table || {}, o = tblOpts(t), B = [[true, 'Bật'], [false, 'Tắt']];
-  return fSeg('tbl.head', 'Hàng tiêu đề cột', u.head, B, true) + fSeg('tbl.rowHead', 'Cột tiêu đề hàng (cột đầu)', u.rowHead, B, true)
-    + fSeg('tbl.nm', 'Số thứ tự', o.nm, [['out', 'Ngoài bảng'], ['in', 'Trong cột đầu'], ['off', 'Tắt']], 'out')
-    + fSeg('tbl.lines', 'Đường kẻ', u.lines, [['all', 'Đầy đủ'], ['h', 'Chỉ ngang'], ['none', 'Không']], 'all')
-    + fSeg('tbl.fh', 'Tô nền hàng tiêu đề', u.fh, B, true) + fSeg('tbl.fc', 'Tô nền cột đầu', u.fc, B, false)
-    + fSeg('tbl.fr', 'Tô nền các hàng nội dung', o.fc ? 'none' : u.fr, [['none', 'Không'], ['zebra', 'Xen kẽ', o.fc ? 'Đã tô cột đầu nên không tô các hàng' : '']], 'none')
-    + fSeg('tbl.split', 'Cho phép cắt bảng giữa các hàng', u.split, B, true) + (o.split ? fSeg('tbl.repeat', 'Lặp hàng tiêu đề ở trang sau', u.repeat, B, true) : '');
-}
-function marksCtl(t) {
-  if (!t.image) return '';
-  const im = t.image, ms = im.marks || [], mk = im.mk || {}, on = markMode;
-  const seg = (act, cur, opts) => `<span class="seg">${opts.map(([v, n]) => `<button data-act="${act}" data-v="${v}" class="${cur === v ? 'on' : ''}">${n}</button>`).join('')}</span>`;
-  return `<h3>Điểm trên ảnh</h3><div class="stack"><button class="btn ${on ? 'pri' : ''}" data-act="mkmode">${on ? 'Đang đặt điểm: bấm vào ảnh' : 'Đặt điểm'}</button>${ms.length ? '<button class="btn" data-act="mkclear">Xóa hết</button>' : ''}</div>
-    <div class="field"><span>Hình</span>${seg('mkshape', mk.shape === 'square' ? 'square' : 'circle', [['circle', 'Tròn'], ['square', 'Vuông']])}</div>
-    <div class="field"><span>Bên trong</span>${seg('mklabel', mk.label === 'none' ? 'none' : 'num', [['num', 'Số 1, 2, 3'], ['none', 'Ô trống']])}</div>
-    <p class="hint">${ms.length ? `${ms.length} điểm. Số điểm n ứng với câu n. Kéo điểm trên ảnh để dời, hoặc bấm số bên dưới để xóa.` : 'Bấm "Đặt điểm" rồi bấm vào ảnh trên trang. Vị trí tính theo ảnh; nếu đổi sang Fit, kiểm tra điểm còn nằm trong khung.'}</p>
-    ${ms.length ? `<div class="mkchips">${ms.map((m, i) => `<button class="btn" data-act="mkdel" data-v="${i}" title="Xóa điểm ${i + 1}">${i + 1} ✕</button>`).join('')}</div>` : ''}`;
-}
-function framePanel(t, s) {
-  const L = layoutOf(t), fr = frOf(t), f = fitOf(t);
-  let size = '', align = '', content = '';
-  if (!f && L !== 'T8') size += fRange('frame.scale', 'Kích thước ảnh (khóa tỉ lệ)', fr.scale, { min: 40, max: 100, step: 5, def: 100, fmt: x => x + '%' });
-  if (!(f === 'height' && isColI(t))) size += fNum('frame.h', 'Chiều cao khung', fr.h, { min: 25, max: 150, step: 5, unit: 'mm', def: f ? (frameH(t) || 'theo ảnh') : 'theo ảnh' });
-  else size += `<p class="hint">Fit dọc: khung cao theo cột nội dung bên cạnh.</p>`;
-  if (L === 'T8') size += fNum('frame.w', 'Chiều rộng khung', fr.w, { min: IW8[0], max: IW8[1], step: 5, unit: '% bài đọc', def: IW8[2] });
-  if (L === 'T1' || L === 'T4') align += fSeg('frame.align', 'Căn ngang', fr.align, Object.entries(HA), L === 'T1' ? 'center' : 'left', { hint: L === 'T1' ? 'Trái: ảnh thẳng đường dóng của tiêu đề.' : '' });
-  if (L === 'T8') align += fSeg('frame.align', 'Căn ngang (chữ bao phía còn lại)', fr.align, [['left', 'Trái'], ['right', 'Phải']], 'right');
-  if (isColI(t)) align += fSeg('frame.valign', 'Căn dọc so với nội dung', fr.valign, Object.entries(VA), 'top');
-  content += fSeg('frame.fit', 'Hiển thị ảnh trong khung', fr.fit, [['normal', 'Bình thường'], ['width', 'Fit ngang'], ['height', 'Fit dọc']], 'normal', { hint: 'Fit ngang: ngang ảnh bằng ngang khung. Fit dọc: cao ảnh bằng cao khung. Tâm ảnh trùng tâm khung, phần thừa bị cắt. Fit không phóng to khung.' });
-  if (f) content += fRange('frame.zoom', 'Zoom ảnh', fr.zoom, { min: 50, max: 300, step: 5, def: 100, fmt: x => x + '%', fmtKey: 'zoom' }) + `<button class="btn" data-act="center" ${fr.ox || fr.oy || fr.zoom ? '' : 'disabled'}>Đưa ảnh về giữa khung</button>`;
-  content += imgCtl(t, 'G1') + marksCtl(t) + `<p class="hint">Khung chính là ảnh: kéo cạnh dưới khung trên trang để đổi chiều cao, ảnh đi theo khung.${f ? ' Kéo chấm tâm để dời góc nhìn.' : ''}</p>`;
-  return panel(t, s, `Ảnh ${cd('G1')}`, { size, align, content, cname: 'Hiển thị ảnh' });
-}
-function cimgPanel(t, s, all) {
-  const keys = cellKeys(t, 'cimg'), key = all ? keys[0] : s.item, cc = cellCfg(t, key), fr = cc.frame || {}, row = cellDirOf(t) === 'row', f = fr.fit;
-  let size = fNum('frame.h', 'Chiều cao khung', fr.h, { min: 15, max: 150, step: 5, unit: 'mm', def: f === 'height' ? 35 : 'theo ảnh' }), align = '', content = '';
-  if (!row) size += fNum('frame.w', 'Độ rộng ảnh', fr.w, { min: 20, max: 100, step: 5, unit: '% ô', def: 'tự động' });   // v84: mặc định = cỡ hiện tại (rộng hết ô, tối đa 34 mm)
-  if (row) size += fRange('split', 'Tỉ lệ hàng (ảnh / chữ)', cc.split, { min: 15, max: 50, step: 5, def: 25, fmt: r => `${r} / ${100 - r}`, fmtKey: 'split' });
-  align = row ? fSeg('valign', 'Căn dọc trong hàng', cc.valign, Object.entries(VA), t.layout.valign || 'center') : fSeg('frame.align', 'Căn ngang trong ô', fr.align, Object.entries(HA), t.content.variant === 'multi' ? 'center' : (t.layout.align || 'left'));
-  content += fSeg('frame.fit', 'Hiển thị ảnh trong khung', fr.fit, [['normal', 'Bình thường'], ['width', 'Fit ngang'], ['height', 'Fit dọc']], 'normal');
-  if (f) content += fRange('frame.zoom', 'Zoom ảnh', fr.zoom, { min: 50, max: 300, step: 5, def: 100, fmt: x => x + '%', fmtKey: 'zoom' }) + `<button class="btn" data-act="center" ${fr.ox || fr.oy || fr.zoom ? '' : 'disabled'}>Đưa ảnh về giữa khung</button>`;
-  content += (all ? '' : imgCtl(t, '@' + key)) + (all ? `<p class="hint">Đang chỉnh cùng lúc ${keys.length} ô ảnh. Chọn một ô (trên trang) để chỉnh riêng ô đó.</p>` : `<p class="hint">Kéo cạnh dưới ảnh trên trang để đổi chiều cao khung.</p>`);
-  return panel(t, s, all ? `Ảnh · tất cả ${keys.length} ô` : `Ô ${labelOf(t, key)} · Ảnh`, { size, align, content, cname: 'Hiển thị ảnh' });
-}
-function crowPanel(t, s) {
-  const cc = cellCfg(t, s.item);
-  const size = fRange('split', 'Tỉ lệ hàng (ảnh / chữ)', cc.split, { min: 15, max: 50, step: 5, def: 25, fmt: r => `${r} / ${100 - r}`, fmtKey: 'split' }) + fNum('rowH', 'Chiều cao hàng tối thiểu', cc.rowH, { min: 10, max: 120, step: 5, unit: 'mm', def: 'tự động' });
-  const align = fSeg('valign', 'Căn dọc nội dung trong ô', cc.valign, Object.entries(VA), t.layout.valign || 'center');
-  const content = `<p class="hint">Kéo thanh ngang dưới ô chữ để đổi chiều cao hàng. Đáp án trong ô (lựa chọn in đậm) có thông số riêng: bấm vào đáp án để chỉnh.</p>`;
-  return panel(t, s, `Ô ${labelOf(t, s.item)} · Chữ`, { size, align, content });
-}
-function answerPanel(t, s, key) {
-  const a = t.answer, p = a.params || {}, o = key ? ((p.perItem || {})[key] || {}) : p, L = a.layout, age = AGE[ws.age], inl = a.attach === 'inline';
-  const D = (k, d) => key && isSet(p[k]) ? p[k] : d;
-  let top = '', size = '', align = '', content = '';
-  if (!key) {
-    const att = attachOpts(t), chs = aChoices(t), lockedA = Object.keys(AL).filter(k => !chs.some(c => c.A === k && c.att));
-    top = (att.length > 1 ? `<h3>Gắn đáp án</h3><div class="seg wrapseg">${['inline', 'item', 'block'].filter(k => att.includes(k)).map(k => `<button data-act="attach" data-v="${k}" class="${a.attach === k ? 'on' : ''}">${ATTACH[k]}</button>`).join('')}</div>` : '') + `
-      <h3>Kiểu đáp án</h3><div class="lay-grid">${chs.filter(c => c.att).map(c => `<button class="lay ${L === c.A ? 'on' : ''}" data-act="al" data-v="${c.A}" title="${c.att ? (c.att === a.attach ? AL[c.A] : `Chọn sẽ chuyển Gắn đáp án sang ${ATTACH[c.att]}`) : 'Không dùng được với nội dung hiện tại'}"><b style="font-size:13px">${AL[c.A]}</b>${cd(c.A)}${c.att && c.att !== a.attach ? `<small class="sc">→ ${ATTACH[c.att]}</small>` : ''}</button>`).join('')}</div>` +
-      (lockedA.length ? `<details class="why"><summary>Kiểu khác không hợp dạng bài này (${lockedA.length})</summary><p class="hint">${lockedA.map(k => `${AL[k]} ${cd(k)}`).join(' · ')}</p></details>` : '');
-  }
-  if (L === 'A1' || L === 'A8') {
-    size = (L === 'A1' ? fNum('lines', 'Số dòng mỗi câu', o.lines, { min: 1, max: 20, def: D('lines', 1) }) : fNum('repeat', 'Số lần tô', o.repeat, { min: 1, max: 5, def: D('repeat', 3) }))
-      + fNum('lineMm', `Chiều cao dòng (tối thiểu ${age.line})`, o.lineMm, { min: age.line, max: 25, step: .5, unit: 'mm', def: D('lineMm', age.line) })
-      + fNum('w', 'Độ rộng dòng', o.w, { min: 40, max: 100, step: 5, unit: '%', def: D('w', 100) });
-  } else if (L === 'A2' && inl) {
-    const c = a2cfg(t, key ? { id: key } : null);
-    size = fSeg('lenMode', 'Độ dài gạch', o.lenMode, [['fill', 'Hết lề phải'], ['fixed', 'Cố định']], D('lenMode', 'fixed')) + fNum('lenMm', c.mode === 'fill' ? 'Độ dài khi Cố định' : 'Độ dài', o.lenMm, { min: 15, max: 150, step: 5, unit: 'mm', def: D('lenMm', A2MM[ws.age]) }) + fNum('lines', 'Số dòng', o.lines, { min: 1, max: 8, def: D('lines', 1) });
-    content = fSeg('start', 'Dòng đầu bắt đầu', o.start, [['inline', 'Cạnh chữ'], ['below', 'Hàng dưới']], D('start', 'inline')) + `<p class="hint">Hết lề phải và nhiều dòng chỉ dùng cho chỗ trống ở cuối câu; chỗ trống giữa câu luôn là gạch cố định.</p>`;
-  } else if (L === 'A2') size = fNum('width', 'Độ rộng ô', o.width, { min: 4, max: 30, unit: 'ký tự', def: D('width', 'theo từ') });
-  else if (L === 'A3') size = fNum('boxW', 'Cỡ ô chữ', o.boxW, { min: 5, max: 12, step: .5, unit: 'mm', def: D('boxW', 6.5) });
-  else if (L === 'A4' && inl) { size = `<p class="hint" data-na="size">Lựa chọn nằm trong câu nên cỡ theo chữ.</p>`; content = `<p class="hint">Viết lựa chọn dạng {từ 1|từ 2} trong nội dung; hiện thành từ 1 / từ 2, mỗi từ in đậm. Học sinh gạch chân hoặc khoanh từ đúng.</p>`; }
-  else if (L === 'A4') {
-    size = fNum('gap', 'Khoảng cách các lựa chọn', o.gap, { min: 2, max: 20, unit: 'mm', def: D('gap', 7) });
-    content = fSeg('dir', 'Cách xếp', o.dir, Object.entries(A4DIRS), D('dir', 'auto'), { hint: key ? '' : 'Tự động: lựa chọn ngắn thì xếp một hàng; không vừa thì 2 cột; dài nữa thì mỗi đáp án một dòng. Luôn thẳng cột giữa các câu.' })
-      + (key ? '' : fNum('autoMax', 'Đáp án “ngắn” khi dài tối đa', o.autoMax, { min: 6, max: 60, unit: 'ký tự', def: a4autoDef() }) + fSeg('qv', 'Căn dọc (số câu, chữ câu, lựa chọn)', o.qv, [['top', 'Trên'], ['center', 'Giữa'], ['bottom', 'Dưới']], 'top', { hint: 'Áp cho mọi câu của Task: số câu, chữ câu và dòng lựa chọn cùng đường căn.' }) + fSeg('lab', 'Nhãn', o.lab, [['circle', 'ⓐ'], ['dot', 'a.'], ['box', '☐ ô tick']], 'dot') + (o.lab === 'box' ? '' : fSeg('upper', 'Chữ nhãn', o.upper, [[false, 'a b c'], [true, 'A B C']], false)));
-  } else if (L === 'A5') size = fNum('size', 'Cỡ ô tick', o.size, { min: 4, max: 12, step: .5, unit: 'mm', def: D('size', 6.5) });
-  else if (L === 'A6') size = fNum('size', 'Cỡ ô T/F', o.size, { min: 5, max: 12, step: .5, unit: 'mm', def: D('size', 7.5) });
-  else if (L === 'A7') size = fNum('size', 'Cỡ chấm nối', o.size, { min: 1.5, max: 6, step: .5, unit: 'mm', def: D('size', 2.8) });
-  if (L === 'A7' && ck(t) === 'pairs') content += fSeg('mid', 'Chỗ nối (giữa hai cột)', o.mid, [['dot', 'Chấm nối'], ['box', 'Ô viết chữ'], ['none', 'Không có']], 'dot', { hint: 'Ô viết chữ: học sinh viết chữ cái của vế phải vào ô bên cạnh vế trái (không nối dây).' });   // v105
-  if (inl && (L === 'A2' || L === 'A4')) align = `<p class="hint" data-na="align">Đáp án nằm trong câu nên đi theo dòng chữ, không căn riêng.</p>`;
-  else align = fSeg('align', 'Căn ngang', o.align, Object.entries(HA), D('align', ansAlignDef(t)));
-  if (L === 'A6' && !key && p.row) content += fSeg('rowv', 'Căn dọc cả khối', p.rowv, [['top', 'Trên'], ['center', 'Giữa'], ['bottom', 'Dưới']], 'center', { hint: 'Áp cho mọi câu của Task: số câu, chữ câu và ô T / F.' }) + fNum('tfx', 'T / F cách lề phải', p.tfx, { min: 0, max: 140, step: 1, unit: 'mm', def: 0 });   // v101
-  if (!key) content += `<p class="hint">Bấm vào đáp án của một câu trên trang để chỉnh riêng câu đó.</p>`;
-  return panel(t, s, key ? `Đáp án · câu ${labelOf(t, key)}` : `Đáp án · ${AL[L]} ${cd(L)}`, { top, size, align, content, cname: 'Kiểu hiển thị', autoExtra: key ? '' : '<button class="btn" data-act="reset-answer">Về kiểu đáp án ban đầu</button>' });
-}
-function bankPanel(t, s) {
-  const b = t.wordBank, right = b.placement === 'right';
-  const size = right ? fRange('@split', 'Tỉ lệ nội dung / khung từ', t.layout.split, { min: 40, max: 80, step: 5, def: 62, fmt: r => `${r} / ${100 - r}`, fmtKey: 'split' }) : fNum('w', 'Độ rộng khung từ', b.w, { min: 30, max: 100, step: 5, unit: '%', def: 100 });
-  const align = right ? fSeg('valign', 'Căn dọc', b.valign, Object.entries(VA), 'top') : fSeg('align', 'Căn ngang', b.align, Object.entries(HA), 'center', { hint: b.w ? '' : 'Có tác dụng khi độ rộng nhỏ hơn 100%.' });
-  const content = `<div class="field"><span>Vị trí</span><div class="seg"><button data-act="wb" data-v="top" class="${!right ? 'on' : ''}">Trên nội dung</button><button data-act="wb" data-v="right" class="${right ? 'on' : ''}">Bên phải</button></div></div><div class="field"><span>Kiểu hiển thị</span><div class="seg"><button data-act="wbstyle" data-v="chips" class="${b.style !== 'list' ? 'on' : ''}">Từ rời</button><button data-act="wbstyle" data-v="list" class="${b.style === 'list' ? 'on' : ''}">Danh sách</button></div></div>`
-    + (b.style === 'list' ? `<div class="field"><span>Nhãn</span><div class="seg">${[['lower', 'a b c'], ['upper', 'A B C'], ['none', 'Không']].map(([k, n]) => `<button data-act="wblab" data-v="${k}" class="${(b.label || 'lower') === k ? 'on' : ''}">${n}</button>`).join('')}</div></div>` : '');
-  return panel(t, s, `Khung từ ${cd('G4')}`, { size, align, content, cname: 'Kiểu hiển thị' });
-}
-function gtPanel(t, s) {
-  const x = gtOf(t, s.item), L = gtOrder(t), i = L.findIndex(y => y.id === x.id), n = (t.extras || []).findIndex(y => y.id === x.id) + 1, img = x.kind === 'image';
-  const size = fSeg('size', 'Cỡ chữ', x.size, [[null, `Theo phiếu · ${FSZ[ws.age][sizeKey()]} pt`], ...Object.entries(GT_SIZE).map(([k, v]) => [k, `${v} · ${FSZ[ws.age][k]} pt`])], null);
-  const align = img ? fSeg('align', 'Căn lề', x.align, [['left', 'Trái'], ['center', 'Giữa'], ['right', 'Phải']], 'left') : fSeg('align', 'Căn lề', x.align, [['', `Theo Task (${TA.find(y => y[0] === taOf(t))[1]})`], ...TA], '');   // v97
-  const frame = img ? '' : fSeg('frame', 'Khung', x.frame, [['none', 'Không'], ['line', 'Viền xám'], ['fill', 'Nền xám nhẹ'], ['both', 'Viền + nền']], 'none');
-  const cols2 = img ? '' : fSeg('cols', 'Số cột chữ', x.cols, [[1, '1 cột'], [2, '2 cột']], 1);
-  const wd = img ? fSeg('n', 'Số ảnh trên một hàng', x.n, [[1, '1'], [2, '2'], [3, '3'], [4, '4']], 1) + fNum('w', gtN(x) > 1 ? 'Độ rộng cả hàng ảnh' : 'Độ rộng ảnh', x.w, { min: 20, max: 100, step: 5, unit: '%', def: gtN(x) > 1 ? 100 : 50 }) : '';
-  const pos = `<div class="field"><span>Vị trí trong Task</span><div class="seg"><button data-act="gtmove" data-v="-1" ${i <= 0 ? 'disabled' : ''}>↑ Đưa lên</button><button data-act="gtmove" data-v="1" ${i >= L.length - 1 ? 'disabled' : ''}>↓ Đưa xuống</button></div><p class="hint" style="margin:4px 0 0">Đang ở ${x.pos === 'top' ? 'phía trên' : 'phía dưới'} phần bài của Task. Không đánh số, không có đáp án, không phụ thuộc bố cục Task.</p></div><div class="stack"><button class="btn" data-act="gtdel">Xóa khối này</button></div>`;
-  return crumb(t, s) + `<h2>Khối ${img ? 'ảnh' : 'chữ'} ${n} ${cd('G-Text')}</h2>` + (img ? sec('size', 'Kích thước', wd) + sec('content', 'Ảnh', gtKeys(x).map((k, j) => (gtN(x) > 1 ? `<h4>Ảnh ${j + 1}</h4>` : '') + imgCtl(t, k)).join('')) : sec('size', 'Cỡ chữ', size + cols2)) + sec('align', img ? 'Căn lề' : 'Căn lề &amp; khung', align + frame) + sec('pos', 'Vị trí', pos) + sec('auto', 'Về tự động', autoSec(t, s));
-}
-function headPanel(t, s) {
-  return crumb(t, s) + `<h2>Tiêu đề ${cd('G0')}</h2><p class="hint">Tiêu đề (số, tên bài, hướng dẫn${t.audio ? ', số track' : ''}) luôn nằm đầu Task, cố định và là mốc của đường dóng. Khi Task bị cắt sang trang mới, trang sau không lặp lại tiêu đề.</p>`;
-}
-function sheetPanel() {
-  const sp = sheetSpacing(), sh = ws.spacing.preset, d = lastRes ? lastRes.diags : [], P = presetsGet(), keys = Object.keys(P);
-  return `<h2>Phiếu · ${esc(ws.title)}</h2><p class="hint" style="margin:0">${ws.tasks.length} Task · ${lastRes ? lastRes.pages.length : '–'} trang A4</p>
-    ${d.map(diagBox).join('')}
-    <h3>Xếp trang</h3><div class="field"><div class="seg">${[['cont', 'Liền trang'], ['page', 'Tách trang']].map(([k, n]) => `<button data-act="flow" data-v="${k}" class="${(ws.flow || 'cont') === k ? 'on' : ''}">${n}</button>`).join('')}</div><p class="hint" style="margin:0">${(ws.flow || 'cont') === 'page' ? 'Tách trang: mỗi trang chỉ chứa các Task trọn vẹn. Task không vừa chỗ còn lại sẽ sang trang mới.' : 'Liền trang: các Task nối tiếp nhau, lấp đầy trang; Task dài được cắt giữa 2 trang ở ranh giới item, hàng hoặc câu.'} Muốn một Task luôn sang trang mới hoặc giữ liền Task sau: chọn Task đó, mục Ngắt trang.</p></div>
-    <h3>Font chữ phiếu</h3><div class="field"><div class="seg">${Object.keys(FONTS).map(k => `<button data-act="font" data-v="${k}" class="${fontKey() === k ? 'on' : ''}" style="font-family:${FONTS[k].css}">${FONTS[k].name}</button>`).join('')}</div><p class="hint" style="margin:0">${FONTS[fontKey()].hint} Đổi font có thể đổi số trang; phiếu được dàn lại ngay.</p></div>
-    <h3>Cỡ chữ phiếu</h3><div class="field"><div class="seg">${Object.keys(SIZES).map(k => `<button data-act="size" data-v="${k}" class="${sizeKey() === k ? 'on' : ''}" title="${FSZ[ws.age][k]} pt">${SIZES[k]} · ${FSZ[ws.age][k]} pt</button>`).join('')}</div><p class="hint" style="margin:0">Áp cho chữ nội dung và câu hỏi của mọi Task. Mặc định là Vừa. Dòng viết của học sinh vẫn theo độ tuổi (tối thiểu ${AGE[ws.age].line} mm). Đổi cỡ chữ có thể đổi số trang.</p></div>
-    <h3>Khoảng cách</h3><div class="field"><div class="seg">${[...Object.keys(PRESETS).map(k => [k, PRESET_NAME[k]]), ['free', 'Tự do']].map(([k, n]) => `<button data-act="sheet-preset" data-v="${k}" class="${sh === k ? 'on' : ''}">${n}</button>`).join('')}</div></div>
-    <p class="hint" style="margin:0 0 4px">${sh === 'free' ? 'Tự do: các số do bạn nhập. Bấm Gọn, Vừa hoặc Thoáng để về bộ số chuẩn.' : 'Các số đi theo mức đã chọn. Sửa tay một số bất kỳ thì chuyển sang Tự do.'}</p>
-    ${Object.keys(SP_LABEL).map(k => numRow('sheet', k, sp[k], sp[k], sh === 'free')).join('')}
-    ${sheetExtra()}
-    <details class="adv"><summary>Nâng cao</summary>
-      <h4>Mặc định theo dạng bài${keys.length ? ` (${keys.length})` : ''}</h4>
-      ${keys.length ? `<ul class="plist">${keys.map(k => `<li><b>${esc((P[k] && P[k].name) || k)}</b><button class="lnk2" data-act="preset-del" data-v="${esc(k)}">Xóa</button></li>`).join('')}</ul>` : '<p class="hint" style="margin:0">Chưa lưu. Chọn một Task đã chỉnh vừa ý, bấm "Lưu làm mặc định cho dạng này"; các phiếu sau mở ra sẽ tự áp.</p>'}
-      <div class="stack" style="margin-top:6px"><button class="btn" data-act="import">Nạp phiếu khác (JSON / MD)…</button></div>
-      <h4>Quy tắc in</h4><p class="hint" style="margin:0">Dòng viết tối thiểu ${AGE[ws.age].line} mm, cỡ chữ ${fontPt()} pt (${SIZES[sizeKey()]}; mức To của độ tuổi này là ${FSZ[ws.age].l} pt), tối đa ${AGE[ws.age].maxCols} cột (độ tuổi ${ws.age}).</p>
-    </details>`;
-}
-let sheetExtra = () => '';
+// Cột phải là React (src/ui/insp): ở đây chỉ sửa lựa chọn không còn hợp lệ rồi báo React dựng lại
+let inspN = 0;
 function renderInspector() {
-  const el = document.getElementById('insp'); stage.classList.toggle('mkmode', markMode && sel.type === 'group' && sel.g === 'G1' && !sel.item);
-  if (sel.type === 'sheet') { el.innerHTML = sheetPanel(); return; }
-  const t = ws.tasks.find(x => x.id === sel.id); if (!t) { sel = { type: 'sheet' }; multi = []; return renderInspector(); }
-  const k = kindOf(t, sel);
-  el.innerHTML = k === 'task' ? taskPanel(t, sel) : k === 'frame' ? framePanel(t, sel) : k === 'cimg' ? cimgPanel(t, sel, false) : k === 'cimgs' ? cimgPanel(t, sel, true)
-    : k === 'crow' ? crowPanel(t, sel) : k === 'answer' ? answerPanel(t, sel, null) : k === 'aitem' ? answerPanel(t, sel, sel.item) : k === 'bank' ? bankPanel(t, sel) : k === 'gt' ? gtPanel(t, sel) : headPanel(t, sel);
+  if (sel.type !== 'sheet' && !ws.tasks.find(x => x.id === sel.id)) { sel = { type: 'sheet' }; multi = []; }
+  stage.classList.toggle('mkmode', markMode && sel.type === 'group' && sel.g === 'G1' && !sel.item);
+  publish({ inspRev: ++inspN });
 }
 
 /* ================= Lệnh & lịch sử ================= */
@@ -1090,7 +868,7 @@ function scoreLayout(t, L, cols) {
   if (autoLayout(t) === 'T5' && L !== 'T5') pen += 1000;
   if (L === 'T4' && ['A1', 'A8'].includes(A)) pen += 1000; // dòng viết không ép vào cột đáp án hẹp
   if (h > CONTENT_H) pen += 1000;
-  meas.innerHTML = '';
+  measEl().innerHTML = '';
   return { L, cols: cols ?? null, h: Math.round(h), score: h + pen, rg };
 }
 function candidates(t) {
@@ -1263,13 +1041,6 @@ keyExtra = e => {
 };
 LEGEND = 'Kéo thanh hoặc cạnh = đổi kích thước · Bấm đúp = về tự động · Esc = lên cấp · Mũi tên = chỉnh nhanh · Tab = container kế · Shift+bấm = chọn thêm · Ctrl+C / Ctrl+V = chép kiểu';
 // --- Panel phiếu: tự động hóa ---
-sheetExtra = () => {
-  const n = lastRes ? lastRes.pages.length : 1;
-  return `<h3>Tự động hóa</h3>
-    <div class="stack"><button class="btn" data-act="optimize" title="Chỉ đổi các Task đang ở Tự động">Tối ưu bố cục cả phiếu</button></div>
-    <div class="fitrow" data-param="fitN"><label for="fitN">Ép vừa</label><input id="fitN" type="number" min="1" max="${n}" step="1" value="${Math.max(1, n - 1)}"><span>trang</span><button class="btn" data-act="fitN" title="Thử lần lượt: khoảng cách Vừa → Gọn, tối ưu bố cục, Gọn từng Task, ảnh nhỏ hơn 20%, Liền trang. Dừng ở bước đầu tiên đạt số trang.">Thu</button></div>
-    <div class="fld s ${ws.fill ? 'ov' : ''}" data-param="fill"><span class="fl">Lấp đầy trang</span><span class="fc"><span class="seg"><button data-act="fill" data-v="0" class="${ws.fill ? '' : 'on'}">Tắt</button><button data-act="fill" data-v="1" class="${ws.fill ? 'on' : ''}">Bật</button></span><span class="hint fh">Chia phần trống cuối mỗi trang (trừ trang cuối) vào khoảng giữa các Task, tối đa ${FILL_MAX} mm mỗi khoảng.</span></span><button class="rst" data-act="fill" data-v="0" ${ws.fill ? '' : 'hidden'} aria-label="Về tự động">↺</button></div>`;
-};
 extraActs.optimize = () => { const before = lastRes.pages.length; let n = 0; commit(w => { n = optimizeAll(w); }); toast(n ? `Đã tối ưu ${n} Task · ${before} → ${lastRes.pages.length} trang` : 'Bố cục hiện tại đã tốt nhất theo điểm'); };
 extraActs.fitN = () => { const i = document.getElementById('fitN'), N = Math.max(1, parseInt(i.value, 10) || 1), before = lastRes.pages.length, r = fitPages(N); if (r.n >= before) { toast(`Không thu được dưới ${before} trang bằng các bước tự động`); return; } commit(w => { Object.assign(w, clone(r.w)); }); toast(r.n <= N ? `Đã thu phiếu về ${r.n} trang` : `Tốt nhất là ${r.n} trang (chưa đạt ${N})`); };
 extraActs.fill = (b, v) => commit(w => { if (v === '1') w.fill = true; else delete w.fill; }, v === '1' ? 'Đã bật Lấp đầy trang' : 'Đã tắt Lấp đầy trang');
@@ -1278,13 +1049,6 @@ extraActs['preset-apply'] = () => { const t = curT(ws), pr = presetsGet()[preset
 extraActs['preset-del'] = (b, v) => { const P = Object.assign({}, presetsGet()); delete P[v]; presetsSet(P); toast(`Đã xóa mặc định của dạng ${v}`); renderInspector(); };
 extraActs.import = () => openImport('sheet');
 extraActs.change = i => { if (i.id === 'fitN') { /* chờ bấm nút */ } };
-// Nút lưu / áp mặc định trong panel Task (mục Về tự động)
-const _taskPanel = taskPanel;
-taskPanel = (t, s) => {
-  const has = !!presetsGet()[presetKey(t)];
-  const extra = `<button class="btn" data-act="preset-save">Lưu làm mặc định cho dạng ${esc(taskLabel(t))}</button>${has ? `<button class="btn" data-act="preset-apply">Áp mặc định đã lưu của dạng ${esc(taskLabel(t))}</button>` : ''}`;
-  return _taskPanel(t, s).replace('<div class="stack"><button class="btn" data-act="auto"', `<div class="stack">${extra}<button class="btn" data-act="auto"`);
-};
 // (v106: nút "Nạp phiếu này" trong hộp JSON không bao giờ hiện, đã bỏ khi chuyển sang React)
 // Danh sách mẫu theo nhóm (thứ tự LIB_GROUPS)
 const libGroups = () => LIB_GROUPS.map(g => [g, RECIPES.filter(r => (r.group || 'Danh sách câu') === g)]).filter(x => x[1].length);
@@ -1362,11 +1126,6 @@ function cardOf(t) {
   const cols = colsOf(t);
   chips.push({ t: `bố cục: ${TL[L].name.toLowerCase()}${cols > 1 ? `, ${cols} cột` : ''}`, go: 'task' });
   return { chips, warns: contentWarnings(t), match: m };
-}
-function cardHtml(t, where) {
-  const c = cardOf(t);
-  return `<div class="tcard" data-card="${t.id}">${c.chips.map(x => `<button class="chip ${x.cls || ''}" data-go="${x.go}" data-id="${t.id}" title="${esc(x.title || 'Bấm để tới chỗ chỉnh')}">${esc(x.t)}</button>`).join('')}</div>` +
-    (c.warns.length ? `<ul class="twarn">${c.warns.map(x => `<li class="${x.lv}">${esc(x.m)}</li>`).join('')}</ul>` : '');
 }
 // Bấm chip: nhảy tới container tương ứng (hoặc khung soạn nội dung ở cột trái)
 function goChip(b) {
@@ -1465,10 +1224,6 @@ function fieldToggles(t) {
   }
   return o;
 }
-// ---- HTML khung soạn ----
-const eIn = (k, v, ph, o = {}) => o.area
-  ? `<textarea data-k="${k}" rows="${o.rows || 2}" placeholder="${esc(ph || '')}" aria-label="${esc(o.label || ph || k)}">${esc(v)}</textarea>`
-  : `<input data-k="${k}" value="${esc(v)}" placeholder="${esc(ph || '')}" aria-label="${esc(o.label || ph || k)}"${o.w ? ` style="width:${o.w}"` : ''}>`;
 // Câu / lượt nào có chỗ học sinh phải trả lời: dùng để đánh dấu trong danh sách
 const GAP_RE = /___/, PICK_RE = /\{[^}]*\|[^}]*\}/;
 function ansLabel(x) {
@@ -1477,55 +1232,6 @@ function ansLabel(x) {
   const tx = [x.text || '', ...(Array.isArray(x.lines) ? x.lines.map(l => typeof l === 'string' ? l : (l && l.text) || '') : [])].join(' ');
   return GAP_RE.test(tx) ? 'chỗ trống' : PICK_RE.test(tx) ? 'chọn trong câu' : null;
 }
-function edItems(t) {
-  const k = ck(t), it = its(t), c = t.content, keys = it.some(x => x.key != null);
-  const noun = k === 'dialogue' ? 'lượt' : k === 'pairs' ? 'cặp' : k === 'trace' ? 'từ' : 'câu';
-  const spk = []; it.forEach(x => { if (x.who != null && !spk.includes(x.who)) spk.push(x.who); });
-  const rows = it.map((x, i) => {
-    let f = '', whoIn = '';
-    if (x.who != null) { whoIn = eIn(`it.${i}.who`, x.who, 'Tên', { w: '92px', label: `Người nói ${i + 1}` }); f += `<div class="er2">${eIn(`it.${i}.text`, x.text || '', 'Lời thoại (___ = chỗ trống)', { label: `Lời ${i + 1}` })}</div>`; }
-    else if (x.pair) f += x.pair.l && x.pair.l.img != null
-      ? `<div class="er2 pairimg"><div class="imgblk">${thumbHtml(t, '@' + x.id)}${eIn(`it.${i}.pli`, x.pair.l.img, 'Tên ảnh', { label: `Ảnh vế trái ${i + 1}` })}${eIn(`it.${i}.pl`, fieldVal(x, 'pl'), 'Chữ dưới ảnh', { label: `Chữ dưới ảnh vế trái ${i + 1}` })}</div><span class="eto">↔</span>${eIn(`it.${i}.pr`, fieldVal(x, 'pr'), 'Vế phải', { label: `Vế phải ${i + 1}` })}</div>`
-      : `<div class="er2">${eIn(`it.${i}.pl`, fieldVal(x, 'pl'), 'Vế trái', { label: `Vế trái ${i + 1}` })}<span class="eto">↔</span>${eIn(`it.${i}.pr`, fieldVal(x, 'pr'), 'Vế phải', { label: `Vế phải ${i + 1}` })}</div>`;
-    else if (x.lines) f += eIn(`it.${i}.lines`, fieldVal(x, 'lines'), 'Mỗi dòng một dòng chữ; {a|b} = chọn', { area: 1, rows: Math.max(2, x.lines.length), label: `Các dòng câu ${i + 1}` });
-    else f += eIn(`it.${i}.text`, x.text || '', k === 'trace' ? 'Từ để tô' : 'Chữ (___ chỗ trống, {a|b} chọn; dòng trống = sang đoạn)', { label: `Chữ câu ${i + 1}`, area: !x.gt && !x.img && !x.imgs, rows: Math.max(1, Math.min(14, ((x.text || '').match(/\n/g) || []).length + Math.ceil((x.text || '').length / 44))) });   // v101: ô câu nhiều dòng, kéo giãn được như ô bài đọc
-    if (x.img != null) f = (!x.pair && !x.who && !x.lines && !x.imgs) ? `<div class="imgrow2">${thumbHtml(t, '@' + x.id)}<div class="imgcol">${eIn(`it.${i}.img`, x.img, 'Chữ dưới ảnh / tên ảnh', { label: `Chữ dưới ảnh câu ${i + 1}` })}${f}</div></div>`
-      : `<div class="imgblk">${thumbHtml(t, '@' + x.id)}${eIn(`it.${i}.img`, x.img, 'Chữ dưới ảnh / tên ảnh', { label: `Chữ dưới ảnh câu ${i + 1}` })}</div>` + f;
-    if (x.imgs) f += `<div class="imgsgrid" style="--n:${x.imgs.length}">${x.imgs.map((im, j) => `<div class="imgblk">${thumbHtml(t, `@${x.id}.${j}`)}${eIn(`it.${i}.imgs.${j}`, im, 'Chữ dưới ảnh', { label: `Chữ dưới ảnh ${j + 1} của câu ${i + 1}` })}${t.answer.layout === 'A5' ? `<button type="button" class="tkq${exPicks(t, x, x.imgs).includes(j) ? ' on' : ''}" data-eact="tickopt" data-i="${i}" data-j="${j}" aria-pressed="${!!(String(x.key ?? '').trim() && exPick(t, x, x.imgs) === j)}" title="Tick ✓ = ảnh này là đáp án đúng" aria-label="Đáp án đúng: ảnh ${j + 1} của câu ${i + 1}">✓</button>` : ''}</div>`).join('')}</div>`;
-    if (x.opts) { const pk = exPicks(t, x, x.opts);   // v87: mỗi lựa chọn một dòng: ô tích (đúng, chọn được nhiều) + a. b. c. + ô gõ + ✕
-      f += `<div class="eopts"><div class="eoh"><span class="elb">Đáp án</span><span class="sp"></span><button type="button" class="eb eoadd" data-eact="optadd" data-i="${i}" title="Thêm đáp án" aria-label="Thêm đáp án câu ${i + 1}">+</button></div>${x.opts.map((o, j) => `<div class="eo"><button type="button" class="tkq${pk.includes(j) ? ' on' : ''}" data-eact="tickopt" data-i="${i}" data-j="${j}" aria-pressed="${pk.includes(j)}" title="Tích = đáp án đúng (chọn được nhiều)" aria-label="Đáp án đúng: ${'abcdefgh'[j] || j + 1} câu ${i + 1}">✓</button><span class="eol">${'abcdefgh'[j] || j + 1}.</span>${eIn(`it.${i}.opts.${j}`, o, 'Đáp án ' + ('abcdefgh'[j] || j + 1), { label: `Lựa chọn ${'abcdefgh'[j] || j + 1} câu ${i + 1}` })}<button type="button" class="eb" data-eact="optdel" data-i="${i}" data-j="${j}" ${x.opts.length > 2 ? '' : 'disabled'} title="Xóa đáp án này" aria-label="Xóa lựa chọn ${'abcdefgh'[j] || j + 1} câu ${i + 1}">✕</button></div>`).join('')}</div>`; }
-    if (t.answer.layout === 'A3' && !x.who && !x.pair) f += `<div class="er2"><span class="elb">Số ô</span>${eIn(`it.${i}.len`, x.len || '', 'tự động', { w: '60px', label: `Số ô chữ câu ${i + 1}` })}</div>`;
-    const pg = x.opts || x.imgs ? [] : pkGroups(x), ul = !pg.length && (t.answer.params || {}).ulab && t.answer.kind === 'choice' ? [...pkSrc(x).matchAll(/<u>([\s\S]*?)<\/u>/g)].map(m => m[1]) : [];
-    if (pg.length && needKey(t, x)) f += `<div class="er2 kpk"><span class="elb">Đáp án</span><span class="pkr">${pg.map((g, gi) => g.map((o, j) => `<button type="button" class="pko${o.ok ? ' on' : ''}" data-eact="pickopt" data-i="${i}" data-g="${gi}" data-j="${j}" aria-pressed="${o.ok}" title="Bấm = vế đúng (bấm lại để bỏ)">${esc(o.t || '…')}</button>`).join('')).join('<span class="pks">·</span>')}</span></div>`;   // v89: bấm vế đúng ngay trên câu
-    else if (ul.length && needKey(t, x)) { const up = (t.answer.params || {}).upper, L = up ? 'ABCDEFGH' : 'abcdefgh', kk = String(x.key ?? '').trim().toLowerCase(); f += `<div class="er2 kpk"><span class="elb">Phần sai</span><span class="pkr">${ul.map((u, j) => `<button type="button" class="pko ule${kk === 'abcdefgh'[j] ? ' on' : ''}" data-eact="ulpick" data-i="${i}" data-j="${j}" aria-pressed="${kk === 'abcdefgh'[j]}" title="Bấm phần gạch chân bị sai = đáp án">${L[j]}. ${esc(u.replace(/<[^>]+>|\*/g, ''))}</button>`).join('')}</span></div>`; }
-    else if (needKey(t, x) && !x.opts && !x.imgs && (gapN(x) > 1 || (gapN(x) === 1 && t.wordBank && t.wordBank.kind !== 'image' && t.wordBank.words.length))) { const ks = keyGaps(x), wb = t.wordBank && t.wordBank.kind !== 'image' ? t.wordBank.words : null;   // v91: mỗi chỗ trống một ô đáp án; có Khung từ thì chọn từ trong khung
-      f += `<div class="er2 kgap"><span class="elb">Đáp án</span><span class="pkr">${Array.from({ length: gapN(x) }, (_, j) => { const v = ks[j] || '', gl = gapLabs(x.text)[j], lb = gl ? `<i>${esc(gl)}</i>` : gapN(x) > 1 ? `<i>(${j + 1})</i>` : ''; return wb && wb.length ? `<label class="kg">${lb}<select data-k="it.${i}.keyg.${j}" aria-label="Đáp án chỗ trống ${j + 1} câu ${i + 1}"><option value="">—</option>${wb.concat(v && !wb.includes(v) ? [v] : []).map(w => `<option${w === v ? ' selected' : ''}>${esc(w)}</option>`).join('')}</select></label>` : `<label class="kg">${lb}${eIn(`it.${i}.keyg.${j}`, v, 'đáp án', { label: `Đáp án chỗ trống ${j + 1} câu ${i + 1}` })}</label>`; }).join('')}</span></div>`; }
-    else if (needKey(t, x) && !x.pair && !(x.imgs && t.answer.layout === 'A5') && !x.opts && !(t.answer.layout === 'A6' && optsOfKey(t, x).length > 1)) f += `<div class="er2"><span class="elb">Đáp án</span>${eIn(`it.${i}.key`, x.key || '', 'đáp án đúng', { label: `Đáp án đúng câu ${i + 1}` })}</div>`;
-    const al = ansLabel(x), sc = '';
-    return `<div class="eit${al ? ' ans' : ''}${sc}" data-i="${i}"><div class="eih"><span class="egrip" draggable="true" data-drag="${i}" title="Kéo để đổi thứ tự">⋮⋮</span><span class="ino">${i + 1}</span>${whoIn}
-      <span class="sp"></span><button class="eb" data-eact="up" data-i="${i}" ${i ? '' : 'disabled'} aria-label="Lên">↑</button><button class="eb" data-eact="down" data-i="${i}" ${i < it.length - 1 ? '' : 'disabled'} aria-label="Xuống">↓</button><button class="eb" data-eact="dupi" data-i="${i}" aria-label="Nhân đôi câu">⧉</button><button class="eb" data-eact="del" data-i="${i}" aria-label="Xóa ${noun} ${i + 1}">✕</button></div>${f}${al ? `<div class="eans" title="Câu này có chỗ học sinh phải trả lời">✎ ${al}</div>` : ''}</div>`;
-  }).join('');
-  const heads = k === 'pairs' ? `<div class="er2"><span class="elb">Tiêu đề cột</span>${eIn('heads.0', (t.content.heads || [])[0] || '', 'Cột trái', { label: 'Tiêu đề cột trái' })}${eIn('heads.1', (t.content.heads || [])[1] || '', 'Cột phải', { label: 'Tiêu đề cột phải' })}</div>` : '';   // v105
-  return `${heads}<div class="eitems">${rows}</div><div class="erow"><button class="btn" data-eact="add">+ Thêm ${noun}</button><button class="btn" data-eact="paste-items" title="Dán nhiều dòng, mỗi dòng một ${noun}">Dán nhiều ${noun}…</button></div>` +
-    (it.some(x => x.img || x.imgs) || (k === 'pairs' && it.some(x => x.pair && x.pair.l && x.pair.l.img != null)) ? `<div class="edrop" data-drop="${t.id}">Kéo nhiều ảnh vào đây: mỗi ảnh vào một ô theo thứ tự, thừa ảnh thì thêm ${noun}.</div>` : '');
-}
-function arSegHtml(t) {
-  if (!slotsOf(t).some(x => fixedImg(t, x.key))) return '';
-  return `<div class="ef"><span class="elb">Tỉ lệ ô ảnh</span><span class="seg">${AR_OPTS.map(([v, n]) => `<button type="button" data-eact="tblar" data-v="${v}" class="${tblAr(t) === v ? 'on' : ''}">${n}</button>`).join('')}</span></div>`;
-}
-function edTable(t) {
-  const c = t.content;
-  if (tblOpts(t).cross) { const n = crossCount(c); return `<p class="hint">Mỗi dòng một hàng. <b>#</b> không có ô · <b>.</b> ô trống chưa có đáp án · chữ cái = ô có đáp án · <b>(a)</b> chữ cho sẵn. Số 1, 2, 3 tự đánh.</p><div class="ef col xgin"><span class="elb">Lưới ô chữ</span>${eIn('cross.grid', crossLines(c).join('\n'), '#C#S#\n#A#U#\n#TEN#', { area: 1, rows: Math.min(14, Math.max(4, c.rows.length + 1)), label: 'Lưới ô chữ' })}</div><p class="hint"><span id="xcount">${n.cells} ô · ${n.words} từ (${n.across} ngang, ${n.down} dọc).</span> Lời gợi ý: thêm ở Khối tự do (+ Chữ).</p>`; }
-  const head = `<div class="etr"><span class="ino">·</span>${eIn('tb.corner', brOut(c.corner || ''), 'Góc', { label: 'Ô góc' })}${c.cols.map((x, j) => eIn(`tb.col.${j}`, brOut(x), `Cột ${j + 1}`, { label: `Tên cột ${j + 1}` })).join('')}<span class="eb0"></span></div>`;
-  const cTxt = v => brOut(v && typeof v === 'object' && v.img && !v.tick ? (v.text || '') : fmtCell(v));   // v99: ô có ảnh: ảnh nhỏ bên trái, ô gõ chỉ chữ
-  const imB = (v, i, j) => v && typeof v === 'object' && (v.tick || v.ans != null) ? '' : `<button type="button" class="eimb${v && v.img ? ' x' : ''}" data-eact="tbimg" data-i="${i}" data-j="${j}" title="${v && v.img ? 'Gỡ ảnh khỏi ô (giữ chữ)' : 'Thêm ảnh vào ô'}" aria-label="${v && v.img ? 'Gỡ ảnh' : 'Thêm ảnh'}">${v && v.img ? '×' : '+ảnh'}</button>`;   // v99
-  const imWrap = (v, i, j, inner) => { const bt = imB(v, i, j); return !bt ? inner : inner.startsWith('<span class="etc">') ? inner.replace(/<\/span>$/, bt + '</span>') : `<span class="etc">${inner}${bt}</span>`; };
-  const tkWrap = (v, i, j, inner) => v && v.tick ? `<span class="etc"><button type="button" class="tkq${v.ok ? ' on' : ''}" data-eact="tbok" data-i="${i}" data-j="${j}" aria-pressed="${!!v.ok}" title="Đánh dấu ô đúng (bản giáo viên)">✓</button>${inner}</span>` : inner;   // v98
-  const withThumb = (v, key, inner) => v && typeof v === 'object' && v.img && key ? `<span class="etc">${thumbHtml(t, key)}${inner}</span>` : inner;
-  const rows = c.rows.map((r, i) => `<div class="etr"><span class="ino">${i + 1}</span>${imWrap(r.head, i, 'h', withThumb(r.head, r.id && '@' + r.id, eIn(`tb.r.${i}.head`, cTxt(r.head), 'Đầu hàng', { label: `Đầu hàng ${i + 1}` })))}${r.cells.map((v, j) => imWrap(v, i, j, tkWrap(v, i, j, withThumb(v, r.id && `@${r.id}.${j}`, eIn(`tb.r.${i}.c.${j}`, cTxt(v), '(trống)', { label: `Hàng ${i + 1} cột ${j + 1}` }).replace('<input ', v && v.ans != null ? '<input class="etka" title="Ô học sinh điền: đáp án (in trống)" ' : '<input '))))).join('')}<button class="eb" data-eact="delrow" data-i="${i}" aria-label="Xóa hàng ${i + 1}">✕</button></div>`).join('');
-  return `<p class="hint">Ô để trống = chỗ viết · <b>=chữ</b> = ô học sinh điền, chữ là đáp án (in trống) · <b>[ ]</b> = ô tích, <b>[ ] chữ</b> = ô tích kèm chữ, <b>[x]</b> = ô tích đúng · <b>+ảnh</b> thêm ảnh vào ô, <b>×</b> trên ảnh nhỏ để gỡ</p><div class="etbl" style="--nc:${c.cols.length + 1}">${head}${rows}</div>
-    <div class="erow"><button class="btn" data-eact="addrow">+ Hàng</button><button class="btn" data-eact="addcol">+ Cột</button><button class="btn" data-eact="delcol" ${c.cols.length > 1 ? '' : 'disabled'}>− Cột cuối</button><button class="btn" data-eact="paste-items" title="Dán bảng: mỗi dòng một hàng, ô cách nhau bằng Tab hoặc |">Dán bảng…</button></div>`;
-}
 const nounOf = k => k === 'dialogue' ? 'lượt' : k === 'pairs' ? 'cặp' : k === 'trace' ? 'từ' : 'câu';
 // Tóm tắt hiện ở đầu mỗi khu vực (gọn mắt khi khu vực đang thu lại)
 function secSums(t) {
@@ -1533,63 +1239,12 @@ function secSums(t) {
   const on = fieldToggles(t).filter(x => x.on).length;
   return { kind: descOf(t), info: t.title || '', content: c.form === 'table' ? `${c.rows.length} hàng` : k === 'empty' && c.list === false ? 'chỉ có ảnh' : `${it.length} ${nounOf(k)}`, parts: on ? `${on} đang bật` : 'chưa bật', free: (t.extras || []).length ? `${t.extras.length} khối` : 'chưa có' };
 }
-function gtEd(t) {
-  const L = gtOrder(t), ex = t.extras || [];
-  const cards = ex.map(x => {
-    const i = L.findIndex(y => y.id === x.id), img = x.kind === 'image', n = ex.filter(y => y.kind === x.kind).indexOf(x) + 1, nm = img ? 'ảnh' : 'chữ';
-    return `<div class="gtcard" data-x="${x.id}"><div class="gthd"><b>Khối ${nm} ${n}</b><small>${x.pos === 'top' ? 'phía trên bài' : 'phía dưới bài'}</small><span class="gtbt"><button class="eb" data-eact="gtsel" data-x="${x.id}" title="Chọn trên trang để chỉnh cỡ chữ, căn lề, khung" aria-label="Chọn khối ${nm} ${n} để chỉnh định dạng">⚙</button><button class="eb" data-eact="gtup" data-x="${x.id}" ${i <= 0 ? 'disabled' : ''} aria-label="Đưa khối chữ lên">↑</button><button class="eb" data-eact="gtdown" data-x="${x.id}" ${i >= L.length - 1 ? 'disabled' : ''} aria-label="Đưa khối chữ xuống">↓</button><button class="eb" data-eact="gtrm" data-x="${x.id}" aria-label="Xóa khối ${nm} ${n}">✕</button></span></div>${img ? `<div class="ef imgrow">${gtKeys(x).map(k => thumbHtml(t, k)).join('')}${eIn(`x.${x.id}.label`, x.label || '', 'Tên ảnh', { label: 'Tên ảnh' })}</div>` : eIn(`x.${x.id}.text`, x.text || '', 'Gõ chữ. Đầu dòng "- " là gạch đầu dòng, "1. " là danh sách số, **đậm**, *nghiêng*.', { area: 1, rows: 4, label: `Khối chữ ${n}` })}</div>`;
-  }).join('');
-  return `<p class="hint" style="margin:0 0 6px">Khối tự do nằm ngang cả bề rộng Task, không đánh số, không có đáp án. Chữ: ghi chú, ví dụ, luật chơi, danh sách. Ảnh: ảnh minh họa, sơ đồ.</p>${cards}<div class="stack"><button class="btn" data-eact="gtadd">+ Chữ</button><button class="btn" data-eact="gtadd" data-kind="image">+ Ảnh</button></div>`;
-}
-function edHtml(t) {
-  const m = recipeMatch(t), c = t.content, k = ck(t), a = t.answer, i = ws.tasks.indexOf(t), n = ws.tasks.length, sums = secSums(t);
-  const kinds = kindsOk(t), tgl = fieldToggles(t), sl = slotsOf(t);
-  const sec = (key, title, inner) => `<section class="sec ${SECT[key] ? 'open' : ''}" data-sec="${key}"><button class="sech" data-stg="${key}" aria-expanded="${SECT[key] ? 'true' : 'false'}"><span class="snum">${({ kind: 1, info: 2, content: 3, parts: 4, free: 5 })[key]}</span><span class="sect">${title}</span><span class="secs">${esc(sums[key] || '')}</span><span class="car">▶</span></button><div class="secb">${inner}</div></section>`;
-  const tools = `<div class="tkt" role="toolbar" aria-label="Thao tác với Task ${i + 1}"><button class="eb" data-eact="tup" ${i ? '' : 'disabled'} title="Đưa Task lên" aria-label="Đưa Task lên">↑</button><button class="eb" data-eact="tdown" ${i < n - 1 ? '' : 'disabled'} title="Đưa Task xuống" aria-label="Đưa Task xuống">↓</button><button class="eb" data-eact="tdup" title="Nhân đôi Task" aria-label="Nhân đôi Task">⧉</button><button class="eb tjn" data-eact="tjoin" ${i ? '' : 'disabled'} aria-pressed="${t.layout.break === 'join'}" title="${i ? (t.layout.break === 'join' ? 'Đã nối vào Task phía trên (phần tiếp, không số / tiêu đề). Bấm để bỏ nối' : 'Nối vào Task phía trên: thành phần tiếp, không số / tiêu đề') : 'Task đầu phiếu không nối được'}">${t.layout.break === 'join' ? '↳ Đã nối' : '↳ Nối Task'}</button><span class="sp"></span><button class="eb dng" data-eact="tdel" title="Xóa Task (có hỏi trước, hoàn tác được)" aria-label="Xóa Task"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.6 8.5h5.8l.6-8.5M6.8 7v4M9.2 7v4" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>`;
-  // 1. Dạng bài và đáp án
-  const kind = `<div class="tcwrap">${cardHtml(t)}</div>
-    <div class="ef"><span class="elb">Áp mẫu</span><select data-eact="recipe" aria-label="Áp một mẫu có sẵn cho Task này" title="Áp một lần: giữ chữ các câu, đổi cấu trúc, đáp án và bố cục theo mẫu. Hoàn tác được."><option value="" selected>Chọn mẫu để áp…</option>${libOpts()}</select></div>
-    <div class="ef"><span class="elb">Đáp án</span><select data-eact="kind" aria-label="Loại đáp án" ${kinds.length < 2 ? 'disabled' : ''}>${kinds.map(x => `<option value="${x}" ${a.kind === x ? 'selected' : ''}>${KIND_NAME[x]}</option>`).join('')}</select></div>`;
-  // 2. Tiêu đề và hướng dẫn (nhóm G0)
-  const info = `<div class="ef"><span class="elb">Tiêu đề</span>${eIn('title', t.title || '', 'Tên bài / lệnh', { label: 'Tiêu đề' })}</div>
-    <div class="ef"><span class="elb">Hướng dẫn</span>${eIn('instruction', t.instruction || '', 'Hướng dẫn', { label: 'Hướng dẫn' })}</div>
-    <div class="ef"><span class="elb">Track</span>${eIn('audio', t.audio || '', 'không có', { label: 'Track audio' })}</div>${qrEd(t)}`;
-  // 3. Nội dung: phần dùng chung (ảnh, bài đọc, khung từ) rồi danh sách câu
-  let cont = '';
-  if (t.image) cont += `<div class="ef imgrow"><span class="elb">Ảnh chung</span>${slotsOf(t).some(x => x.key === 'G1') ? thumbHtml(t, 'G1') : ''}${eIn('image.label', t.image.label || '', 'Tên ảnh', { label: 'Tên ảnh chung' })}</div>`;
-  if (c.lead && c.lead.kind === 'passage') cont += `<div class="ef col"><span class="elb">Bài đọc</span>${eIn('lead.text', c.lead.text || '', 'Dán bài đọc vào đây (___ chỗ trống, {a|b} chọn, **đậm**, *nghiêng*, __gạch chân__; dòng trống = sang đoạn)', { area: 1, rows: 5, label: 'Bài đọc' })}</div>` + ((gapCount(c.lead.text || '') || c.lead.keys) ? `<div class="ef col"><span class="elb">Đáp án chỗ trống</span>${eIn('lead.keys', (c.lead.keys || []).join(', '), 'Theo thứ tự chỗ trống: am, go, play', { label: 'Đáp án chỗ trống trong bài đọc' })}</div>` : '');
-  if (c.lead && c.lead.kind === 'text') cont += `<div class="ef"><span class="elb">Lời dẫn</span>${eIn('lead.text', c.lead.text || '', 'Lời giới thiệu', { label: 'Lời dẫn' })}</div>`;
-  if (t.wordBank) cont += `<div class="ef col"><span class="elb">Khung từ</span>${eIn('wb.words', t.wordBank.words.join('\n'), 'Mỗi dòng một từ (hoặc cách nhau bằng dấu phẩy)', { area: 1, rows: Math.min(6, Math.max(2, t.wordBank.words.length)), label: 'Khung từ' })}</div>`;
-  cont += arSegHtml(t);
-  if (c.form === 'table') cont += `<div class="subh">Bảng</div>` + edTable(t);
-  else if (c.list !== false) cont += (() => { const n = its(t).length, na = its(t).filter(ansLabel).length; return `<div class="subh">Danh sách ${nounOf(k)}<small>${n}${na ? ` · ${na} có chỗ trả lời` : ''}</small></div>`; })() + edItems(t);
-  else cont += `<p class="hint" style="margin:${cont ? '8px' : 0} 0 0">Danh sách câu đang tắt${(c.items || []).length ? ` (vẫn giữ ${c.items.length} câu)` : ''}. Bật ở mục 4 · Thành phần của bài.</p>`;
-  // 4. Thành phần của bài (công tắc bật / tắt các trường)
-  const parts = tgl.length ? `<p class="hint" style="margin:0 0 4px">Bật hoặc tắt các thành phần của bài. Mục nào mờ là không dùng cho dạng này.</p><div class="etgs">${tgl.map(x => `<label class="etg ${x.dis ? 'dis' : ''}" title="${esc(x.dis || '')}"><input type="checkbox" data-tg="${x.id}" ${x.on ? 'checked' : ''} ${x.dis && !x.on ? 'disabled' : ''}>${x.label}</label>`).join('')}</div>` : '';
-  return `<div class="ed" data-ed="${t.id}">${tools}${sec('kind', 'Dạng bài &amp; đáp án', kind)}${sec('info', 'Tiêu đề &amp; hướng dẫn', info)}${sec('content', 'Nội dung', cont)}${parts ? sec('parts', 'Thành phần của bài', parts) : ''}${sec('free', 'Khối tự do', gtEd(t))}</div>`;
-}
-function qrEd(t) {
-  if (!t.audio) return '';
-  const q = t.qr || { src: 'link' }, src = q.src || 'link', inner = qrInner(t);
-  const seg = `<span class="seg">${[['link', 'Link'], ['img', 'Ảnh mã'], ['file', 'File nghe']].map(([v, n]) => `<button type="button" data-eact="qrsrc" data-v="${v}" class="${src === v ? 'on' : ''}">${n}</button>`).join('')}</span>`;
-  let body = '';
-  if (src === 'link') body = eIn('qr.link', q.link || '', 'Link nghe, hoặc phần cuối sau địa chỉ gốc', { label: 'Link nghe' });
-  else if (src === 'img') body = `<button type="button" class="btn" data-eact="qrimg">${q.img ? 'Thay ảnh mã…' : 'Tải ảnh mã…'}</button>${q.img ? '<button type="button" class="btn" data-eact="qrrm">Gỡ</button>' : ''}`;
-  else body = `<button type="button" class="btn" data-eact="qrfile">${q.url ? 'Thay file nghe…' : 'Tải file nghe…'}</button>${q.file ? `<span class="qrnote">${esc(q.file)}</span>` : ''}${q.url ? '<button type="button" class="btn" data-eact="qrrm">Gỡ</button>' : ''}`;
-  const base = src === 'img' ? '' : `<div class="ef col"><span class="elb">Địa chỉ gốc (cả phiếu)</span>${eIn('qr.base', ws.audioBase || '', 'Ví dụ: https://pinta.vn/audio', { label: 'Địa chỉ gốc audio' })}</div>`;
-  const note = src === 'file' ? `<p class="qrnote">${q.demo ? 'Bản demo: chưa nối kho lưu file nghe, link chỉ là mẫu (không nghe được). Hệ thống thật sẽ trả về link thật.' : 'Link được hệ thống tạo khi tải file lên.'}${q.url ? ' ' + esc(qrUrl(t)) : ''}</p>` : '';
-  return `<div class="ef col"><span class="elb">Mã QR nghe</span><div class="qrrow"><span class="qrp">${inner || 'Chưa có mã'}</span><div class="stack" style="flex:1;min-width:0;display:grid;gap:6px">${seg}<div class="qrrow">${body}</div></div></div></div>${note}${base}`;
-}
 // ---- Sửa trực tiếp: gõ = cập nhật trang ngay (không dựng lại cột trái), rời ô = ghi vào lịch sử hoàn tác ----
 let edSnap = null, edTimer = null, edDirty = false;
+let liveN = 0;
 function liveRender() {
   const res = paginate(); lastRes = res; draw(); renderInspector();
-  const edE = document.querySelector('#tree .ed'), eid = edE ? edE.dataset.ed : sel.id, t0 = ws.tasks.find(x => x.id === eid);
-  if (t0) { document.querySelectorAll('#tree .tcwrap').forEach(e => { e.innerHTML = cardHtml(t0); });
-    document.querySelectorAll('#tree .qrp').forEach(e => { e.innerHTML = qrInner(t0) || 'Chưa có mã'; });
-    const sm = secSums(t0); document.querySelectorAll('#tree .sec').forEach(e => { const o = e.querySelector('.secs'); if (o && sm[e.dataset.sec] != null) o.textContent = sm[e.dataset.sec]; }); }
-  const tn = document.querySelector(`#tree .tnode[data-sel="task"][data-id="${eid}"] .tnm`); if (tn && t0) tn.textContent = t0.typeName;
-  publish({ pages: res.pages.length, diags: res.diags.length });
+  publish({ pages: res.pages.length, diags: res.diags.length, liveRev: ++liveN });   // thẻ mô tả, mã QR, tóm tắt mục, tên Task, số câu có đáp án (src/ui/tree) vẽ lại
 }
 function edFlush() { if (edSnap && edDirty) { hist.push(edSnap); fut = []; publish({ canUndo: true }); } edSnap = null; edDirty = false; }
 const treeEl = document.getElementById('tree');
@@ -1605,7 +1260,7 @@ treeEl.addEventListener('input', e => {
 });
 treeEl.addEventListener('focusout', e => { if (e.target.closest('.ed [data-k]')) { clearTimeout(edTimer); if (edDirty) { ws.tasks.forEach(tidy); liveRender(); kcntSync(); } edFlush(); } });
 // v88: gõ đáp án xong (rời ô) thì chip "x/y câu có đáp án" cập nhật ngay, không cần vẽ lại khung soạn
-function kcntSync() { document.querySelectorAll('#tree .ed[data-ed]').forEach(ed => { const t = ws.tasks.find(x => x.id === ed.dataset.ed), b = ed.querySelector('.kcnt'); if (!t || !b) return; const ks = keyState(t); b.textContent = `${ks.need.length - ks.miss.length}/${ks.need.length} câu có đáp án`; b.classList.toggle('w', !!ks.miss.length); }); }
+function kcntSync() { publish({ liveRev: ++liveN }); }
 treeEl.addEventListener('change', e => {
   const x = e.target;
   if (x.dataset.tg) { const id = x.closest('.ed').dataset.ed, on = x.checked; return commit(w => toggleField(w.tasks.find(y => y.id === id), x.dataset.tg, on)); }
@@ -1918,15 +1573,6 @@ function checkRes() {
 function slotName(t, key) { if (key === 'G1') return 'ảnh chung'; if (key === 'G1b') return 'ảnh chung thứ hai'; if (/^B\.\d+$/.test(key)) return `ảnh khung từ ${'ABCDEFGHIJ'[+key.slice(2)] || ''}`; if (xOfKey(t, key)) return 'ảnh khối tự do';
   if (ck(t) === 'table') { const [id, j] = key.slice(1).split('.'), i = (t.content.rows || []).findIndex(r => r.id === id); return `ảnh hàng ${i + 1}${j != null ? ', cột ' + (+j + 1) : ' (cột đầu)'}`; } const [id, j] = key.slice(1).split('.'), i = its(t).findIndex(x => x.id === id); return `ảnh câu ${i + 1}${j != null ? '.' + (+j + 1) : ''}`; }
 // Panel ảnh: tải / thay / gỡ + tỉ lệ ô giữ chỗ
-function imgCtl(t, key) {
-  if (!key) return '';
-  const up = srcOf(t, key), ar = imgArOf(t, key) || '4/3', m = (t.upMeta || {})[key], lr = (lowRes[t.id] || []).find(x => x.key === key);
-  return `<h3>Ảnh</h3><div class="stack"><div class="erow"><button class="btn" data-act="img-gen" data-v="${key}">Tạo ảnh…</button><button class="btn" data-act="img-up" data-v="${key}">${up ? 'Thay ảnh…' : 'Tải ảnh lên…'}</button>${up ? `<button class="btn" data-act="img-rm" data-v="${key}">Gỡ ảnh</button>` : ''}</div>
-    ${up ? `<p class="hint">Ảnh thật${m ? ` ${m.w}×${m.h} px` : ''}, tỉ lệ ${arLabel(ar)}.${lr ? ` <b style="color:var(--danger)">Hơi mờ khi in (~${lr.dpi} dpi, nên ≥ 150).</b>` : ''}</p>`
-      : fld('ar', 'Tỉ lệ ô giữ chỗ', `<span class="seg wrapseg">${AR_OPTS.map(([v, n]) => `<button data-act="img-ar" data-v="${key}|${v}" class="${String(ar) === v ? 'on' : ''}">${n}</button>`).join('')}</span>`, false, '', 's')}
-    <p class="hint">Cũng có thể kéo thả ảnh vào ô trên trang, hoặc chọn ô rồi bấm Ctrl+V.</p>${key === 'G1' ? `<div class="erow"><button class="btn" data-act="img-del">Xóa khung ảnh</button></div><p class="hint">Bài không cần ảnh chung thì xóa cả khung. Phím Delete cũng được. Thêm lại bằng nút + Thêm ở mục G1 · Ảnh chung (cột trái).</p>` : ''}</div>`;
-}
-
 /* ---- Thư viện mẫu có sẵn (thẻ 1 của "+ Task") ---- */
 /* v94: chọn Dạng câu hỏi (Q) rồi Bố cục (T), xem trước bằng chữ lorem. Mỗi Q dựa trên một công thức (RECIPES) rồi setQ / blkAdd / tn. */
 const LN_REC = { Q1: 'gap-fill', Q2: 'answer-q', Q3: 'choose-abc', Q4: 'choose-inline', Q5: 'true-false', Q6: 'look-write', Q7: 'listen-tick', Q8: 'match', Q9: 'trace', Q10: 'table', Q11: 'table', Q12: 'answer-q', IMG: 'colour-draw' };
@@ -2079,10 +1725,6 @@ function render() {
 /* ================= Tạo ảnh (popup) =================
    Nối dịch vụ gen ảnh thật: gán window.WSImageGen = { generate: async ({ prompt, refs, ar }) => ({ src: 'data:image/png;base64,…' }) }
    (refs = mảng data URL của ảnh tham chiếu; ar = '4/3' | '1/1' | '3/4' | '16/9'). Chưa gán thì dùng bản demo có đóng dấu DEMO. */
-function thumbHtml(t, key) {
-  const src = srcOf(t, key), ar = imgArOf(t, key) || '4/3';
-  return `<button type="button" class="ithumb ${src ? 'has' : ''}" data-gen="${esc(key)}" style="--tar:${ar}" title="${src ? 'Mở để thay hoặc tạo lại ảnh' : 'Tạo hoặc tải ảnh'}" aria-label="Ảnh: ${esc(slotName(t, key))}">${src ? `<img src="${src}" alt="">` : '<span>+</span>'}</button>`;
-}
 const genState = {}; let genCtx = null;
 const GEN_DEMO = { demo: true, generate: ({ prompt, ar }) => new Promise(ok => setTimeout(() => {
   const r = arNum(ar) || 4 / 3, W = r >= 1 ? 768 : Math.round(768 * r), H = r >= 1 ? Math.round(768 / r) : 768, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
@@ -2248,38 +1890,6 @@ const QPV = {
   Q11: '<div class="cw"><b>1</b><b></b><b></b><b></b><b>2</b><b></b></div>',
   Q12: '<p class="l"></p><p class="l"></p><p class="l"></p><p class="l"></p>'
 };
-const qIcon = q => `<span class="qpv" aria-hidden="true">${QPV[q] || ''}</span>`;
-// Bộ chọn T (4 kiểu + Tự động) và Q (12 kiểu); act = 'tn' / 'q' (Inspector) hoặc eact (cột trái)
-function tPickerHtml(t, side) {
-  const why = tnReasons(t), cur = t.layout.task === 'auto' ? 'auto' : tnOf(t), at = side === 'tree' ? 'data-eact' : 'data-act', IC = { T1: 'T1', T2: 'T2', T3: 'T3', T4: 'T8' };
-  const btn = (v, n, ic, dis, hint) => `<button class="lay tnb ${cur === v ? 'on' : ''}" ${at}="tn" data-v="${v}" ${dis ? `disabled title="${esc(dis)}"` : `title="${esc(hint)}"`}>${layIcon(ic)}<span>${n}</span>${v !== 'auto' ? cd(v) : `<small class="cd">${TN[tnOf(t)]}</small>`}</button>`;
-  const ok = Object.keys(TN).filter(v => !why[v]), locked = Object.keys(TN).filter(v => why[v]);
-  return `<h3>Bố cục Task</h3><div class="lay-grid tn-grid">${btn('auto', 'Tự động', IC[tnOf(t)], '', 'Hệ thống tự chọn')}${ok.map(v => btn(v, TN[v], IC[v], '', TN_HINT[v])).join('')}</div>` +
-    (locked.length ? `<details class="why"><summary>Bố cục chưa dùng được (${locked.length})</summary><ul>${locked.map(v => `<li><b>${TN[v]}</b>: ${esc(why[v])}</li>`).join('')}</ul></details>` : '');
-}
-function qPickerHtml(t, side) {
-  const cur = qOf(t), why = qReasons(t), at = side === 'tree' ? 'data-eact' : 'data-act';
-  return `<h3>Dạng câu hỏi</h3><div class="q-grid">${QORDER.map(q => `<button class="qbt ${cur === q ? 'on' : ''}" ${at}="q" data-v="${q}" ${why[q] ? `disabled title="${esc(why[q])}"` : `title="${esc(QN[q] + ': ' + QHINT[q])}"`}><b>${QN[q]}</b>${cd(q)}${qIcon(q)}</button>`).join('')}</div>`;
-}
-function qOptsHtml(t, side) {
-  const at = side === 'tree' ? 'data-eact' : 'data-act', st = qStyles(t), ar = qArr(t), q = qOf(t), p = t.answer.params || {}, ha = t.answer.kind !== 'none', tbl = ck(t) === 'table';
-  let h = '';
-  if (!tbl && ck(t) !== 'empty') h += `<div class="field"><span>Có chỗ trả lời</span><div class="seg"><button ${at}="hasans" data-v="1" class="${ha ? 'on' : ''}">Có</button><button ${at}="hasans" data-v="0" class="${!ha ? 'on' : ''}">Không (chỉ hiển thị)</button></div></div>`;
-  if (st.length > 1) h += `<div class="field"><span>Cách trả lời</span><div class="seg wrapseg">${st.map(x => `<button ${at}="qst" data-v="${x.id}" class="${x.on ? 'on' : ''}">${x.name}</button>`).join('')}</div></div>`;
-  if (q === 'Q2' && ha && p.frame !== 'box') {   // v95
-    const c = q2cfg(t), B = (v, lab, on) => `<button ${at}="q2" data-v="${v}" class="${on ? 'on' : ''}">${lab}</button>`;
-    h += `<div class="field q2f"><span>Điểm bắt đầu</span><label class="q2ck"><input type="checkbox" ${at}="q2" data-v="start:${c.start === 'end' ? 'below' : 'end'}" ${c.start === 'end' ? 'checked' : ''}> Từ cuối câu hỏi</label></div>`;
-    h += `<div class="field q2f"><span>Chiều dài</span><div class="seg">${B('len:fixed', 'Cố định', c.len === 'fixed')}${B('len:fill', 'Hết dòng', c.len === 'fill')}</div>${c.len === 'fixed' ? `<div class="seg q2n">${B('mm:-5', '−', false)}<b data-q2v="mm">${c.mm} mm</b>${B('mm:+5', '+', false)}</div>` : ''}</div>`;
-    h += `<div class="field q2f"><span>Số hàng</span><div class="seg q2n">${B('ln:-1', '−', false)}<b data-q2v="ln">${c.lines}</b>${B('ln:+1', '+', false)}</div></div>`;
-    h += `<p class="hint">${c.start === 'end' ? (c.lines > 1 ? `Gạch ngay sau câu hỏi, thêm ${c.lines - 1} hàng bên dưới.` : 'Gạch ngay sau câu hỏi, cùng hàng.') : `${c.lines} hàng bên dưới câu hỏi.`}</p>`;
-  }
-  if (q === 'Q5' && t.answer.layout === 'A6') { const k = labsKey(p); h += `<div class="field"><span>Nhãn lựa chọn</span><div class="seg wrapseg">${Object.keys(LABS).map(x => `<button ${at}="labs" data-v="${x}" class="${k === x ? 'on' : ''}">${LABS[x].join(' / ')}</button>`).join('')}</div></div>`; }
-  if (q === 'Q5' && t.answer.layout === 'A6') h += `<div class="field"><span>Vị trí T / F</span><div class="seg"><button ${at}="tfrow" data-v="0" class="${p.row ? '' : 'on'}">Dưới câu</button><button ${at}="tfrow" data-v="1" class="${p.row ? 'on' : ''}">Cùng hàng với câu</button></div></div>`;
-  if (['A1', 'A8'].includes(t.answer.layout) && p.frame !== 'box') h += `<div class="field"><span>Kiểu dòng</span><div class="seg"><button ${at}="ruling" data-v="" class="${p.ruling !== '4' ? 'on' : ''}">Dòng thường</button><button ${at}="ruling" data-v="4" class="${p.ruling === '4' ? 'on' : ''}">Bốn ô li (tập viết)</button></div></div>`;
-  if (ar.length) h += `<div class="field"><span>Cách xếp câu</span><div class="seg">${ar.map(([v, n, on]) => `<button ${at}="qarr" data-v="${v}" class="${on ? 'on' : ''}">${n}</button>`).join('')}</div></div>`;
-  if (tbl) h += `<p class="hint">Chỗ trả lời nằm trong ô: ô để trống = ô viết, ✓ = ô tick.</p>`;
-  return h;
-}
 // v98: bảng chọn đáp án: ô chữ ↔ ô tích + chữ (giữ ô trống, ô điền, ảnh); "một ô đúng mỗi hàng" giữ ô đúng đầu tiên
 const tkCells = t => (t.content.rows || []).flatMap(r => r.cells);
 const tkHasText = t => tkCells(t).some(v => (typeof v === 'string' && v.trim()) || (v && v.tick && v.text));
@@ -2358,49 +1968,10 @@ blankItem = (f => t => withoutGt(t, () => f(t)))(blankItem);
 itemKeys = (f => t => { const g = new Set(its(t).filter(x => x.gt).map(x => x.id)); return f(t).filter(id => !g.has(id)); })(itemKeys);
 labelOf = (f => (t, k) => { const [a, b] = String(k).split('.'), i = its(t).findIndex(x => x.id === a); return i >= 0 && !its(t)[i].gt ? qnum(t, i) + (b != null ? '.' + (+b + 1) : '') : f(t, k); })(labelOf);
 Object.assign(GNAME, { G2: 'Câu hỏi', G3: 'Câu hỏi' });
-// ---- Inspector: bộ chọn T + Q thay cho bộ chọn bố cục cũ; panel Câu hỏi thay panel Đáp án ----
-layoutPicker = t => tPickerHtml(t) + qPickerHtml(t) + qOptsHtml(t);
-const _answerPanel81 = answerPanel;
-answerPanel = (t, s, key) => {
-  if (key) {
-    const it = its(t), i = it.findIndex(x => x.id === key), x = it[i] || {};
-    const acts = `<h3>Câu này</h3><div class="stack"><button class="btn" data-act="iadd" data-item="${key}">+ Thêm câu sau</button><button class="btn" data-act="idup" data-item="${key}">⧉ Nhân đôi</button><button class="btn" data-act="iex" data-item="${key}" aria-pressed="${!!x.ex}">${x.ex ? 'Bỏ câu ví dụ' : 'Đặt làm câu ví dụ (số 0)'}</button><button class="btn" data-act="idel" data-item="${key}">✕ Xóa câu</button></div>`
-      + (x.ex ? `<div class="field"><span>Đáp án mẫu (hiện sẵn)</span><input data-itx="${key}" data-f="key" value="${esc(x.key || '')}" aria-label="Đáp án của câu ví dụ"></div>` : '') + `<p class="hint">Phím Delete cũng xóa câu đang chọn.</p>`;
-    return _answerPanel81(t, s, key).replace(/<h2>Đáp án · câu ([^<]*)<\/h2>/, (m, n) => `<h2>Câu ${n}${x.ex ? ' (ví dụ)' : ''} · chỗ trả lời</h2>` + acts);
-  }
-  const q = qOf(t), h = _answerPanel81(t, s, null), top = qPickerHtml(t) + qOptsHtml(t);
-  return h.replace(/<h2>Đáp án · [\s\S]*?<\/h2>[\s\S]*?(?=<section class="psec")/, `<h2>Câu hỏi · ${QN[q]} ${cd(q)}</h2>${top}`);
-};
-const _framePanel81 = framePanel;
-framePanel = (t, s) => {
-  const two = !!(t.image && t.image.two), ok = ['questions', 'passage', 'empty'].includes(ck(t));
-  const f2 = two ? g1bFr(t) : {}, fit2 = two ? fSeg('@cells.G1b.frame.fit', 'Hiển thị ảnh thứ hai', f2.fit, [['', 'Như ảnh 1'], ['normal', 'Bình thường'], ['width', 'Fit ngang'], ['height', 'Fit dọc']], '', { hint: 'Kích thước và căn lề đi theo khung ảnh chung.' })
-    + (f2.fit && f2.fit !== 'normal' ? fRange('@cells.G1b.frame.zoom', 'Zoom ảnh thứ hai', f2.zoom, { min: 50, max: 300, step: 5, def: 100, fmt: x => x + '%', fmtKey: 'zoom' }) : '') : '';   // v85
-  const add = `<h3>Ảnh thứ hai</h3>${two ? fit2 + imgCtl(t, 'G1b').replace('<h3>Ảnh</h3>', '') + `<div class="stack"><button class="btn" data-act="blkdel" data-v="G1b">Xóa ảnh thứ hai</button></div>` : `<div class="stack"><button class="btn" data-act="blkadd" data-v="G1b" ${ok ? '' : 'disabled title="Hai ảnh dùng cho bài có câu hỏi / bài đọc"'}>+ Thêm ảnh thứ hai</button></div>`}<p class="hint">Hai ảnh đứng cạnh nhau, cùng cỡ.</p>`;
-  return _framePanel81(t, s).replace(/(<section class="psec" data-sec="auto")/, `<section class="psec" data-sec="two">${add}</section>$1`);
-};
-bankPanel = (t, s) => {
-  const b = t.wordBank, pl = b.placement || 'top', right = pl === 'right', img = b.kind === 'image';
-  const size = (right ? fRange('@split', 'Tỉ lệ nội dung / khung từ', t.layout.split, { min: 40, max: 80, step: 5, def: 62, fmt: r => `${r} / ${100 - r}`, fmtKey: 'split' }) : fNum('w', 'Độ rộng khung từ', b.w, { min: 30, max: 100, step: 5, unit: '%', def: 100 }));
-  const align = right ? fSeg('valign', 'Căn dọc', b.valign, Object.entries(VA), 'top') : fSeg('align', 'Căn ngang', b.align, Object.entries(HA), 'center', { hint: b.w ? '' : 'Có tác dụng khi độ rộng nhỏ hơn 100%.' });
-  const sg = (act, cur, opts) => `<div class="seg wrapseg">${opts.map(([v, n]) => `<button data-act="${act}" data-v="${v}" class="${String(cur) === String(v) ? 'on' : ''}">${n}</button>`).join('')}</div>`;
-  let content = `<div class="field"><span>Loại</span>${sg('wbkind', img ? 'image' : 'text', [['text', 'Chữ'], ['image', 'Ảnh']])}</div><div class="field"><span>Vị trí</span>${sg('wb', pl, [['top', 'Trên câu hỏi'], ['bottom', 'Dưới câu hỏi'], ['right', 'Bên phải']])}</div>`;
-  if (!img) content += `<div class="field"><span>Kiểu hiển thị</span>${sg('wbstyle', b.style === 'list' ? 'list' : 'chips', [['chips', 'Từ rời'], ['list', 'Danh sách']])}</div>` + (b.style === 'list' ? `<div class="field"><span>Nhãn</span>${sg('wblab', b.label || 'lower', [['lower', 'a b c'], ['upper', 'A B C'], ['none', 'Không']])}</div>` : '');
-  else content += `<div class="field"><span>Nhãn</span>${sg('wblab', b.label || 'lower', [['upper', 'A B C'], ['lower', 'a b c'], ['none', 'Không']])}</div><div class="field"><span>Chữ dưới ảnh</span>${sg('wbcap', b.cap === false ? '0' : '1', [['1', 'Hiện'], ['0', 'Ẩn']])}</div>${fSeg('frame.fit', 'Hiển thị ảnh trong khung', (b.frame || {}).fit, [['normal', 'Bình thường'], ['width', 'Fit ngang'], ['height', 'Fit dọc']], 'normal', { hint: 'Áp cho mọi ảnh trong khung từ.' })}${(b.frame || {}).fit ? fRange('frame.zoom', 'Zoom ảnh', b.frame.zoom, { min: 50, max: 300, step: 5, def: 100, fmt: x => x + '%', fmtKey: 'zoom' }) : ''}<div class="field"><span>Tỉ lệ ô ảnh</span>${sg('wbar', b.ar || '1/1', [['1/1', '1:1'], ['4/3', '4:3'], ['3/4', '3:4']])}</div><div class="field"><span>Số ảnh mỗi hàng</span>${sg('wbcols', b.cols || 0, [[0, 'Tự động'], [2, '2'], [3, '3'], [4, '4'], [5, '5'], [6, '6']])}</div><p class="hint">Bấm vào từng ô ảnh trên trang để tải / tạo ảnh. Tên ảnh sửa ở cột trái (mục Nội dung).</p>`;
-  content += `<div class="stack"><button class="btn" data-act="blkdel" data-v="G4">Xóa khung từ</button></div>`;
-  return panel(t, s, `Khung từ ${img ? 'ảnh' : 'chữ'} ${cd('G4')}`, { size, align, content, cname: 'Kiểu hiển thị' });
-};
-// Bài đọc (G2 của Task có bài đọc): thứ tự so với câu hỏi, xóa bài đọc
-function leadPanel(t, s) {
-  const qf = t.layout.order === 'qfirst', w8 = !qf && t.layout.task !== 'auto' && ['T8', 'T4'].includes(layoutOf(t));
-  const c = `<div class="field"><span>Thứ tự</span><div class="seg"><button data-act="order" data-v="pfirst" class="${!qf ? 'on' : ''}">Bài đọc trước</button><button data-act="order" data-v="qfirst" class="${qf ? 'on' : ''}" ${w8 ? 'disabled title="Bố cục đang chọn tay (Ảnh trong bài đọc / hai cột): bài đọc luôn đứng trước. Đổi Bố cục về Tự động / Xếp dọc / Ảnh trái / Ảnh phải để đặt câu hỏi trước."' : ''}>Câu hỏi trước</button></div><p class="hint" style="margin:4px 0 0">Câu hỏi trước: bài đọc in sau câu hỏi (bài đọc khi đó không cắt theo đoạn).</p></div><div class="stack"><button class="btn" data-act="blkdel" data-v="G2">Xóa bài đọc (giữ câu hỏi)</button></div><p class="hint">Sửa chữ bài đọc ở cột trái, mục Nội dung. Phím Delete cũng xóa bài đọc.</p>`;
-  return crumb(t, s) + `<h2>Bài đọc ${cd('G2')}</h2>` + sec('content', 'Bài đọc', c) + taskPanel(t, { type: 'task', id: t.id }).replace(/^[\s\S]*?<\/h2>/, '<h3>Cả Task</h3>');
-}
 const _renderInspector81 = renderInspector;
 renderInspector = function () {
   // v85: hoàn tác sau khi thêm khối có thể để lựa chọn trỏ vào khối không còn (vd khung từ) → về chọn cả Task
   if (sel.type === 'group') { const t0 = ws.tasks.find(x => x.id === sel.id); if (!t0) sel = { type: 'sheet' }; else if ((sel.g === 'G4' && !t0.wordBank) || (sel.g === 'G1' && !sel.item && !t0.image) || (sel.g === 'GT' && sel.item && !gtOf(t0, sel.item))) { sel = { type: 'task', id: t0.id }; multi = []; } }
-  if (sel.type === 'group' && sel.g === 'G2' && !sel.item) { const t = curT(ws); if (t && ck(t) === 'passage') { document.getElementById('insp').innerHTML = leadPanel(t, sel); tidyHints(document.getElementById('insp')); return; } }
   _renderInspector81();
 };
 extraActs['blkadd'] = (b, v) => { let nid = null; commit(w => { nid = blkAdd(curT(w), v); }, BLK_NAME[v] ? 'Đã thêm: ' + BLK_NAME[v] : null); };
@@ -2419,33 +1990,6 @@ keyExtra = (f => e => {
 
 // ---- Cột trái: mục 1 "Bố cục & dạng câu hỏi", khối thêm / xóa, câu ví dụ, dòng chữ giữa các câu ----
 applyField = (f => (t, k, v) => { if (k === 'image.label2') { if (t.image) t.image.label2 = v; return; } if (k === 'wb.imgs') { if (t.wordBank) t.wordBank.words = splitList(v, /\n|,/).filter(Boolean); return; } const m = /^it\.(\d+)\.key$/.exec(k); if (m) { const x = its(t)[+m[1]]; if (x) { if (v.trim() || x.ex) x.key = v; else delete x.key; } return; } return f(t, k, v); })(applyField);
-const xb = (v, n) => ` <button type="button" class="eb xb" data-eact="blkdel" data-v="${v}" title="Xóa ${n}" aria-label="Xóa ${n}">✕</button>`;
-const _edHtml81 = edHtml;
-edHtml = t => {
-  let h = _edHtml81(t); const c = t.content, k = ck(t);
-  // Mục 1: bộ chọn T và Q (giữ "Áp mẫu" và "Đáp án" chi tiết bên dưới)
-  h = h.replace('<span class="sect">Dạng bài &amp; đáp án</span>', '<span class="sect">Bố cục &amp; dạng câu hỏi</span>')
-    .replace(/(<div class="tcwrap">[\s\S]*?<\/div>)(\s*<div class="ef"><span class="elb">Áp mẫu)/, (m, a, b2) => a + `<div class="qpick">${tPickerHtml(t, 'tree')}${qPickerHtml(t, 'tree')}${qOptsHtml(t, 'tree')}</div>` + b2);
-  // Mục 3: nút xóa từng khối, ảnh thứ hai, khung từ ảnh, nút thêm khối
-  h = h.replace('<span class="elb">Ảnh chung</span>', `<span class="elb">Ảnh chung${xb('G1', 'ảnh chung')}</span>`)
-    .replace('<span class="elb">Bài đọc</span>', `<span class="elb">Bài đọc${xb('G2', 'bài đọc')}</span>`)
-    .replace('<span class="elb">Lời dẫn</span>', `<span class="elb">Lời dẫn${xb('intro', 'lời dẫn')}</span>`)
-    .replace('<span class="elb">Khung từ</span>', `<span class="elb">${t.wordBank && t.wordBank.kind === 'image' ? 'Khung từ ảnh' : 'Khung từ'}${xb('G4', 'khung từ')}</span>`);
-  if (t.image && t.image.two) { const a = eIn('image.label', t.image.label || '', 'Tên ảnh', { label: 'Tên ảnh chung' }) + '</div>'; h = h.replace(a, a + `<div class="ef imgrow"><span class="elb">Ảnh thứ hai${xb('G1b', 'ảnh thứ hai')}</span>${thumbHtml(t, 'G1b')}${eIn('image.label2', t.image.label2 || '', 'Tên ảnh', { label: 'Tên ảnh thứ hai' })}</div>`); }
-  if (t.wordBank && t.wordBank.kind === 'image') { const wb = t.wordBank, i0 = h.indexOf('<span class="elb">Khung từ ảnh'); if (i0 > 0) { const j = h.indexOf('</div>', h.indexOf('</textarea>', i0)); if (j > 0) h = h.slice(0, j + 6) + `<div class="ef wbth">${wb.words.map((w, i) => `<span class="wbt">${thumbHtml(t, 'B.' + i)}<small>${esc(w)}</small></span>`).join('')}</div>` + h.slice(j + 6); } }
-  // Câu: số theo câu thật (ví dụ = 0, dòng chữ không số), nút "0" bật / tắt câu ví dụ
-  const it = its(t), exOk = c.form !== 'table' && c.list !== false && !['pairs', 'empty', 'table'].includes(k);
-  h = h.replace(/<div class="eit([^"]*)" data-i="(\d+)"><div class="eih"><span class="egrip" draggable="true" data-drag="\2" title="Kéo để đổi thứ tự">⋮⋮<\/span><span class="ino">\d+<\/span>/g, (m, cl, i) => { const x = it[+i] || {}; return `<div class="eit${cl}${x.gt ? ' egt' : ''}${x.ex ? ' eex' : ''}" data-i="${i}"><div class="eih"><span class="egrip" draggable="true" data-drag="${i}" title="Kéo để đổi thứ tự">⋮⋮</span><span class="ino${x.ex ? ' ex' : ''}">${x.gt ? 'Chữ' : qnum(t, +i)}</span>`; });
-  if (exOk) h = h.replace(/<button class="eb" data-eact="dupi" data-i="(\d+)"/g, (m, i) => { const x = it[+i] || {}; return x.gt ? m : `<button class="eb exb${x.ex ? ' on' : ''}" data-eact="iexi" data-i="${i}" aria-pressed="${!!x.ex}" title="${x.ex ? 'Bỏ câu ví dụ' : 'Đặt làm câu ví dụ: số 0, hiện sẵn đáp án'}" aria-label="Câu ví dụ">Ví dụ</button>` + m; });
-  // Dòng chữ (gt): chỉ ô chữ, không đáp án / lựa chọn / số ô
-  if (it.some(x => x.gt)) h = h.replace(/<div class="eit[^"]*egt[^"]*" data-i="(\d+)">[\s\S]*?(?=<div class="eit|<\/div><div class="erow">)/g, m => m.replace(/<div class="er2"><span class="elb">(Đáp án|Số ô|Chọn)<\/span>[\s\S]*?<\/div>/g, '').replace(/<div class="eans"[^>]*>[^<]*<\/div>/, '').replace(/placeholder="[^"]*"/, 'placeholder="Dòng chữ giữa các câu (không số, không chỗ trả lời)"').replace(/<button class="eb" data-eact="dupi"[^>]*>⧉<\/button>/, ''));
-  if (exOk && ['questions', 'dialogue'].includes(k)) h = h.replace(/(<button class="btn" data-eact="add">[^<]*<\/button>)/, `$1<button class="btn" data-eact="gtiadd" title="Dòng chữ giữa các câu: không số, không chỗ trả lời (tiêu đề nhóm, lời dẫn phần sau)">+ Dòng chữ</button>`);
-  // Thêm khối
-  const ad = blkAddable(t);
-  if (ad.length) { const row = `<div class="ef blkadd"><span class="elb">Thêm khối</span><select data-eact="blkadd" aria-label="Thêm khối vào Task"><option value="">Chọn khối…</option>${ad.map(v => `<option value="${v}">${BLK_NAME[v]}</option>`).join('')}</select></div>`;
-    const s0 = h.indexOf('data-sec="content"'); if (s0 > 0) { const e0 = h.indexOf('</div></section>', s0); if (e0 > 0) h = h.slice(0, e0) + row + h.slice(e0); } }
-  return h;
-};
 treeEl.addEventListener('click', e => {
   const b = e.target.closest('[data-eact]'); if (!b || b.disabled || b.tagName === 'SELECT') return;
   const ed = b.closest('.ed'), id = ed ? ed.dataset.ed : null, act = b.dataset.eact, v = b.dataset.v; if (!id) return;
@@ -2522,37 +2066,6 @@ secSums = t => {
   return { cfg: s.kind, g0: s.info, g1: t.image ? (t.image.two ? '2 ảnh' : '1 ảnh') : 'chưa có', g2: ld ? (ld.text || '').replace(/\s+/g, ' ').trim() || (ld.kind === 'text' ? 'lời dẫn trống' : 'bài đọc trống') : 'chưa có',
     g3: c.form !== 'table' && c.list === false ? ((c.items || []).length ? `đang tắt · giữ ${c.items.length} câu` : 'chưa có') : s.content, g4: wb ? `${n} ${wb.kind === 'image' ? 'ảnh' : 'từ'}` : 'chưa có', gt: s.free };
 };
-const _edHtml82 = edHtml;
-edHtml = t => {
-  const tp = document.createElement('template'); tp.innerHTML = _edHtml82(t);
-  const q = s => tp.content.querySelector(s), out = e => e ? e.outerHTML : '', inner = s => { const e = q(s); return e ? e.innerHTML : ''; };
-  const c = t.content, k = ck(t), sums = secSums(t), tn = tnOf(t), qq = qOf(t), ad = blkAddable(t), tbl = c.form === 'table';
-  // Mục "Nội dung" của v81 → từng khối
-  const G = { g1: '', g2: '', g3: '', g4: '' };
-  [...(q('[data-sec="content"] .secb') || { children: [] }).children].forEach(e => {
-    if (e.classList.contains('blkadd') || (e.tagName === 'P' && /Danh sách câu đang tắt/.test(e.textContent))) return;
-    const g = e.classList.contains('imgrow') ? 'g1' : e.querySelector('[data-k^="lead."]') ? 'g2' : (e.classList.contains('wbth') || e.querySelector('[data-k^="wb."]')) ? 'g4' : 'g3';
-    G[g] += e.outerHTML;
-  });
-  if (t.image && ad.includes('G1b')) G.g1 += `<div class="stack"><button class="btn" data-eact="blkaddb" data-v="G1b">+ Ảnh thứ hai</button></div>`;
-  // Cấu hình: thẻ mô tả, T, Q, tùy chọn của Q, tùy chọn câu, bật / tắt khối
-  const tg = fieldToggles(t), tgH = l => l.map(x => `<label class="etg ${x.dis ? 'dis' : ''}" title="${esc(x.dis || '')}"><input type="checkbox" data-tg="${x.id}" ${x.on ? 'checked' : ''} ${x.dis && !x.on ? 'disabled' : ''}>${TG_BLK[x.id] || x.label}</label>`).join('');
-  const tgI = tg.filter(x => !TG_BLK[x.id] && !(x.dis && !x.on)), tgB = tg.filter(x => TG_BLK[x.id]);
-  const cfg = out(q('.tcwrap')) + out(q('.qpick')) + (tgI.length ? `<h3>Tùy chọn của câu</h3><div class="etgs">${tgH(tgI)}</div>` : '') +
-    (tgB.length ? `<h3>Khối của bài</h3><p class="hint" style="margin:0 0 4px">Bật hoặc tắt từng khối. Tắt Câu hỏi vẫn giữ câu để bật lại.</p><div class="etgs">${tgH(tgB)}</div>` : '');
-  const tag = (v, ti) => v ? `<span class="stag" title="${esc(ti)}">${v}</span>` : '';
-  const sec = (key, code, title, html, tg0) => `<section class="sec ${SECT[key] ? 'open' : ''}" data-sec="${key}"><button class="sech" data-stg="${key}" aria-expanded="${SECT[key] ? 'true' : 'false'}"><span class="snum">${code}</span><span class="sect">${title}</span><span class="secs">${esc(sums[key] || '')}</span>${tg0 || ''}<span class="car">▶</span></button><div class="secb">${html}</div></section>`;
-  // Khối chưa có: tiêu đề mờ, nút thêm ngay tại mục
-  const off = (key, code, title, btns, why) => `<section class="sec off" data-sec="${key}"><div class="sech"><span class="snum">${code}</span><span class="sect">${title}</span><span class="secs">${esc(why || sums[key] || '')}</span>${btns.map(([v, n]) => `<button type="button" class="eb sadd" data-eact="blkaddb" data-v="${v}">${n}</button>`).join('')}</div></section>`;
-  const NA = 'không dùng cho dạng này';
-  const g1 = t.image ? sec('g1', 'G1', 'Ảnh chung', G.g1) : off('g1', 'G1', 'Ảnh chung', [['G1', '+ Thêm']]);
-  const g2 = c.lead ? sec('g2', 'G2', c.lead.kind === 'text' ? 'Lời dẫn' : 'Bài đọc', G.g2, tag('theo ' + tn, 'Vị trí bài đọc theo Bố cục ' + TN[tn])) :
-    off('g2', 'G2', 'Bài đọc', [...(ad.includes('G2') ? [['G2', '+ Bài đọc']] : []), ...(ad.includes('intro') ? [['intro', '+ Lời dẫn']] : [])], ad.includes('G2') || ad.includes('intro') ? '' : NA);
-  const g3on = tbl || c.list !== false;
-  const g3 = g3on ? sec('g3', 'G3', tbl ? 'Bảng' : 'Câu hỏi', G.g3, tag(qq && 'theo ' + qq, qq ? 'Dạng câu hỏi: ' + QN[qq] : '')) : off('g3', 'G3', 'Câu hỏi', [['G3', c.list === false && (c.items || []).length ? '+ Bật lại' : '+ Thêm']]);
-  const g4 = t.wordBank ? sec('g4', 'G4', t.wordBank.kind === 'image' ? 'Khung từ ảnh' : 'Khung từ', G.g4) : ad.includes('G4') ? off('g4', 'G4', 'Khung từ', [['G4', '+ Chữ'], ['G4i', '+ Ảnh']]) : off('g4', 'G4', 'Khung từ', [], NA);
-  return `<div class="ed" data-ed="${t.id}">${out(q('.tkt'))}${sec('cfg', '⚙', 'Cấu hình', cfg, tag(tn + (qq ? ' · ' + qq : ''), 'Bố cục ' + TN[tn] + (qq ? ' · Dạng câu hỏi ' + QN[qq] : '')))}${sec('g0', 'G0', 'Tiêu đề', inner('[data-sec="info"] .secb'))}${g1}${g2}${g3}${g4}${(t.extras || []).length ? sec('gt', 'GT', 'Khối tự do', inner('[data-sec="free"] .secb')) : off('gt', 'GT', 'Khối tự do', [['GTt', '+ Chữ'], ['GTi', '+ Ảnh']])}</div>`;
-};
 treeEl.addEventListener('click', e => {
   const b = e.target.closest('[data-eact="blkaddb"]'); if (!b || b.disabled) return;
   const id = b.closest('.ed').dataset.ed, v = b.dataset.v; let nid = null;
@@ -2563,16 +2076,6 @@ focusK = (f => k => { const e = document.querySelector(`#tree .ed [data-k="${k}"
 /* ================= hết v82 ================= */
 
 /* ================= v83: ô ảnh G1 lớn, ⓘ + thanh chèn ký hiệu cho ô chữ ================= */
-const _edHtml83 = edHtml;
-edHtml = t => {
-  const tp = document.createElement('template'); tp.innerHTML = _edHtml83(t); const R = tp.content;
-  R.querySelectorAll('.sec[data-sec=g1] .imgrow .ithumb').forEach(b => { b.classList.add('big'); if (!b.classList.contains('has')) b.innerHTML = '<span>＋ Tải ảnh lên · Tạo ảnh<small>hoặc kéo thả ảnh vào ô trên trang · Ctrl+V</small></span>'; });
-  const info = (ctx, ti) => `<button type="button" class="tinfo" data-eact="tinfo" data-ctx="${ctx}" title="${ti}" aria-label="${ti}">i</button>`;
-  const lb = R.querySelector('.sec[data-sec=g2] .elb'); if (lb) lb.insertAdjacentHTML('beforeend', info('passage', 'Cách viết bài đọc / lời dẫn'));
-  const sh = R.querySelector('.sec[data-sec=g3] .subh'); if (sh) sh.insertAdjacentHTML('beforeend', info('items', 'Cách viết câu hỏi'));
-  R.querySelectorAll('.sec[data-sec=gt] .gtcard').forEach(c => { if (/Khối chữ/.test(c.querySelector('.gthd b') ? c.querySelector('.gthd b').textContent : '')) c.querySelector('.gthd b').insertAdjacentHTML('afterend', info('free', 'Cách viết khối chữ')); });
-  const d = document.createElement('div'); d.appendChild(R.cloneNode(true)); return d.innerHTML;
-};
 // Bảng ký hiệu theo ngữ cảnh; nút chèn tác động vào ô chữ đang gõ gần nhất
 const TXH = {
   passage: ['Bài đọc / lời dẫn', [['**chữ**', 'đậm'], ['*chữ*', 'nghiêng'], ['<u>chữ</u>', 'gạch chân'], ['___', 'chỗ trống để học sinh điền'], ['{a|b}', 'chọn trong câu'], ['(dòng trống)', 'sang đoạn mới'], ['A. …', 'đầu đoạn (≥ 2 đoạn): nhãn đoạn đậm']], 'Đáp án chỗ trống ghi ở ô bên dưới, cách nhau dấu phẩy, theo thứ tự chỗ trống.'],
@@ -2620,38 +2123,6 @@ treeEl.addEventListener('scroll', () => { const pop = document.getElementById('t
 /* ================= v85: cột trái gọn hơn =================
    Bỏ "Khối của bài" trong Cấu hình (thêm / xóa khối đã có ngay ở từng mục G; G3 có nút ✕ = tắt câu hỏi, giữ câu để bật lại).
    Mục G3: "Danh sách câu" → "Câu hỏi", bỏ số câu, thanh B I U ___ {a|b} bên phải cùng hàng; ⓘ lên hàng "Tỉ lệ ô ảnh" nếu có. */
-const _edHtml84 = edHtml;
-edHtml = t => {
-  const tp = document.createElement('template'); tp.innerHTML = _edHtml84(t); const R = tp.content;
-  const h3 = [...R.querySelectorAll('.sec[data-sec=cfg] h3')].find(h => h.textContent.trim() === 'Khối của bài');
-  if (h3) { [h3.nextElementSibling && h3.nextElementSibling.matches('p.hint') ? h3.nextElementSibling : null].forEach(e => e && e.remove()); const g = h3.nextElementSibling; if (g && g.matches('.etgs')) g.remove(); h3.remove(); }
-  const sh = R.querySelector('.sec[data-sec=g3] .subh');
-  if (sh) {
-    const nm = (sh.firstChild && sh.firstChild.nodeType === 3 ? sh.firstChild.textContent : '').trim(), inf = sh.querySelector('.tinfo');
-    const lt = R.querySelector('.sec[data-sec=g3] .ef .elb'), ar = lt && lt.textContent.trim() === 'Tỉ lệ ô ảnh' ? lt.closest('.ef') : null;
-    const lst = fieldToggles(t).find(x => x.id === 'list'), canOff = lst && lst.on && !lst.dis;
-    sh.innerHTML = `<span class="g3n">${esc(nm === 'Danh sách câu' ? 'Câu hỏi' : nm)}${canOff ? xb('G3', 'câu hỏi (giữ câu để bật lại)') : ''}</span>${t.content.form === 'table' ? '' : `<span class="g3tb" role="toolbar" aria-label="Chèn ký hiệu vào ô câu đang gõ">${TXB.items.map(([n, a]) => `<button type="button" data-tx="${a}" title="${{ b: 'Đậm', i: 'Nghiêng', u: 'Gạch chân', gap: 'Chỗ trống', pick: 'Chọn trong câu' }[a]}: chèn vào ô câu đang gõ">${esc(n)}</button>`).join('')}</span>`}`;
-    if (inf) { if (ar) { ar.classList.add('g3ar'); ar.appendChild(inf); } else sh.appendChild(inf); }
-    if (ck(t) === 'pairs') { const on = !!t.content.shuffle; sh.insertAdjacentHTML('afterend', `<div class="ef shrow"><span class="elb">Xáo vế phải khi in</span><span class="seg"><button type="button" data-eact="pshuf" data-v="1" class="${on ? 'on' : ''}">Bật</button><button type="button" data-eact="pshuf" data-v="" class="${on ? '' : 'on'}">Tắt</button></span>${on ? '<button type="button" class="btn" data-eact="preshuf" title="Đổi thứ tự xáo khác">Xáo lại</button>' : ''}</div><p class="hint">Bật: gõ cặp <b>đúng</b> cạnh nhau, phiếu in tự xáo vế phải (cố định, in lại không đổi). Tắt: in đúng thứ tự đang gõ.</p>`); }   // v90
-    const ks = keyState(t); if (ks.need.length) sh.insertAdjacentHTML('beforeend', `<button type="button" class="kcnt${ks.miss.length ? ' w' : ''}" data-eact="keyjump" title="${ks.miss.length ? 'Bấm để tới câu còn thiếu đáp án đúng' : 'Mọi câu đã có đáp án đúng'}">${ks.need.length - ks.miss.length}/${ks.need.length} câu có đáp án</button>`);   // v88
-    // v96: tùy chọn bảng ngay ở cột trái (ô tích): hàng tiêu đề, tô nền hàng tiêu đề, hàng xen kẽ, cột tiêu đề hàng, số thứ tự
-    if (ck(t) === 'table' && !tblOpts(t).cross) { const o = tblOpts(t), C = (k, n, on, dis) => `<label class="tbck"><input type="checkbox" data-eact="tblo" data-v="${k}:${on ? 0 : 1}" ${on ? 'checked' : ''} ${dis ? `disabled title="${esc(dis)}"` : ''}> ${n}</label>`;
-      sh.insertAdjacentHTML('afterend', `<div class="ef tbrow"><span class="elb">Kiểu bảng</span><span class="tbcks">${C('head', 'Hàng tiêu đề cột', o.head)}${C('fh', 'Tô nền hàng tiêu đề', o.fh && o.head, o.head ? '' : 'Bật Hàng tiêu đề cột trước')}${C('fr', 'Tô hàng xen kẽ', o.fr === 'zebra' && !o.fc, o.fc ? 'Đang tô cột đầu' : '')}${C('rowHead', 'Cột tiêu đề hàng', o.rowHead)}</span></div>${tkHasText(t) || tkCells(t).some(v => v && v.tick) ? `<div class="ef tbrow"><span class="elb">Chọn đáp án</span><span class="tbcks">${tkHasText(t) ? C('tk', 'Hiện ô tích trước chữ', tkOn(t)) : ''}${tkCells(t).some(v => v && v.tick) ? C('one', 'Một ô đúng mỗi hàng', !!(t.layout.table || {}).one) : ''}</span></div>` : ''}<div class="ef tbrow"><span class="elb">Số thứ tự</span><span class="seg">${[['out', 'Ngoài bảng'], ['in', 'Trong cột đầu'], ['off', 'Tắt']].map(([v, n]) => `<button type="button" data-eact="tblo" data-v="nm:${v}" class="${o.nm === v ? 'on' : ''}">${n}</button>`).join('')}</span></div><div class="ef tbrow"><span class="elb">Ảnh trong bảng</span><span class="seg">${[['none', 'Không'], ['first', 'Cột đầu'], ['all', 'Mọi ô có chữ']].map(([v, n]) => `<button type="button" data-eact="tblo" data-v="im:${v}" class="${cimMode(t) === v ? 'on' : ''}">${n}</button>`).join('')}</span></div>`); }
-    // v86: chữ câu hỏi Bình thường / Đậm
-    if (!['table', 'empty', 'trace', 'dialogue'].includes(ck(t))) { const qb = !!t.layout.qbold; sh.insertAdjacentHTML('afterend', `<div class="ef qbrow"><span class="elb">Chữ câu hỏi</span><span class="seg"><button type="button" data-eact="qbold" data-v="" class="${qb ? '' : 'on'}">Bình thường</button><button type="button" data-eact="qbold" data-v="1" class="${qb ? 'on' : ''}" style="font-weight:700">Đậm</button></span></div>`); }
-  }
-  // v86 (F2): ô tích đáp án đúng ngay dưới lựa chọn (Chọn A/B/C, Đúng/Sai); không in ra phiếu
-  if (['A4', 'A6'].includes(t.answer.layout)) R.querySelectorAll('.sec[data-sec=g3] .eit[data-i]').forEach(e => {
-    const i = +e.dataset.i, x = its(t)[i]; if (!x || x.gt || x.imgs || x.opts) return; const op = optsOfKey(t, x); if (op.length < 2) return; const on = exPicks(t, x, op);   // v87: câu có opts đã có ô tích ở từng dòng
-    const row = `<div class="er2 ktk"><span class="elb">Đúng</span>${op.map((o, j) => `<span class="ko"><button type="button" class="tkq${on.includes(j) ? ' on' : ''}" data-eact="tickopt" data-i="${i}" data-j="${j}" aria-pressed="${on.includes(j)}" title="Đánh dấu đáp án đúng (chọn được nhiều)">✓</button>${t.answer.layout === 'A4' ? esc('abcdefgh'[j] + '. ') : ''}${esc(String(o).replace(/<[^>]+>|\*/g, ''))}</span>`).join('')}</div>`;
-    const anchor = e.querySelector('[data-k="it.' + i + '.opts"]'), host = anchor ? anchor.closest('.er2') : e.querySelector('[data-k="it.' + i + '.text"]');
-    if (host) host.insertAdjacentHTML('afterend', row);
-  });
-  // v86: G2 (bài đọc / lời dẫn) có thanh B I U ___ {a|b} ¶ ở hàng tiêu đề, dính khi cuộn
-  const g2l = R.querySelector('.sec[data-sec=g2] .ef > .elb');
-  if (g2l && R.querySelector('.sec[data-sec=g2] [data-k="lead.text"]')) { g2l.classList.add('g2bar'); g2l.insertAdjacentHTML('beforeend', `<span class="g3tb" role="toolbar" aria-label="Chèn ký hiệu vào bài đọc">${TXB.passage.map(([n, a]) => `<button type="button" data-tx="${a}" title="${{ b: 'Đậm', i: 'Nghiêng', u: 'Gạch chân', gap: 'Chỗ trống', pick: 'Chọn trong câu', para: 'Sang đoạn mới' }[a]}: chèn vào ô đang gõ">${esc(n)}</button>`).join('')}</span>`); }
-  const d = document.createElement('div'); d.appendChild(R.cloneNode(true)); return d.innerHTML;
-};
 // chiều cao thanh tiêu đề Task (đang dính) → vị trí dính của thanh B I U
 treeEl.addEventListener('scroll', () => { const h = treeEl.querySelector('.tk.open>.tkh'); if (h) treeEl.style.setProperty('--tkh', Math.round(h.getBoundingClientRect().height) + 'px'); }, { passive: true });
 treeEl.addEventListener('mousedown', e => { if (e.target.closest('.g3tb [data-tx]')) e.preventDefault(); }, true);
@@ -2660,6 +2131,10 @@ treeEl.addEventListener('click', e => { const b = e.target.closest('[data-eact="
 treeEl.addEventListener('click', e => { const b = e.target.closest('.g3tb [data-tx]'); if (b) { e.stopPropagation(); txInsert(b.dataset.tx); } }, true);
 const qm3 = (th, ou, ba) => qmEq(ou, ba) ? qmC(th) : ou;
 function qmObj3(th, ou, ba) { const o = {}; new Set([...Object.keys(th || {}), ...Object.keys(ou || {}), ...Object.keys(ba || {})]).forEach(k => { const v = qm3((th || {})[k], (ou || {})[k], (ba || {})[k]); if (v !== undefined) o[k] = v; }); return o; }
+// Cho phần giao diện đã chuyển sang React đọc (src/ui/legacyApi.ts); gán ở cuối để lấy bản cuối của các hàm bị vá chồng
+Object.defineProperties(L, Object.fromEntries(Object.entries({ SECT: () => SECT, TG_BLK: () => TG_BLK, TXB: () => TXB, ansLabel: () => ansLabel, blkAddable: () => blkAddable, cardOf: () => cardOf, cimMode: () => cimMode, crossCount: () => crossCount, fieldToggles: () => fieldToggles, fieldVal: () => fieldVal, gapLabs: () => gapLabs, gapN: () => gapN, hasOverride: () => hasOverride, isOnSel: () => isOnSel, keyState: () => keyState, needKey: () => needKey, nounOf: () => nounOf, openTask: () => openTask, optsOfKey: () => optsOfKey, secSums: () => secSums, slotName: () => slotName, slotsOf: () => slotsOf, tkCells: () => tkCells, tkHasText: () => tkHasText, tkOn: () => tkOn }).map(([k, g]) => [k, { get: g }])));   // cột trái (đọc lúc gọi: nhiều hàm bị bọc lại sau)
+Object.defineProperties(L, { sel: { get: () => sel }, multi: { get: () => multi }, markMode: { get: () => markMode }, lastRes: { get: () => lastRes }, lowRes: { get: () => lowRes } });
+Object.assign(L, { GNAME, SCOPES, SP_LABEL, ICON, TN_HINT, QHINT, QPV, HA, VA, A4DIRS, FILL_MAX, ovOf, targetsOf, kindOf, labelOf, cellKeys, cellImgMode, dirDefault, tblColPct, ansAlignDef, gtOf, gtOrder, qArr, labsKey, taskLabel, presetsGet, presetKey, fontKey });
 window.__ws = { pick: s => pick(s), get ws() { return ws; }, get res() { return lastRes; }, get renders() { return renderCount; }, get sel() { return sel; }, get multi() { return multi; }, render, setZoom(z) { zoom = z; draw(); } };
 // Độ rộng cột trái (#lsplit): React (src/ui/LeftSplit.tsx)
 // Chờ font của phiếu tải xong rồi mới đo; font đổi sau đó thì đo lại.

@@ -5,10 +5,10 @@
 **Việc của phiên này: chuyển app sang React.** Kế hoạch đầy đủ + tiến độ: `docs/KE_HOACH_REACT.md` (mục 8 là phần quan trọng nhất: đã làm gì, cách làm từng mảnh, còn gì).
 
 Trạng thái cuối phiên:
-- Bản đang dùng: **`ws-editor.html`** (badge **v108**) — dựng từ `app/` bằng Vite, **một file**, mở bằng bấm đúp, font lấy từ `fonts/`. Tính năng y hệt v106.
+- Bản đang dùng: **`ws-editor.html`** (badge **v109**) — dựng từ `app/` bằng Vite, **một file**, mở bằng bấm đúp, font lấy từ `fonts/`. Tính năng y hệt v106.
 - Bản cũ: `ws-editor-prototype.html` (v106) vẫn giữ nguyên để so sánh; nhánh `backup/v106`. `chay.bat` giờ mở bản React, `chay-v106.bat` mở bản cũ.
-- Đã xong: bước 1 (đường chuẩn), bước 2 (Vite + tách lõi), bước 3 mảnh 1–6 (toàn bộ khung app và mọi hộp thoại là React).
-- Còn lại: nội dung ba cột (inspector, cột trái soạn bài, trang xem trước) vẫn do bộ dựng HTML cũ sinh ra; xem `docs/KE_HOACH_REACT.md` mục 8.3.
+- Đã xong: bước 1 (đường chuẩn), bước 2 (Vite + tách lõi), bước 3 mảnh 1–9: khung app, mọi hộp thoại **và cả ba cột** (cột phải, cột trái soạn bài, khung trang A4) là React (v109, spec mục 40). Trạng thái chọn và xử lý sự kiện vẫn ở legacy.
+- Còn lại: bước 4 (người dùng thử local), rồi dần đưa trạng thái / sự kiện ra khỏi legacy; xem `docs/KE_HOACH_REACT.md` mục 8.3.
 - **v108** (sau khi người dùng thử): Chọn A/B/C đáp án không thẳng cột giữa các câu. Lỗi có từ v106, sửa ở cả hai bản; Tự động không còn tự chọn Tự xuống dòng; đường chuẩn lập lại thành `tests/chuan/v108/` (spec mục 39). Danh sách cho người dùng kiểm tra tay: `docs/KIEM_TRA_v107.md`; người dùng đã thử, chỉ báo mục 15 (đã sửa).
 - **Đóng băng tính năng** cho tới khi chuyển xong. Lỗi nặng thì sửa ở cả hai bản.
 
@@ -33,6 +33,7 @@ Kiểm chứng độ nhạy: đổi cỡ chữ hướng dẫn từ `.92em` thàn
 - `app/src/core/`: `model` (bù trường, mặc định), `layout` (dựng HTML Task, đo, chia trang), `md` (đọc/xuất MD + JSON), `state` (phiếu `ws`, đổi qua `setWs`). Tách **tự động, nguyên văn** bằng `app/scripts/tach-core.mjs` + phân tích phụ thuộc có xét phạm vi `app/scripts/phu-thuoc.mjs`.
 
 ### Bước 3 — giao diện React (`app/src/ui/`, React 19 + Zustand)
+Mảnh 7–9 (v109): cột phải `insp/`, cột trái `tree/`, khung trang `stage/`; kiểm bằng công cụ mới `tests/chuan/giaodien.py` (so DOM hai cột với v106 ở 2.497 trạng thái chọn).
 Thanh trên cùng, hộp Thao tác nhanh, hộp Xem JSON / Xuất MD, hộp hỏi xác nhận, thông báo, thanh kéo cột trái, popup "+ Task" / "+ Phiếu", hộp Dán nhiều dòng, hộp ảnh, khung app ba cột.
 `index.html` giờ chỉ còn `<head>`, các ô gắn React và vài `<input type=file>` ẩn.
 
@@ -44,6 +45,7 @@ Thanh trên cùng, hộp Thao tác nhanh, hộp Xem JSON / Xuất MD, hộp hỏ
 5. Gán vào biến đã chuyển thành `import` thì bộ dựng báo lỗi (`ws` trong `loadSheet` phải đổi sang `setWs`).
 6. `test34`, `test45` chập chờn theo thời gian chờ ở **cả** v106 lẫn bản mới; hỏng thì chạy lại riêng.
 7. Không đẩy được tag lên repo (máy chủ chặn) → mốc v106 lưu bằng **nhánh** `backup/v106`.
+8. Module `core` đọc DOM lúc nạp thì hỏng khi React import core trước khi dựng khung (`measure` → `measEl()`). Bọc mỗi cột bằng `Guard` để một lỗi không làm trắng app.
 
 ## 3. Việc tiếp theo
 Theo `docs/KE_HOACH_REACT.md` mục 8.3: chuyển nội dung inspector → cột trái soạn bài → trang xem trước sang JSX, mỗi khối một lần, chạy lại đường chuẩn + test sau mỗi khối. Xong bước 3 thì tới bước 4 (người dùng trải nghiệm local), rồi mới tới Cloudflare (mục 5 của kế hoạch).
