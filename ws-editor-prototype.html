@@ -5,7 +5,7 @@
 <!-- v81: kiến trúc trình bày mới — Bố cục Task 4 kiểu (Xếp dọc / Ảnh trái / Ảnh phải / Ảnh trong bài đọc), 12 dạng câu hỏi có hình xem trước, khối thêm / xóa thống nhất, câu ví dụ số 0, dòng chữ giữa các câu, hai ảnh chung, khung từ ảnh, bốn ô li, khung vẽ, nhãn A–D dưới đoạn gạch chân, nhãn Đúng/Sai tự đặt, câu hỏi trước bài đọc. Dữ liệu cũ mở ra giống v80. -->
 <!-- v71: nhãn lựa chọn (Ⓐ / ☐) nằm ngang dòng đầu của lựa chọn, không còn canh giữa khi lựa chọn dài hai dòng; khoảng cách nhãn → chữ 2 mm (trước 1,2 / 1,6 mm). -->
 <!-- v70: Đáp án Đúng/Sai (A6) trong Hai cột mặc định 80/20; A4 "Tự động" quyết một lần cho cả Task; nút Xuất MD -->
-<!-- v100: chỗ trống sau nhãn (a) không thêm số, bài đọc có ___ không tạo dòng câu, Số câu a b c (layout.nlab), Đúng/Sai cùng hàng (params.row). v80: ký hiệu chữ **đậm** *nghiêng* <u>gạch chân</u> (hàm rich), tách phần tự động khi có dòng hướng dẫn trước câu 1 mới, Task viết đoạn không có câu (khung viết tự do, tới 20 dòng), gạch ___ trong câu là một gạch thật, nút Xóa khung ảnh. v78: ô chữ giải đố (bảng layout.table.cross, ô có chữ mới có viền xám, tự đánh số, Crossword: trong MD); G-Text 2 cột + danh sách số bắt đầu từ N. v77: mặc định theo cấu hình, ẩn số câu ở lề, A4 Tự động chọn Tự xuống dòng. v76: điểm trên ảnh chung (số trong chấm / ô trống, tròn / vuông). v75: bài đọc có chỗ trống đánh số, {a|b}, **đậm** *nghiêng* __gạch chân__, đáp án chỗ trống, cắt theo đoạn. v74: G-Text kiểu Ảnh, khung chữ 4 kiểu. v73: G-Text kiểu Chữ (t.extras: khối tự do trên/dưới bài). v72: Cỡ chữ phiếu Nhỏ / Vừa / To (ws.size, mức To = cỡ cũ) -->
+<!-- v101: điền từ vào đoạn văn = câu hỏi Q1 (chỗ trống trong chữ là chỗ trả lời, không dòng kẻ thừa), "(a) ___" và "a. ___" không bị hiểu là lựa chọn, ô câu nhiều dòng, nhãn (a) ở đáp án từng chỗ trống, T/F căn dọc cả khối + cách lề phải. v100: chỗ trống sau nhãn (a) không thêm số, bài đọc có ___ không tạo dòng câu, Số câu a b c (layout.nlab), Đúng/Sai cùng hàng (params.row). v80: ký hiệu chữ **đậm** *nghiêng* <u>gạch chân</u> (hàm rich), tách phần tự động khi có dòng hướng dẫn trước câu 1 mới, Task viết đoạn không có câu (khung viết tự do, tới 20 dòng), gạch ___ trong câu là một gạch thật, nút Xóa khung ảnh. v78: ô chữ giải đố (bảng layout.table.cross, ô có chữ mới có viền xám, tự đánh số, Crossword: trong MD); G-Text 2 cột + danh sách số bắt đầu từ N. v77: mặc định theo cấu hình, ẩn số câu ở lề, A4 Tự động chọn Tự xuống dòng. v76: điểm trên ảnh chung (số trong chấm / ô trống, tròn / vuông). v75: bài đọc có chỗ trống đánh số, {a|b}, **đậm** *nghiêng* __gạch chân__, đáp án chỗ trống, cắt theo đoạn. v74: G-Text kiểu Ảnh, khung chữ 4 kiểu. v73: G-Text kiểu Chữ (t.extras: khối tự do trên/dưới bài). v72: Cỡ chữ phiếu Nhỏ / Vừa / To (ws.size, mức To = cỡ cũ) -->
 <!-- v69: Font chữ phiếu (Andika / Be Vietnam Pro / Lexend) ở panel Phiếu, lưu ở ws.font -->
 <!-- v68: Task nối vào Task trên (một Task của phiếu gốc có nhiều phần, mỗi phần giữ đáp án riêng): lựa chọn thứ 4 của mục Ngắt trang, không số / tiêu đề, giữ liền Task trên, cách trên bằng khoảng cách giữa các nhóm; MD: "### Phần: …" trong "## Task"; nhãn lựa chọn A. B. C. giữ chữ hoa; câu duy nhất không đánh số. v67: nhập MD theo phiếu thật đầu tiên — lựa chọn A/B/C mỗi dòng một lựa chọn, ô tick ☐ thành Lựa chọn (A4) nhãn ô tick, bỏ dòng "Nội dung:" / "My answer" / dòng kẻ / gạch ___ thừa, lời nhắc cuối bài và "Ghi chú:" vào hướng dẫn, bài đọc giữ đoạn, hội thoại chỉ qua khối "Hội thoại:", dòng nhãn lạ có ghi chú; cảnh báo mới (lỗi chữ, câu giống tiêu đề, chỗ trả lời trùng, ký hiệu ô tick sót). v66: font Andika + Be Vietnam Pro nhúng sẵn (thư mục fonts/), nạp trước nhóm ký tự tiếng Việt, đổi font không dựng lại cột trái. v65: P2 nhập file — quy ước MD trung gian ("## Task: …", trường "Tên: giá trị", khối Bài đọc / Hội thoại / Ô chữ, "## Đáp án" riêng), bộ đọc readMd dùng chung lớp nhập. v64: P1 nhập file — cột trái chỉ còn "+ Task" (thẻ Mẫu có sẵn | Từ file / dán, Task luôn vào cuối phiếu) và "+ Phiếu" (từ file / dán, để trống = phiếu rỗng, xác nhận + tải JSON cũ trước khi thay); bỏ nút "Dán…"; bảng nhận diện sơ bộ (số theo file, tiêu đề, mô tả, số câu, cảnh báo, ước tính số trang); một lần nhập = một bước hoàn tác. v63: P0 nhập file — nạp JSON thiếu trường tự bù (fillSheet/fillTask), nạp lỗi không đổi phiếu đang mở, Task không tên lấy tiêu đề/mô tả, hộp Dán nhận ra JSON, tự chọn "Cả đề", cảnh báo dán dài, báo vị trí chèn. v62: bảng có thể kèm khung từ (ô chữ = bảng chữ cái + khung từ). v61: mở Task nào cũng chỉ mở khu vực 3 Nội dung (1, 2, 4 thu lại), bất kể lần trước mở gì. v60: dán bài — bộ đoán trả về cấu hình (khung + thành phần + loại đáp án), mẫu chỉ áp khi người dùng chọn. v59: gọn mẫu 15 → 13 (gộp 3 mẫu bảng thành "Bảng", "Tranh" → "Tô màu / vẽ"). v58: "Công thức" → "Áp mẫu…" (áp một lần, mẫu chia nhóm); thẻ dạng bài và tóm tắt hiện mô tả thành phần (descOf). v57: bỏ dạng "Tranh" — Task chỉ có ảnh = Danh sách câu 0 câu + Ảnh chung; công tắc "Danh sách câu" (tắt = ẩn, giữ câu + đáp án). v56: QR bo góc. v55: mã QR nghe cho bài có Track. v54: thẻ câu không tô đậm lề trái. v53: viền Task xám, đệm hai bên rộng hơn, thanh tên Task cao bằng thanh khu vực và nền xanh. v52: Task mở nằm trong một thẻ có viền; Task đang thao tác được đánh dấu trên trang; cột trái rộng 360. v51: mặc định chỉ mở thẻ Nội dung. v50: bảng — chiều cao hàng mặc định 14 mm (cả hàng tiêu đề). v49: ảnh chung giữ khung cố định, ảnh thật nằm trong khung; T5 Fit dọc giữ tỉ lệ. v48: khung ảnh cố định cho mọi bài ảnh từng câu (bảng, danh sách, lưới T5). v47: Dùng ảnh này không còn qua fetch/blob. v46: popup ảnh — chỉnh nháp, chỉ lưu khi bấm Dùng ảnh này -->
 <!-- v37: cột trái dạng accordion + khu vực + kéo độ rộng -->
@@ -473,7 +473,11 @@ dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 /* v100: T F cùng hàng với câu (params.row): chữ câu bên trái, hai ô ở cuối hàng bên phải */
 .task[data-tfr] .qb{flex-direction:row;align-items:center;justify-content:space-between;gap:4mm}
 .task[data-tfr] .qb>.qt{flex:1;min-width:0}
-.task[data-tfr] .qb>.a6{flex:none}
+.task[data-tfr] .qb>.a6{flex:none;margin-right:var(--tfx,0mm)}
+/* v101: Căn dọc cả khối (số câu, chữ câu, ô T/F): Trên / Giữa / Dưới */
+.task[data-tfr] .q{align-items:center}.task[data-tfr] .qb{align-items:center}
+.task[data-tfr][data-tfv=top] .q,.task[data-tfr][data-tfv=top] .qb{align-items:flex-start}
+.task[data-tfr][data-tfv=bottom] .q,.task[data-tfr][data-tfv=bottom] .qb{align-items:flex-end}
 .a6 span{width:var(--as,7.5mm);height:var(--as,7.5mm);border:.3mm solid var(--ink-3);border-radius:50%;display:grid;place-items:center;font-size:.8em;font-weight:700}
 .a7{width:var(--as,2.8mm);height:var(--as,2.8mm);border-radius:50%;background:var(--ink);display:inline-block}
 .a8{display:flex;width:calc(var(--aw,100) * 1%);gap:7mm;border-bottom:.3mm solid var(--ink-4);height:var(--lh);align-items:flex-end;font-size:1.55em;line-height:1}
@@ -878,7 +882,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 
 <div class="app">
   <header class="top">
-    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v100</span> <small id="wsTitle"></small></div>
+    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v101</span> <small id="wsTitle"></small></div>
     <div class="tb">
       <label for="age" class="hint" style="margin:0">Độ tuổi</label>
       <select id="age"><option value="5-6">5–6</option><option value="7-9">7–9</option><option value="10-12">10–12</option></select>
@@ -3436,6 +3440,8 @@ const paraHtml = s => /\n/.test(s) ? s.split(/\n\s*\n/).map(x => x.replace(/\s*\
 /* Bài đọc (v75): ___ chỗ trống tự đánh số khi có từ 2 chỗ; {a|b} chọn; **đậm**, *nghiêng*, __gạch chân__ */
 const passageParas = t => { const x = leadText(t); return /\n/.test(x) ? x.split(/\n\s*\n/).map(p => p.replace(/\s*\n\s*/g, ' ').trim()).filter(Boolean) : [x]; };
 // v100: chỗ trống đứng sau nhãn có sẵn "(a)" thì không thêm số (n)
+// v101: nhãn in sẵn trước từng chỗ trống của một câu: "(a)" → "(a)", chỗ trống không có nhãn → ''
+const gapLabs = tx => { const o = [], str = String(tx || ''); str.replace(/_{3,}/g, (m, at) => { const m2 = /\(\s*([A-Za-z0-9]{1,2})\s*\)\s*$/.exec(str.slice(0, at)); o.push(m2 ? `(${m2[1]})` : ''); return m; }); return o; };
 const GAPP = /_{3,}/g, GAPLAB = /\(\s*[A-Za-z0-9]{1,2}\s*\)\s*$/, gapCount = x => (String(x).match(GAPP) || []).length;
 function passInline(raw, n0, total) {
   let k = n0;
@@ -3603,7 +3609,7 @@ const isJoined = t => !!t && t.layout && t.layout.break === 'join' && ws.tasks.i
 const gapOf = t => isJoined(t) ? spacingOf(t).groupGap : spacingOf(t).gapTask;
 function attachOpts(t) {
   const a = t.answer, q = ck(t) === 'questions';
-  const gap = ck(t) === 'dialogue' || (q && its(t).some(x => (x.text || '').includes('___')));
+  const gap = ck(t) === 'dialogue' || ((q || ck(t) === 'passage') && its(t).some(x => (x.text || '').includes('___')));   // v101: câu của Task có bài đọc cũng có chỗ trống ngay trong câu
   if (a.kind === 'word') return [...(gap ? ['inline'] : []), 'item', ...(q ? ['block'] : [])];
   if (a.kind === 'sentence') return ['item', ...(q ? ['block'] : [])];
   if (a.kind === 'choice') { const o = []; if (q && its(t).some(x => x.opts)) o.push('item'); if (hasMarkup(t)) o.push('inline'); return o.length ? o : [a.attach]; }
@@ -3923,12 +3929,13 @@ function renderTask(t, frag, mt) {
   if (lay.width && t6w) style += `;--cw:${lay.width}`;
   if (lay.rowH && L === 'T7') style += `;--mrh:${lay.rowH}mm`;
   if (lay.whoW) style += `;--who:${lay.whoW}mm`;
+  if (t.answer.layout === 'A6' && (t.answer.params || {}).row && (t.answer.params || {}).tfx) style += `;--tfx:${t.answer.params.tfx}mm`;   // v101: T / F cách lề phải
   if (lay.colGap != null && L === 'T5') style += `;--cg:${lay.colGap}mm`;
   if (mt) style += `;margin-top:${mt}mm`;
   const at = [fitOf(t) ? `data-fit="${fitOf(t)}"` : '', alignOf(t) ? `data-ia="${alignOf(t)}"` : '',
     L === 'T5' && lay.align && cellDirOf(t) !== 'row' ? `data-ca="${lay.align}"` : '', frameH(t) ? 'data-ih="1"' : '', lay.num === 'off' ? 'data-nonum="1"' : '',
     lay.valign && cellDirOf(t) !== 'row' ? `data-va="${lay.valign}"` : '', fr.valign && isColI(t) ? `data-iv="${fr.valign}"` : '',
-    lay.width && t6w ? 'data-w2="1"' : '', lay.align && (t6w || L === 'T8') ? `data-al2="${lay.align}"` : '', lay.qbold ? 'data-qb="1"' : '', t.answer.layout === 'A6' && (t.answer.params || {}).row ? 'data-tfr="1"' : '', taOf(t) !== 'left' ? `data-ta="${taOf(t)}"` : ''].filter(Boolean).join(' ');   // v86: data-qb = chữ câu hỏi đậm
+    lay.width && t6w ? 'data-w2="1"' : '', lay.align && (t6w || L === 'T8') ? `data-al2="${lay.align}"` : '', lay.qbold ? 'data-qb="1"' : '', t.answer.layout === 'A6' && (t.answer.params || {}).row ? `data-tfr="1" data-tfv="${(t.answer.params || {}).rowv || 'center'}"` : '', taOf(t) !== 'left' ? `data-ta="${taOf(t)}"` : ''].filter(Boolean).join(' ');   // v86: data-qb = chữ câu hỏi đậm
   const g0 = cont ? '' : isJoined(t) ? (t.instruction ? `<div class="g0 jn" data-node="${t.id}:G0"><div class="g0t"><span class="ins">${er(t.instruction)}</span></div></div>` : '') : `<div class="g0" data-node="${t.id}:G0"><span class="num">${t.number}</span><div class="g0t"><span class="ttl">${esc(t.title)}</span>${t.audio ? `<span class="trk">${esc(t.audio)}</span>` : ''}<span class="ins">${er(t.instruction)}</span></div>${qrHtml(t)}</div>`;
   const ex = Array.isArray(t.extras) ? t.extras : [], lastF = !frag || !!frag.last;
   const gtTop = first ? ex.filter(x => x.pos === 'top').map(x => gtHtml(t, x, 'top')).join('') : '', gtBot = lastF ? ex.filter(x => x.pos !== 'top').map(x => gtHtml(t, x, 'bot')).join('') : '';
@@ -4091,7 +4098,8 @@ function body0n(t, L, frag, first) {
     const pIdx = cut && frag ? range(passageParas(t), { a: frag.a, b: Math.min(frag.b, PP - 1) }).map(x => x[1]) : null;
     const g2 = pIdx && !pIdx.length ? '' : `<div class="g2 passage" data-node="${id}:G2">${passageHtml(t, pIdx)}</div>`;
     const qs = cut && frag ? (frag.b >= PP ? range(its(t), { a: Math.max(0, frag.a - PP), b: frag.b - PP }) : []) : range(its(t), L === 'T8' ? frag : null);
-    const g3 = qs.length ? `<div class="g3 list" data-node="${id}:G3" style="--cols:1">${qs.map(([q, i]) => q.gt ? g3row(t, q) : `<div class="q">${inoT(t, i)}<div class="qb"><div class="qt">${qwho(q)}${q.ex || (t.answer.params || {}).ulab ? qtext(t, q) : er(q.text)}</div>${ans(t, q)}</div></div>`).join('')}</div>` : '';
+    const inlGap = t.answer.attach === 'inline' && t.answer.layout === 'A2';   // v101: chỗ trống ngay trong câu (cả đoạn văn) là chỗ trả lời
+    const g3 = qs.length ? `<div class="g3 list" data-node="${id}:G3" style="--cols:1">${qs.map(([q, i]) => q.gt ? g3row(t, q) : `<div class="q">${inoT(t, i)}<div class="qb"><div class="qt">${qwho(q)}${q.ex || (t.answer.params || {}).ulab || inlGap ? qtext(t, q) : er(q.text)}</div>${inlGap ? '' : ans(t, q)}</div></div>`).join('')}</div>` : '';
     if (L === 'T8' && !first) return `<div class="body b1">${g3}</div>`;
     if (L === 'T8' && g1) return `<div class="body b1">${g4}<div class="wrapbox">${g1}${g2}</div>${g3}</div>`;
     if (L === 'T4') return `<div class="body b1">${g1}${g4}<div class="tbl tbl2" style="align-items:start"><div class="c2">${g2}</div><div>${g3}</div></div></div>`;
@@ -4899,6 +4907,7 @@ function answerPanel(t, s, key) {
   else if (L === 'A7') size = fNum('size', 'Cỡ chấm nối', o.size, { min: 1.5, max: 6, step: .5, unit: 'mm', def: D('size', 2.8) });
   if (inl && (L === 'A2' || L === 'A4')) align = `<p class="hint" data-na="align">Đáp án nằm trong câu nên đi theo dòng chữ, không căn riêng.</p>`;
   else align = fSeg('align', 'Căn ngang', o.align, Object.entries(HA), D('align', ansAlignDef(t)));
+  if (L === 'A6' && !key && p.row) content += fSeg('rowv', 'Căn dọc cả khối', p.rowv, [['top', 'Trên'], ['center', 'Giữa'], ['bottom', 'Dưới']], 'center', { hint: 'Áp cho mọi câu của Task: số câu, chữ câu và ô T / F.' }) + fNum('tfx', 'T / F cách lề phải', p.tfx, { min: 0, max: 140, step: 1, unit: 'mm', def: 0 });   // v101
   if (!key) content += `<p class="hint">Bấm vào đáp án của một câu trên trang để chỉnh riêng câu đó.</p>`;
   return panel(t, s, key ? `Đáp án · câu ${labelOf(t, key)}` : `Đáp án · ${AL[L]} ${cd(L)}`, { top, size, align, content, cname: 'Kiểu hiển thị', autoExtra: key ? '' : '<button class="btn" data-act="reset-answer">Về kiểu đáp án ban đầu</button>' });
 }
@@ -5605,6 +5614,8 @@ function normAnswer(t) {
   const att = attachOpts(t); if (!att.includes(a.attach)) a.attach = att[0];
   const al = alOpts(t); if (!al.includes(a.layout)) a.layout = al[0];
   if (a.kind === 'word' && a.attach === 'inline' && ck(t) !== 'dialogue' && !its(t).some(x => (x.text || '').includes('___'))) a.attach = 'item';
+  // v101: mọi câu đều có chỗ trống ___ ngay trong chữ (kể cả đoạn văn nhiều chỗ trống): chỗ trống là chỗ trả lời, không thêm dòng kẻ sau câu
+  if (a.kind === 'word' && a.attach === 'item' && ['questions', 'passage'].includes(ck(t)) && a.layout === 'A2' && its(t).filter(x => !x.ex && !x.gt).length && its(t).filter(x => !x.ex && !x.gt).every(x => gapCount(x.text || '') >= 2 || /_{3,}\s*[^\s_.?!]/.test(x.text || ''))) a.attach = 'inline';   // chỗ trống thật trong chữ (không phải một gạch ở cuối câu hỏi)
 }
 // Đổi loại đáp án: kèm các trường nội dung cần cho loại đó (A4 → lựa chọn, A7 → vế ghép…)
 function setKind(t, k) {
@@ -5750,7 +5761,7 @@ function edItems(t) {
       ? `<div class="er2 pairimg"><div class="imgblk">${thumbHtml(t, '@' + x.id)}${eIn(`it.${i}.pli`, x.pair.l.img, 'Tên ảnh', { label: `Ảnh vế trái ${i + 1}` })}${eIn(`it.${i}.pl`, fieldVal(x, 'pl'), 'Chữ dưới ảnh', { label: `Chữ dưới ảnh vế trái ${i + 1}` })}</div><span class="eto">↔</span>${eIn(`it.${i}.pr`, fieldVal(x, 'pr'), 'Vế phải', { label: `Vế phải ${i + 1}` })}</div>`
       : `<div class="er2">${eIn(`it.${i}.pl`, fieldVal(x, 'pl'), 'Vế trái', { label: `Vế trái ${i + 1}` })}<span class="eto">↔</span>${eIn(`it.${i}.pr`, fieldVal(x, 'pr'), 'Vế phải', { label: `Vế phải ${i + 1}` })}</div>`;
     else if (x.lines) f += eIn(`it.${i}.lines`, fieldVal(x, 'lines'), 'Mỗi dòng một dòng chữ; {a|b} = chọn', { area: 1, rows: Math.max(2, x.lines.length), label: `Các dòng câu ${i + 1}` });
-    else f += eIn(`it.${i}.text`, x.text || '', k === 'trace' ? 'Từ để tô' : 'Chữ (___ chỗ trống, {a|b} chọn)', { label: `Chữ câu ${i + 1}`, area: /\n/.test(x.text || ''), rows: ((x.text || '').match(/\n/g) || []).length + 1 });
+    else f += eIn(`it.${i}.text`, x.text || '', k === 'trace' ? 'Từ để tô' : 'Chữ (___ chỗ trống, {a|b} chọn; dòng trống = sang đoạn)', { label: `Chữ câu ${i + 1}`, area: !x.gt && !x.img && !x.imgs, rows: Math.max(1, Math.min(14, ((x.text || '').match(/\n/g) || []).length + Math.ceil((x.text || '').length / 44))) });   // v101: ô câu nhiều dòng, kéo giãn được như ô bài đọc
     if (x.img != null) f = (!x.pair && !x.who && !x.lines && !x.imgs) ? `<div class="imgrow2">${thumbHtml(t, '@' + x.id)}<div class="imgcol">${eIn(`it.${i}.img`, x.img, 'Chữ dưới ảnh / tên ảnh', { label: `Chữ dưới ảnh câu ${i + 1}` })}${f}</div></div>`
       : `<div class="imgblk">${thumbHtml(t, '@' + x.id)}${eIn(`it.${i}.img`, x.img, 'Chữ dưới ảnh / tên ảnh', { label: `Chữ dưới ảnh câu ${i + 1}` })}</div>` + f;
     if (x.imgs) f += `<div class="imgsgrid" style="--n:${x.imgs.length}">${x.imgs.map((im, j) => `<div class="imgblk">${thumbHtml(t, `@${x.id}.${j}`)}${eIn(`it.${i}.imgs.${j}`, im, 'Chữ dưới ảnh', { label: `Chữ dưới ảnh ${j + 1} của câu ${i + 1}` })}${t.answer.layout === 'A5' ? `<button type="button" class="tkq${exPicks(t, x, x.imgs).includes(j) ? ' on' : ''}" data-eact="tickopt" data-i="${i}" data-j="${j}" aria-pressed="${!!(String(x.key ?? '').trim() && exPick(t, x, x.imgs) === j)}" title="Tick ✓ = ảnh này là đáp án đúng" aria-label="Đáp án đúng: ảnh ${j + 1} của câu ${i + 1}">✓</button>` : ''}</div>`).join('')}</div>`;
@@ -5761,7 +5772,7 @@ function edItems(t) {
     if (pg.length && needKey(t, x)) f += `<div class="er2 kpk"><span class="elb">Đáp án</span><span class="pkr">${pg.map((g, gi) => g.map((o, j) => `<button type="button" class="pko${o.ok ? ' on' : ''}" data-eact="pickopt" data-i="${i}" data-g="${gi}" data-j="${j}" aria-pressed="${o.ok}" title="Bấm = vế đúng (bấm lại để bỏ)">${esc(o.t || '…')}</button>`).join('')).join('<span class="pks">·</span>')}</span></div>`;   // v89: bấm vế đúng ngay trên câu
     else if (ul.length && needKey(t, x)) { const up = (t.answer.params || {}).upper, L = up ? 'ABCDEFGH' : 'abcdefgh', kk = String(x.key ?? '').trim().toLowerCase(); f += `<div class="er2 kpk"><span class="elb">Phần sai</span><span class="pkr">${ul.map((u, j) => `<button type="button" class="pko ule${kk === 'abcdefgh'[j] ? ' on' : ''}" data-eact="ulpick" data-i="${i}" data-j="${j}" aria-pressed="${kk === 'abcdefgh'[j]}" title="Bấm phần gạch chân bị sai = đáp án">${L[j]}. ${esc(u.replace(/<[^>]+>|\*/g, ''))}</button>`).join('')}</span></div>`; }
     else if (needKey(t, x) && !x.opts && !x.imgs && (gapN(x) > 1 || (gapN(x) === 1 && t.wordBank && t.wordBank.kind !== 'image' && t.wordBank.words.length))) { const ks = keyGaps(x), wb = t.wordBank && t.wordBank.kind !== 'image' ? t.wordBank.words : null;   // v91: mỗi chỗ trống một ô đáp án; có Khung từ thì chọn từ trong khung
-      f += `<div class="er2 kgap"><span class="elb">Đáp án</span><span class="pkr">${Array.from({ length: gapN(x) }, (_, j) => { const v = ks[j] || '', lb = gapN(x) > 1 ? `<i>(${j + 1})</i>` : ''; return wb && wb.length ? `<label class="kg">${lb}<select data-k="it.${i}.keyg.${j}" aria-label="Đáp án chỗ trống ${j + 1} câu ${i + 1}"><option value="">—</option>${wb.concat(v && !wb.includes(v) ? [v] : []).map(w => `<option${w === v ? ' selected' : ''}>${esc(w)}</option>`).join('')}</select></label>` : `<label class="kg">${lb}${eIn(`it.${i}.keyg.${j}`, v, 'đáp án', { label: `Đáp án chỗ trống ${j + 1} câu ${i + 1}` })}</label>`; }).join('')}</span></div>`; }
+      f += `<div class="er2 kgap"><span class="elb">Đáp án</span><span class="pkr">${Array.from({ length: gapN(x) }, (_, j) => { const v = ks[j] || '', gl = gapLabs(x.text)[j], lb = gl ? `<i>${esc(gl)}</i>` : gapN(x) > 1 ? `<i>(${j + 1})</i>` : ''; return wb && wb.length ? `<label class="kg">${lb}<select data-k="it.${i}.keyg.${j}" aria-label="Đáp án chỗ trống ${j + 1} câu ${i + 1}"><option value="">—</option>${wb.concat(v && !wb.includes(v) ? [v] : []).map(w => `<option${w === v ? ' selected' : ''}>${esc(w)}</option>`).join('')}</select></label>` : `<label class="kg">${lb}${eIn(`it.${i}.keyg.${j}`, v, 'đáp án', { label: `Đáp án chỗ trống ${j + 1} câu ${i + 1}` })}</label>`; }).join('')}</span></div>`; }
     else if (needKey(t, x) && !x.pair && !(x.imgs && t.answer.layout === 'A5') && !x.opts && !(t.answer.layout === 'A6' && optsOfKey(t, x).length > 1)) f += `<div class="er2"><span class="elb">Đáp án</span>${eIn(`it.${i}.key`, x.key || '', 'đáp án đúng', { label: `Đáp án đúng câu ${i + 1}` })}</div>`;
     const al = ansLabel(x), sc = '';
     return `<div class="eit${al ? ' ans' : ''}${sc}" data-i="${i}"><div class="eih"><span class="egrip" draggable="true" data-drag="${i}" title="Kéo để đổi thứ tự">⋮⋮</span><span class="ino">${i + 1}</span>${whoIn}
@@ -5992,7 +6003,7 @@ const isInstr = s => { const x = s.replace(HEAD_RE, '').replace(NUM_RE, '').trim
 // "(on / off)" hoặc "on / off" trong câu → {on|off}
 const inlineOpts = s => s.replace(/\(([^()]{1,40}?(?:\s\/\s[^()]{1,40}?)+)\)/g, (m, g) => `{${g.split(/\s\/\s/).map(x => x.trim()).join('|')}}`);
 function splitOptsLine(s) { // "What is it? A. cat B. dog C. pig" → [câu, [cat, dog, pig]]
-  const m = [...s.matchAll(/(?:^|\s)\(?([A-Da-d])[.)]\s+/g)];
+  const m = [...s.matchAll(/(?:^|\s)\(?([A-Da-d])[.)]\s+(?!_{3,})/g)];   // v101: "(a) ___" là nhãn chỗ trống, không phải lựa chọn
   if (m.length >= 2 && m.map(x => x[1].toUpperCase()).join('').startsWith('AB')) {
     const head = s.slice(0, m[0].index).trim(), opts = m.map((x, i) => s.slice(x.index + x[0].length, i + 1 < m.length ? m[i + 1].index : undefined).trim());
     return [head, opts];
@@ -6574,7 +6585,7 @@ const MD_LABEL = /^\s*[\p{L}][\p{L}\d ()/'’-]{1,30}:\s*$/u;                   
 const MD_SCAF = /^\s*(my answer|your answer|answer|đáp án( của em)?)\s*:?\s*[A-Da-d](\s*[\/,]\s*[A-Da-d])+\s*\.?\s*$/i;   // "My answer: A / B / C"
 const MD_RULE = /^\s*[_.…\-–—\s]{6,}\s*$/;                                                         // dòng chỉ có gạch / chấm (dòng kẻ viết)
 const BOX = /\[\s*\]|☐|□/;
-const OPT_LINE = /^\(?[A-Da-d][.)]\s+\S/;
+const OPT_LINE = /^\(?[A-Da-d][.)]\s+(?!_{3,})\S/;   // v101: "a. ___ nghĩa" (nhãn chữ + chỗ trống) không phải lựa chọn
 const optStr = os => os.map((o, i) => `${'ABCDEFGH'[i]}. ${o}`).join(' ');
 // Dòng có ô tick: "☐ a cake ☐ a football" hoặc "1. [ ] a cake" → [thân câu, [lựa chọn]]
 function boxSplit(line) {
@@ -6699,7 +6710,7 @@ function mdTask(b, keys) {
   if (F.shuf) { if (ck(t) !== 'pairs') notes.push('“Xáo vế phải” chỉ dùng cho bài nối'); else if (/^(có|bật|yes|on)$/i.test(F.shuf)) t.content.shuffle = true; else if (/^(không|tắt|no|off)$/i.test(F.shuf)) delete t.content.shuffle; else notes.push(`không hiểu "Xáo vế phải: ${F.shuf}" (có / không)`); }
   if (/\s\|\s|\t/.test(body.join('\n')) && ck(t) === 'table') explicit = true;
   // v100: bài đọc có chỗ trống ___ và không có câu đánh số: chỗ trống là chỗ trả lời, không tạo dòng câu trống
-  if (t.content.lead && t.content.lead.kind === 'passage' && gapCount(t.content.lead.text) > 0 && its(t).every(x => !x.text && !x.opts && !x.imgs && !x.img && !x.lines && !x.ex && !x.gt)) { t.content.items = []; t.content.list = false; }
+  if (t.content.lead && t.content.lead.kind === 'passage' && gapCount(t.content.lead.text) > 0 && its(t).every(x => !x.text && !x.opts && !x.imgs && !x.img && !x.lines && !x.ex && !x.gt)) { t.content.items = []; t.content.list = false; notes.push('bài đọc có chỗ trống ___: vẫn dùng được, nhưng nên chuyển thành câu hỏi (mỗi đoạn một câu “1.”, bài đọc chỉ giữ tiêu đề) để có đáp án riêng cho từng chỗ trống'); }
   normAnswer(t); tidy(t);
   if (!force) { const m = recipeMatch(t); t.typeId = m.exact ? m.r.id : 'custom'; t.typeName = descOf(t); }
   if (!explicit && conf !== 'cao') notes.push(`loại đáp án do hệ thống đoán (độ chắc: ${conf}); thêm dòng “Trả lời: …” để chắc`);

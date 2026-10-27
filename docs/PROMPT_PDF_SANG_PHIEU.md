@@ -39,7 +39,13 @@ NGUYÊN TẮC
 15. BỐ CỤC: thường KHÔNG ghi (app tự chọn). Chỉ ghi "Bố cục: ảnh trái" / "ảnh phải" / "ảnh trong bài đọc" khi PDF đặt tranh chung rõ ràng như vậy và điều đó giúp học sinh. Câu hỏi in TRƯỚC bài đọc trong PDF: "Thứ tự: câu hỏi trước". Điểm đánh số trên tranh chung: "Điểm trên ảnh: x y; x y" (x, y theo % chiều ngang / dọc của tranh, ước lượng; thêm "(ô trống)" nếu điểm không in số).
 16. TIÊU ĐỀ BÀI ĐỌC: chữ in đậm đứng ngay trên bài đọc (tên truyện, tên đoạn văn) viết là dòng đầu của "Bài đọc:", dạng "**TIÊU ĐỀ**", rồi một dòng trống rồi mới tới đoạn văn. KHÔNG viết nó trước "Bài đọc:" như một dòng riêng (app sẽ hiểu nhầm thành một câu).
 17. "Hướng dẫn:" CHỈ ghi khi PDF có câu lệnh riêng NGOÀI tiêu đề bài. Nếu tiêu đề bài chính là câu lệnh (vd "1 LISTEN AND FILL IN THE BLANK" và không có dòng nào dưới nó), KHÔNG chép lại vào "Hướng dẫn:". Dòng "Tuổi:" chỉ ghi khi PDF ghi rõ độ tuổi; không đoán (PDF chỉ có "Level 0" hay mã phiếu thì bỏ dòng Tuổi).
-18. BÀI ĐIỀN TỪ TRONG BÀI ĐỌC: chỗ trống có nhãn in sẵn "(a) ______" thì viết đúng "(a) ___" trong bài đọc, không thêm số, và KHÔNG viết thêm dòng câu nào dưới bài đọc. App tự bỏ số (1)(2)… khi chỗ trống đã có nhãn.
+18. BÀI ĐIỀN TỪ VÀO ĐOẠN VĂN (đoạn văn có các chỗ trống "(a) ______", "(b) ______"…): KHÔNG để đoạn văn trong "Bài đọc:", vì chỗ trống cần đáp án nên đoạn văn là CÂU HỎI. "Bài đọc:" chỉ ghi tiêu đề của bài (vd "**THE GOLDEN CHIEFS OF PANAMA**"), nếu PDF không có tiêu đề thì bỏ "Bài đọc:". Mỗi đoạn văn là một câu đánh số "1.", "2.", "3." (một đoạn, giữ nguyên nhãn "(a) ___" trong đoạn, nhiều chỗ trống một câu cũng được), kèm "Dạng: điền từ" và "Số câu: ẩn" (PDF không đánh số đoạn). Không viết thêm dòng kẻ nào sau đoạn. Ví dụ:
+   Dạng: điền từ
+   Số câu: ẩn
+   Bài đọc:
+   **THE GOLDEN CHIEFS OF PANAMA**
+   1. In 2005, Julia Mayo began to (a) ___ a cemetery. Many (b) ___ were found there.
+   2. The (c) ___ people lived in simple houses.
 19. NHÃN CÂU LÀ CHỮ a, b, c… (bài nối từ với nghĩa: "a. ______ nghĩa", "b. ______ nghĩa"): viết mỗi dòng là "1. ___ nghĩa" (đánh số, KHÔNG viết "a." ở đầu dòng vì app hiểu là lựa chọn của câu trên), và thêm dòng "Số câu: a b c" ngay dưới "Dạng:". Muốn bỏ hẳn số câu (không nhãn) thì ghi "Số câu: ẩn".
 20. ĐÚNG/SAI MÀ T F NẰM CÙNG HÀNG VỚI CÂU (T F ở cuối dòng bên phải câu, không xuống dòng dưới): ghi "Dạng: đúng/sai (cùng hàng)". Có nhãn khác thì "Dạng: đúng/sai (Yes/No, cùng hàng)". Bài đọc có tranh cạnh bên rồi các câu ngay dưới: thêm "Ảnh:" và "Bố cục: ảnh phải" như thường.
 
@@ -206,6 +212,8 @@ NGUYÊN TẮC
 3. KHÔNG CHÉP GIÀN GIÁO: không để ___ ở cuối câu khi đáp án là Đúng/Sai, viết câu, viết từ (chỗ viết nằm sau câu); không có câu "My answer: A / B / C"; không chép Name/Class, tên phiếu lặp lại ở đầu trang, thời gian từng bài, nhãn phần. Chỉ giữ ___ khi chỗ trống nằm trong câu hoặc sau nhãn ("Place of the party: ___").
 4. Ảnh chỉ ghi TÊN NGẮN. Đáp án đúng chỉ khi PDF có (trường "key"). Mọi "id" duy nhất.
 5. Lời nhắc nằm dưới bài trong bản gốc: nối vào cuối "instruction".
+6. (v101) "instruction" chỉ ghi khi PDF có câu lệnh riêng NGOÀI tiêu đề bài; trùng tiêu đề thì để trống. "age" chỉ ghi khi PDF ghi độ tuổi, không đoán.
+7. (v101) Đoạn văn có chỗ trống "(a) ___" cần đáp án: mỗi đoạn là MỘT CÂU của Task ("content.items"), nhãn "(a)" giữ trong chữ; "content.lead" (bài đọc) chỉ giữ tiêu đề. Bài đọc thật chỉ để đọc thì không chứa ___.
 
 KHUNG PHIẾU
 {"schema":"ws-editor/0.3","id":"ws-001","title":"<tên phiếu>","age":"7-9","page":{"size":"A4","marginMm":{"top":14,"right":14,"bottom":14,"left":14}},"spacing":{"preset":"normal","overrides":{}},"flow":"cont","tasks":[ ... ]}

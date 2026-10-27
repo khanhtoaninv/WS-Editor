@@ -4,16 +4,15 @@
 Dạng: điền từ
 Ảnh: golden chief artifact
 Bố cục: ảnh phải
+Số câu: ẩn
 
 Bài đọc:
 
 **THE GOLDEN CHIEFS OF PANAMA**
 
-In 2005, archaeologist Julia Mayo and her team began to (a) ___ a cemetery in Panama. The cemetery was more than 1000 years old. Many (b) ___ were found at this (c) ___. In 2010, she and her team uncovered a powerful warrior (d) ___ wearing (e) ___.
-
-In 2011, they uncovered another chief. Specialists at the Smithsonian Institution studied what Mayo’s team found. They learned something important about this ancient civilization. The (f) ___ people lived in simple houses, but they were rich and cultured enough to understand fine art.
-
-Mayo thinks the cemetery has about 20 more chiefs like the two she excavated. Because her team of 10 works slowly, in four years they have dug up just two percent of the cemetery. She (g) ___ that if work continues at this speed, the last (h) ___ will be excavated 196 years from now!
+1. In 2005, archaeologist Julia Mayo and her team began to (a) ___ a cemetery in Panama. The cemetery was more than 1000 years old. Many (b) ___ were found at this (c) ___. In 2010, she and her team uncovered a powerful warrior (d) ___ wearing (e) ___.
+2. In 2011, they uncovered another chief. Specialists at the Smithsonian Institution studied what Mayo’s team found. They learned something important about this ancient civilization. The (f) ___ people lived in simple houses, but they were rich and cultured enough to understand fine art.
+3. Mayo thinks the cemetery has about 20 more chiefs like the two she excavated. Because her team of 10 works slowly, in four years they have dug up just two percent of the cemetery. She (g) ___ that if work continues at this speed, the last (h) ___ will be excavated 196 years from now!
 
 ## Task: CHOOSE THE SUITABLE WORD WITH ITS DEFINITION
 Dạng: điền từ
