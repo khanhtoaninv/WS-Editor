@@ -15,6 +15,9 @@
 
 **Chưa làm / chờ người dùng:** căn lề chữ ô câu hỏi (người dùng nói để sau); tiêu đề bài đọc căn giữa; thanh kéo nhóm T/F; số Task theo PDF (PDF 1, 2, 4, 5); bài 3 của PDF; kiểm `## Đáp án` MD cho câu nhiều chỗ trống; bản prompt trong thư mục project (`prompt/PROMPT_PDF_SANG_MD_v100.txt` đã tạo trước đó, chưa có quy tắc 18 mới, cần xuất lại bản v101); AI tạo lại MD từ prompt mới chưa thử.
 
+## 0b. v102 (sau khi gộp v101)
+Người dùng: tất cả câu có đáp án a, b, c để mặc định `a. b. c.` (không vòng tròn). Đã đổi: nhãn A4 mặc định `a.`, vòng tròn `Khoanh ⓐ` là lựa chọn riêng (`params.lab = 'circle'`; MD `(khoanh)`), spec mục 34, `tests/test45.py`. **Đổi hành vi phiếu cũ:** phiếu đã lưu chưa chọn nhãn trước đây hiện vòng tròn, nay hiện `a.`.
+
 ## 1. Kiểm thử
 `bash tests/run_all.sh` (test1–44 + audit) trên bản cuối v101 (badge v101): **tất cả đạt**, audit 0 vấn đề, test2 (so với backup/v80) đạt, 0 lỗi console. test44 (mới): MD phiếu 7 dạng mới (3 đoạn là 3 câu), `(a) ___` không bị cắt, `a. ___` thành 8 câu, phiếu cũ ghi chú, 8 chỗ trống trong chữ không dòng kẻ thừa, ô câu nhiều dòng, nhãn đáp án (a)–(e), căn dọc T/F, cách lề phải 40 mm. Đã nạp phiếu 7 và xem hình: Task 1 và 2 khớp PDF (nhãn a–h, tiêu đề đầu bài, ảnh phải).
 **Còn lệch so với PDF:** chỗ trống cuối đoạn (vd `(e) ___.`) kéo dài hết dòng (kiểu `fl` có sẵn của chỗ trống cuối câu), PDF dùng chỗ trống ngắn; tiêu đề bài đọc căn trái, in đậm.
