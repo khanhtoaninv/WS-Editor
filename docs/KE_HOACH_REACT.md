@@ -11,7 +11,7 @@ Ngày 27/10/2026. Đã duyệt; **đang thực hiện** (tiến độ ở mục 
 
 ## 1. Mục tiêu và nguyên tắc
 - Chuyển xong rồi mới làm tính năng mới. Phiếu cũ phải dàn trang **giống hệt** v106.
-- **Đóng băng tính năng** trong lúc chuyển: v106 chỉ sửa lỗi nặng; lỗi nào sửa thì sửa ở cả hai bản và thêm phiếu tái hiện vào đường chuẩn.
+- ~~**Đóng băng tính năng** trong lúc chuyển~~ (bỏ từ 27/10/2026: giao diện đã là React, phần còn lại ở 8.3 làm song song với tính năng mới; mỗi thay đổi vẫn qua đường chuẩn). Trước đây: v106 chỉ sửa lỗi nặng; lỗi nào sửa thì sửa ở cả hai bản và thêm phiếu tái hiện vào đường chuẩn.
 - Mỗi bước có điều kiện "xong" đo được. Chưa đạt thì không sang bước sau.
 - Giữ nguyên hình dạng JSON phiếu trong suốt quá trình chuyển (file cũ mở được, đường chuẩn so được).
 - Trước khi bắt đầu: gắn tag `v106` và tạo nhánh `backup/v106`.
