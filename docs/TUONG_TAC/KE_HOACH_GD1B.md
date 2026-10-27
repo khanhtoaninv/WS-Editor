@@ -1,7 +1,7 @@
 # Kế hoạch GĐ1b: giáo viên tự tương tác trên phiếu
 
 > 27/10/2026 · Theo cách chia của người dùng: 1a trình chiếu (xong, v111), **1b giáo viên mở phiếu, tự gõ / chọn một đáp án, máy báo đúng sai ngay để giảng cho học sinh**, 1c làm bài trên lớp (sau GĐ2). **Chưa code**, chờ người dùng nói "ok làm".
-> Kết quả: trong trình chiếu có nút **✍ Làm thử**. Bật lên là phiếu thành phiếu làm được: gõ vào chỗ trống, bấm chọn A/B/C, T/F, ô tick, nối, điền bảng, ô chữ; máy tô **xanh (đúng) / đỏ (sai)** ngay tại chỗ. Không lưu, không gửi đi đâu ("tương tác một chiều").
+> Kết quả: phiếu trong trình chiếu **lúc nào cũng làm được** (người dùng chốt bỏ nút Làm thử, 27/10): gõ vào chỗ trống, bấm chọn A/B/C, T/F, ô tick, nối, điền bảng, ô chữ; máy tô **xanh (đúng) / đỏ (sai)** ngay tại chỗ. Không lưu, không gửi đi đâu ("tương tác một chiều").
 
 ## 0. Hiện trạng đã có (từ GĐ0, GĐ1a)
 
@@ -33,7 +33,7 @@
 - Hiệu ứng khen (hình sao, tiếng chuông) chưa làm ở 1b; ghi vào việc sau nếu bạn muốn.
 
 ## 3. Ghép với 1a
-- Bật Làm thử thì bấm vào chỗ trả lời là **làm bài**, không phải hiện đáp án như 1a. Muốn hiện đáp án: phím A / nút ✓ đầu Task vẫn dùng được.
+- Không có công tắc Làm thử: ở **con trỏ**, bấm vào chỗ trả lời là **làm bài** (thay cho "bấm từng chỗ để hiện đáp án" của 1a). Hiện đáp án: phím A, nút ✓ đầu Task, Space lần lượt, hoặc bấm dấu ✗ cạnh chỗ vừa làm sai. Đang **cầm bút** (P) thì bấm kéo là vẽ; Esc về con trỏ. Giữ Ctrl / Shift kéo vẫn vẽ nhanh như 1a.
 - Bút, che / hé, phóng, Từng Task, đồng hồ, bảng trắng dùng chung. Đang gõ trong ô thì phím tắt trình chiếu (T, A, H…) không chạy.
 - Tab / Shift+Tab: sang chỗ trả lời kế / trước trong phần đang xem. Enter: chấm rồi sang chỗ kế.
 - Màn cảm ứng: chạm ô thì bàn phím ảo hiện (ô gõ là ô nhập thật).
@@ -42,7 +42,7 @@
 ## 4. Các bước (mỗi bước tự kiểm thử rồi mới sang bước sau)
 
 ### C1. Nền làm thử + ô gõ
-- Nút ✍ Làm thử (phím W), trạng thái bài làm dạng `Answers` của `shared/` (cùng khuôn với bài nộp ở 1c).
+- Không có nút Làm thử (người dùng chốt). Trạng thái bài làm dạng `Answers` của `shared/` (cùng khuôn với bài nộp ở 1c).
 - Ô gõ cho `text`, `cell`, ô chữ: đặt ngay trên phần tử `data-ans` của bản sao trang, chữ cỡ phiếu, phóng to vẫn khớp.
 - Test: gõ đáp án đúng / sai / khác hoa thường / thừa dấu chấm trên phiếu mẫu `tests/gd0/mau-du-dang.md`.
 
@@ -72,7 +72,11 @@ Lưu bài làm, nhiều người cùng làm, gửi kết quả (đó là 1c, c�
 |---|---|
 | Ô gõ đè lệch chỗ trống ở dạng lạ (gạch cuối câu, ô nhiều dòng) | Ô gõ nằm trong chính phần tử `data-ans` của bản sao trang; chụp ảnh từng dạng |
 | Máy chấm khác cách giáo viên nghĩ (`isn't` ≠ `is not`) | Đã thống nhất ở GĐ0: nhiều cách viết ghi cách nhau ` / `; không tự mở rộng viết tắt |
-| Bấm nhầm giữa làm bài và hiện đáp án | Làm thử là công tắc rõ ràng trên thanh công cụ, đổi màu khi bật |
+| Bấm nhầm giữa làm bài và vẽ | Con trỏ = làm bài, cầm bút = vẽ; nút bút đang bật đổi màu rõ, Esc về con trỏ |
 
 ## 7. Cần bạn chốt
 Mặc định "sai thì **không** tự hiện đáp án đúng" (giáo viên hỏi lại lớp trước), có công tắc để bật. Bạn muốn mặc định như vậy hay ngược lại?
+
+## 8. Các lớp trên màn hình (chốt 27/10)
+Từ dưới lên: (1) **trang phiếu** (bản sao, không đổi) → (2) **lớp làm bài**: ô gõ, phương án đang chọn, đường nối, xanh / đỏ, đáp án; nằm *trong* trang, gắn vào từng chỗ `data-ans`, nên phóng / đổi kiểu xem tự đi theo → (3) **tấm che** (che cả bài làm và đáp án) → (4) **nét vẽ**, trên cùng của trang để luôn nhìn thấy → (5) **công cụ nổi theo màn hình**: thanh công cụ, bút, đồng hồ, bảng trắng, ảnh lớn.
+Thứ tự hiển thị khác thứ tự nhận cú bấm: lớp nét vẽ trong suốt với cú bấm khi không cầm bút (cú bấm đi xuyên xuống lớp làm bài / tấm che); cầm bút thì lớp vẽ nhận hết. Mã 1a đã theo đúng thứ tự này.
