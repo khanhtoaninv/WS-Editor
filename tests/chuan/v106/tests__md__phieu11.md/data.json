@@ -1,0 +1,188 @@
+{
+ "title": "WS-Imp-0-6-5 — Unit 6 Lesson 5",
+ "tasks": [
+  {
+   "id": "t1",
+   "typeId": "table",
+   "typeName": "Bảng · ô có chữ · ảnh chung",
+   "title": "LISTEN TO THE AUDIO AND COMPLETE THE TABLE",
+   "instruction": "",
+   "content": {
+    "form": "table",
+    "corner": "Hotel rooms",
+    "cols": [
+     "Features",
+     "Price",
+     "Like and don’t like"
+    ],
+    "rows": [
+     {
+      "head": "The Sand Hotel, Weymouth, Britain",
+      "cells": [
+       "- A big (1) ___ on the beach\n- Facilities:\n+ No toilets and (2) ___\n+ No (3) ___ in the rooms\n+ A bed of sand in each room\n- Remember to bring (4) ___",
+       "£ (5) ___ for a night",
+       "- The view of the (6) ___ from the bed\n- Nights are (7) ___ so you get wet"
+      ],
+      "id": "r1"
+     },
+     {
+      "head": "Vanya Tree House, Kerala, India",
+      "cells": [
+       "- A (8) ___ next to the bed\n- Views of (9) ___ from the windows\n- No (10) ___ in the hotel\n- Facilities:\n+ A toilet\n+ A washbasin\n+ Solar panels\n+ A wind turbine for (11) ___",
+       "£ (m) ___ for a night",
+       "- Sounds of birds and (12) ___ in the morning\n- (13) ___ to the tree house\n- No road for the (14) ___ kilometer."
+      ],
+      "id": "r2"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "none",
+    "attach": "item",
+    "layout": null,
+    "params": {}
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "image": {
+    "label": "Sand Hotel trên bãi biển",
+    "size": "medium",
+    "two": true,
+    "label2": "Vanya Tree House"
+   },
+   "audio": null,
+   "part": "",
+   "number": 1
+  },
+  {
+   "id": "t2",
+   "typeId": "read-answer",
+   "typeName": "Bài đọc · điền chỗ trống · ảnh chung",
+   "title": "READ THE TEXT AND COMPLETE THE SENTENCES WITH THE CORRECT WORDS",
+   "instruction": "",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "There is a lot of ___ in Montreal in winter.",
+      "id": "q1"
+     },
+     {
+      "text": "In Montreal, people use ___ as a first language.",
+      "id": "q2"
+     },
+     {
+      "text": "There are ___ between important buildings in the city.",
+      "id": "q3"
+     },
+     {
+      "text": "___ people use the underground city every day.",
+      "id": "q4"
+     },
+     {
+      "text": "Coralie studies ___ at university.",
+      "id": "q5"
+     },
+     {
+      "text": "She likes going to ___ at a theatre in the underground city.",
+      "id": "q6"
+     },
+     {
+      "text": "Coralie’s sister often goes to ___ centre.",
+      "id": "q7"
+     },
+     {
+      "text": "Oliver is into ___ sports.",
+      "id": "q8"
+     }
+    ],
+    "lead": {
+     "kind": "passage",
+     "text": "**UNDERGROUND MONTREAL**\n\nThe people of Montreal like being different. In other big Canadian cities, like Toronto and Vancouver, the first language is English. In Montreal, people's first language is French. And when other people in Canada complain about the long, cold winters, Montrealers smile. Their city is also very cold in winter, and has a lot of snow on the ground for three or four months every year. But that isn’t a problem. Why? Because they’ve got an underground city in Montreal.\n\nThere are 32 kilometres of tunnels under Montreal’s city centre, and some of them are fifty years old. The tunnels link ten train stations, two bus stations, 1,200 offices, 2,000 shops, 200 restaurants, forty banks, forty cinemas, seven hotels, two universities and many other important buildings. 500,000 people use the tunnels every day to escape the winter weather.\n\n‘My family's flat has got an entrance to the underground city,’ says music student Coralie Gauthier.\n\n‘In winter, I never go outside on my journey to university.’\n\nEveryone in Coralie's family has got a favourite place in the underground city. ‘Mine is the Maisonneuve Theatre,' she says. ‘I go to lots of concerts there.’ And her family’s favourites? ‘My sister's into fashion, so hers is the Desjardins shopping centre. My parents' main interest is art, so theirs is the Museum of Contemporary Art. And my brother loves watching ice hockey, so his is the Bell Centre ice hockey stadium.’\n\nBut the underground city isn’t popular with everyone. Winter is Olivier's favourite season. ‘Whose favourite place is underground?’ asks fifteen-year-old Olivier Roy. 'I can't understand that - it isn’t natural. There are lots of fantastic winter sports in Canada, like skiing, ice-climbing and snowboarding. At the weekend, I'm always outside. I hate being inside in winter.’"
+    }
+   },
+   "answer": {
+    "kind": "word",
+    "attach": "inline",
+    "layout": "A2",
+    "params": {
+     "lenMode": "fill",
+     "lines": 1,
+     "start": "inline"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "image": {
+    "label": "khu thành phố ngầm Montreal",
+    "size": "medium",
+    "two": true,
+    "label2": "toàn cảnh Montreal"
+   },
+   "audio": null,
+   "part": "",
+   "number": 2
+  }
+ ],
+ "id": "(id)",
+ "age": "7-9",
+ "page": {
+  "size": "A4",
+  "marginMm": {
+   "top": 14,
+   "right": 14,
+   "bottom": 14,
+   "left": 14
+  }
+ },
+ "spacing": {
+  "preset": "compact",
+  "overrides": {}
+ },
+ "flow": "cont",
+ "schema": "ws-editor/0.3"
+}

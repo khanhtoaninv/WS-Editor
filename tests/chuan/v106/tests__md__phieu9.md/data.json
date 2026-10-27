@@ -1,0 +1,442 @@
+{
+ "title": "DAILY WORKSHEET – Unit 6 Lesson 3",
+ "tasks": [
+  {
+   "id": "t1",
+   "typeId": "choose-abc",
+   "typeName": "Câu hỏi · khoanh A/B/C",
+   "title": "LISTEN TO AN INTERVIEW AND CIRCLE THE CORRECT ANSWERS.",
+   "instruction": "",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "Dr Thompson is ___.",
+      "opts": [
+       "a psychologist",
+       "an architect",
+       "a restaurant manager"
+      ],
+      "id": "q1"
+     },
+     {
+      "text": "Many Mexican restaurants have ___.",
+      "opts": [
+       "orange walls",
+       "red walls",
+       "white walls"
+      ],
+      "id": "q2"
+     },
+     {
+      "text": "Many Chinese restaurants have ___.",
+      "opts": [
+       "orange walls",
+       "red walls",
+       "white walls"
+      ],
+      "id": "q3"
+     },
+     {
+      "text": "Which colours are natural?",
+      "opts": [
+       "brown and yellow",
+       "brown and green",
+       "yellow and green"
+      ],
+      "id": "q4"
+     },
+     {
+      "text": "The main topic of the interview is ___.",
+      "opts": [
+       "buildings",
+       "colours",
+       "restaurants."
+      ],
+      "id": "q5"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4",
+    "params": {
+     "dir": "auto"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 1
+  },
+  {
+   "id": "t2",
+   "typeId": "match",
+   "typeName": "Nối cặp",
+   "title": "LISTEN AGAIN. MATCH THE REASONS (A-E) TO THE QUESTIONS (1-5)",
+   "instruction": "",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "pair": {
+       "l": {
+        "text": "Why is colour important?"
+       },
+       "r": {
+        "text": "a. Because this is the colour of fire and good things."
+       }
+      },
+      "id": "q1"
+     },
+     {
+      "pair": {
+       "l": {
+        "text": "Why do many restaurants in Mexico have orange walls?"
+       },
+       "r": {
+        "text": "b. Because it changes the way people think and feel."
+       }
+      },
+      "id": "q2"
+     },
+     {
+      "pair": {
+       "l": {
+        "text": "Why don’t many restaurants in London have orange walls?"
+       },
+       "r": {
+        "text": "c. Because colours mean different things in different countries."
+       }
+      },
+      "id": "q3"
+     },
+     {
+      "pair": {
+       "l": {
+        "text": "Why do many Chinese restaurants have red walls?"
+       },
+       "r": {
+        "text": "d. Because this colour makes people feel hungry."
+       }
+      },
+      "id": "q4"
+     },
+     {
+      "pair": {
+       "l": {
+        "text": "Why is white a good colour for an English restaurant?"
+       },
+       "r": {
+        "text": "e. Because this colour means fresh and clean."
+       }
+      },
+      "id": "q5"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "match",
+    "attach": "item",
+    "layout": "A7",
+    "params": {}
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": "on",
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 2
+  },
+  {
+   "id": "t3",
+   "typeId": "match",
+   "typeName": "Nối cặp",
+   "title": "MATCH EACH IDIOM ON THE LEFT WITH ITS DEFINITION ON THE RIGHT",
+   "instruction": "",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "pair": {
+       "l": {
+        "text": "tie up loose ends"
+       },
+       "r": {
+        "text": "a. understand and deal with something"
+       }
+      },
+      "id": "q1"
+     },
+     {
+      "pair": {
+       "l": {
+        "text": "come to light"
+       },
+       "r": {
+        "text": "b. try something"
+       }
+      },
+      "id": "q2"
+     },
+     {
+      "pair": {
+       "l": {
+        "text": "give something a shot"
+       },
+       "r": {
+        "text": "c. find an easy solution"
+       }
+      },
+      "id": "q3"
+     },
+     {
+      "pair": {
+       "l": {
+        "text": "get to grips with something"
+       },
+       "r": {
+        "text": "d. just in case"
+       }
+      },
+      "id": "q4"
+     },
+     {
+      "pair": {
+       "l": {
+        "text": "make do"
+       },
+       "r": {
+        "text": "e. finish off final little tasks"
+       }
+      },
+      "id": "q5"
+     },
+     {
+      "pair": {
+       "l": {
+        "text": "to be on the safe side"
+       },
+       "r": {
+        "text": "f. uncover the truth"
+       }
+      },
+      "id": "q6"
+     },
+     {
+      "pair": {
+       "l": {
+        "text": "wave a magic wand"
+       },
+       "r": {
+        "text": "g. manage with something of worse quality"
+       }
+      },
+      "id": "q7"
+     },
+     {
+      "pair": {
+       "l": {
+        "text": "get to the bottom of something"
+       },
+       "r": {
+        "text": "h. be discovered"
+       }
+      },
+      "id": "q8"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "match",
+    "attach": "item",
+    "layout": "A7",
+    "params": {}
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 3
+  },
+  {
+   "id": "t4",
+   "typeId": "true-false",
+   "typeName": "Bài đọc · Đúng/Sai · ảnh chung",
+   "title": "READ THE TEXT. ARE THE SENTENCES TRUE (T) OR FALSE (F)?",
+   "instruction": "",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "You build an Earthship like an ordinary house.",
+      "id": "q1"
+     },
+     {
+      "text": "People in Earthships don't need money for electricity.",
+      "id": "q2"
+     },
+     {
+      "text": "You build the back wall from old cars.",
+      "id": "q3"
+     },
+     {
+      "text": "The back wall has got big windows.",
+      "id": "q4"
+     },
+     {
+      "text": "Earthships are cold at night.",
+      "id": "q5"
+     },
+     {
+      "text": "You can eat fruit from the plants in winter.",
+      "id": "q6"
+     },
+     {
+      "text": "You can drink the rain water from the roof.",
+      "id": "q7"
+     },
+     {
+      "text": "After a shower, you can drink the water.",
+      "id": "q8"
+     },
+     {
+      "text": "Jane Ronson doesn't like her home.",
+      "id": "q9"
+     },
+     {
+      "text": "She can use the internet for a long time.",
+      "id": "q10"
+     }
+    ],
+    "lead": {
+     "kind": "passage",
+     "text": "**EARTHSHIPS**\n\nAn Earthship is a house made from recycled material, rubbish and the earth under your feet An Earthship is good for the environment. It collects water, makes electricity and grows food. You can build it cheaply ; with eco-friendly materials.\n\nYou build an Earthship in front of a hill, so it has a natural back wall behind the house. You put earth in old car tyres and use these for the other outside walls. Inside the house, in the walls between the different rooms, there are old bottles and drinks cans. There aren't any windows in the back wall, but the Earthship isn't dark because of the big windows in the front wall. These windows warm the Earthship in the day. The walls then keep it warm at night.\n\nThere are plants in the garden next to the house and in the hall and kitchen. These can give you fruit and vegetables all year. On the roof, there are solar panels and a wind turbine to produce electricity from the sun and the wind. The house also collects rain water on the roof and filters it, so you can drink it and use it in the kitchen and showers in the bathroom. You can then use the water again on the plants and in the toilet.\n\nAn Earthship is very green, but does it make a comfortable home? Jane Ronson lives in an Earthship near the city of Phoenix, USA, and she says, 'It's fantastic. It's got all the same things as ordinary homes. There's a modern cooker, a fridge and a dishwasher in the kitchen, and a big TV opposite the sofa in the living room. It's got the internet, too, and with the electricity from the solar panels and wind turbines we can watch TV and use the computer for hours.'\n\nThere are now a thousand Earthships around the world. Are they the houses of the future?"
+    }
+   },
+   "answer": {
+    "kind": "tf",
+    "attach": "item",
+    "layout": "A6",
+    "params": {
+     "row": true
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "T3",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "image": {
+    "label": "các hình ngôi nhà Earthship và nội thất tái chế",
+    "size": "medium"
+   },
+   "audio": null,
+   "part": "",
+   "number": 4
+  }
+ ],
+ "id": "(id)",
+ "age": "7-9",
+ "page": {
+  "size": "A4",
+  "marginMm": {
+   "top": 14,
+   "right": 14,
+   "bottom": 14,
+   "left": 14
+  }
+ },
+ "spacing": {
+  "preset": "compact",
+  "overrides": {}
+ },
+ "flow": "cont",
+ "schema": "ws-editor/0.3"
+}

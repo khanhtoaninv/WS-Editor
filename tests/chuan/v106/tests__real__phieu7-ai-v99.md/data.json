@@ -1,0 +1,336 @@
+{
+ "title": "Unit 6 – Lesson 1",
+ "age": "10-12",
+ "tasks": [
+  {
+   "id": "t1",
+   "typeId": "read-answer",
+   "typeName": "Bài đọc · viết từ · ảnh chung",
+   "title": "LISTEN AND FILL IN THE BLANK",
+   "instruction": "LISTEN AND FILL IN THE BLANK",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "THE GOLDEN CHIEFS OF PANAMA",
+      "id": "q1"
+     }
+    ],
+    "lead": {
+     "kind": "passage",
+     "text": "In 2005, archaeologist Julia Mayo and her team began to (a) ___ a cemetery in Panama. The cemetery was more than 1000 years old. Many (b) ___ were found at this (c) ___. In 2010, she and her team uncovered a powerful warrior (d) ___ wearing (e) ___.\n\nIn 2011, they uncovered another chief. Specialists at the Smithsonian Institution studied what Mayo’s team found. They learned something important about this ancient civilization. The (f) ___ people lived in simple houses, but they were rich and cultured enough to understand fine art.\n\nMayo thinks the cemetery has about 20 more chiefs like the two she excavated. Because her team of 10 works slowly, in four years they have dug up just two percent of the cemetery. She (g) ___ that if work continues at this speed, the last (h) ___ will be excavated 196 years from now!"
+    }
+   },
+   "answer": {
+    "kind": "word",
+    "attach": "item",
+    "layout": "A2",
+    "params": {
+     "lenMode": "fill",
+     "lines": 1,
+     "start": "inline"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "T3",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "image": {
+    "label": "golden chief artifact",
+    "size": "medium"
+   },
+   "audio": null,
+   "part": "",
+   "number": 1
+  },
+  {
+   "id": "t2",
+   "typeId": "gap-fill",
+   "typeName": "Câu hỏi · điền chỗ trống · khung từ",
+   "title": "CHOOSE THE SUITABLE WORD WITH ITS DEFINITION",
+   "instruction": "CHOOSE THE SUITABLE WORD WITH ITS DEFINITION",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "___ born in a place of belonging to a particular place",
+      "id": "q1"
+     },
+     {
+      "text": "___ an object made by humans found at an archaeological dig",
+      "id": "q2"
+     },
+     {
+      "text": "___ the head or leader of a group of people",
+      "id": "q3"
+     },
+     {
+      "text": "___ jewels, money, and other things of value",
+      "id": "q4"
+     },
+     {
+      "text": "___ to dig or make a hole in the ground",
+      "id": "q5"
+     },
+     {
+      "text": "___ a place or location",
+      "id": "q6"
+     },
+     {
+      "text": "___ a precious yellow metal, often used in jewelry",
+      "id": "q7"
+     },
+     {
+      "text": "___ to guess the value or amount of something",
+      "id": "q8"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "word",
+    "attach": "inline",
+    "layout": "A2",
+    "params": {
+     "lenMode": "fill",
+     "lines": 1,
+     "start": "inline"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "wordBank": {
+    "words": [
+     "artifact",
+     "estimate",
+     "gold",
+     "site",
+     "chief",
+     "excavate",
+     "native",
+     "treasure"
+    ],
+    "placement": "top",
+    "style": "chips",
+    "label": "lower"
+   },
+   "audio": null,
+   "part": "",
+   "number": 2
+  },
+  {
+   "id": "t3",
+   "typeId": "choose-abc",
+   "typeName": "Câu hỏi · khoanh A/B/C",
+   "title": "LISTEN AND CHOOSE THE CORRECT ANSWER",
+   "instruction": "LISTEN AND CHOOSE THE CORRECT ANSWER",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "Why did the boy go to San Francisco?",
+      "opts": [
+       "He visited his friend",
+       "He visited his family",
+       "He lived there"
+      ],
+      "id": "q1"
+     },
+     {
+      "text": "When was the girl in San Francisco?",
+      "opts": [
+       "2 months ago",
+       "2 years ago",
+       "one year ago"
+      ],
+      "id": "q2"
+     },
+     {
+      "text": "Why do people in San Francisco want to build safer homes?",
+      "opts": [
+       "They want to live in newer homes",
+       "They want their homes will fall during an earthquake",
+       "They want their homes won’t fall during an earthquake"
+      ],
+      "id": "q3"
+     },
+     {
+      "text": "How does San Francisco change?",
+      "opts": [
+       "It’s more international",
+       "It’s more comfortable",
+       "It’s more economical"
+      ],
+      "id": "q4"
+     },
+     {
+      "text": "What doesn’t change in San Francisco?",
+      "opts": [
+       "The Goal Bridge",
+       "The Golden Gate Bridge",
+       "The Gate Bridge"
+      ],
+      "id": "q5"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4",
+    "params": {
+     "dir": "auto"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 3
+  },
+  {
+   "id": "t4",
+   "typeId": "true-false",
+   "typeName": "Bài đọc · Đúng/Sai · ảnh chung",
+   "title": "READ THE INTRODUCTION THEN READ THE STATEMENTS BELOW",
+   "instruction": "READ THE INTRODUCTION THEN READ THE STATEMENTS BELOW. CIRCLE T FOR TRUE OR F FOR FALSE.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "Ella-Li Spik is Swedish.",
+      "id": "q1"
+     },
+     {
+      "text": "She grew up in the city.",
+      "id": "q2"
+     },
+     {
+      "text": "She wants to go to the college.",
+      "id": "q3"
+     }
+    ],
+    "lead": {
+     "kind": "passage",
+     "text": "Ella-Li Spik is a Sami. The Sami is a small group of people who live in Sweden. They herd reindeer. Ella-Li grew up herding reindeer. But things are changing for the Sami. Ella-Li is part of a new generation that wants to attend college.\n\n“I want to explore the world,” she says, “but I always want reindeer to be part of my life.”"
+    }
+   },
+   "answer": {
+    "kind": "tf",
+    "attach": "item",
+    "layout": "A6",
+    "params": {}
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "T3",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "image": {
+    "label": "reindeer in snowy landscape",
+    "size": "medium"
+   },
+   "audio": null,
+   "part": "",
+   "number": 4
+  }
+ ],
+ "id": "(id)",
+ "page": {
+  "size": "A4",
+  "marginMm": {
+   "top": 14,
+   "right": 14,
+   "bottom": 14,
+   "left": 14
+  }
+ },
+ "spacing": {
+  "preset": "compact",
+  "overrides": {}
+ },
+ "flow": "cont",
+ "schema": "ws-editor/0.3"
+}

@@ -1,0 +1,796 @@
+{
+ "schema": "ws-editor/0.3",
+ "id": "(id)",
+ "title": "Wonders of the Sea (Our World 4, WS 6.1)",
+ "age": "7-9",
+ "page": {
+  "size": "A4",
+  "marginMm": {
+   "top": 14,
+   "right": 14,
+   "bottom": 14,
+   "left": 14
+  }
+ },
+ "spacing": {
+  "preset": "normal",
+  "overrides": {}
+ },
+ "flow": "cont",
+ "tasks": [
+  {
+   "id": "ws1a",
+   "typeId": "custom",
+   "typeName": "Ô chữ",
+   "title": "Students 1 and 2: Work with a friend. Find and circle the words in the puzzle.",
+   "instruction": "",
+   "audio": null,
+   "image": null,
+   "wordBank": {
+    "words": [
+     "dolphin",
+     "sea sponges",
+     "squid",
+     "fish",
+     "creature",
+     "sunlight",
+     "disappear",
+     "layer"
+    ],
+    "placement": "top",
+    "style": "chips",
+    "label": "none"
+   },
+   "content": {
+    "form": "table",
+    "corner": "",
+    "cols": [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    "rows": [
+     {
+      "head": "",
+      "cells": [
+       "S",
+       "U",
+       "N",
+       "L",
+       "I",
+       "G",
+       "H",
+       "T",
+       "L",
+       "O",
+       "D",
+       "A"
+      ],
+      "id": "r1"
+     },
+     {
+      "head": "",
+      "cells": [
+       "E",
+       "O",
+       "R",
+       "M",
+       "I",
+       "D",
+       "O",
+       "L",
+       "P",
+       "H",
+       "I",
+       "N"
+      ],
+      "id": "r2"
+     },
+     {
+      "head": "",
+      "cells": [
+       "A",
+       "S",
+       "C",
+       "E",
+       "C",
+       "I",
+       "G",
+       "H",
+       "T",
+       "S",
+       "S",
+       "R"
+      ],
+      "id": "r3"
+     },
+     {
+      "head": "",
+      "cells": [
+       "S",
+       "E",
+       "N",
+       "T",
+       "U",
+       "R",
+       "T",
+       "L",
+       "E",
+       "I",
+       "A",
+       "E"
+      ],
+      "id": "r4"
+     },
+     {
+      "head": "",
+      "cells": [
+       "P",
+       "A",
+       "O",
+       "S",
+       "O",
+       "L",
+       "E",
+       "U",
+       "A",
+       "F",
+       "P",
+       "S"
+      ],
+      "id": "r5"
+     },
+     {
+      "head": "",
+      "cells": [
+       "O",
+       "N",
+       "C",
+       "Q",
+       "C",
+       "P",
+       "W",
+       "A",
+       "R",
+       "Y",
+       "P",
+       "O"
+      ],
+      "id": "r6"
+     },
+     {
+      "head": "",
+      "cells": [
+       "N",
+       "S",
+       "E",
+       "U",
+       "E",
+       "Y",
+       "U",
+       "H",
+       "T",
+       "T",
+       "E",
+       "U"
+      ],
+      "id": "r7"
+     },
+     {
+      "head": "",
+      "cells": [
+       "G",
+       "H",
+       "F",
+       "I",
+       "S",
+       "H",
+       "I",
+       "S",
+       "H",
+       "U",
+       "A",
+       "R"
+      ],
+      "id": "r8"
+     },
+     {
+      "head": "",
+      "cells": [
+       "E",
+       "M",
+       "I",
+       "D",
+       "N",
+       "I",
+       "G",
+       "H",
+       "T",
+       "L",
+       "R",
+       "C"
+      ],
+      "id": "r9"
+     },
+     {
+      "head": "",
+      "cells": [
+       "S",
+       "H",
+       "A",
+       "R",
+       "K",
+       "S",
+       "E",
+       "Z",
+       "O",
+       "N",
+       "E",
+       "E"
+      ],
+      "id": "r10"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "none",
+    "attach": "item",
+    "layout": null,
+    "params": {}
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": {
+     "head": false,
+     "rowHead": false,
+     "nm": "off",
+     "lines": "all",
+     "align": "center",
+     "minH": 8
+    }
+   },
+   "part": "",
+   "number": 1
+  },
+  {
+   "id": "ws1b",
+   "typeId": "custom",
+   "typeName": "Viết gợi ý",
+   "title": "Work with your friend. Prepare clues for the words you found in Activity 1.",
+   "instruction": "Look at the pictures on pages 90 and 91 of your book if you need help. Example: It’s smaller than a whale. It lives in the sunlight zone. (dolphin)",
+   "audio": null,
+   "image": null,
+   "wordBank": null,
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "id": "q1",
+      "text": "Clue 1:"
+     },
+     {
+      "id": "q2",
+      "text": "Clue 2:"
+     },
+     {
+      "id": "q3",
+      "text": "Clue 3:"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "sentence",
+    "attach": "item",
+    "layout": "A1",
+    "params": {
+     "lines": 2
+    }
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "part": "",
+   "number": 2
+  },
+  {
+   "id": "ws1c",
+   "typeId": "custom",
+   "typeName": "Hỏi đáp theo cặp",
+   "title": "Join students 3 and 4. Give the clues to your friends. Take turns.",
+   "instruction": "Listen to the clues and find the words in your puzzle.",
+   "audio": null,
+   "image": null,
+   "wordBank": null,
+   "content": {
+    "form": "list",
+    "variant": "dialogue",
+    "items": [
+     {
+      "id": "l1",
+      "who": "Students 1 and 2",
+      "text": "Here’s our first clue. It’s smaller than a whale. It lives in the sunlight zone."
+     },
+     {
+      "id": "l2",
+      "who": "Students 3 and 4",
+      "text": "Is it a dolphin?"
+     },
+     {
+      "id": "l3",
+      "who": "Students 1 and 2",
+      "text": "Yes, it is. Where is it in the puzzle?"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "none",
+    "attach": "item",
+    "layout": null,
+    "params": {}
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "part": "",
+   "number": 3
+  },
+  {
+   "id": "ws2a",
+   "typeId": "custom",
+   "typeName": "Ô chữ",
+   "title": "Students 3 and 4: Work with a friend. Find and circle the words in the puzzle.",
+   "instruction": "",
+   "audio": null,
+   "image": null,
+   "wordBank": {
+    "words": [
+     "shark",
+     "turtle",
+     "octopus",
+     "whale",
+     "sea",
+     "zone",
+     "resource",
+     "midnight"
+    ],
+    "placement": "top",
+    "style": "chips",
+    "label": "none"
+   },
+   "content": {
+    "form": "table",
+    "corner": "",
+    "cols": [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    "rows": [
+     {
+      "head": "",
+      "cells": [
+       "S",
+       "U",
+       "N",
+       "L",
+       "I",
+       "G",
+       "H",
+       "T",
+       "L",
+       "O",
+       "D",
+       "A"
+      ],
+      "id": "r1"
+     },
+     {
+      "head": "",
+      "cells": [
+       "E",
+       "O",
+       "R",
+       "M",
+       "I",
+       "D",
+       "O",
+       "L",
+       "P",
+       "H",
+       "I",
+       "N"
+      ],
+      "id": "r2"
+     },
+     {
+      "head": "",
+      "cells": [
+       "A",
+       "S",
+       "C",
+       "E",
+       "C",
+       "I",
+       "G",
+       "H",
+       "T",
+       "S",
+       "S",
+       "R"
+      ],
+      "id": "r3"
+     },
+     {
+      "head": "",
+      "cells": [
+       "S",
+       "E",
+       "N",
+       "T",
+       "U",
+       "R",
+       "T",
+       "L",
+       "E",
+       "I",
+       "A",
+       "E"
+      ],
+      "id": "r4"
+     },
+     {
+      "head": "",
+      "cells": [
+       "P",
+       "A",
+       "O",
+       "S",
+       "O",
+       "L",
+       "E",
+       "U",
+       "A",
+       "F",
+       "P",
+       "S"
+      ],
+      "id": "r5"
+     },
+     {
+      "head": "",
+      "cells": [
+       "O",
+       "N",
+       "C",
+       "Q",
+       "C",
+       "P",
+       "W",
+       "A",
+       "R",
+       "Y",
+       "P",
+       "O"
+      ],
+      "id": "r6"
+     },
+     {
+      "head": "",
+      "cells": [
+       "N",
+       "S",
+       "E",
+       "U",
+       "E",
+       "Y",
+       "U",
+       "H",
+       "T",
+       "T",
+       "E",
+       "U"
+      ],
+      "id": "r7"
+     },
+     {
+      "head": "",
+      "cells": [
+       "G",
+       "H",
+       "F",
+       "I",
+       "S",
+       "H",
+       "I",
+       "S",
+       "H",
+       "U",
+       "A",
+       "R"
+      ],
+      "id": "r8"
+     },
+     {
+      "head": "",
+      "cells": [
+       "E",
+       "M",
+       "I",
+       "D",
+       "N",
+       "I",
+       "G",
+       "H",
+       "T",
+       "L",
+       "R",
+       "C"
+      ],
+      "id": "r9"
+     },
+     {
+      "head": "",
+      "cells": [
+       "S",
+       "H",
+       "A",
+       "R",
+       "K",
+       "S",
+       "E",
+       "Z",
+       "O",
+       "N",
+       "E",
+       "E"
+      ],
+      "id": "r10"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "none",
+    "attach": "item",
+    "layout": null,
+    "params": {}
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": {
+     "head": false,
+     "rowHead": false,
+     "nm": "off",
+     "lines": "all",
+     "align": "center",
+     "minH": 8
+    }
+   },
+   "part": "",
+   "number": 4
+  },
+  {
+   "id": "ws2b",
+   "typeId": "custom",
+   "typeName": "Viết gợi ý",
+   "title": "Work with your friend. Prepare clues for the words you found in Activity 1.",
+   "instruction": "Look at the pictures on pages 90 and 91 of your book if you need help. Example: It can have sharp teeth. It lives in the sunlight zone. (shark)",
+   "audio": null,
+   "image": null,
+   "wordBank": null,
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "id": "q1",
+      "text": "Clue 1:"
+     },
+     {
+      "id": "q2",
+      "text": "Clue 2:"
+     },
+     {
+      "id": "q3",
+      "text": "Clue 3:"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "sentence",
+    "attach": "item",
+    "layout": "A1",
+    "params": {
+     "lines": 2
+    }
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "part": "",
+   "number": 5
+  },
+  {
+   "id": "ws2c",
+   "typeId": "custom",
+   "typeName": "Hỏi đáp theo cặp",
+   "title": "Join students 1 and 2. Give the clues to your friends. Take turns.",
+   "instruction": "Listen to the clues and find the words in your puzzle.",
+   "audio": null,
+   "image": null,
+   "wordBank": null,
+   "content": {
+    "form": "list",
+    "variant": "dialogue",
+    "items": [
+     {
+      "id": "l1",
+      "who": "Students 3 and 4",
+      "text": "Here’s the clue. It’s got sharp teeth. It lives in the sunlight zone."
+     },
+     {
+      "id": "l2",
+      "who": "Students 1 and 2",
+      "text": "Is it a shark?"
+     },
+     {
+      "id": "l3",
+      "who": "Students 3 and 4",
+      "text": "Yes. Where is it in the puzzle?"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "none",
+    "attach": "item",
+    "layout": null,
+    "params": {}
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "part": "",
+   "number": 6
+  }
+ ]
+}

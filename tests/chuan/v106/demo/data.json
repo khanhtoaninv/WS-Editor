@@ -1,0 +1,1699 @@
+{
+ "schema": "ws-editor/0.3",
+ "id": "(id)",
+ "title": "Unit 3 · My home",
+ "age": "7-9",
+ "page": {
+  "size": "A4",
+  "marginMm": {
+   "top": 14,
+   "right": 14,
+   "bottom": 14,
+   "left": 14
+  }
+ },
+ "spacing": {
+  "preset": "compact",
+  "overrides": {}
+ },
+ "flow": "cont",
+ "tasks": [
+  {
+   "audio": null,
+   "image": null,
+   "wordBank": null,
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "id": "t1",
+   "typeId": "V01",
+   "typeName": "Look and write",
+   "title": "Look and write.",
+   "instruction": "Look at the pictures. Write the words.",
+   "content": {
+    "form": "list",
+    "variant": "single",
+    "items": [
+     {
+      "id": "i1",
+      "img": "cat",
+      "len": 3
+     },
+     {
+      "id": "i2",
+      "img": "dog",
+      "len": 3
+     },
+     {
+      "id": "i3",
+      "img": "fish",
+      "len": 4
+     },
+     {
+      "id": "i4",
+      "img": "bird",
+      "len": 4
+     },
+     {
+      "id": "i5",
+      "img": "frog",
+      "len": 4
+     },
+     {
+      "id": "i6",
+      "img": "duck",
+      "len": 4
+     }
+    ]
+   },
+   "answer": {
+    "params": {},
+    "kind": "word",
+    "attach": "item",
+    "layout": "A2"
+   },
+   "part": "",
+   "number": 1
+  },
+  {
+   "audio": null,
+   "image": null,
+   "wordBank": null,
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "id": "t2",
+   "typeId": "V02",
+   "typeName": "Match pictures with words",
+   "title": "Look and match.",
+   "instruction": "Draw a line from the picture to the word.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "id": "p0",
+      "pair": {
+       "l": {
+        "id": "l1",
+        "img": "apple"
+       },
+       "r": {
+        "id": "r1",
+        "text": "pear"
+       }
+      }
+     },
+     {
+      "id": "p1",
+      "pair": {
+       "l": {
+        "id": "l2",
+        "img": "banana"
+       },
+       "r": {
+        "id": "r2",
+        "text": "lemon"
+       }
+      }
+     },
+     {
+      "id": "p2",
+      "pair": {
+       "l": {
+        "id": "l3",
+        "img": "pear"
+       },
+       "r": {
+        "id": "r3",
+        "text": "apple"
+       }
+      }
+     },
+     {
+      "id": "p3",
+      "pair": {
+       "l": {
+        "id": "l4",
+        "img": "orange"
+       },
+       "r": {
+        "id": "r4",
+        "text": "orange"
+       }
+      }
+     },
+     {
+      "id": "p4",
+      "pair": {
+       "l": {
+        "id": "l5",
+        "img": "lemon"
+       },
+       "r": {
+        "id": "r5",
+        "text": "banana"
+       }
+      }
+     }
+    ]
+   },
+   "answer": {
+    "params": {},
+    "kind": "match",
+    "attach": "item",
+    "layout": "A7"
+   },
+   "part": "",
+   "number": 2
+  },
+  {
+   "audio": "Track 05",
+   "image": null,
+   "wordBank": null,
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "id": "t3",
+   "typeId": "LS03",
+   "typeName": "Listen and tick",
+   "title": "Listen and tick (✓) the box.",
+   "instruction": "There is one example.",
+   "content": {
+    "form": "list",
+    "variant": "multi",
+    "items": [
+     {
+      "id": "i1",
+      "text": "What is Tom eating?",
+      "imgs": [
+       "pizza",
+       "rice",
+       "cake"
+      ]
+     },
+     {
+      "id": "i2",
+      "text": "Where is the cat?",
+      "imgs": [
+       "on the bed",
+       "under the table",
+       "in the box"
+      ]
+     },
+     {
+      "id": "i3",
+      "text": "What colour is Ann's bag?",
+      "imgs": [
+       "red bag",
+       "blue bag",
+       "green bag"
+      ]
+     }
+    ]
+   },
+   "answer": {
+    "params": {},
+    "kind": "tick",
+    "attach": "item",
+    "layout": "A5"
+   },
+   "part": "",
+   "number": 3
+  },
+  {
+   "audio": null,
+   "image": null,
+   "wordBank": null,
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "id": "t4",
+   "typeId": "G01",
+   "typeName": "Multiple choice",
+   "title": "Choose the correct answer.",
+   "instruction": "Circle a, b or c.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "id": "q1",
+      "text": "She ___ a teacher.",
+      "opts": [
+       "am",
+       "is",
+       "are"
+      ]
+     },
+     {
+      "id": "q2",
+      "text": "They ___ playing football in the garden.",
+      "opts": [
+       "is",
+       "are",
+       "be"
+      ]
+     },
+     {
+      "id": "q3",
+      "text": "I have ___ apple in my bag.",
+      "opts": [
+       "a",
+       "an",
+       "the"
+      ]
+     },
+     {
+      "id": "q4",
+      "text": "There ___ two cats on the sofa.",
+      "opts": [
+       "is",
+       "are",
+       "am"
+      ]
+     },
+     {
+      "id": "q5",
+      "text": "My brother can ___ very fast.",
+      "opts": [
+       "run",
+       "runs",
+       "running"
+      ]
+     }
+    ]
+   },
+   "answer": {
+    "params": {
+     "dir": "h"
+    },
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4"
+   },
+   "part": "",
+   "number": 4
+  },
+  {
+   "audio": null,
+   "image": null,
+   "wordBank": null,
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "id": "t11",
+   "typeId": "R05",
+   "typeName": "Reading · choose A, B or C",
+   "title": "Questions 1–6: Choose the best answer A, B, or C.",
+   "instruction": "Look at the three school notices. Circle one answer.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "id": "q1",
+      "text": "How many classes does Pine Hill School have?",
+      "opts": [
+       "Ten",
+       "Twelve",
+       "Fourteen"
+      ]
+     },
+     {
+      "id": "q2",
+      "text": "What do Pine Hill students do in the afternoon?",
+      "opts": [
+       "They use the computer room or join the music club.",
+       "They work in the school garden or play basketball.",
+       "They have art lessons or go swimming."
+      ]
+     },
+     {
+      "id": "q3",
+      "text": "About how many students study at Kim Dong Secondary School?",
+      "opts": [
+       "270",
+       "620",
+       "720"
+      ]
+     },
+     {
+      "id": "q4",
+      "text": "Lan wants to use a computer for her schoolwork at Kim Dong. Where should she go?",
+      "opts": [
+       "The science room",
+       "The computer room",
+       "The playground"
+      ]
+     },
+     {
+      "id": "q5",
+      "text": "Which sentence is correct about Green World School?",
+      "opts": [
+       "Teachers teach all subjects in English.",
+       "Teachers teach all subjects in Vietnamese.",
+       "Teachers teach subjects in English and Vietnamese."
+      ]
+     },
+     {
+      "id": "q6",
+      "text": "Mai wants to study with international students. Which school is suitable for her?",
+      "opts": [
+       "Green World School",
+       "Pine Hill School",
+       "Kim Dong Secondary School"
+      ]
+     }
+    ]
+   },
+   "answer": {
+    "params": {
+     "dir": "auto",
+     "lab": "dot"
+    },
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4"
+   },
+   "part": "",
+   "number": 5
+  },
+  {
+   "audio": null,
+   "image": null,
+   "wordBank": {
+    "words": [
+     "Le Loi Secondary School.",
+     "Great! Let’s sing together one day.",
+     "Yes. The teachers and students are very friendly.",
+     "Really? Is she in Grade 6?",
+     "I go to the music club on Thursdays.",
+     "I usually ride my bike."
+    ],
+    "placement": "right",
+    "style": "list",
+    "label": "lower"
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "id": "t12",
+   "typeId": "D02",
+   "typeName": "Complete the conversation",
+   "title": "Complete the conversation with the responses a–f. There is one extra response.",
+   "instruction": "Write one letter in each gap.",
+   "content": {
+    "form": "list",
+    "lead": {
+     "kind": "text",
+     "text": "Mai is talking to Ben about his new school."
+    },
+    "items": [
+     {
+      "id": "l0",
+      "who": "Mai",
+      "text": "Hi, Ben. Do you like your new school?"
+     },
+     {
+      "id": "l1",
+      "who": "Ben",
+      "text": "___"
+     },
+     {
+      "id": "l2",
+      "who": "Mai",
+      "text": "Great! Which school do you go to?"
+     },
+     {
+      "id": "l3",
+      "who": "Ben",
+      "text": "___"
+     },
+     {
+      "id": "l4",
+      "who": "Mai",
+      "text": "Oh, my cousin studies there, too."
+     },
+     {
+      "id": "l5",
+      "who": "Ben",
+      "text": "___"
+     },
+     {
+      "id": "l6",
+      "who": "Mai",
+      "text": "Yes, she is. She is in Class 6B. What do you do after lessons?"
+     },
+     {
+      "id": "l7",
+      "who": "Ben",
+      "text": "___"
+     },
+     {
+      "id": "l8",
+      "who": "Mai",
+      "text": "That sounds fun! I love music, too."
+     },
+     {
+      "id": "l9",
+      "who": "Ben",
+      "text": "___"
+     }
+    ]
+   },
+   "answer": {
+    "params": {
+     "lenMode": "fill",
+     "lines": 1,
+     "start": "inline"
+    },
+    "kind": "word",
+    "attach": "inline",
+    "layout": "A2"
+   },
+   "part": "",
+   "number": 6
+  },
+  {
+   "audio": null,
+   "image": null,
+   "wordBank": {
+    "words": [
+     "kitchen",
+     "garden",
+     "bedroom",
+     "bathroom",
+     "living room"
+    ],
+    "placement": "top"
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "id": "t5",
+   "typeId": "V10",
+   "typeName": "Complete with word bank",
+   "title": "Complete the sentences.",
+   "instruction": "Use the words in the box.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "id": "q1",
+      "text": "We cook dinner in the ___."
+     },
+     {
+      "id": "q2",
+      "text": "I sleep in my ___."
+     },
+     {
+      "id": "q3",
+      "text": "Flowers grow in the ___."
+     },
+     {
+      "id": "q4",
+      "text": "I wash my hands in the ___."
+     },
+     {
+      "id": "q5",
+      "text": "We watch TV in the ___."
+     }
+    ]
+   },
+   "answer": {
+    "params": {
+     "lenMode": "fill",
+     "lines": 1,
+     "start": "inline"
+    },
+    "kind": "word",
+    "attach": "inline",
+    "layout": "A2"
+   },
+   "part": "",
+   "number": 7
+  },
+  {
+   "audio": null,
+   "image": null,
+   "wordBank": null,
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "id": "t13",
+   "typeId": "W07",
+   "typeName": "Speaking plan",
+   "title": "Choose one school. Complete the speaking plan with short notes.",
+   "instruction": "Write short notes.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "id": "q1",
+      "text": "The school I choose: ___"
+     },
+     {
+      "id": "q2",
+      "text": "Reason 1: one fact from the text: ___"
+     },
+     {
+      "id": "q3",
+      "text": "Reason 2: why it is good for me: ___"
+     },
+     {
+      "id": "q4",
+      "text": "One activity I would like to do: ___"
+     }
+    ]
+   },
+   "answer": {
+    "params": {
+     "lenMode": "fill",
+     "lines": 2,
+     "start": "inline"
+    },
+    "kind": "word",
+    "attach": "inline",
+    "layout": "A2"
+   },
+   "part": "",
+   "number": 8
+  },
+  {
+   "audio": "Track 11",
+   "image": null,
+   "wordBank": null,
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "id": "t14",
+   "typeId": "TB1",
+   "typeName": "Bảng · chọn A/B/C",
+   "title": "Listen to Mia talk about her weekend. Choose A, B or C.",
+   "instruction": "Circle one answer in each row.",
+   "content": {
+    "form": "table",
+    "corner": "",
+    "cols": [
+     "A",
+     "B",
+     "C"
+    ],
+    "rows": [
+     {
+      "head": "Day she goes swimming",
+      "cells": [
+       "Saturday",
+       "Sunday",
+       "Monday"
+      ],
+      "id": "r1"
+     },
+     {
+      "head": "Time she leaves home",
+      "cells": [
+       "8:00",
+       "8:30",
+       "9:00"
+      ],
+      "id": "r2"
+     },
+     {
+      "head": "Who goes with her",
+      "cells": [
+       "her sister",
+       "her cousin",
+       "her friend"
+      ],
+      "id": "r3"
+     },
+     {
+      "head": "Lunch after swimming",
+      "cells": [
+       "a sandwich",
+       "rice and fish",
+       "noodles"
+      ],
+      "id": "r4"
+     },
+     {
+      "head": "What she does at home",
+      "cells": [
+       "reads a book",
+       "watches TV",
+       "helps her mum cook dinner"
+      ],
+      "id": "r5"
+     }
+    ]
+   },
+   "answer": {
+    "params": {},
+    "kind": "none",
+    "attach": "item",
+    "layout": null
+   },
+   "part": "",
+   "number": 9
+  },
+  {
+   "audio": "Track 12",
+   "image": null,
+   "wordBank": null,
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": {
+     "num": false,
+     "align": "center",
+     "lines": "all",
+     "cols": "first",
+     "first": 22,
+     "fh": false,
+     "fc": false,
+     "fr": "zebra"
+    }
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "id": "t15",
+   "typeId": "TB2",
+   "typeName": "Bảng · điền thông tin",
+   "title": "Listen and complete the table.",
+   "instruction": "Write one or two words. There is one example.",
+   "content": {
+    "form": "table",
+    "corner": "Name",
+    "cols": [
+     "Age",
+     "Hobby",
+     "Favourite food"
+    ],
+    "rows": [
+     {
+      "head": "Tom",
+      "cells": [
+       "9",
+       "football",
+       "pizza"
+      ],
+      "id": "r1"
+     },
+     {
+      "head": "Lily",
+      "cells": [
+       "",
+       "",
+       ""
+      ],
+      "id": "r2"
+     },
+     {
+      "head": "Ben",
+      "cells": [
+       "",
+       "",
+       ""
+      ],
+      "id": "r3"
+     },
+     {
+      "head": "Mai",
+      "cells": [
+       "",
+       "",
+       ""
+      ],
+      "id": "r4"
+     }
+    ]
+   },
+   "answer": {
+    "params": {},
+    "kind": "none",
+    "attach": "item",
+    "layout": null
+   },
+   "part": "",
+   "number": 10
+  },
+  {
+   "audio": null,
+   "image": null,
+   "wordBank": null,
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": {
+     "lines": "h",
+     "align": "center",
+     "cols": "first",
+     "first": 40,
+     "rowHead": true,
+     "fh": false,
+     "fc": false,
+     "fr": "none"
+    }
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "id": "t16",
+   "typeId": "TB3",
+   "typeName": "Bảng · tick theo cột",
+   "title": "Where do these animals live? Tick (✓) the box.",
+   "instruction": "Tick one or more boxes in each row.",
+   "content": {
+    "form": "table",
+    "corner": "",
+    "cols": [
+     "Farm",
+     "Zoo",
+     "Forest"
+    ],
+    "rows": [
+     {
+      "head": {
+       "img": "cow",
+       "text": "cow"
+      },
+      "cells": [
+       {
+        "tick": 1
+       },
+       {
+        "tick": 1
+       },
+       {
+        "tick": 1
+       }
+      ],
+      "id": "r1"
+     },
+     {
+      "head": {
+       "img": "tiger",
+       "text": "tiger"
+      },
+      "cells": [
+       {
+        "tick": 1
+       },
+       {
+        "tick": 1
+       },
+       {
+        "tick": 1
+       }
+      ],
+      "id": "r2"
+     },
+     {
+      "head": {
+       "img": "rabbit",
+       "text": "rabbit"
+      },
+      "cells": [
+       {
+        "tick": 1
+       },
+       {
+        "tick": 1
+       },
+       {
+        "tick": 1
+       }
+      ],
+      "id": "r3"
+     },
+     {
+      "head": {
+       "img": "monkey",
+       "text": "monkey"
+      },
+      "cells": [
+       {
+        "tick": 1
+       },
+       {
+        "tick": 1
+       },
+       {
+        "tick": 1
+       }
+      ],
+      "id": "r4"
+     },
+     {
+      "head": {
+       "img": "chicken",
+       "text": "chicken"
+      },
+      "cells": [
+       {
+        "tick": 1
+       },
+       {
+        "tick": 1
+       },
+       {
+        "tick": 1
+       }
+      ],
+      "id": "r5"
+     }
+    ]
+   },
+   "answer": {
+    "params": {},
+    "kind": "none",
+    "attach": "item",
+    "layout": null
+   },
+   "part": "",
+   "number": 11
+  },
+  {
+   "audio": null,
+   "image": null,
+   "wordBank": null,
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": {
+     "lines": "all",
+     "cols": "equal",
+     "fh": false,
+     "fc": false,
+     "fr": "zebra"
+    }
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "id": "t17",
+   "typeId": "TB4",
+   "typeName": "Bảng · bảng dài (cắt trang)",
+   "title": "Complete the table with the past forms of the verbs.",
+   "instruction": "Use the example to help you.",
+   "content": {
+    "form": "table",
+    "corner": "Verb",
+    "cols": [
+     "Past simple",
+     "Past participle"
+    ],
+    "rows": [
+     {
+      "head": "go",
+      "cells": [
+       "went",
+       "gone"
+      ],
+      "id": "r1"
+     },
+     {
+      "head": "see",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r2"
+     },
+     {
+      "head": "eat",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r3"
+     },
+     {
+      "head": "take",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r4"
+     },
+     {
+      "head": "write",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r5"
+     },
+     {
+      "head": "buy",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r6"
+     },
+     {
+      "head": "make",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r7"
+     },
+     {
+      "head": "come",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r8"
+     },
+     {
+      "head": "give",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r9"
+     },
+     {
+      "head": "know",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r10"
+     },
+     {
+      "head": "drink",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r11"
+     },
+     {
+      "head": "sing",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r12"
+     },
+     {
+      "head": "run",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r13"
+     },
+     {
+      "head": "swim",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r14"
+     },
+     {
+      "head": "sleep",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r15"
+     },
+     {
+      "head": "drive",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r16"
+     },
+     {
+      "head": "read",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r17"
+     },
+     {
+      "head": "speak",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r18"
+     }
+    ]
+   },
+   "answer": {
+    "params": {},
+    "kind": "none",
+    "attach": "item",
+    "layout": null
+   },
+   "part": "",
+   "number": 12
+  },
+  {
+   "audio": null,
+   "image": {
+    "label": "the park",
+    "size": "medium"
+   },
+   "wordBank": null,
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "id": "t6",
+   "typeId": "R03",
+   "typeName": "True or False",
+   "title": "Look at the picture. True or False?",
+   "instruction": "Circle T (true) or F (false).",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "id": "q1",
+      "text": "There are three children in the park."
+     },
+     {
+      "id": "q2",
+      "text": "The dog is under the tree."
+     },
+     {
+      "id": "q3",
+      "text": "A girl is riding a bike."
+     },
+     {
+      "id": "q4",
+      "text": "The boy is eating an ice cream."
+     },
+     {
+      "id": "q5",
+      "text": "It is a sunny day."
+     }
+    ]
+   },
+   "answer": {
+    "params": {},
+    "kind": "tf",
+    "attach": "item",
+    "layout": "A6"
+   },
+   "part": "",
+   "number": 13
+  },
+  {
+   "audio": null,
+   "image": {
+    "label": "Lucy and Max",
+    "size": "medium"
+   },
+   "wordBank": null,
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "id": "t7",
+   "typeId": "R01",
+   "typeName": "Read and answer",
+   "title": "Read and answer.",
+   "instruction": "Read the text. Answer the questions.",
+   "content": {
+    "form": "list",
+    "lead": {
+     "kind": "passage",
+     "text": "My name is Lucy. I am nine years old. I live in a small house with my mum, my dad and my brother Ben. We have a dog. His name is Max. Max is brown and white. Every morning, Ben and I walk Max in the park. Max likes running after balls."
+    },
+    "items": [
+     {
+      "id": "q1",
+      "text": "How old is Lucy?"
+     },
+     {
+      "id": "q2",
+      "text": "What is the dog's name?"
+     },
+     {
+      "id": "q3",
+      "text": "What colour is Max?"
+     },
+     {
+      "id": "q4",
+      "text": "Where do they walk Max?"
+     }
+    ]
+   },
+   "answer": {
+    "params": {
+     "lines": 1
+    },
+    "kind": "sentence",
+    "attach": "item",
+    "layout": "A1"
+   },
+   "part": "",
+   "number": 14
+  },
+  {
+   "audio": null,
+   "image": null,
+   "wordBank": null,
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "id": "t8",
+   "typeId": "W03",
+   "typeName": "Answer the questions",
+   "title": "Answer the questions about you.",
+   "instruction": "Write full sentences.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "id": "q1",
+      "text": "What is your name?"
+     },
+     {
+      "id": "q2",
+      "text": "How old are you?"
+     },
+     {
+      "id": "q3",
+      "text": "What is your favourite food?"
+     },
+     {
+      "id": "q4",
+      "text": "What can you do?"
+     },
+     {
+      "id": "q5",
+      "text": "Who is in your family?"
+     },
+     {
+      "id": "q6",
+      "text": "What do you do after school?"
+     }
+    ]
+   },
+   "answer": {
+    "params": {
+     "lines": 2
+    },
+    "kind": "sentence",
+    "attach": "item",
+    "layout": "A1"
+   },
+   "part": "",
+   "number": 15
+  },
+  {
+   "audio": null,
+   "image": null,
+   "wordBank": null,
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "id": "t9",
+   "typeId": "P01",
+   "typeName": "Trace the words",
+   "title": "Trace the words.",
+   "instruction": "Say the word. Then trace it.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "id": "w0",
+      "text": "cat"
+     },
+     {
+      "id": "w1",
+      "text": "hat"
+     },
+     {
+      "id": "w2",
+      "text": "map"
+     },
+     {
+      "id": "w3",
+      "text": "bag"
+     },
+     {
+      "id": "w4",
+      "text": "van"
+     }
+    ]
+   },
+   "answer": {
+    "params": {
+     "repeat": 3
+    },
+    "kind": "trace",
+    "attach": "item",
+    "layout": "A8"
+   },
+   "part": "",
+   "number": 16
+  },
+  {
+   "audio": "Track 08",
+   "image": {
+    "label": "the classroom",
+    "size": "large"
+   },
+   "wordBank": null,
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "id": "t10",
+   "typeId": "LS04",
+   "typeName": "Listen and colour",
+   "title": "Listen and colour.",
+   "instruction": "Listen to the teacher. Colour the picture.",
+   "content": {
+    "form": "list",
+    "list": false,
+    "items": []
+   },
+   "answer": {
+    "params": {},
+    "kind": "none",
+    "attach": "item",
+    "layout": null
+   },
+   "part": "",
+   "number": 17
+  },
+  {
+   "audio": null,
+   "image": null,
+   "wordBank": null,
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "id": "t18",
+   "typeId": "R06",
+   "typeName": "Read and underline",
+   "title": "Read.",
+   "instruction": "What’s the weather like? Underline the correct answer.",
+   "content": {
+    "form": "list",
+    "variant": "single",
+    "items": [
+     {
+      "id": "i1",
+      "img": "rainy",
+      "lines": [
+       "It’s {windy|rainy}.",
+       "{Take|Put} your raincoat {on|off}.",
+       "Don’t forget your {shorts|umbrella}."
+      ]
+     },
+     {
+      "id": "i2",
+      "img": "sunny",
+      "lines": [
+       "It’s {cloudy|sunny}.",
+       "{Take|Put} your jumper {off|on}.",
+       "Put your {swimming costume|coat} on."
+      ]
+     }
+    ]
+   },
+   "answer": {
+    "params": {},
+    "kind": "choice",
+    "attach": "inline",
+    "layout": "A4"
+   },
+   "part": "",
+   "number": 18
+  }
+ ]
+}
