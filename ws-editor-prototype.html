@@ -431,6 +431,8 @@ dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 .tg .rhx{display:flex;align-items:center;gap:2.4mm}.tg .rhx .pic{width:16mm}
 .chkrow{display:flex;gap:18px;padding:4px 0}.chkrow label{display:flex;align-items:center;gap:6px;font-size:13px}.chkrow input{accent-color:var(--accent)}
 .tg .tn{background:var(--tint)}.tg .tn.hd{background:var(--tint-h,#d9e0e7)}
+/* v98: ô tích + chữ trong bảng; bản giáo viên tô ô đúng */
+.tg .tkc{display:inline-flex;align-items:center;gap:2mm;min-width:0}.tg .tkc>span:last-child{min-width:0}.tg .tc.tok{background:#dff1f2}
 .tg .tc .pic.sm,.tg .th .pic.sm{width:16mm}
 .tg[data-ln="all"] .tc,.tg[data-ln="all"] .th{border-right:.3mm solid var(--ln);border-bottom:.3mm solid var(--ln)}
 .tg[data-ln="all"] .r0{border-top:.3mm solid var(--ln)}
@@ -829,6 +831,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 .eit.kflash{outline:2px solid #f59e0b;outline-offset:1px}
 .eopts{display:grid;gap:3px}.eoh{display:flex;align-items:center;gap:6px}.eoh .sp{flex:1}.eoadd{border-radius:50%;width:22px;font-size:14px}
 .eo{display:flex;align-items:center;gap:5px;min-width:0}.eo .tkq{width:18px;height:18px;font-size:12px;border-radius:4px}.eo .eol{font-size:12px;color:var(--muted);min-width:14px}
+.etbl .tkq{width:18px;height:18px;font-size:12px;border-radius:4px}   /* v98 */
 .ktk{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px}.ktk .ko{display:inline-flex;align-items:center;gap:4px;font-size:12px;cursor:pointer}.ktk .tkq{width:18px;height:18px;font-size:12px;border-radius:4px}
 .imgsgrid .imgblk{position:relative}
 .imgrow2{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:start}
@@ -868,7 +871,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 
 <div class="app">
   <header class="top">
-    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v97</span> <small id="wsTitle"></small></div>
+    <div class="brand">WS Editor <span class="badge" id="verBadge" title="Phiên bản bản dựng này" style="font-size:11px;padding:1px 7px;margin-left:4px">v98</span> <small id="wsTitle"></small></div>
     <div class="tb">
       <label for="age" class="hint" style="margin:0">Độ tuổi</label>
       <select id="age"><option value="5-6">5–6</option><option value="7-9">7–9</option><option value="10-12">10–12</option></select>
@@ -3975,7 +3978,8 @@ function body0n(t, L, frag, first) {
     const tpl = cwOk ? o.cw.map(x => `minmax(0,${x}fr)`).join(' ') : !rh ? `repeat(${nC},minmax(0,1fr))` : o.cols === 'equal' ? `repeat(${tot},minmax(0,1fr))` : o.cols === 'auto' ? `fit-content(45%) repeat(${nC},minmax(0,1fr))` : `${o.first}fr repeat(${nC},${((100 - o.first) / nC).toFixed(3)}fr)`;
     const hasBlank = c.rows.some(r => r.cells.some(x => x === ''));
     const rhmm = o.minH ?? TBL_ROW_MM;
-    const cellHtml = (v, sk) => typeof v === 'string' ? er(v) : v && v.ans != null ? ((t.layout.table || {}).key ? `<span class="tka">${er(v.ans)}</span>` : '') : v && v.tick ? '<span class="a a5"></span>' : v && v.img ? (sk ? tpic(t, sk, v.img, 'sm') : pic(v.img, 'sm')) : '';
+    const tkey = !!(t.layout.table || {}).key;   // v98: bản giáo viên: ô tích đúng có ✓ và tô nền
+    const cellHtml = (v, sk) => typeof v === 'string' ? er(v) : v && v.ans != null ? ((t.layout.table || {}).key ? `<span class="tka">${er(v.ans)}</span>` : '') : v && v.tick ? (v.text ? `<span class="tkc"><span class="a a5${tkey && v.ok ? ' pk' : ''}"></span><span>${er(v.text)}</span></span>` : `<span class="a a5${tkey && v.ok ? ' pk' : ''}"></span>`) : v && v.img ? (sk ? tpic(t, sk, v.img, 'sm') : pic(v.img, 'sm')) : '';
     const rowsOut = [];
     if (showHead) rowsOut.push({ head: true, cells: (rh ? [c.corner || ''] : []).concat(c.cols) });
     fr.forEach(([r, i]) => rowsOut.push({ i, cells: (rh ? [r.head] : []).concat(r.cells) }));
@@ -3987,7 +3991,7 @@ function body0n(t, L, frag, first) {
       const nm = `<div class="nm" data-rk="${rk}"${rst}>${o.num && !r.head ? `<span class="ino">${r.i + 1}</span>` : ''}</div>`;
       return nm + r.cells.map((v, ci2) => {
         const isRH = rh && ci2 === 0, tint = (o.fh && r.head) || (o.fr === 'zebra' && !r.head && (r.i % 2 === 1)) || (o.fc && isRH && !r.head);
-        const cc = `${cl}${ci2 === 0 ? ' c0' : ''}${ci2 === r.cells.length - 1 ? ' cl' : ''}${tint ? ' tn' : ''}${o.fh && r.head ? ' hd' : ''}`;
+        const cc = `${cl}${ci2 === 0 ? ' c0' : ''}${ci2 === r.cells.length - 1 ? ' cl' : ''}${tint ? ' tn' : ''}${o.fh && r.head ? ' hd' : ''}${tkey && !r.head && v && v.tick && v.ok ? ' tok' : ''}`;
         const rid = !r.head && c.rows[r.i] ? c.rows[r.i].id : null, sk = rid ? (isRH ? '@' + rid : `@${rid}.${ci2 - (rh ? 1 : 0)}`) : null;
         let bd = isRH && v && typeof v === 'object' ? `<span class="rhx">${sk ? tpic(t, sk, v.img, 'sm') : pic(v.img, 'sm')}<span>${esc(v.text || '')}</span></span>` : cellHtml(v, sk);
         if (o.nm === 'in' && ci2 === 0 && !r.head) bd = `<span class="nin"><span class="ino">${r.i + 1}</span><span class="nib">${bd}</span></span>`;
@@ -4785,7 +4789,7 @@ function taskPanel(t, s) {
   if (L === 'T9') align += tblOpts(t).cross ? fSeg('tbl.align', 'Vị trí ô chữ', (lay.table || {}).align, Object.entries(HA), 'center') : fSeg('tbl.align', 'Căn lề nội dung ô', (lay.table || {}).align, Object.entries(HA), 'left');
   if (L === 'T1' && ck(t) === 'empty') align += `<p class="hint" data-na="align">Bài chỉ có ảnh: căn lề nằm ở ảnh.</p>`;
   if (L === 'T5' && t.content.variant !== 'multi') content += fSeg('dir', 'Hướng ô (ảnh so với chữ)', lay.dir, [['col', 'Ảnh trên'], ['row', 'Ảnh trái']], dirDefault(t));
-  if (L === 'T9') content += tblKind(t) + (!tblOpts(t).cross && (t.content.rows || []).some(r => r.cells.some(v => v && v.ans != null)) ? fSeg('tbl.key', 'Hiện đáp án (bản giáo viên)', (t.layout.table || {}).key, [[true, 'Hiện'], [false, 'Ẩn']], false, { hint: 'Ẩn: ô "=…" in trống cho học sinh. Hiện: in chữ đáp án vào ô.' }) : '') + (tblOpts(t).cross ? fSeg('tbl.key', 'Hiện đáp án (bản giáo viên)', (t.layout.table || {}).key, [[true, 'Hiện'], [false, 'Ẩn']], false, { hint: 'Ẩn: học sinh thấy ô trống. Hiện: in chữ đáp án vào ô để làm bản đáp án.' }) : tblStyle(t));
+  if (L === 'T9') content += tblKind(t) + (!tblOpts(t).cross && (t.content.rows || []).some(r => r.cells.some(v => v && (v.ans != null || v.ok))) ? fSeg('tbl.key', 'Hiện đáp án (bản giáo viên)', (t.layout.table || {}).key, [[true, 'Hiện'], [false, 'Ẩn']], false, { hint: 'Ẩn: ô "=…" in trống, ô tích để trống cho học sinh. Hiện: in chữ đáp án vào ô, ô tích đúng có ✓ và tô nền.' }) : '') + (tblOpts(t).cross ? fSeg('tbl.key', 'Hiện đáp án (bản giáo viên)', (t.layout.table || {}).key, [[true, 'Hiện'], [false, 'Ẩn']], false, { hint: 'Ẩn: học sinh thấy ô trống. Hiện: in chữ đáp án vào ô để làm bản đáp án.' }) : tblStyle(t));
   if (cellImgMode(t)) content += `<p class="hint">Mỗi ảnh là một container: bấm vào ảnh trên trang để chỉnh riêng.</p>`;
   if (its(t).length > 1 && !['table', 'empty'].includes(ck(t))) content += fSeg('@num', 'Số câu ở lề', lay.num, [['on', 'Hiện'], ['off', 'Ẩn']], 'on', { hint: 'Ẩn khi học sinh phải tự điền số vào chỗ trống (bài xếp thứ tự), để số ở lề khỏi lẫn với số phải điền.' });
   const brk = fSeg('break', 'Trước và sau Task này', lay.break, [['auto', 'Tự động'], ['page', 'Sang trang mới'], ['keep', 'Giữ liền Task sau'], ['join', 'Nối vào Task trên', ws.tasks[0] === t ? 'Task đầu phiếu không nối được' : '']], 'auto', { hint: lay.break === 'join' ? 'Phần tiếp của Task trên: không số, không tiêu đề (chỉ giữ hướng dẫn riêng nếu có), luôn đi liền Task trên, cách trên bằng khoảng cách giữa các nhóm. Mỗi phần giữ đáp án riêng.' : '' });
@@ -5637,9 +5641,10 @@ function dropOrphans(t, id) {
   if (t.imgAr) Object.keys(t.imgAr).forEach(k => { if (k === '@' + id || k.startsWith('@' + id + '.')) delete t.imgAr[k]; });
 }
 // Ô bảng: '' = ô trống viết, ✓ = ô tick, [ảnh: x] = ảnh; còn lại là chữ
-const fmtCell = v => typeof v === 'string' ? v : v && v.ans != null ? '=' + v.ans : v && v.tick ? '✓' : v && v.img ? `[ảnh: ${v.img}]${v.text ? ' ' + v.text : ''}` : '';
+const fmtCell = v => typeof v === 'string' ? v : v && v.ans != null ? '=' + v.ans : v && v.tick ? (v.ok ? '[x]' : '[ ]') + (v.text ? ' ' + v.text : '') : v && v.img ? `[ảnh: ${v.img}]${v.text ? ' ' + v.text : ''}` : '';
 // v92: "=chữ" = ô học sinh điền, chữ là đáp án (in trống)
-function parseCell(s) { s = String(s); const ma = /^\s*=\s*(\S.*?)\s*$/.exec(s); if (ma) return { ans: ma[1] }; if (/^\s*(✓|\[\s*\]|\[✓\]|v)\s*$/i.test(s) && s.trim()) return { tick: 1 }; const m = s.match(/^\s*\[ảnh:\s*([^\]]*)\]\s*(.*)$/i); if (m) return m[2] ? { img: m[1].trim(), text: m[2] } : { img: m[1].trim() }; return s; }
+// v98: [ ] / [x] = ô tích (x = ô đúng), có thể kèm chữ phía sau
+function parseCell(s) { s = String(s); const ma = /^\s*=\s*(\S.*?)\s*$/.exec(s); if (ma) return { ans: ma[1] }; if (/^\s*(✓|v)\s*$/i.test(s)) return { tick: 1 }; const mk = /^\s*\[\s*([xX✓]?)\s*\]\s*(.*?)\s*$/.exec(s); if (mk) { const o = { tick: 1 }; if (mk[1]) o.ok = true; if (mk[2]) o.text = mk[2]; return o; } const m = s.match(/^\s*\[ảnh:\s*([^\]]*)\]\s*(.*)$/i); if (m) return m[2] ? { img: m[1].trim(), text: m[2] } : { img: m[1].trim() }; return s; }
 const splitList = (s, re) => String(s).split(re).map(x => x.trim()).filter((x, i, a) => x || a.length > 1);
 // Ghi một trường từ ô soạn vào dữ liệu
 function applyField(t, k, v) {
@@ -5761,9 +5766,10 @@ function edTable(t) {
   const c = t.content;
   if (tblOpts(t).cross) { const n = crossCount(c); return `<p class="hint">Mỗi dòng một hàng. <b>#</b> không có ô · <b>.</b> ô trống chưa có đáp án · chữ cái = ô có đáp án · <b>(a)</b> chữ cho sẵn. Số 1, 2, 3 tự đánh.</p><div class="ef col xgin"><span class="elb">Lưới ô chữ</span>${eIn('cross.grid', crossLines(c).join('\n'), '#C#S#\n#A#U#\n#TEN#', { area: 1, rows: Math.min(14, Math.max(4, c.rows.length + 1)), label: 'Lưới ô chữ' })}</div><p class="hint" id="xcount">${n.cells} ô · ${n.words} từ (${n.across} ngang, ${n.down} dọc). Lời gợi ý: thêm khối chữ ở mục 5.</p>`; }
   const head = `<div class="etr"><span class="ino">·</span>${eIn('tb.corner', c.corner || '', 'Góc', { label: 'Ô góc' })}${c.cols.map((x, j) => eIn(`tb.col.${j}`, x, `Cột ${j + 1}`, { label: `Tên cột ${j + 1}` })).join('')}<span class="eb0"></span></div>`;
+  const tkWrap = (v, i, j, inner) => v && v.tick ? `<span class="etc"><button type="button" class="tkq${v.ok ? ' on' : ''}" data-eact="tbok" data-i="${i}" data-j="${j}" aria-pressed="${!!v.ok}" title="Đánh dấu ô đúng (bản giáo viên)">✓</button>${inner}</span>` : inner;   // v98
   const withThumb = (v, key, inner) => v && typeof v === 'object' && v.img && key ? `<span class="etc">${thumbHtml(t, key)}${inner}</span>` : inner;
-  const rows = c.rows.map((r, i) => `<div class="etr"><span class="ino">${i + 1}</span>${withThumb(r.head, r.id && '@' + r.id, eIn(`tb.r.${i}.head`, fmtCell(r.head), 'Đầu hàng', { label: `Đầu hàng ${i + 1}` }))}${r.cells.map((v, j) => withThumb(v, r.id && `@${r.id}.${j}`, eIn(`tb.r.${i}.c.${j}`, fmtCell(v), '(trống)', { label: `Hàng ${i + 1} cột ${j + 1}` }).replace('<input ', v && v.ans != null ? '<input class="etka" title="Ô học sinh điền: đáp án (in trống)" ' : '<input '))).join('')}<button class="eb" data-eact="delrow" data-i="${i}" aria-label="Xóa hàng ${i + 1}">✕</button></div>`).join('');
-  return `<p class="hint">Ô để trống = chỗ viết · <b>=chữ</b> = ô học sinh điền, chữ là đáp án (in trống) · ✓ = ô tick · [ảnh: tên] = ảnh</p><div class="etbl" style="--nc:${c.cols.length + 1}">${head}${rows}</div>
+  const rows = c.rows.map((r, i) => `<div class="etr"><span class="ino">${i + 1}</span>${withThumb(r.head, r.id && '@' + r.id, eIn(`tb.r.${i}.head`, fmtCell(r.head), 'Đầu hàng', { label: `Đầu hàng ${i + 1}` }))}${r.cells.map((v, j) => tkWrap(v, i, j, withThumb(v, r.id && `@${r.id}.${j}`, eIn(`tb.r.${i}.c.${j}`, fmtCell(v), '(trống)', { label: `Hàng ${i + 1} cột ${j + 1}` }).replace('<input ', v && v.ans != null ? '<input class="etka" title="Ô học sinh điền: đáp án (in trống)" ' : '<input ')))).join('')}<button class="eb" data-eact="delrow" data-i="${i}" aria-label="Xóa hàng ${i + 1}">✕</button></div>`).join('');
+  return `<p class="hint">Ô để trống = chỗ viết · <b>=chữ</b> = ô học sinh điền, chữ là đáp án (in trống) · <b>[ ]</b> = ô tích, <b>[ ] chữ</b> = ô tích kèm chữ, <b>[x]</b> = ô tích đúng · [ảnh: tên] = ảnh</p><div class="etbl" style="--nc:${c.cols.length + 1}">${head}${rows}</div>
     <div class="erow"><button class="btn" data-eact="addrow">+ Hàng</button><button class="btn" data-eact="addcol">+ Cột</button><button class="btn" data-eact="delcol" ${c.cols.length > 1 ? '' : 'disabled'}>− Cột cuối</button><button class="btn" data-eact="paste-items" title="Dán bảng: mỗi dòng một hàng, ô cách nhau bằng Tab hoặc |">Dán bảng…</button></div>`;
 }
 const nounOf = k => k === 'dialogue' ? 'lượt' : k === 'pairs' ? 'cặp' : k === 'trace' ? 'từ' : 'câu';
@@ -6119,7 +6125,7 @@ function taskToText(t) {
   if (t.instruction) out.push(t.instruction);
   if (t.wordBank) out.push('Words: ' + t.wordBank.words.join(', '));
   if (t.image) out.push(`[ảnh: ${t.image.label}]`);
-  if (c.form === 'table') { out.push([c.corner || '', ...c.cols].join('\t')); c.rows.forEach(r => out.push([fmtCell(r.head), ...r.cells.map(v => v && v.tick ? '[ ]' : fmtCell(v))].join('\t'))); return out.join('\n'); }
+  if (c.form === 'table') { out.push([c.corner || '', ...c.cols].join('\t')); c.rows.forEach(r => out.push([fmtCell(r.head), ...r.cells.map(v => v && v.tick ? '[ ]' + (v.text ? ' ' + v.text : '') : fmtCell(v))].join('\t'))); return out.join('\n'); }
   if (c.lead && c.lead.kind === 'passage') out.push(c.lead.text);
   if (c.lead && c.lead.kind === 'text') out.push(c.lead.text);
   its(t).forEach((x, i) => {
@@ -6678,7 +6684,7 @@ function mdTask(b, keys) {
 // Xuất MD theo quy ước (dùng để kiểm thử khứ hồi và làm mẫu cho người soạn; nút Xuất MD ở thanh trên)
 const MD_KNAME = t => { const a = t.answer, k = a.kind; return k === 'word' ? (a.attach === 'inline' ? 'điền chỗ trống' : 'viết từ') : k === 'choice' ? (a.attach === 'inline' ? 'chọn trong câu' : (a.params || {}).lab === 'box' ? 'tick' : 'khoanh A/B/C') : { sentence: 'viết câu', tick: 'tick', tf: 'đúng/sai', match: 'nối', trace: 'tô chữ', none: 'không' }[k] || 'không'; };
 function taskToMd(t, asPart) {
-  const c = t.content, o = [(asPart ? '### Phần: ' : '## Task: ') + (t.title || '')], k = ck(t), a = t.answer, cell = v => v && v.ans != null ? '=' + v.ans : v && v.tick ? '[ ]' : v && v.img ? `[ảnh: ${v.img}]` : (typeof v === 'string' ? v : '');
+  const c = t.content, o = [(asPart ? '### Phần: ' : '## Task: ') + (t.title || '')], k = ck(t), a = t.answer, cell = v => v && v.ans != null ? '=' + v.ans : v && v.tick ? fmtCell(v) : v && v.img ? `[ảnh: ${v.img}]` : (typeof v === 'string' ? v : '');
   if (t.audio) o.push('Track: ' + t.audio);
   if (t.instruction) o.push('Hướng dẫn: ' + t.instruction);
   if (t.image && k !== 'table') o.push('Ảnh: ' + t.image.label + (t.image.two ? '; ' + (t.image.label2 || 'ảnh 2') : ''));
@@ -7326,9 +7332,15 @@ function qCmd(t, act, v) {
   if (act === 'qarr') { const fit = t.layout.frame.fit; Object.assign(t.layout, { task: v, split: null, cols: null, cw: null, width: null, align: null, valign: null }); t.layout.frame = fit ? { fit } : {}; return 'Đã đổi cách xếp câu'; }
   return null;
 }
+// v98: bảng chọn đáp án: ô chữ ↔ ô tích + chữ (giữ ô trống, ô điền, ảnh); "một ô đúng mỗi hàng" giữ ô đúng đầu tiên
+const tkCells = t => (t.content.rows || []).flatMap(r => r.cells);
+const tkHasText = t => tkCells(t).some(v => (typeof v === 'string' && v.trim()) || (v && v.tick && v.text));
+const tkOn = t => tkCells(t).some(v => v && v.tick && v.text);
+function tkAll(t, on) { (t.content.rows || []).forEach(r => { r.cells = r.cells.map(v => on ? (typeof v === 'string' && v.trim() ? { tick: 1, text: v } : v) : (v && v.tick && v.text ? v.text : v)); }); if (on && (t.layout.table || {}).one) tkOne(t); }
+function tkOne(t) { (t.content.rows || []).forEach(r => { let f = false; r.cells.forEach(v => { if (v && v.tick && v.ok) { if (f) delete v.ok; f = true; } }); }); }
 function tblo(t, v) { const [k, x] = v.split(':'), o = t.layout.table = Object.assign({}, t.layout.table || {});
-  if (k === 'nm') { o.nm = x; delete o.num; } else if (k === 'fr') { o.fr = x === '1' ? 'zebra' : 'none'; if (x === '1') o.fc = false; } else o[k] = x === '1';
-  return { head: 'Hàng tiêu đề cột', fh: 'Tô nền hàng tiêu đề', fr: 'Tô hàng xen kẽ', rowHead: 'Cột tiêu đề hàng', nm: 'Số thứ tự' }[k] + ': ' + (k === 'nm' ? { out: 'ngoài bảng', in: 'trong cột đầu', off: 'tắt' }[x] : x === '1' ? 'bật' : 'tắt'); }
+  if (k === 'nm') { o.nm = x; delete o.num; } else if (k === 'tk') { tkAll(t, x === '1'); } else if (k === 'one') { if (x === '1') { o.one = true; tkOne(t); } else delete o.one; } else if (k === 'fr') { o.fr = x === '1' ? 'zebra' : 'none'; if (x === '1') o.fc = false; } else o[k] = x === '1';
+  return { head: 'Hàng tiêu đề cột', fh: 'Tô nền hàng tiêu đề', fr: 'Tô hàng xen kẽ', rowHead: 'Cột tiêu đề hàng', nm: 'Số thứ tự', tk: 'Hiện ô tích trước chữ', one: 'Một ô đúng mỗi hàng' }[k] + ': ' + (k === 'nm' ? { out: 'ngoài bảng', in: 'trong cột đầu', off: 'tắt' }[x] : x === '1' ? 'bật' : 'tắt'); }
 const Q_ACTS = ['tn', 'q', 'hasans', 'qst', 'labs', 'ruling', 'qarr', 'q2'];
 Q_ACTS.forEach(a => { extraActs[a] = (b, v) => { let msg = null; commit(w => { msg = qCmd(curT(w), a, v); }, null, () => { if (msg) toast(msg); }); }; });
 
@@ -7499,6 +7511,7 @@ treeEl.addEventListener('click', e => {
   if (act === 'tickopt') { const i = +b.dataset.i, j = +b.dataset.j; return commit(w => { const t = T(w), x = its(t)[i]; if (!x) return; const op = optsOfKey(t, x);   // v86 (F2): bật / tắt từng đáp án, được chọn nhiều
     if (t.answer.layout === 'A6') { x.key = exPicks(t, x, op).includes(j) ? '' : op[j]; return; }
     const cur = exPicks(t, x, op), nx = cur.includes(j) ? cur.filter(k => k !== j) : cur.concat(j).sort((a, c) => a - c); x.key = nx.map(k => 'abcdefgh'[k] || String(k + 1)).join(', '); }); }
+  if (act === 'tbok') { const i = +b.dataset.i, j = +b.dataset.j; return commit(w => { const t = T(w), r = t.content.rows[i], x = r && r.cells[j]; if (!x || !x.tick) return; if (x.ok) delete x.ok; else { if ((t.layout.table || {}).one) r.cells.forEach(y => { if (y && y.tick) delete y.ok; }); x.ok = true; } }); }   // v98
   if (act === 'tblo') { let m = null; return commit(w => { m = tblo(T(w), v); }, null, () => toast(m)); }   // v96
   if (act === 'pshuf') return commit(w => { const c = T(w).content; if (v) c.shuffle = true; else delete c.shuffle; });
   if (act === 'preshuf') return commit(w => { const c = T(w).content; c.shufSeed = (c.shufSeed || 0) + 1; });
@@ -7683,7 +7696,7 @@ edHtml = t => {
     const ks = keyState(t); if (ks.need.length) sh.insertAdjacentHTML('beforeend', `<button type="button" class="kcnt${ks.miss.length ? ' w' : ''}" data-eact="keyjump" title="${ks.miss.length ? 'Bấm để tới câu còn thiếu đáp án đúng' : 'Mọi câu đã có đáp án đúng'}">${ks.need.length - ks.miss.length}/${ks.need.length} câu có đáp án</button>`);   // v88
     // v96: tùy chọn bảng ngay ở cột trái (ô tích): hàng tiêu đề, tô nền hàng tiêu đề, hàng xen kẽ, cột tiêu đề hàng, số thứ tự
     if (ck(t) === 'table' && !tblOpts(t).cross) { const o = tblOpts(t), C = (k, n, on, dis) => `<label class="tbck"><input type="checkbox" data-eact="tblo" data-v="${k}:${on ? 0 : 1}" ${on ? 'checked' : ''} ${dis ? `disabled title="${esc(dis)}"` : ''}> ${n}</label>`;
-      sh.insertAdjacentHTML('afterend', `<div class="ef tbrow"><span class="elb">Kiểu bảng</span><span class="tbcks">${C('head', 'Hàng tiêu đề cột', o.head)}${C('fh', 'Tô nền hàng tiêu đề', o.fh && o.head, o.head ? '' : 'Bật Hàng tiêu đề cột trước')}${C('fr', 'Tô hàng xen kẽ', o.fr === 'zebra' && !o.fc, o.fc ? 'Đang tô cột đầu' : '')}${C('rowHead', 'Cột tiêu đề hàng', o.rowHead)}</span></div><div class="ef tbrow"><span class="elb">Số thứ tự</span><span class="seg">${[['out', 'Ngoài bảng'], ['in', 'Trong cột đầu'], ['off', 'Tắt']].map(([v, n]) => `<button type="button" data-eact="tblo" data-v="nm:${v}" class="${o.nm === v ? 'on' : ''}">${n}</button>`).join('')}</span></div>`); }
+      sh.insertAdjacentHTML('afterend', `<div class="ef tbrow"><span class="elb">Kiểu bảng</span><span class="tbcks">${C('head', 'Hàng tiêu đề cột', o.head)}${C('fh', 'Tô nền hàng tiêu đề', o.fh && o.head, o.head ? '' : 'Bật Hàng tiêu đề cột trước')}${C('fr', 'Tô hàng xen kẽ', o.fr === 'zebra' && !o.fc, o.fc ? 'Đang tô cột đầu' : '')}${C('rowHead', 'Cột tiêu đề hàng', o.rowHead)}</span></div>${tkHasText(t) || tkCells(t).some(v => v && v.tick) ? `<div class="ef tbrow"><span class="elb">Chọn đáp án</span><span class="tbcks">${tkHasText(t) ? C('tk', 'Hiện ô tích trước chữ', tkOn(t)) : ''}${tkCells(t).some(v => v && v.tick) ? C('one', 'Một ô đúng mỗi hàng', !!(t.layout.table || {}).one) : ''}</span></div>` : ''}<div class="ef tbrow"><span class="elb">Số thứ tự</span><span class="seg">${[['out', 'Ngoài bảng'], ['in', 'Trong cột đầu'], ['off', 'Tắt']].map(([v, n]) => `<button type="button" data-eact="tblo" data-v="nm:${v}" class="${o.nm === v ? 'on' : ''}">${n}</button>`).join('')}</span></div>`); }
     // v86: chữ câu hỏi Bình thường / Đậm
     if (!['table', 'empty', 'trace', 'dialogue'].includes(ck(t))) { const qb = !!t.layout.qbold; sh.insertAdjacentHTML('afterend', `<div class="ef qbrow"><span class="elb">Chữ câu hỏi</span><span class="seg"><button type="button" data-eact="qbold" data-v="" class="${qb ? '' : 'on'}">Bình thường</button><button type="button" data-eact="qbold" data-v="1" class="${qb ? 'on' : ''}" style="font-weight:700">Đậm</button></span></div>`); }
   }
