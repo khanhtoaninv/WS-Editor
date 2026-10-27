@@ -791,3 +791,12 @@ Nguồn: phiếu 9 ("Unit 6 – Lesson 3"), `tests/md/phieu9.md`.
 - **Prompt PDF→MD (quy tắc 21–22):** bài nối không có đáp án trong PDF thì không đoán cặp, ghi chú "chưa có đáp án", không `Xáo vế phải`; `Viền hai vế: có` chỉ khi bản gốc có khung.
 - Chưa làm: bài nối kiểu "viết chữ cái vào ô" như PDF phiếu 9 (Task 2, 3 trong PDF học sinh viết a–h chứ không nối dây); Task 4 phiếu 9 cao 433 mm không cắt được nên tràn trang.
 - Kiểm thử: `tests/test46.py`.
+
+## 36. Xuống dòng trong ô bảng (v104, 27/10/2026)
+Nguồn: phiếu 11 ("Unit 6 – Lesson 5"), `tests/md/phieu11.md`.
+- Trước v104 chữ trong ô bảng có thể chứa `\n` nhưng trang gộp thành một câu liền, MD không có ký hiệu xuống dòng và xuất MD ghi xuống dòng thật vào giữa hàng bảng (nạp lại bị vỡ).
+- Nay: `<br>` trong ô MD (tiêu đề cột, đầu hàng, ô) = `\n` trong dữ liệu; trang vẽ mỗi dòng một dòng riêng (`.tml`, cách nhau 1,2 mm); ô soạn bảng ở cột trái hiện và nhận `<br>`; xuất MD ghi lại `<br>` (mỗi hàng bảng vẫn một dòng).
+- Ô không có xuống dòng giữ nguyên cách hiện cũ; MD cũ nối bằng `;` vẫn nạp như trước (một dòng).
+- Prompt PDF→MD quy tắc 23. Kiểm thử: `tests/test47.py`.
+- Chưa làm: khoảng cách dòng trong ô chỉnh được; số hàng 1, 2 ở lề bảng mặc định hiện (PDF phiếu 11 không có, tắt bằng "Số câu ở lề: Ẩn" hoặc tùy chọn bảng).
+

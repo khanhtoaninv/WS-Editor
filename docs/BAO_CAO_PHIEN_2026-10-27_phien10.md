@@ -15,6 +15,9 @@
 
 **Chưa làm / chờ người dùng:** căn lề chữ ô câu hỏi (người dùng nói để sau); tiêu đề bài đọc căn giữa; thanh kéo nhóm T/F; số Task theo PDF (PDF 1, 2, 4, 5); bài 3 của PDF; kiểm `## Đáp án` MD cho câu nhiều chỗ trống; bản prompt trong thư mục project (`prompt/PROMPT_PDF_SANG_MD_v100.txt` đã tạo trước đó, chưa có quy tắc 18 mới, cần xuất lại bản v101); AI tạo lại MD từ prompt mới chưa thử.
 
+## 0d. v104 (phiếu 11)
+Phiếu 11: ô bảng nhiều dòng bị gộp thành một câu. Sửa: `<br>` xuống dòng trong ô (MD, ô soạn, xuất MD), trang vẽ mỗi dòng riêng; prompt quy tắc 23; spec mục 36; `tests/test47.py`, `tests/md/phieu11.md`.
+
 ## 0c. v103 (sau khi gộp v102): phiếu 9
 Phiếu 9 ("Unit 6 – Lesson 3"): AI ghép cặp nối theo vị trí dù PDF không in đáp án (lỗi prompt → quy tắc 21); bài nối không vẽ số câu (lỗi code, đã sửa); vế phải luôn có viền (nay công tắc Viền hai vế, mặc định không); T/F cùng hàng chưa kéo được (nay có tay kéo). Spec mục 35, `tests/test46.py`, `tests/md/phieu9.md`, prompt `PROMPT_PDF_SANG_MD_v103.txt`. Còn mở: PDF Task 2 / 3 là bài "viết chữ cái vào ô", app chỉ có dạng nối dây; Task 4 cao hơn một trang.
 
