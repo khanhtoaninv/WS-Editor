@@ -58,9 +58,9 @@ Bản local và bản Cloudflare là **cùng một bản build**, nên thử ở
 ## 4. Quyết định
 | Việc | Đề xuất | Trạng thái |
 |---|---|---|
-| Ngôn ngữ | TypeScript (12 kiểu Q, 4 kiểu T, TS bắt lỗi sai kiểu khi chuyển) | chờ xác nhận |
-| Store | Zustand, giữ nguyên hình dạng JSON | chờ xác nhận |
-| Chạy local | build một file, không cần Node | chờ xác nhận |
+| Ngôn ngữ | TypeScript (12 kiểu Q, 4 kiểu T, TS bắt lỗi sai kiểu khi chuyển) | **đã chốt** (27/10) |
+| Store | Zustand, giữ nguyên hình dạng JSON | **đã chốt** (27/10) |
+| Chạy local | build một file, không cần Node | **đã chốt** (27/10) |
 | Tài khoản | trước mắt không đăng nhập, một tài khoản admin dùng chung | **đã chốt** |
 
 ## 5. Sau khi chuyển xong: Cloudflare
@@ -75,4 +75,4 @@ Bản local và bản Cloudflare là **cùng một bản build**, nên thử ở
 4. Thời gian (ước lượng thô, chưa đo): bước 1 ~1 phiên, bước 2 ~2–3 phiên, bước 3 ~4–6 phiên, bước 4 ~1 phiên + thời gian người dùng trải nghiệm.
 
 ## 7. Việc tiếp theo
-Người dùng duyệt kế hoạch và 3 quyết định ở mục 4 → nói "làm đi" → bắt đầu bước 1.
+Mục 4 đã chốt hết. Người dùng nói "làm đi" → bắt đầu bước 1.
