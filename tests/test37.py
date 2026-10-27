@@ -9,7 +9,7 @@ with sync_playwright() as p:
     pg.on('console', lambda m: errs.append(m.text) if m.type=='error' and 'ERR_' not in m.text and 'fonts' not in m.text else None); pg.on('pageerror', lambda e: errs.append('PAGEERR '+str(e)))
     pg.goto('file://'+sys.argv[1]); pg.wait_for_timeout(1300)
     n0 = pg.evaluate("ws.tasks.length")
-    chk('badge v105', pg.inner_text('#verBadge')=='v105')
+    chk('badge v106', pg.inner_text('#verBadge')=='v106')
     pg.click('#tree [data-lib]'); pg.wait_for_timeout(400)
     chk('tab đầu "Chọn dạng bài", hiện lưới Q + Bố cục + xem trước', pg.is_visible('#lnQ') and pg.is_visible('#lnT') and pg.is_visible('#lnPv') and pg.locator('#lnQ [data-lq]').count()==13, pg.locator('#lnQ [data-lq]').count())
     chk('5 ô bố cục', pg.locator('#lnT [data-lt]').count()==5)

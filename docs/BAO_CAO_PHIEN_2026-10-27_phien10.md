@@ -15,6 +15,9 @@
 
 **Chưa làm / chờ người dùng:** căn lề chữ ô câu hỏi (người dùng nói để sau); tiêu đề bài đọc căn giữa; thanh kéo nhóm T/F; số Task theo PDF (PDF 1, 2, 4, 5); bài 3 của PDF; kiểm `## Đáp án` MD cho câu nhiều chỗ trống; bản prompt trong thư mục project (`prompt/PROMPT_PDF_SANG_MD_v100.txt` đã tạo trước đó, chưa có quy tắc 18 mới, cần xuất lại bản v101); AI tạo lại MD từ prompt mới chưa thử.
 
+## 0f. v106 (chỉnh sau phiếu 14)
+Số câu bài nối thẳng lề với Task khác + chữ cột căn trái; Căn dọc Trên/Giữa/Dưới cho Chọn A/B/C; a/b/c/d thẳng cột (lỗi đo độ dài có thẻ); tay kéo T/F trên Task bị cắt trang. Spec mục 38, `tests/test49.py`. Chưa rõ người dùng nói "70/30" là cột nào (bài đọc|câu hỏi hay câu|T/F): đã sửa cả hai, chờ thử lại.
+
 ## 0e. v105 (phiếu 14)
 Phiếu 14: `Dạng: nối` không tách cặp (lỗi bộ đọc), bài nối kiểu viết chữ cái thiếu tiêu đề cột / vế thừa / ô viết chữ (mô hình), bài đọc + T/F tự chọn Hai cột nên không xếp dọc được (code). Sửa cả ba; prompt quy tắc 24–25; spec mục 37; `tests/test48.py`, `tests/md/phieu14.md`.
 

@@ -76,7 +76,7 @@ Tên trường viết hoa hay thường đều được; có bản tiếng Anh: 
 |---|---|---|---|
 | `điền từ` (`điền chỗ trống`) | Q1 | gạch `___` trong câu, hoặc dưới câu | `(ô chữ cái)` = mỗi chữ một ô |
 | `viết câu` | Q2 | dòng kẻ để viết câu (`Dòng viết: N`) | `(bốn ô li)` |
-| `chọn A/B/C` (`khoanh A/B/C`) | Q3 | lựa chọn A, B, C dưới câu | (v102) nhãn mặc định là `a. b. c.` (không vòng tròn); `(khoanh)` = vòng tròn ⓐ; `(ô tick)` = ☐ |
+| `chọn A/B/C` (`khoanh A/B/C`) | Q3 | lựa chọn A, B, C dưới câu | (v102) nhãn mặc định là `a. b. c.` (không vòng tròn); `(khoanh)` = vòng tròn ⓐ; `(ô tick)` = ☐; (v106) `(căn giữa)` / `(căn dưới)` = căn dọc số câu, chữ câu, lựa chọn |
 | `chọn trong câu` (`gạch chân`) | Q4 | `{a\|b}` trong câu, học sinh gạch / khoanh | `(nhãn A-D)` = bài tìm lỗi sai: viết các đoạn gạch chân `<u>…</u>`, app in A B C D dưới từng đoạn |
 | `đúng/sai` | Q5 | khoanh T / F | nhãn tự đặt 2–3 cái: `(Yes/No)`, `(True/False)`, `(T/F/NG)`, `(Right/Wrong)`; `(ô tick)` = ô tick; `(cùng hàng)` (v100) = T F nằm cuối hàng, bên phải câu (kết hợp: `(Yes/No, cùng hàng)`) |
 | `nhìn ảnh viết` | Q6 | mỗi câu một ảnh `[ảnh: x]`, viết từ / câu | |
