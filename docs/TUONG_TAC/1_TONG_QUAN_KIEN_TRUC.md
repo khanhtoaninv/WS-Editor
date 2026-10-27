@@ -110,7 +110,7 @@ Giao diện nối trình xem với nơi chứa nó (gợi ý, đặt tên chi ti
 3. **Làm bài:** mỗi thay đổi tự lưu nháp lên máy chủ. Mất mạng → giữ tạm trên máy, có mạng lại thì gửi.
 4. **Nộp:** máy chủ chấm ngay. Học sinh thấy **điểm tổng của mình** và **bảng điểm tổng của lớp, cập nhật thời gian thực**. Chưa thấy đúng / sai từng câu. Nếu phiên cho làm nhiều lần thì có nút Làm lại (giáo viên đặt số lần, lấy lần cao nhất hoặc lần cuối: cài đặt).
 5. **Màn giáo viên (thời gian thực):** danh sách lớp với ảnh đại diện; trạng thái từng em (chưa vào / đang làm, tiến độ x/y / đã nộp, điểm); điểm trung bình; % đúng từng câu khi bài nộp dần về.
-6. **Chốt phiên:** giáo viên bấm "Chốt phiên" → không nhận bài nữa, bài dở nộp tự động → học sinh xem được **kết quả từng câu** (`result`). Giáo viên chuyển sang chữa bài (6.4). Có thể **mở lại** phiên nếu cần.
+6. **Chốt phiên:** giáo viên bấm "Chốt phiên" → không nhận bài nữa, bài dở nộp tự động → học sinh xem được **kết quả từng câu** (`result`). Giáo viên chuyển sang chữa bài (6.4). Có thể **mở lại** phiên (ví dụ cho em vào muộn làm tiếp): khi mở lại, kết quả từng câu **bị ẩn lại** với mọi học sinh cho tới khi chốt lần nữa (giảm việc mách đáp án; em đã xem rồi thì vẫn có thể nhớ, giáo viên cân nhắc).
 7. **Hết thời hạn** mà giáo viên chưa chốt → tự chốt.
 
 Kỹ thuật: kênh cập nhật tức thời (WebSocket hoặc tương đương) cho màn giáo viên và bảng điểm lớp của học sinh.

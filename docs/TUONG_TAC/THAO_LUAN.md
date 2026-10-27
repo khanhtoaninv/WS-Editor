@@ -30,3 +30,9 @@ Trạng thái: **đang thảo luận, chưa code.** Đã viết nháp v0 ba tài
 - "Mỗi buổi một phiên" áp **theo lớp**; giáo viên chỉ mở và điều hành phiên.
 - **Bài về nhà tính sau**, làm trên lớp trước.
 - Đã sửa tài liệu 1 và 3 thành v0.1 theo các điểm này.
+
+## Đồng ý thêm (27/10/2026)
+- Key đang dùng ở máy khác → hỏi "Tiếp tục trên máy này?", máy cũ bị ngắt, bài nháp không mất (lưu ở máy chủ).
+- Hết thời hạn mà giáo viên chưa chốt → hệ thống tự chốt, bài dở nộp tự động.
+- Giáo viên mở lại được phiên đã chốt; khi mở lại thì ẩn lại kết quả từng câu tới khi chốt lần nữa.
+- Bước tiếp theo: lập kế hoạch chi tiết GĐ0 (tài liệu 3 mục 3), chờ người dùng cho phép.
