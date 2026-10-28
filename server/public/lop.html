@@ -18020,15 +18020,333 @@ function Cham({ phien, hs, onBack, onReport }) {
 	})] });
 }
 // src/lop/BaoCao.tsx
-function BaoCao({ onBack }) {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+var DIST = [
+	"0–19%",
+	"20–39%",
+	"40–59%",
+	"60–79%",
+	"80–100%"
+];
+var Bar = ({ label, pct, cls, title }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+	className: "rbar",
+	title: title || `${label}: ${pct}%${cls != null ? ` (lớp ${cls}%)` : ""}`,
+	children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+			className: "rbl",
+			children: label
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+			className: "rbt",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", { style: { width: `${Math.max(0, Math.min(100, pct))}%` } }), cls != null ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { style: { left: `${cls}%` } }) : null]
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+			className: "rbv",
+			children: [
+				pct,
+				"%",
+				cls != null ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("small", { children: [
+					" · lớp ",
+					cls,
+					"%"
+				] }) : null
+			]
+		})
+	]
+});
+var Ins = ({ list }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
+	className: "rins",
+	children: list.map((x, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+		className: x.muc,
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+			className: "rdot",
+			"aria-hidden": "true",
+			children: x.muc === "cao" ? "!" : x.muc === "tot" ? "★" : "•"
+		}), x.text]
+	}, i))
+});
+function BaoCao({ phien, onBack, onCham }) {
+	const [c, setC] = (0, import_react.useState)(null), [err, setErr] = (0, import_react.useState)("");
+	(0, import_react.useEffect)(() => {
+		api(`/api/phien/${phien}/bao-cao`).then(setC, (e) => setErr(e.message));
+	}, [phien]);
+	if (err) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 		className: "lb ghost",
 		onClick: onBack,
 		children: "← Phiên"
 	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-		className: "hint",
-		children: "Báo cáo: bản sau (v121)."
+		className: "err",
+		children: err
 	})] });
+	if (!c) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+		className: "hint",
+		children: "Đang tính báo cáo…"
+	});
+	const dmax = Math.max(1, ...c.dist), none = !c.nVao, pc = (x) => none ? "–" : `${x}%`;
+	const csv = () => {
+		const q = (s) => `"${String(s).replace(/"/g, "\"\"")}"`;
+		const rows = [[
+			"Học sinh",
+			"Trạng thái",
+			"Điểm",
+			"Tối đa",
+			"%",
+			"Chờ chấm tay",
+			"Bỏ trống"
+		], ...c.students.map((s) => [
+			s.ten,
+			s.nop ? "đã nộp" : s.vao ? "chưa nộp" : "không vào",
+			s.score,
+			s.max,
+			s.pct,
+			s.pending,
+			s.blank
+		])];
+		const a = document.createElement("a");
+		a.href = URL.createObjectURL(new Blob(["﻿" + rows.map((r) => r.map(q).join(",")).join("\n")], { type: "text/csv" }));
+		a.download = `bao-cao-${c.phien.ten.replace(/[^\w-]+/g, "-")}.csv`;
+		a.click();
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "rpt",
+		id: "rLop",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "row",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "lb ghost",
+						onClick: onBack,
+						children: "← Phiên"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "sp" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "lb",
+						onClick: csv,
+						id: "rCsv",
+						children: "Tải bảng điểm (CSV)"
+					})
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+				title: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: ["Báo cáo lớp · ", c.phien.ten] }),
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "hint",
+					children: [
+						c.phien.lopTen,
+						" · ",
+						c.phien.goiTen,
+						c.pending ? ` · còn ${c.pending} chỗ chấm tay chưa chấm (chưa tính vào %)` : ""
+					]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "rtiles",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("b", {
+							id: "rNop",
+							children: [
+								c.nNop,
+								"/",
+								c.nLop
+							]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "đã nộp" })] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", {
+							id: "rAvg",
+							children: pc(c.avg)
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "trung bình" })] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: pc(c.median) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "trung vị" })] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: none ? "–" : `${c.lo}–${c.hi}%` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "thấp – cao nhất" })] })
+					]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "rgrid",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
+					title: "Nhận xét nhanh",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ins, { list: c.insights })
+				}), none ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
+					title: "Phân bố điểm",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "hint",
+						children: "Chưa có bài làm."
+					})
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+					title: "Phân bố điểm",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "rdist",
+							role: "img",
+							"aria-label": "Số em theo mức điểm: " + c.dist.map((n, i) => `${DIST[i]} ${n} em`).join(", "),
+							children: c.dist.map((n, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "rdc",
+								title: `${DIST[i]}: ${n} em`,
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "rdn",
+										children: n
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", { style: { height: `${n / dmax * 100}%` } }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "rdl",
+										children: DIST[i]
+									})
+								]
+							}, i))
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: "Theo dạng bài" }),
+						c.qs.map((q) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bar, {
+							label: q.name,
+							pct: q.pct
+						}, q.id)),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: "Theo Task" }),
+						c.tasks.map((t) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bar, {
+							label: t.name,
+							pct: t.pct
+						}, t.id))
+					]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
+				title: "Câu sai nhiều",
+				children: c.top.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("table", {
+					className: "ltbl",
+					id: "rTop",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Câu" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Đúng" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Đáp án" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Trả lời sai hay gặp" })
+					] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", { children: c.top.map((s) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", { children: [
+							"Task ",
+							s.taskNum,
+							" · câu ",
+							s.label
+						] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("b", { children: [s.pct, "%"] }),
+							" ",
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "hint",
+								children: [
+									"(",
+									s.correct,
+									"/",
+									s.n - s.pending,
+									")"
+								]
+							})
+						] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: s.key }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", { children: [s.wrongs.map((w) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "chip",
+							children: [
+								w.text || "(?)",
+								" ×",
+								w.n
+							]
+						}, w.text)), s.blank ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "chip",
+							children: ["bỏ trống ×", s.blank]
+						}) : null] })
+					] }, s.id)) })]
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "hint",
+					children: none ? "Chưa có bài làm." : "Không câu nào dưới 70% đúng."
+				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+				title: "Học sinh",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("table", {
+					className: "ltbl",
+					id: "rHs",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Học sinh" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Điểm" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {})
+					] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", { children: c.students.map((s) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
+						"data-hs": s.hs,
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", { children: [s.ten, s.nop ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "chip",
+								children: s.vao ? "chưa nộp" : "không vào"
+							})] }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: s.vao ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("b", { children: [s.pct, "%"] }),
+								" ",
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "hint",
+									children: [
+										s.score,
+										"/",
+										s.max
+									]
+								}),
+								s.pending ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "chip warn",
+									children: [s.pending, " chờ chấm"]
+								}) : null
+							] }) : "–" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+								style: { width: "30%" },
+								children: s.vao ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "rbt sm",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", { style: { width: `${s.pct}%` } }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { style: { left: `${c.avg}%` } })]
+								}) : null
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+								className: "r",
+								children: s.vao ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									className: "lb",
+									onClick: () => onCham(s.hs),
+									children: "Chấm chữa"
+								}) : null
+							})
+						]
+					}, s.hs)) })]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "hint",
+					children: "Vạch đứng trên thanh = trung bình lớp."
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("details", {
+				className: "lcard",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("summary", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("b", { children: [
+					"Từng câu (",
+					c.slots.length,
+					")"
+				] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("table", {
+					className: "ltbl",
+					id: "rSlots",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Câu" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Dạng" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Đúng" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Sai" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Trống" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Đáp án" })
+					] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", { children: c.slots.map((s) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", { children: [
+							"T",
+							s.taskNum,
+							" · ",
+							s.label
+						] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+							className: "hint",
+							children: s.manual ? "chấm tay" : ""
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: s.n - s.pending ? `${s.pct}%` : "–" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: s.wrong + s.partial }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: s.blank }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+							className: "hint",
+							children: s.key
+						})
+					] }, s.id)) })]
+				})]
+			})
+		]
+	});
 }
 // src/lop/Teacher.tsx
 var MAU = [

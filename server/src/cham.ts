@@ -1,9 +1,9 @@
-// Chấm chữa (v120); báo cáo lớp / từng em và insight thêm ở v121–v122. Gắn thêm đường dẫn vào máy chủ (app.ts).
+// Chấm chữa (v120), báo cáo lớp (v121); báo cáo từng em và insight AI thêm ở v122. Gắn thêm đường dẫn vào máy chủ (app.ts).
 // Mọi phép tính báo cáo nằm ở shared/src/baocao.ts (TeacherResource dùng lại được); ở đây chỉ gom dữ liệu và kiểm quyền.
 import type { Ctx } from './app.ts';
 import { HttpError, bad, json } from './http.ts';
 import type { Overrides, Slot, Key } from '../../shared/src/index.ts';
-import { taskInfo, type Sub } from '../../shared/src/baocao.ts';
+import { classReport, taskInfo, type Sub } from '../../shared/src/baocao.ts';
 
 type On = (m: string, p: string, h: (r: any, res: any, m: RegExpMatchArray) => unknown) => void;
 const now = () => new Date().toISOString();
@@ -50,5 +50,11 @@ export function extraRoutes(on: On, ctx: Ctx, u: { needGv: (r: any) => void; phi
     const g = u.grade(d.slots, d.key, bai.answers, c.overrides);
     ctx.emit(p.id, 'hs', ctx.progress(p, m[2]));
     return { score: g.score, max: g.max, pending: g.pendingManual, xong: !!c.xongLuc };
+  });
+
+  // báo cáo lớp
+  on('GET', '/api/phien/:id/bao-cao', (r, _res, m) => {
+    u.needGv(r); const p = u.phienOf(m[1]), d = goiData(p.goi);
+    return { phien: ctx.phienView(p), ...classReport(d.slots, d.key, subsOf(p), tasksOf(p.goi)) };
   });
 }

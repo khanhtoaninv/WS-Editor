@@ -1,4 +1,4 @@
-# v120 Lớp học thử: chấm chữa từng học sinh.
+# v120–v121 Lớp học thử: chấm chữa từng học sinh, báo cáo lớp.
 # 12 em (tên giả): 8 em vào làm qua API (đúng / sai có chủ đích), 7 em nộp, 1 em bị thu khi kết thúc, 4 em không vào.
 # Cách dùng: python3 tests/lop/test_cham.py   (ảnh chụp ở /tmp/claude-0/lop/)
 import os, sys, json
@@ -97,9 +97,41 @@ try:
         # quyền: học sinh không gọi được chấm / báo cáo
         rq = p.request.new_context(base_url=S.base)
         ok(rq.get(f'/api/phien/{pid}/cham').status == 401, 'chưa đăng nhập: không xem được bài chấm')
+        # ---------- báo cáo lớp ----------
+        g.click('#chBaoCao'); g.wait_for_selector('#rLop')
+        rep = api(g, f'/api/phien/{pid}/bao-cao')['j']
+        ok(rep['nNop'] == 8 and rep['nVao'] == 8 and rep['nLop'] == 12, f"nộp {rep['nNop']} vào {rep['nVao']} / {rep['nLop']}")   # em thứ 8 bị thu khi kết thúc
+        ok(g.inner_text('#rNop').strip() == '8/12', 'ô đã nộp')
+        ok(len(rep['chuaVao']) == 4, 'bốn em không vào')
+        tg = next((s for s in rep['slots'] if s['id'] == target['id']), None)
+        ok(tg and any(w['text'] == 'zzz' and w['n'] >= 4 for w in tg['wrongs']), f"đáp án sai hay gặp: {tg and tg['wrongs']}")
+        ins = g.inner_text('#rLop .rins')
+        ok('zzz' in ins, 'nhận xét nêu câu cả lớp cùng sai')
+        ok('không vào phiên' in ins, 'nhận xét nêu em không vào')
+        ok(g.locator('#rTop tr').count() >= 2, 'bảng câu sai nhiều')
+        ok(g.locator('#rHs tr[data-hs]').count() == 12, 'bảng học sinh đủ 12 em')
+        g.screenshot(path=f'{OUT}/baocao_lop.png', full_page=True)
+        with g.expect_download() as dl: g.click('#rCsv')
+        csv = open(dl.value.path(), encoding='utf-8-sig').read().splitlines()
+        ok(len(csv) == 13 and csv[0].startswith('"Học sinh"') and any(hs[0]['ten'] in l for l in csv), f'tải bảng điểm CSV ({len(csv)} dòng)')
         b.close()
 finally:
     S.stop()
+# phiên không ai làm: báo cáo vẫn mở được
+S2 = Server()
+try:
+    with sync_playwright() as p:
+        b = p.chromium.launch(); ctx = b.new_context(viewport={'width': 1366, 'height': 900}); g = ctx.new_page()
+        g.on('pageerror', lambda e: errs.append('gv2: ' + str(e))); g.on('console', lambda m: errs.append('gv2: ' + m.text) if m.type == 'error' else None)
+        gv_login(g, S2.base); gui_goi(ctx, S2.base, SHEET); ma = mo_phien(g)
+        pid = g.evaluate("() => fetch('/api/phien').then(r => r.json()).then(a => a[0].id)")
+        api(g, f'/api/phien/{pid}/ket-thuc', 'POST', {})
+        g.click('#tab-phien'); g.click('.ltbl tr.click'); g.wait_for_selector('#phBaoCao'); g.click('#phBaoCao'); g.wait_for_selector('#rLop')
+        ok('Chưa có bài làm' in g.inner_text('#rLop .rins'), 'không ai làm: báo chưa có bài')
+        g.screenshot(path=f'{OUT}/baocao_trong.png')
+        b.close()
+finally:
+    S2.stop()
 errs = [e for e in errs if '409 (Conflict)' not in e]   # 409: thử chấm khi phiên còn mở (cố ý)
 ok(not errs, f'lỗi console: {errs[:5]}')
 print(f'{n - len(fails)}/{n} đạt')

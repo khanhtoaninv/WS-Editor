@@ -926,3 +926,10 @@ Kế hoạch `docs/KE_HOACH_SUA_SAU_KIEM_THU.md` đợt 1 (kết quả thử tay
 - Mở từ phiên đã kết thúc (**Chấm chữa**). Trái: trình xem vai `review` với bài làm của em (khóa, dấu đúng / sai của máy, bấm ✓ / ✗ cạnh chỗ chấm tay, nút Đáp án). Phải: **bảng chấm**: từng chỗ (câu, em trả lời → đáp án, trạng thái, ô điểm 0…tối đa bước 0,5, nút ✓ / ✗ cho chỗ chấm tay), lời nhắn từng câu (hiện cho câu sai / chấm tay), **Nhận xét chung**, **Chốt chấm xong**, "Chốt, em sau ▶", ◀ ▶ đổi em, nút Báo cáo (v121).
 - Điểm ở bảng chấm là điểm chính thức; sửa được cả điểm máy chấm (chấp nhận cách viết khác). ✓ / ✗ trên phiếu ↔ điểm tối đa / 0 ở bảng (hai chiều). Tự lưu 0,6 giây sau mỗi thay đổi. Chỉ chấm khi phiên đã kết thúc. Bảng theo dõi phiên hiện chip "Đã chấm". Ô "Đúng x/y" của trình xem ẩn khi chấm chữa (điểm chính thức ở bảng chấm).
 - Máy chủ: `GET /api/phien/:id/cham`, `PUT /api/phien/:id/cham/:hs {overrides, nhanXet, xong}` (điểm kẹp 0…tối đa).
+
+## 52. Báo cáo lớp (v121, 28/10/2026)
+- **Báo cáo** (từ phiên hoặc bảng chấm): ô số (đã nộp, trung bình, trung vị, thấp – cao nhất), phân bố điểm 5 mức, % đúng theo dạng bài (tên Q như WS Editor) và theo Task, **Câu sai nhiều** (dưới 70%: % đúng, đáp án, các câu trả lời sai hay gặp ×số em, bỏ trống), bảng học sinh (%, điểm, chờ chấm, thanh so với vạch trung bình lớp, nút Chấm chữa), bảng từng câu (thu gọn), **Tải bảng điểm (CSV)**.
+- % chỉ tính phần đã chấm (chỗ chấm tay chưa chấm không tính, báo "còn n chỗ"). Chỉ tính bài đã nộp (cả bài thu khi kết thúc).
+- Tính trong `shared/src/baocao.ts` (`classReport`, `taskInfo`, `answerText`, `keyText`), có test `shared/test/baocao.test.ts`.
+- **Nhận xét nhanh theo quy tắc** (không cần mạng): câu dưới 70% kèm "n/m em cùng trả lời X (đáp án: Y) → chữa chung cả lớp"; dạng bài yếu nhất / mạnh nhất; câu nhiều em bỏ trống; em dưới 50%; em vào mà chưa tự nộp; em không vào; còn chỗ chấm tay. Phiên không ai làm: báo "Chưa có bài làm", các ô số để "–".
+- Chưa có ở v121: báo cáo từng em, Insight AI (v122).

@@ -1,9 +1,9 @@
-// Máy chủ lớp thử v120: chấm chữa. Chạy: npm run test:lop
+// Máy chủ lớp thử v120–v121: chấm chữa, báo cáo lớp. Chạy: npm run test:lop
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { boot, client, upload } from './api.test.ts';
 
-test('chấm chữa', async () => {
+test('chấm chữa và báo cáo lớp', async () => {
   const S = await boot();
   try {
     const gv = client(S.base);
@@ -26,9 +26,17 @@ test('chấm chữa', async () => {
     const c1 = (await gv(`/api/phien/${ph.id}/cham`)).j.hocSinh.find((h: any) => h.hs === hs0);
     assert.deepEqual(c1.overrides, { 't3.i1': { score: 1.5 }, 't1.i2': { score: 1, comment: 'chấp nhận' } });
     assert.equal((await gv(`/api/phien/${ph.id}`)).j.hocSinh.find((h: any) => h.id === hs0).xongCham, true);
+    // báo cáo lớp (v121)
+    const b = (await gv(`/api/phien/${ph.id}/bao-cao`)).j;
+    assert.equal(b.nNop, 3); assert.deepEqual(b.chuaVao, ['Dũng']);
+    const s12 = b.slots.find((s: any) => s.id === 't1.i2');
+    assert.deepEqual(s12.wrongs, [{ text: 'play', n: 2 }]); assert.equal(s12.key, 'plays');
+    assert.ok(b.insights.some((i: any) => i.text.includes('"play"')));
+    assert.equal(b.students[0].ten, 'An'); assert.equal(b.students[0].pct, 90);
     // học sinh / người ngoài không vào được
     const x = client(S.base);
     assert.equal((await x(`/api/phien/${ph.id}/cham`)).status, 401);
+    assert.equal((await x(`/api/phien/${ph.id}/bao-cao`)).status, 401);
     assert.equal((await x(`/api/phien/${ph.id}/cham/${hs0}`, { method: 'PUT', json: { overrides: {} } })).status, 401);
   } finally { await S.stop(); }
 });

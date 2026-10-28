@@ -24,3 +24,9 @@
 - Lỗi tìm ra khi test: (1) sửa điểm câu máy chấm thành đúng thì ô lời nhắn biến mất → giữ ô khi đã sửa điểm; (2) trình xem đếm "Đúng 24/34" còn bảng chấm 25/34 (trình xem không biết điểm sửa tay) → ẩn ô đếm của trình xem khi chấm chữa.
 - Thử tay: `docs/TUONG_TAC/KIEM_TRA_LOP_THU_V120.md`.
 - **Đã kiểm thử v120** (bản cuối): `chuan.py so` 120/120; `giaodien.py --bo-moi` 2489/2497 (8 lệch đã biết); `run_all.sh` 49/49 + audit 0; gd1a 73/73; gd1b 82/82; quét 161/161; shared 26/26; test_dot1–5 đạt; kiem_slots, gd2 402/402 đạt; `npm run test:lop` 5/5; `test_lop.py` 18/18; `test_cham.py` 24/24 (12 em, 8 em làm qua API, chấm tay, sửa điểm, lời nhắn, chốt, lưu lại được, không đăng nhập thì bị chặn). Chưa kiểm: bảng chấm trên màn hình hẹp (dưới 900 px bảng xuống nửa dưới, chưa chụp xem), phiếu nhiều chỗ chấm tay.
+
+## 4. v121 Báo cáo lớp (spec mục 52)
+- Người dùng: "tiếp tục với v121". Đưa vào phần báo cáo lớp của bản nháp: `app/src/lop/BaoCao.tsx` (chỉ báo cáo lớp), đường dẫn `GET /api/phien/:id/bao-cao` trong `server/src/cham.ts`; phép tính `shared/src/baocao.ts` (đã có từ v119).
+- Sửa khi xem ảnh: nút Chấm chữa hiện cả ở em không vào → ẩn; phiên không ai làm hiện "0%" và biểu đồ rỗng, "Không câu nào dưới 70%" → hiện "–" và "Chưa có bài làm".
+- Thử tay: `docs/TUONG_TAC/KIEM_TRA_LOP_THU_V121.md`.
+- **Đã kiểm thử v121** (bản cuối): `chuan.py so` 120/120; `giaodien.py --bo-moi` 2489/2497 (8 lệch đã biết); `run_all.sh` 49/49 + audit 0; gd1a 73/73; gd1b 82/82; quét 161/161; shared 26/26; test_dot1–5 đạt; kiem_slots, gd2 402/402 đạt; `npm run test:lop` 5/5; `test_lop.py` 18/18; `test_cham.py` 34/34 (thêm: số em nộp / vào, câu trả lời sai hay gặp, nhận xét nhanh, bảng câu sai nhiều, 12 em, tải CSV, phiên trống). Chưa kiểm: mở CSV bằng Excel thật, báo cáo trên điện thoại / màn hẹp.
