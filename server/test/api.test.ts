@@ -81,6 +81,7 @@ test('lớp học thử: đăng nhập, lớp, gói, phiên, học sinh làm và
     const all = JSON.stringify(bai);
     assert.ok(!all.includes('goes') && !all.includes('friendly') && !all.includes('"correct"'), 'học sinh không nhận đáp án');
     assert.equal((await an(`/api/goi/${encodeURIComponent(g.j.id)}/f/key.json`)).status, 404, 'không lấy được key.json');
+    for (const bad of ["pages%2F..%2F..%2Fkey.json", "pages/../key.json", "..%2Fkey.json", "pages%5Cp1.html"]) assert.equal((await an(`/api/goi/${encodeURIComponent(g.j.id)}/f/${bad}`)).status, 404, "đường dẫn lạ bị chặn: " + bad);
     assert.equal((await an(`/api/goi/${encodeURIComponent(g.j.id)}/dap-an`)).status, 401);
     assert.equal((await an(`/api/goi/${encodeURIComponent(g.j.id)}/f/pages/p1.html`)).status, 200);
     assert.equal((await lau(`/api/goi/${encodeURIComponent(g.j.id)}/f/pages/p1.html`)).status, 401, 'người ngoài không lấy được trang');

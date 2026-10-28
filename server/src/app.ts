@@ -6,7 +6,7 @@
 // Đáp án (key.json) không bao giờ gửi cho học sinh: học sinh chỉ nhận phần đề của gói (studentView).
 import { createServer, type Server } from 'node:http';
 import { readFileSync, existsSync } from 'node:fs';
-import { join, normalize } from 'node:path';
+import { join } from 'node:path';
 import { randomBytes, timingSafeEqual } from 'node:crypto';
 import { networkInterfaces } from 'node:os';
 import { inspectWsp, studentView, isBlank, grade, fromB64, toB64, type Slot, type Key, type Answers, type Manifest } from '../../shared/src/index.ts';
@@ -154,7 +154,7 @@ export async function createApp(o: Opts) {
   on('GET', '/api/goi/:id/f/(.+)', (r, res, m) => {
     const id = decodeURIComponent(m[1]), path = decodeURIComponent(m[2]);
     if (!isGv(r)) { const { p } = hsOf(r); if (p.goi !== id) throw new HttpError(403, 'không thuộc phiên của em'); }
-    if (!FILE_OK.test(path) || normalize(path) !== path) throw new HttpError(404, 'không có');
+    if (!FILE_OK.test(path)) throw new HttpError(404, 'không có');   // FILE_OK chỉ nhận đúng các tên file hợp lệ; không dùng path.normalize (Windows đổi / thành \\ nên mọi file bị từ chối)
     const f = st.goiFile(id, path); if (!f) throw new HttpError(404, 'không có');
     res.writeHead(200, { 'content-type': mimeOf(path), 'cache-control': 'private, max-age=3600', 'x-content-type-options': 'nosniff' }); res.end(f);
   });
