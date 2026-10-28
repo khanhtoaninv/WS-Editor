@@ -17487,6 +17487,21 @@ function Student() {
 			setErr(e.message);
 		}
 	};
+	const leave = async () => {
+		if (!locked && !confirm("Thoát ra màn chọn tên? Bài em đã làm được lưu lại, em vào lại bằng tên này để làm tiếp.")) return;
+		try {
+			if (!locked) await save();
+			const r = await api("/api/hs/thoat", { json: {} });
+			setBai(null);
+			setPkg(null);
+			setGone("");
+			setSaved("");
+			setMa(r.ma);
+			await find(r.ma);
+		} catch (e) {
+			setErr(e.message);
+		}
+	};
 	(0, import_react.useEffect)(() => {
 		const f = (e) => {
 			if (saved === "dang-luu") {
@@ -17527,6 +17542,13 @@ function Student() {
 			id: "hsNop",
 			onClick: () => setAsk(true),
 			children: "Nộp bài"
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+			className: "vb hsout",
+			id: "hsOut",
+			title: "Thoát để vào bằng tên khác (bài đã làm được giữ lại)",
+			onClick: leave,
+			children: "Thoát"
 		})
 	] });
 	const data = (0, import_react.useMemo)(() => pkg && bai ? {

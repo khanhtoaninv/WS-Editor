@@ -247,6 +247,11 @@ export async function createApp(o: Opts) {
     st.touch(`phien:${p.id}`); notify(p, h.id);
     return { ok: true };
   });
+  // học sinh thoát: nhả tên (bài làm giữ nguyên) để vào lại hoặc đổi sang tên khác trên máy này
+  on('POST', '/api/hs/thoat', (r, res) => {
+    const { p, hs, bai } = hsOf(r); bai.token = undefined; setCookie(res, 'hs', '', 0);
+    st.touch(`phien:${p.id}`); notify(p, hs); return { ok: true, ma: p.ma };
+  });
   on('GET', '/api/hs/bai', r => {
     const { p, hs, bai } = hsOf(r), g = st.goi.find(x => x.id === p.goi), d = goiData(p.goi);
     const h = st.lop.find(x => x.id === p.lop)?.hocSinh.find(x => x.id === hs);

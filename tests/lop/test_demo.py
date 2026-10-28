@@ -42,7 +42,12 @@ try:
         g.screenshot(path=f'{OUT}/demo_baocao.png')
         # 4) vào làm ở phiên đang mở
         ctx, pg, herrs = hs_vao(b, S.base, 'LAMTHU', 'Xuân'); ok(pg.query_selector('#wsShow') is not None, 'vào làm phiếu ôn tập')
-        pg.screenshot(path=f'{OUT}/demo_hs.png'); ctx.close()
+        pg.screenshot(path=f'{OUT}/demo_hs.png')
+        # thoát để vào bằng tên khác trên cùng máy
+        pg.once('dialog', lambda d: d.accept()); pg.click('#hsOut'); pg.wait_for_selector('.hsnames')
+        ok(pg.locator('.hsnames .lb.used').count() == 4, 'thoát: tên Xuân được nhả (4 em đã vào sẵn vẫn khóa)')
+        pg.click('.hsnames >> text="Yến"'); pg.wait_for_selector('#wsShow'); ok('Yến' in pg.inner_text('.hsname'), 'vào lại bằng tên khác trên cùng máy')
+        ctx.close()
         ok(not herrs, 'học sinh 0 lỗi console ' + str(herrs))
         # màn chọn tên có avatar
         pg2 = b.new_context(viewport={'width': 390, 'height': 844}).new_page(); pg2.goto(f'{S.base}/hs?ma=LAMTHU'); pg2.wait_for_selector('.hsnames')

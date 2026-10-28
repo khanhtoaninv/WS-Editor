@@ -55,6 +55,11 @@ export function Student() {
     try { const r = await api<{ nopLuc: string }>('/api/hs/nop', { json: { answers: cur.current } }); setBai(b => b ? { ...b, nopLuc: r.nopLuc } : b); }
     catch (e) { setErr((e as Error).message); }
   };
+  const leave = async () => {
+    if (!locked && !confirm('Thoát ra màn chọn tên? Bài em đã làm được lưu lại, em vào lại bằng tên này để làm tiếp.')) return;
+    try { if (!locked) await save(); const r = await api<{ ma: string }>('/api/hs/thoat', { json: {} }); setBai(null); setPkg(null); setGone(''); setSaved(''); setMa(r.ma); await find(r.ma); }
+    catch (e) { setErr((e as Error).message); }
+  };
   useEffect(() => { const f = (e: BeforeUnloadEvent) => { if (saved === 'dang-luu') { save(); e.preventDefault(); } }; window.addEventListener('beforeunload', f); return () => window.removeEventListener('beforeunload', f); });
 
   const locked = !!bai && (!!bai.nopLuc || bai.phien.trangThai !== 'mo');
@@ -65,6 +70,7 @@ export function Student() {
     <span className="hsname" title={bai.phien.ten}><Av id={bai.hs.id} size={22} />{bai.hs.ten}</span>
     {locked ? null : <span className={'hssave ' + saved} id="hsSave">{saved === 'dang-luu' ? 'Đang lưu…' : saved === 'loi' ? 'Chưa lưu được' : saved === 'da-luu' ? '✓ Đã lưu' : ''}</span>}
     {locked ? null : <button className="vb hsnop" id="hsNop" onClick={() => setAsk(true)}>Nộp bài</button>}
+    <button className="vb hsout" id="hsOut" title="Thoát để vào bằng tên khác (bài đã làm được giữ lại)" onClick={leave}>Thoát</button>
   </>;
   const data = useMemo(() => pkg && bai ? { title: pkg.title, pages: pkg.pages, slots: pkg.slots, key: {}, role: 'student' as const, init: bai.answers, onAnswers, store: 'hs:' + bai.phien.id } : null, [pkg, bai?.phien.id]);   // eslint-disable-line react-hooks/exhaustive-deps
 
