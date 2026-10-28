@@ -14,14 +14,16 @@ Không thay TeacherResource; không cần cài thêm gói npm. Dữ liệu nằm
 5. Ctrl+C để dừng (dữ liệu được lưu).
 
 Biến môi trường (tùy chọn): `LOP_CONG` (cổng), `LOP_MAT_KHAU`, `LOP_DU_LIEU` (thư mục dữ liệu),
-`ANTHROPIC_API_KEY` (Insight AI, dùng từ v122).
+`ANTHROPIC_API_KEY` (bật **Insight AI**), `LOP_AI_MODEL` (mặc định `claude-opus-5-5`).
+Ví dụ Mac: `ANTHROPIC_API_KEY=sk-ant-... npm run lop`. Windows (PowerShell): `$env:ANTHROPIC_API_KEY="sk-ant-..."; npm run lop`.
+Không có khóa vẫn dùng được: nút AI trả đoạn nhắc (chỉ số liệu ẩn danh) để chép sang AI khác.
 
 ## Luồng
 Lớp (danh sách tên, nên dùng tên giả) → Gói phiếu (gửi từ WS Editor) → Mở phiên (mã 6 ký tự + QR) → học sinh vào, chọn tên, làm (tự lưu), nộp →
-giáo viên theo dõi trực tiếp → Kết thúc phiên (thu bài em chưa nộp). Sau: **Chấm chữa** (v120), **Báo cáo** lớp / từng em + nhận xét (v121–v122), chưa có ở v119.
+giáo viên theo dõi trực tiếp → Kết thúc phiên (thu bài em chưa nộp) → **Chấm chữa** (v120) → **Báo cáo** lớp (v121) / từng em + nhận xét theo quy tắc + Insight AI (v122).
 
 ## Mã
-- `lop.ts` chạy máy chủ; `src/app.ts` đường dẫn API; `src/cham.ts` chỗ gắn chấm chữa / báo cáo (v120+); `src/store.ts` lưu JSON; `src/khoa.ts` khóa ký / mở gói.
+- `lop.ts` chạy máy chủ; `src/app.ts` đường dẫn API; `src/cham.ts` chấm chữa + báo cáo + AI; `src/ai.ts` gọi Claude; `src/store.ts` lưu JSON; `src/khoa.ts` khóa ký / mở gói.
 - Giao diện: `app/src/lop/` (React, dùng lại trình xem `app/src/viewer/` với vai `student` / `review`), build ra `server/public/lop.html` (`cd app && npm run build`).
-- Tính điểm, báo cáo, nhận xét: `shared/src/grade.ts`, `shared/src/baocao.ts` (TeacherResource dùng lại được; báo cáo dùng từ v121).
+- Tính điểm, báo cáo, nhận xét: `shared/src/grade.ts`, `shared/src/baocao.ts` (TeacherResource dùng lại được).
 - Test: `npm run test:lop` (API), `python3 tests/lop/test_lop.py` (trình duyệt), hoặc `bash tests/lop/run.sh`.

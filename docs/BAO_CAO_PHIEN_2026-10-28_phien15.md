@@ -30,3 +30,10 @@
 - Sửa khi xem ảnh: nút Chấm chữa hiện cả ở em không vào → ẩn; phiên không ai làm hiện "0%" và biểu đồ rỗng, "Không câu nào dưới 70%" → hiện "–" và "Chưa có bài làm".
 - Thử tay: `docs/TUONG_TAC/KIEM_TRA_LOP_THU_V121.md`.
 - **Đã kiểm thử v121** (bản cuối): `chuan.py so` 120/120; `giaodien.py --bo-moi` 2489/2497 (8 lệch đã biết); `run_all.sh` 49/49 + audit 0; gd1a 73/73; gd1b 82/82; quét 161/161; shared 26/26; test_dot1–5 đạt; kiem_slots, gd2 402/402 đạt; `npm run test:lop` 5/5; `test_lop.py` 18/18; `test_cham.py` 34/34 (thêm: số em nộp / vào, câu trả lời sai hay gặp, nhận xét nhanh, bảng câu sai nhiều, 12 em, tải CSV, phiên trống). Chưa kiểm: mở CSV bằng Excel thật, báo cáo trên điện thoại / màn hẹp.
+
+## 5. v122 Báo cáo từng em + Insight (spec mục 53)
+- Người dùng: "Tiếp tục với v22" (hiểu là v122). Đưa vào phần còn lại của bản nháp: báo cáo em (`BaoCao.tsx`), `GET /api/phien/:id/bao-cao/:hs`, `POST /api/phien/:id/insight-ai`, `server/src/ai.ts`.
+- **AI:** gọi Claude Messages API bằng HTTP thẳng (máy chủ không gói npm), mẫu mặc định `claude-opus-5-5` (đổi bằng `LOP_AI_MODEL`), effort thấp, `fallbacks: "default"`. Khóa chỉ ở máy chủ (`ANTHROPIC_API_KEY`). Không có khóa: trả đoạn nhắc để chép. **Chưa gọi AI thật lần nào**: test dùng máy chủ AI giả (`LOP_AI_URL`), kiểm đầu mục, tên mẫu, đoạn nhắc không có tên học sinh / bài viết / nhận xét giáo viên.
+- Lưu ý test: tên giả "Nam" trùng chữ "Việt Nam" trong câu mở đầu đoạn nhắc (không phải lộ tên); test bỏ cụm đó khi dò.
+- **Mốc 2 xong phần đã định (v119 → v122).** Việc tiếp: người dùng thử tay `KIEM_TRA_LOP_THU_V119.md` … `V122.md`; thử AI thật với khóa của người dùng; thử điện thoại / máy tính bảng thật qua wifi.
+- **Đã kiểm thử v122** (bản cuối): `chuan.py so` 120/120; `giaodien.py --bo-moi` 2489/2497 (8 lệch đã biết); `run_all.sh` 49/49 + audit 0; gd1a 73/73; gd1b 82/82; quét 161/161; shared 26/26; test_dot1–5 đạt; kiem_slots, gd2 402/402 đạt; `npm run test:lop` 5/5; `test_lop.py` 18/18; `test_cham.py` 45/45. Chưa kiểm: AI thật (cần khóa của người dùng), báo cáo trên màn hẹp.

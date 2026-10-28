@@ -1,4 +1,4 @@
-// Máy chủ lớp thử v120–v121: chấm chữa, báo cáo lớp. Chạy: npm run test:lop
+// Máy chủ lớp thử v120–v122: chấm chữa, báo cáo lớp / từng em, insight AI (không khóa → đoạn nhắc). Chạy: npm run test:lop
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { boot, client, upload } from './api.test.ts';
@@ -33,10 +33,18 @@ test('chấm chữa và báo cáo lớp', async () => {
     assert.deepEqual(s12.wrongs, [{ text: 'play', n: 2 }]); assert.equal(s12.key, 'plays');
     assert.ok(b.insights.some((i: any) => i.text.includes('"play"')));
     assert.equal(b.students[0].ten, 'An'); assert.equal(b.students[0].pct, 90);
+    // từng em
+    const e = (await gv(`/api/phien/${ph.id}/bao-cao/${lop.hocSinh[1].id}`)).j;
+    assert.equal(e.ten, 'Bình'); assert.ok(e.wrong.length >= 2); assert.equal(e.rank, 3);
+    // AI không khóa: trả đoạn nhắc ẩn danh
+    const ai = (await gv(`/api/phien/${ph.id}/insight-ai`, { json: { hs: lop.hocSinh[1].id } })).j;
+    assert.equal(ai.text, null); assert.match(ai.loi, /ANTHROPIC_API_KEY/);
+    for (const t of ['An', 'Bình', 'Chi', 'Dũng', 'I like dogs', 'Tốt', 'chấp nhận']) assert.ok(!new RegExp(`(^|[^\\p{L}])${t}($|[^\\p{L}])`, 'u').test(ai.prompt), 'đoạn nhắc lộ ' + t);
     // học sinh / người ngoài không vào được
     const x = client(S.base);
     assert.equal((await x(`/api/phien/${ph.id}/cham`)).status, 401);
     assert.equal((await x(`/api/phien/${ph.id}/bao-cao`)).status, 401);
+    assert.equal((await x(`/api/phien/${ph.id}/insight-ai`, { json: {} })).status, 401);
     assert.equal((await x(`/api/phien/${ph.id}/cham/${hs0}`, { method: 'PUT', json: { overrides: {} } })).status, 401);
   } finally { await S.stop(); }
 });

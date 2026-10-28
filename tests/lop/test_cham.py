@@ -1,7 +1,7 @@
-# v120–v121 Lớp học thử: chấm chữa từng học sinh, báo cáo lớp.
+# v120–v122 Lớp học thử: chấm chữa, báo cáo lớp / từng em, insight theo quy tắc và AI (máy chủ AI giả, không gọi mạng thật).
 # 12 em (tên giả): 8 em vào làm qua API (đúng / sai có chủ đích), 7 em nộp, 1 em bị thu khi kết thúc, 4 em không vào.
 # Cách dùng: python3 tests/lop/test_cham.py   (ảnh chụp ở /tmp/claude-0/lop/)
-import os, sys, json
+import os, sys, json, re, threading, http.server
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from chung import Server, gv_login, gui_goi, mo_phien, api
 from playwright.sync_api import sync_playwright
@@ -12,6 +12,16 @@ fails, n = [], 0
 def ok(c, m):
     global n; n += 1
     if not c: fails.append(m); print('  FAIL', m)
+
+# máy chủ AI giả: ghi lại yêu cầu, trả một câu cố định
+SEEN = []
+class Fake(http.server.BaseHTTPRequestHandler):
+    def do_POST(self):
+        b = self.rfile.read(int(self.headers['content-length'])); SEEN.append({'path': self.path, 'h': dict(self.headers), 'b': json.loads(b)})
+        out = json.dumps({'type': 'message', 'role': 'assistant', 'stop_reason': 'end_turn', 'content': [{'type': 'text', 'text': 'NHẬN ĐỊNH GIẢ: lớp nhầm thì quá khứ.'}]}).encode()
+        self.send_response(200); self.send_header('content-type', 'application/json'); self.send_header('content-length', str(len(out))); self.end_headers(); self.wfile.write(out)
+    def log_message(self, *a): pass
+fake = http.server.ThreadingHTTPServer(('127.0.0.1', 0), Fake); threading.Thread(target=fake.serve_forever, daemon=True).start()
 
 def answer(s, k, good, common=False):
     """giá trị đúng / sai cho một chỗ (theo đáp án)"""
@@ -29,7 +39,7 @@ def answer(s, k, good, common=False):
     if it == 'tf': return 'F' if str(c).upper().startswith('T') else 'T'
     return None
 
-S = Server(); errs = []
+S = Server(env={'ANTHROPIC_API_KEY': 'khoa-thu', 'LOP_AI_URL': f'http://127.0.0.1:{fake.server_address[1]}'}); errs = []
 try:
     with sync_playwright() as p:
         b = p.chromium.launch()
@@ -114,6 +124,27 @@ try:
         with g.expect_download() as dl: g.click('#rCsv')
         csv = open(dl.value.path(), encoding='utf-8-sig').read().splitlines()
         ok(len(csv) == 13 and csv[0].startswith('"Học sinh"') and any(hs[0]['ten'] in l for l in csv), f'tải bảng điểm CSV ({len(csv)} dòng)')
+        # Insight AI (máy chủ AI giả)
+        g.click('#rAiGo'); g.wait_for_selector('#rAiText', timeout=10000)
+        ok('NHẬN ĐỊNH GIẢ' in g.inner_text('#rAiText'), 'hiện câu trả lời AI')
+        req = SEEN[-1]; prompt = req['b']['messages'][0]['content']
+        ok(req['path'] == '/v1/messages' and req['h'].get('x-api-key') == 'khoa-thu' and req['h'].get('anthropic-version'), 'gọi Messages API đúng đầu mục')
+        ok(req['b']['model'] == 'claude-opus-5-5', 'mẫu mặc định ' + req['b']['model'])
+        names = [h['ten'] for h in hs]
+        has = lambda txt, nm: re.search(r'(?<!\w)' + re.escape(nm) + r'(?!\w)', txt.replace('Việt Nam', '')) is not None   # "Nam" trong lớp mẫu trùng chữ "Việt Nam" của câu mở đầu
+        ok(not any(has(prompt, nm) for nm in names), 'đoạn nhắc không có tên học sinh: ' + str([nm for nm in names if has(prompt, nm)]) + ' ' + str([prompt[max(0, m.start()-40):m.end()+20] for nm in names for m in re.finditer(r'(?<!\w)' + re.escape(nm) + r'(?!\w)', prompt)][:3]))
+        ok('I like it because' not in prompt and 'Em làm khá' not in prompt and 'Chấp nhận, nhưng' not in prompt, 'đoạn nhắc không có bài viết / nhận xét')
+        ok('"zzz"' in prompt, 'đoạn nhắc có đáp án sai hay gặp')
+        # ---------- báo cáo từng em ----------
+        g.click(f"#rHs tr[data-hs='{hs[0]['id']}'] >> text=Báo cáo em"); g.wait_for_selector('#rEm')
+        er = api(g, f"/api/phien/{pid}/bao-cao/{hs[0]['id']}")['j']
+        ok(g.inner_text('#rEmPct').strip() == f"{er['pct']:g}%", f"% của em {g.inner_text('#rEmPct')} = {er['pct']}")
+        ok('Em làm khá' in g.inner_text('#rEm'), 'báo cáo em có nhận xét của giáo viên')
+        ok(er['insights'] and hs[0]['ten'] in er['insights'][0]['text'], 'nhận xét từng em')
+        g.click('#rEm #rAiGo'); g.wait_for_selector('#rEm #rAiText', timeout=10000)
+        p2 = SEEN[-1]['b']['messages'][0]['content']
+        ok('Một học sinh (gọi là HS)' in p2 and not any(has(p2, nm) for nm in names), 'đoạn nhắc từng em ẩn danh')
+        g.screenshot(path=f'{OUT}/baocao_em.png', full_page=True)
         b.close()
 finally:
     S.stop()
@@ -128,10 +159,12 @@ try:
         api(g, f'/api/phien/{pid}/ket-thuc', 'POST', {})
         g.click('#tab-phien'); g.click('.ltbl tr.click'); g.wait_for_selector('#phBaoCao'); g.click('#phBaoCao'); g.wait_for_selector('#rLop')
         ok('Chưa có bài làm' in g.inner_text('#rLop .rins'), 'không ai làm: báo chưa có bài')
+        api(g, '/api/lop', 'GET')
+        r = api(g, f'/api/phien/{pid}/insight-ai', 'POST', {}); ok(r['j']['text'] is None and 'ANTHROPIC_API_KEY' in r['j']['loi'] and r['j']['prompt'], 'không khóa: trả đoạn nhắc để chép')
         g.screenshot(path=f'{OUT}/baocao_trong.png')
         b.close()
 finally:
-    S2.stop()
+    S2.stop(); fake.shutdown()
 errs = [e for e in errs if '409 (Conflict)' not in e]   # 409: thử chấm khi phiên còn mở (cố ý)
 ok(not errs, f'lỗi console: {errs[:5]}')
 print(f'{n - len(fails)}/{n} đạt')

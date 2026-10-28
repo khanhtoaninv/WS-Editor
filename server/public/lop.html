@@ -18064,8 +18064,71 @@ var Ins = ({ list }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
 		}), x.text]
 	}, i))
 });
-function BaoCao({ phien, onBack, onCham }) {
-	const [c, setC] = (0, import_react.useState)(null), [err, setErr] = (0, import_react.useState)("");
+function Ai({ phien, hs, ai }) {
+	const [busy, setBusy] = (0, import_react.useState)(false), [r, setR] = (0, import_react.useState)(null), [copied, setCopied] = (0, import_react.useState)(false);
+	const run = async () => {
+		setBusy(true);
+		setR(null);
+		try {
+			setR(await api(`/api/phien/${phien}/insight-ai`, { json: hs ? { hs } : {} }));
+		} catch (e) {
+			setR({
+				prompt: "",
+				text: null,
+				loi: e.message
+			});
+		}
+		setBusy(false);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "rai",
+		id: "rAi",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "row",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "lb pri",
+					id: "rAiGo",
+					onClick: run,
+					disabled: busy,
+					children: busy ? "AI đang đọc số liệu…" : ai ? "✦ Insight AI" : "✦ Lấy đoạn nhắc cho AI"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+					className: "hint",
+					children: ["Chỉ gửi số liệu ẩn danh (không tên học sinh, không bài viết).", ai ? "" : " Máy chủ chưa có khóa AI: chép đoạn nhắc dán vào AI bạn dùng."]
+				})]
+			}),
+			r?.text ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "raitext",
+				id: "rAiText",
+				children: r.text
+			}) : null,
+			r?.loi ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: ai ? "err" : "hint",
+				id: "rAiLoi",
+				children: r.loi
+			}) : null,
+			r && !r.text && r.prompt ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+				readOnly: true,
+				rows: 8,
+				id: "rAiPrompt",
+				value: r.prompt
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				className: "lb",
+				onClick: () => navigator.clipboard?.writeText(r.prompt).then(() => setCopied(true)),
+				children: copied ? "✓ Đã chép" : "Chép đoạn nhắc"
+			})] }) : null,
+			r?.text ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("details", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("summary", {
+				className: "hint",
+				children: "Đoạn nhắc đã gửi"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("pre", {
+				className: "rpre",
+				children: r.prompt
+			})] }) : null
+		]
+	});
+}
+function BaoCao({ phien, ai, onBack, onCham }) {
+	const [c, setC] = (0, import_react.useState)(null), [err, setErr] = (0, import_react.useState)(""), [hs, setHs] = (0, import_react.useState)(null);
 	(0, import_react.useEffect)(() => {
 		api(`/api/phien/${phien}/bao-cao`).then(setC, (e) => setErr(e.message));
 	}, [phien]);
@@ -18080,6 +18143,13 @@ function BaoCao({ phien, onBack, onCham }) {
 	if (!c) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 		className: "hint",
 		children: "Đang tính báo cáo…"
+	});
+	if (hs) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Em, {
+		phien,
+		hs,
+		ai,
+		onBack: () => setHs(null),
+		onCham
 	});
 	const dmax = Math.max(1, ...c.dist), none = !c.nVao, pc = (x) => none ? "–" : `${x}%`;
 	const csv = () => {
@@ -18159,9 +18229,12 @@ function BaoCao({ phien, onBack, onCham }) {
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "rgrid",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
 					title: "Nhận xét nhanh",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ins, { list: c.insights })
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ins, { list: c.insights }), none ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ai, {
+						phien,
+						ai
+					})]
 				}), none ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Card, {
 					title: "Phân bố điểm",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
@@ -18295,11 +18368,15 @@ function BaoCao({ phien, onBack, onCham }) {
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
 								className: "r",
-								children: s.vao ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								children: s.vao ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 									className: "lb",
+									onClick: () => setHs(s.hs),
+									children: "Báo cáo em"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									className: "lb ghost",
 									onClick: () => onCham(s.hs),
 									children: "Chấm chữa"
-								}) : null
+								})] }) : null
 							})
 						]
 					}, s.hs)) })]
@@ -18344,6 +18421,144 @@ function BaoCao({ phien, onBack, onCham }) {
 						})
 					] }, s.id)) })]
 				})]
+			})
+		]
+	});
+}
+function Em({ phien, hs, ai, onBack, onCham }) {
+	const [r, setR] = (0, import_react.useState)(null), [err, setErr] = (0, import_react.useState)("");
+	(0, import_react.useEffect)(() => {
+		api(`/api/phien/${phien}/bao-cao/${hs}`).then(setR, (e) => setErr(e.message));
+	}, [phien, hs]);
+	if (err) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+		className: "lb ghost",
+		onClick: onBack,
+		children: "← Báo cáo lớp"
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+		className: "err",
+		children: err
+	})] });
+	if (!r) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+		className: "hint",
+		children: "Đang tính…"
+	});
+	const grp = (l) => l.map((q) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Bar, {
+		label: q.name,
+		pct: q.pct,
+		cls: q.classPct
+	}, q.id));
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "rpt",
+		id: "rEm",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "row",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "lb ghost",
+						onClick: onBack,
+						children: "← Báo cáo lớp"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "sp" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "lb",
+						onClick: () => onCham(hs),
+						children: "Chấm chữa em này"
+					})
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+				title: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: ["Báo cáo · ", r.ten] }),
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "rtiles",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("b", {
+							id: "rEmPct",
+							children: [r.pct, "%"]
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+							r.score,
+							"/",
+							r.max,
+							" điểm"
+						] })] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("b", { children: [r.classAvg, "%"] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "trung bình lớp" })] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: r.rank ? `${r.rank}/${r.of}` : "–" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "thứ hạng" })] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("b", { children: [
+							r.right.length,
+							"/",
+							r.right.length + r.wrong.length + r.blank.length
+						] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "câu đúng" })] })
+					]
+				}), r.nhanXet ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "rnx",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Nhận xét của cô / thầy:" }),
+						" ",
+						r.nhanXet
+					]
+				}) : null]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "rgrid",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+					title: "Nhận xét nhanh",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ins, { list: r.insights }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ai, {
+						phien,
+						hs,
+						ai
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+					title: "So với lớp",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: "Theo dạng bài" }),
+						grp(r.qs),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: "Theo Task" }),
+						grp(r.tasks),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+							className: "hint",
+							children: "Vạch đứng = trung bình lớp."
+						})
+					]
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
+				title: `Câu sai (${r.wrong.length})${r.blank.length ? ` · bỏ trống (${r.blank.length})` : ""}`,
+				children: [r.wrong.length || r.blank.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("table", {
+					className: "ltbl",
+					id: "rEmSai",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Câu" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Em trả lời" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Đáp án" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Lớp đúng" })
+					] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", { children: [...r.wrong, ...r.blank].map((x) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", { children: [
+							"Task ",
+							x.taskNum,
+							" · ",
+							x.label
+						] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", { children: [x.answer || /* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", {
+							className: "hint",
+							children: "(trống)"
+						}), x.comment ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "hint",
+							children: ["✎ ", x.comment]
+						}) : null] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: x.key }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", { children: [x.classPct, "%"] })
+					] }, x.id)) })]
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "hint",
+					children: "Không có câu sai."
+				}), r.pending.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "hint",
+					children: [
+						"Còn ",
+						r.pending.length,
+						" chỗ chấm tay chưa chấm."
+					]
+				}) : null]
 			})
 		]
 	});

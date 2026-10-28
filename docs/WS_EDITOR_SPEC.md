@@ -932,4 +932,9 @@ Kế hoạch `docs/KE_HOACH_SUA_SAU_KIEM_THU.md` đợt 1 (kết quả thử tay
 - % chỉ tính phần đã chấm (chỗ chấm tay chưa chấm không tính, báo "còn n chỗ"). Chỉ tính bài đã nộp (cả bài thu khi kết thúc).
 - Tính trong `shared/src/baocao.ts` (`classReport`, `taskInfo`, `answerText`, `keyText`), có test `shared/test/baocao.test.ts`.
 - **Nhận xét nhanh theo quy tắc** (không cần mạng): câu dưới 70% kèm "n/m em cùng trả lời X (đáp án: Y) → chữa chung cả lớp"; dạng bài yếu nhất / mạnh nhất; câu nhiều em bỏ trống; em dưới 50%; em vào mà chưa tự nộp; em không vào; còn chỗ chấm tay. Phiên không ai làm: báo "Chưa có bài làm", các ô số để "–".
-- Chưa có ở v121: báo cáo từng em, Insight AI (v122).
+
+## 53. Báo cáo từng em và Insight (v122, 28/10/2026)
+- **Báo cáo em:** %, điểm, trung bình lớp, thứ hạng, câu đúng; nhận xét của giáo viên; so với lớp theo dạng bài / Task (vạch = lớp); bảng câu sai / bỏ trống (em trả lời, đáp án, % lớp đúng, lời nhắn).
+- **Nhận xét nhanh theo quy tắc cho từng em** (lớp: mục 52): so với lớp, dạng yếu / mạnh (≥ 2 câu), sai câu phần lớn lớp làm đúng (có thể đọc vội), bỏ trống nhiều.
+- **✦ Insight AI:** máy chủ gửi **chỉ số liệu ẩn danh** (không tên, không bài viết tự do, không nhận xét của giáo viên) tới Claude Messages API (`server/src/ai.ts`, gọi HTTP thẳng vì máy chủ không có gói npm; mẫu `claude-opus-5-5`, effort thấp, `fallbacks: "default"`). Khóa chỉ ở máy chủ: biến môi trường `ANTHROPIC_API_KEY`. Không có khóa: nút thành "Lấy đoạn nhắc cho AI", hiện đoạn nhắc để chép dán vào AI khác. Đoạn nhắc đã gửi xem lại được.
+- Nút "Báo cáo em" ở bảng học sinh của báo cáo lớp (chỉ em có vào phiên). Insight AI có ở cả báo cáo lớp và báo cáo em; phiên không ai làm thì không hiện.

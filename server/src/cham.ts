@@ -1,9 +1,10 @@
-// Chấm chữa (v120), báo cáo lớp (v121); báo cáo từng em và insight AI thêm ở v122. Gắn thêm đường dẫn vào máy chủ (app.ts).
+// Chấm chữa (v120), báo cáo lớp (v121), báo cáo từng em + insight AI (v122). Gắn thêm đường dẫn vào máy chủ (app.ts).
 // Mọi phép tính báo cáo nằm ở shared/src/baocao.ts (TeacherResource dùng lại được); ở đây chỉ gom dữ liệu và kiểm quyền.
 import type { Ctx } from './app.ts';
 import { HttpError, bad, json } from './http.ts';
 import type { Overrides, Slot, Key } from '../../shared/src/index.ts';
-import { classReport, taskInfo, type Sub } from '../../shared/src/baocao.ts';
+import { classReport, studentReport, taskInfo, aiPrompt, type Sub } from '../../shared/src/baocao.ts';
+import { askAi } from './ai.ts';
 
 type On = (m: string, p: string, h: (r: any, res: any, m: RegExpMatchArray) => unknown) => void;
 const now = () => new Date().toISOString();
@@ -56,5 +57,22 @@ export function extraRoutes(on: On, ctx: Ctx, u: { needGv: (r: any) => void; phi
   on('GET', '/api/phien/:id/bao-cao', (r, _res, m) => {
     u.needGv(r); const p = u.phienOf(m[1]), d = goiData(p.goi);
     return { phien: ctx.phienView(p), ...classReport(d.slots, d.key, subsOf(p), tasksOf(p.goi)) };
+  });
+  on('GET', '/api/phien/:id/bao-cao/:hs', (r, _res, m) => {
+    u.needGv(r); const p = u.phienOf(m[1]), d = goiData(p.goi), subs = subsOf(p), s = subs.find(x => x.hs === m[2]);
+    if (!s) throw new HttpError(404, 'không có học sinh này');
+    const cls = classReport(d.slots, d.key, subs, tasksOf(p.goi));
+    return { phien: ctx.phienView(p), ...studentReport(d.slots, d.key, s, cls) };
+  });
+  // insight AI: chỉ gửi số liệu ẩn danh (không tên, không bài viết), khóa đặt ở máy chủ
+  on('POST', '/api/phien/:id/insight-ai', async (r, _res, m) => {
+    u.needGv(r); const p = u.phienOf(m[1]), d = goiData(p.goi), b = await json<{ hs?: string }>(r);
+    const subs = subsOf(p), cls = classReport(d.slots, d.key, subs, tasksOf(p.goi));
+    const s = b.hs ? subs.find(x => x.hs === b.hs) : undefined;
+    if (b.hs && !s) throw new HttpError(404, 'không có học sinh này');
+    const prompt = aiPrompt(cls, s ? studentReport(d.slots, d.key, s, cls) : null, d.manifest.title);
+    if (!ctx.ai) return { prompt, text: null, loi: 'Máy chủ chưa có khóa AI (biến môi trường ANTHROPIC_API_KEY). Có thể chép đoạn nhắc dưới đây dán vào AI.' };
+    try { return { prompt, text: await askAi(ctx.ai, prompt) }; }
+    catch (e) { return { prompt, text: null, loi: 'Gọi AI không được: ' + (e as Error).message }; }
   });
 }
