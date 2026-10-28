@@ -4,19 +4,15 @@
 import { networkInterfaces } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
-import { randomInt } from 'node:crypto';
+import { mkdirSync } from 'node:fs';
 import { createApp } from './src/app.ts';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = resolve(process.env.LOP_DU_LIEU || join(ROOT, 'server', 'du-lieu'));
 const PORT = +(process.env.LOP_CONG || 1531);
 mkdirSync(DATA, { recursive: true });
-// mật khẩu: biến môi trường, hoặc tạo một lần (6 số) và lưu trong dữ liệu
-const cfgF = join(DATA, 'cau-hinh.json');
-const cfg = existsSync(cfgF) ? JSON.parse(readFileSync(cfgF, 'utf8')) : {};
-if (!cfg.matKhau) { cfg.matKhau = String(randomInt(100000, 999999)); writeFileSync(cfgF, JSON.stringify(cfg, null, 1)); }
-const matKhau = process.env.LOP_MAT_KHAU || cfg.matKhau;
+// mật khẩu giáo viên: mặc định 123456 (bản thử trong mạng nội bộ); đổi bằng biến môi trường LOP_MAT_KHAU
+const matKhau = process.env.LOP_MAT_KHAU || '123456';
 const aiKey = process.env.ANTHROPIC_API_KEY;
 
 const { server, close } = await createApp({ root: ROOT, data: DATA, matKhau, ai: aiKey ? { key: aiKey, model: process.env.LOP_AI_MODEL } : null, log: m => console.log(new Date().toLocaleTimeString('vi-VN'), m) });

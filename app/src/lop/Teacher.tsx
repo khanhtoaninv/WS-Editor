@@ -32,7 +32,7 @@ function Login({ onOk }: { onOk: () => void }) {
   const [p, setP] = useState(''), [err, setErr] = useState('');
   return <div className="lopc hsbox"><h1>Lớp học thử · Giáo viên</h1>
     <form onSubmit={e => { e.preventDefault(); setErr(''); api('/api/gv/dang-nhap', { json: { matKhau: p } }).then(onOk, x => setErr(x.message)); }}>
-      <label htmlFor="gvPass">Mật khẩu (in ở cửa sổ chạy máy chủ)</label>
+      <label htmlFor="gvPass">Mật khẩu (mặc định 123456)</label>
       <input id="gvPass" type="password" value={p} onChange={e => setP(e.target.value)} autoFocus />
       <button className="lb pri" id="gvLogin">Đăng nhập</button>
     </form>{err ? <p className="err">{err}</p> : null}

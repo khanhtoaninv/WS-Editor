@@ -70,7 +70,7 @@ export function LiveDlg() {
         {c ? <div className="wspsum" id="liveSum"><b>{c.input.title}</b> · {c.input.pages.length} trang · {st!.length} chỗ trả lời ({auto} máy chấm, {st!.length - auto} chấm tay)</div> : null}
         {c && c.blockers.length ? <div className="wspbad" id="liveBlock"><b>Chưa giao được:</b><ul>{c.blockers.map(x => <li key={x}>{x}</li>)}</ul></div> : null}
         {srv && gv === false ? <form className="liveform" onSubmit={e => { e.preventDefault(); login(); }}>
-          <label htmlFor="livePass">Mật khẩu giáo viên (in ở cửa sổ máy chủ)</label>
+          <label htmlFor="livePass">Mật khẩu giáo viên (mặc định 123456)</label>
           <span className="liverow"><input id="livePass" type="password" value={pw} onChange={e => setPw(e.target.value)} autoFocus /><button className="btn pri" id="liveLogin">Đăng nhập</button></span></form> : null}
         {srv && gv ? <>
           {mo.length ? <div className="liveopen" id="liveOpen"><span className="hint">Phiên đang mở:</span> {mo.map(p => <button key={p.id} className="btn" data-phien={p.id} onClick={() => setRun(p.id)}>{p.ten} · mã {p.ma}</button>)}</div> : null}
