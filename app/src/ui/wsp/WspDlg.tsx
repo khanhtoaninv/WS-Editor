@@ -3,13 +3,12 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useUi, publish } from '../store';
 import { actions } from '../actions';
 import { askConfirm } from '../Dialogs';
-import { buildFiles, checkFiles, sealWsp, inspectWsp, type Signer } from '../../../../shared/src/index.ts';
+import { inspectWsp } from '../../../../shared/src/index.ts';
+import { sealCollected } from './seal';
 import { collect, type Collected } from './collect';
-import { devSigner, edBox, serverKeys, serverSigner, trPub, setTrPub, trusted, nextVersion, saveVersion, type ServerKeys } from './keys';
+import { edBox, serverKeys, trPub, setTrPub, trusted, type ServerKeys } from './keys';
 
-const VER = 'WS Editor v122';
 const kb = (n: number) => n < 1024 * 1024 ? `${Math.max(1, Math.round(n / 1024))} KB` : `${(n / 1024 / 1024).toFixed(1)} MB`;
-const fname = (t: string) => (t || 'phieu').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'phieu';
 
 export function WspDlg() {
   const open = useUi(s => s.wspOpen), ref = useRef<HTMLDialogElement>(null);
@@ -29,16 +28,9 @@ export function WspDlg() {
     const e0 = setTrPub(srv ? '' : tr); if (e0) { setTrErr(e0); return; }
     setBusy('Đang kiểm, ký và mã hóa…'); setMsg(null);
     try {
-      const b0 = await buildFiles(c.input), h = b0.manifest.contentHash + b0.manifest.keyHash;
-      const v = nextVersion(c.input.sheetId, h), { files, manifest } = await buildFiles({ ...c.input, version: v });
-      const chk = await checkFiles(files);
-      if (chk.errors.length) { setMsg({ ok: false, text: 'Gói chưa đạt kiểm tra, chưa xuất:', list: chk.errors }); setBusy(''); return; }
-      const rec: Record<string, JsonWebKey> = { ed: (await edBox()).publicKey };
-      const t = srv ? srv.trPublic : trPub(); if (t) rec.tr = t;
-      const signer: Signer = srv ? serverSigner(srv.keyId) : await devSigner();
-      const bytes = await sealWsp(files, manifest, { signer, recipients: rec, producer: VER });
-      saveVersion(c.input.sheetId, v, h);
-      const name = `${fname(c.input.title)}-v${v}.wsp`;
+      const sl = await sealCollected(c, srv);
+      if ('errors' in sl) { setMsg({ ok: false, text: 'Gói chưa đạt kiểm tra, chưa xuất:', list: sl.errors }); setBusy(''); return; }
+      const { bytes, name, manifest, v, signer, hasTr } = sl;
       if (send) {   // v119: máy chủ lớp thử nhận gói (kiểm lại mục 9 ở phía nhận)
         const r = await fetch('/api/goi', { method: 'POST', headers: { 'content-type': 'application/octet-stream' }, body: bytes as Uint8Array<ArrayBuffer> }), j = await r.json().catch(() => ({}));
         if (!r.ok) throw new Error(r.status === 401 ? 'chưa đăng nhập trang giáo viên của lớp thử (mở /gv ở thẻ khác, đăng nhập rồi gửi lại)' : j.loi || 'máy chủ từ chối gói');
@@ -48,7 +40,7 @@ export function WspDlg() {
       const url = URL.createObjectURL(new Blob([bytes as Uint8Array<ArrayBuffer>], { type: 'application/octet-stream' }));
       const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 60000);
       (window as any).__wspLast = { bytes, name, manifest };
-      setMsg({ ok: true, text: `Đã xuất ${name} (${kb(bytes.length)}) · phiên bản ${v} · ký bằng ${signer.keyId}${rec.tr ? '' : ' · chưa có khóa bên nhập: gói chỉ mở lại được trong WS Editor trên máy này'}` });
+      setMsg({ ok: true, text: `Đã xuất ${name} (${kb(bytes.length)}) · phiên bản ${v} · ký bằng ${signer.keyId}${hasTr ? '' : ' · chưa có khóa bên nhập: gói chỉ mở lại được trong WS Editor trên máy này'}` });
     } catch (e) { setMsg({ ok: false, text: 'Không xuất được: ' + (e as Error).message }); }
     setBusy('');
   };

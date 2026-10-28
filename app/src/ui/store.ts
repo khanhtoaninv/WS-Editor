@@ -31,12 +31,13 @@ export type UiState = {
   liveRev: number;                                          // lần vẽ lại phần đọc khi đang gõ (thẻ mô tả, tên Task…)
   pageView: PageView | null;                                // các trang A4 (null = chưa dàn)
   show: ShowData | null;                                    // GĐ1a trình chiếu đang mở (null = đóng)
-  wspOpen: boolean;                                         // GĐ2 hộp gói .wsp
+  wspOpen: boolean;
+  liveOpen: boolean;                                        // v123 hộp Live (mở phiên lớp học thử ngay trong editor)                                         // GĐ2 hộp gói .wsp
 };
 
 export const useUi = create<UiState>(() => ({
   title: '', age: '7-9', canUndo: false, canRedo: false, zoomLabel: 'Vừa khung', guides: false,
-  pages: null, diags: null, helpOpen: false, dataDlg: null, cfm: null, toastMsg: '', toastShow: false, imp: null, paste: null, genOpen: false, inspRev: 0, treeRev: 0, liveRev: 0, pageView: null, show: null, wspOpen: false, codes: (() => { try { return localStorage.getItem('wsEditor.codes.v1') === '1'; } catch (_) { return false; } })(),
+  pages: null, diags: null, helpOpen: false, dataDlg: null, cfm: null, toastMsg: '', toastShow: false, imp: null, paste: null, genOpen: false, inspRev: 0, treeRev: 0, liveRev: 0, pageView: null, show: null, wspOpen: false, liveOpen: false, codes: (() => { try { return localStorage.getItem('wsEditor.codes.v1') === '1'; } catch (_) { return false; } })(),
 }));
 
 // Cập nhật đồng bộ: code cũ (và test) đọc DOM ngay sau render(), nên React phải vẽ xong trước khi publish trả về.

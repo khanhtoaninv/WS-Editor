@@ -6,10 +6,10 @@ Không thay TeacherResource; không cần cài thêm gói npm. Dữ liệu nằm
 ## Chạy
 1. Cài **Node.js 22.6 trở lên** (nodejs.org, bản LTS).
 2. Lấy bản mới: `git pull`.
-3. Chạy: `npm run lop` ở thư mục gốc repo. Hoặc bấm đúp `chay-lop.command` (Mac) / `chay-lop.bat` (Windows).
+3. Chạy: `npm run lop` ở thư mục gốc repo. Hoặc bấm đúp `chay-lop.command` (Mac) / `chay-lop.bat` (Windows): tự cập nhật, bật máy chủ, mở WS Editor.
 4. Cửa sổ in ra địa chỉ và **mật khẩu giáo viên** (6 số, tạo một lần, lưu trong `server/du-lieu/cau-hinh.json`).
    - Giáo viên: `http://localhost:1531/gv`
-   - WS Editor qua máy chủ: `http://localhost:1531/editor` (có nút **Gửi lên lớp thử** trong hộp "Gói .wsp")
+   - WS Editor qua máy chủ: `http://localhost:1531/editor` (có nút **● Live**: một bấm là giao phiếu cho lớp; còn **Gửi lên lớp thử** trong hộp "Gói .wsp")
    - Học sinh (cùng wifi): `http://<địa chỉ máy>:1531/hs`, hoặc quét mã QR trên trang phiên.
 5. Ctrl+C để dừng (dữ liệu được lưu).
 

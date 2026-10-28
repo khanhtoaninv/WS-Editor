@@ -18661,13 +18661,14 @@ function Login({ onOk }) {
 	});
 }
 function Shell({ ai, onOut }) {
-	const [v, setV] = (0, import_react.useState)({ tab: "phien" });
+	const hp = new URLSearchParams(location.hash.slice(1)), nhung = hp.has("nhung");
+	const [v, setV] = (0, import_react.useState)(() => hp.get("phien") ? { phien: hp.get("phien") } : { tab: "phien" });
 	const [show, setShow] = (0, import_react.useState)(null);
 	const tab = "tab" in v ? v.tab : "phien";
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "lopc gv",
+		className: "lopc gv" + (nhung ? " nhung" : ""),
 		children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
+			nhung ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
 				className: "lophd",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Lớp học thử" }),
@@ -19301,6 +19302,7 @@ function PhienView({ id, onBack, onCham, onReport }) {
 (0, import_client.createRoot)(document.getElementById("lop")).render(location.pathname.startsWith("/hs") ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Student, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Teacher, {}));</script>
   <style rel="stylesheet" crossorigin>/* ====== GĐ1a trình chiếu (src/viewer) ====== */
 .showfab{position:fixed;right:calc(312px + 20px + 18px);bottom:18px;z-index:50;height:40px;padding:0 18px;border-radius:20px;font-size:15px;font-weight:600;box-shadow:0 3px 12px rgba(20,30,40,.25)}
+.showfab.livefab{right:calc(312px + 20px + 18px + 118px + 98px);background:var(--card,#fff);color:#c62828;font-size:14px;padding:0 14px}
 .showfab.wspfab{right:calc(312px + 20px + 18px + 118px);background:var(--card,#fff);font-size:14px;padding:0 14px}
 @media print{.showfab{display:none}}
 #wsShow.show{position:fixed;inset:0;z-index:1000;background:#26282c;color:#e8e8e8;font:14px system-ui,-apple-system,"Segoe UI",sans-serif;user-select:none}
@@ -19606,6 +19608,7 @@ input,select,textarea{font:inherit;color:inherit;background:var(--l-card);border
 details.lcard>summary{cursor:pointer}
 /* học sinh trên điện thoại: thanh công cụ xuống dòng, nút Nộp luôn thấy */
 @media (max-width:700px){.show.role-student .vbar{flex-wrap:wrap;justify-content:center;width:calc(100vw - 12px);bottom:6px;gap:4px 6px}.show.role-student .vgrp{border-right:0;padding-right:0}.show.role-student .vsel{max-width:96px}.show .vbanner{top:6px;font-size:13px}}
+.lopc.nhung{padding:8px}
 /*$vite$:1*/</style>
 </head>
 <body>

@@ -114,3 +114,4 @@ input,select,textarea{font:inherit;color:inherit;background:var(--l-card);border
 details.lcard>summary{cursor:pointer}
 /* học sinh trên điện thoại: thanh công cụ xuống dòng, nút Nộp luôn thấy */
 @media (max-width:700px){.show.role-student .vbar{flex-wrap:wrap;justify-content:center;width:calc(100vw - 12px);bottom:6px;gap:4px 6px}.show.role-student .vgrp{border-right:0;padding-right:0}.show.role-student .vsel{max-width:96px}.show .vbanner{top:6px;font-size:13px}}
+.lopc.nhung{padding:8px}

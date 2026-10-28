@@ -41,15 +41,17 @@ function Login({ onOk }: { onOk: () => void }) {
 
 type View = { tab: 'phien' | 'lop' | 'goi' } | { phien: string; sub?: 'cham' | 'bao-cao'; hs?: string };
 function Shell({ ai, onOut }: { ai: boolean; onOut: () => void }) {
-  const [v, setV] = useState<View>({ tab: 'phien' });
+  // v123: WS Editor nhúng trang này trong hộp Live bằng /gv#phien=<id>&nhung=1 (mở thẳng một phiên, bỏ thanh trên)
+  const hp = new URLSearchParams(location.hash.slice(1)), nhung = hp.has('nhung');
+  const [v, setV] = useState<View>(() => hp.get('phien') ? { phien: hp.get('phien')! } : { tab: 'phien' });
   const [show, setShow] = useState<ShowData | null>(null);
   const tab = 'tab' in v ? v.tab : 'phien';
-  return <div className="lopc gv">
-    <header className="lophd">
+  return <div className={'lopc gv' + (nhung ? ' nhung' : '')}>
+    {nhung ? null : <header className="lophd">
       <b>Lớp học thử</b><span className="badge">thử nghiệm</span>
       <nav>{(['phien', 'lop', 'goi'] as const).map(t => <button key={t} className={'lt' + (tab === t ? ' on' : '')} id={'tab-' + t} onClick={() => setV({ tab: t })}>{{ phien: 'Phiên học', lop: 'Lớp', goi: 'Gói phiếu' }[t]}</button>)}</nav>
       <span className="sp" /><a className="lt" href="/editor" target="_blank" rel="noopener">WS Editor ↗</a><button className="lt" onClick={onOut}>Đăng xuất</button>
-    </header>
+    </header>}
     <main>
       {'phien' in v ? (v.sub === 'cham' ? <Cham phien={v.phien} hs={v.hs} onBack={() => setV({ phien: v.phien })} onReport={() => setV({ phien: v.phien, sub: 'bao-cao' })} />
         : v.sub === 'bao-cao' ? <BaoCao phien={v.phien} ai={ai} onBack={() => setV({ phien: v.phien })} onCham={hs => setV({ phien: v.phien, sub: 'cham', hs })} />

@@ -14111,6 +14111,7 @@ var useUi = create(() => ({
 	pageView: null,
 	show: null,
 	wspOpen: false,
+	liveOpen: false,
 	codes: (() => {
 		try {
 			return localStorage.getItem("wsEditor.codes.v1") === "1";
@@ -14217,7 +14218,7 @@ function TopBar() {
 							padding: "1px 7px",
 							marginLeft: 4
 						},
-						children: "v122"
+						children: "v123"
 					}),
 					" ",
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", {
@@ -30471,9 +30472,18 @@ function Presenter({ data, onClose }) {
 	});
 }
 // src/viewer/ShowRoot.tsx
+var LOP = /^https?:$/.test(location.protocol) && !!document.querySelector("meta[name=\"ws-lop\"]");
 function ShowRoot() {
 	const d = useUi((s) => s.show), pages = useUi((s) => s.pages);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+		d || !LOP ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+			className: "btn showfab livefab",
+			id: "liveBtn",
+			title: "Giao phiếu này cho lớp (lớp học thử): mã vào lớp, mã QR, theo dõi trực tiếp",
+			disabled: !pages,
+			onClick: () => publish({ liveOpen: true }),
+			children: "● Live"
+		}),
 		d ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 			className: "btn showfab wspfab",
 			id: "wspBtn",
@@ -30495,6 +30505,143 @@ function ShowRoot() {
 			onClose: () => publish({ show: null })
 		}) : null
 	] });
+}
+// src/ui/wsp/keys.ts
+var K_SIGN = "wsp.devSign.v1";
+var K_ED = "wsp.edBox.v1";
+var K_TR = "wsp.trPub.v1";
+var K_TRUST = "wsp.trust.v1";
+var K_VER = "wsp.ver.v1";
+var get = (k) => {
+	try {
+		const v = localStorage.getItem(k);
+		return v ? JSON.parse(v) : null;
+	} catch {
+		return null;
+	}
+};
+var put = (k, v) => {
+	try {
+		localStorage.setItem(k, JSON.stringify(v));
+	} catch {}
+};
+var memSign = null;
+var memEd = null;
+async function devSign() {
+	let k = get(K_SIGN) || memSign;
+	if (!k) {
+		k = {
+			...await genSignKey(),
+			kid: "dev-local-" + Math.random().toString(36).slice(2, 8)
+		};
+		put(K_SIGN, k);
+	}
+	return memSign = k;
+}
+async function edBox() {
+	let k = get(K_ED) || memEd;
+	if (!k) {
+		k = await genBoxKey();
+		put(K_ED, k);
+	}
+	return memEd = k;
+}
+var trPub = () => get(K_TR);
+function setTrPub(txt) {
+	if (!txt.trim()) {
+		try {
+			localStorage.removeItem(K_TR);
+		} catch {}
+		return null;
+	}
+	try {
+		const j = JSON.parse(txt);
+		if (j.kty !== "RSA" || !j.n || !j.e) return "không phải khóa công khai RSA (JWK)";
+		put(K_TR, publicOf(j));
+		return null;
+	} catch {
+		return "không đọc được JSON";
+	}
+}
+async function serverKeys() {
+	if (!/^https?:$/.test(location.protocol) || !document.querySelector("meta[name=\"ws-lop\"]")) return null;
+	try {
+		const r = await fetch("/api/wsp/khoa");
+		if (!r.ok) return null;
+		const j = await r.json();
+		return j && j.keyId && j.trPublic ? j : null;
+	} catch {
+		return null;
+	}
+}
+function serverSigner(keyId) {
+	return {
+		keyId,
+		async sign(d) {
+			const r = await fetch("/api/wsp/ky", {
+				method: "POST",
+				headers: { "content-type": "application/json" },
+				body: JSON.stringify({ data: toB64(d) })
+			});
+			if (!r.ok) throw new Error("máy chủ không ký được (" + r.status + ")");
+			return fromB64((await r.json()).signature);
+		}
+	};
+}
+async function devSigner() {
+	const k = await devSign();
+	return localSigner(k.kid, k.privateKey);
+}
+async function trusted() {
+	const t = { ...get(K_TRUST) || {} };
+	const d = await devSign();
+	t[d.kid] = d.publicKey;
+	const s = await serverKeys();
+	if (s) t[s.keyId] = s.signPublic;
+	return t;
+}
+function nextVersion(id, hash) {
+	const o = (get(K_VER) || {})[id];
+	if (!o) return 1;
+	return o.h === hash ? o.v : o.v + 1;
+}
+function saveVersion(id, v, hash) {
+	const m = get(K_VER) || {};
+	m[id] = {
+		v,
+		h: hash
+	};
+	put(K_VER, m);
+}
+// src/ui/wsp/seal.ts
+var VER = "WS Editor v123";
+var fname = (t) => (t || "phieu").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").replace(/[^\w-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "phieu";
+async function sealCollected(c, srv) {
+	const b0 = await buildFiles(c.input), h = b0.manifest.contentHash + b0.manifest.keyHash;
+	const v = nextVersion(c.input.sheetId, h), { files, manifest } = await buildFiles({
+		...c.input,
+		version: v
+	});
+	const chk = await checkFiles(files);
+	if (chk.errors.length) return { errors: chk.errors };
+	const rec = { ed: (await edBox()).publicKey };
+	const t = srv ? srv.trPublic : trPub();
+	if (t) rec.tr = t;
+	const signer = srv ? serverSigner(srv.keyId) : await devSigner();
+	const bytes = await sealWsp(files, manifest, {
+		signer,
+		recipients: rec,
+		producer: VER
+	});
+	saveVersion(c.input.sheetId, v, h);
+	return {
+		bytes,
+		name: `${fname(c.input.title)}-v${v}.wsp`,
+		manifest,
+		v,
+		signer,
+		hasTr: !!rec.tr
+	};
 }
 // src/ui/wsp/collect.ts
 var esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -30658,117 +30805,8 @@ async function collect() {
 		warnings
 	};
 }
-// src/ui/wsp/keys.ts
-var K_SIGN = "wsp.devSign.v1";
-var K_ED = "wsp.edBox.v1";
-var K_TR = "wsp.trPub.v1";
-var K_TRUST = "wsp.trust.v1";
-var K_VER = "wsp.ver.v1";
-var get = (k) => {
-	try {
-		const v = localStorage.getItem(k);
-		return v ? JSON.parse(v) : null;
-	} catch {
-		return null;
-	}
-};
-var put = (k, v) => {
-	try {
-		localStorage.setItem(k, JSON.stringify(v));
-	} catch {}
-};
-var memSign = null;
-var memEd = null;
-async function devSign() {
-	let k = get(K_SIGN) || memSign;
-	if (!k) {
-		k = {
-			...await genSignKey(),
-			kid: "dev-local-" + Math.random().toString(36).slice(2, 8)
-		};
-		put(K_SIGN, k);
-	}
-	return memSign = k;
-}
-async function edBox() {
-	let k = get(K_ED) || memEd;
-	if (!k) {
-		k = await genBoxKey();
-		put(K_ED, k);
-	}
-	return memEd = k;
-}
-var trPub = () => get(K_TR);
-function setTrPub(txt) {
-	if (!txt.trim()) {
-		try {
-			localStorage.removeItem(K_TR);
-		} catch {}
-		return null;
-	}
-	try {
-		const j = JSON.parse(txt);
-		if (j.kty !== "RSA" || !j.n || !j.e) return "không phải khóa công khai RSA (JWK)";
-		put(K_TR, publicOf(j));
-		return null;
-	} catch {
-		return "không đọc được JSON";
-	}
-}
-async function serverKeys() {
-	if (!/^https?:$/.test(location.protocol) || !document.querySelector("meta[name=\"ws-lop\"]")) return null;
-	try {
-		const r = await fetch("/api/wsp/khoa");
-		if (!r.ok) return null;
-		const j = await r.json();
-		return j && j.keyId && j.trPublic ? j : null;
-	} catch {
-		return null;
-	}
-}
-function serverSigner(keyId) {
-	return {
-		keyId,
-		async sign(d) {
-			const r = await fetch("/api/wsp/ky", {
-				method: "POST",
-				headers: { "content-type": "application/json" },
-				body: JSON.stringify({ data: toB64(d) })
-			});
-			if (!r.ok) throw new Error("máy chủ không ký được (" + r.status + ")");
-			return fromB64((await r.json()).signature);
-		}
-	};
-}
-async function devSigner() {
-	const k = await devSign();
-	return localSigner(k.kid, k.privateKey);
-}
-async function trusted() {
-	const t = { ...get(K_TRUST) || {} };
-	const d = await devSign();
-	t[d.kid] = d.publicKey;
-	const s = await serverKeys();
-	if (s) t[s.keyId] = s.signPublic;
-	return t;
-}
-function nextVersion(id, hash) {
-	const o = (get(K_VER) || {})[id];
-	if (!o) return 1;
-	return o.h === hash ? o.v : o.v + 1;
-}
-function saveVersion(id, v, hash) {
-	const m = get(K_VER) || {};
-	m[id] = {
-		v,
-		h: hash
-	};
-	put(K_VER, m);
-}
 // src/ui/wsp/WspDlg.tsx
-var VER = "WS Editor v122";
 var kb = (n) => n < 1048576 ? `${Math.max(1, Math.round(n / 1024))} KB` : `${(n / 1024 / 1024).toFixed(1)} MB`;
-var fname = (t) => (t || "phieu").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").replace(/[^\w-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "phieu";
 function WspDlg() {
 	const open = useUi((s) => s.wspOpen), ref = (0, import_react.useRef)(null);
 	const [c, setC] = (0, import_react.useState)(null), [srv, setSrv] = (0, import_react.useState)(null);
@@ -30810,32 +30848,17 @@ function WspDlg() {
 		setBusy("Đang kiểm, ký và mã hóa…");
 		setMsg(null);
 		try {
-			const b0 = await buildFiles(c.input), h = b0.manifest.contentHash + b0.manifest.keyHash;
-			const v = nextVersion(c.input.sheetId, h), { files, manifest } = await buildFiles({
-				...c.input,
-				version: v
-			});
-			const chk = await checkFiles(files);
-			if (chk.errors.length) {
+			const sl = await sealCollected(c, srv);
+			if ("errors" in sl) {
 				setMsg({
 					ok: false,
 					text: "Gói chưa đạt kiểm tra, chưa xuất:",
-					list: chk.errors
+					list: sl.errors
 				});
 				setBusy("");
 				return;
 			}
-			const rec = { ed: (await edBox()).publicKey };
-			const t = srv ? srv.trPublic : trPub();
-			if (t) rec.tr = t;
-			const signer = srv ? serverSigner(srv.keyId) : await devSigner();
-			const bytes = await sealWsp(files, manifest, {
-				signer,
-				recipients: rec,
-				producer: VER
-			});
-			saveVersion(c.input.sheetId, v, h);
-			const name = `${fname(c.input.title)}-v${v}.wsp`;
+			const { bytes, name, manifest, v, signer, hasTr } = sl;
 			if (send) {
 				const r = await fetch("/api/goi", {
 					method: "POST",
@@ -30870,7 +30893,7 @@ function WspDlg() {
 			};
 			setMsg({
 				ok: true,
-				text: `Đã xuất ${name} (${kb(bytes.length)}) · phiên bản ${v} · ký bằng ${signer.keyId}${rec.tr ? "" : " · chưa có khóa bên nhập: gói chỉ mở lại được trong WS Editor trên máy này"}`
+				text: `Đã xuất ${name} (${kb(bytes.length)}) · phiên bản ${v} · ký bằng ${signer.keyId}${hasTr ? "" : " · chưa có khóa bên nhập: gói chỉ mở lại được trong WS Editor trên máy này"}`
 			});
 		} catch (e) {
 			setMsg({
@@ -31086,6 +31109,394 @@ function WspDlg() {
 		]
 	});
 }
+// src/lop/api.ts
+async function api(path, o = {}) {
+	const r = await fetch(path, {
+		method: o.method || (o.json !== void 0 || o.body ? "POST" : "GET"),
+		headers: o.json !== void 0 ? { "content-type": "application/json" } : o.body ? { "content-type": "application/octet-stream" } : {},
+		body: o.json !== void 0 ? JSON.stringify(o.json) : o.body
+	}).catch(() => {
+		throw new Error("Không nối được máy chủ lớp thử (máy chủ đã tắt hoặc mất wifi?)");
+	});
+	const t = await r.text();
+	let j = null;
+	try {
+		j = t ? JSON.parse(t) : null;
+	} catch {}
+	if (!r.ok) {
+		const e = new Error(j && j.loi ? j.loi : `Lỗi ${r.status}`);
+		e.status = r.status;
+		throw e;
+	}
+	return j;
+}
+// src/ui/wsp/LiveDlg.tsx
+var MAU = [
+	"An",
+	"Bình",
+	"Chi",
+	"Dũng",
+	"Giang",
+	"Hà",
+	"Khoa",
+	"Linh",
+	"Minh",
+	"Nam",
+	"Phúc",
+	"Quyên"
+];
+function LiveDlg() {
+	const open = useUi((s) => s.liveOpen), ref = (0, import_react.useRef)(null);
+	const [c, setC] = (0, import_react.useState)(null), [srv, setSrv] = (0, import_react.useState)(null);
+	const [gv, setGv] = (0, import_react.useState)(null), [pw, setPw] = (0, import_react.useState)("");
+	const [lops, setLops] = (0, import_react.useState)([]), [lop, setLop] = (0, import_react.useState)(""), [ten, setTen] = (0, import_react.useState)("");
+	const [nl, setNl] = (0, import_react.useState)(null);
+	const [mo, setMo] = (0, import_react.useState)([]), [run, setRun] = (0, import_react.useState)(""), [seen, setSeen] = (0, import_react.useState)(false);
+	const [busy, setBusy] = (0, import_react.useState)(""), [err, setErr] = (0, import_react.useState)("");
+	(0, import_react.useLayoutEffect)(() => {
+		const el = ref.current;
+		if (open && !el.open) el.showModal();
+		else if (!open && el.open) el.close();
+	}, [open]);
+	const loadSrv = async () => {
+		const g = await api("/api/gv/toi").catch(() => ({ gv: false }));
+		setGv(g.gv);
+		if (!g.gv) return;
+		const l = await api("/api/lop").catch(() => []);
+		setLops(l);
+		setLop((x) => x && l.some((y) => y.id === x) ? x : l[0]?.id || "");
+		const p = await api("/api/phien").catch(() => []);
+		setMo(p.filter((x) => x.trangThai === "mo"));
+	};
+	(0, import_react.useEffect)(() => {
+		if (!open) return;
+		setC(null);
+		setRun("");
+		setErr("");
+		setSeen(false);
+		setNl(null);
+		setBusy("Đang gom trang, ảnh, phông…");
+		Promise.all([
+			collect(),
+			serverKeys(),
+			loadSrv()
+		]).then(([x, s]) => {
+			setC(x);
+			setSrv(s);
+			setBusy("");
+			setTen((t) => t || (x ? x.input.title : ""));
+		}, (e) => {
+			setBusy("");
+			setErr("Không gom được phiếu: " + e.message);
+		});
+	}, [open]);
+	const login = async () => {
+		setErr("");
+		try {
+			await api("/api/gv/dang-nhap", { json: { matKhau: pw } });
+			setPw("");
+			await loadSrv();
+		} catch (e) {
+			setErr(e.message);
+		}
+	};
+	const saveLop = async () => {
+		setErr("");
+		try {
+			const l = await api("/api/lop", { json: {
+				ten: nl.ten,
+				hocSinh: nl.ds.split("\n").map((x) => x.trim()).filter(Boolean)
+			} });
+			setNl(null);
+			await loadSrv();
+			setLop(l.id);
+		} catch (e) {
+			setErr(e.message);
+		}
+	};
+	const go = async () => {
+		if (!c || !srv) return;
+		setErr("");
+		try {
+			setBusy("Đang kiểm, ký và gửi phiếu…");
+			const sl = await sealCollected(c, srv);
+			if ("errors" in sl) {
+				setErr("Phiếu chưa đạt kiểm tra: " + sl.errors.slice(0, 5).join("; "));
+				setBusy("");
+				return;
+			}
+			const g = await api("/api/goi", { body: sl.bytes });
+			setBusy("Đang mở phiên…");
+			const p = await api("/api/phien", { json: {
+				lop,
+				goi: g.id,
+				ten
+			} });
+			setRun(p.id);
+		} catch (e) {
+			setErr(e.message);
+		}
+		setBusy("");
+	};
+	const st = c && c.input.slots, auto = st ? st.filter((s) => s.grading === "auto").length : 0;
+	const can = !!c && !!srv && gv === true && !!lop && !c.blockers.length && (!c.warnings.length || seen) && !busy;
+	const close = () => publish({ liveOpen: false });
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("dialog", {
+		id: "liveDlg",
+		ref,
+		"aria-labelledby": "liveTitle",
+		className: run ? "liverun" : "",
+		onClose: () => {
+			if (useUi.getState().liveOpen) close();
+		},
+		children: run ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "liverow",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", {
+					id: "liveTitle",
+					children: "Phiên đang chạy"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "sp",
+					style: { flex: 1 }
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "btn",
+					id: "liveBack",
+					onClick: () => {
+						setRun("");
+						loadSrv();
+					},
+					children: "← Phiên khác"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "btn",
+					id: "liveClose",
+					onClick: close,
+					children: "Thu nhỏ"
+				})
+			]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("iframe", {
+			id: "liveFrame",
+			title: "Phiên học",
+			src: `/gv#phien=${run}&nhung=1`
+		})] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+				id: "liveTitle",
+				style: {
+					margin: "0 0 6px",
+					fontSize: 15
+				},
+				children: "Live · giao phiếu cho lớp"
+			}),
+			!srv && !busy ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "wspbad",
+				id: "liveNo",
+				children: "Nút này chỉ chạy khi mở WS Editor từ máy chủ lớp thử (chạy chay-lop.bat rồi vào địa chỉ /editor)."
+			}) : null,
+			c ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "wspsum",
+				id: "liveSum",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: c.input.title }),
+					" · ",
+					c.input.pages.length,
+					" trang · ",
+					st.length,
+					" chỗ trả lời (",
+					auto,
+					" máy chấm, ",
+					st.length - auto,
+					" chấm tay)"
+				]
+			}) : null,
+			c && c.blockers.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "wspbad",
+				id: "liveBlock",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Chưa giao được:" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", { children: c.blockers.map((x) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: x }, x)) })]
+			}) : null,
+			c && c.warnings.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "wspwarn",
+				id: "liveWarn",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("b", { children: [
+						"Cảnh báo (",
+						c.warnings.length,
+						"):"
+					] }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ul", { children: [c.warnings.slice(0, 8).map((x) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: x }, x)), c.warnings.length > 8 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: [
+						"… và ",
+						c.warnings.length - 8,
+						" cảnh báo khác"
+					] }) : null] }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+						type: "checkbox",
+						id: "liveSeen",
+						checked: seen,
+						onChange: (e) => setSeen(e.target.checked)
+					}), " Tôi đã xem các cảnh báo, vẫn giao"] })
+				]
+			}) : null,
+			srv && gv === false ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+				className: "liveform",
+				onSubmit: (e) => {
+					e.preventDefault();
+					login();
+				},
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+					htmlFor: "livePass",
+					children: "Mật khẩu giáo viên (in ở cửa sổ máy chủ)"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+					className: "liverow",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+						id: "livePass",
+						type: "password",
+						value: pw,
+						onChange: (e) => setPw(e.target.value),
+						autoFocus: true
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "btn pri",
+						id: "liveLogin",
+						children: "Đăng nhập"
+					})]
+				})]
+			}) : null,
+			srv && gv ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+				mo.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "liveopen",
+					id: "liveOpen",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "hint",
+							children: "Phiên đang mở:"
+						}),
+						" ",
+						mo.map((p) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							className: "btn",
+							"data-phien": p.id,
+							onClick: () => setRun(p.id),
+							children: [
+								p.ten,
+								" · mã ",
+								p.ma
+							]
+						}, p.id))
+					]
+				}) : null,
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "liverow wrap",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: ["Lớp ", /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+							id: "liveLop",
+							value: lop,
+							onChange: (e) => setLop(e.target.value),
+							children: [!lops.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+								value: "",
+								children: "Chưa có lớp"
+							}) : null, lops.map((l) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("option", {
+								value: l.id,
+								children: [
+									l.ten,
+									" (",
+									l.hocSinh.length,
+									")"
+								]
+							}, l.id))]
+						})] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							className: "btn",
+							id: "liveNewLop",
+							onClick: () => setNl(nl ? null : {
+								ten: "",
+								ds: ""
+							}),
+							children: "+ Lớp mới"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+							style: { flex: 1 },
+							children: ["Tên phiên ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+								id: "liveTen",
+								value: ten,
+								onChange: (e) => setTen(e.target.value),
+								style: { width: "100%" }
+							})]
+						})
+					]
+				}),
+				nl ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "liveform",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: ["Tên lớp ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							id: "liveNlTen",
+							value: nl.ten,
+							onChange: (e) => setNl({
+								...nl,
+								ten: e.target.value
+							}),
+							placeholder: "VD: 4A"
+						})] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: ["Học sinh (mỗi dòng một tên; nên dùng tên giả hoặc viết tắt khi thử) ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+							id: "liveNlDs",
+							rows: 6,
+							value: nl.ds,
+							onChange: (e) => setNl({
+								...nl,
+								ds: e.target.value
+							})
+						})] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "liverow",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									className: "btn",
+									id: "liveNlMau",
+									onClick: () => setNl({
+										ten: nl.ten || "Lớp mẫu",
+										ds: MAU.join("\n")
+									}),
+									children: "Dùng lớp mẫu 12 em"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { flex: 1 } }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									className: "btn pri",
+									id: "liveNlLuu",
+									onClick: saveLop,
+									children: "Lưu lớp"
+								})
+							]
+						})
+					]
+				}) : null
+			] }) : null,
+			busy ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "hint",
+				id: "liveBusy",
+				children: busy
+			}) : null,
+			err ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "wspbad",
+				id: "liveErr",
+				children: err
+			}) : null,
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "liverow",
+				style: { justifyContent: "flex-end" },
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "btn",
+					id: "liveCancel",
+					onClick: close,
+					children: "Đóng"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "btn pri",
+					id: "liveGo",
+					disabled: !can,
+					onClick: go,
+					children: "Bắt đầu phiên"
+				})]
+			})
+		] })
+	});
+}
 // src/ui/mount.tsx
 function mount(id, node) {
 	const el = document.getElementById(id);
@@ -31103,6 +31514,7 @@ mount("r-paste", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PasteDlg, {}));
 mount("r-gen", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(GenDlg, {}));
 mount("r-show", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShowRoot, {}));
 mount("r-wsp", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WspDlg, {}));
+mount("r-live", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LiveDlg, {}));
 Object.assign(window, {
 	askConfirm,
 	toast,
@@ -40824,8 +41236,24 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 #wspDlg .wsprow{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
 #wspDlg .wsptr{margin:6px 0}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #wspDlg .wspwarn{background:#3a3010;color:#f0d890}}
+
+/* v123 hộp Live (mở phiên lớp học thử trong editor) */
+#liveDlg{width:min(560px,94vw)}
+#liveDlg.liverun{width:min(1100px,96vw);height:90vh;padding:10px;display:flex;flex-direction:column}
+#liveDlg.liverun[open]{display:flex}
+#liveDlg ul{margin:4px 0 0;padding-left:18px}
+#liveDlg .wspsum{background:var(--card-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:6px 0}
+#liveDlg .wspbad{background:var(--danger-soft);color:var(--danger);border-radius:8px;padding:8px 10px;margin:6px 0}
+#liveDlg .wspwarn{background:#fff7e0;color:#7a5200;border-radius:8px;padding:8px 10px;margin:6px 0;max-height:26vh;overflow:auto}
+#liveDlg .liverow{display:flex;gap:8px;align-items:flex-end;margin:8px 0}
+#liveDlg .liverow.wrap{flex-wrap:wrap}
+#liveDlg .liveform{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+#liveDlg .liveopen{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:6px 0}
+#liveDlg #liveFrame{flex:1;border:1px solid var(--line);border-radius:8px;width:100%;background:#fff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #liveDlg .wspwarn{background:#3a3010;color:#f0d890}}
 /* ====== GĐ1a trình chiếu (src/viewer) ====== */
 .showfab{position:fixed;right:calc(312px + 20px + 18px);bottom:18px;z-index:50;height:40px;padding:0 18px;border-radius:20px;font-size:15px;font-weight:600;box-shadow:0 3px 12px rgba(20,30,40,.25)}
+.showfab.livefab{right:calc(312px + 20px + 18px + 118px + 98px);background:var(--card,#fff);color:#c62828;font-size:14px;padding:0 14px}
 .showfab.wspfab{right:calc(312px + 20px + 18px + 118px);background:var(--card,#fff);font-size:14px;padding:0 14px}
 @media print{.showfab{display:none}}
 #wsShow.show{position:fixed;inset:0;z-index:1000;background:#26282c;color:#e8e8e8;font:14px system-ui,-apple-system,"Segoe UI",sans-serif;user-select:none}
@@ -41030,6 +41458,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 <div id="r-toast" style="display:contents"></div>
 <div id="r-show" style="display:contents"></div>
 <div id="r-wsp" style="display:contents"></div>
+<div id="r-live" style="display:contents"></div>
 <div id="r-help" style="display:contents"></div>
 <div id="r-dlg" style="display:contents"></div>
 
