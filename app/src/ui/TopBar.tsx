@@ -15,7 +15,7 @@ export function TopBar() {
   useEffect(() => { const el = ageRef.current!, f = () => actions.setAge(el.value); el.addEventListener('change', f); return () => el.removeEventListener('change', f); }, []);
   return (
     <header className="top">
-      <div className="brand">WS Editor <span className="badge" id="verBadge" title="Phiên bản bản dựng này (bản dựng Vite, đang chuyển sang React)" style={{ fontSize: 11, padding: '1px 7px', marginLeft: 4 }}>v119</span> <small id="wsTitle">{s.title}</small></div>
+      <div className="brand">WS Editor <span className="badge" id="verBadge" title="Phiên bản bản dựng này (bản dựng Vite, đang chuyển sang React)" style={{ fontSize: 11, padding: '1px 7px', marginLeft: 4 }}>v120</span> <small id="wsTitle">{s.title}</small></div>
       <div className="tb">
         <label htmlFor="age" className="hint" style={{ margin: 0 }}>Độ tuổi</label>
         <select id="age" ref={ageRef}><option value="5-6">5–6</option><option value="7-9">7–9</option><option value="10-12">10–12</option></select>

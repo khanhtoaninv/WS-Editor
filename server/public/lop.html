@@ -14169,6 +14169,45 @@ function gradeSlot(slot, k, v) {
 		};
 	}
 }
+function grade(slots, key, answers, overrides = {}) {
+	const counts = {
+		correct: 0,
+		wrong: 0,
+		partial: 0,
+		blank: 0,
+		pending: 0,
+		ungraded: 0
+	};
+	const perSlot = {};
+	let score = 0, max = 0, autoScore = 0, pendingManual = 0;
+	for (const s of slots) {
+		let r = gradeSlot(s, key[s.id], answers[s.id]);
+		const ov = overrides[s.id];
+		const manual = (key[s.id]?.grading ?? s.grading) === "manual";
+		if (ov && r.max > 0) {
+			const sc = Math.min(r.max, Math.max(0, ov.score));
+			r = {
+				status: sc >= r.max ? "correct" : sc > 0 ? "partial" : "wrong",
+				score: sc,
+				max: r.max
+			};
+		} else if (r.score != null && !manual) autoScore += r.score;
+		perSlot[s.id] = r;
+		counts[r.status]++;
+		max += r.max;
+		if (r.score != null) score += r.score;
+		if (r.status === "pending") pendingManual++;
+	}
+	const rd = (n) => Math.round(n * 100) / 100;
+	return {
+		score: rd(score),
+		max: rd(max),
+		autoScore: rd(autoScore),
+		pendingManual,
+		counts,
+		perSlot
+	};
+}
 // ../shared/src/suggest.ts
 var PAIRS = [
 	["colour", "color"],
@@ -15017,7 +15056,7 @@ function letterToOpt(s, el, ch) {
 	const mr = [...rowLetters(sec)].find(([, l]) => l === ch.toUpperCase())?.[0];
 	return mr && optOfRow(s, mr)?.id || ch;
 }
-var ST$1 = {
+var ST$2 = {
 	correct: [
 		"vw-ok",
 		"✓",
@@ -15057,7 +15096,7 @@ function place(parent, el) {
 	else parent.appendChild(el);
 }
 function badge(el, id, st, tap, mj = false) {
-	const d = ST$1[st];
+	const d = ST$2[st];
 	if (!d || el.classList.contains("xc")) return;
 	const b = document.createElement("em");
 	b.className = "vwm " + d[0] + (mj ? " tap mj" : tap ? " tap" : "");
@@ -15165,7 +15204,7 @@ function applyWork(root, slots, w, hooks) {
 	for (const s of slots) {
 		const els = elsOf(root, s.id), kind = kindOf(s, els);
 		if (!kind) continue;
-		const v = w.ans[s.id], r = w.res[s.id], st = r ? ST$1[r.status] : void 0, k = w.key[s.id];
+		const v = w.ans[s.id], r = w.res[s.id], st = r ? ST$2[r.status] : void 0, k = w.key[s.id];
 		const mj = !!w.man?.[s.id] && !!r, tap = !!r && !mj && (r.status === "wrong" || r.status === "partial" || r.status === "pending" && !!k?.sample);
 		if (kind === "type") {
 			const host = els[0], inp = ensureInput(host, s.id, hooks), txt = shown(s, els, v);
@@ -17169,7 +17208,7 @@ function Presenter({ data, onClose }) {
 					}),
 					stu ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "vgrp",
-						children: [nAll ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						children: [nAll && !rev ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 							className: "vscore",
 							id: "workScore",
 							title: "Số chỗ làm đúng / số chỗ máy chấm được" + (manDone.length ? ` (kể cả ${manDone.length} chỗ chấm tay)` : "") + ". Bấm vào chỗ trả lời để làm thử",
@@ -17563,15 +17602,421 @@ function Student() {
 		]
 	});
 }
+// ../shared/src/baocao.ts
+function answerText(s, v) {
+	if (isBlank(v)) return "";
+	const o = (id) => (s.options || []).find((x) => x.id === id);
+	if (s.interaction === "choice-one" || s.interaction === "choice-many" || s.interaction === "match") return [].concat(v).map((id) => {
+		const x = o(id);
+		return x ? x.text || (x.img ? "(ảnh " + id + ")" : id) : id;
+	}).join(", ");
+	if (s.interaction === "find") return "đã khoanh " + String(v).replace("-", " → ");
+	return Array.isArray(v) ? v.join(", ") : String(v);
+}
+function keyText(s, k) {
+	if (!k) return "";
+	if (k.accept && k.accept.length) return k.accept[0];
+	if (k.sample) return k.sample;
+	if (k.correct != null) return s.interaction === "find" ? s.label : answerText(s, k.correct);
+	return "";
+}
 // src/lop/Cham.tsx
-function Cham({ onBack }) {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+var ST$1 = {
+	correct: "đúng",
+	wrong: "sai",
+	partial: "một phần",
+	blank: "bỏ trống",
+	pending: "chờ chấm",
+	ungraded: "không chấm"
+};
+function Cham({ phien, hs, onBack, onReport }) {
+	const [d, setD] = (0, import_react.useState)(null), [pkg, setPkg] = (0, import_react.useState)(null), [err, setErr] = (0, import_react.useState)("");
+	const [cur, setCur] = (0, import_react.useState)(""), [save, setSave] = (0, import_react.useState)("");
+	const timer = (0, import_react.useRef)(0), pendingPut = (0, import_react.useRef)(null);
+	(0, import_react.useEffect)(() => {
+		api(`/api/phien/${phien}/cham`).then(async (x) => {
+			setPkg(await loadPkg(x.phien.goi, x.pages, x.title, x.slots));
+			setD(x);
+			const first = x.hocSinh.find((h) => h.hs === hs) || x.hocSinh.find((h) => h.nop && !h.xong) || x.hocSinh.find((h) => h.vao) || x.hocSinh[0];
+			setCur(first ? first.hs : "");
+		}, (e) => setErr(e.message));
+	}, [phien]);
+	const flush = () => {
+		clearTimeout(timer.current);
+		const p = pendingPut.current;
+		if (!p) return Promise.resolve();
+		pendingPut.current = null;
+		setSave("dang-luu");
+		return api(`/api/phien/${phien}/cham/${p.hs}`, {
+			method: "PUT",
+			json: p.body
+		}).then((r) => {
+			setSave("da-luu");
+			setD((o) => o && {
+				...o,
+				hocSinh: o.hocSinh.map((h) => h.hs === p.hs ? {
+					...h,
+					score: r.score,
+					pending: r.pending,
+					xong: r.xong
+				} : h)
+			});
+		}, (e) => {
+			setSave("loi");
+			setErr(e.message);
+		});
+	};
+	(0, import_react.useEffect)(() => () => {
+		flush();
+	}, []);
+	const h = d?.hocSinh.find((x) => x.hs === cur);
+	const patch = (p) => {
+		if (!d || !h) return;
+		const n = {
+			...h,
+			...p
+		}, g = grade(d.slots, d.key, n.answers, n.overrides);
+		setD({
+			...d,
+			hocSinh: d.hocSinh.map((x) => x.hs === h.hs ? {
+				...n,
+				score: g.score,
+				max: g.max,
+				pending: g.pendingManual
+			} : x)
+		});
+		pendingPut.current = {
+			hs: h.hs,
+			body: {
+				overrides: n.overrides,
+				nhanXet: n.nhanXet,
+				xong: n.xong
+			}
+		};
+		setSave("dang-luu");
+		clearTimeout(timer.current);
+		timer.current = window.setTimeout(flush, 600);
+	};
+	const go = (k) => {
+		if (!d) return;
+		flush();
+		const i = d.hocSinh.findIndex((x) => x.hs === cur), n = d.hocSinh[(i + k + d.hocSinh.length) % d.hocSinh.length];
+		setCur(n.hs);
+	};
+	const manual = (s) => (d.key[s.id]?.grading ?? s.grading) === "manual";
+	const maxOf = (s) => d.key[s.id]?.score ?? 1;
+	const man0 = (0, import_react.useMemo)(() => {
+		const m = {};
+		if (!d || !h) return m;
+		for (const s of d.slots) {
+			const o = h.overrides[s.id];
+			if (!o || !manual(s)) continue;
+			if (o.score >= maxOf(s)) m[s.id] = "ok";
+			else if (o.score <= 0) m[s.id] = "no";
+		}
+		return m;
+	}, [d, h?.overrides]);
+	const onMan = (m) => {
+		if (!d || !h) return;
+		const ov = { ...h.overrides };
+		let ch = false;
+		for (const s of d.slots) {
+			if (!manual(s)) continue;
+			const o = ov[s.id], want = m[s.id] === "ok" ? maxOf(s) : m[s.id] === "no" ? 0 : null;
+			if (want != null && (!o || o.score !== want)) {
+				ov[s.id] = {
+					...o || {},
+					score: want
+				};
+				ch = true;
+			} else if (want == null && o && (o.score >= maxOf(s) || o.score <= 0) && !o.comment) {
+				delete ov[s.id];
+				ch = true;
+			}
+		}
+		if (ch) patch({ overrides: ov });
+	};
+	const setScore = (s, v) => {
+		const ov = { ...h.overrides }, o = ov[s.id];
+		if (v === "") {
+			const a = grade(d.slots, d.key, h.answers, {}).perSlot[s.id].score;
+			if (o?.comment && a != null) ov[s.id] = {
+				score: a,
+				comment: o.comment
+			};
+			else delete ov[s.id];
+		} else ov[s.id] = {
+			...o || {},
+			score: Math.max(0, Math.min(maxOf(s), +v))
+		};
+		patch({ overrides: ov });
+	};
+	const setNote = (s, c) => {
+		const ov = { ...h.overrides }, o = ov[s.id], g = grade(d.slots, d.key, h.answers, {}).perSlot[s.id];
+		if (c) ov[s.id] = {
+			score: o ? o.score : g.score ?? 0,
+			comment: c
+		};
+		else if (o) {
+			const { comment: _c, ...rest } = o;
+			ov[s.id] = rest;
+		}
+		patch({ overrides: ov });
+	};
+	if (err && !d) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+		className: "lb ghost",
+		onClick: onBack,
+		children: "← Phiên"
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+		className: "err",
+		children: err
+	})] });
+	if (!d || !pkg) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+		className: "hint",
+		children: "Đang tải bài làm…"
+	});
+	if (!h) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 		className: "lb ghost",
 		onClick: onBack,
 		children: "← Phiên"
 	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 		className: "hint",
-		children: "Chấm chữa: bản sau (v120)."
+		children: "Lớp không có học sinh."
+	})] });
+	const g = grade(d.slots, d.key, h.answers, h.overrides), g0 = grade(d.slots, d.key, h.answers, {});
+	const open = d.phien.trangThai === "mo", idx = d.hocSinh.findIndex((x) => x.hs === cur);
+	const tnum = Object.fromEntries(d.tasks.map((t) => [t.id, t.num]));
+	const rows = d.slots.filter((s) => g.perSlot[s.id] && g.perSlot[s.id].max > 0);
+	const first = (s) => s.task !== rows[rows.indexOf(s) - 1]?.task;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presenter, {
+		data: {
+			title: pkg.title,
+			pages: pkg.pages,
+			slots: d.slots,
+			key: d.key,
+			role: "review",
+			lock: true,
+			init: h.answers,
+			man0,
+			onMan,
+			store: "cham:" + phien + ":" + h.hs,
+			banner: !h.vao ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [h.ten, " không vào phiên: không có bài làm."] }) : null
+		},
+		onClose: () => {
+			flush();
+			onBack();
+		}
+	}, h.hs), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("aside", {
+		className: "chpanel",
+		id: "chPanel",
+		"aria-label": "Bảng chấm",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "chhd",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "lb ghost",
+						onClick: () => go(-1),
+						"aria-label": "Em trước",
+						title: "Em trước",
+						children: "◀"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("select", {
+						id: "chHs",
+						value: cur,
+						onChange: (e) => {
+							flush();
+							setCur(e.target.value);
+						},
+						"aria-label": "Chọn học sinh",
+						children: d.hocSinh.map((x) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("option", {
+							value: x.hs,
+							children: [
+								x.xong ? "✓ " : "",
+								x.ten,
+								x.vao ? "" : " (không vào)"
+							]
+						}, x.hs))
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "lb ghost",
+						id: "chNext",
+						onClick: () => go(1),
+						"aria-label": "Em sau",
+						title: "Em sau",
+						children: "▶"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "hint",
+						children: [
+							idx + 1,
+							"/",
+							d.hocSinh.length
+						]
+					})
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "chsum",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "chsc",
+						id: "chScore",
+						children: [g.score, /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("small", { children: ["/", g.max] })]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [g.pendingManual ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "chip warn",
+						children: [g.pendingManual, " chỗ chờ chấm tay"]
+					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "chip ok",
+						children: "Đã chấm đủ"
+					}), h.nop ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "chip",
+						children: h.vao ? "chưa nộp" : "không vào"
+					})] }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "hssave " + save,
+						id: "chSave",
+						children: save === "dang-luu" ? "Đang lưu…" : save === "loi" ? "Chưa lưu được" : save === "da-luu" ? "✓ Đã lưu" : ""
+					})
+				]
+			}),
+			open ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "err",
+				children: "Phiên còn mở: kết thúc phiên rồi mới chấm được."
+			}) : null,
+			err ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "err",
+				children: err
+			}) : null,
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "chlist",
+				children: rows.map((s) => {
+					const r = g.perSlot[s.id], r0 = g0.perSlot[s.id], o = h.overrides[s.id], m = manual(s), a = answerText(s, h.answers[s.id]);
+					return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+						first(s) ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "chtask",
+							children: ["Task ", tnum[s.task] || "?"]
+						}) : null,
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "chrow " + r.status,
+							"data-slot": s.id,
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "chl",
+									children: s.label
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "cha",
+									title: a,
+									children: [a || /* @__PURE__ */ (0, import_jsx_runtime.jsx)("i", {
+										className: "hint",
+										children: "(trống)"
+									}), r.status !== "correct" && keyText(s, d.key[s.id]) ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "chk",
+										title: "Đáp án",
+										children: ["→ ", keyText(s, d.key[s.id])]
+									}) : null]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "chip " + (r.status === "correct" ? "ok" : r.status === "pending" ? "warn" : ""),
+									children: [m && r.status !== "pending" ? "tay: " : o && !m && o.score !== r0.score ? "sửa: " : "", ST$1[r.status]]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									type: "number",
+									min: 0,
+									max: maxOf(s),
+									step: .5,
+									className: "chin",
+									"aria-label": "Điểm câu " + s.label,
+									disabled: open,
+									value: o ? o.score : r.score ?? "",
+									placeholder: "?",
+									onChange: (e) => setScore(s, e.target.value)
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "hint",
+									children: ["/", maxOf(s)]
+								}),
+								m ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "chq",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										className: "lb ghost",
+										disabled: open,
+										title: "Đúng (điểm tối đa)",
+										onClick: () => setScore(s, String(maxOf(s))),
+										children: "✓"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										className: "lb ghost",
+										disabled: open,
+										title: "Sai (0 điểm)",
+										onClick: () => setScore(s, "0"),
+										children: "✗"
+									})]
+								}) : null
+							]
+						}),
+						o || m || r.status === "wrong" || r.status === "partial" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							className: "chnote",
+							placeholder: "Lời nhắn cho câu này (tùy chọn)",
+							disabled: open,
+							value: o?.comment || "",
+							onChange: (e) => setNote(s, e.target.value)
+						}) : null
+					] }, s.id);
+				})
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+				className: "chnx",
+				children: ["Nhận xét chung ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+					id: "chNhanXet",
+					rows: 3,
+					disabled: open,
+					value: h.nhanXet,
+					onChange: (e) => patch({ nhanXet: e.target.value }),
+					placeholder: "VD: Em làm tốt phần đọc, cần ôn thì quá khứ."
+				})]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "row",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+						className: "chxong",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+							type: "checkbox",
+							id: "chXong",
+							disabled: open,
+							checked: h.xong,
+							onChange: (e) => patch({ xong: e.target.checked })
+						}), " Chốt chấm xong"]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "sp" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "lb",
+						onClick: () => {
+							flush();
+							onReport();
+						},
+						id: "chBaoCao",
+						children: "Báo cáo"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "lb pri",
+						disabled: open,
+						onClick: () => {
+							if (!h.xong) patch({ xong: true });
+							setTimeout(() => go(1), 0);
+						},
+						title: "Chốt chấm em này, sang em sau",
+						children: "Chốt, em sau ▶"
+					})
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "hint",
+				children: "Bấm ✓ / ✗ cạnh chỗ chấm tay trên phiếu, hoặc nhập điểm ở đây (sửa được cả điểm máy chấm). Điểm ở bảng này là điểm chính thức."
+			})
+		]
 	})] });
 }
 // src/lop/BaoCao.tsx

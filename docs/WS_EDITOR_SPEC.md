@@ -922,3 +922,7 @@ Kế hoạch `docs/KE_HOACH_SUA_SAU_KIEM_THU.md` đợt 1 (kết quả thử tay
 - **An toàn:** đáp án không bao giờ gửi cho học sinh (`key.json` chỉ giáo viên; test dò cả chữ đáp án trong dữ liệu học sinh); bài làm chỉ nhận đúng mã chỗ trả lời, giới hạn độ dài; cookie HttpOnly; chặn yêu cầu ghi từ trang lạ (Origin).
 - **Trình xem 3 vai** (`ShowData.role`): `show` (như cũ), `student`, `review` (v120). Học sinh trên điện thoại (màn < 700 px): Từng Task rộng hết màn hình, thanh công cụ xuống dòng để nút Nộp luôn thấy. Thêm `init`, `onAnswers`, `lock`, `man0` / `onMan`, `extra` (nút thêm vào thanh), `banner`.
 
+## 51. Chấm chữa (v120, 28/10/2026)
+- Mở từ phiên đã kết thúc (**Chấm chữa**). Trái: trình xem vai `review` với bài làm của em (khóa, dấu đúng / sai của máy, bấm ✓ / ✗ cạnh chỗ chấm tay, nút Đáp án). Phải: **bảng chấm**: từng chỗ (câu, em trả lời → đáp án, trạng thái, ô điểm 0…tối đa bước 0,5, nút ✓ / ✗ cho chỗ chấm tay), lời nhắn từng câu (hiện cho câu sai / chấm tay), **Nhận xét chung**, **Chốt chấm xong**, "Chốt, em sau ▶", ◀ ▶ đổi em, nút Báo cáo (v121).
+- Điểm ở bảng chấm là điểm chính thức; sửa được cả điểm máy chấm (chấp nhận cách viết khác). ✓ / ✗ trên phiếu ↔ điểm tối đa / 0 ở bảng (hai chiều). Tự lưu 0,6 giây sau mỗi thay đổi. Chỉ chấm khi phiên đã kết thúc. Bảng theo dõi phiên hiện chip "Đã chấm". Ô "Đúng x/y" của trình xem ẩn khi chấm chữa (điểm chính thức ở bảng chấm).
+- Máy chủ: `GET /api/phien/:id/cham`, `PUT /api/phien/:id/cham/:hs {overrides, nhanXet, xong}` (điểm kẹp 0…tối đa).

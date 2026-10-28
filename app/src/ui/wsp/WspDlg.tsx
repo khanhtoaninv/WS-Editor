@@ -7,7 +7,7 @@ import { buildFiles, checkFiles, sealWsp, inspectWsp, type Signer } from '../../
 import { collect, type Collected } from './collect';
 import { devSigner, edBox, serverKeys, serverSigner, trPub, setTrPub, trusted, nextVersion, saveVersion, type ServerKeys } from './keys';
 
-const VER = 'WS Editor v119';
+const VER = 'WS Editor v120';
 const kb = (n: number) => n < 1024 * 1024 ? `${Math.max(1, Math.round(n / 1024))} KB` : `${(n / 1024 / 1024).toFixed(1)} MB`;
 const fname = (t: string) => (t || 'phieu').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'phieu';
 

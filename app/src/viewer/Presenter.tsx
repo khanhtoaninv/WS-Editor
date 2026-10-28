@@ -655,7 +655,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
           {noKey && tch ? <span className="vnote" title="Các chỗ này chưa nhập đáp án trong WS Editor">{noKey} chỗ chưa có đáp án</span> : null}
         </div>}
         {stu ? null : <div className="vgrp">
-          {nAll ? <span className="vscore" id="workScore" title={'Số chỗ làm đúng / số chỗ máy chấm được' + (manDone.length ? ` (kể cả ${manDone.length} chỗ chấm tay)` : '') + '. Bấm vào chỗ trả lời để làm thử'}>{`Đúng ${nOk}/${nAll}`}</span> : null}
+          {nAll && !rev ? <span className="vscore" id="workScore" title={'Số chỗ làm đúng / số chỗ máy chấm được' + (manDone.length ? ` (kể cả ${manDone.length} chỗ chấm tay)` : '') + '. Bấm vào chỗ trả lời để làm thử'}>{`Đúng ${nOk}/${nAll}`}</span> : null}
           {tch ? <><button className={'vb' + (reveal ? ' on' : '')} id="workReveal" onClick={() => setReveal(!reveal)} title="Bật: làm sai thì hiện luôn đáp án đúng. Tắt: bấm dấu ✗ để xem">✗→✓<span className="vt"> Sai thì hiện đáp án</span></button>
           <button className="vb" id="workReset" disabled={!anyWork} onClick={() => { resetWork(data.slots.map(x => x.id)); flash('Đã xóa bài làm cả phiếu'); }} title="Làm lại cả phiếu (xóa bài làm)">⟲<span className="vt"> Làm lại</span></button></> : null}
         </div>}
