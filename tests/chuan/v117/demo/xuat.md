@@ -18,6 +18,7 @@ Dạng: nhìn ảnh viết
 Hướng dẫn: Draw a line from the picture to the word.
 Trả lời: nối
 Dạng: nối
+Xáo vế phải: có
 1. [ảnh: apple] - pear
 2. [ảnh: banana] - lemon
 3. [ảnh: pear] - apple
@@ -108,40 +109,40 @@ Track: Track 12
 Hướng dẫn: Write one or two words. There is one example.
 Name | Age | Hobby | Favourite food
 Tom | 9 | football | pizza
-Lily |  |  | 
-Ben |  |  | 
-Mai |  |  | 
+Lily | =8 | =dancing | =noodles
+Ben | =10 | =swimming | =chicken
+Mai | =9 | =reading | =ice cream
 
 ## Task: Where do these animals live? Tick (✓) the box.
 Hướng dẫn: Tick one or more boxes in each row.
  | Farm | Zoo | Forest
-[ảnh: cow] cow | [ ] | [ ] | [ ]
-[ảnh: tiger] tiger | [ ] | [ ] | [ ]
-[ảnh: rabbit] rabbit | [ ] | [ ] | [ ]
-[ảnh: monkey] monkey | [ ] | [ ] | [ ]
-[ảnh: chicken] chicken | [ ] | [ ] | [ ]
+[ảnh: cow] cow | [x] | [ ] | [ ]
+[ảnh: tiger] tiger | [ ] | [x] | [ ]
+[ảnh: rabbit] rabbit | [x] | [ ] | [x]
+[ảnh: monkey] monkey | [ ] | [x] | [x]
+[ảnh: chicken] chicken | [x] | [ ] | [ ]
 
 ## Task: Complete the table with the past forms of the verbs.
 Hướng dẫn: Use the example to help you.
 Verb | Past simple | Past participle
 go | went | gone
-see |  | 
-eat |  | 
-take |  | 
-write |  | 
-buy |  | 
-make |  | 
-come |  | 
-give |  | 
-know |  | 
-drink |  | 
-sing |  | 
-run |  | 
-swim |  | 
-sleep |  | 
-drive |  | 
-read |  | 
-speak |  | 
+see | =saw | =seen
+eat | =ate | =eaten
+take | =took | =taken
+write | =wrote | =written
+buy | =bought | =bought
+make | =made | =made
+come | =came | =come
+give | =gave | =given
+know | =knew | =known
+drink | =drank | =drunk
+sing | =sang | =sung
+run | =ran | =run
+swim | =swam | =swum
+sleep | =slept | =slept
+drive | =drove | =driven
+read | =read | =read
+speak | =spoke | =spoken
 
 ## Task: Look at the picture. True or False?
 Hướng dẫn: Circle T (true) or F (false).
@@ -199,9 +200,63 @@ Trả lời: không
 Hướng dẫn: What’s the weather like? Underline the correct answer.
 Trả lời: chọn trong câu
 Dạng: nhìn ảnh viết
-1. [ảnh: rainy] It’s {windy|rainy}.
-   {Take|Put} your raincoat {on|off}.
-   Don’t forget your {shorts|umbrella}.
-2. [ảnh: sunny] It’s {cloudy|sunny}.
-   {Take|Put} your jumper {off|on}.
-   Put your {swimming costume|coat} on.
+1. [ảnh: rainy] It’s {windy|*rainy}.
+   {*Take|Put} your raincoat {*on|off}.
+   Don’t forget your {shorts|*umbrella}.
+2. [ảnh: sunny] It’s {cloudy|*sunny}.
+   {*Take|Put} your jumper {*off|on}.
+   Put your {*swimming costume|coat} on.
+
+## Đáp án
+### Task 1
+1. cat
+2. dog
+3. fish
+4. bird
+5. frog
+6. duck
+### Task 3
+1. a
+2. b
+3. b
+### Task 4
+1. b
+2. b
+3. b
+4. b
+5. a
+### Task 5
+1. b
+2. a
+3. c
+4. b
+5. c
+6. a
+### Task 6
+1. 
+2. c
+3. 
+4. a
+5. 
+6. d
+7. 
+8. e
+9. 
+10. b
+### Task 7
+1. kitchen
+2. bedroom
+3. garden
+4. bathroom
+5. living room
+### Task 13
+1. f
+2. t
+3. t
+4. f
+5. t
+### Task 14
+1. nine / She is nine / She is nine years old
+2. Max / His name is Max / The dog's name is Max
+3. brown and white / Max is brown and white
+4. in the park / They walk Max in the park
