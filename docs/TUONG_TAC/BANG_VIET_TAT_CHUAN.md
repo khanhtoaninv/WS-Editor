@@ -72,7 +72,7 @@
 - Công tắc "Phân biệt viết tắt" ở cột trái (mục Câu hỏi) và trong MD; ghi vào `docs/TUONG_TAC/2_CHUAN_GOI_PHIEU.md` mục 6.2.
 - Cập nhật `DUYET_GD0.md` (Task có đáp án `doesn't / does not` không cần ghi hai cách nữa).
 
-## 5. Gợi ý cách viết khác khi nhập đáp án (đề xuất, 28/10/2026, chờ duyệt)
+## 5. Gợi ý cách viết khác khi nhập đáp án (đề xuất 28/10/2026; người dùng chọn **cách A**: chip ngay dưới ô đáp án, kèm nút “Nhận tất cả” khi Task nhiều gợi ý)
 Thay vì máy đoán lúc chấm, máy **gợi ý lúc soạn** và người soạn quyết.
 - **Khi nào:** ngay sau khi người soạn nhập / sửa đáp án chữ của một chỗ (ô đáp án trong khung soạn, hoặc khi nạp MD / JSON có đáp án).
 - **Hiện thế nào:** dưới ô đáp án hiện vài **chip** nhỏ, ví dụ `+ He has gone`, `+ colour`. Bấm chip = thêm vào danh sách đáp án chấp nhận (ghi ` / `). Bấm × = bỏ gợi ý đó cho chỗ này (không hỏi lại). Chip đã chọn hiện như đáp án thường.
