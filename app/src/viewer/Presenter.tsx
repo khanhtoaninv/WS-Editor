@@ -31,7 +31,9 @@ function units(sec: HTMLElement) {
 }
 
 export function Presenter({ data, onClose }: { data: ShowData; onClose: () => void }) {
-  const P = useMemo(() => prep(data), [data]);
+  const P = useMemo(() => prep(data), [data.pages, data.title]);   // eslint-disable-line react-hooks/exhaustive-deps   (v119: vai student / review đổi lock, extra… mỗi lần vẽ: không dàn lại trang)
+  // v119 vai (data.ts): show = chiếu / làm thử, student = học sinh làm bài, review = giáo viên chấm chữa bài một em
+  const role = data.role || 'show', stu = role === 'student', rev = role === 'review', lock = !!data.lock, tch = role === 'show';
   const nP = P.pages.length, nT = P.tasks.length;
   const startT = Math.max(0, P.tasks.findIndex(t => t.id === data.start));
   const [mode, setMode] = useState<Mode>('page');
@@ -55,7 +57,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
   const [rect, setRect] = useState<null | { x0: number; y0: number; x1: number; y1: number }>(null);
   const stageRef = useRef<HTMLDivElement>(null), surfRef = useRef<HTMLDivElement>(null), barRef = useRef<HTMLDivElement>(null);
   // B4 đáp án: các chỗ đang hiện; `order` để Shift+Space ẩn lại chỗ vừa hiện
-  const ansIds = useMemo(() => new Set(data.slots.filter(x => hasAns(x, data.key)).map(x => x.id)), [data]);
+  const ansIds = useMemo(() => new Set(data.slots.filter(x => hasAns(x, data.key)).map(x => x.id)), [data.slots, data.key]);
   const noKey = data.slots.length - ansIds.size;
   const [shown, setShown] = useState<Set<string>>(() => new Set());
   const order = useRef<string[]>([]);
@@ -75,27 +77,32 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
   };
   const prevAns = () => { const id = order.current.pop(); if (id) setShown(old => { const n = new Set(old); n.delete(id); return n; }); };
   // GĐ1b bài làm: giá trị trong ref (gõ không vẽ lại), `done` = các chỗ đã chốt để chấm
-  const slotBy = useMemo(() => Object.fromEntries(data.slots.map(x => [x.id, x])), [data]);
-  const ans = useRef<Answers>({});
-  const [done, setDone] = useState<Set<string>>(() => new Set());
+  const slotBy = useMemo(() => Object.fromEntries(data.slots.map(x => [x.id, x])), [data.slots]);
+  const ans = useRef<Answers>({ ...(data.init || {}) });
+  const [done, setDone] = useState<Set<string>>(() => new Set(Object.keys(data.init || {}).filter(k => !isBlank((data.init || {})[k]))));
+  const tell = () => data.onAnswers?.({ ...ans.current });
   const [pend, setPend] = useState<Pend | null>(null);
   const [reveal, setReveal] = useState(false);
   const [, bump] = useReducer((x: number) => x + 1, 0);
   // v114 chấm tay: giáo viên bấm ✓ / ✗ cạnh chỗ chấm tay (chỉ trong lúc chiếu, không lưu)
-  const [man, setMan] = useState<Record<string, 'ok' | 'no'>>({});
+  const [man, setMan] = useState<Record<string, 'ok' | 'no'>>(() => ({ ...(data.man0 || {}) }));
+  const man1 = useRef(man); useEffect(() => { if (man1.current !== man) { man1.current = man; data.onMan?.(man); } }, [man]);   // eslint-disable-line react-hooks/exhaustive-deps
+  // chấm chữa: điểm sửa ở bảng chấm bên ngoài → cập nhật ✓ / ✗ trên phiếu (không báo ngược lại khi giống nhau)
+  useEffect(() => { if (data.man0 && JSON.stringify(data.man0) !== JSON.stringify(man1.current)) { const m = { ...data.man0 }; man1.current = m; setMan(m); } }, [data.man0]);   // eslint-disable-line react-hooks/exhaustive-deps
   const res: Record<string, SlotResult> = {};
-  done.forEach(id => { if (!slotBy[id]) return; let r = gradeSlot(slotBy[id], data.key[id], ans.current[id]);
+  if (!stu) done.forEach(id => { if (!slotBy[id]) return; let r = gradeSlot(slotBy[id], data.key[id], ans.current[id]);
     if (r.status === 'pending' && man[id]) r = { status: man[id] === 'ok' ? 'correct' : 'wrong', score: man[id] === 'ok' ? r.max : 0, max: r.max };
     res[id] = r; });
-  const autoIds = useMemo(() => data.slots.filter(x => { const k = data.key[x.id]; return k && (k.grading ?? x.grading) === 'auto' && (k.correct != null || (k.accept && k.accept.length)); }).map(x => x.id), [data]);
+  const autoIds = useMemo(() => data.slots.filter(x => { const k = data.key[x.id]; return k && (k.grading ?? x.grading) === 'auto' && (k.correct != null || (k.accept && k.accept.length)); }).map(x => x.id), [data.slots, data.key]);
   const manDone = Object.keys(man).filter(i => res[i]);
   const nOk = autoIds.filter(i => res[i] && res[i].status === 'correct').length + manDone.filter(i => man[i] === 'ok').length, nAll = autoIds.length + manDone.length;
   // đáp án tự hiện vì làm sai (công tắc "Sai thì hiện đáp án" hoặc bấm ✗): gắn với lần làm đó, làm lại thì ẩn
   const revealed = useRef(new Set<string>());
   const anyWork = Object.values(ans.current).some(v => !isBlank(v));
   const commit = (id: string, v: AnswerValue | null) => {
+    if (lock) return;
     const same = done.has(id) && JSON.stringify(ans.current[id]) === JSON.stringify(v);
-    ans.current[id] = v; const blank = isBlank(v);
+    ans.current[id] = v; const blank = isBlank(v); tell();
     setDone(o => { const n = new Set(o); if (blank) n.delete(id); else n.add(id); return n; });
     if (same) return;
     if (man[id]) setMan(o => { const n = { ...o }; delete n[id]; return n; });   // bài làm đổi: chấm tay lại
@@ -103,10 +110,11 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
     if (revealed.current.has(id) && !bad) { revealed.current.delete(id); setShown(o => { const n = new Set(o); n.delete(id); return n; }); }
     if (bad && !shown.has(id)) { revealed.current.add(id); setShown(o => new Set(o).add(id)); }
   };
-  const draft = (id: string, v: AnswerValue | null) => { ans.current[id] = v; setDone(o => { if (!o.has(id)) return o; const n = new Set(o); n.delete(id); return n; }); };
+  const draft = (id: string, v: AnswerValue | null) => { if (lock) return; ans.current[id] = v; tell(); setDone(o => { if (!o.has(id)) return o; const n = new Set(o); n.delete(id); return n; }); };
   const resetWork = (ids: string[]) => {
     (document.activeElement as HTMLElement | null)?.blur?.();
-    ids.forEach(i => { delete ans.current[i]; });
+    if (lock) return;
+    ids.forEach(i => { delete ans.current[i]; }); tell();
     setDone(o => { const n = new Set(o); ids.forEach(i => n.delete(i)); return n; });
     setShown(o => { const n = new Set(o); ids.forEach(i => n.delete(i)); return n; });
     ids.forEach(i => revealed.current.delete(i));
@@ -187,7 +195,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
   const W0 = mode === 'page' ? RW : TASK_W, H0 = mode === 'page' ? rows.length * RH - PGAP : taskH;
   // Từng Task (v115): Mặc định = 80% bề ngang màn hình (Task dài vẫn ≥ 1,5 lần cỡ thật, cuộn); Vừa = thấy trọn Task
   const wfit = (vp.w - GAP) / TASK_W, hfit = (vp.h - GAP) / taskH;
-  const fit = mode === 'page' ? Math.min((vp.w - GAP) / RW, (vp.h - GAP) / PAGE_H) : tfit === 'fit' ? Math.min(wfit, hfit) : Math.min(TASK_DEF * wfit, Math.max(hfit, READ));
+  const fit = mode === 'page' ? Math.min((vp.w - GAP) / RW, (vp.h - GAP) / PAGE_H) : tfit === 'fit' ? Math.min(wfit, hfit) : Math.min((stu && vp.w < 700 ? 1 : TASK_DEF) * wfit, Math.max(hfit, READ));
   const s = Math.max(.05, fit * z);
 
   // Từng Task: đo chiều cao thật của Task (chưa nhân tỉ lệ)
@@ -202,6 +210,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
     const root = surfRef.current; if (!root) return;
     applyAnswers(root, data.slots, data.key, shown);
     applyWork(root, data.slots, { ans: ans.current, res, pend, shownIds: shown, key: data.key, man }, hooks);
+    if (lock) root.querySelectorAll<HTMLInputElement>('.vwi').forEach(i => { i.readOnly = true; });
     root.querySelectorAll<HTMLElement>('section.task[data-frag="0"]').forEach(sec => {
       const id = sec.dataset.task!, ids = data.slots.filter(x => x.task === id && ansIds.has(x.id)).map(x => x.id);
       let b = sec.querySelector<HTMLButtonElement>(':scope > .vtk');
@@ -213,7 +222,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
     root.querySelectorAll<HTMLElement>('section.task[data-frag="0"]').forEach(sec => {
       const id = sec.dataset.task!, on = data.slots.some(x => x.task === id && !isBlank(ans.current[x.id]));
       let b = sec.querySelector<HTMLButtonElement>(':scope > .vrs');
-      if (!on) { b?.remove(); return; }
+      if (!on || lock || rev) { b?.remove(); return; }
       if (!b) { b = document.createElement('button'); b.className = 'vrs'; b.dataset.vr = id; b.tabIndex = -1; b.title = 'Làm lại Task này (xóa bài làm)'; b.textContent = '⟲'; sec.appendChild(b); }
     });
     // v117 E5: nút 🔍 bên trái ✓ / ⟲ (Cả trang): mở Từng Task đúng Task đó
@@ -228,7 +237,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
       const id = sec.dataset.task!, man = data.slots.filter(x => x.task === id && (data.key[x.id]?.grading ?? x.grading) === 'manual'), nt = data.notes?.[id] || [], any = data.slots.some(x => x.task === id);
       let b = sec.querySelector<HTMLElement>(':scope > .vmn');
       const txt = man.length ? `✎ Chấm tay${man.length < data.slots.filter(x => x.task === id).length ? ` ${man.length} chỗ` : ''}` : !any && nt.length ? 'Chỉ xem' : '';
-      if (!txt) { b?.remove(); return; }
+      if (!txt || stu) { b?.remove(); return; }
       if (!b) { b = document.createElement('span'); b.className = 'vmn'; sec.appendChild(b); }
       b.textContent = txt; b.title = (nt.length ? nt.join('\n') : 'Chưa có đáp án: giáo viên tự chấm') + '\n(chỉ hiện khi chiếu, không in ra phiếu)';
       b.style.right = 1 + 9 * sec.querySelectorAll(':scope > .vtk, :scope > .vrs, :scope > .vzt').length + 'mm';   // bên trái các nút ✓ / ⟲ / 🔍
@@ -304,7 +313,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
   useEffect(() => {
     const on = () => setFs(!!document.fullscreenElement);
     document.addEventListener('fullscreenchange', on);
-    try { document.documentElement.requestFullscreen?.().catch(() => {}); } catch (_) { /* không hỗ trợ */ }
+    if (tch) try { document.documentElement.requestFullscreen?.().catch(() => {}); } catch (_) { /* không hỗ trợ */ }
     return () => { document.removeEventListener('fullscreenchange', on); if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {}); };
   }, []);
   const toggleFs = () => { try { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(() => {}); } catch (_) { /* bỏ qua */ } };
@@ -322,6 +331,8 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
     const k = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement; if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT')) return;
       let used = true;
+      if (!tch && 'pPeEhHlLgGbB'.includes(e.key) && e.key.length === 1) { e.stopPropagation(); return; }   // học sinh / chấm chữa: không bút, che, đèn, đồng hồ, bảng
+      if (stu && (e.key === ' ' || e.key === 'a' || e.key === 'A' || e.key === 'Escape')) { e.stopPropagation(); return; }
       if (board) {   // đang ở bảng trắng: chỉ nhận Esc / B / G
         const kk = e.key.toLowerCase();
         if (kk === 'escape' || kk === 'b') setBoard(false); else if (kk === 'g') setTimer(!timer); else { if (!e.ctrlKey && !e.metaKey) e.stopPropagation(); return; }
@@ -382,7 +393,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
   // v116 tìm từ: ở con trỏ, kéo trên lưới từ chữ đầu tới chữ cuối; chữ trên đường kéo (đọc xuôi hoặc ngược) là một từ của khung từ thì ghi bài làm
   const fd = useRef<null | { sec: HTMLElement; a: HTMLElement; b: HTMLElement; svg: SVGElement | null }>(null);
   const findDown = (e: React.PointerEvent) => {
-    if (tool !== 'pointer' || e.ctrlKey || e.metaKey || e.shiftKey || (e.pointerType === 'mouse' && e.button !== 0)) return false;
+    if (lock || tool !== 'pointer' || e.ctrlKey || e.metaKey || e.shiftKey || (e.pointerType === 'mouse' && e.button !== 0)) return false;
     const c = (e.target as HTMLElement).closest<HTMLElement>('[data-rc]'), sec = c?.closest<HTMLElement>('section.task');
     if (!c || !sec || !data.slots.some(x => x.task === sec.dataset.task && x.interaction === 'find')) return false;
     e.preventDefault(); stageRef.current!.setPointerCapture(e.pointerId); fd.current = { sec, a: c, b: c, svg: capsule(sec, c, c, 'vfl') }; return true;
@@ -437,7 +448,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
   const inkDown = (e: React.PointerEvent) => {
     const quick = tool === 'pointer' && e.pointerType === 'mouse' ? (e.ctrlKey || e.metaKey ? 'hl' : e.shiftKey ? 'line' : null) : null;
     const t = INK_TOOLS.includes(tool) ? tool : quick;
-    if (!t || (e.pointerType === 'mouse' && e.button !== 0)) return false;
+    if (!tch || !t || (e.pointerType === 'mouse' && e.button !== 0)) return false;
     const p = surfPt(e), a = anchorAt(p); if (!a) return false;
     e.preventDefault(); stageRef.current!.setPointerCapture(e.pointerId);
     if (t === 'eraser') { drawing.current = { key: a.key, s: { t: 'pen', c: '', w: 0, pts: [] }, erase: true, shift: false, cut: false }; eraseAt(p); return true; }
@@ -474,7 +485,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
     const arr = (o[key] || []).flatMap(x => x.id !== id ? [x] : n ? [{ ...x, ...n }] : []), out = { ...o, [key]: arr };
     if (!arr.length) delete out[key]; return out; });
   const onSurfDbl = (e: React.MouseEvent) => {
-    if (tool !== 'pointer') return;
+    if (tool !== 'pointer' || !tch) return;
     const tg = e.target as HTMLElement; if (tg.closest('[data-ans], .vwi, button, .vnt, .vmn, .vcv, .mrows, [data-rc]')) return;
     const b = surfRef.current!.getBoundingClientRect(), p: Pt = [(e.clientX - b.left) / s, (e.clientY - b.top) / s], a = anchorAt(p); if (!a) return;
     const id = 'n' + Date.now().toString(36), L = local(a, p);
@@ -505,6 +516,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
     const mk = tg.closest<HTMLElement>('.vmk'); if (mk) { const id = mk.dataset.mk!, v = mk.dataset.v as 'ok' | 'no'; setMan(o => ({ ...o, [id]: v })); return true; }
     const mj = tg.closest<HTMLElement>('.vwm.mj'); if (mj) { const id = mj.dataset.vw!; setMan(o => { const n = { ...o }; delete n[id]; return n; }); return true; }
     const m = tg.closest<HTMLElement>('.vwm.tap'); if (m) { const id = m.dataset.vw!, on = !shown.has(id); toggle([id]); if (on) revealed.current.add(id); return true; }
+    if (lock) return !!tg.closest('[data-ans], .mrows, .vwgo, .vrs, svg.vwl');   // đã khóa: bấm chỗ trả lời không làm gì
     const g = tg.closest<HTMLElement>('.vwgo'); if (g) { commit(g.dataset.vg!, ans.current[g.dataset.vg!] ?? null); lastMany.current = null; return true; }
     const rs = tg.closest<HTMLElement>('.vrs'); if (rs) { resetWork(data.slots.filter(x => x.task === rs.dataset.vr).map(x => x.id)); flash('Đã xóa bài làm của Task này'); return true; }
     const ln = tg.closest<SVGElement>('svg.vwl'); if (ln) { commit(ln.dataset.vw!, null); return true; }
@@ -554,7 +566,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
   const SR = (window as unknown as { SpeechRecognition?: unknown; webkitSpeechRecognition?: unknown }).SpeechRecognition || (window as unknown as { webkitSpeechRecognition?: unknown }).webkitSpeechRecognition;
 
   return (
-    <div id="wsShow" className={'show' + (bar ? '' : ' nobar') + (board ? ' boarding' : '')} role="dialog" aria-label="Trình chiếu phiếu" onPointerMove={e => { poke(); if (torch) setTpos({ x: e.clientX, y: e.clientY }); }}>
+    <div id="wsShow" className={'show' + (bar || !tch ? '' : ' nobar') + (board ? ' boarding' : '') + (tch ? '' : ' role-' + role)} role="dialog" aria-label="Trình chiếu phiếu" onPointerMove={e => { poke(); if (torch) setTpos({ x: e.clientX, y: e.clientY }); }}>
       <div className={'vstage' + (inkTool ? ' inking' : '')} ref={stageRef} data-mode={mode} data-tool={tool} data-scroll={mode === 'page' && scroll ? '1' : undefined} onScroll={onStageScroll}
         onPointerDown={e => { if (inkDown(e) || findDown(e)) return; if (e.pointerType === 'touch') { touches.current.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (touches.current.size === 2) pinch0.current = { d: dist(), z }; } }}
         onPointerMove={e => { if (inkMove(e) || findMove(e)) return; if (touches.current.has(e.pointerId)) { touches.current.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (pinch0.current && touches.current.size === 2) { const [a, b] = [...touches.current.values()]; zoomTo(pinch0.current.z * dist() / pinch0.current.d, { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }); } } }}
@@ -581,7 +593,8 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
       {tool === 'zoomrect' ? <div className="vcap zoomrect" onPointerDown={onRectDown} onPointerMove={onRectMove} onPointerUp={onRectUp}>
         {rect ? <i className="vrect" style={{ left: Math.min(rect.x0, rect.x1), top: Math.min(rect.y0, rect.y1), width: Math.abs(rect.x1 - rect.x0), height: Math.abs(rect.y1 - rect.y0) }} /> : <span className="vhint">Kéo khung quanh vùng cần phóng · Esc để thôi</span>}
       </div> : null}
-      <div className={'vpal' + (bar || inkTool ? '' : ' off')} role="toolbar" aria-label="Bút vẽ" onPointerEnter={() => setBar(true)}>
+      {data.banner ? <div className="vbanner" role="status">{data.banner}</div> : null}
+      {tch ? <div className={'vpal' + (bar || inkTool ? '' : ' off')} role="toolbar" aria-label="Bút vẽ" onPointerEnter={() => setBar(true)}>
         <button className={'vb' + (tool === 'pointer' ? ' on' : '')} onClick={() => setTool('pointer')} title="Con trỏ (Esc)" aria-label="Con trỏ">↖</button>
         <button className={'vb' + (tool === 'pen' ? ' on' : '')} id="inkPen" onClick={() => setTool(tool === 'pen' ? 'pointer' : 'pen')} title="Bút (P)" aria-label="Bút">✎</button>
         <button className={'vb' + (tool === 'hl' ? ' on' : '')} id="inkHl" onClick={() => setTool(tool === 'hl' ? 'pointer' : 'hl')} title="Bút tô vàng (giữ Ctrl kéo cũng được)" aria-label="Bút tô"><i className="hlic" /></button>
@@ -600,7 +613,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
           <button className="vb" id="inkClearAll" onClick={clearInk}>Xóa hết nét vẽ</button>
         </div> : null}
         <button className={'vb' + (inkHidden ? ' on' : '')} onClick={() => setInkHidden(!inkHidden)} disabled={!hasInk && !inkHidden} title="Ẩn / hiện nét vẽ" aria-label="Ẩn nét vẽ">{inkHidden ? '◌' : '◉'}</button>
-      </div>
+      </div> : null}
       {torch ? <div className="vtorch" id="torch" aria-hidden="true" style={{ background: `radial-gradient(circle ${trad}px at ${tpos.x}px ${tpos.y}px, transparent 0 ${trad - 2}px, rgba(0,0,0,.92) ${trad}px)` }} /> : null}
       {board ? <Board st={boardSt} setSt={setBoardSt} color={color} width={width} onClose={() => setBoard(false)} /> : null}
       {timer ? <Timer onClose={() => setTimer(false)} /> : null}
@@ -630,24 +643,26 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
           <button className="vb" onClick={() => zoomTo(z * 1.25)} aria-label="Phóng to" title="Phóng to (+)">+</button>
           <button className={'vb' + (tool === 'zoomrect' ? ' on' : '')} onClick={() => setTool(tool === 'zoomrect' ? 'pointer' : 'zoomrect')} title="Phóng vùng: kéo khung (Z)">⬚<span className="vt vt2"> Phóng vùng</span></button>
         </div>
-        <div className="vgrp">
-          <button className={'vb' + (timer ? ' on' : '')} id="showTimer" onClick={() => setTimer(!timer)} title="Đồng hồ đếm ngược (G)">⏱<span className="vt"> Đồng hồ</span></button>
+        {stu ? null : <div className="vgrp">
+          {tch ? <><button className={'vb' + (timer ? ' on' : '')} id="showTimer" onClick={() => setTimer(!timer)} title="Đồng hồ đếm ngược (G)">⏱<span className="vt"> Đồng hồ</span></button>
           <button className={'vb' + (board ? ' on' : '')} id="showBoard" onClick={() => setBoard(!board)} title="Bảng trắng (B)">▢<span className="vt"> Bảng</span></button>
           <button className={'vb' + (torch ? ' on' : '')} id="showTorch" onClick={() => setTorch(!torch)} title="Đèn pin: tối màn hình, chỉ sáng quanh chuột (L). Lăn chuột đổi cỡ vòng sáng, Esc tắt">🔦<span className="vt vt2"> Đèn pin</span></button>
           <button className={'vb' + (cover ? ' on' : '')} id="showCover" onClick={toggleCover} title="Che từng câu, bấm để hé dần (H). Bấm lại để bỏ che">▤<span className="vt"> Che</span></button>
+          </> : null}
           {cover ? <button className="vb" id="showOpenAll" onClick={() => { const r = surfRef.current; if (r) setOpen(o => { const n = new Set(o); r.querySelectorAll<HTMLElement>('[data-vu]').forEach(u => n.add(u.dataset.vu!)); return n; }); }} title="Hé hết phần đang xem">Hé hết</button> : null}
           <button className={'vb' + (allOn ? ' on' : '')} id="showAns" onClick={toggleAll} title={`Hiện / ẩn đáp án phần đang xem (A; Shift+A: cả phiếu) · Space: hiện lần lượt, Shift+Space: ẩn lại · nút ✓ đầu Task: hiện Task đó${noKey ? ` · ${noKey} chỗ chưa có đáp án` : ''}`}>✓<span className="vt"> Đáp án</span></button>
-          <button className={'vb' + (clickAns ? ' on' : '')} id="showClick" onClick={() => setClickAns(!clickAns)} title="Bật: nút Sau của bút trình chiếu hiện đáp án kế tiếp, hết đáp án mới lật">⏭<span className="vt vt2"> Clicker: đáp án</span></button>
-          {noKey ? <span className="vnote" title="Các chỗ này chưa nhập đáp án trong WS Editor">{noKey} chỗ chưa có đáp án</span> : null}
-        </div>
-        <div className="vgrp">
+          {tch ? <button className={'vb' + (clickAns ? ' on' : '')} id="showClick" onClick={() => setClickAns(!clickAns)} title="Bật: nút Sau của bút trình chiếu hiện đáp án kế tiếp, hết đáp án mới lật">⏭<span className="vt vt2"> Clicker: đáp án</span></button> : null}
+          {noKey && tch ? <span className="vnote" title="Các chỗ này chưa nhập đáp án trong WS Editor">{noKey} chỗ chưa có đáp án</span> : null}
+        </div>}
+        {stu ? null : <div className="vgrp">
           {nAll ? <span className="vscore" id="workScore" title={'Số chỗ làm đúng / số chỗ máy chấm được' + (manDone.length ? ` (kể cả ${manDone.length} chỗ chấm tay)` : '') + '. Bấm vào chỗ trả lời để làm thử'}>{`Đúng ${nOk}/${nAll}`}</span> : null}
-          <button className={'vb' + (reveal ? ' on' : '')} id="workReveal" onClick={() => setReveal(!reveal)} title="Bật: làm sai thì hiện luôn đáp án đúng. Tắt: bấm dấu ✗ để xem">✗→✓<span className="vt"> Sai thì hiện đáp án</span></button>
-          <button className="vb" id="workReset" disabled={!anyWork} onClick={() => { resetWork(data.slots.map(x => x.id)); flash('Đã xóa bài làm cả phiếu'); }} title="Làm lại cả phiếu (xóa bài làm)">⟲<span className="vt"> Làm lại</span></button>
-        </div>
+          {tch ? <><button className={'vb' + (reveal ? ' on' : '')} id="workReveal" onClick={() => setReveal(!reveal)} title="Bật: làm sai thì hiện luôn đáp án đúng. Tắt: bấm dấu ✗ để xem">✗→✓<span className="vt"> Sai thì hiện đáp án</span></button>
+          <button className="vb" id="workReset" disabled={!anyWork} onClick={() => { resetWork(data.slots.map(x => x.id)); flash('Đã xóa bài làm cả phiếu'); }} title="Làm lại cả phiếu (xóa bài làm)">⟲<span className="vt"> Làm lại</span></button></> : null}
+        </div>}
+        {data.extra ? <div className="vgrp vextra">{data.extra}</div> : null}
         <div className="vgrp">
           <button className="vb" onClick={toggleFs} title={fs ? 'Thu cửa sổ (F)' : 'Toàn màn hình (F)'}>⛶<span className="vt vt2">{fs ? ' Thu cửa sổ' : ' Toàn màn hình'}</span></button>
-          <button className="vb x" onClick={onClose} title="Thoát trình chiếu (Esc)" id="showClose">✕<span className="vt"> Thoát</span></button>
+          {stu ? null : <button className="vb x" onClick={onClose} title={rev ? 'Đóng (Esc)' : 'Thoát trình chiếu (Esc)'} id="showClose">✕<span className="vt">{rev ? ' Đóng' : ' Thoát'}</span></button>}
         </div>
       </div>
     </div>

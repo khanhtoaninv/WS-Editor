@@ -1,7 +1,8 @@
 // GĐ1a trình chiếu: đầu vào của trình xem và cách tách trang thành các mảnh Task.
 // Trình xem chỉ nhận HTML các trang đã dàn + chỗ trả lời + đáp án (không đọc trạng thái WS Editor), để sau này
 // chuyển nguyên sang TeacherResource (docs/TUONG_TAC/KE_HOACH_GD1A.md mục 1).
-import type { Key, Slot } from '../../../shared/src/index.ts';
+import type { ReactNode } from 'react';
+import type { Answers, Key, Slot } from '../../../shared/src/index.ts';
 
 export type ShowData = {
   title: string;
@@ -11,6 +12,18 @@ export type ShowData = {
   start?: string | null;    // mã Task mở đầu (Task đang chọn trong WS Editor)
   store?: string;           // tên chỗ lưu nét vẽ trên máy (mặc định theo tiêu đề phiếu)
   notes?: Record<string, string[]>;   // v113: ghi chú theo Task (chưa có đáp án → chấm tay, chỉ xem…), hiện trên Task khi chiếu
+  // v119 Lớp học thử (server/): cùng trình xem cho ba vai
+  //   show    = giáo viên chiếu / làm thử (mặc định, như GĐ1a–1b)
+  //   student = học sinh làm bài: không đáp án, không chấm, không công cụ giáo viên; báo bài làm qua onAnswers
+  //   review  = giáo viên chấm chữa bài một em: bài làm nạp sẵn, không sửa được (lock), chấm tay ✓ / ✗ báo qua onMan
+  role?: 'show' | 'student' | 'review';
+  init?: Answers;                                  // bài làm nạp sẵn
+  onAnswers?: (a: Answers) => void;                // student: mỗi lần bài làm đổi
+  lock?: boolean;                                  // không cho sửa bài làm (đã nộp / phiên đã đóng / chấm chữa)
+  man0?: Record<string, 'ok' | 'no'>;              // review: chấm tay đã có
+  onMan?: (m: Record<string, 'ok' | 'no'>) => void;
+  extra?: ReactNode;                               // thêm nút vào thanh công cụ (Nộp bài…)
+  banner?: ReactNode;                              // dải thông báo trên cùng (đã nộp, phiên đã kết thúc…)
 };
 
 export type Frag = { task: string; page: number; k: number; html: string };   // k = mảnh thứ k của Task (0 = mảnh đầu)

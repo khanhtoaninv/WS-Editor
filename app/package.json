@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build && node scripts/xuat.mjs",
-    "typecheck": "tsc --noEmit"
+    "build": "tsc --noEmit && vite build && node scripts/xuat.mjs && vite build --config vite.lop.config.ts",
+    "typecheck": "tsc --noEmit",
+    "build:lop": "vite build --config vite.lop.config.ts"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",

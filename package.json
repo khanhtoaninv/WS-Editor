@@ -1,0 +1,11 @@
+{
+  "name": "ws-editor-repo",
+  "private": true,
+  "type": "module",
+  "description": "WS Editor + Khu thử nghiệm Lớp học (server/). Không cần npm install để chạy máy chủ lớp thử.",
+  "scripts": {
+    "lop": "node --experimental-strip-types --disable-warning=ExperimentalWarning server/lop.ts",
+    "test:lop": "node --experimental-strip-types --disable-warning=ExperimentalWarning --test server/test/*.test.ts"
+  },
+  "engines": { "node": ">=22.6" }
+}

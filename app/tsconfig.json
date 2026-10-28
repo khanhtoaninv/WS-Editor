@@ -24,6 +24,7 @@
     "src",
     "scripts/*.ts",
     "vite.config.ts",
+    "vite.lop.config.ts",
     "../shared/src"
   ]
 }

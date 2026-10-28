@@ -5,3 +5,4 @@ logs/
 shots/
 .DS_Store
 app/dist/
+server/du-lieu/
