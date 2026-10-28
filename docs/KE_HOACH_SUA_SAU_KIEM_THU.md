@@ -29,13 +29,13 @@
 | 3.1 | Gõ vào chỗ trống bài đọc: ẩn nhãn (1)(2) của ô đang gõ | T03 |
 | 3.2 | Ô tick: đúng/sai thể hiện bằng màu dấu tick + chữ, bỏ khung xanh đỏ bao quanh | T10 |
 | 3.3 | Bài nối: chừa khoảng giữa chữ vế trái và chấm nối | T18 |
-| 3.4 | Đúng/Sai: chọn **một** cách căn T/F (tỉ lệ 70/30 hoặc cách lề) cho mọi kiểu. Cần người dùng chọn | T13, T14 |
+| 3.4 | Đúng/Sai: mọi kiểu T/F căn **theo tỉ lệ** cột câu / cột T/F (người dùng chốt 28/10), bỏ chỉnh theo cách lề | T13, T14 |
 | 3.5 | Nút Xóa nét vẽ có chữ, thêm "Xóa nét trang này" | C4 |
 | 3.6 | Trình chiếu: Ctrl + lăn chuột phóng **theo đầu chuột**; nút về 100% | E2 |
 | 3.7 | Shift + kéo = đường thẳng màu đỏ, nét vừa; thả ra về con trỏ | E4 |
 | 3.8 | Từng Task: mặc định 80% → Vừa → Mặc định | E7 |
 | 3.9 | Enter / ↓ sang ô đáp án kế, ↑ về ô trước | E8 |
-| 3.10 | Ảnh T16–T17: kích thước mặc định theo số ảnh trên hàng, nút **Fit ô**, thanh kéo kích thước cả khối (cần hình minh họa trước vì đụng dàn trang, đổi chuẩn 120) | Ý kiến chung phần 1 |
+| 3.10 | Ảnh T16–T17: kích thước mặc định theo số ảnh trên hàng, nút **Fit ô**, thanh kéo kích thước cả khối. Hình minh họa `docs/TUONG_TAC/MINH_HOA_ANH_DONG_DEU.png` (chờ duyệt); đổi chuẩn 120 | Ý kiến chung phần 1 |
 
 ## Đợt 4. Chấm thông minh hơn (v116) — đã có đề xuất, chờ duyệt bảng
 | # | Việc | Nguồn |
