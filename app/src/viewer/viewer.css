@@ -1,7 +1,8 @@
 /* ====== GĐ1a trình chiếu (src/viewer) ====== */
 .showfab{position:fixed;right:calc(312px + 20px + 18px);bottom:18px;z-index:50;height:40px;padding:0 18px;border-radius:20px;font-size:15px;font-weight:600;box-shadow:0 3px 12px rgba(20,30,40,.25)}
+.showfab.wspfab{right:calc(312px + 20px + 18px + 118px);background:var(--card,#fff);font-size:14px;padding:0 14px}
 @media print{.showfab{display:none}}
-.show{position:fixed;inset:0;z-index:1000;background:#26282c;color:#e8e8e8;font:14px system-ui,-apple-system,"Segoe UI",sans-serif;user-select:none}
+#wsShow.show{position:fixed;inset:0;z-index:1000;background:#26282c;color:#e8e8e8;font:14px system-ui,-apple-system,"Segoe UI",sans-serif;user-select:none}
 .show .vstage{position:absolute;inset:0;overflow:auto;scrollbar-width:thin}
 .show .vwrap{position:relative;display:flex;min-width:100%;min-height:100%}
 .show .vbox{margin:auto;position:relative;flex:none}

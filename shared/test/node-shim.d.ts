@@ -7,3 +7,5 @@ declare module 'node:assert/strict' {
 declare module 'node:fs' { export function readFileSync(p: string | URL, enc: string): string; export function readdirSync(p: string | URL): string[]; export function existsSync(p: string | URL): boolean; }
 declare class URL { constructor(u: string, base?: string | URL); readonly href: string; }
 interface ImportMeta { readonly url: string; }
+declare module 'node:fs' { export function readFileSync(p: string | URL): Uint8Array; export function writeFileSync(p: string, d: string | Uint8Array): void; export function mkdirSync(p: string, o?: { recursive?: boolean }): void; export function statSync(p: string): { isDirectory(): boolean }; }
+declare const process: { argv: string[]; exitCode: number | undefined; env: Record<string, string | undefined> };

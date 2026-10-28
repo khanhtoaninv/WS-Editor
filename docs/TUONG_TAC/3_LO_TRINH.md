@@ -20,6 +20,10 @@
 | 4 | Chữa bài và thống kê | TeacherResource | `review` từng em, chấm tay, `live-board`, thống kê lớp / câu / Task, lịch sử từng em qua các phiên, nhật ký | 3 |
 | 5 | Mở rộng | cả hai | Bài về nhà, bút vẽ, công cụ trình chiếu, xáo phương án, … (chọn theo nhu cầu) | 1 (bút), 3 |
 
+### 2b. Hai mốc (chốt 28/10/2026)
+- **Mốc 1: WS Editor hoàn chỉnh** = GĐ0 + GĐ1a (trình chiếu) + GĐ1b (giáo viên làm thử) + GĐ2 (xuất gói `.wsp`, v118). WS Editor build và hoàn thành độc lập, không chờ TeacherResource.
+- **Mốc 2: Khu thử nghiệm Lớp học** (`server/`, `docs/KE_HOACH_LOP_HOC_THU.md`, v119–v122): máy chủ chạy trên máy giáo viên, nhận gói `wsp/0`; lớp, phiên, học sinh làm và nộp, chấm chữa, báo cáo, insight. Không tính vào WS Editor; dùng để thử sản phẩm và rút ra **yêu cầu cho TeacherResource** (GĐ3–GĐ4). Tên "1c" bỏ.
+
 GĐ1 và GĐ3 có thể chạy **song song** sau khi GĐ2 chốt định dạng (TeacherResource dùng gói mẫu trong `ws-shared/fixtures`).
 
 ## 3. GĐ0. Chuẩn bị trong WS Editor

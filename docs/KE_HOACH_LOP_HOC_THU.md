@@ -1,6 +1,6 @@
-# Kế hoạch: Lớp học thử có máy chủ (đề xuất 28/10/2026, chờ người dùng "làm đi")
+# Kế hoạch: Lớp học thử có máy chủ (duyệt 28/10/2026, đang làm v119–v122)
 
-> Mục đích: khu thử nghiệm sản phẩm trước khi giao cho TeacherResource. Trải nghiệm trọn vòng một buổi học: lập lớp → mở phiên → học sinh làm bài, nộp → giáo viên kết thúc, chấm chữa → báo cáo lớp / từng em + insight. Thay cho "1c" trong `docs/TUONG_TAC/3_LO_TRINH.md` ở giai đoạn thử.
+> Mục đích: khu thử nghiệm sản phẩm trước khi giao cho TeacherResource. Trải nghiệm trọn vòng một buổi học: lập lớp → mở phiên → học sinh làm bài, nộp → giáo viên kết thúc, chấm chữa → báo cáo lớp / từng em + insight. Đây là **Mốc 2 "Khu thử nghiệm Lớp học"**, tách khỏi WS Editor (Mốc 1 = WS Editor xong sau GĐ2, v118); bỏ tên "1c" (`docs/TUONG_TAC/3_LO_TRINH.md` mục 2b). Đầu ra chính ngoài bản chạy thử: **yêu cầu cho TeacherResource** rút từ lúc dùng thử.
 
 ## 1. Quyết định đã có (28/10)
 - Chạy máy chủ **trên máy người dùng** (`http://localhost:<cổng>`); học sinh cùng wifi vào bằng địa chỉ mạng nội bộ (app hiện địa chỉ + mã QR). Người dùng đã có Node / npm.
@@ -9,7 +9,7 @@
 - Dữ liệu thử dùng học sinh giả / tên viết tắt.
 
 ## 2. Kiến trúc
-- `server/` (Node ≥ 22, SQLite sẵn của Node `node:sqlite`, không thư viện nặng nếu được). Phục vụ `ws-editor.html` + `fonts/`, API JSON, kênh sự kiện trực tiếp (SSE).
+- `server/` (Node ≥ 22.6, **không thư viện, không cần `npm install`**; lưu bằng file JSON trong `server/du-lieu/` thay cho SQLite, vì `node:sqlite` còn phải bật cờ ở nhiều bản Node 22). Nhận gói `wsp/0` (GĐ2), giữ đáp án ở máy chủ. Phục vụ `ws-editor.html` + `fonts/`, API JSON, kênh sự kiện trực tiếp (SSE).
 - Chạy: `npm run lop` (hoặc `chay-lop.bat` / `chay-lop.command` bấm đúp). In ra địa chỉ localhost và địa chỉ mạng nội bộ.
 - Kiểu dữ liệu mới (lớp, học sinh, phiên, bài nộp, kết quả chấm, báo cáo) và hàm tổng hợp báo cáo + insight quy tắc: `shared/` (để TeacherResource dùng lại), có test `npm test`.
 - Giao diện: màn mới trong app (React), chế độ Học sinh là trang riêng nhẹ `#/hs` (điện thoại dùng được). Lớp giao tiếp lưu trữ tách riêng (`api.ts`) để đổi nơi lưu không viết lại giao diện.
@@ -26,10 +26,11 @@
    - Insight quy tắc ("Câu 4 Task 2: 80% sai, thường chọn A"; "Em An yếu dạng nối"); nút **Insight AI** gọi máy chủ → AI (cần khóa); không có khóa thì xuất đoạn nhắc sẵn để dán vào AI.
 
 ## 4. Chia bước (mỗi bước là một bản thử tay được; test Playwright nhiều tab giả lập giáo viên + học sinh)
-- (a) Server + lớp + phiên + học sinh nộp bài + theo dõi trực tiếp. Bản v118.
-- (b) Chấm chữa. v119.
-- (c) Báo cáo lớp. v120.
-- (d) Báo cáo từng em + insight (quy tắc, rồi AI). v121.
+- (GĐ2) Xuất / mở gói .wsp trong WS Editor. v118 (Mốc 1).
+- (a) Server + lớp + phiên + học sinh nộp bài + theo dõi trực tiếp. v119.
+- (b) Chấm chữa. v120.
+- (c) Báo cáo lớp. v121.
+- (d) Báo cáo từng em + insight (quy tắc, rồi AI). v122.
 Mỗi bước: cập nhật spec (mục mới), báo cáo phiên, tăng badge, commit + push `main`; đủ bộ test cũ (120/120, 1a, 1b…) vì không được làm hỏng phần soạn / chiếu.
 
 ## 5. Chưa làm / ngoài phạm vi
@@ -37,5 +38,5 @@ Tài khoản thật, email, phân quyền nhiều giáo viên, chạy công khai
 
 ## 6. Rủi ro
 - Học sinh ngoài wifi lớp không vào được (chấp nhận ở giai đoạn thử).
-- Máy giáo viên ngủ / tắt thì máy chủ dừng (dữ liệu vẫn nằm trong file SQLite, mở lại là còn).
+- Máy giáo viên ngủ / tắt thì máy chủ dừng (dữ liệu vẫn nằm trong các file JSON, mở lại là còn).
 - Gửi dữ liệu sang AI ngoài: chỉ số liệu ẩn danh, và người dùng tự đặt khóa + hạn mức.

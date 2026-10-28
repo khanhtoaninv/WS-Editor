@@ -882,3 +882,13 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 .sgc button:hover{background:#e3efff}
 .sgc .sgx{padding:0 6px;color:var(--muted);border-left:1px dashed var(--accent)}
 @media print{.esug{display:none}}
+
+/* GĐ2 hộp gói .wsp (v118) */
+#wspDlg ul{margin:4px 0 0;padding-left:18px}
+#wspDlg .wspsum{background:var(--card-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:6px 0}
+#wspDlg .wspbad{background:var(--danger-soft);color:var(--danger);border-radius:8px;padding:8px 10px;margin:6px 0}
+#wspDlg .wspwarn{background:#fff7e0;color:#7a5200;border-radius:8px;padding:8px 10px;margin:6px 0;max-height:30vh;overflow:auto}
+#wspDlg .wspok{background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:8px 10px;margin:6px 0}
+#wspDlg .wsprow{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+#wspDlg .wsptr{margin:6px 0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #wspDlg .wspwarn{background:#3a3010;color:#f0d890}}

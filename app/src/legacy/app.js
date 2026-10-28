@@ -832,6 +832,13 @@ actions.present = () => {   // GĐ1a: mở trình chiếu trên các trang đang
   const notes = Object.fromEntries((ws.tasks || []).map(t => [t.id, taskSlots(t).notes]));
   publish({ show: { title: ws.title, pages: pv.pages.map(p => p.html), slots: r.slots, key: r.key, notes, start: sel.type !== 'sheet' ? sel.id : null } });
 };
+// GĐ2 gói .wsp (src/ui/wsp/): dữ liệu để đóng gói, và mở lại phiếu gốc từ gói
+actions.wspSource = () => {
+  const pv = useUi.getState().pageView; if (!pv) return null; const r = sheetSlots(ws);
+  const staticOnly = (ws.tasks || []).reduce((n, t) => n + taskSlots(t).notes.filter(m => /chỉ xem/.test(m)).length, 0);
+  return { ws: clone(ws), pages: pv.pages.map(p => p.html), over: pv.pages.filter(p => p.over).length, slots: r.slots, key: r.key, warn: r.warn, staticOnly, font: FONTS[fontKey()] };
+};
+actions.openSheet = (obj, msg) => loadSheet(obj, msg);
 actions.toggleGuides = () => { guides = !guides; publish({ guides }); draw(); if (sel.type === 'sheet') renderInspector(); };
 // Hộp Xem JSON / Xuất MD là React (src/ui/Dialogs.tsx)
 actions.showMd = () => publish({ dataDlg: { kind: 'md', text: sheetToMd(ws) } });

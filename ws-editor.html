@@ -14110,6 +14110,7 @@ var useUi = create(() => ({
 	liveRev: 0,
 	pageView: null,
 	show: null,
+	wspOpen: false,
 	codes: (() => {
 		try {
 			return localStorage.getItem("wsEditor.codes.v1") === "1";
@@ -14140,7 +14141,9 @@ var actions = {
 	impOk: noop,
 	impClosed: noop,
 	pasteItems: noop,
-	present: noop
+	present: noop,
+	wspSource: () => null,
+	openSheet: noop
 };
 // node_modules/react/cjs/react-jsx-runtime.production.js
 /**
@@ -14214,7 +14217,7 @@ function TopBar() {
 							padding: "1px 7px",
 							marginLeft: 4
 						},
-						children: "v117"
+						children: "v118"
 					}),
 					" ",
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", {
@@ -16470,7 +16473,7 @@ var layout_exports = /* @__PURE__ */ __exportAll({
 	crossCell: () => crossCell,
 	crossHtml: () => crossHtml,
 	er: () => er,
-	esc: () => esc,
+	esc: () => esc$1,
 	exFill: () => exFill,
 	exPick: () => exPick$1,
 	exPicks: () => exPicks$1,
@@ -17582,7 +17585,7 @@ var passageParas = (t) => {
 };
 function passInline(raw, n0, total, tid, c0) {
 	let k = n0, c = c0 || 0;
-	return rich(esc(pkPre(raw)).replace(GAPP, (m, at, str) => {
+	return rich(esc$1(pkPre(raw)).replace(GAPP, (m, at, str) => {
 		k++;
 		return `<span class="pgap"${tid ? slotAt(`${tid}.lead.${k}`) : ""}>${total > 1 && !GAPLAB.test(str.slice(0, at)) ? `(${k})` : "&nbsp;"}</span>`;
 	}).replace(/\{([^{}|]+(?:\|[^{}|]+)+)\}/g, (m, g) => `<span class="pch"${tid ? slotAt(`${tid}.leadc.${++c}`) : ""}>${g.split("|").map((o) => `<b>${o.replace(/\u0003/g, "").trim()}</b>`).join("&nbsp;/ ")}</span>`).replace(/(?<!_)__(?!_)(.+?)(?<!_)__(?!_)/g, "<u>$1</u>"));
@@ -17797,7 +17800,7 @@ function pOf(t, item) {
 	const p = t.answer.params || {}, k = item && typeof item === "object" ? item.id : null, o = k && p.perItem && p.perItem[k];
 	return o ? Object.assign({}, p, o) : p;
 }
-var esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({
+var esc$1 = (s) => String(s).replace(/[&<>"]/g, (c) => ({
 	"&": "&amp;",
 	"<": "&lt;",
 	">": "&gt;",
@@ -17876,7 +17879,7 @@ function rich(h, pw) {
 	});
 	return out;
 }
-var er = (s) => rich(esc(pkPre(s)));
+var er = (s) => rich(esc$1(pkPre(s)));
 var PHC = {};
 function PH(ar) {
 	const a = String(ar || "4/3");
@@ -17884,7 +17887,7 @@ function PH(ar) {
 	const v = arNum(a) || 4 / 3, W = 48, H = +(W / v).toFixed(2), m = Math.min(W, H);
 	return PHC[a] = "data:image/svg+xml," + encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${W} ${H}'><rect width='${W}' height='${H}' fill='#eef2f5'/><g transform='translate(${W / 2 - m * .14} ${H / 2 - m * .12}) scale(${m * .28 / 24})' fill='none' stroke='#9fb1bf' stroke-width='1.6' stroke-linejoin='round'><rect x='1' y='2' width='22' height='16' rx='2.5'/><circle cx='16.5' cy='7' r='2'/><path d='M2 16 L9 9 L14 14 L17 11 L22 16'/></g></svg>`);
 }
-var pic = (label, cls = "", src, o = {}) => `<div class="pic ${cls}${src ? " up" : " ph"}"${o.slot ? ` data-slot="${o.slot}"` : ""}${o.ar ? ` style="--par:${o.ar};--ar:${o.ar}"` : ""}><img src="${src || PH(o.ar || o.gar)}" alt="${esc(label)}">${src ? "" : `<span class="pic-ar">${arLabel$1(o.ar || o.gar || "4/3")}</span><span class="pic-cap">${esc(label)}</span>`}</div>`;
+var pic = (label, cls = "", src, o = {}) => `<div class="pic ${cls}${src ? " up" : " ph"}"${o.slot ? ` data-slot="${o.slot}"` : ""}${o.ar ? ` style="--par:${o.ar};--ar:${o.ar}"` : ""}><img src="${src || PH(o.ar || o.gar)}" alt="${esc$1(label)}">${src ? "" : `<span class="pic-ar">${arLabel$1(o.ar || o.gar || "4/3")}</span><span class="pic-cap">${esc$1(label)}</span>`}</div>`;
 function ci(t, key, label, src) {
 	const f = cellFr(t, key);
 	return `<div class="ci" data-node="${t.id}:G1:${key}" data-ck="${key}"${f.fit ? ` data-cf="${f.fit}"` : ""}${f.h ? " data-cih=\"1\"" : ""}${f.align ? ` data-fa="${f.align}"` : ""}${f.w ? ` data-cw="1"` : ""} style="${f.w ? `--cw:${f.w}%;` : ""}--iar:${natAr(t, "@" + key) || tblAr$1(t)};--ih:${f.h || 35};--ox:${f.ox || 0};--oy:${f.oy || 0};--z:${(f.zoom || 100) / 100}">${pic(label, "", src, {
@@ -17981,17 +17984,17 @@ function exPick$1(t, item, opts) {
 	return opts.findIndex((o) => String(o).replace(/<[^>]+>|\*/g, "").trim().toLowerCase() === L);
 }
 function exFill(t, item, h) {
-	const k = esc(String(item.key).trim()), A = t.answer.layout, ek = `<span class="exk">${k}</span>`;
+	const k = esc$1(String(item.key).trim()), A = t.answer.layout, ek = `<span class="exk">${k}</span>`;
 	if (A === "A1") return h.replace("<div class=\"ln\"></div>", `<div class="ln">${ek}</div>`);
 	if (A === "A2") {
 		const g = keyGaps$1(item);
 		let j = 0;
-		return g.length > 1 ? h.replace(/(<span class="a a2"[^>]*>)(<\/span>)/g, (m, a, b) => `${a}<span class="exk">${esc(g[j++] || "")}</span>${b}`) : h.replace(/(<span class="a a2"[^>]*>)(<\/span>)/, `$1${ek}$2`);
+		return g.length > 1 ? h.replace(/(<span class="a a2"[^>]*>)(<\/span>)/g, (m, a, b) => `${a}<span class="exk">${esc$1(g[j++] || "")}</span>${b}`) : h.replace(/(<span class="a a2"[^>]*>)(<\/span>)/, `$1${ek}$2`);
 	}
 	if (A === "A3") {
 		const ch = [...String(item.key).trim().replace(/\s+/g, "")];
 		let j = 0;
-		return h.replace(/<i><\/i>/g, () => `<i>${ch[j] ? `<span class="exk">${esc(ch[j++])}</span>` : (j++, "")}</i>`);
+		return h.replace(/<i><\/i>/g, () => `<i>${ch[j] ? `<span class="exk">${esc$1(ch[j++])}</span>` : (j++, "")}</i>`);
 	}
 	if (A === "A4") {
 		const ix = exPicks$1(t, item, item.opts || []);
@@ -18030,10 +18033,10 @@ function ans0(t, item, sk) {
 		case "A5": return `<span class="a a5" ${nd}${as}></span>`;
 		case "A6": {
 			const lb = Array.isArray(p.labs) && p.labs.length >= 2 ? p.labs.slice(0, 3) : null;
-			return `<span class="a a6${lb ? " lb" : ""}" ${nd}${as}>${(lb || ["T", "F"]).map((x) => `<span>${esc(x)}</span>`).join("")}</span>`;
+			return `<span class="a a6${lb ? " lb" : ""}" ${nd}${as}>${(lb || ["T", "F"]).map((x) => `<span>${esc$1(x)}</span>`).join("")}</span>`;
 		}
 		case "A7": return `<span class="a a7" ${nd}${as}></span>`;
-		case "A8": return `<div class="a a8${p.ruling === "4" ? " r4" : ""}" ${nd} style="--lh:${lh}mm${aw}">${`<span>${esc(item && typeof item === "object" ? item.text : item)}</span>`.repeat(p.repeat || 3)}</div>`;
+		case "A8": return `<div class="a a8${p.ruling === "4" ? " r4" : ""}" ${nd} style="--lh:${lh}mm${aw}">${`<span>${esc$1(item && typeof item === "object" ? item.text : item)}</span>`.repeat(p.repeat || 3)}</div>`;
 	}
 	return "";
 }
@@ -18064,7 +18067,7 @@ function a2inline(t, raw, num, item, sk) {
 	const fixedBlank = (j) => `<span class="a a2" ${nd(j)} style="width:${fixedW}"></span>`;
 	const lab = () => num ? `(${num()}) ` : "";
 	if (!(a2end(raw) && (c.mode === "fill" || c.lines > 1 || c.start === "below"))) return parts.reduce((a, part, i) => a + (i ? lab() + fixedBlank(i) : "") + er(part).replace(/\n/g, "<br>"), "");
-	const tok = "", head = parts.slice(0, -1).map((x, i) => rich(esc(x), true).replace(/\s*\n\s*/g, "  ") + (i < last ? lab() + tok : "")).join("");
+	const tok = "", head = parts.slice(0, -1).map((x, i) => rich(esc$1(x), true).replace(/\s*\n\s*/g, "  ") + (i < last ? lab() + tok : "")).join("");
 	let gi = 0;
 	const words = head.split(/\s+/).filter(Boolean).map((w) => w === "" ? "<span class=\"brk\"></span>" : `<span class="w">${w.split(tok).map((x, ix) => ix ? fixedBlank(++gi) + x : x).join("")}</span>`);
 	const tail = parts[parts.length - 1].trim(), keepTail = /[?!:…]/.test(tail) ? tail.replace(/[.,;]/g, "") : "";
@@ -18073,11 +18076,11 @@ function a2inline(t, raw, num, item, sk) {
 	if (c.start === "inline") {
 		row += label ? `<span class="w">${label.trim()}</span>` : "";
 		row += c.mode === "fill" ? `<span class="a fl" ${nd(last + 1)}></span>` : `<span class="a a2 nofl" ${nd(last + 1)} style="width:${fixedW}"></span>`;
-		row += tail ? `<span class="w tl">${esc(tail)}</span>` : "";
+		row += tail ? `<span class="w tl">${esc$1(tail)}</span>` : "";
 	} else {
 		extra = c.lines;
 		if (label) row += `<span class="w">${label.trim()}</span>`;
-		if (keepTail) row += `<span class="w tl">${esc(keepTail)}</span>`;
+		if (keepTail) row += `<span class="w tl">${esc$1(keepTail)}</span>`;
 	}
 	const xl = Array.from({ length: Math.max(0, extra) }, () => `<span class="a xl" ${nd(last + 1)} style="${c.mode === "fill" ? "" : `width:${c.mm}mm;`}--lh2:${AGE$1[ws.age].line}mm"></span>`).join("");
 	return `<span class="a2box"><span class="fr">${row}</span>${xl}</span>`;
@@ -18105,14 +18108,14 @@ function qtext(t, q, sk) {
 		h = h.replace(/<span class="ulb">([\s\S]*?)<i>([A-Ha-h])<\/i><\/span>/g, (m, u, c) => c.toUpperCase() === L ? `<span class="ulb pk">${u}<i>${c}</i></span>` : m);
 	}
 	if (q && q.ex && String(q.key ?? "").trim() && (t.answer.attach === "inline" || q2end(t))) {
-		const k = esc(String(q.key).trim());
+		const k = esc$1(String(q.key).trim());
 		if (t.answer.layout === "A4") {
 			const L = k.toLowerCase();
 			h = h.replace(/<b>([^<]*)<\/b>/g, (m, x) => x.trim().toLowerCase() === L ? `<b class="pk">${x}</b>` : m);
 		} else {
 			const g = keyGaps$1(q);
 			let j = 0;
-			h = g.length > 1 ? h.replace(/(<span class="(?:a (?:a2|fl)[^"]*|gap)"[^>]*>)(<\/span>)/g, (m, a, b) => `${a}<span class="exk">${esc(g[j++] || "")}</span>${b}`) : h.replace(/(<span class="(?:a (?:a2|fl)[^"]*|gap)"[^>]*>)(<\/span>)/, `$1<span class="exk">${k}</span>$2`);
+			h = g.length > 1 ? h.replace(/(<span class="(?:a (?:a2|fl)[^"]*|gap)"[^>]*>)(<\/span>)/g, (m, a, b) => `${a}<span class="exk">${esc$1(g[j++] || "")}</span>${b}`) : h.replace(/(<span class="(?:a (?:a2|fl)[^"]*|gap)"[^>]*>)(<\/span>)/, `$1<span class="exk">${k}</span>$2`);
 		}
 	}
 	if (p.ulab && t.answer.kind === "choice" && q && q.id && !q.ex) h = h.replace(/<span class="ulb( pk)?">/g, (m) => m.slice(0, -1) + slotAt(`${t.id}.${q.id}`) + ">");
@@ -18153,7 +18156,7 @@ function crossHtml(t) {
 			return;
 		}
 		const nn = !a(r, k - 1) && a(r, k + 1) || !a(r - 1, k) && a(r + 1, k) ? ++num : 0, show = x.k === "given" || o.key && x.k === "ans";
-		cells.push(`<span class="xc${x.k === "given" ? " gv" : ""}"${x.k === "ans" || x.k === "empty" ? slotAt(`${t.id}.cell.${c.rows[r].id}.${k}`) : ""}>${nn ? `<i class="xn">${nn}</i>` : ""}${show ? esc(x.ch.toUpperCase()) : ""}</span>`);
+		cells.push(`<span class="xc${x.k === "given" ? " gv" : ""}"${x.k === "ans" || x.k === "empty" ? slotAt(`${t.id}.cell.${c.rows[r].id}.${k}`) : ""}>${nn ? `<i class="xn">${nn}</i>` : ""}${show ? esc$1(x.ch.toUpperCase()) : ""}</span>`);
 	}));
 	const al = (t.layout.table || {}).align || "center";
 	return `<div class="g2 xg ${al === "left" ? "xl" : al === "right" ? "xr" : "xm"}" data-node="${t.id}:G2" style="--xn:${n};--xc:${o.xc || 10}mm">${cells.join("")}</div>`;
@@ -18294,7 +18297,7 @@ function renderTask(t, frag, mt) {
 		t.answer.layout === "A6" && (t.answer.params || {}).row ? `data-tfr="1" data-tfv="${(t.answer.params || {}).rowv || "center"}"` : "",
 		taOf$1(t) !== "left" ? `data-ta="${taOf$1(t)}"` : ""
 	].filter(Boolean).join(" ");
-	const g0 = cont ? "" : isJoined(t) ? t.instruction ? `<div class="g0 jn" data-node="${t.id}:G0"><div class="g0t"><span class="ins">${er(t.instruction)}</span></div></div>` : "" : `<div class="g0" data-node="${t.id}:G0"><span class="num">${t.number}</span><div class="g0t"><span class="ttl">${esc(t.title)}</span>${t.audio ? `<span class="trk">${esc(t.audio)}</span>` : ""}<span class="ins">${er(t.instruction)}</span></div>${qrHtml(t)}</div>`;
+	const g0 = cont ? "" : isJoined(t) ? t.instruction ? `<div class="g0 jn" data-node="${t.id}:G0"><div class="g0t"><span class="ins">${er(t.instruction)}</span></div></div>` : "" : `<div class="g0" data-node="${t.id}:G0"><span class="num">${t.number}</span><div class="g0t"><span class="ttl">${esc$1(t.title)}</span>${t.audio ? `<span class="trk">${esc$1(t.audio)}</span>` : ""}<span class="ins">${er(t.instruction)}</span></div>${qrHtml(t)}</div>`;
 	const ex = Array.isArray(t.extras) ? t.extras : [], lastF = !frag || !!frag.last;
 	const gtTop = first ? ex.filter((x) => x.pos === "top").map((x) => gtHtml(t, x, "top")).join("") : "", gtBot = lastF ? ex.filter((x) => x.pos !== "top").map((x) => gtHtml(t, x, "bot")).join("") : "";
 	return `<section class="task L-${L}" data-node="${t.id}" data-task="${t.id}" ${at} style="${style}">${g0}${gtTop}${body(t, L, frag, first, lastF)}${gtBot}</section>`;
@@ -18319,7 +18322,7 @@ var inoN = (t, i) => {
 	const x = its$2(t)[i];
 	return `<span class="ino${x && x.ex ? " ex" : ""}">${x && x.ex ? 0 : nlab(t, qnum$1(t, i))}</span>`;
 };
-var qwho = (q) => q && q.who != null ? `<b class="qwho">${esc(q.who)}:</b>` : "";
+var qwho = (q) => q && q.who != null ? `<b class="qwho">${esc$1(q.who)}:</b>` : "";
 var g3row = (t, q) => `<div class="q g3t"><span class="ino" style="visibility:hidden" aria-hidden="true">0</span><div class="qb"><div class="qt">${er(q.text || "")}</div></div></div>`;
 var leadIntro = (t) => t.content.lead && t.content.lead.kind === "text" && leadText(t) ? `<div class="dl intro">${er(leadText(t))}</div>` : "";
 function wsFind(t) {
@@ -18439,7 +18442,7 @@ function body0n(t, L, frag, first) {
 				const cc = `${cl}${ci2 === 0 ? " c0" : ""}${ci2 === r.cells.length - 1 ? " cl" : ""}${tint ? " tn" : ""}${o.fh && r.head ? " hd" : ""}${tkey && !r.head && v && v.tick && v.ok ? " tok" : ""}`;
 				const rid = !r.head && c.rows[r.i] ? c.rows[r.i].id : null, sk = rid ? isRH ? "@" + rid : `@${rid}.${ci2 - (rh ? 1 : 0)}` : null;
 				const tsl = !r.head && rid && !isRH ? v && typeof v === "object" && v.ans != null || v === "" && !isGridTbl(t) ? `${id}.cell.${rid}.${ci2 - (rh ? 1 : 0)}` : v && typeof v === "object" && v.tick ? `${id}.cell.${rid}` : "" : "";
-				let bd = isRH && v && typeof v === "object" ? `<span class="rhx">${sk ? tpic(t, sk, v.img, "sm") : pic(v.img, "sm")}<span>${esc(v.text || "")}</span></span>` : cellHtml(v, sk);
+				let bd = isRH && v && typeof v === "object" ? `<span class="rhx">${sk ? tpic(t, sk, v.img, "sm") : pic(v.img, "sm")}<span>${esc$1(v.text || "")}</span></span>` : cellHtml(v, sk);
 				if (tsl && v && v.tick) bd = bd.replace(/(<span class="a a5[^"]*")/, `$1${slotAt(tsl)}`);
 				if (o.nm === "in" && ci2 === 0 && !r.head) bd = `<span class="nin"><span class="ino">${r.i + 1}</span><span class="nib">${bd}</span></span>`;
 				return `<div class="${r.head ? "th" : "tc"}${isRH ? " rh" : ""}${cc}" data-rk="${rk}"${rst} ${r.head ? "" : `data-node="${id}:G2"`}${wsg && !r.head && !isRH ? ` data-rc="${r.i},${ci2 - (rh ? 1 : 0)}"` : ""}${tsl && !(v && v.tick) ? slotAt(tsl) : ""}>${bd}</div>`;
@@ -18454,11 +18457,11 @@ function body0n(t, L, frag, first) {
 			return t.answer.layout === "A2" && t.answer.attach === "inline" ? a2inline(t, tx, () => ++n, { id: lid }) : er(tx).split("___").reduce((a, part, i) => a + (i ? `(${++n}) ${ans(t, { id: lid }, sid(i))}` : "") + part, "");
 		};
 		const intro = first ? leadText(t) : "";
-		return `<div class="body b1">${withBank(`<div class="g2 dialogue" data-node="${id}:G2">${(intro ? `<div class="dl intro">${er(intro)}</div>` : "") + range(c.items, frag).map(([l, li]) => `<div class="dl"><span class="who">${esc(l.who || "")}:</span><span>${fill(l.text || "", li)}</span></div>`).join("")}</div>`)}</div>`;
+		return `<div class="body b1">${withBank(`<div class="g2 dialogue" data-node="${id}:G2">${(intro ? `<div class="dl intro">${er(intro)}</div>` : "") + range(c.items, frag).map(([l, li]) => `<div class="dl"><span class="who">${esc$1(l.who || "")}:</span><span>${fill(l.text || "", li)}</span></div>`).join("")}</div>`)}</div>`;
 	}
 	if (k === "pairs" && c.shuffle) {
 		const Ls = c.items.filter((x) => x.pair && x.pair.l), Rs = c.items.filter((x) => x.pair && x.pair.r), pm = pairPerm(t, Rs.length), n = Math.max(Ls.length, Rs.length);
-		const hd = c.heads && c.heads.some(Boolean) ? `<div class="ml mh" data-node="${id}:G2">${esc(c.heads[0] || "")}</div><div class="md"></div><div class="mr mh" data-node="${id}:G2">${esc(c.heads[1] || "")}</div>` : "", mid = (t.answer.params || {}).mid, mdH = (l, r, it) => mid === "box" ? `<div class="md mbox" data-node="${id}:G3">${l ? `<span class="a mbx" data-node="${id}:G3"${slotAt(`${id}.${it.id}`)}></span>` : ""}</div>` : mid === "none" ? `<div class="md"></div>` : `<div class="md" data-node="${id}:G3">${l ? ans(t, it) : "<span></span>"}${r ? ans(t, it, false) : "<span></span>"}</div>`;
+		const hd = c.heads && c.heads.some(Boolean) ? `<div class="ml mh" data-node="${id}:G2">${esc$1(c.heads[0] || "")}</div><div class="md"></div><div class="mr mh" data-node="${id}:G2">${esc$1(c.heads[1] || "")}</div>` : "", mid = (t.answer.params || {}).mid, mdH = (l, r, it) => mid === "box" ? `<div class="md mbox" data-node="${id}:G3">${l ? `<span class="a mbx" data-node="${id}:G3"${slotAt(`${id}.${it.id}`)}></span>` : ""}</div>` : mid === "none" ? `<div class="md"></div>` : `<div class="md" data-node="${id}:G3">${l ? ans(t, it) : "<span></span>"}${r ? ans(t, it, false) : "<span></span>"}</div>`;
 		let rows = hd;
 		for (let i = 0; i < n; i++) {
 			const lx = Ls[i], l = lx && lx.pair.l, rx = Rs[pm[i]], r = rx && rx.pair.r, it = { id: (lx || rx).id };
@@ -18468,7 +18471,7 @@ function body0n(t, L, frag, first) {
 	}
 	if (k === "pairs") {
 		const n = c.items.length;
-		const hd = c.heads && c.heads.some(Boolean) ? `<div class="ml mh" data-node="${id}:G2">${esc(c.heads[0] || "")}</div><div class="md"></div><div class="mr mh" data-node="${id}:G2">${esc(c.heads[1] || "")}</div>` : "", mid = (t.answer.params || {}).mid, mdH = (l, r, it) => mid === "box" ? `<div class="md mbox" data-node="${id}:G3">${l ? `<span class="a mbx" data-node="${id}:G3"${slotAt(`${id}.${it.id}`)}></span>` : ""}</div>` : mid === "none" ? `<div class="md"></div>` : `<div class="md" data-node="${id}:G3">${l ? ans(t, it) : "<span></span>"}${r ? ans(t, it, false) : "<span></span>"}</div>`;
+		const hd = c.heads && c.heads.some(Boolean) ? `<div class="ml mh" data-node="${id}:G2">${esc$1(c.heads[0] || "")}</div><div class="md"></div><div class="mr mh" data-node="${id}:G2">${esc$1(c.heads[1] || "")}</div>` : "", mid = (t.answer.params || {}).mid, mdH = (l, r, it) => mid === "box" ? `<div class="md mbox" data-node="${id}:G3">${l ? `<span class="a mbx" data-node="${id}:G3"${slotAt(`${id}.${it.id}`)}></span>` : ""}</div>` : mid === "none" ? `<div class="md"></div>` : `<div class="md" data-node="${id}:G3">${l ? ans(t, it) : "<span></span>"}${r ? ans(t, it, false) : "<span></span>"}</div>`;
 		let rows = hd;
 		for (let i = 0; i < n; i++) {
 			const pr = c.items[i].pair || {}, l = pr.l, r = pr.r, it = { id: c.items[i].id };
@@ -19127,7 +19130,7 @@ try {
 try {
 	Object.defineProperty(window, "esc", {
 		configurable: true,
-		get: () => esc
+		get: () => esc$1
 	});
 } catch (_) {}
 try {
@@ -26862,6 +26865,20 @@ function GenDlg() {
 		})
 	});
 }
+// ../shared/src/types.ts
+var FORMAT = "wsp/0";
+var INTERACTIONS = [
+	"text",
+	"text-long",
+	"choice-one",
+	"choice-many",
+	"tf",
+	"match",
+	"cell",
+	"draw",
+	"find",
+	"static"
+];
 // ../shared/src/grade.ts
 var isBlank = (v) => v == null || (Array.isArray(v) ? v.length === 0 : String(v).trim() === "");
 function gradeSlot(slot, k, v) {
@@ -26927,6 +26944,591 @@ function gradeSlot(slot, k, v) {
 			max: 0
 		};
 	}
+}
+// ../shared/src/validate.ts
+var ID_RE = /^[A-Za-z0-9_-]+(\.[A-Za-z0-9_()-]+)*$/;
+var CHOICE = /* @__PURE__ */ new Set([
+	"choice-one",
+	"choice-many",
+	"match",
+	"tf"
+]);
+function validate(slots, key) {
+	const err = [];
+	if (!Array.isArray(slots)) return ["slots không phải danh sách"];
+	if (key == null || typeof key !== "object" || Array.isArray(key)) return ["key không phải đối tượng"];
+	const K = key, seen = /* @__PURE__ */ new Set();
+	slots.forEach((s0, i) => {
+		const s = s0, at = `slot ${i + 1}${s && s.id ? ` (${s.id})` : ""}`;
+		if (!s || typeof s !== "object") {
+			err.push(`${at}: không phải đối tượng`);
+			return;
+		}
+		if (typeof s.id !== "string" || !ID_RE.test(s.id)) err.push(`${at}: id không hợp lệ`);
+		else if (seen.has(s.id)) err.push(`${at}: id trùng`);
+		else seen.add(s.id);
+		if (typeof s.task !== "string" || !s.task) err.push(`${at}: thiếu task`);
+		if (typeof s.label !== "string") err.push(`${at}: thiếu label`);
+		if (!INTERACTIONS.includes(s.interaction)) err.push(`${at}: interaction lạ "${s.interaction}"`);
+		if (![
+			"auto",
+			"manual",
+			"none"
+		].includes(s.grading)) err.push(`${at}: grading lạ "${s.grading}"`);
+		if ((s.interaction === "choice-one" || s.interaction === "choice-many" || s.interaction === "match") && !(Array.isArray(s.options) && s.options.length >= 2)) err.push(`${at}: dạng chọn cần ít nhất 2 phương án`);
+		if (s.options) {
+			const ids = /* @__PURE__ */ new Set();
+			s.options.forEach((o) => {
+				if (!o || typeof o.id !== "string" || !o.id) err.push(`${at}: phương án thiếu id`);
+				else if (ids.has(o.id)) err.push(`${at}: phương án trùng id ${o.id}`);
+				else ids.add(o.id);
+			});
+			if (s.options.some((o) => o && ("ok" in o || "correct" in o))) err.push(`${at}: phương án trong đề không được đánh dấu đúng`);
+		}
+		const k = K[s.id];
+		if (s.grading === "auto") {
+			if (!k) {
+				err.push(`${at}: chấm máy nhưng thiếu đáp án`);
+				return;
+			}
+			if (k.type !== s.interaction) err.push(`${at}: kiểu đáp án "${k.type}" khác kiểu chỗ trả lời "${s.interaction}"`);
+			if (!(typeof k.score === "number" && k.score > 0)) err.push(`${at}: điểm phải > 0`);
+			if ([
+				"text",
+				"text-long",
+				"cell"
+			].includes(k.type) && !(Array.isArray(k.accept) && k.accept.some((a) => String(a).trim()))) err.push(`${at}: thiếu đáp án chấp nhận`);
+			if (CHOICE.has(k.type)) {
+				const want = [].concat(k.correct ?? []);
+				if (!want.length) err.push(`${at}: thiếu phương án đúng`);
+				else if (k.type !== "tf" && s.options) {
+					const ids = new Set(s.options.map((o) => o.id));
+					want.forEach((w) => {
+						if (!ids.has(w)) err.push(`${at}: phương án đúng "${w}" không có trong đề`);
+					});
+				}
+				if (k.type === "choice-one" && want.length > 1) err.push(`${at}: chọn một nhưng có ${want.length} phương án đúng`);
+			}
+		}
+	});
+	Object.keys(K).forEach((id) => {
+		if (!seen.has(id)) err.push(`đáp án "${id}" không ứng với chỗ trả lời nào`);
+	});
+	return err;
+}
+// ../shared/src/zip.ts
+var CRC = (() => {
+	const t = /* @__PURE__ */ new Uint32Array(256);
+	for (let n = 0; n < 256; n++) {
+		let c = n;
+		for (let k = 0; k < 8; k++) c = c & 1 ? 3988292384 ^ c >>> 1 : c >>> 1;
+		t[n] = c >>> 0;
+	}
+	return t;
+})();
+function crc32(b) {
+	let c = 4294967295;
+	for (let i = 0; i < b.length; i++) c = CRC[(c ^ b[i]) & 255] ^ c >>> 8;
+	return (c ^ 4294967295) >>> 0;
+}
+var enc = new TextEncoder();
+var dec = new TextDecoder("utf-8", { fatal: true });
+var utf8 = (s) => enc.encode(s);
+var fromUtf8 = (b) => dec.decode(b);
+var DOS_TIME = 0;
+var DOS_DATE = 23585;
+function safeName(n) {
+	return !!n && n.length < 256 && !n.startsWith("/") && !n.includes("\\") && !n.includes("\0") && !n.split("/").some((p) => p === ".." || p === "." || p === "");
+}
+function zip(files) {
+	const names = Object.keys(files).sort(), parts = [], cen = [];
+	let off = 0;
+	for (const n of names) {
+		if (!safeName(n)) throw new Error(`tên file không hợp lệ: ${n}`);
+		const nb = utf8(n), d = files[n], crc = crc32(d);
+		const h = new Uint8Array(30 + nb.length), v = new DataView(h.buffer);
+		v.setUint32(0, 67324752, true);
+		v.setUint16(4, 20, true);
+		v.setUint16(6, 2048, true);
+		v.setUint16(8, 0, true);
+		v.setUint16(10, DOS_TIME, true);
+		v.setUint16(12, DOS_DATE, true);
+		v.setUint32(14, crc, true);
+		v.setUint32(18, d.length, true);
+		v.setUint32(22, d.length, true);
+		v.setUint16(26, nb.length, true);
+		v.setUint16(28, 0, true);
+		h.set(nb, 30);
+		const c = new Uint8Array(46 + nb.length), w = new DataView(c.buffer);
+		w.setUint32(0, 33639248, true);
+		w.setUint16(4, 20, true);
+		w.setUint16(6, 20, true);
+		w.setUint16(8, 2048, true);
+		w.setUint16(10, 0, true);
+		w.setUint16(12, DOS_TIME, true);
+		w.setUint16(14, DOS_DATE, true);
+		w.setUint32(16, crc, true);
+		w.setUint32(20, d.length, true);
+		w.setUint32(24, d.length, true);
+		w.setUint16(28, nb.length, true);
+		w.setUint32(42, off, true);
+		c.set(nb, 46);
+		parts.push(h, d);
+		cen.push(c);
+		off += h.length + d.length;
+	}
+	const cs = cen.reduce((a, b) => a + b.length, 0), e = /* @__PURE__ */ new Uint8Array(22), x = new DataView(e.buffer);
+	x.setUint32(0, 101010256, true);
+	x.setUint16(8, names.length, true);
+	x.setUint16(10, names.length, true);
+	x.setUint32(12, cs, true);
+	x.setUint32(16, off, true);
+	return concat([
+		...parts,
+		...cen,
+		e
+	]);
+}
+function unzip(b) {
+	const v = new DataView(b.buffer, b.byteOffset, b.byteLength);
+	let e = -1;
+	for (let i = b.length - 22; i >= Math.max(0, b.length - 22 - 65535); i--) if (v.getUint32(i, true) === 101010256) {
+		e = i;
+		break;
+	}
+	if (e < 0) throw new Error("không phải file ZIP");
+	const n = v.getUint16(e + 10, true), out = {};
+	let p = v.getUint32(e + 16, true);
+	for (let k = 0; k < n; k++) {
+		if (p + 46 > b.length || v.getUint32(p, true) !== 33639248) throw new Error("ZIP hỏng (mục lục)");
+		const meth = v.getUint16(p + 10, true), crc = v.getUint32(p + 16, true), size = v.getUint32(p + 20, true);
+		const nl = v.getUint16(p + 28, true), xl = v.getUint16(p + 30, true), cl = v.getUint16(p + 32, true), lo = v.getUint32(p + 42, true);
+		const name = fromUtf8(b.subarray(p + 46, p + 46 + nl));
+		if (meth !== 0) throw new Error(`file nén không hỗ trợ: ${name}`);
+		if (!safeName(name)) throw new Error(`tên file không an toàn: ${name}`);
+		if (name in out) throw new Error(`file trùng tên: ${name}`);
+		if (lo + 30 > b.length || v.getUint32(lo, true) !== 67324752) throw new Error(`ZIP hỏng (${name})`);
+		const ln = v.getUint16(lo + 26, true), st = lo + 30 + ln + v.getUint16(lo + 28, true);
+		if (ln !== nl || b.subarray(lo + 30, lo + 30 + ln).some((x, i) => x !== b[p + 46 + i]) || v.getUint16(lo + 8, true) !== 0 || v.getUint32(lo + 14, true) !== crc || v.getUint32(lo + 18, true) !== size || v.getUint32(lo + 22, true) !== size) throw new Error(`ZIP hỏng (đầu mục ${name})`);
+		if (st + size > b.length) throw new Error(`ZIP hỏng (${name} bị cắt)`);
+		const d = b.slice(st, st + size);
+		if (crc32(d) !== crc) throw new Error(`ZIP hỏng (${name} sai CRC)`);
+		out[name] = d;
+		p += 46 + nl + xl + cl;
+	}
+	return out;
+}
+function concat(a) {
+	const r = new Uint8Array(a.reduce((s, x) => s + x.length, 0));
+	let o = 0;
+	for (const x of a) {
+		r.set(x, o);
+		o += x.length;
+	}
+	return r;
+}
+// ../shared/src/wsp.ts
+var subtle = () => {
+	const s = globalThis.crypto && globalThis.crypto.subtle;
+	if (!s) throw new Error("máy không có WebCrypto (cần trình duyệt mới hoặc trang chạy qua http://localhost)");
+	return s;
+};
+var toB64 = (b) => {
+	let s = "";
+	for (let i = 0; i < b.length; i += 32768) s += String.fromCharCode(...b.subarray(i, i + 32768));
+	return btoa(s);
+};
+var fromB64 = (s) => {
+	const r = atob(s), b = new Uint8Array(r.length);
+	for (let i = 0; i < r.length; i++) b[i] = r.charCodeAt(i);
+	return b;
+};
+var hex = (b) => [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, "0")).join("");
+var buf = (b) => b;
+async function sha256(b) {
+	return hex(await subtle().digest("SHA-256", buf(typeof b === "string" ? utf8(b) : b)));
+}
+function canon(v) {
+	if (v === null || typeof v !== "object") return JSON.stringify(v ?? null);
+	if (Array.isArray(v)) return "[" + v.map(canon).join(",") + "]";
+	const o = v;
+	return "{" + Object.keys(o).filter((k) => o[k] !== void 0).sort().map((k) => JSON.stringify(k) + ":" + canon(o[k])).join(",") + "}";
+}
+var NOT_CONTENT = /* @__PURE__ */ new Set([
+	"key.json",
+	"source.json",
+	"manifest.json"
+]);
+async function hashes(files) {
+	const map = {};
+	for (const p of Object.keys(files).sort()) if (p !== "manifest.json") map[p] = await sha256(files[p]);
+	return {
+		map,
+		content: await sha256(Object.keys(map).filter((p) => !NOT_CONTENT.has(p)).map((p) => `${p}:${map[p]}`).join("\n"))
+	};
+}
+async function buildFiles(inp) {
+	const files = {};
+	inp.pages.forEach((h, i) => {
+		files[`pages/p${i + 1}.html`] = utf8(h);
+	});
+	files["pages/style.css"] = utf8(inp.css);
+	for (const [n, b] of Object.entries(inp.fonts || {})) files[`fonts/${n}`] = b;
+	for (const [n, b] of Object.entries(inp.media || {})) files[`media/${n}`] = b;
+	files["slots.json"] = utf8(JSON.stringify(inp.slots, null, 1));
+	files["key.json"] = utf8(JSON.stringify(inp.key, null, 1));
+	if (inp.source !== void 0) files["source.json"] = utf8(JSON.stringify(inp.source));
+	const h = await hashes(files);
+	const tasks = /* @__PURE__ */ new Set();
+	inp.pages.forEach((p) => {
+		for (const m of p.matchAll(/data-task="([^"]+)"/g)) tasks.add(m[1]);
+	});
+	const manifest = {
+		format: FORMAT,
+		sheetId: inp.sheetId,
+		version: inp.version,
+		title: inp.title,
+		...inp.age ? { age: inp.age } : {},
+		pageSize: {
+			wMm: 210,
+			hMm: 297
+		},
+		pages: inp.pages.map((_, i) => ({
+			file: `pages/p${i + 1}.html`,
+			heightMm: 297
+		})),
+		contentHash: h.content,
+		keyHash: h.map["key.json"],
+		files: h.map,
+		stats: {
+			tasks: tasks.size,
+			slots: inp.slots.length,
+			autoGraded: inp.slots.filter((s) => s.grading === "auto").length,
+			manualGraded: inp.slots.filter((s) => s.grading === "manual").length,
+			staticOnly: inp.staticOnly || 0
+		},
+		...inp.warnings && inp.warnings.length ? { warnings: inp.warnings } : {},
+		docMode: inp.docMode || "standards"
+	};
+	files["manifest.json"] = utf8(JSON.stringify(manifest, null, 1));
+	return {
+		files,
+		manifest
+	};
+}
+async function genSignKey() {
+	const k = await subtle().generateKey("Ed25519", true, ["sign", "verify"]);
+	return {
+		publicKey: await subtle().exportKey("jwk", k.publicKey),
+		privateKey: await subtle().exportKey("jwk", k.privateKey)
+	};
+}
+async function genBoxKey() {
+	const k = await subtle().generateKey({
+		name: "RSA-OAEP",
+		modulusLength: 2048,
+		publicExponent: new Uint8Array([
+			1,
+			0,
+			1
+		]),
+		hash: "SHA-256"
+	}, true, ["encrypt", "decrypt"]);
+	return {
+		publicKey: await subtle().exportKey("jwk", k.publicKey),
+		privateKey: await subtle().exportKey("jwk", k.privateKey)
+	};
+}
+function localSigner(keyId, privateKey) {
+	return {
+		keyId,
+		async sign(d) {
+			const k = await subtle().importKey("jwk", privateKey, "Ed25519", false, ["sign"]);
+			return new Uint8Array(await subtle().sign("Ed25519", k, buf(d)));
+		}
+	};
+}
+function publicOf(j) {
+	const r = { ...j };
+	[
+		"d",
+		"p",
+		"q",
+		"dp",
+		"dq",
+		"qi",
+		"key_ops",
+		"ext"
+	].forEach((k) => delete r[k]);
+	return r;
+}
+var aad = (sheetId, version) => utf8(`${FORMAT}|${sheetId}|${version}`);
+var signedPart = (e) => {
+	const { signature, ...rest } = e;
+	return utf8(canon(rest));
+};
+async function sealWsp(files, m, o) {
+	if (!Object.keys(o.recipients).length) throw new Error("cần ít nhất một người nhận (khóa công khai)");
+	const s = subtle(), raw = crypto.getRandomValues(/* @__PURE__ */ new Uint8Array(32)), iv = crypto.getRandomValues(/* @__PURE__ */ new Uint8Array(12));
+	const ck = await s.importKey("raw", raw, "AES-GCM", false, ["encrypt"]);
+	const ct = new Uint8Array(await s.encrypt({
+		name: "AES-GCM",
+		iv,
+		additionalData: buf(aad(m.sheetId, m.version))
+	}, ck, buf(zip(files))));
+	const payload = new Uint8Array(12 + ct.length);
+	payload.set(iv);
+	payload.set(ct, 12);
+	const wrappedKeys = {};
+	for (const [who, jwk] of Object.entries(o.recipients)) {
+		const pk = await s.importKey("jwk", publicOf(jwk), {
+			name: "RSA-OAEP",
+			hash: "SHA-256"
+		}, false, ["encrypt"]);
+		wrappedKeys[who] = toB64(new Uint8Array(await s.encrypt({ name: "RSA-OAEP" }, pk, raw)));
+	}
+	const env = {
+		format: FORMAT,
+		sheetId: m.sheetId,
+		version: m.version,
+		title: m.title,
+		createdAt: o.createdAt || (/* @__PURE__ */ new Date()).toISOString(),
+		producer: o.producer,
+		keyId: o.signer.keyId,
+		wrappedKeys,
+		payloadSha256: await sha256(payload),
+		signature: ""
+	};
+	env.signature = toB64(await o.signer.sign(signedPart(env)));
+	return zip({
+		"envelope.json": utf8(JSON.stringify(env, null, 1)),
+		"payload.bin": payload
+	});
+}
+function readEnvelope(b) {
+	const z = unzip(b);
+	const names = Object.keys(z).sort().join(",");
+	if (names !== "envelope.json,payload.bin") throw new Error(`gói phải có đúng envelope.json và payload.bin (đang có: ${names || "rỗng"})`);
+	const again = zip(z);
+	if (again.length !== b.length || again.some((x, i) => x !== b[i])) throw new Error("vỏ gói bị sửa (không đúng dạng chuẩn) → từ chối");
+	let e;
+	try {
+		e = JSON.parse(fromUtf8(z["envelope.json"]));
+	} catch {
+		throw new Error("envelope.json không đọc được");
+	}
+	return {
+		envelope: e,
+		payload: z["payload.bin"]
+	};
+}
+async function inspectWsp(b, o) {
+	const r = {
+		ok: false,
+		errors: [],
+		warnings: []
+	}, s = subtle();
+	let env, payload;
+	try {
+		({envelope: env, payload} = readEnvelope(b));
+	} catch (e) {
+		r.errors.push(String(e.message));
+		return r;
+	}
+	r.envelope = env;
+	if (env.format !== "wsp/0") {
+		r.errors.push(`định dạng "${env.format}" không đọc được (máy này đọc ${FORMAT}); cần nâng cấp`);
+		return r;
+	}
+	for (const k of [
+		"sheetId",
+		"title",
+		"createdAt",
+		"producer",
+		"keyId",
+		"payloadSha256",
+		"signature"
+	]) if (typeof env[k] !== "string" || !env[k]) r.errors.push(`phong bì thiếu ${k}`);
+	if (!Number.isInteger(env.version) || env.version < 1) r.errors.push("phong bì: version phải là số nguyên ≥ 1");
+	if (!env.wrappedKeys || typeof env.wrappedKeys !== "object") r.errors.push("phong bì thiếu wrappedKeys");
+	if (r.errors.length) return r;
+	const pub = o.trust[env.keyId];
+	if (!pub) {
+		r.errors.push(`khóa ký "${env.keyId}" không có trong danh sách tin cậy → từ chối`);
+		return r;
+	}
+	try {
+		const vk = await s.importKey("jwk", publicOf(pub), "Ed25519", false, ["verify"]);
+		if (!await s.verify("Ed25519", vk, buf(fromB64(env.signature)), buf(signedPart(env)))) {
+			r.errors.push("sai chữ ký → từ chối (gói bị sửa sau khi ký hoặc ký bằng khóa khác)");
+			return r;
+		}
+	} catch (e) {
+		r.errors.push(`không kiểm được chữ ký: ${e.message}`);
+		return r;
+	}
+	if (await sha256(payload) !== env.payloadSha256) {
+		r.errors.push("payload.bin sai hash → từ chối");
+		return r;
+	}
+	if (!o.who) {
+		r.ok = true;
+		r.warnings.push("chỉ kiểm chữ ký, chưa giải mã (không có khóa riêng)");
+		return r;
+	}
+	const w = env.wrappedKeys[o.who];
+	if (!w) {
+		r.errors.push(`gói không bọc khóa cho "${o.who}"`);
+		return r;
+	}
+	if (!o.privateKey) {
+		r.errors.push("thiếu khóa riêng để giải mã");
+		return r;
+	}
+	let inner;
+	try {
+		const pk = await s.importKey("jwk", o.privateKey, {
+			name: "RSA-OAEP",
+			hash: "SHA-256"
+		}, false, ["decrypt"]);
+		const raw = new Uint8Array(await s.decrypt({ name: "RSA-OAEP" }, pk, buf(fromB64(w))));
+		const ck = await s.importKey("raw", raw, "AES-GCM", false, ["decrypt"]);
+		inner = unzip(new Uint8Array(await s.decrypt({
+			name: "AES-GCM",
+			iv: buf(payload.subarray(0, 12)),
+			additionalData: buf(aad(env.sheetId, env.version))
+		}, ck, buf(payload.subarray(12)))));
+	} catch (e) {
+		r.errors.push(`không giải mã được lõi: ${e.message || "sai khóa"}`);
+		return r;
+	}
+	const c = await checkFiles(inner);
+	r.errors.push(...c.errors);
+	r.warnings.push(...c.warnings);
+	r.manifest = c.manifest;
+	r.files = inner;
+	if (c.manifest) {
+		if (c.manifest.sheetId !== env.sheetId || c.manifest.version !== env.version) r.errors.push("manifest và phong bì khác sheetId / version");
+		if (c.manifest.title !== env.title) r.errors.push("manifest và phong bì khác tiêu đề");
+	}
+	r.ok = !r.errors.length;
+	return r;
+}
+var KEY_WORDS = [
+	"accept",
+	"correct",
+	"sample",
+	"explain"
+];
+function deepKeys(v, out) {
+	if (Array.isArray(v)) v.forEach((x) => deepKeys(x, out));
+	else if (v && typeof v === "object") for (const [k, x] of Object.entries(v)) {
+		out.add(k);
+		deepKeys(x, out);
+	}
+}
+var textOf = (h) => h.replace(/<[^>]*>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, "\"").replace(/&#39;/g, "'").replace(/\s+/g, " ");
+async function checkFiles(files) {
+	const errors = [], warnings = [];
+	const J = (p) => {
+		if (!files[p]) {
+			errors.push(`thiếu ${p}`);
+			return;
+		}
+		try {
+			return JSON.parse(fromUtf8(files[p]));
+		} catch {
+			errors.push(`${p} không phải JSON`);
+			return;
+		}
+	};
+	const m = J("manifest.json"), slots = J("slots.json"), key = J("key.json");
+	if (!m) return {
+		errors,
+		warnings
+	};
+	if (m.format !== "wsp/0") errors.push(`manifest: format "${m.format}" khác ${FORMAT}`);
+	if (typeof m.sheetId !== "string" || !m.sheetId) errors.push("manifest thiếu sheetId");
+	if (!Number.isInteger(m.version)) errors.push("manifest: version phải là số nguyên");
+	if (typeof m.title !== "string") errors.push("manifest thiếu title");
+	if (!m.pageSize || m.pageSize.wMm !== 210 || m.pageSize.hMm !== 297) errors.push("manifest: pageSize phải là A4 210×297");
+	if (!Array.isArray(m.pages) || !m.pages.length) errors.push("manifest: không có trang");
+	if (m.docMode !== "quirks" && m.docMode !== "standards") errors.push("manifest: docMode phải là \"quirks\" hoặc \"standards\"");
+	if (!m.files || typeof m.files !== "object") {
+		errors.push("manifest thiếu files");
+		return {
+			errors,
+			warnings,
+			manifest: m
+		};
+	}
+	const h = await hashes(files);
+	for (const p of Object.keys(m.files)) if (!(p in files)) errors.push(`manifest liệt kê ${p} nhưng gói không có`);
+	for (const p of Object.keys(h.map)) {
+		if (!(p in m.files)) errors.push(`file ${p} không có trong manifest`);
+		else if (m.files[p] !== h.map[p]) errors.push(`file ${p} sai hash`);
+		if (!/^(pages\/(p[1-9]\d*\.html|style\.css)|fonts\/[\w.-]+\.woff2|media\/[\w.-]+\.(png|jpe?g|webp|gif|svg)|slots\.json|key\.json|source\.json)$/.test(p)) errors.push(`file lạ trong gói: ${p}`);
+	}
+	if (m.contentHash !== h.content) errors.push("contentHash không khớp nội dung đề");
+	if (m.keyHash !== h.map["key.json"]) errors.push("keyHash không khớp key.json");
+	if (slots && key) {
+		validate(slots, key).forEach((e) => errors.push(`slots/key: ${e}`));
+		const ks = /* @__PURE__ */ new Set();
+		deepKeys(slots, ks);
+		KEY_WORDS.filter((k) => ks.has(k)).forEach((k) => errors.push(`slots.json có trường đáp án "${k}" (đáp án chỉ được nằm trong key.json)`));
+	}
+	const ids = new Set((slots || []).map((s) => s.id)), seen = /* @__PURE__ */ new Set(), refs = /* @__PURE__ */ new Set();
+	const pageFiles = (Array.isArray(m.pages) ? m.pages : []).map((p) => p && p.file);
+	pageFiles.forEach((f, i) => {
+		if (f !== `pages/p${i + 1}.html`) errors.push(`manifest: trang ${i + 1} phải là pages/p${i + 1}.html`);
+	});
+	Object.keys(files).filter((p) => /^pages\/p\d+\.html$/.test(p) && !pageFiles.includes(p)).forEach((p) => errors.push(`${p} không có trong danh sách trang`));
+	let allText = "";
+	for (const f of pageFiles) {
+		if (!f || !files[f]) continue;
+		const html = fromUtf8(files[f]), at = f;
+		allText += textOf(html) + "\n";
+		if (/<\s*(script|iframe|object|embed|link|meta|base|form|style)\b/i.test(html)) errors.push(`${at}: có thẻ bị cấm (script / iframe / link / style…)`);
+		if (/\son[a-z]+\s*=/i.test(html)) errors.push(`${at}: có thuộc tính sự kiện on…`);
+		if (/javascript:/i.test(html)) errors.push(`${at}: có javascript:`);
+		if (/class="[^"]*\bok\b/.test(html) || /data-(ok|correct|accept|key|sample)\b/.test(html)) errors.push(`${at}: trang có đánh dấu đáp án`);
+		for (const x of html.matchAll(/data-ans="([^"]+)"/g)) {
+			seen.add(x[1]);
+			if (!ids.has(x[1])) errors.push(`${at}: data-ans "${x[1]}" không có trong slots.json`);
+		}
+		for (const x of html.matchAll(/\b(?:src|href|xlink:href|poster|srcset)\s*=\s*"([^"]*)"/gi)) refs.add(x[1]);
+		for (const x of html.matchAll(/url\(\s*['"]?([^'")]+)['"]?\s*\)/gi)) refs.add(x[1].replace(/&quot;/g, ""));
+	}
+	ids.forEach((id) => {
+		if (!seen.has(id)) errors.push(`chỗ trả lời "${id}" không thấy trên trang nào`);
+	});
+	if (files["pages/style.css"]) {
+		const css = fromUtf8(files["pages/style.css"]);
+		if (/@import|expression\(|javascript:|<\/?\s*style/i.test(css)) errors.push("pages/style.css có @import / expression / javascript");
+		for (const x of css.matchAll(/url\(\s*['"]?([^'")]+)['"]?\s*\)/gi)) refs.add(x[1]);
+	} else errors.push("thiếu pages/style.css");
+	refs.forEach((u) => {
+		if (/^data:image\/svg\+xml/i.test(u)) return;
+		if (/^(https?:)?\/\//i.test(u) || /^[a-z]+:/i.test(u)) errors.push(`tham chiếu ngoài gói bị cấm: ${u.slice(0, 80)}`);
+		else if (!files[u]) errors.push(`tham chiếu tới ${u} nhưng gói không có`);
+	});
+	Object.keys(files).filter((p) => p.endsWith(".svg")).forEach((p) => {
+		const t = fromUtf8(files[p]);
+		if (/<script|\son[a-z]+\s*=|javascript:/i.test(t)) errors.push(`${p}: SVG có script`);
+	});
+	if (key) Object.entries(key).forEach(([id, k]) => {
+		[k.sample, k.explain].forEach((t) => {
+			const s = String(t || "").trim().replace(/\s+/g, " ");
+			if (s.length >= 8 && allText.includes(s)) errors.push(`trang có sẵn bài mẫu / giải thích của "${id}"`);
+		});
+	});
+	if (m.stats && m.stats.staticOnly) warnings.push(`${m.stats.staticOnly} câu chỉ xem (không tương tác)`);
+	(m.warnings || []).forEach((w) => warnings.push(w));
+	return {
+		errors,
+		warnings,
+		manifest: m
+	};
 }
 // src/viewer/data.ts
 function hashOf(s) {
@@ -29830,17 +30432,587 @@ function Presenter({ data, onClose }) {
 // src/viewer/ShowRoot.tsx
 function ShowRoot() {
 	const d = useUi((s) => s.show), pages = useUi((s) => s.pages);
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [d ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-		className: "btn pri showfab",
-		id: "showBtn",
-		title: "Trình chiếu phiếu lên lớp (toàn màn hình)",
-		disabled: !pages,
-		onClick: () => actions.present(),
-		children: "▶ Chiếu"
-	}), d ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presenter, {
-		data: d,
-		onClose: () => publish({ show: null })
-	}) : null] });
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+		d ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+			className: "btn showfab wspfab",
+			id: "wspBtn",
+			title: "Gói phiếu tương tác (.wsp): xuất gói cho học sinh làm, hoặc mở lại gói đã xuất",
+			disabled: !pages,
+			onClick: () => publish({ wspOpen: true }),
+			children: "Gói .wsp"
+		}),
+		d ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+			className: "btn pri showfab",
+			id: "showBtn",
+			title: "Trình chiếu phiếu lên lớp (toàn màn hình)",
+			disabled: !pages,
+			onClick: () => actions.present(),
+			children: "▶ Chiếu"
+		}),
+		d ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presenter, {
+			data: d,
+			onClose: () => publish({ show: null })
+		}) : null
+	] });
+}
+// src/ui/wsp/collect.ts
+var esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+var EXT = {
+	"image/png": "png",
+	"image/jpeg": "jpg",
+	"image/webp": "webp",
+	"image/gif": "gif",
+	"image/svg+xml": "svg"
+};
+function dataBytes(u) {
+	const m = /^data:([^;,]+)(;base64)?,(.*)$/s.exec(u);
+	if (!m) return null;
+	const body = m[2] ? atob(m[3]) : decodeURIComponent(m[3]);
+	const b = new Uint8Array(body.length);
+	for (let i = 0; i < body.length; i++) b[i] = body.charCodeAt(i) & 255;
+	return {
+		type: m[1].toLowerCase(),
+		bytes: m[2] ? b : new TextEncoder().encode(body)
+	};
+}
+async function fetchBytes(u) {
+	try {
+		const r = await fetch(u);
+		if (!r.ok) return null;
+		return {
+			type: (r.headers.get("content-type") || "").split(";")[0].trim().toLowerCase(),
+			bytes: new Uint8Array(await r.arrayBuffer())
+		};
+	} catch {
+		return null;
+	}
+}
+var isPlaceholder = (u) => /^data:image\/svg\+xml/i.test(u) && u.length < 4e3;
+function pageCss(html, fontCss) {
+	const used = /* @__PURE__ */ new Set([
+		"paper",
+		"page",
+		"flow",
+		"pfoot",
+		"wsp-pg"
+	]);
+	for (const m of html.matchAll(/class="([^"]*)"/g)) m[1].split(/\s+/).forEach((c) => c && used.add(c));
+	const fams = new Set([...fontCss.matchAll(/"([^"]+)"/g)].map((m) => m[1].toLowerCase()));
+	const out = [], fonts = [];
+	const BAD = /#|:hover|:focus|:active|::selection|::-webkit|\[contenteditable|\[data-node\]|\[data-theme/;
+	for (const sh of Array.from(document.styleSheets)) {
+		let rules;
+		try {
+			rules = sh.cssRules;
+		} catch {
+			continue;
+		}
+		for (const r of Array.from(rules)) {
+			if (r instanceof CSSFontFaceRule) {
+				const fam = r.style.getPropertyValue("font-family").replace(/['"]/g, "").trim().toLowerCase();
+				if (!fams.has(fam)) continue;
+				const u = /url\(\s*["']?([^"')]+)["']?\s*\)/.exec(r.cssText);
+				if (!u) continue;
+				const file = u[1].split("/").pop();
+				fonts.push(file);
+				out.push(r.cssText.replace(u[0], `url(fonts/${file})`));
+				continue;
+			}
+			if (!(r instanceof CSSStyleRule)) continue;
+			const sel = r.selectorText;
+			if (sel === ":root") {
+				out.push(r.cssText);
+				continue;
+			}
+			if (/^\*(\s*,\s*\*?::?(before|after))*$/.test(sel)) {
+				out.push(r.cssText);
+				continue;
+			}
+			const keep = sel.split(",").map((s) => s.trim()).filter((p) => {
+				if (BAD.test(p) || /^(html|body)\b/.test(p)) return false;
+				const cls = [...p.replace(/:not\([^)]*\)/g, "").matchAll(/\.([\w-]+)/g)].map((m) => m[1]);
+				return cls.length > 0 && cls.every((c) => used.has(c)) && !cls.some((c) => c === "sel" || c === "cur" || c === "stage" || c === "show");
+			});
+			if (keep.length) out.push(`${keep.join(",")}{${r.style.cssText}}`);
+		}
+	}
+	out.push(`:root{--f-sheet:${fontCss}}`);
+	out.push(".wsp-pg{position:relative;left:auto;top:auto;transform:none;box-shadow:none;overflow:hidden;background:#fff;color:var(--ink)}");
+	return {
+		css: out.join("\n"),
+		fonts
+	};
+}
+async function collect() {
+	const s = actions.wspSource();
+	if (!s) return null;
+	const blockers = [], warnings = [...s.warn];
+	if (s.over) blockers.push(`${s.over} trang có Task tràn trang: sửa cho hết tràn rồi xuất`);
+	if (!s.slots.length) warnings.push("phiếu không có chỗ trả lời nào: học sinh chỉ xem");
+	const n = s.pages.length, title = s.ws.title || "Phiếu";
+	let pages = s.pages.map((h, i) => `<div class="page paper wsp-pg" lang="vi" data-page="${i}"><div class="flow">${h}</div><div class="pfoot"><span>${esc(title)}</span><span>Trang ${i + 1}/${n}</span></div></div>`);
+	pages = pages.map((h) => h.replace(/\sclass="([^"]*)"/g, (_, c) => {
+		const k = c.split(/\s+/).filter((x) => x && x !== "sel" && x !== "cur").join(" ");
+		return k ? ` class="${k}"` : "";
+	}));
+	const media = {}, byUrl = /* @__PURE__ */ new Map();
+	const urls = /* @__PURE__ */ new Set();
+	pages.forEach((h) => {
+		for (const m of h.matchAll(/\ssrc="([^"]+)"/g)) urls.add(m[1]);
+		for (const m of h.matchAll(/url\((?:&quot;|["'])?([^"')&]+)(?:&quot;|["'])?\)/g)) urls.add(m[1]);
+	});
+	for (const u0 of urls) {
+		const u = u0.replace(/&amp;/g, "&");
+		if (isPlaceholder(u)) continue;
+		const got = u.startsWith("data:") ? dataBytes(u) : await fetchBytes(u);
+		if (!got) {
+			blockers.push(`không lấy được ảnh ${u.slice(0, 60)}${u.length > 60 ? "…" : ""}: tải ảnh lên lại trong khung ảnh rồi xuất`);
+			continue;
+		}
+		const ext = EXT[got.type] || /\.(png|jpe?g|webp|gif|svg)(\?|$)/i.exec(u)?.[1].toLowerCase().replace("jpeg", "jpg");
+		if (!ext) {
+			blockers.push(`ảnh dạng lạ (${got.type || "không rõ"}): ${u.slice(0, 60)}`);
+			continue;
+		}
+		if (ext === "svg" && /<script|\son[a-z]+\s*=|javascript:/i.test(new TextDecoder().decode(got.bytes))) {
+			blockers.push("ảnh SVG có mã chạy: thay bằng ảnh PNG / JPG");
+			continue;
+		}
+		const name = `${(await sha256(got.bytes)).slice(0, 16)}.${ext}`;
+		media[name] = got.bytes;
+		byUrl.set(u0, `media/${name}`);
+	}
+	pages = pages.map((h) => {
+		byUrl.forEach((to, from) => {
+			h = h.split(from).join(to);
+		});
+		return h;
+	});
+	const pc = pageCss(pages.join("\n"), s.font.css), fonts = {};
+	let css = pc.css;
+	for (const f of [...new Set(pc.fonts)]) {
+		const got = await fetchBytes(new URL(`fonts/${f}`, location.href).href);
+		if (got && got.bytes.length > 100) fonts[f] = got.bytes;
+		else css = css.split("\n").filter((l) => !l.includes(`url(fonts/${f})`)).join("\n");
+	}
+	if (pc.fonts.length && !Object.keys(fonts).length) warnings.push(`gói chưa kèm phông ${s.font.name} (app đang mở thẳng từ file; mở app qua máy chủ lớp thử "npm run lop" để kèm phông). Máy khác sẽ hiện phông thay thế`);
+	return {
+		input: {
+			sheetId: s.ws.id,
+			version: 1,
+			title,
+			age: s.ws.age,
+			pages,
+			css,
+			fonts,
+			media,
+			slots: s.slots,
+			key: s.key,
+			source: s.ws,
+			staticOnly: s.staticOnly,
+			warnings,
+			docMode: document.compatMode === "BackCompat" ? "quirks" : "standards"
+		},
+		blockers,
+		warnings
+	};
+}
+// src/ui/wsp/keys.ts
+var K_SIGN = "wsp.devSign.v1";
+var K_ED = "wsp.edBox.v1";
+var K_TR = "wsp.trPub.v1";
+var K_TRUST = "wsp.trust.v1";
+var K_VER = "wsp.ver.v1";
+var get = (k) => {
+	try {
+		const v = localStorage.getItem(k);
+		return v ? JSON.parse(v) : null;
+	} catch {
+		return null;
+	}
+};
+var put = (k, v) => {
+	try {
+		localStorage.setItem(k, JSON.stringify(v));
+	} catch {}
+};
+var memSign = null;
+var memEd = null;
+async function devSign() {
+	let k = get(K_SIGN) || memSign;
+	if (!k) {
+		k = {
+			...await genSignKey(),
+			kid: "dev-local-" + Math.random().toString(36).slice(2, 8)
+		};
+		put(K_SIGN, k);
+	}
+	return memSign = k;
+}
+async function edBox() {
+	let k = get(K_ED) || memEd;
+	if (!k) {
+		k = await genBoxKey();
+		put(K_ED, k);
+	}
+	return memEd = k;
+}
+var trPub = () => get(K_TR);
+function setTrPub(txt) {
+	if (!txt.trim()) {
+		try {
+			localStorage.removeItem(K_TR);
+		} catch {}
+		return null;
+	}
+	try {
+		const j = JSON.parse(txt);
+		if (j.kty !== "RSA" || !j.n || !j.e) return "không phải khóa công khai RSA (JWK)";
+		put(K_TR, publicOf(j));
+		return null;
+	} catch {
+		return "không đọc được JSON";
+	}
+}
+async function serverKeys() {
+	if (!/^https?:$/.test(location.protocol) || !document.querySelector("meta[name=\"ws-lop\"]")) return null;
+	try {
+		const r = await fetch("/api/wsp/khoa");
+		if (!r.ok) return null;
+		const j = await r.json();
+		return j && j.keyId && j.trPublic ? j : null;
+	} catch {
+		return null;
+	}
+}
+function serverSigner(keyId) {
+	return {
+		keyId,
+		async sign(d) {
+			const r = await fetch("/api/wsp/ky", {
+				method: "POST",
+				headers: { "content-type": "application/json" },
+				body: JSON.stringify({ data: toB64(d) })
+			});
+			if (!r.ok) throw new Error("máy chủ không ký được (" + r.status + ")");
+			return fromB64((await r.json()).signature);
+		}
+	};
+}
+async function devSigner() {
+	const k = await devSign();
+	return localSigner(k.kid, k.privateKey);
+}
+async function trusted() {
+	const t = { ...get(K_TRUST) || {} };
+	const d = await devSign();
+	t[d.kid] = d.publicKey;
+	const s = await serverKeys();
+	if (s) t[s.keyId] = s.signPublic;
+	return t;
+}
+function nextVersion(id, hash) {
+	const o = (get(K_VER) || {})[id];
+	if (!o) return 1;
+	return o.h === hash ? o.v : o.v + 1;
+}
+function saveVersion(id, v, hash) {
+	const m = get(K_VER) || {};
+	m[id] = {
+		v,
+		h: hash
+	};
+	put(K_VER, m);
+}
+// src/ui/wsp/WspDlg.tsx
+var VER = "WS Editor v118";
+var kb = (n) => n < 1048576 ? `${Math.max(1, Math.round(n / 1024))} KB` : `${(n / 1024 / 1024).toFixed(1)} MB`;
+var fname = (t) => (t || "phieu").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").replace(/[^\w-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "phieu";
+function WspDlg() {
+	const open = useUi((s) => s.wspOpen), ref = (0, import_react.useRef)(null);
+	const [c, setC] = (0, import_react.useState)(null), [srv, setSrv] = (0, import_react.useState)(null);
+	const [busy, setBusy] = (0, import_react.useState)(""), [msg, setMsg] = (0, import_react.useState)(null);
+	const [seen, setSeen] = (0, import_react.useState)(false), [tr, setTr] = (0, import_react.useState)(""), [trErr, setTrErr] = (0, import_react.useState)("");
+	(0, import_react.useLayoutEffect)(() => {
+		const el = ref.current;
+		if (open && !el.open) el.showModal();
+		else if (!open && el.open) el.close();
+	}, [open]);
+	(0, import_react.useEffect)(() => {
+		if (!open) return;
+		setC(null);
+		setMsg(null);
+		setSeen(false);
+		setTrErr("");
+		const p = trPub();
+		setTr(p ? JSON.stringify(p) : "");
+		setBusy("Đang gom trang, ảnh, phông…");
+		Promise.all([collect(), serverKeys()]).then(([x, s]) => {
+			setC(x);
+			setSrv(s);
+			setBusy("");
+		}, (e) => {
+			setBusy("");
+			setMsg({
+				ok: false,
+				text: "Không gom được phiếu: " + e.message
+			});
+		});
+	}, [open]);
+	const exportIt = async () => {
+		if (!c) return;
+		const e0 = setTrPub(srv ? "" : tr);
+		if (e0) {
+			setTrErr(e0);
+			return;
+		}
+		setBusy("Đang kiểm, ký và mã hóa…");
+		setMsg(null);
+		try {
+			const b0 = await buildFiles(c.input), h = b0.manifest.contentHash + b0.manifest.keyHash;
+			const v = nextVersion(c.input.sheetId, h), { files, manifest } = await buildFiles({
+				...c.input,
+				version: v
+			});
+			const chk = await checkFiles(files);
+			if (chk.errors.length) {
+				setMsg({
+					ok: false,
+					text: "Gói chưa đạt kiểm tra, chưa xuất:",
+					list: chk.errors
+				});
+				setBusy("");
+				return;
+			}
+			const rec = { ed: (await edBox()).publicKey };
+			const t = srv ? srv.trPublic : trPub();
+			if (t) rec.tr = t;
+			const signer = srv ? serverSigner(srv.keyId) : await devSigner();
+			const bytes = await sealWsp(files, manifest, {
+				signer,
+				recipients: rec,
+				producer: VER
+			});
+			saveVersion(c.input.sheetId, v, h);
+			const name = `${fname(c.input.title)}-v${v}.wsp`, url = URL.createObjectURL(new Blob([bytes], { type: "application/octet-stream" }));
+			const a = document.createElement("a");
+			a.href = url;
+			a.download = name;
+			document.body.appendChild(a);
+			a.click();
+			a.remove();
+			setTimeout(() => URL.revokeObjectURL(url), 6e4);
+			window.__wspLast = {
+				bytes,
+				name,
+				manifest
+			};
+			setMsg({
+				ok: true,
+				text: `Đã xuất ${name} (${kb(bytes.length)}) · phiên bản ${v} · ký bằng ${signer.keyId}${rec.tr ? "" : " · chưa có khóa bên nhập: gói chỉ mở lại được trong WS Editor trên máy này"}`
+			});
+		} catch (e) {
+			setMsg({
+				ok: false,
+				text: "Không xuất được: " + e.message
+			});
+		}
+		setBusy("");
+	};
+	const openIt = async (f) => {
+		setBusy("Đang kiểm gói…");
+		setMsg(null);
+		try {
+			const r = await inspectWsp(new Uint8Array(await f.arrayBuffer()), {
+				trust: await trusted(),
+				who: "ed",
+				privateKey: (await edBox()).privateKey
+			});
+			setBusy("");
+			if (!r.ok || !r.files) {
+				setMsg({
+					ok: false,
+					text: `Không mở được ${f.name}:`,
+					list: r.errors
+				});
+				return;
+			}
+			const src = r.files["source.json"];
+			if (!src) {
+				setMsg({
+					ok: false,
+					text: "Gói không kèm phiếu gốc (source.json): không mở lại để sửa được"
+				});
+				return;
+			}
+			if (!await askConfirm("Mở phiếu trong gói?", `“${r.envelope.title}” (phiên bản ${r.envelope.version}) sẽ thay phiếu đang mở. Phiếu đang mở chưa lưu sẽ mất.`, "Mở phiếu")) return;
+			if (actions.openSheet(JSON.parse(new TextDecoder().decode(src)), `Đã mở gói ${f.name}`)) publish({ wspOpen: false });
+		} catch (e) {
+			setBusy("");
+			setMsg({
+				ok: false,
+				text: "Không mở được: " + e.message
+			});
+		}
+	};
+	const st = c && c.input.slots, auto = st ? st.filter((s) => s.grading === "auto").length : 0;
+	const can = !!c && !c.blockers.length && (!c.warnings.length || seen) && !busy;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("dialog", {
+		id: "wspDlg",
+		ref,
+		"aria-labelledby": "wspTitle",
+		onClose: () => {
+			if (useUi.getState().wspOpen) publish({ wspOpen: false });
+		},
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+				id: "wspTitle",
+				style: {
+					margin: "0 0 6px",
+					fontSize: 15
+				},
+				children: "Gói phiếu tương tác (.wsp)"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "hint",
+				style: { margin: "0 0 8px" },
+				children: "Gói chứa trang đã dàn, chỗ trả lời, đáp án (mã hóa) và phiếu gốc để mở lại. Học sinh chỉ thấy phần đề; đáp án nằm ở máy chủ."
+			}),
+			c ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "wspsum",
+				id: "wspSum",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: c.input.title }),
+					" · ",
+					c.input.pages.length,
+					" trang · ",
+					st.length,
+					" chỗ trả lời (",
+					auto,
+					" máy chấm, ",
+					st.length - auto,
+					" chấm tay)",
+					c.input.staticOnly ? ` · ${c.input.staticOnly} câu chỉ xem` : "",
+					" · ",
+					Object.keys(c.input.media || {}).length,
+					" ảnh · ",
+					Object.keys(c.input.fonts || {}).length,
+					" file phông"
+				]
+			}) : null,
+			c && c.blockers.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "wspbad",
+				id: "wspBlock",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Chưa xuất được:" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", { children: c.blockers.map((x) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: x }, x)) })]
+			}) : null,
+			c && c.warnings.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "wspwarn",
+				id: "wspWarn",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("b", { children: [
+						"Cảnh báo (",
+						c.warnings.length,
+						"):"
+					] }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ul", { children: [c.warnings.slice(0, 12).map((x) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: x }, x)), c.warnings.length > 12 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: [
+						"… và ",
+						c.warnings.length - 12,
+						" cảnh báo khác"
+					] }) : null] }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+						type: "checkbox",
+						id: "wspSeen",
+						checked: seen,
+						onChange: (e) => setSeen(e.target.checked)
+					}), " Tôi đã xem các cảnh báo, vẫn xuất"] })
+				]
+			}) : null,
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "wsprow",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "hint",
+					children: "Ký và người nhận:"
+				}), srv ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+					id: "wspSigner",
+					children: [
+						"máy chủ lớp thử (khóa ",
+						srv.keyId,
+						") · gói mở được trên máy chủ này và trong WS Editor"
+					]
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					id: "wspSigner",
+					children: "khóa thử trên máy này (chưa có dịch vụ ký của công ty)"
+				})]
+			}),
+			srv ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("details", {
+				className: "wsptr",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("summary", { children: "Khóa công khai bên nhập (TeacherResource), nếu có" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+						id: "wspTr",
+						value: tr,
+						onChange: (e) => {
+							setTr(e.target.value);
+							setTrErr("");
+						},
+						placeholder: "{\"kty\":\"RSA\",\"n\":\"…\",\"e\":\"AQAB\"}",
+						style: { height: 70 }
+					}),
+					trErr ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "wspbad",
+						children: trErr
+					}) : null
+				]
+			}),
+			busy ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "hint",
+				id: "wspBusy",
+				children: busy
+			}) : null,
+			msg ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: msg.ok ? "wspok" : "wspbad",
+				id: "wspMsg",
+				children: [msg.text, msg.list ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", { children: msg.list.slice(0, 15).map((x) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: x }, x)) }) : null]
+			}) : null,
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "row",
+				style: { justifyContent: "space-between" },
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+					className: "btn",
+					htmlFor: "wspFile",
+					title: "Mở lại gói đã xuất từ WS Editor trên máy này để sửa",
+					children: ["Mở gói .wsp…", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+						type: "file",
+						id: "wspFile",
+						accept: ".wsp",
+						hidden: true,
+						onChange: (e) => {
+							const f = e.target.files && e.target.files[0];
+							e.target.value = "";
+							if (f) openIt(f);
+						}
+					})]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+					style: {
+						display: "flex",
+						gap: 8
+					},
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "btn",
+						id: "wspClose",
+						onClick: () => publish({ wspOpen: false }),
+						children: "Đóng"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "btn pri",
+						id: "wspGo",
+						disabled: !can,
+						onClick: exportIt,
+						children: "Xuất gói .wsp"
+					})]
+				})]
+			})
+		]
+	});
 }
 // src/ui/mount.tsx
 function mount(id, node) {
@@ -29858,6 +31030,7 @@ mount("r-lib", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ImportDlg, {}));
 mount("r-paste", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PasteDlg, {}));
 mount("r-gen", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(GenDlg, {}));
 mount("r-show", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ShowRoot, {}));
+mount("r-wsp", /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WspDlg, {}));
 Object.assign(window, {
 	askConfirm,
 	toast,
@@ -30219,7 +31392,7 @@ var ATTACH = {
 	item: "Theo item",
 	block: "Khối riêng"
 };
-var paraHtml = (s) => /\n/.test(s) ? s.split(/\n\s*\n/).map((x) => x.replace(/\s*\n\s*/g, " ").trim()).filter(Boolean).map((x) => `<p>${esc(x)}</p>`).join("") : esc(s);
+var paraHtml = (s) => /\n/.test(s) ? s.split(/\n\s*\n/).map((x) => x.replace(/\s*\n\s*/g, " ").trim()).filter(Boolean).map((x) => `<p>${esc$1(x)}</p>`).join("") : esc$1(s);
 var gapLabs = (tx) => {
 	const o = [], str = String(tx || "");
 	str.replace(/_{3,}/g, (m, at) => {
@@ -32536,6 +33709,23 @@ actions.present = () => {
 		start: sel.type !== "sheet" ? sel.id : null
 	} });
 };
+actions.wspSource = () => {
+	const pv = useUi.getState().pageView;
+	if (!pv) return null;
+	const r = sheetSlots(ws);
+	const staticOnly = (ws.tasks || []).reduce((n, t) => n + taskSlots(t).notes.filter((m) => /chỉ xem/.test(m)).length, 0);
+	return {
+		ws: clone(ws),
+		pages: pv.pages.map((p) => p.html),
+		over: pv.pages.filter((p) => p.over).length,
+		slots: r.slots,
+		key: r.key,
+		warn: r.warn,
+		staticOnly,
+		font: FONTS$1[fontKey()]
+	};
+};
+actions.openSheet = (obj, msg) => loadSheet(obj, msg);
 actions.toggleGuides = () => {
 	guides = !guides;
 	publish({ guides });
@@ -33174,7 +34364,7 @@ extraActs.change = (i) => {
 	if (i.id === "fitN") {}
 };
 var libGroups = () => LIB_GROUPS.map((g) => [g, RECIPES.filter((r) => (r.group || "Danh sách câu") === g)]).filter((x) => x[1].length);
-var libOpts = (selId, mark) => libGroups().map(([g, rs]) => `<optgroup label="${esc(g)}">${rs.map((r) => `<option value="${r.id}" ${selId === r.id ? "selected" : ""}>${esc(r.name)}${mark && mark(r) ? mark(r) : ""}</option>`).join("")}</optgroup>`).join("");
+var libOpts = (selId, mark) => libGroups().map(([g, rs]) => `<optgroup label="${esc$1(g)}">${rs.map((r) => `<option value="${r.id}" ${selId === r.id ? "selected" : ""}>${esc$1(r.name)}${mark && mark(r) ? mark(r) : ""}</option>`).join("")}</optgroup>`).join("");
 var endGap = (s) => /\s_{3,}\s*[.?!]?\s*$/.test(s) && !/:\s*_{3,}\s*$/.test(s);
 function contentWarnings(t) {
 	const w = [], k = ck$3(t), it = its$2(t), a = t.answer, c = t.content;
@@ -34192,7 +35382,7 @@ function impRender() {
 		return;
 	}
 	if (J.err) {
-		out.innerHTML = `<div class="diag">${esc(J.err)} Phiếu đang mở không đổi.</div>`;
+		out.innerHTML = `<div class="diag">${esc$1(J.err)} Phiếu đang mở không đổi.</div>`;
 		ok.disabled = true;
 		ok.textContent = sheet ? "Tạo phiếu mới" : "Thêm vào cuối phiếu";
 		impUi({
@@ -34207,14 +35397,14 @@ function impRender() {
 		if (r.joined) multi[r.grp] = (multi[r.grp] || 1) + 1;
 	});
 	const partTxt = nParts ? ` (${Object.keys(multi).map((g) => `Task ${g} có ${multi[g]} phần`).join(", ")})` : "";
-	let h = `<p class="hint">Nhận ra <b>${SRC_NAME[J.src]}</b>${J.src === "json" ? J.kind === "sheet" ? " (cả phiếu)" : " (Task)" : ""}${impFile ? ` · file “${esc(impFile)}”` : ""}: <b>${nTop}</b> Task${partTxt}${J.src === "text" && pasteMode === "test" ? " (cắt theo dòng đầu mục)" : ""}.</p>`;
+	let h = `<p class="hint">Nhận ra <b>${SRC_NAME[J.src]}</b>${J.src === "json" ? J.kind === "sheet" ? " (cả phiếu)" : " (Task)" : ""}${impFile ? ` · file “${esc$1(impFile)}”` : ""}: <b>${nTop}</b> Task${partTxt}${J.src === "text" && pasteMode === "test" ? " (cắt theo dòng đầu mục)" : ""}.</p>`;
 	if (J.src === "text") h += `<div class="diag info">Chữ thô: hệ thống <b>đoán</b>, độ chắc thấp. Xem lại từng Task, chọn mẫu khác nếu đoán sai. Muốn chính xác thì dùng JSON hoặc MD theo quy ước.</div>`;
 	if (J.src === "text" && pasteMode === "task" && J.lines > PASTE_LONG) h += `<div class="diag">Đang dán ${J.lines} dòng vào <b>một</b> Task. Nếu đây là cả đề, chuyển sang “Cả đề” để cắt thành nhiều Task. <button class="btn" data-pm2="test">Chuyển sang Cả đề</button></div>`;
 	if (!sheet && J.kind === "sheet") h += `<div class="diag info">File có <b>cài đặt cấp phiếu</b>: “+ Task” chỉ lấy các Task, bỏ cài đặt cấp phiếu (tên, tuổi, khoảng cách, xếp trang). <button class="btn" data-imp="tosheet">Mở bằng “+ Phiếu” thay vì thêm</button></div>`;
 	if (!sheet && n > 1) h += `<div class="diag warn">File có <b>${nTop}</b> Task${partTxt}. Bỏ chọn Task không muốn nhập; các Task được thêm vào cuối phiếu theo thứ tự trong file.</div>`;
-	if (sheet && J.sheetNotes && J.sheetNotes.length) h += `<p class="hint">Cấp phiếu thiếu, sẽ bù mặc định: ${esc(J.sheetNotes.join(", "))}.</p>`;
+	if (sheet && J.sheetNotes && J.sheetNotes.length) h += `<p class="hint">Cấp phiếu thiếu, sẽ bù mặc định: ${esc$1(J.sheetNotes.join(", "))}.</p>`;
 	if (bad) h += `<div class="diag">${bad} Task không dựng được (xem dòng đỏ).${sheet ? " Sửa file rồi nạp lại; phiếu đang mở không đổi." : " Các Task này sẽ bị bỏ qua."}</div>`;
-	if (J.mdNotes && J.mdNotes.length) h += `<p class="hint">${esc(J.mdNotes.join("; "))}.</p>`;
+	if (J.mdNotes && J.mdNotes.length) h += `<p class="hint">${esc$1(J.mdNotes.join("; "))}.</p>`;
 	h += J.tasks.map((r, i) => impRowHtml(r, i, {
 		check: !sheet && n > 1,
 		text: J.src === "text",
@@ -34241,13 +35431,13 @@ function impRowHtml(r, i, o) {
 	const t = r.t, n = t ? ck$3(t) === "table" ? `${t.content.rows.length} hàng` : ck$3(t) === "empty" ? "chỉ có ảnh" : `${its$2(t).length} ${ck$3(t) === "dialogue" ? "lượt" : "câu"}` : "";
 	const warns = t ? contentWarnings(t) : [], noImg = t ? slotsOf(t).filter((s) => !srcOf$2(t, s.key)).length : 0;
 	const cb = o.check ? `<input type="checkbox" data-jk="${i}" ${r.skip || !t || r.err ? "" : "checked"} ${t && !r.err ? "" : "disabled"} aria-label="Nhập Task ${i + 1}"> ` : "";
-	const conf = o.text ? ` <span class="conf c-${r.conf === "cao" ? "hi" : r.conf === "vừa" ? "mid" : "lo"}">đoán · độ chắc: ${esc(r.conf)}</span>` : "";
+	const conf = o.text ? ` <span class="conf c-${r.conf === "cao" ? "hi" : r.conf === "vừa" ? "mid" : "lo"}">đoán · độ chắc: ${esc$1(r.conf)}</span>` : "";
 	const pick = o.text ? `<select data-pr="${i}" aria-label="Áp mẫu khác cho Task ${i + 1}" title="Mặc định giữ cấu hình hệ thống đoán; chọn một mẫu nếu đoán sai"><option value="" ${r.rid ? "" : "selected"}>Giữ cấu hình đoán</option>${libOpts(r.rid)}</select>` : "";
 	const m = t ? recipeMatch(t) : null;
-	return `<div class="prv imrow${r.err ? " bad" : ""}" data-ji="${i}"><div class="prh"><label>${cb}<b>${r.no || i + 1}.</b></label> <span class="imt">${t ? esc(t.title || "(chưa có tiêu đề)") : ""}</span>${conf}${pick}</div>
-    ${t ? `<div class="prt"><b>${esc(descOf(t))}</b> <span class="hint">· ${n}${m ? m.exact ? ` · giống mẫu “${esc(m.r.name)}”` : " · cấu hình riêng" : ""}</span></div>` : ""}
-    ${r.err || warns.length || (r.notes || []).length || noImg ? `<ul class="twarn">${r.err ? `<li>${esc(r.err)}</li>` : ""}${(r.notes || []).map((x) => `<li class="info">${esc(o.src === "json" ? "Đã bù: " + x : x)}</li>`).join("")}${warns.map((x) => `<li class="${x.lv}">${esc(x.m)}</li>`).join("")}${noImg ? `<li class="info">${noImg} ô ảnh chưa có ảnh (ô giữ chỗ).</li>` : ""}</ul>` : ""}
-    ${o.text ? `<details><summary>Chữ gốc</summary><pre>${esc(r.raw)}</pre></details>` : ""}</div>`;
+	return `<div class="prv imrow${r.err ? " bad" : ""}" data-ji="${i}"><div class="prh"><label>${cb}<b>${r.no || i + 1}.</b></label> <span class="imt">${t ? esc$1(t.title || "(chưa có tiêu đề)") : ""}</span>${conf}${pick}</div>
+    ${t ? `<div class="prt"><b>${esc$1(descOf(t))}</b> <span class="hint">· ${n}${m ? m.exact ? ` · giống mẫu “${esc$1(m.r.name)}”` : " · cấu hình riêng" : ""}</span></div>` : ""}
+    ${r.err || warns.length || (r.notes || []).length || noImg ? `<ul class="twarn">${r.err ? `<li>${esc$1(r.err)}</li>` : ""}${(r.notes || []).map((x) => `<li class="info">${esc$1(o.src === "json" ? "Đã bù: " + x : x)}</li>`).join("")}${warns.map((x) => `<li class="${x.lv}">${esc$1(x.m)}</li>`).join("")}${noImg ? `<li class="info">${noImg} ô ảnh chưa có ảnh (ô giữ chỗ).</li>` : ""}</ul>` : ""}
+    ${o.text ? `<details><summary>Chữ gốc</summary><pre>${esc$1(r.raw)}</pre></details>` : ""}</div>`;
 }
 function impDownloadOld() {
 	try {
@@ -34281,7 +35471,7 @@ function impCommit() {
 			srcInHidden: true,
 			pmHidden: true
 		});
-		d.querySelector("#pasteOut").innerHTML = `<div class="diag imconf"><b>Thay phiếu hiện tại?</b><div>Phiếu “${esc(ws.title)}” (${ws.tasks.length} Task) sẽ được thay bằng phiếu mới${J ? ` (${J.tasks.length} Task)` : " trống"}. Nạp phiếu xóa lịch sử Hoàn tác, nên không quay lại được.</div><div class="fixes"><button class="btn" data-imp="dl">Tải JSON phiếu cũ</button><button class="btn" data-imp="back">Quay lại</button></div></div>`;
+		d.querySelector("#pasteOut").innerHTML = `<div class="diag imconf"><b>Thay phiếu hiện tại?</b><div>Phiếu “${esc$1(ws.title)}” (${ws.tasks.length} Task) sẽ được thay bằng phiếu mới${J ? ` (${J.tasks.length} Task)` : " trống"}. Nạp phiếu xóa lịch sử Hoàn tác, nên không quay lại được.</div><div class="fixes"><button class="btn" data-imp="dl">Tải JSON phiếu cũ</button><button class="btn" data-imp="back">Quay lại</button></div></div>`;
 		impUi({
 			okDisabled: false,
 			okText: "Thay phiếu hiện tại"
@@ -34757,16 +35947,16 @@ function lnLorem(t) {
 function lnRender() {
 	const d = impDlg();
 	if (!d.querySelector("#lnQ")) return;
-	d.querySelector("#lnQ").innerHTML = LN_GROUPS.map(([g, qs]) => `<div class="lnqg">${g}</div><div class="lnqc">${qs.map((q) => `<button type="button" class="lnq ${ln.q === q ? "on" : ""}" data-lq="${q}" title="${esc(q === "IMG" ? "Một ảnh lớn, không có câu hỏi; thêm câu sau nếu cần" : QHINT[q])}"><b>${q === "IMG" ? "" : q + " "}${esc(lnName(q))}</b><span>${esc(LN_HINT[q])}</span></button>`).join("")}</div>`).join("");
+	d.querySelector("#lnQ").innerHTML = LN_GROUPS.map(([g, qs]) => `<div class="lnqg">${g}</div><div class="lnqc">${qs.map((q) => `<button type="button" class="lnq ${ln.q === q ? "on" : ""}" data-lq="${q}" title="${esc$1(q === "IMG" ? "Một ảnh lớn, không có câu hỏi; thêm câu sau nếu cần" : QHINT[q])}"><b>${q === "IMG" ? "" : q + " "}${esc$1(lnName(q))}</b><span>${esc$1(LN_HINT[q])}</span></button>`).join("")}</div>`).join("");
 	const forceImg = ln.q === "IMG";
 	d.querySelector("#lnB").innerHTML = "<span class=\"hint\">Kèm theo:</span>" + LN_BLK.map(([g, n]) => {
 		const why = lnBlkWhy(g), on = forceImg && g === "G1" ? true : ln[g] && !why;
-		return `<button type="button" class="chip ${on ? "on" : ""}" data-lb="${g}" ${why ? `disabled title="${esc(why)}"` : ""}>${on ? "✓ " : "+ "}${n}</button>`;
+		return `<button type="button" class="chip ${on ? "on" : ""}" data-lb="${g}" ${why ? `disabled title="${esc$1(why)}"` : ""}>${on ? "✓ " : "+ "}${n}</button>`;
 	}).join("");
 	const rs = tnReasons$1(lnBuild(ws));
 	d.querySelector("#lnT").innerHTML = LN_TS.map(([v, n]) => {
 		const why = v === "auto" ? "" : rs[v];
-		return `<button type="button" class="lnt ${ln.T === v ? "on" : ""} ${why ? "off" : ""}" data-lt="${v}" ${why ? `data-why="${esc(why)}"` : ""} title="${esc(why || (v === "auto" ? "Máy chọn kiểu hợp nhất" : TN_HINT[v]))}" aria-disabled="${why ? "true" : "false"}">${v === "auto" ? "<span class=\"au\">✦</span>" : layIcon(v === "T4" ? "T8" : v)}<b>${n}</b></button>`;
+		return `<button type="button" class="lnt ${ln.T === v ? "on" : ""} ${why ? "off" : ""}" data-lt="${v}" ${why ? `data-why="${esc$1(why)}"` : ""} title="${esc$1(why || (v === "auto" ? "Máy chọn kiểu hợp nhất" : TN_HINT[v]))}" aria-disabled="${why ? "true" : "false"}">${v === "auto" ? "<span class=\"au\">✦</span>" : layIcon(v === "T4" ? "T8" : v)}<b>${n}</b></button>`;
 	}).join("");
 	d.querySelector("#lnTh").textContent = `· hợp với ${q0name()}`;
 	d.querySelector("#lnPos").innerHTML = [["end", "Cuối phiếu"], ["after", "Sau Task đang chọn"]].map(([v, n]) => {
@@ -34783,7 +35973,7 @@ function lnRender() {
 	try {
 		html = renderTask(p, null, 0);
 	} catch (e) {
-		html = `<p class="hint">Không dựng được bản xem trước: ${esc(e.message)}</p>`;
+		html = `<p class="hint">Không dựng được bản xem trước: ${esc$1(e.message)}</p>`;
 	}
 	pv.innerHTML = `<div class="lnpg"><div class="flow">${html}</div></div>`;
 	d.querySelector("#lnCap").textContent = `${q0name()} · ${ln.T === "auto" ? "Tự động → " + TN$2[tnOf$2(p)] : TN$2[ln.T]}. Chữ mẫu chỉ để xem, Task thật dùng câu mẫu để bạn sửa.`;
@@ -36545,7 +37735,7 @@ function txOpen(btn) {
 	}
 	pop.dataset.ctx = ctx;
 	pop._btn = btn;
-	pop.innerHTML = `<h4>${ti}</h4><div class="txtb" role="toolbar" aria-label="Chèn ký hiệu">${TXB[ctx].map(([n, a]) => `<button type="button" data-tx="${a}" title="Chèn vào ô đang gõ">${esc(n)}</button>`).join("")}</div><table>${rows.map(([k, v]) => `<tr><td>${esc(k)}</td><td>${esc(v)}</td></tr>`).join("")}</table><p class="txnote">${esc(note)} Bôi đen chữ rồi bấm B / I / U để định dạng.</p>`;
+	pop.innerHTML = `<h4>${ti}</h4><div class="txtb" role="toolbar" aria-label="Chèn ký hiệu">${TXB[ctx].map(([n, a]) => `<button type="button" data-tx="${a}" title="Chèn vào ô đang gõ">${esc$1(n)}</button>`).join("")}</div><table>${rows.map(([k, v]) => `<tr><td>${esc$1(k)}</td><td>${esc$1(v)}</td></tr>`).join("")}</table><p class="txnote">${esc$1(note)} Bôi đen chữ rồi bấm B / I / U để định dạng.</p>`;
 	const r = btn.getBoundingClientRect();
 	pop.hidden = false;
 	const w = pop.offsetWidth, h = pop.offsetHeight;
@@ -39552,10 +40742,21 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 .sgc button:hover{background:#e3efff}
 .sgc .sgx{padding:0 6px;color:var(--muted);border-left:1px dashed var(--accent)}
 @media print{.esug{display:none}}
+
+/* GĐ2 hộp gói .wsp (v118) */
+#wspDlg ul{margin:4px 0 0;padding-left:18px}
+#wspDlg .wspsum{background:var(--card-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:6px 0}
+#wspDlg .wspbad{background:var(--danger-soft);color:var(--danger);border-radius:8px;padding:8px 10px;margin:6px 0}
+#wspDlg .wspwarn{background:#fff7e0;color:#7a5200;border-radius:8px;padding:8px 10px;margin:6px 0;max-height:30vh;overflow:auto}
+#wspDlg .wspok{background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:8px 10px;margin:6px 0}
+#wspDlg .wsprow{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+#wspDlg .wsptr{margin:6px 0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #wspDlg .wspwarn{background:#3a3010;color:#f0d890}}
 /* ====== GĐ1a trình chiếu (src/viewer) ====== */
 .showfab{position:fixed;right:calc(312px + 20px + 18px);bottom:18px;z-index:50;height:40px;padding:0 18px;border-radius:20px;font-size:15px;font-weight:600;box-shadow:0 3px 12px rgba(20,30,40,.25)}
+.showfab.wspfab{right:calc(312px + 20px + 18px + 118px);background:var(--card,#fff);font-size:14px;padding:0 14px}
 @media print{.showfab{display:none}}
-.show{position:fixed;inset:0;z-index:1000;background:#26282c;color:#e8e8e8;font:14px system-ui,-apple-system,"Segoe UI",sans-serif;user-select:none}
+#wsShow.show{position:fixed;inset:0;z-index:1000;background:#26282c;color:#e8e8e8;font:14px system-ui,-apple-system,"Segoe UI",sans-serif;user-select:none}
 .show .vstage{position:absolute;inset:0;overflow:auto;scrollbar-width:thin}
 .show .vwrap{position:relative;display:flex;min-width:100%;min-height:100%}
 .show .vbox{margin:auto;position:relative;flex:none}
@@ -39756,6 +40957,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 <input type="file" id="genRefFile" accept="image/*" multiple hidden><input type="file" id="genUp" accept="image/*" hidden>
 <div id="r-toast" style="display:contents"></div>
 <div id="r-show" style="display:contents"></div>
+<div id="r-wsp" style="display:contents"></div>
 <div id="r-help" style="display:contents"></div>
 <div id="r-dlg" style="display:contents"></div>
 
