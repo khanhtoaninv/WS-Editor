@@ -1,0 +1,465 @@
+{
+ "title": "A Surprise Birthday Party",
+ "age": "7-9",
+ "tasks": [
+  {
+   "id": "t1",
+   "typeId": "choose-abc",
+   "typeName": "Câu hỏi · tick lựa chọn",
+   "title": "Look & Predict",
+   "instruction": "Look at the title. What do you think you will see in the story? Tick (✓) two. Your ideas are predictions. Check them after reading.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "",
+      "opts": [
+       "a cake",
+       "a football",
+       "balloons"
+      ],
+      "id": "q1"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4",
+    "params": {
+     "dir": "auto",
+     "lab": "box"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 1
+  },
+  {
+   "id": "t2",
+   "typeId": "choose-abc",
+   "typeName": "Bài đọc · khoanh A/B/C",
+   "title": "Read & Choose the Main Idea",
+   "instruction": "Read the story. Then choose the best summary (A, B or C).",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "",
+      "opts": [
+       "Lily and her friends made a cake at school.",
+       "Lily’s friends planned a party, and something funny happened.",
+       "Lily went to a party, but no one came."
+      ],
+      "id": "q1"
+     }
+    ],
+    "lead": {
+     "kind": "passage",
+     "text": "On Saturday morning, Lily was at home with her mum. It was her birthday, but she thought everyone was busy. At ten o'clock, her friends Ben, Amy and Jack were at Ben's house. They were making a surprise party for Lily. Amy put balloons near the window. Jack made sandwiches, and Ben put a chocolate cake on the table. Lily's dad brought some presents.\n\nAt two o'clock, Lily's mum said, \"Let's visit Ben.\" When Lily opened the door, the room was dark. She couldn't see her friends. Suddenly, the lights came on, and everyone shouted, \"Happy birthday!\" Lily was very surprised.\n\nBut then their dog Max jumped onto a chair and took a sandwich! Everyone laughed. Ben gave Max his own small biscuit, so he left the food alone. They ate cake, played games and sang songs. Lily smiled because her friends made her day special."
+    }
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4",
+    "params": {
+     "dir": "auto"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 2
+  },
+  {
+   "id": "t3",
+   "typeId": "true-false",
+   "typeName": "Câu hỏi · Đúng/Sai",
+   "title": "True or False?",
+   "instruction": "Read again. Write T (True) or F (False).",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "Lily thought everyone was busy on her birthday.",
+      "id": "q1"
+     },
+     {
+      "text": "Ben and his friends prepared the party at Lily’s house.",
+      "id": "q2"
+     },
+     {
+      "text": "Jack made sandwiches for the party.",
+      "id": "q3"
+     },
+     {
+      "text": "Max took a sandwich from the table.",
+      "id": "q4"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "tf",
+    "attach": "item",
+    "layout": "A6",
+    "params": {}
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 3
+  },
+  {
+   "id": "t4",
+   "typeId": "answer-q",
+   "typeName": "Câu hỏi · viết câu",
+   "title": "Find the Details",
+   "instruction": "Answer with one word or a short phrase.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "Where did the friends prepare the party?",
+      "id": "q1"
+     },
+     {
+      "text": "What time did Lily visit Ben?",
+      "id": "q2"
+     },
+     {
+      "text": "Who brought the presents?",
+      "id": "q3"
+     },
+     {
+      "text": "What did Ben give Max?",
+      "id": "q4"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "sentence",
+    "attach": "item",
+    "layout": "A1",
+    "params": {
+     "lines": 1
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 4
+  },
+  {
+   "id": "t5",
+   "typeId": "choose-abc",
+   "typeName": "Câu hỏi · khoanh A/B/C",
+   "title": "Choose & Think",
+   "instruction": "Use clues in the story. Circle the best answer.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "Why was the room dark when Lily opened the door?",
+      "opts": [
+       "The friends wanted to surprise her.",
+       "The friends were sleeping.",
+       "Ben was not at home."
+      ],
+      "id": "q1"
+     },
+     {
+      "text": "Why did Ben give Max a biscuit?",
+      "opts": [
+       "He wanted Max to eat the cake.",
+       "He wanted Max to leave the party food alone.",
+       "He wanted Max to sit on the table."
+      ],
+      "id": "q2"
+     },
+     {
+      "text": "How did Lily probably feel at the end?",
+      "opts": [
+       "Happy and loved.",
+       "Angry and tired.",
+       "Lonely and afraid."
+      ],
+      "id": "q3"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4",
+    "params": {
+     "dir": "auto"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 5
+  },
+  {
+   "id": "t6",
+   "typeId": "gap-fill",
+   "typeName": "Câu hỏi · điền chỗ trống",
+   "title": "Story Map",
+   "instruction": "Complete the story map with words from the story.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "Place of the party: ___",
+      "id": "q1"
+     },
+     {
+      "text": "Food at the party (two things): ___",
+      "id": "q2"
+     },
+     {
+      "text": "Funny problem: ___",
+      "id": "q3"
+     },
+     {
+      "text": "How Lily felt at the end: ___",
+      "id": "q4"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "word",
+    "attach": "inline",
+    "layout": "A2",
+    "params": {
+     "lenMode": "fill",
+     "lines": 1,
+     "start": "inline"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 6
+  },
+  {
+   "id": "t7",
+   "typeId": "gap-fill",
+   "typeName": "Câu hỏi · điền chỗ trống · khung từ",
+   "title": "My Idea",
+   "instruction": "Which party activity would you like best? Choose one and finish the sentence.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "I would like ___ because ___.",
+      "id": "q1"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "word",
+    "attach": "inline",
+    "layout": "A2",
+    "params": {
+     "lenMode": "fill",
+     "lines": 1,
+     "start": "inline"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "wordBank": {
+    "words": [
+     "eating cake",
+     "playing games",
+     "singing songs"
+    ],
+    "placement": "top",
+    "style": "chips",
+    "label": "lower"
+   },
+   "audio": null,
+   "part": "",
+   "number": 7
+  }
+ ],
+ "id": "(id)",
+ "page": {
+  "size": "A4",
+  "marginMm": {
+   "top": 14,
+   "right": 14,
+   "bottom": 14,
+   "left": 14
+  }
+ },
+ "spacing": {
+  "preset": "compact",
+  "overrides": {}
+ },
+ "flow": "cont",
+ "schema": "ws-editor/0.3"
+}

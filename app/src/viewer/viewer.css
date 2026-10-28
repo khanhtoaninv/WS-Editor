@@ -34,6 +34,14 @@
 .show .vsurf .xc>.vans,.show .vsurf .tc>.vans{bottom:auto;top:50%;transform:translateY(-50%)}
 .show .vsurf svg.vline{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none}
 .show .vsurf svg.vline line{stroke:#1565c0;stroke-width:.7mm;stroke-linecap:round}
+/* v116 tìm từ: khung bo góc quanh từ (đáp án xanh biển, bài làm xanh lá / đỏ, đang kéo xám) */
+.show .vsurf svg.vwfd,.show .vsurf svg.vfl{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:1}
+.show .vsurf svg rect{fill:none;stroke-width:.6mm}
+.show .vsurf svg.vcap rect{stroke:#1565c0;fill:rgba(21,101,192,.08)}
+.show .vsurf svg.vwfd.ok rect{stroke:#2e7d32;fill:rgba(46,125,50,.1)}
+.show .vsurf svg.vwfd.no rect{stroke:#c62828;fill:rgba(198,40,40,.08)}
+.show .vsurf svg.vfl rect{stroke:#78909c;stroke-dasharray:1.2mm .8mm;fill:rgba(120,144,156,.1)}
+.show .vsurf [data-rc]{cursor:crosshair}
 .show .vsurf .vok{outline-color:#1565c0 !important}
 .show .vsurf .opt.vok>b,.show .vsurf .opt.vok>i{outline:.6mm solid #1565c0;outline-offset:.5mm;border-radius:50%;color:#1565c0}
 .show .vsurf .a6 span.vok{box-shadow:0 0 0 .6mm #1565c0;color:#1565c0;border-radius:1.5mm}
@@ -45,6 +53,7 @@
 .show .vsurf .vtk{position:absolute;right:1mm;top:1mm;width:8mm;height:8mm;border-radius:50%;border:.35mm solid #9aa6ad;background:#fff;color:#9aa6ad;font:700 4.5mm/1 system-ui,sans-serif;cursor:pointer;opacity:.55}
 .show .vsurf .vtk:hover{opacity:1}
 .show .vsurf .vtk.on{background:#1565c0;border-color:#1565c0;color:#fff;opacity:1}
+.show .vsurf .vmn{position:absolute;right:1mm;top:2mm;height:6mm;padding:0 2mm;border-radius:3mm;background:#fff4e0;border:.3mm solid #f0b35a;color:#8a5300;font:600 3mm/5.4mm system-ui,sans-serif;white-space:nowrap;cursor:help;z-index:2}
 .show .vnote{font-size:12px;color:#f0b35a;white-space:nowrap}
 .show .vmsg{position:absolute;left:50%;top:18px;transform:translateX(-50%);z-index:40;background:rgba(0,0,0,.8);padding:8px 14px;border-radius:8px}
 /* B5 bút */
@@ -58,6 +67,10 @@
 .show .vpal.off{opacity:0;pointer-events:none}
 .show .vpal .vb{width:42px;min-width:0;padding:0;font-size:18px}
 .show .vpal .vb:disabled{opacity:.35;cursor:default}
+.show .vpal .vb.vbt{height:46px;line-height:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.show .vpal .vb.vbt small{font-size:10px}
+.show .vclr{position:absolute;left:calc(100% + 8px);bottom:40px;display:flex;flex-direction:column;gap:4px;padding:6px;border-radius:10px;background:rgba(20,21,24,.95);box-shadow:0 4px 18px rgba(0,0,0,.4)}
+.show .vclr .vb{width:auto;font-size:14px;padding:0 12px;text-align:left}
 .show .vpsep{width:28px;height:1px;background:#444a52;margin:2px 0}
 .show .vdot{width:26px;height:26px;border-radius:50%;border:2px solid #555;cursor:pointer}
 .show .vdot.on{border-color:#fff;box-shadow:0 0 0 2px #1f6feb}
@@ -68,8 +81,9 @@
 .show .vsurf .vcv{position:absolute;inset:-.6mm -1mm;z-index:2;border-radius:1.5mm;background:repeating-linear-gradient(45deg,#dfe3e8 0 2.5mm,#d3d8de 2.5mm 5mm);display:flex;align-items:center;justify-content:center;color:#5b6570;font:600 3.2mm/1 system-ui,sans-serif;cursor:pointer}
 .show .vsurf .vcv:hover{background:repeating-linear-gradient(45deg,#e8ebef 0 2.5mm,#dde1e6 2.5mm 5mm)}
 .show .vsurf [data-vu]:not(.vcov){cursor:pointer}
-@media (max-width:1700px){.show .vbar .vt{display:none}.show .vnote{display:none}}
-@media (max-width:2100px){.show .vbar .vt2{display:none}}
+@media (max-width:1700px){.show .vbar .vt{display:none}.show .vsurf .vmn{position:absolute;right:1mm;top:2mm;height:6mm;padding:0 2mm;border-radius:3mm;background:#fff4e0;border:.3mm solid #f0b35a;color:#8a5300;font:600 3mm/5.4mm system-ui,sans-serif;white-space:nowrap;cursor:help;z-index:2}
+.show .vnote{display:none}}
+@media (max-width:2100px){.show .vbar .vt2{display:none}.show .vnote{display:none}}   /* v117: nhãn "n chỗ chưa có đáp án" đã có ở góc từng Task (✎ Chấm tay) */
 @media (max-width:1100px){.show .vsel{width:110px}}
 /* B7 đồng hồ, bảng trắng */
 .show .vtimer{position:absolute;right:16px;top:16px;z-index:35;padding:10px;border-radius:14px;background:rgba(20,21,24,.94);box-shadow:0 4px 18px rgba(0,0,0,.45);display:flex;flex-direction:column;align-items:center;gap:6px}
@@ -95,8 +109,9 @@
 .show .vsurf .vwi:hover{background:rgba(31,111,235,.05)}
 .show .vsurf .vwi:focus{background:rgba(31,111,235,.08);box-shadow:0 0 0 .4mm #1f6feb}
 .show .vsurf .pgap>.vwi{font-size:1.25em}
-.show .vsurf .pgap.vwf{color:transparent}
+.show .vsurf .pgap.vwf,.show .vsurf .pgap:focus-within{color:transparent}   /* v115: đang gõ thì ẩn nhãn (1) (2) */
 .show .vsurf textarea.vwi{resize:none;text-align:left;line-height:var(--lh,8mm);padding:calc(var(--lh,8mm) * .12) 2mm 0;overflow:hidden;white-space:pre-wrap}
+.show .vsurf textarea.vwi.vwwrap{line-height:1.2;padding:0 .8mm;text-align:left;white-space:pre-wrap;word-break:break-word}
 .show .vsurf .vwx{text-transform:uppercase;font-weight:700;padding:0}
 .show .vsurf .mbx>.vwi{text-transform:uppercase;font-weight:700;padding:0}
 .show .vsurf .vwf>.vans,.show .vsurf .vwf .ln>.vans{left:.5mm;right:auto;top:auto;bottom:100%;transform:none;font-size:.8em;text-align:left}
@@ -110,6 +125,13 @@
 .show .vsurf .vw-ok>.vwi{color:#1b5e20}
 .show .vsurf .vw-no>.vwi{color:#b71c1c}
 .show .vsurf .a5.vwt{display:inline-grid;place-items:center}
+/* v115 ô tick (T10): đúng / sai thể hiện bằng màu dấu tick và chữ, không khung bao */
+.show .vsurf .opt:has(>b.bx).vw-sel,.show .vsurf .opt:has(>b.bx).vw-ok,.show .vsurf .opt:has(>b.bx).vw-no,.show .vsurf .opt:has(>b.bx).vw-part{box-shadow:none;background-color:transparent}
+.show .vsurf .opt.vw-sel>b.bx{position:relative}
+.show .vsurf .opt.vw-sel>b.bx::after{content:'✓';position:absolute;left:50%;top:50%;transform:translate(-50%,-58%);font-size:1.25em;font-weight:800;color:#455a64}
+.show .vsurf .opt.vw-ok>b.bx::after,.show .vsurf .opt.vw-ok>span{color:#2e7d32}
+.show .vsurf .opt.vw-no>b.bx::after,.show .vsurf .opt.vw-no>span{color:#c62828}
+.show .vsurf .opt.vw-ok>b.bx{border-color:#2e7d32}.show .vsurf .opt.vw-no>b.bx{border-color:#c62828}
 .show .vsurf .a5.vwt::after{content:'✓';font-weight:700;color:#455a64}
 .show .vsurf .a5.vwt.vw-ok::after{color:#2e7d32}
 .show .vsurf .a5.vwt.vw-no::after{color:#c62828}
@@ -137,4 +159,32 @@
 .show .vsurf .vrs{position:absolute;right:10mm;top:1mm;width:8mm;height:8mm;border-radius:50%;border:.35mm solid #9aa6ad;background:#fff;color:#5b6570;font:700 4.5mm/1 system-ui,sans-serif;cursor:pointer;opacity:.6}
 .show .vsurf .vrs:hover{opacity:1}
 .show .vsurf [data-ans]:not(.vwh),.show .vsurf .mrows>.ml,.show .vsurf .mrows>.mr,.show .vsurf .md .a7{cursor:pointer}
+.show .vsurf .vmkg{position:absolute;top:-2.4mm;right:2.2mm;z-index:3;display:flex;gap:.8mm}
+.show .vsurf .vmk{width:5mm;height:5mm;padding:0;border-radius:50%;border:.3mm solid #fff;font:700 3.2mm/1 system-ui,sans-serif;color:#fff;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.show .vsurf .vmk.ok{background:#2e7d32}.show .vsurf .vmk.no{background:#c62828}
+.show .vsurf .vmk:hover{transform:scale(1.15)}
 .show .vscore{padding:0 6px;font-weight:600;color:#9be39f;font-variant-numeric:tabular-nums;white-space:nowrap}
+/* v117 E1 / E3: 1 / 2 trang, Cuộn */
+.show .vsurf.vpages{background:none;box-shadow:none}
+.show .vpages>.vpage{position:absolute;background:var(--paper,#fff);color:var(--ink,#111);box-shadow:0 2px 18px rgba(0,0,0,.45)}
+/* v117 E5 nút 🔍 mở Từng Task */
+.show .vsurf .vzt{position:absolute;right:10mm;top:1mm;width:8mm;height:8mm;border-radius:50%;border:.35mm solid #9aa6ad;background:#fff;font:3.8mm/1 system-ui,sans-serif;cursor:zoom-in;opacity:.55;padding:0}
+.show .vsurf .vzt:hover{opacity:1}
+/* v117 E6 đèn pin */
+.show .vtorch{position:absolute;inset:0;z-index:28;pointer-events:none}
+/* v117 E11 hộp Note */
+.show .vnotes{position:absolute;left:0;top:0;width:0;height:0;z-index:4}
+.show .vnt{position:absolute;min-width:46mm;max-width:90mm;background:#fff8c4;border:.3mm solid #e0c64a;border-radius:2mm;box-shadow:0 1mm 3mm rgba(0,0,0,.25);color:#3d3500;font:3.6mm/1.35 system-ui,sans-serif;user-select:text}
+.show .vnth{display:flex;align-items:center;gap:1mm;padding:.8mm 1mm .8mm 2mm;border-bottom:.25mm solid #eedb7a;font-weight:600;font-size:3mm;color:#7a6a00}
+.show .vnth span{flex:1}
+.show .vntb{width:6mm;height:6mm;border:0;border-radius:1.2mm;background:transparent;color:inherit;font:inherit;font-size:3.6mm;line-height:1;cursor:pointer;padding:0}
+.show .vntb:hover{background:rgba(0,0,0,.08)}
+.show .vntb.on{background:#e53935;color:#fff}
+.show .vntt{display:block;box-sizing:border-box;width:100%;min-width:46mm;min-height:9mm;border:0;outline:none;background:transparent;resize:none;padding:1.5mm 2mm;font:inherit;color:inherit;field-sizing:content;overflow:hidden}
+.show .vnt.vntc{min-width:0;padding:.8mm 2mm;cursor:pointer;font-size:3.2mm;white-space:nowrap}
+/* v117 E10 bảng trắng chế độ Text */
+.show .vbsurf.txt{cursor:text}
+.show .vbtx{position:absolute;border:0;outline:none;background:transparent;resize:none;padding:0 2px;margin:0;font:34px/57px system-ui,sans-serif;field-sizing:content;min-width:40px;overflow:hidden;white-space:pre}
+.show .vbsurf.bg-grid .vbtx{font-size:24px;line-height:36px}
+.show .vbsurf.bg-plain .vbtx{line-height:44px}
+.show .vbtx:focus{background:rgba(31,111,235,.06);box-shadow:0 0 0 1px #9cc0ff}

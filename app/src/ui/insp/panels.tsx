@@ -9,7 +9,7 @@ import * as Md from '../../core/md.js';
 import * as St from '../../core/state.js';
 import { Fragment } from 'react';
 import { Cd, type N, autoSec, crumb, diagBox, diagFor, fNum, fRange, fSeg, fld, has, imgCtl, isSet, numRow, panel, presetSeg, qOpts, qPicker, s, sec, tPicker } from './parts';
-const { A2MM, FSZ, IW8, T7CW, TA, TBL_DEF, TBL_ROW_MM, a2cfg, a4autoDef, cellCfg, cellDirOf, colsDefault, colsOf, colsRange, fitOf, fontPt, frOf, frameH, g1bFr, gtKeys, gtN, inheritedSpacing, isColI, layoutOf, qOf, ratioOf, rmeta, sheetSpacing, sizeKey, spacingOf, taOf, tblOpts } = Lay as any;
+const { A2MM, FSZ, IW8, imgRowN, T7CW, TA, TBL_DEF, TBL_ROW_MM, a2cfg, a4autoDef, cellCfg, cellDirOf, colsDefault, colsOf, colsRange, fitOf, fontPt, frOf, frameH, g1bFr, gtKeys, gtN, inheritedSpacing, isColI, layoutOf, qOf, ratioOf, rmeta, sheetSpacing, sizeKey, spacingOf, taOf, tblOpts } = Lay as any;
 const { AGE, FONTS, GT_SIZE, PRESETS, QN, SIZES, ck, its } = Mod as any;
 const { PRESET_NAME } = Md as any;
 const W = (): any => St.ws;   // phiếu đang mở (đọc mỗi lần: setWs thay cả đối tượng)
@@ -25,6 +25,8 @@ function taskParts(t: any, sl: any) {
   if (ratioOf(t) != null && !row) size.push(fRange('split', Lt === 'T6' ? 'Tỉ lệ nội dung / khung từ' : Lt === 'T4' ? 'Tỉ lệ câu hỏi / đáp án' : 'Tỉ lệ ảnh / nội dung', lay.split, { min: m.range[0], max: m.range[1], step: 5, def: m.ratio, fmt: splitFmt, fmtKey: 'split' }));
   if (Lt === 'T7') { ['Cột trái', 'Cột nối', 'Cột phải'].forEach((n, i) => { size.push(fNum('cw.' + i, n, lay.cw ? lay.cw[i] : null, { min: 10, max: 80, step: 5, unit: '%', def: T7CW[i] })); }); size.push(fNum('rowH', 'Chiều cao hàng', lay.rowH, { min: 8, max: 40, unit: 'mm', def: 'tự động' })); }
   if (cr) { const opts = []; for (let c = cr[0]; c <= cr[1]; c++) opts.push([c, c]); size.push(fSeg('cols', 'Số cột', lay.cols, opts, Math.min(cr[1], Math.max(cr[0], colsDefault(t, Lt))))); }
+  if (imgRowN(t)) size.push(fRange('@imgPct', 'Kích thước ảnh (cả khối)', lay.imgPct, { min: 50, max: 150, step: 5, def: 100, fmt: pct, fmtKey: 'zoom' }),
+    fSeg('@imgFit', 'Vừa ô', lay.imgFit ? true : false, [[false, 'Theo số ảnh trên hàng'], [true, 'Fit ô']], false, { hint: `Mặc định ${imgRowN(t)} ảnh trên hàng: rộng ${(Lay as any).IMW[imgRowN(t)] ?? Math.round(182 / imgRowN(t) - 6)} mm. Fit ô: ảnh và dòng viết khít bề ngang ô. Ảnh chỉnh độ rộng riêng thì giữ nguyên.` }));   // v115
   if (Lt === 'T5' && !row && colsOf(t) > 1) size.push(fNum('colGap', 'Khoảng cách giữa các cột', lay.colGap, { min: 2, max: 20, unit: 'mm', def: sp.itemGap }));
   if (Lt === 'T6' && !wbR) size.push(fNum('width', 'Độ rộng khối nội dung', lay.width, { min: 40, max: 100, step: 5, unit: '%', def: 100 }));
   if (ck(t) === 'dialogue') size.push(fNum('whoW', 'Cột tên người nói', lay.whoW, { min: 6, max: 40, unit: 'mm', def: 'tự động' }));
@@ -151,7 +153,7 @@ function answerPanel(t: any, sl: any, key: string | null) {
   if (La === 'A7' && ck(t) === 'pairs') content.push(fSeg('mid', 'Chỗ nối (giữa hai cột)', o.mid, [['dot', 'Chấm nối'], ['box', 'Ô viết chữ'], ['none', 'Không có']], 'dot', { hint: 'Ô viết chữ: học sinh viết chữ cái của vế phải vào ô bên cạnh vế trái (không nối dây).' }));   // v105
   if (inl && (La === 'A2' || La === 'A4')) align = <p className="hint" data-na="align">Đáp án nằm trong câu nên đi theo dòng chữ, không căn riêng.</p>;
   else align = fSeg('align', 'Căn ngang', o.align, E(L.HA), D('align', L.ansAlignDef(t)));
-  if (La === 'A6' && !key && p.row) content.push(fSeg('rowv', 'Căn dọc cả khối', p.rowv, [['top', 'Trên'], ['center', 'Giữa'], ['bottom', 'Dưới']], 'center', { hint: 'Áp cho mọi câu của Task: số câu, chữ câu và ô T / F.' }), fNum('tfx', 'T / F cách lề phải', p.tfx, { min: 0, max: 140, step: 1, unit: 'mm', def: 0 }));   // v101
+  if (La === 'A6' && !key && p.row) content.push(fSeg('rowv', 'Căn dọc cả khối', p.rowv, [['top', 'Trên'], ['center', 'Giữa'], ['bottom', 'Dưới']], 'center', { hint: 'Áp cho mọi câu của Task: số câu, chữ câu và ô T / F.' }), fRange('tfp', 'Tỉ lệ câu / T-F', p.tfp, { min: 50, max: 90, step: 5, def: 80, fmt: splitFmt, fmtKey: 'split' }));   // v101; v115 theo tỉ lệ
   if (!key) content.push(<p key="hk" className="hint">Bấm vào đáp án của một câu trên trang để chỉnh riêng câu đó.</p>);
   const secs = <>{sec('size', 'Kích thước', size)}{sec('align', 'Căn lề', align)}{sec('content', 'Kiểu hiển thị', content)}{sec('auto', 'Về tự động', autoSec(t, sl, key ? null : <button className="btn" data-act="reset-answer">Về kiểu đáp án ban đầu</button>))}</>;
   if (key) {

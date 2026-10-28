@@ -7,6 +7,8 @@
 import sys, os, glob, json
 from playwright.sync_api import sync_playwright
 
+# --bo-moi: bỏ qua các ô mới có chủ ý từ v113 (so với bản v106): "Phân biệt viết tắt", Kích thước ảnh / Vừa ô, tỉ lệ T/F (tfp thay tfx), chip gợi ý đáp án
+BO_MOI = '--bo-moi' in sys.argv; sys.argv = [a for a in sys.argv if a != '--bo-moi']
 NEW, OLD = os.path.abspath(sys.argv[1]), os.path.abspath(sys.argv[2])
 LIM = int(sys.argv[3]) if len(sys.argv) > 3 else 999
 HERE = os.path.dirname(os.path.abspath(__file__)); TESTS = os.path.dirname(HERE); ROOT = os.path.dirname(TESTS)
@@ -32,7 +34,7 @@ SER = """(st) => {
   // chữ: gộp các nút chữ liền nhau (React có thể tách "a" + "b"), gộp khoảng trắng; class: bỏ khoảng trắng thừa, class rỗng = không có
   const kidsOf = n => { const out = []; let buf = null;
     const flush = () => { if (buf != null) { const t = buf.replace(/\\s+/g, ' ').trim(); if (t) out.push('"' + t + '"'); buf = null; } };
-    n.childNodes.forEach(c => { if (c.nodeType === 3) buf = (buf || '') + c.textContent; else if (c.nodeType === 1) { flush(); out.push(ser(c)); } });
+    n.childNodes.forEach(c => { if (c.nodeType === 3) buf = (buf || '') + c.textContent; else if (c.nodeType === 1) { if (st.bo && c.matches(BO)) return; flush(); out.push(ser(c)); } });
     flush(); return out; };
   const ser = n => {
     // Khác biệt có chủ ý: nút chọn font của v106 có style hỏng (dấu " trong tên font cắt mất thuộc tính), bản React hiện đúng font → không so style của nút này
@@ -50,8 +52,10 @@ SER = """(st) => {
     return '<' + n.tagName.toLowerCase() + (a.length ? ' ' + a.join(' ') : '') + (pr.length ? ' ' + pr.join(' ') : '') + '>' + (kids.length ? '\\n' + kids.join('\\n').replace(/^/gm, ' ') : '');
   };
   if (st.mk) { markMode = true; } else markMode = false;
+  const BO = '[data-bo], [data-param="@imgPct"], [data-param="@imgFit"], [data-param="tfp"], [data-param="tfx"], .esug, [data-eact="sugall"]';
   let err = '';   // lỗi khi chọn (vd tay kéo trên trang) ghi lại để so, không dừng cả lượt
   try { if (st.multi) { pick(st.s); pick(st.multi, true); } else pick(st.s); } catch (e) { err = 'LỖI ' + e.message; }
+  if (st.bo) document.querySelectorAll('#insp .field, #tree .field').forEach(f => { const sp = f.querySelector(':scope > span'); if (sp && sp.textContent.trim() === 'Phân biệt viết tắt') f.dataset.bo = '1'; });
   return [ser(document.getElementById('insp')), ser(document.getElementById('tree')), JSON.stringify(sel) + err]; }"""
 
 def grab(app):
@@ -72,14 +76,14 @@ def grab(app):
                 if sect == 'mo': pg.evaluate("() => { Object.keys(SECT).forEach(k => SECT[k] = true); }")
                 for s in sts:
                     k = sect + ' ' + json.dumps(s, ensure_ascii=False)
-                    res[k] = pg.evaluate(SER, {'s': s})
+                    res[k] = pg.evaluate(SER, {'s': s, 'bo': BO_MOI})
                     if sect == 'goc' and s['type'] == 'group' and s['g'] == 'G1' and 'item' not in s:
-                        res[k + ' +mk'] = pg.evaluate(SER, {'s': s, 'mk': True}); pg.evaluate("() => { markMode = false; }")
+                        res[k + ' +mk'] = pg.evaluate(SER, {'s': s, 'mk': True, 'bo': BO_MOI}); pg.evaluate("() => { markMode = false; }")
                 # chọn nhiều: hai khối cùng loại đầu tiên khác Task
                 grp = [s for s in sts if s['type'] == 'group']
                 for i, s1 in enumerate(grp):
                     s2 = next((x for x in grp[i + 1:] if x['g'] == s1['g'] and x['id'] != s1['id'] and ('item' in x) == ('item' in s1)), None)
-                    if s2: res[sect + ' multi ' + json.dumps([s1, s2], ensure_ascii=False)] = pg.evaluate(SER, {'s': s1, 'multi': s2}); break
+                    if s2: res[sect + ' multi ' + json.dumps([s1, s2], ensure_ascii=False)] = pg.evaluate(SER, {'s': s1, 'multi': s2, 'bo': BO_MOI}); break
                 pg.evaluate("() => { sectReset('(x)'); }")
             out[name] = res
         b.close()

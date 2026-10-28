@@ -12,6 +12,7 @@ import * as Lay from '../../core/layout.js';
 import * as Mod from '../../core/model.js';
 import * as Md from '../../core/md.js';
 import * as St from '../../core/state.js';
+import { allSug, sugOf } from '../../core/sug.js';
 const { AR_OPTS, exPick, exPicks, fixedImg, imgArOf, keyGaps, qOf, qnum, qrInner, qrUrl, srcOf, tblAr, tblOpts } = Lay as any;
 const { QN, ck, gapCount, its, pkGroups, pkSrc } = Mod as any;
 const { TN, brOut, crossLines, fmtCell, tnOf } = Md as any;
@@ -19,6 +20,12 @@ const W = (): any => St.ws;   // phiếu đang mở (đọc mỗi lần: setWs t
 type N = ReactNode;
 const ABC = 'abcdefgh';
 const abc = (j: number) => ABC[j] || j + 1;
+
+// v116 gợi ý cách viết khác ngay dưới ô đáp án (cách A): bấm chip = thêm " / …", × = bỏ gợi ý (không hỏi lại)
+function Sug({ t, x, i, k, v }: { t: any; x: any; i: number; k: string; v: any }) {
+  const g: string[] = sugOf(t, x, k, v); if (!g.length) return null;
+  return <span className="esug" title="Gợi ý cách viết khác (máy chấm chỉ nhận khi bạn thêm vào)">{g.map(y => <span className="sgc" key={y}><button type="button" data-eact="sugadd" data-i={i} data-k={k} data-v={y}>{`+ ${y}`}</button><button type="button" className="sgx" data-eact="sugno" data-i={i} data-k={k} data-v={y} title="Bỏ gợi ý này" aria-label={`Bỏ gợi ý ${y}`}>×</button></span>)}</span>;
+}
 
 // Ô gõ (data-k = trường dữ liệu). ph2: chữ gợi ý thay (dòng chữ giữa các câu)
 function eIn(k: string, v: any, ph?: string, o: any = {}) {
@@ -112,8 +119,8 @@ function edItems(t: any) {
     else if (need && !x.opts && !x.imgs && (L.gapN(x) > 1 || (L.gapN(x) === 1 && t.wordBank && t.wordBank.kind !== 'image' && t.wordBank.words.length))) { const ks = keyGaps(x), wb = t.wordBank && t.wordBank.kind !== 'image' ? t.wordBank.words : null, n = L.gapN(x);   // v91: mỗi chỗ trống một ô đáp án
       f.push(<div className="er2 kgap" key="key"><span className="elb">Đáp án</span><span className="pkr">{Array.from({ length: n }, (_, j) => { const v = ks[j] || '', gl = L.gapLabs(x.text)[j], lb = gl ? <i>{s(gl)}</i> : n > 1 ? <i>{`(${j + 1})`}</i> : null;
         return wb && wb.length ? <label className="kg" key={j}>{lb}<select data-k={`it.${i}.keyg.${j}`} aria-label={`Đáp án chỗ trống ${j + 1} câu ${i + 1}`} defaultValue={v}><option value="">—</option>{wb.concat(v && !wb.includes(v) ? [v] : []).map((w: string, wi: number) => <option key={wi}>{w}</option>)}</select></label>
-          : <label className="kg" key={j}>{lb}{E(`it.${i}.keyg.${j}`, v, 'đáp án', { label: `Đáp án chỗ trống ${j + 1} câu ${i + 1}` })}</label>; })}</span></div>); }
-    else if (need && !x.pair && !(x.imgs && a.layout === 'A5') && !x.opts && !(a.layout === 'A6' && L.optsOfKey(t, x).length > 1)) f.push(<div className="er2" key="key"><span className="elb">Đáp án</span>{E(`it.${i}.key`, x.key || '', 'đáp án đúng', { label: `Đáp án đúng câu ${i + 1}` })}</div>);
+          : <label className="kg" key={j}>{lb}{E(`it.${i}.keyg.${j}`, v, 'đáp án', { label: `Đáp án chỗ trống ${j + 1} câu ${i + 1}` })}<Sug t={t} x={x} i={i} k={`it.${i}.keyg.${j}`} v={v} /></label>; })}</span></div>); }
+    else if (need && !x.pair && !(x.imgs && a.layout === 'A5') && !x.opts && !(a.layout === 'A6' && L.optsOfKey(t, x).length > 1)) f.push(<div className="er2" key="key"><span className="elb">Đáp án</span>{E(`it.${i}.key`, x.key || '', 'đáp án đúng', { label: `Đáp án đúng câu ${i + 1}` })}<Sug t={t} x={x} i={i} k={`it.${i}.key`} v={x.key} /></div>);
     const al = L.ansLabel(x);
     return <div className={`eit${al ? ' ans' : ''}${gt ? ' egt' : ''}${x.ex ? ' eex' : ''}`} data-i={i} key={i}><div className="eih"><span className="egrip" draggable="true" data-drag={i} title="Kéo để đổi thứ tự">⋮⋮</span><span className={`ino${x.ex ? ' ex' : ''}`}>{gt ? 'Chữ' : s(qnum(t, i))}</span>{whoIn}
       <span className="sp" /><button className="eb" data-eact="up" data-i={i} disabled={i ? undefined : true} aria-label="Lên">↑</button><button className="eb" data-eact="down" data-i={i} disabled={i < it.length - 1 ? undefined : true} aria-label="Xuống">↓</button>
@@ -122,7 +129,7 @@ function edItems(t: any) {
   });
   const heads = k === 'pairs' ? <div className="er2" key="heads"><span className="elb">Tiêu đề cột</span>{eIn('heads.0', (c.heads || [])[0] || '', 'Cột trái', { label: 'Tiêu đề cột trái' })}{eIn('heads.1', (c.heads || [])[1] || '', 'Cột phải', { label: 'Tiêu đề cột phải' })}</div> : null;   // v105
   return [heads, <div className="eitems" key="its">{rows}</div>,
-    <div className="erow" key="erow"><button className="btn" data-eact="add">{`+ Thêm ${noun}`}</button>{exOk && ['questions', 'dialogue'].includes(k) ? <button className="btn" data-eact="gtiadd" title="Dòng chữ giữa các câu: không số, không chỗ trả lời (tiêu đề nhóm, lời dẫn phần sau)">+ Dòng chữ</button> : null}<button className="btn" data-eact="paste-items" title={`Dán nhiều dòng, mỗi dòng một ${noun}`}>{`Dán nhiều ${noun}…`}</button></div>,
+    <div className="erow" key="erow"><button className="btn" data-eact="add">{`+ Thêm ${noun}`}</button>{allSug(t).length >= 3 ? <button className="btn" data-eact="sugall" title="Thêm mọi gợi ý cách viết khác của Task này vào đáp án">{`Nhận tất cả gợi ý (${allSug(t).length})`}</button> : null}{exOk && ['questions', 'dialogue'].includes(k) ? <button className="btn" data-eact="gtiadd" title="Dòng chữ giữa các câu: không số, không chỗ trả lời (tiêu đề nhóm, lời dẫn phần sau)">+ Dòng chữ</button> : null}<button className="btn" data-eact="paste-items" title={`Dán nhiều dòng, mỗi dòng một ${noun}`}>{`Dán nhiều ${noun}…`}</button></div>,
     it.some((x: any) => x.img || x.imgs) || (k === 'pairs' && it.some((x: any) => x.pair && x.pair.l && x.pair.l.img != null)) ? <div className="edrop" data-drop={t.id} key="drop">{`Kéo nhiều ảnh vào đây: mỗi ảnh vào một ô theo thứ tự, thừa ảnh thì thêm ${noun}.`}</div> : null];
 }
 

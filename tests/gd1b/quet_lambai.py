@@ -35,8 +35,9 @@ PLAN = """([s, k]) => {
 OPT = """([id, j, s]) => { const els = [...document.querySelectorAll(`#wsShow .vsurf [data-ans="${CSS.escape(id)}"]`)];
   let opts = els; if (els.length === 1) for (const q of [':scope > .opt', ':scope > b', ':scope > span:not(.vans)']) { const kk = els[0].querySelectorAll(q); if (kk.length) { opts = [...kk]; break; } }
   return opts[j]; }"""
-ROW = """([id, txt]) => { const norm = x => (x || '').replace(/\\s+/g, ' ').trim().toLowerCase(), sec = document.querySelector(`#wsShow .vsurf [data-ans="${CSS.escape(id)}"]`).closest('section');
-  const rows = [...sec.querySelectorAll('.mrows > .mr:not(.mh)')]; return rows.find(m => norm(m.textContent) === norm(txt)) || rows.find(m => norm(m.textContent).endsWith(norm(txt))); }"""
+ROW = """([id, txt, opt]) => { const norm = x => (x || '').replace(/\\s+/g, ' ').trim().toLowerCase(), sec = document.querySelector(`#wsShow .vsurf [data-ans="${CSS.escape(id)}"]`).closest('section');
+  const rows = [...sec.querySelectorAll('.mrows > .mr:not(.mh)')]; if (opt) { const r = rows.find(m => m.dataset.opt === opt); if (r) return r; }   // v113: hàng vế phải mang mã phương án (vế phải có thể trùng chữ)
+  return rows.find(m => norm(m.textContent) === norm(txt)) || rows.find(m => norm(m.textContent).endsWith(norm(txt))); }"""
 ST = """id => { const els = [...document.querySelectorAll(`#wsShow .vsurf [data-ans="${CSS.escape(id)}"]`)], all = els.flatMap(e => [e, ...e.querySelectorAll('*')]);
   for (const c of ['vw-ok', 'vw-no', 'vw-part', 'vw-man', 'vw-sel']) if (all.some(e => e.classList.contains(c))) return c.slice(3);
   const svg = els[0] && [...els[0].closest('section').querySelectorAll('svg.vwl')].find(x => x.dataset.vw === id); return svg ? [...svg.classList].find(c => c !== 'vwl') : ''; }"""
@@ -76,7 +77,7 @@ with sync_playwright() as p:
                     if pg.query_selector(f"{sel} .vwgo"): pg.click(f"{sel} .vwgo")
                 else:
                     if pl['v'] is None: probs.append((s['id'], 'bài nối không có vế phải')); continue
-                    pg.click(sel); row = pg.evaluate_handle(ROW, [s['id'], pl['v']]).as_element()
+                    pg.click(sel); row = pg.evaluate_handle(ROW, [s['id'], pl['v'], k['correct'] if k and isinstance(k.get('correct'), str) else None]).as_element()
                     if not row: probs.append((s['id'], 'không thấy vế phải')); pg.keyboard.press('Escape'); continue
                     row.click()
                 pg.wait_for_timeout(30); got = pg.evaluate(ST, s['id'])

@@ -110,7 +110,7 @@ with sync_playwright() as p:
         else { const v = els[0].querySelector('.vans'); ok = !!v && v.textContent === (k.accept ? k.accept[0] : k.sample); }
         out[s.id] = ok; }
       return out; }"""
-    pg.click('#showBtn'); pg.wait_for_selector('#wsShow'); key(pg, 'a'); pg.wait_for_timeout(150)
+    pg.click('#showBtn'); pg.wait_for_selector('#wsShow'); key(pg, 'Shift+A'); pg.wait_for_timeout(150)   # v114: A = phần đang xem, Shift+A = cả phiếu
     got = {}
     for i in range(nP):
         got.update(pg.evaluate(CHECK, [keyed, sk['key']])); pg.screenshot(path=f'{SHOT}/b4_dapan_trang{i+1}.png'); key(pg, 'PageDown')
@@ -178,7 +178,7 @@ with sync_playwright() as p:
     n = pg.evaluate(NP); key(pg, 'e'); drag(q[0] + 260, q[1] + q[3] - 10, q[0] + 260, q[1] + q[3] + 20)
     chk('B5 tẩy xóa nét bị kéo qua', pg.evaluate(NP) == n - 1, (n, pg.evaluate(NP)))
     pg.keyboard.press('Control+z'); pg.wait_for_timeout(80); chk('B5 Ctrl+Z hoàn tác tẩy', pg.evaluate(NP) == n)
-    key(pg, 'Escape'); pg.click('#inkClear'); pg.wait_for_timeout(80); chk('B5 Xóa hết', pg.evaluate(NP) == 0)
+    key(pg, 'Escape'); pg.click('#inkClear'); pg.click('#inkClearAll'); pg.wait_for_timeout(80); chk('B5 Xóa hết', pg.evaluate(NP) == 0)
     pg.click('#inkUndo'); pg.wait_for_timeout(80); chk('B5 hoàn tác Xóa hết', pg.evaluate(NP) == n)
     key(pg, 'Escape'); key(pg, 'Escape'); pg.wait_for_timeout(100)
     pg.click('#showBtn'); pg.wait_for_selector('#wsShow'); key(pg, 'Home'); pg.wait_for_timeout(150)

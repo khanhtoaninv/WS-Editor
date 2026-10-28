@@ -40,3 +40,14 @@ Nếu được, thử trên **máy chiếu hoặc TV của lớp**, có **bút t
 
 ## Thoát
 26. Esc (có thể phải bấm hai lần khi đang toàn màn hình) hoặc nút ✕ Thoát: về WS Editor, phiếu soạn y như cũ.
+
+## Thêm từ v113 – v117 (28/10/2026)
+27. **2 trang** (nút ▯ cạnh "Từng Task"): hai trang cạnh nhau, ▶ lật 2 trang. Bấm lại về 1 trang.
+28. **Cuộn** (nút ⇕): mọi trang xếp dọc, lăn chuột cuộn tự do; ▶ cuộn tới đầu trang kế.
+29. Nút **🔍** ở góc mỗi Task: mở Từng Task đúng Task đó.
+30. **Đèn pin** (phím L hoặc 🔦): màn tối, chỉ sáng quanh chuột; lăn chuột đổi cỡ vòng sáng; Esc tắt.
+31. **Bảng → nút T**: bấm đâu gõ đó, chữ ngồi đúng dòng kẻ (nền kẻ dòng) hoặc vào ô (nền kẻ ô).
+32. **Ghi chú**: bấm đúp chỗ trống trên phiếu, gõ (hoặc 🎤 nói, nếu trình duyệt cho), thu gọn –, xóa ×. Đóng rồi mở lại trình chiếu: ghi chú còn.
+33. Ctrl + lăn chuột phóng **theo đầu chuột**; nút Vừa về 100%. Từng Task: nút Mặc định ↔ Vừa.
+34. Shift + kéo: đường thẳng đỏ. Nút **🗑 Xóa**: chọn "Xóa nét trang này" hoặc "Xóa hết".
+35. Nút **Đáp án** / phím A chỉ bật trang hoặc Task đang xem; Shift+A cả phiếu.

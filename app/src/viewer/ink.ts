@@ -47,3 +47,18 @@ export function saveInk(name: string, hash: string, ink: Ink) {
     return true;
   } catch (_) { return false; }
 }
+
+// v117 E11 hộp Note: cùng chỗ neo với nét vẽ (tọa độ trong Task / trang), lưu trên máy theo phiếu + dấu nội dung
+export type Note = { id: string; x: number; y: number; t: string; c: boolean };   // c: thu gọn
+export type Notes = Record<string, Note[]>;
+const LN = (name: string) => 'wsShow.note:' + name;
+export function loadNotes(name: string, hash: string): Notes {
+  try { const o = JSON.parse(localStorage.getItem(LN(name)) || 'null'); return o && o.hash === hash && o.notes && typeof o.notes === 'object' ? o.notes : {}; } catch (_) { return {}; }
+}
+export function saveNotes(name: string, hash: string, notes: Notes) {
+  try {
+    const keep: Notes = {}; for (const [k, a] of Object.entries(notes)) { const b = a.filter(n => n.t.trim()); if (b.length) keep[k] = b; }
+    if (!Object.keys(keep).length) localStorage.removeItem(LN(name)); else localStorage.setItem(LN(name), JSON.stringify({ hash, notes: keep }));
+    return true;
+  } catch (_) { return false; }
+}

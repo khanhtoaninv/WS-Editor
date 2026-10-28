@@ -96,6 +96,7 @@ export function qOpts(t: any, side?: string) {
   const A = (act: string, v: string) => ({ [a]: act, 'data-v': v });
   const h: N[] = [];
   if (!tbl && ck(t) !== 'empty') h.push(<div className="field" key="ha"><span>Có chỗ trả lời</span><div className="seg"><button {...A('hasans', '1')} className={ha ? 'on' : ''}>Có</button><button {...A('hasans', '0')} className={!ha ? 'on' : ''}>Không (chỉ hiển thị)</button></div></div>);
+  if (ha && (['word', 'sentence'].includes(t.answer.kind) || (ck(t) === 'passage' && (Mod as any).gapCount((Lay as any).leadText(t) || '')) || (tbl && !(t.layout.table || {}).cross))) h.push(<div className="field" key="sc"><span>Phân biệt viết tắt</span><div className="seg"><button {...A('strictc', '0')} className={p.strictContr ? '' : 'on'}>Không (I'm = I am)</button><button {...A('strictc', '1')} className={p.strictContr ? 'on' : ''}>Có</button></div></div>);   // v116: bật cho bài dạy viết tắt
   if (st.length > 1) h.push(<div className="field" key="st"><span>Cách trả lời</span><div className="seg wrapseg">{st.map((x: any) => <button key={x.id} {...A('qst', x.id)} className={x.on ? 'on' : ''}>{s(x.name)}</button>)}</div></div>);
   if (q === 'Q2' && ha && p.frame !== 'box') {   // v95
     const c = q2cfg(t), B = (v: string, lab: string, on: boolean) => <button {...A('q2', v)} className={on ? 'on' : ''}>{lab}</button>;

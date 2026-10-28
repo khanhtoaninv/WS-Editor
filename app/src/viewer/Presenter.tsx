@@ -4,17 +4,20 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { gradeSlot, isBlank, type AnswerValue, type Answers, type SlotResult } from '../../../shared/src/index.ts';
 import { prep, type ShowData } from './data';
-import { applyAnswers, hasAns, optOfRow, slotsInView } from './answers';
+import { applyAnswers, capsule, hasAns, optOfRow, rcCell, slotsInView } from './answers';
 import { Board, Timer, type BoardState } from './Tools';
-import { applyWork, elsOf, kindOf, letterToOpt, needsGo, nextCell, pickIndex, picked, type Hooks, type Pend } from './work';
-import { COLORS, HL, WIDTHS, hit, loadInk, lockLine, pathOf, saveInk, type Anchor, type Ink, type Pt, type Stroke } from './ink';
+import { applyWork, elsOf, fitInput, kindOf, letterToOpt, needsGo, nextCell, pickIndex, picked, type Hooks, type Pend } from './work';
+import { COLORS, HL, WIDTHS, hit, loadInk, loadNotes, lockLine, pathOf, saveInk, saveNotes, type Anchor, type Ink, type Note, type Notes, type Pt, type Stroke } from './ink';
+import { NoteBox } from './Note';
 
 const PX = 96 / 25.4;                       // px mỗi mm (CSS)
 const PAGE_W = 210 * PX, PAGE_H = 297 * PX;
 const TASK_PAD = 8, TASK_W = (182 + 2 * TASK_PAD) * PX;   // khung Từng Task: bề rộng vùng chữ của trang + lề 8 mm
 const GAP = 24;                              // khoảng chừa quanh trang khi vừa màn hình (px)
 const READ = 1.5;                            // Từng Task: Task dài thì không thu nhỏ dưới 1,5 lần cỡ thật (cuộn thay vì chữ nhỏ)
+const TASK_DEF = .8;                         // Từng Task mặc định: Task rộng 80% màn hình
 const Z_MIN = .5, Z_MAX = 6;
+const PGAP = 8 * PX;                         // v117: khe giữa hai trang (2 trang, Cuộn)
 
 type Mode = 'page' | 'task';
 type Tool = 'pointer' | 'zoomrect' | 'pen' | 'hl' | 'line' | 'eraser';
@@ -33,8 +36,17 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
   const startT = Math.max(0, P.tasks.findIndex(t => t.id === data.start));
   const [mode, setMode] = useState<Mode>('page');
   const [pi, setPi] = useState(() => (data.start && P.pageOf[data.start] != null ? P.pageOf[data.start] : 0));
+  // v117 E1 / E3: Cả trang xem 1 hoặc 2 trang cạnh nhau; Trang (lật) hoặc Cuộn (mọi trang xếp dọc liền)
+  const [two, setTwo] = useState(false), [scroll, setScroll] = useState(false);
+  const cols = two ? 2 : 1, row = Math.floor(pi / cols), nRows = Math.ceil(nP / cols);
+  const rows = mode === 'page' ? (scroll ? Array.from({ length: nRows }, (_, r) => r) : [row]) : [];
+  const shownPages = rows.flatMap(r => Array.from({ length: cols }, (_, c) => r * cols + c)).filter(i => i < nP);
+  const rowPages = Array.from({ length: cols }, (_, c) => row * cols + c).filter(i => i < nP);
+  // v117 E6 đèn pin
+  const [torch, setTorch] = useState(false), [tpos, setTpos] = useState({ x: window.innerWidth / 2, y: window.innerHeight / 2 }), [trad, setTrad] = useState(150);
   const [ti, setTi] = useState(startT);
   const [z, setZ] = useState(1);
+  const [tfit, setTfit] = useState<'def' | 'fit'>('def');
   const [tool, setTool] = useState<Tool>('pointer');
   const [bar, setBar] = useState(true);
   const [vp, setVp] = useState({ w: window.innerWidth, h: window.innerHeight });
@@ -48,9 +60,14 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
   const [shown, setShown] = useState<Set<string>>(() => new Set());
   const order = useRef<string[]>([]);
   const [clickAns, setClickAns] = useState(false);
-  const toggle = (ids: string[]) => setShown(old => { const n = new Set(old), on = ids.some(i => !n.has(i)); ids.forEach(i => on ? n.add(i) : n.delete(i)); if (on) order.current.push(...ids.filter(i => !old.has(i))); return n; });
-  const allOn = shown.size > 0 && shown.size >= ansIds.size;
-  const toggleAll = () => { order.current = []; setShown(allOn ? new Set() : new Set(ansIds)); };
+  const toggle = (ids: string[]) => { ids.forEach(i => revealed.current.delete(i)); setShown(old => { const n = new Set(old), on = ids.some(i => !n.has(i)); ids.forEach(i => on ? n.add(i) : n.delete(i)); if (on) order.current.push(...ids.filter(i => !old.has(i))); return n; }); };
+  // v114: nút Đáp án / phím A bật tắt phần đang xem (trang hoặc Task), Shift+A cả phiếu; sang Task khác không tự hiện
+  const viewIds = useMemo(() => { const h = mode === 'page' ? rowPages.map(i => P.pages[i]).join('') : P.tasks[ti] ? P.tasks[ti].frags.map(f => f.html).join('') : '', out = new Set<string>();
+    for (const m of h.matchAll(/data-ans="([^"]+)"/g)) { const id = m[1].replace(/&quot;/g, '"').replace(/&amp;/g, '&'); if (ansIds.has(id)) out.add(id); }
+    return [...out]; }, [mode, pi, ti, P, ansIds, cols]);   // eslint-disable-line react-hooks/exhaustive-deps
+  const allOn = viewIds.length > 0 && viewIds.every(i => shown.has(i));
+  const toggleAll = () => { order.current = []; toggle(viewIds); };
+  const toggleSheet = () => { order.current = []; revealed.current.clear(); setShown(shown.size >= ansIds.size ? new Set() : new Set(ansIds)); };
   const nextAns = () => {   // hiện chỗ kế tiếp trong phần đang xem; hết thì báo, trả false
     const id = surfRef.current ? slotsInView(surfRef.current).find(i => ansIds.has(i) && !shown.has(i)) : undefined;
     if (!id) { flash('Đã hiện hết đáp án trong phần đang xem'); return false; }
@@ -64,15 +81,27 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
   const [pend, setPend] = useState<Pend | null>(null);
   const [reveal, setReveal] = useState(false);
   const [, bump] = useReducer((x: number) => x + 1, 0);
+  // v114 chấm tay: giáo viên bấm ✓ / ✗ cạnh chỗ chấm tay (chỉ trong lúc chiếu, không lưu)
+  const [man, setMan] = useState<Record<string, 'ok' | 'no'>>({});
   const res: Record<string, SlotResult> = {};
-  done.forEach(id => { if (slotBy[id]) res[id] = gradeSlot(slotBy[id], data.key[id], ans.current[id]); });
+  done.forEach(id => { if (!slotBy[id]) return; let r = gradeSlot(slotBy[id], data.key[id], ans.current[id]);
+    if (r.status === 'pending' && man[id]) r = { status: man[id] === 'ok' ? 'correct' : 'wrong', score: man[id] === 'ok' ? r.max : 0, max: r.max };
+    res[id] = r; });
   const autoIds = useMemo(() => data.slots.filter(x => { const k = data.key[x.id]; return k && (k.grading ?? x.grading) === 'auto' && (k.correct != null || (k.accept && k.accept.length)); }).map(x => x.id), [data]);
-  const nOk = autoIds.filter(i => res[i] && res[i].status === 'correct').length;
+  const manDone = Object.keys(man).filter(i => res[i]);
+  const nOk = autoIds.filter(i => res[i] && res[i].status === 'correct').length + manDone.filter(i => man[i] === 'ok').length, nAll = autoIds.length + manDone.length;
+  // đáp án tự hiện vì làm sai (công tắc "Sai thì hiện đáp án" hoặc bấm ✗): gắn với lần làm đó, làm lại thì ẩn
+  const revealed = useRef(new Set<string>());
   const anyWork = Object.values(ans.current).some(v => !isBlank(v));
   const commit = (id: string, v: AnswerValue | null) => {
+    const same = done.has(id) && JSON.stringify(ans.current[id]) === JSON.stringify(v);
     ans.current[id] = v; const blank = isBlank(v);
     setDone(o => { const n = new Set(o); if (blank) n.delete(id); else n.add(id); return n; });
-    if (!blank && reveal && slotBy[id] && ['wrong', 'partial'].includes(gradeSlot(slotBy[id], data.key[id], v).status) && ansIds.has(id)) setShown(o => new Set(o).add(id));
+    if (same) return;
+    if (man[id]) setMan(o => { const n = { ...o }; delete n[id]; return n; });   // bài làm đổi: chấm tay lại
+    const bad = !blank && reveal && slotBy[id] && ['wrong', 'partial'].includes(gradeSlot(slotBy[id], data.key[id], v).status) && ansIds.has(id);
+    if (revealed.current.has(id) && !bad) { revealed.current.delete(id); setShown(o => { const n = new Set(o); n.delete(id); return n; }); }
+    if (bad && !shown.has(id)) { revealed.current.add(id); setShown(o => new Set(o).add(id)); }
   };
   const draft = (id: string, v: AnswerValue | null) => { ans.current[id] = v; setDone(o => { if (!o.has(id)) return o; const n = new Set(o); n.delete(id); return n; }); };
   const resetWork = (ids: string[]) => {
@@ -80,6 +109,8 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
     ids.forEach(i => { delete ans.current[i]; });
     setDone(o => { const n = new Set(o); ids.forEach(i => n.delete(i)); return n; });
     setShown(o => { const n = new Set(o); ids.forEach(i => n.delete(i)); return n; });
+    ids.forEach(i => revealed.current.delete(i));
+    setMan(o => { const n = { ...o }; ids.forEach(i => delete n[i]); return n; });
     setPend(null); bump();
   };
   const lastMany = useRef<string | null>(null);   // chọn nhiều đang chờ Chấm (Enter)
@@ -97,7 +128,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
         return;
       }
       draft(id, el.value);
-      if (el.tagName === 'INPUT') { const h = el.parentElement!; h.style.minWidth = ''; if (el.scrollWidth > el.clientWidth + 1) h.style.minWidth = el.scrollWidth + 6 + 'px'; }   // chữ dài hơn gạch: gạch dài ra
+      fitInput(el, id, hooks);   // chữ dài hơn gạch: gạch dài ra, hết bề ngang thì xuống dòng
     },
     key: (id, el, e) => {
       e.stopPropagation();   // phím khi đang gõ không tới phím tắt của WS Editor
@@ -106,6 +137,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
       if (e.key === 'Escape') { el.blur(); e.preventDefault(); return; }
       if (e.key === 'Tab') { e.preventDefault(); hooks.current.blur(id, el); focusNext(el, e.shiftKey ? -1 : 1); return; }
       if (e.key === 'Enter' && !(el.tagName === 'TEXTAREA' && +(el.dataset.ml || 1) > 1 && !e.ctrlKey && !e.metaKey)) { e.preventDefault(); hooks.current.blur(id, el); focusNext(el, 1); return; }
+      if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && !xw && !(+(el.dataset.ml || 1) > 1)) { e.preventDefault(); hooks.current.blur(id, el); focusNext(el, e.key === 'ArrowDown' ? 1 : -1); return; }   // v115: ↓ ô kế, ↑ ô trước
       if (xw && s) {
         const mv = (d: 1 | -1 | 'down' | 'up') => { const c = nextCell(el.parentElement!, d)?.querySelector<HTMLElement>(':scope > .vwi'); if (c) { e.preventDefault(); c.focus(); } };
         if (e.key === 'ArrowRight') mv(1); else if (e.key === 'ArrowLeft') mv(-1); else if (e.key === 'ArrowDown') mv('down'); else if (e.key === 'ArrowUp') mv('up');
@@ -142,7 +174,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
   const [open, setOpen] = useState<Set<string>>(() => new Set());   // các tấm đã hé: "<task>#<mảnh>:<thứ tự>"
   const toggleCover = () => { setOpen(new Set()); setCover(!cover); };
   const pendScroll = useRef<null | { x: number; y: number } | 'top' | 'keep'>('top');
-  const keep = useRef<{ fx: number; fy: number } | null>(null);
+  const keep = useRef<{ ux: number; uy: number; ax: number; ay: number } | null>(null);   // giữ điểm (ux, uy) của trang dưới điểm (ax, ay) của màn hình khi phóng
 
   // kích thước vùng chiếu
   useLayoutEffect(() => {
@@ -151,8 +183,11 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
     return () => ro.disconnect();
   }, []);
 
-  const W0 = mode === 'page' ? PAGE_W : TASK_W, H0 = mode === 'page' ? PAGE_H : taskH;
-  const fit = mode === 'page' ? Math.min((vp.w - GAP) / PAGE_W, (vp.h - GAP) / PAGE_H) : Math.min((vp.w - GAP) / TASK_W, Math.max((vp.h - GAP) / taskH, READ));   // vừa cả Task nếu được, không thì vừa ngang
+  const RW = cols * PAGE_W + (cols - 1) * PGAP, RH = PAGE_H + PGAP;   // một hàng trang
+  const W0 = mode === 'page' ? RW : TASK_W, H0 = mode === 'page' ? rows.length * RH - PGAP : taskH;
+  // Từng Task (v115): Mặc định = 80% bề ngang màn hình (Task dài vẫn ≥ 1,5 lần cỡ thật, cuộn); Vừa = thấy trọn Task
+  const wfit = (vp.w - GAP) / TASK_W, hfit = (vp.h - GAP) / taskH;
+  const fit = mode === 'page' ? Math.min((vp.w - GAP) / RW, (vp.h - GAP) / PAGE_H) : tfit === 'fit' ? Math.min(wfit, hfit) : Math.min(TASK_DEF * wfit, Math.max(hfit, READ));
   const s = Math.max(.05, fit * z);
 
   // Từng Task: đo chiều cao thật của Task (chưa nhân tỉ lệ)
@@ -166,7 +201,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
   useLayoutEffect(() => {
     const root = surfRef.current; if (!root) return;
     applyAnswers(root, data.slots, data.key, shown);
-    applyWork(root, data.slots, { ans: ans.current, res, pend, shownIds: shown, key: data.key }, hooks);
+    applyWork(root, data.slots, { ans: ans.current, res, pend, shownIds: shown, key: data.key, man }, hooks);
     root.querySelectorAll<HTMLElement>('section.task[data-frag="0"]').forEach(sec => {
       const id = sec.dataset.task!, ids = data.slots.filter(x => x.task === id && ansIds.has(x.id)).map(x => x.id);
       let b = sec.querySelector<HTMLButtonElement>(':scope > .vtk');
@@ -181,6 +216,23 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
       if (!on) { b?.remove(); return; }
       if (!b) { b = document.createElement('button'); b.className = 'vrs'; b.dataset.vr = id; b.tabIndex = -1; b.title = 'Làm lại Task này (xóa bài làm)'; b.textContent = '⟲'; sec.appendChild(b); }
     });
+    // v117 E5: nút 🔍 bên trái ✓ / ⟲ (Cả trang): mở Từng Task đúng Task đó
+    root.querySelectorAll<HTMLElement>('section.task[data-frag="0"]').forEach(sec => {
+      let b = sec.querySelector<HTMLButtonElement>(':scope > .vzt');
+      if (mode !== 'page') { b?.remove(); return; }
+      if (!b) { b = document.createElement('button'); b.className = 'vzt'; b.dataset.vz = sec.dataset.task!; b.tabIndex = -1; b.title = 'Xem riêng Task này (Từng Task)'; b.textContent = '🔍'; sec.appendChild(b); }
+      b.style.right = 1 + 9 * sec.querySelectorAll(':scope > .vtk, :scope > .vrs').length + 'mm';
+    });
+    // v113: nhãn "Chấm tay" / "Chỉ xem" trên Task có chỗ chưa có đáp án (bấm hoặc rê chuột xem lý do)
+    root.querySelectorAll<HTMLElement>('section.task[data-frag="0"]').forEach(sec => {
+      const id = sec.dataset.task!, man = data.slots.filter(x => x.task === id && (data.key[x.id]?.grading ?? x.grading) === 'manual'), nt = data.notes?.[id] || [], any = data.slots.some(x => x.task === id);
+      let b = sec.querySelector<HTMLElement>(':scope > .vmn');
+      const txt = man.length ? `✎ Chấm tay${man.length < data.slots.filter(x => x.task === id).length ? ` ${man.length} chỗ` : ''}` : !any && nt.length ? 'Chỉ xem' : '';
+      if (!txt) { b?.remove(); return; }
+      if (!b) { b = document.createElement('span'); b.className = 'vmn'; sec.appendChild(b); }
+      b.textContent = txt; b.title = (nt.length ? nt.join('\n') : 'Chưa có đáp án: giáo viên tự chấm') + '\n(chỉ hiện khi chiếu, không in ra phiếu)';
+      b.style.right = 1 + 9 * sec.querySelectorAll(':scope > .vtk, :scope > .vrs, :scope > .vzt').length + 'mm';   // bên trái các nút ✓ / ⟲ / 🔍
+    });
     // che / hé
     root.querySelectorAll('.vcv').forEach(e => e.remove());
     root.querySelectorAll('[data-vu]').forEach(e => { e.removeAttribute('data-vu'); e.classList.remove('vcov'); });
@@ -192,7 +244,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
     // chỗ neo nét vẽ: từng mảnh Task (và cả trang ở Cả trang), tọa độ chưa nhân tỉ lệ
     const sr = root.getBoundingClientRect(), k = sr.width / root.offsetWidth || 1;
     const an: Anchor[] = [...root.querySelectorAll<HTMLElement>('section.task[data-frag]')].map(sec => { const r = sec.getBoundingClientRect(); return { key: `${sec.dataset.task}#${sec.dataset.frag}`, x: (r.left - sr.left) / k, y: (r.top - sr.top) / k, w: r.width / k, h: r.height / k }; });
-    if (mode === 'page') an.push({ key: `page#${pi}`, x: 0, y: 0, w: PAGE_W, h: PAGE_H });
+    if (mode === 'page') shownPages.forEach((i, k) => an.push({ key: `page#${i}`, x: (k % cols) * (PAGE_W + PGAP), y: rows.indexOf(Math.floor(i / cols)) * RH, w: PAGE_W, h: PAGE_H }));
     const j = JSON.stringify(an.map(a => [a.key, Math.round(a.x), Math.round(a.y), Math.round(a.w), Math.round(a.h)]));
     if (j !== JSON.stringify(anchors.map(a => [a.key, Math.round(a.x), Math.round(a.y), Math.round(a.w), Math.round(a.h)]))) setAnchors(an);
   });
@@ -200,33 +252,43 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
   // cuộn sau khi đổi trang / Task / tỉ lệ
   useLayoutEffect(() => {
     const st = stageRef.current!, p = pendScroll.current;
-    if (keep.current) { const k = keep.current; keep.current = null; st.scrollLeft = k.fx * st.scrollWidth - st.clientWidth / 2; st.scrollTop = k.fy * st.scrollHeight - st.clientHeight / 2; return; }
-    if (p === 'top') { st.scrollTop = 0; st.scrollLeft = (st.scrollWidth - st.clientWidth) / 2; }
+    if (keep.current) { const k = keep.current, bx = st.querySelector<HTMLElement>('.vbox')!; keep.current = null; st.scrollLeft = bx.offsetLeft + k.ux * s - k.ax; st.scrollTop = bx.offsetTop + k.uy * s - k.ay; return; }
+    if (p === 'top') { st.scrollTop = mode === 'page' && scroll ? rowTop(row) : 0; st.scrollLeft = (st.scrollWidth - st.clientWidth) / 2; }
     else if (p && p !== 'keep') { st.scrollLeft = p.x; st.scrollTop = p.y; }
     pendScroll.current = null;
-  }, [mode, pi, ti, s, taskH]);
+  }, [mode, pi, ti, s, taskH, tfit, two, scroll]);   // eslint-disable-line react-hooks/exhaustive-deps
+  function rowTop(r: number) { const bx = stageRef.current?.querySelector<HTMLElement>('.vbox'); return (bx ? bx.offsetTop : 0) + r * RH * s; }
+  // Cuộn: trang đang xem = hàng chiếm phần trên màn hình
+  const onStageScroll = () => {
+    if (mode !== 'page' || !scroll) return;
+    const st = stageRef.current!, r = Math.max(0, Math.min(nRows - 1, Math.floor((st.scrollTop - rowTop(0) + st.clientHeight * .4) / (RH * s))));
+    if (r !== row) setPi(r * cols);
+  };
 
-  const zoomTo = useCallback((nz: number) => {
-    const st = stageRef.current!;
-    keep.current = { fx: (st.scrollLeft + st.clientWidth / 2) / st.scrollWidth, fy: (st.scrollTop + st.clientHeight / 2) / st.scrollHeight };
+  const zoomTo = useCallback((nz: number, at?: { x: number; y: number }) => {   // at: điểm trên màn hình giữ đứng yên (đầu chuột); không có thì giữa màn hình
+    const st = stageRef.current!, r = st.getBoundingClientRect(), b = surfRef.current!.getBoundingClientRect(), sc = b.width / surfRef.current!.offsetWidth || 1;
+    const ax = at ? at.x - r.left : st.clientWidth / 2, ay = at ? at.y - r.top : st.clientHeight / 2;
+    keep.current = { ux: (r.left + ax - b.left) / sc, uy: (r.top + ay - b.top) / sc, ax, ay };
     setZ(Math.min(Z_MAX, Math.max(Z_MIN, Math.round(nz * 100) / 100)));
   }, []);
-  const zoomFit = useCallback(() => { pendScroll.current = 'top'; setZ(1); }, []);
+  const zoomFit = useCallback(() => { pendScroll.current = 'top'; setZ(1); setTfit('def'); }, []);
+  const zoomBtn = () => { pendScroll.current = 'top'; if (mode === 'task' && z === 1 && tfit === 'def') setTfit('fit'); else setTfit('def'); setZ(1); };
 
   // lật: Từng Task thì cuộn hết Task rồi mới sang Task sau (một phím clicker làm được hết)
   const go = useCallback((d: 1 | -1, clicker = false) => {
     const st = stageRef.current!;
     if (clicker && clickAns) { if (d > 0 && surfRef.current && slotsInView(surfRef.current).some(i => ansIds.has(i) && !shown.has(i))) { nextAns(); return; } }
     if (mode === 'page') {
+      if (scroll) { const r = Math.max(0, Math.min(nRows - 1, row + d)); st.scrollTo({ top: rowTop(r), behavior: 'smooth' }); setPi(r * cols); return; }
       if (z > 1) { const max = st.scrollHeight - st.clientHeight; if (d > 0 && st.scrollTop < max - 4) { st.scrollTop += st.clientHeight * .85; return; } if (d < 0 && st.scrollTop > 4) { st.scrollTop -= st.clientHeight * .85; return; } }
-      const np = Math.min(nP - 1, Math.max(0, pi + d)); if (np !== pi) { pendScroll.current = 'top'; setPi(np); }
+      const np = Math.min(nRows - 1, Math.max(0, row + d)) * cols; if (np !== row * cols) { pendScroll.current = 'top'; setPi(np); }
       return;
     }
     const max = st.scrollHeight - st.clientHeight;
     if (d > 0 && st.scrollTop < max - 4) { st.scrollTop = Math.min(max, st.scrollTop + st.clientHeight * .85); return; }
     if (d < 0 && st.scrollTop > 4) { st.scrollTop = Math.max(0, st.scrollTop - st.clientHeight * .85); return; }
     const nt = Math.min(nT - 1, Math.max(0, ti + d)); if (nt !== ti) { pendScroll.current = 'top'; setTi(nt); }
-  }, [mode, pi, ti, nP, nT, z, clickAns, shown, ansIds]);
+  }, [mode, pi, ti, nP, nT, z, clickAns, shown, ansIds, cols, scroll, s]);   // eslint-disable-line react-hooks/exhaustive-deps
 
   const toMode = useCallback((m: Mode) => {
     if (m === mode) return;
@@ -234,6 +296,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
     else if (P.tasks[ti]) setPi(P.tasks[ti].frags[0].page);
     pendScroll.current = 'top'; setZ(1); setMode(m);
   }, [mode, pi, ti, P]);
+  const openTask = (id: string) => { const i = P.tasks.findIndex(t => t.id === id); if (i < 0) return; pendScroll.current = 'top'; setZ(1); setTi(i); setMode('task'); };   // v117 E5: nút 🔍 ở góc Task
   const goTask = (i: number) => { pendScroll.current = 'top'; setZ(1); if (mode === 'task') setTi(i); else { setTi(i); setPi(P.tasks[i].frags[0].page); } };
 
   // toàn màn hình: mở là xin, Esc của trình duyệt thoát toàn màn hình thì vẫn ở trình chiếu (Esc lần nữa mới đóng)
@@ -277,7 +340,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
         case 'PageDown': go(1, true); break;    // bút trình chiếu (clicker) gửi PageDown / PageUp
         case 'PageUp': go(-1, true); break;
         case ' ': if (e.shiftKey) prevAns(); else nextAns(); break;
-        case 'a': case 'A': if (!e.ctrlKey && !e.metaKey) toggleAll(); else used = false; break;
+        case 'a': case 'A': if (!e.ctrlKey && !e.metaKey) { if (e.shiftKey) toggleSheet(); else toggleAll(); } else used = false; break;
         case 'Home': if (mode === 'page') { pendScroll.current = 'top'; setPi(0); } else goTask(0); break;
         case 'End': if (mode === 'page') { pendScroll.current = 'top'; setPi(nP - 1); } else goTask(nT - 1); break;
         case 't': case 'T': toMode(mode === 'page' ? 'task' : 'page'); break;
@@ -287,10 +350,11 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
         case 'z': case 'Z': setTool(tool === 'zoomrect' ? 'pointer' : 'zoomrect'); break;
         case 'f': case 'F': toggleFs(); break;
         case 'h': case 'H': toggleCover(); break;
+        case 'l': case 'L': setTorch(!torch); break;
         case 'g': case 'G': setTimer(!timer); break;
         case 'b': case 'B': setBoard(true); break;
         case 'Enter': if (lastMany.current) { commit(lastMany.current, ans.current[lastMany.current] ?? null); lastMany.current = null; } else used = false; break;
-        case 'Escape': if (pend) setPend(null); else if (pic) setPic(null); else if (tool !== 'pointer') setTool('pointer'); else if (z !== 1) zoomFit(); else onClose(); break;
+        case 'Escape': if (torch) setTorch(false); else if (pend) setPend(null); else if (pic) setPic(null); else if (tool !== 'pointer') setTool('pointer'); else if (z !== 1) zoomFit(); else onClose(); break;
         default: used = false;
       }
       if (used) { e.preventDefault(); e.stopPropagation(); poke(); } else e.stopPropagation();
@@ -301,14 +365,45 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
 
   // Ctrl + lăn chuột (và chụm hai ngón trên bàn di chuột) = phóng
   useEffect(() => {
-    const st = stageRef.current!, w = (e: WheelEvent) => { if (!e.ctrlKey) return; e.preventDefault(); zoomTo(z * (e.deltaY < 0 ? 1.12 : 1 / 1.12)); };
+    const st = stageRef.current!, w = (e: WheelEvent) => { if (torch && !e.ctrlKey) { e.preventDefault(); setTrad(r => Math.max(60, Math.min(600, Math.round(r * (e.deltaY < 0 ? 1.12 : 1 / 1.12))))); return; }
+      if (!e.ctrlKey) {   // v117: tự cuộn (trên trang phóng to, Chromium có lúc không cuộn khi đầu chuột nằm trên chữ của trang)
+        const k = e.deltaMode === 1 ? 40 : e.deltaMode === 2 ? st.clientHeight : 1, dy = e.shiftKey && !e.deltaX ? e.deltaY : 0;
+        e.preventDefault(); st.scrollBy({ left: (e.deltaX + dy) * k, top: (dy ? 0 : e.deltaY) * k }); return;
+      }
+      e.preventDefault(); zoomTo(z * (e.deltaY < 0 ? 1.12 : 1 / 1.12), { x: e.clientX, y: e.clientY }); };
     st.addEventListener('wheel', w, { passive: false });
     return () => st.removeEventListener('wheel', w);
-  }, [z, zoomTo]);
+  }, [z, zoomTo, torch]);
 
   // chụm hai ngón trên màn cảm ứng
   const touches = useRef(new Map<number, { x: number; y: number }>()), pinch0 = useRef<{ d: number; z: number } | null>(null);
   const dist = () => { const [a, b] = [...touches.current.values()]; return Math.hypot(a.x - b.x, a.y - b.y); };
+
+  // v116 tìm từ: ở con trỏ, kéo trên lưới từ chữ đầu tới chữ cuối; chữ trên đường kéo (đọc xuôi hoặc ngược) là một từ của khung từ thì ghi bài làm
+  const fd = useRef<null | { sec: HTMLElement; a: HTMLElement; b: HTMLElement; svg: SVGElement | null }>(null);
+  const findDown = (e: React.PointerEvent) => {
+    if (tool !== 'pointer' || e.ctrlKey || e.metaKey || e.shiftKey || (e.pointerType === 'mouse' && e.button !== 0)) return false;
+    const c = (e.target as HTMLElement).closest<HTMLElement>('[data-rc]'), sec = c?.closest<HTMLElement>('section.task');
+    if (!c || !sec || !data.slots.some(x => x.task === sec.dataset.task && x.interaction === 'find')) return false;
+    e.preventDefault(); stageRef.current!.setPointerCapture(e.pointerId); fd.current = { sec, a: c, b: c, svg: capsule(sec, c, c, 'vfl') }; return true;
+  };
+  const findMove = (e: React.PointerEvent) => {
+    const d = fd.current; if (!d) return false;
+    const c = (document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null)?.closest<HTMLElement>('[data-rc]');
+    if (c && c !== d.b && c.closest<HTMLElement>('section.task')?.dataset.task === d.sec.dataset.task) { d.b = c; d.svg?.remove(); d.svg = capsule(d.sec, d.a, c, 'vfl'); }
+    return true;
+  };
+  const findUp = () => {
+    const d = fd.current; if (!d) return false; fd.current = null; d.svg?.remove(); drew.current = Date.now();
+    const [r1, c1] = d.a.dataset.rc!.split(',').map(Number), [r2, c2] = d.b.dataset.rc!.split(',').map(Number), dr = r2 - r1, dc = c2 - c1;
+    if ((!dr && !dc) || (dr && dc && Math.abs(dr) !== Math.abs(dc))) { if (dr || dc) flash('Kéo theo hàng ngang, cột dọc hoặc đường chéo'); return true; }
+    const n = Math.max(Math.abs(dr), Math.abs(dc)) + 1, sr = Math.sign(dr), sc = Math.sign(dc);
+    const got = Array.from({ length: n }, (_, k) => rcCell(d.sec, `${r1 + sr * k},${c1 + sc * k}`)?.textContent?.trim().toUpperCase() || '').join('');
+    const W = (w: string) => w.replace(/[^\p{L}]/gu, '').toUpperCase();
+    const sl = data.slots.find(x => x.task === d.sec.dataset.task && x.interaction === 'find' && [got, [...got].reverse().join('')].includes(W(x.label)));
+    if (!sl) { flash(`"${got}" không có trong khung từ`); return true; }
+    commit(sl.id, `${d.a.dataset.rc}-${d.b.dataset.rc}`); return true;
+  };
 
   // phóng vùng: kéo khung trên lớp bắt chuột, thả thì phóng vùng đó vừa màn hình
   const onRectDown = (e: React.PointerEvent) => { (e.target as HTMLElement).setPointerCapture(e.pointerId); setRect({ x0: e.clientX, y0: e.clientY, x1: e.clientX, y1: e.clientY }); };
@@ -328,7 +423,8 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
   const anchorAt = (p: Pt) => {
     const ins = (a: Anchor) => p[0] >= a.x && p[0] <= a.x + a.w && p[1] >= a.y && p[1] <= a.y + a.h;
     const secs = anchors.filter(a => !a.key.startsWith('page#'));
-    return secs.find(ins) || anchors.find(a => a.key.startsWith('page#')) || secs.reduce<Anchor | null>((m, a) => { const d = Math.abs(p[1] - Math.min(Math.max(p[1], a.y), a.y + a.h)); return !m || d < Math.abs(p[1] - Math.min(Math.max(p[1], m.y), m.y + m.h)) ? a : m; }, null);
+    const pgs = anchors.filter(a => a.key.startsWith('page#'));
+    return secs.find(ins) || pgs.find(ins) || pgs[0] || secs.reduce<Anchor | null>((m, a) => { const d = Math.abs(p[1] - Math.min(Math.max(p[1], a.y), a.y + a.h)); return !m || d < Math.abs(p[1] - Math.min(Math.max(p[1], m.y), m.y + m.h)) ? a : m; }, null);
   };
   const local = (a: Anchor, p: Pt): Pt => [Math.round((p[0] - a.x) * 10) / 10, Math.round((p[1] - a.y) * 10) / 10];
   const eraseAt = (p: Pt) => {
@@ -345,7 +441,8 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
     const p = surfPt(e), a = anchorAt(p); if (!a) return false;
     e.preventDefault(); stageRef.current!.setPointerCapture(e.pointerId);
     if (t === 'eraser') { drawing.current = { key: a.key, s: { t: 'pen', c: '', w: 0, pts: [] }, erase: true, shift: false, cut: false }; eraseAt(p); return true; }
-    const st: Stroke = { t: t as Stroke['t'], c: t === 'hl' ? HL : color, w: Math.round((t === 'hl' ? width * 4 : width) / s * 10) / 10, pts: [local(a, p)] };
+    const qline = !!quick && t === 'line', c = t === 'hl' ? HL : qline ? COLORS[0][0] : color, w0 = qline ? WIDTHS[1][0] : width;   // Shift + kéo: đường thẳng đỏ, nét vừa (v115)
+    const st: Stroke = { t: t as Stroke['t'], c, w: Math.round((t === 'hl' ? w0 * 4 : w0) / s * 10) / 10, pts: [local(a, p)] };
     drawing.current = { key: a.key, s: st, erase: false, shift: !!quick && t === 'line', cut: false }; setLive({ key: a.key, s: st });
     return true;
   };
@@ -364,7 +461,26 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
     if (!d.erase) setInk({ ...ink, [d.key]: [...(ink[d.key] || []), d.s] });
     return true;
   };
-  const clearInk = () => { if (!hasInk) return; setInk({}); flash('Đã xóa nét vẽ. Bấm ↶ để hoàn tác.'); };
+  const clearInk = () => { setClr(false); if (!hasInk) return; setInk({}); flash('Đã xóa hết nét vẽ. Bấm ↶ để hoàn tác.'); };
+  // v115: xóa nét của phần đang xem (trang ở Cả trang, Task ở Từng Task)
+  const viewInk = anchors.some(a => (ink[a.key] || []).length);
+  const clearView = () => { setClr(false); if (!viewInk) return; const n = { ...ink }; anchors.forEach(a => { delete n[a.key]; }); setInk(n); flash(`Đã xóa nét ${mode === 'page' ? 'trang' : 'Task'} này. Bấm ↶ để hoàn tác.`); };
+  const [clr, setClr] = useState(false);
+  // v117 E11 hộp Note: bấm đúp trên phiếu (ở con trỏ, không trúng chỗ trả lời) → ghi chú tại chỗ; gắn với Task / trang như nét vẽ, lưu trên máy
+  const [notes, setNotes] = useState<Notes>(() => loadNotes(store, P.hash));
+  const [newNote, setNewNote] = useState<string | null>(null);
+  useEffect(() => { saveNotes(store, P.hash, notes); }, [notes]);   // eslint-disable-line react-hooks/exhaustive-deps
+  const putNote = (key: string, id: string, n: Partial<Note> | null) => setNotes(o => {
+    const arr = (o[key] || []).flatMap(x => x.id !== id ? [x] : n ? [{ ...x, ...n }] : []), out = { ...o, [key]: arr };
+    if (!arr.length) delete out[key]; return out; });
+  const onSurfDbl = (e: React.MouseEvent) => {
+    if (tool !== 'pointer') return;
+    const tg = e.target as HTMLElement; if (tg.closest('[data-ans], .vwi, button, .vnt, .vmn, .vcv, .mrows, [data-rc]')) return;
+    const b = surfRef.current!.getBoundingClientRect(), p: Pt = [(e.clientX - b.left) / s, (e.clientY - b.top) / s], a = anchorAt(p); if (!a) return;
+    const id = 'n' + Date.now().toString(36), L = local(a, p);
+    window.getSelection()?.removeAllRanges();
+    setNotes(o => ({ ...o, [a.key]: [...(o[a.key] || []), { id, x: L[0], y: L[1], t: '', c: false }] })); setNewNote(id);
+  };
   const inkTool = INK_TOOLS.includes(tool);
   const drew = useRef(0);   // vừa vẽ xong (Ctrl / Shift kéo ở con trỏ) thì cú bấm theo sau không tính là bấm đáp án
 
@@ -372,7 +488,8 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
   const onSurfClick = (e: React.MouseEvent) => {
     if (tool !== 'pointer' || Date.now() - drew.current < 300) return;
     const tg = e.target as HTMLElement, tb = tg.closest<HTMLElement>('.vtk');
-    if (tg.closest('.vwi')) return;
+    if (tg.closest('.vwi, .vnt')) return;
+    const zt = tg.closest<HTMLElement>('.vzt'); if (zt) { openTask(zt.dataset.vz!); e.stopPropagation(); return; }
     if (cover) {   // bấm tấm che: hé; bấm vào câu đã hé (không phải chỗ trả lời): che lại
       const u = tg.closest<HTMLElement>('[data-vu]');
       if (u && (tg.closest('.vcv') || !tg.closest('[data-ans]'))) { const id = u.dataset.vu!; setOpen(o => { const n = new Set(o); if (n.has(id)) n.delete(id); else n.add(id); return n; }); e.stopPropagation(); return; }
@@ -385,7 +502,9 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
 
   // GĐ1b bấm để làm: chọn phương án, nối, bấm vào chỗ gõ; dấu ✗ = xem đáp án chỗ đó; ⟲ = làm lại Task
   const workClick = (tg: HTMLElement) => {
-    const m = tg.closest<HTMLElement>('.vwm.tap'); if (m) { toggle([m.dataset.vw!]); return true; }
+    const mk = tg.closest<HTMLElement>('.vmk'); if (mk) { const id = mk.dataset.mk!, v = mk.dataset.v as 'ok' | 'no'; setMan(o => ({ ...o, [id]: v })); return true; }
+    const mj = tg.closest<HTMLElement>('.vwm.mj'); if (mj) { const id = mj.dataset.vw!; setMan(o => { const n = { ...o }; delete n[id]; return n; }); return true; }
+    const m = tg.closest<HTMLElement>('.vwm.tap'); if (m) { const id = m.dataset.vw!, on = !shown.has(id); toggle([id]); if (on) revealed.current.add(id); return true; }
     const g = tg.closest<HTMLElement>('.vwgo'); if (g) { commit(g.dataset.vg!, ans.current[g.dataset.vg!] ?? null); lastMany.current = null; return true; }
     const rs = tg.closest<HTMLElement>('.vrs'); if (rs) { resetWork(data.slots.filter(x => x.task === rs.dataset.vr).map(x => x.id)); flash('Đã xóa bài làm của Task này'); return true; }
     const ln = tg.closest<SVGElement>('svg.vwl'); if (ln) { commit(ln.dataset.vw!, null); return true; }
@@ -408,7 +527,7 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
       }
       if (kind === 'link') {
         if (pend && 'row' in pend) {   // đã bấm vế phải trước
-          const sec = el.closest<HTMLElement>('section.task'), mrow = sec && [...sec.querySelectorAll<HTMLElement>('.mr:not(.mh)')].find(x => x.textContent === pend.row);
+          const sec = el.closest<HTMLElement>('section.task'), mrow = sec && sec.dataset.task === pend.task ? sec.querySelector<HTMLElement>(`.mr[data-opt="${CSS.escape(pend.row)}"]`) : null;
           const o = mrow ? optOfRow(s, mrow) : null; setPend(null); if (o) link(id, o.id); return true;
         }
         setPend(pend && 'id' in pend && pend.id === id ? null : { id }); return true;
@@ -417,8 +536,8 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
     }
     if (mr) {
       const sec = mr.closest<HTMLElement>('section.task')!;
-      if (pend && 'id' in pend) { const s = slotBy[pend.id], o = s ? optOfRow(s, mr) : null; setPend(null); if (o) link(pend.id, o.id); return true; }
-      const row = mr.textContent || ''; setPend(pend && 'row' in pend && pend.row === row ? null : { task: sec.dataset.task!, row }); return true;
+      if (pend && 'id' in pend) { const s = slotBy[pend.id], o = s && s.task === sec.dataset.task ? optOfRow(s, mr) : null; setPend(null); if (o) link(pend.id, o.id); return true; }
+      const row = mr.dataset.opt || ''; if (!row) return true; setPend(pend && 'row' in pend && pend.row === row ? null : { task: sec.dataset.task!, row }); return true;
     }
     return false;
   };
@@ -429,28 +548,32 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
     commit(id, opt);
   };
 
-  const cur = mode === 'page' ? `Trang ${pi + 1}/${nP}` : P.tasks[ti] ? `Task ${P.tasks[ti].num} · ${ti + 1}/${nT}` : '';
-  const html = mode === 'page' ? P.pages[pi] || '' : taskHtml;
-  const surf = useMemo(() => ({ __html: html }), [html]);
+  const cur = mode === 'page' ? `Trang ${rowPages.length > 1 ? `${rowPages[0] + 1}–${rowPages[rowPages.length - 1] + 1}` : rowPages[0] + 1}/${nP}` : P.tasks[ti] ? `Task ${P.tasks[ti].num} · ${ti + 1}/${nT}` : '';
+  const pageHtml = useMemo(() => P.pages.map(h => ({ __html: h })), [P]);
+  const surf = useMemo(() => ({ __html: taskHtml }), [taskHtml]);
+  const SR = (window as unknown as { SpeechRecognition?: unknown; webkitSpeechRecognition?: unknown }).SpeechRecognition || (window as unknown as { webkitSpeechRecognition?: unknown }).webkitSpeechRecognition;
 
   return (
-    <div id="wsShow" className={'show' + (bar ? '' : ' nobar') + (board ? ' boarding' : '')} role="dialog" aria-label="Trình chiếu phiếu" onPointerMove={poke}>
-      <div className={'vstage' + (inkTool ? ' inking' : '')} ref={stageRef} data-mode={mode} data-tool={tool}
-        onPointerDown={e => { if (inkDown(e)) return; if (e.pointerType === 'touch') { touches.current.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (touches.current.size === 2) pinch0.current = { d: dist(), z }; } }}
-        onPointerMove={e => { if (inkMove(e)) return; if (touches.current.has(e.pointerId)) { touches.current.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (pinch0.current && touches.current.size === 2) zoomTo(pinch0.current.z * dist() / pinch0.current.d); } }}
-        onPointerUp={e => { if (inkUp()) return; touches.current.delete(e.pointerId); if (touches.current.size < 2) pinch0.current = null; }}
+    <div id="wsShow" className={'show' + (bar ? '' : ' nobar') + (board ? ' boarding' : '')} role="dialog" aria-label="Trình chiếu phiếu" onPointerMove={e => { poke(); if (torch) setTpos({ x: e.clientX, y: e.clientY }); }}>
+      <div className={'vstage' + (inkTool ? ' inking' : '')} ref={stageRef} data-mode={mode} data-tool={tool} data-scroll={mode === 'page' && scroll ? '1' : undefined} onScroll={onStageScroll}
+        onPointerDown={e => { if (inkDown(e) || findDown(e)) return; if (e.pointerType === 'touch') { touches.current.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (touches.current.size === 2) pinch0.current = { d: dist(), z }; } }}
+        onPointerMove={e => { if (inkMove(e) || findMove(e)) return; if (touches.current.has(e.pointerId)) { touches.current.set(e.pointerId, { x: e.clientX, y: e.clientY }); if (pinch0.current && touches.current.size === 2) { const [a, b] = [...touches.current.values()]; zoomTo(pinch0.current.z * dist() / pinch0.current.d, { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }); } } }}
+        onPointerUp={e => { if (inkUp() || findUp()) return; touches.current.delete(e.pointerId); if (touches.current.size < 2) pinch0.current = null; }}
         onPointerCancel={e => { inkUp(); touches.current.delete(e.pointerId); pinch0.current = null; }}>
         <div className="vwrap">
           <div className="vbox" style={{ width: W0 * s, height: H0 * s }}>
-            <div className={'vsurf paper ' + (mode === 'page' ? 'vpage' : 'vtask')} ref={surfRef} style={{ transform: `scale(${s})` }} onClick={onSurfClick}>
+            <div className={'vsurf ' + (mode === 'page' ? 'vpages' : 'paper vtask')} ref={surfRef} style={{ transform: `scale(${s})`, ...(mode === 'page' ? { width: W0, height: H0 } : {}) }} onClick={onSurfClick} onDoubleClick={onSurfDbl}>
               {mode === 'page'
-                ? <><div className="flow" dangerouslySetInnerHTML={surf} /><div className="pfoot"><span>{data.title}</span><span>{`Trang ${pi + 1}/${nP}`}</span></div></>
+                ? shownPages.map((i, k) => <div key={i} className="vpage paper" data-pg={i} style={{ left: (k % cols) * (PAGE_W + PGAP), top: rows.indexOf(Math.floor(i / cols)) * RH }}>
+                    <div className="flow" dangerouslySetInnerHTML={pageHtml[i]} /><div className="pfoot"><span>{data.title}</span><span>{`Trang ${i + 1}/${nP}`}</span></div></div>)
                 : <div className="vflow" style={{ padding: `${TASK_PAD}mm` }} dangerouslySetInnerHTML={surf} />}
               {inkHidden ? null : <div className="vink" aria-hidden="true">{anchors.map(a => {
                 const arr = ink[a.key] || [], lv = live && live.key === a.key ? [live.s] : [];
                 return arr.length || lv.length ? <svg key={a.key} style={{ left: a.x, top: a.y, width: a.w, height: a.h }}>
                   {[...arr, ...lv].map((st, i) => <path key={i} d={pathOf(st)} stroke={st.c} strokeWidth={st.w} />)}</svg> : null;
               })}</div>}
+              <div className="vnotes">{anchors.map(a => (notes[a.key] || []).map(n => <NoteBox key={n.id} n={n} x={a.x + n.x} y={a.y + n.y} focus={newNote === n.id} sr={!!SR}
+                onFocused={() => setNewNote(null)} onChange={v => putNote(a.key, n.id, v)} onDelete={() => putNote(a.key, n.id, null)} />))}</div>
             </div>
           </div>
         </div>
@@ -471,9 +594,14 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
         <span className="vpsep" />
         <button className="vb" id="inkUndo" onClick={undo} disabled={!undoS.current.length} title="Hoàn tác (Ctrl+Z)" aria-label="Hoàn tác">↶</button>
         <button className="vb" onClick={redo} disabled={!redoS.current.length} title="Làm lại (Ctrl+Shift+Z)" aria-label="Làm lại">↷</button>
-        <button className="vb" id="inkClear" onClick={clearInk} disabled={!hasInk} title="Xóa hết nét vẽ (hoàn tác được)" aria-label="Xóa hết">🗑</button>
+        <button className={'vb vbt' + (clr ? ' on' : '')} id="inkClear" onClick={() => setClr(!clr)} disabled={!hasInk} title="Xóa nét vẽ (hoàn tác được)" aria-label="Xóa nét vẽ">🗑<small>Xóa</small></button>
+        {clr ? <div className="vclr" role="menu">
+          <button className="vb" id="inkClearView" onClick={clearView} disabled={!viewInk}>{`Xóa nét ${mode === 'page' ? 'trang' : 'Task'} này`}</button>
+          <button className="vb" id="inkClearAll" onClick={clearInk}>Xóa hết nét vẽ</button>
+        </div> : null}
         <button className={'vb' + (inkHidden ? ' on' : '')} onClick={() => setInkHidden(!inkHidden)} disabled={!hasInk && !inkHidden} title="Ẩn / hiện nét vẽ" aria-label="Ẩn nét vẽ">{inkHidden ? '◌' : '◉'}</button>
       </div>
+      {torch ? <div className="vtorch" id="torch" aria-hidden="true" style={{ background: `radial-gradient(circle ${trad}px at ${tpos.x}px ${tpos.y}px, transparent 0 ${trad - 2}px, rgba(0,0,0,.92) ${trad}px)` }} /> : null}
       {board ? <Board st={boardSt} setSt={setBoardSt} color={color} width={width} onClose={() => setBoard(false)} /> : null}
       {timer ? <Timer onClose={() => setTimer(false)} /> : null}
       {msg ? <div className="vmsg" role="status">{msg}</div> : null}
@@ -487,6 +615,10 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
         <div className="vgrp">
           <button className={'vb' + (mode === 'page' ? ' on' : '')} onClick={() => toMode('page')} title="Cả trang (T)">▭<span className="vt"> Cả trang</span></button>
           <button className={'vb' + (mode === 'task' ? ' on' : '')} onClick={() => toMode('task')} title="Từng Task (T)">☰<span className="vt"> Từng Task</span></button>
+          {mode === 'page' ? <>
+            <button className={'vb' + (two ? ' on' : '')} id="showTwo" onClick={() => { pendScroll.current = 'top'; setZ(1); setTwo(!two); }} title="Xem 1 trang / 2 trang cạnh nhau">{two ? '▯▯' : '▯'}<span className="vt vt2">{two ? ' 2 trang' : ' 1 trang'}</span></button>
+            <button className={'vb' + (scroll ? ' on' : '')} id="showScroll" onClick={() => { pendScroll.current = 'top'; setZ(1); setScroll(!scroll); }} title="Trang: lật từng trang · Cuộn: mọi trang xếp dọc liền, cuộn tự do">⇕<span className="vt vt2">{scroll ? ' Cuộn' : ' Trang'}</span></button>
+          </> : null}
           <select className="vsel" aria-label="Đi tới Task" value="" onChange={e => { const i = +e.target.value; if (i >= 0) goTask(i); e.target.blur(); }}>
             <option value="">Đi tới…</option>
             {P.tasks.map((t, i) => <option key={t.id} value={i}>{`Task ${t.num}: ${t.title}`.slice(0, 60)}</option>)}
@@ -494,21 +626,22 @@ export function Presenter({ data, onClose }: { data: ShowData; onClose: () => vo
         </div>
         <div className="vgrp">
           <button className="vb" onClick={() => zoomTo(z / 1.25)} aria-label="Thu nhỏ" title="Thu nhỏ (−)">−</button>
-          <button className="vb" onClick={zoomFit} title="Vừa màn hình (0)" id="showZoom">{z === 1 ? 'Vừa' : `${Math.round(z * 100)}%`}</button>
+          <button className="vb" onClick={zoomBtn} title={mode === 'task' ? 'Từng Task: Mặc định (Task rộng 80% màn hình) ↔ Vừa (thấy trọn Task). Đang phóng thì về Mặc định (0)' : 'Về 100%: vừa màn hình (0)'} id="showZoom">{z !== 1 ? `${Math.round(z * 100)}%` : mode === 'task' && tfit === 'def' ? 'Mặc định' : 'Vừa'}</button>
           <button className="vb" onClick={() => zoomTo(z * 1.25)} aria-label="Phóng to" title="Phóng to (+)">+</button>
           <button className={'vb' + (tool === 'zoomrect' ? ' on' : '')} onClick={() => setTool(tool === 'zoomrect' ? 'pointer' : 'zoomrect')} title="Phóng vùng: kéo khung (Z)">⬚<span className="vt vt2"> Phóng vùng</span></button>
         </div>
         <div className="vgrp">
           <button className={'vb' + (timer ? ' on' : '')} id="showTimer" onClick={() => setTimer(!timer)} title="Đồng hồ đếm ngược (G)">⏱<span className="vt"> Đồng hồ</span></button>
           <button className={'vb' + (board ? ' on' : '')} id="showBoard" onClick={() => setBoard(!board)} title="Bảng trắng (B)">▢<span className="vt"> Bảng</span></button>
+          <button className={'vb' + (torch ? ' on' : '')} id="showTorch" onClick={() => setTorch(!torch)} title="Đèn pin: tối màn hình, chỉ sáng quanh chuột (L). Lăn chuột đổi cỡ vòng sáng, Esc tắt">🔦<span className="vt vt2"> Đèn pin</span></button>
           <button className={'vb' + (cover ? ' on' : '')} id="showCover" onClick={toggleCover} title="Che từng câu, bấm để hé dần (H). Bấm lại để bỏ che">▤<span className="vt"> Che</span></button>
           {cover ? <button className="vb" id="showOpenAll" onClick={() => { const r = surfRef.current; if (r) setOpen(o => { const n = new Set(o); r.querySelectorAll<HTMLElement>('[data-vu]').forEach(u => n.add(u.dataset.vu!)); return n; }); }} title="Hé hết phần đang xem">Hé hết</button> : null}
-          <button className={'vb' + (allOn ? ' on' : '')} id="showAns" onClick={toggleAll} title={`Hiện / ẩn đáp án cả phiếu (A) · Space: hiện lần lượt, Shift+Space: ẩn lại · nút ✓ đầu Task: hiện Task đó${noKey ? ` · ${noKey} chỗ chưa có đáp án` : ''}`}>✓<span className="vt"> Đáp án</span></button>
+          <button className={'vb' + (allOn ? ' on' : '')} id="showAns" onClick={toggleAll} title={`Hiện / ẩn đáp án phần đang xem (A; Shift+A: cả phiếu) · Space: hiện lần lượt, Shift+Space: ẩn lại · nút ✓ đầu Task: hiện Task đó${noKey ? ` · ${noKey} chỗ chưa có đáp án` : ''}`}>✓<span className="vt"> Đáp án</span></button>
           <button className={'vb' + (clickAns ? ' on' : '')} id="showClick" onClick={() => setClickAns(!clickAns)} title="Bật: nút Sau của bút trình chiếu hiện đáp án kế tiếp, hết đáp án mới lật">⏭<span className="vt vt2"> Clicker: đáp án</span></button>
           {noKey ? <span className="vnote" title="Các chỗ này chưa nhập đáp án trong WS Editor">{noKey} chỗ chưa có đáp án</span> : null}
         </div>
         <div className="vgrp">
-          {autoIds.length ? <span className="vscore" id="workScore" title="Số chỗ làm đúng / số chỗ máy chấm được. Bấm vào chỗ trả lời để làm thử">{`Đúng ${nOk}/${autoIds.length}`}</span> : null}
+          {nAll ? <span className="vscore" id="workScore" title={'Số chỗ làm đúng / số chỗ máy chấm được' + (manDone.length ? ` (kể cả ${manDone.length} chỗ chấm tay)` : '') + '. Bấm vào chỗ trả lời để làm thử'}>{`Đúng ${nOk}/${nAll}`}</span> : null}
           <button className={'vb' + (reveal ? ' on' : '')} id="workReveal" onClick={() => setReveal(!reveal)} title="Bật: làm sai thì hiện luôn đáp án đúng. Tắt: bấm dấu ✗ để xem">✗→✓<span className="vt"> Sai thì hiện đáp án</span></button>
           <button className="vb" id="workReset" disabled={!anyWork} onClick={() => { resetWork(data.slots.map(x => x.id)); flash('Đã xóa bài làm cả phiếu'); }} title="Làm lại cả phiếu (xóa bài làm)">⟲<span className="vt"> Làm lại</span></button>
         </div>

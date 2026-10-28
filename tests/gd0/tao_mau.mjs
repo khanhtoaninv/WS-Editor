@@ -15,11 +15,13 @@ const vary = (s, n) => {   // viết khác đi mà vẫn phải được chấm 
 const wrongOf = (s, k) => {
   if (k.type === 'choice-one' || k.type === 'match' || k.type === 'tf') { const o = (s.options || []).find(o => o.id !== k.correct); return o ? o.id : null; }
   if (k.type === 'choice-many') { const o = (s.options || []).find(o => !k.correct.includes(o.id)); return o ? [o.id] : null; }
+  if (k.type === 'find') return '99,99-99,98';   // v116 tìm từ: ô không có trong lưới
   return 'zzz wrong';
 };
 const rightOf = (s, k, n) => {
   if (k.type === 'choice-one' || k.type === 'match' || k.type === 'tf') return k.correct;
   if (k.type === 'choice-many') return [...k.correct].reverse();
+  if (k.type === 'find') return n % 2 ? k.correct.split('-').reverse().join('-') : k.correct;   // kéo ngược cũng đúng
   return vary(k.accept[0], n);
 };
 

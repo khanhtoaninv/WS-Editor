@@ -1,0 +1,381 @@
+{
+ "title": "Unit 3 · My home – ôn tập",
+ "age": "7-9",
+ "spacing": {
+  "preset": "normal",
+  "overrides": {}
+ },
+ "tasks": [
+  {
+   "id": "t1",
+   "typeId": "look-write",
+   "typeName": "Ảnh mỗi câu · viết từ",
+   "title": "Look and write.",
+   "instruction": "Look at the pictures. Write the words.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "",
+      "img": "cat",
+      "id": "q1",
+      "key": "cat"
+     },
+     {
+      "text": "",
+      "img": "dog",
+      "id": "q2",
+      "key": "dog"
+     },
+     {
+      "text": "",
+      "img": "fish",
+      "id": "q3",
+      "key": "fish"
+     },
+     {
+      "text": "",
+      "img": "bird",
+      "id": "q4",
+      "key": "bird"
+     }
+    ],
+    "variant": "single"
+   },
+   "answer": {
+    "kind": "word",
+    "attach": "item",
+    "layout": "A2",
+    "params": {
+     "lenMode": "fill",
+     "lines": 1,
+     "start": "inline"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 1
+  },
+  {
+   "id": "t2",
+   "typeId": "choose-abc",
+   "typeName": "Câu hỏi · khoanh A/B/C",
+   "title": "Choose the correct answer.",
+   "instruction": "Circle a, b or c.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "She ___ a teacher.",
+      "opts": [
+       "am",
+       "is",
+       "are"
+      ],
+      "id": "q1",
+      "key": "is"
+     },
+     {
+      "text": "They ___ playing football.",
+      "opts": [
+       "is",
+       "are",
+       "be"
+      ],
+      "id": "q2",
+      "key": "are"
+     },
+     {
+      "text": "I have ___ apple in my bag.",
+      "opts": [
+       "a",
+       "an",
+       "the"
+      ],
+      "id": "q3",
+      "key": "an"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4",
+    "params": {
+     "dir": "auto"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 2
+  },
+  {
+   "id": "t3",
+   "typeId": "gap-fill",
+   "typeName": "Câu hỏi · điền chỗ trống · khung từ",
+   "title": "Complete the sentences.",
+   "instruction": "Use the words in the box.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "We cook dinner in the ___.",
+      "id": "q1",
+      "key": "kitchen"
+     },
+     {
+      "text": "I sleep in my ___.",
+      "id": "q2",
+      "key": "bedroom"
+     },
+     {
+      "text": "Flowers grow in the ___.",
+      "id": "q3",
+      "key": "garden"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "word",
+    "attach": "inline",
+    "layout": "A2",
+    "params": {
+     "lenMode": "fill",
+     "lines": 1,
+     "start": "inline"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "wordBank": {
+    "words": [
+     "kitchen",
+     "garden",
+     "bedroom"
+    ],
+    "placement": "top",
+    "style": "chips",
+    "label": "lower"
+   },
+   "audio": null,
+   "part": "",
+   "number": 3
+  },
+  {
+   "id": "t4",
+   "typeId": "true-false",
+   "typeName": "Câu hỏi · Đúng/Sai · ảnh chung",
+   "title": "Look at the picture. True or False?",
+   "instruction": "Circle T (true) or F (false).",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "There are three children in the park.",
+      "id": "q1",
+      "key": "T"
+     },
+     {
+      "text": "The dog is under the tree.",
+      "id": "q2",
+      "key": "F"
+     },
+     {
+      "text": "It is a sunny day.",
+      "id": "q3",
+      "key": "T"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "tf",
+    "attach": "item",
+    "layout": "A6",
+    "params": {}
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "image": {
+    "label": "the park",
+    "size": "medium"
+   },
+   "audio": null,
+   "part": "",
+   "number": 4
+  },
+  {
+   "id": "t5",
+   "typeId": "read-answer",
+   "typeName": "Bài đọc · viết câu · ảnh chung",
+   "title": "Read and answer.",
+   "instruction": "Read the text. Answer the questions.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "How old is Lucy?",
+      "id": "q1",
+      "key": "She is nine years old."
+     },
+     {
+      "text": "What is the dog's name?",
+      "id": "q2",
+      "key": "His name is Max."
+     },
+     {
+      "text": "Where do they walk Max?",
+      "id": "q3",
+      "key": "In the park."
+     }
+    ],
+    "lead": {
+     "kind": "passage",
+     "text": "My name is Lucy. I am nine years old. I live in a small house with my mum, my dad and my brother Ben. We have a dog. His name is Max. Max is brown and white. Every morning, Ben and I walk Max in the park."
+    }
+   },
+   "answer": {
+    "kind": "sentence",
+    "attach": "item",
+    "layout": "A1",
+    "params": {
+     "lines": 1
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "image": {
+    "label": "Lucy and Max",
+    "size": "medium"
+   },
+   "audio": null,
+   "part": "",
+   "number": 5
+  }
+ ],
+ "id": "(id)",
+ "page": {
+  "size": "A4",
+  "marginMm": {
+   "top": 14,
+   "right": 14,
+   "bottom": 14,
+   "left": 14
+  }
+ },
+ "flow": "cont",
+ "schema": "ws-editor/0.3"
+}

@@ -12,9 +12,10 @@ export type Interaction =
   | 'match'         // chọn vế phải cho vế trái
   | 'cell'          // gõ vào ô bảng / ô chữ
   | 'draw'          // vẽ / tô
+  | 'find'          // tìm từ trong lưới (Q11): kéo từ chữ đầu tới chữ cuối, giá trị "hàng,cột-hàng,cột" (v116)
   | 'static';       // chỉ xem, không tương tác
 
-export const INTERACTIONS: readonly Interaction[] = ['text', 'text-long', 'choice-one', 'choice-many', 'tf', 'match', 'cell', 'draw', 'static'];
+export const INTERACTIONS: readonly Interaction[] = ['text', 'text-long', 'choice-one', 'choice-many', 'tf', 'match', 'cell', 'draw', 'find', 'static'];
 
 // auto = máy chấm · manual = giáo viên chấm tay · none = không chấm (không tính vào tổng điểm)
 export type Grading = 'auto' | 'manual' | 'none';
@@ -40,13 +41,14 @@ export interface KeyEntry {
   type: Interaction;
   score: number;                     // điểm tối đa của chỗ này
   accept?: string[];                 // text / text-long / cell: các đáp án chấp nhận
-  correct?: string | string[];       // choice-one / tf / match: một id; choice-many: các id
+  correct?: string | string[];       // choice-one / tf / match: một id; choice-many: các id; find: "h,c-h,c" (chữ đầu – chữ cuối)
   scoring?: 'all-or-nothing' | 'partial';
   grading?: Grading;                 // manual: chấm tay (sample là bài mẫu)
   sample?: string;
   explain?: string;
   caseSensitive?: boolean;
   ignorePunct?: boolean;
+  strictContr?: boolean;             // v116: phân biệt viết tắt (bài dạy viết tắt): I'm ≠ I am
 }
 
 export type Key = Record<string, KeyEntry>;

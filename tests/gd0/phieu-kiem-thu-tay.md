@@ -43,7 +43,7 @@ Dạng: điền từ
 2. Hello___ my name is Tom.
 3. What a nice day___
 
-## Task: [T06] Viết tắt (kiểm bảng viết tắt, chưa cài)
+## Task: [T06] Viết tắt (kiểm bảng viết tắt, cài từ v116)
 Hướng dẫn: Write the sentence.
 Dạng: điền từ
 1. ___ happy. (I am)

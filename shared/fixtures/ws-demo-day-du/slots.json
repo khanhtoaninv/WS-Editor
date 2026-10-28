@@ -1980,6 +1980,86 @@
    "item": "r18"
   },
   {
+   "id": "n_wsearch.find.1",
+   "task": "n_wsearch",
+   "label": "panda",
+   "q": "Q11",
+   "interaction": "find",
+   "grading": "auto"
+  },
+  {
+   "id": "n_wsearch.find.2",
+   "task": "n_wsearch",
+   "label": "tiger",
+   "q": "Q11",
+   "interaction": "find",
+   "grading": "auto"
+  },
+  {
+   "id": "n_wsearch.find.3",
+   "task": "n_wsearch",
+   "label": "owl",
+   "q": "Q11",
+   "interaction": "find",
+   "grading": "auto"
+  },
+  {
+   "id": "n_wsearch.find.4",
+   "task": "n_wsearch",
+   "label": "zebra",
+   "q": "Q11",
+   "interaction": "find",
+   "grading": "auto"
+  },
+  {
+   "id": "n_wsearch.find.5",
+   "task": "n_wsearch",
+   "label": "horse",
+   "q": "Q11",
+   "interaction": "find",
+   "grading": "auto"
+  },
+  {
+   "id": "n_wsearch.find.6",
+   "task": "n_wsearch",
+   "label": "lion",
+   "q": "Q11",
+   "interaction": "find",
+   "grading": "auto"
+  },
+  {
+   "id": "n_wsearch.find.7",
+   "task": "n_wsearch",
+   "label": "monkey",
+   "q": "Q11",
+   "interaction": "find",
+   "grading": "auto"
+  },
+  {
+   "id": "n_wsearch.find.8",
+   "task": "n_wsearch",
+   "label": "frog",
+   "q": "Q11",
+   "interaction": "find",
+   "grading": "auto"
+  },
+  {
+   "id": "n_wsearch.find.9",
+   "task": "n_wsearch",
+   "label": "duck",
+   "q": "Q11",
+   "interaction": "find",
+   "grading": "auto"
+  },
+  {
+   "id": "n_wsearch.find.10",
+   "task": "n_wsearch",
+   "label": "snake",
+   "q": "Q11",
+   "interaction": "find",
+   "grading": "auto"
+  },
+  {
    "id": "n_cross.cell.r1.0",
    "task": "n_cross",
    "label": "ô 1-1",
@@ -2133,7 +2213,6 @@
   "Task 22 (Q9 Tô chữ): Tô chữ (Q9): chỉ xem, không chấm",
   "Task 24 (Q10 Bảng): 9 chỗ hàng 2 cột 1, hàng 2 cột 2, hàng 2 cột 3, hàng 3 cột 1, hàng 3 cột 2, hàng 3 cột 3, hàng 4 cột 1, hàng 4 cột 2, hàng 4 cột 3: chưa có đáp án → chấm tay",
   "Task 25 (Q10 Bảng): 5 chỗ hàng 1, hàng 2, hàng 3, hàng 4, hàng 5: chưa có đáp án → chấm tay",
-  "Task 26 (Q10 Bảng): 34 chỗ hàng 2 cột 1, hàng 2 cột 2, hàng 3 cột 1, hàng 3 cột 2, hàng 4 cột 1, hàng 4 cột 2, hàng 5 cột 1, hàng 5 cột 2, hàng 6 cột 1, hàng 6 cột 2, hàng 7 cột 1, hàng 7 cột 2, hàng 8 cột 1, hàng 8 cột 2, hàng 9 cột 1, hàng 9 cột 2, hàng 10 cột 1, hàng 10 cột 2, hàng 11 cột 1, hàng 11 cột 2, hàng 12 cột 1, hàng 12 cột 2, hàng 13 cột 1, hàng 13 cột 2, hàng 14 cột 1, hàng 14 cột 2, hàng 15 cột 1, hàng 15 cột 2, hàng 16 cột 1, hàng 16 cột 2, hàng 17 cột 1, hàng 17 cột 2, hàng 18 cột 1, hàng 18 cột 2: chưa có đáp án → chấm tay",
-  "Task 27 (Q11 Lưới): Lưới (Q11, tìm từ) không có ô điền: chỉ xem"
+  "Task 26 (Q10 Bảng): 34 chỗ hàng 2 cột 1, hàng 2 cột 2, hàng 3 cột 1, hàng 3 cột 2, hàng 4 cột 1, hàng 4 cột 2, hàng 5 cột 1, hàng 5 cột 2, hàng 6 cột 1, hàng 6 cột 2, hàng 7 cột 1, hàng 7 cột 2, hàng 8 cột 1, hàng 8 cột 2, hàng 9 cột 1, hàng 9 cột 2, hàng 10 cột 1, hàng 10 cột 2, hàng 11 cột 1, hàng 11 cột 2, hàng 12 cột 1, hàng 12 cột 2, hàng 13 cột 1, hàng 13 cột 2, hàng 14 cột 1, hàng 14 cột 2, hàng 15 cột 1, hàng 15 cột 2, hàng 16 cột 1, hàng 16 cột 2, hàng 17 cột 1, hàng 17 cột 2, hàng 18 cột 1, hàng 18 cột 2: chưa có đáp án → chấm tay"
  ]
 }

@@ -4,7 +4,6 @@
 import type { Key, Slot } from '../../../shared/src/index.ts';
 
 const SEL = (id: string) => `[data-ans="${CSS.escape(id)}"]`;
-const norm = (s: string) => s.replace(/\s+/g, ' ').trim().toLowerCase();
 
 // chữ đáp án hiện trên phiếu: cách viết đầu tiên, hoặc bài mẫu
 export function ansText(k: Key[string] | undefined) {
@@ -51,12 +50,26 @@ export function lineBetween(sec: HTMLElement, a: Element, b: Element, cls = 'vli
   sec.appendChild(svg); return svg;
 }
 
-// vế phải của một phương án nối: hàng .mr có chữ của phương án (chữ dài nhất khớp), chấm phải của hàng đó, chữ cái nhãn
-export function rightRow(sec: HTMLElement, text: string) {
-  const t = norm(text); if (!t) return null;
-  const rows = [...sec.querySelectorAll<HTMLElement>('.mr:not(.mh)')], tx = (m: HTMLElement) => norm(m.textContent || '');
-  const mr = rows.find(m => tx(m) === t) || rows.find(m => /[\s.)]$/.test(tx(m).slice(0, -t.length)) && tx(m).endsWith(t)) || rows.find(m => tx(m).endsWith(t));
-  if (!mr) return null;
+// v116 tìm từ: khung bo góc (viên thuốc) quanh từ, từ ô a tới ô b của lưới; cls: vline (đáp án) / vwf (bài làm)
+export function capsule(sec: HTMLElement, a: Element, b: Element, cls: string) {
+  sec = a.closest<HTMLElement>('section.task') || sec;   // lưới bị cắt sang mảnh sau: vẽ trong mảnh chứa chữ đầu
+  const r = sec.getBoundingClientRect(), k = r.width / sec.offsetWidth || 1;
+  const c = (e: Element) => { const q = e.getBoundingClientRect(); return [(q.left + q.width / 2 - r.left) / k, (q.top + q.height / 2 - r.top) / k]; };
+  const [x1, y1] = c(a), [x2, y2] = c(b), h = Math.min((a as HTMLElement).offsetHeight, (a as HTMLElement).offsetWidth) * .82, len = Math.hypot(x2 - x1, y2 - y1), ang = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('class', cls);
+  svg.innerHTML = `<rect x="${x1 - h / 2}" y="${y1 - h / 2}" width="${len + h}" height="${h}" rx="${h / 2}" transform="rotate(${ang} ${x1} ${y1})" />`;
+  sec.appendChild(svg); return svg;
+}
+// ô (r, c) của lưới tìm từ, tìm trong mọi mảnh của Task (lưới dài có thể bị cắt sang trang / mảnh sau)
+export const rcCell = (sec: HTMLElement, x: string) => { if (!x) return null; const root = sec.closest('.vsurf') || sec.parentElement || sec;
+  return root.querySelector(`section.task[data-task="${CSS.escape(sec.dataset.task || '')}"] [data-rc="${CSS.escape(x)}"]`); };
+export const rcEnds = (sec: HTMLElement, v: string) => { const [a, b] = String(v).split('-'); return [rcCell(sec, a), rcCell(sec, b)] as const; };
+
+// vế phải của một phương án nối: hàng .mr mang mã phương án (data-opt, v113: theo mã, không theo chữ, vì hai vế phải có thể trùng chữ),
+// chấm phải của hàng đó, chữ cái nhãn
+export function rightRow(sec: HTMLElement, opt: string) {
+  if (!opt) return null;
+  const mr = sec.querySelector<HTMLElement>(`.mr[data-opt="${CSS.escape(opt)}"]`); if (!mr) return null;
   const md = mr.previousElementSibling, dots = md ? md.querySelectorAll<HTMLElement>(':scope > .a7:not([data-ans])') : null;
   return { mr, dot: dots && dots.length ? dots[dots.length - 1] : null, letter: rowLabel(mr) };
 }
@@ -64,14 +77,13 @@ export function rightRow(sec: HTMLElement, text: string) {
 export const rowLabel = (mr: HTMLElement) => ((mr.textContent || '').match(/^\s*([A-Za-z0-9]{1,2})[.)]\s/) || [])[1] || '';
 // phương án của một hàng vế phải (ngược với rightRow)
 export function optOfRow(s: Slot, mr: HTMLElement) {
-  const x = norm(mr.textContent || '');
-  return (s.options || []).filter(o => { const t = norm(String(o.text ?? '')); return t && (x === t || x.endsWith(t)); }).sort((a, b) => String(b.text).length - String(a.text).length)[0] || null;
+  const id = mr.dataset.opt; return (id && (s.options || []).find(o => o.id === id)) || null;
 }
 
 // bài nối: nối chấm trái với chấm phải của hàng có phương án đúng (ô nối viết chữ: chữ cái của hàng đó)
 function showMatch(root: HTMLElement, s: Slot, els: HTMLElement[], cid: string) {
   const o = (s.options || []).find(x => x.id === cid); if (!o) return;
-  const left = els[0], sec = left.closest<HTMLElement>('section.task') || root, r = rightRow(sec, String(o.text ?? ''));
+  const left = els[0], sec = left.closest<HTMLElement>('section.task') || root, r = rightRow(sec, o.id);
   if (left.classList.contains('mbx')) { putText(left, r?.letter || String(o.text ?? '')); return; }
   if (r && r.dot) lineBetween(sec, left, r.dot); else putText(left, String(o.text ?? ''));
 }
@@ -80,6 +92,7 @@ export function showSlot(root: HTMLElement, s: Slot, key: Key) {
   const els = [...root.querySelectorAll<HTMLElement>(SEL(s.id))]; if (!els.length) return;
   const k = key[s.id]; if (!k) return;
   if (s.interaction === 'match') { if (typeof k.correct === 'string') showMatch(root, s, els, k.correct); return; }
+  if (s.interaction === 'find') { const sec = els[0].closest<HTMLElement>('section.task'), [a, b] = sec ? rcEnds(sec, String(k.correct)) : [null, null]; if (sec && a && b) capsule(sec, a, b, 'vline vcap'); mark(els[0]); return; }
   if (k.correct != null) {
     const ids = ([] as string[]).concat(k.correct as string | string[]);
     ids.forEach(id => mark(optEl(els, (s.options || []).findIndex(o => o.id === id))));

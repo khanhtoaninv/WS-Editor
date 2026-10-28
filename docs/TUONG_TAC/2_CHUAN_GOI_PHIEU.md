@@ -164,7 +164,11 @@ Chưa hỗ trợ ở v0 (xuất ra `static`, có cảnh báo khi xuất và khi 
 4. Bỏ dấu câu ở **hai đầu** (`.`, `,`, `!`, `?`, `;`, `:`); giữ dấu câu ở giữa chuỗi trừ khi `"ignorePunct": true`.
 5. Gộp khoảng trắng; cắt hai đầu.
 
-Không tự mở rộng viết tắt (`don't` ≠ `do not`): người soạn thêm vào `accept` nếu muốn. Mỗi mục `key` CÓ THỂ có `"caseSensitive": true` (tên riêng) hoặc `"ignorePunct"`.
+6. (v116) **Mở rộng viết tắt chuẩn** theo `BANG_VIET_TAT_CHUAN.md` cho cả hai bên (`I'm` = `I am`), trừ khi mục `key` có `"strictContr": true` (Task bật "Phân biệt viết tắt").
+
+(v113) Đáp án hoặc bài làm **chỉ gồm dấu câu** thì không bỏ dấu ở bước 4: so cả dấu (`?` ≠ `.`). Mỗi mục `key` CÓ THỂ có `"caseSensitive": true` (tên riêng), `"ignorePunct"`, `"strictContr"`.
+
+(v116) `interaction: "find"` (ô chữ tìm từ): `label` = từ cần tìm, `correct` = `"r1,c1-r2,c2"` (ô đầu, ô cuối, đếm từ 0, không tính hàng / cột tiêu đề); bài làm cùng dạng, chấm đúng khi hai đầu khớp theo một trong hai chiều.
 
 Không dùng so khớp "chứa" (đặc tả tham khảo đề xuất cho câu ngắn) vì cho đúng cả câu sai.
 

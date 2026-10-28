@@ -7,7 +7,8 @@ import { toast } from '../ui/Toast';
 import { ws, setWs } from '../core/state.js';
 import { AGE, AL, ANS_DEF, CELL_NAME, F01, FEAT_NAME, FONTS, FORM_NAME, GAPLAB, GAPP, GT_SIZE, IMP_MAX, IMP_MAX_CH, KIND_A, KIND_NAME, L2KIND, LAYOUT_DEF, MINS, PK_STAR, PRESETS, QN, RECIPES, SCHEMA, SIZES, alOpts, attachOpts, choiceTexts, ck, ckOf, clone, ensureIds, ensureRowIds, featOf, featVal, fillSheet, fillTask, gapCount, hasChoiceMarkup, hasMarkup, isFreeW, isGridTbl, isObj, its, keyParts, kindsOk, migTask, newId, normAnswer, pkGroups, pkMig, pkSrc, pkToggle, prune, qDerived, qTidy, recipeMatch, sigOk, sv, tidy, toForm } from '../core/model.js';
 import { gapN, hasKey, itemKeys, keyState, needKey, optsOfKey } from '../core/answers.js';
-import { sheetSlots, taskSlots } from '../core/slots.js';   // GĐ0 phiếu tương tác (test và bước sau dùng)
+import { sheetSlots, taskSlots } from '../core/slots.js';
+import { allSug } from '../core/sug.js';   // v116   // GĐ0 phiếu tương tác (test và bước sau dùng)
 import { A2MM, AI, AR_OPTS, CHOICE_RE, CONTENT_H, FSZ, G1_TOP, IW8, JS, MM, PH, PHC, SAMPLE, SAMPLE2, T, T7CW, TA, TBL_DEF, TBL_ROW_MM, TL, a2cfg, a2end, a2inline, a4autoDef, a4autoMax, a4dir, alignOf, ans, ans0, ansI, arLabel, arNum, autoLayout, body, body0, body0n, cellCfg, cellDirOf, cellFr, cellSplit, ci, colsDefault, colsOf, colsRange, crossCell, crossHtml, er, esc, exFill, exPick, exPicks, fitOf, fixedImg, fixesFor, fontPt, frOf, frameH, g1Of, g1bFit, g1bFr, g3row, g4Html, gapOf, gtBody, gtHtml, gtInline, gtKeys, gtN, imgArOf, imgStyle, inheritedSpacing, inlChoice, ino, inoN, inoT, isColI, isJoined, keyGaps, layoutOf, layoutReasons, leadIntro, leadOf, leadText, measEl, measure, migrate, natAr, nlab, ownFit, pOf, paginate, pairPerm, passCut, passInline, passageHtml, passageParas, pic, pkB, pkPre, place, q2end, qFirst, qOf, qReal, qnum, qrHtml, qrInner, qrUrl, qtext, qtext0, qwho, range, ratioOf, renderTask, rich, rmeta, sheetSpacing, sizeKey, spacingOf, srcOf, t7cw, taOf, tblAr, tblOpts, tpic, tplOf, units, withMarks, xOfKey } from '../core/layout.js';
 import { A_SHORT, BARE_RE, BOX, BRX, HEADX, HEAD_RE, LABS, MD_EX, MD_FIELD, MD_FKEY, MD_FORM, MD_GT, MD_KIND, MD_KNAME, MD_LABEL, MD_RULE, MD_SCAF, MD_SECT, MD_SKIP, MD_TLAY, NUM_RE, OPT_LINE, PRESET_NAME, QM_C, QM_L, QORDER, T1FAM, TN, TN_OLD, VERB_RE, applyRecipe, boxSplit, brIn, brOut, crossLines, crossParse, descOf, dupGapKind, fmtCell, impSheetObj, inlineOpts, isHead, isInstr, looksJson, mdForm, mdTask, normGap, optStr, parseCell, parseTask, q2cfg, q2set, qCmd, qReasons, qStyles, qmC, qmEq, qmForm, qmHead, qmList, qmPick, qmRest, qmRestore, qmRows, qmUnits, readJson, readMd, recipeById, setHasAns, setKind, setQ, setQMem, sheetToMd, splitOptsLine, stripNum, t1Old, taskToMd, tnOf, tnReasons, tnTarget, toggleField, withoutGt } from '../core/md.js';
 
@@ -186,16 +187,15 @@ function hT7(t, el, fk) {
     move: (ev, c) => { const mm = clampN(Math.round((ev.clientY - c.top) / c.s / MM), 8, 40), tt = curTask(t); if (tt.layout.rowH === mm) return null; tt.layout.rowH = mm; el.style.setProperty('--mrh', mm + 'mm'); return `hàng ${mm} mm`; },
     reset: tt => { tt.layout.rowH = null; } });
 }
-// v103: kéo cột T / F (Đúng/Sai cùng hàng) lại gần câu: đổi params.tfx (mm từ lề phải)
+// v103: kéo cột T / F (Đúng/Sai cùng hàng); v115: đổi params.tfp (tỉ lệ câu / T-F, bước 5%)
 function hTF(t, el, fk) {
   if (t.answer.layout !== 'A6' || !(t.answer.params || {}).row) return;
   const bs = [...el.querySelectorAll('.qb > .a6')]; if (!bs.length) return;
-  const a = bs[0], last = bs[bs.length - 1], qb = a.parentElement, tfx = tt => (tt.answer.params || {}).tfx || 0;
-  const pct = () => { const q = qb.getBoundingClientRect(), r = a.getBoundingClientRect(); return q.width ? Math.round((r.left - q.left) / q.width * 100) : 0; }, lbl = mm => `câu ${pct()} / T-F ${100 - pct()} · cách lề phải ${mm} mm`;   // v106: hiện tỉ lệ câu / T-F
-  mkH(el, 'splitter', { for: fk, param: 'tfx', title: 'Kéo để đưa cột T / F lại gần câu (bước 1 mm).',
-    place: (tr, s) => { const r = relR(a.getBoundingClientRect(), tr, s), l = relR(last.getBoundingClientRect(), tr, s); return { left: r.left - 2 * MM, top: r.top - 1 * MM, height: l.bottom - r.top + 2 * MM, tip: lbl(tfx(curTask(t))) }; },
-    move: (ev, c) => { const q = qb.getBoundingClientRect(), aw = a.getBoundingClientRect().width, mm = clampN(Math.round((q.right - ev.clientX - 2 * MM * c.s - aw) / c.s / MM), 0, 140), tt = curTask(t); if (tfx(tt) === mm) return null; tt.answer.params = tt.answer.params || {}; tt.answer.params.tfx = mm || null; el.style.setProperty('--tfx', mm + 'mm'); return lbl(mm); },
-    reset: tt => { if (tt.answer.params) delete tt.answer.params.tfx; } });
+  const a = bs[0], last = bs[bs.length - 1], qb = a.parentElement, qt = qb.querySelector(':scope > .qt'), tfp = tt => (tt.answer.params || {}).tfp || 80, lbl = p => `câu ${p} / T-F ${100 - p}`;
+  mkH(el, 'splitter', { for: fk, param: 'tfp', title: 'Kéo để đổi tỉ lệ câu / cột T-F (bước 5%).',
+    place: (tr, s) => { const r = relR((qt || a).getBoundingClientRect(), tr, s), l = relR(last.getBoundingClientRect(), tr, s), x = qt ? r.right + 2 * MM : r.left - 2 * MM; return { left: x, top: relR(a.getBoundingClientRect(), tr, s).top - 1 * MM, height: l.bottom - relR(a.getBoundingClientRect(), tr, s).top + 2 * MM, tip: lbl(tfp(curTask(t))) }; },
+    move: ev => { const q = qb.getBoundingClientRect(), p = clampN(Math.round((ev.clientX - q.left) / q.width * 20) * 5, 50, 90), tt = curTask(t); if (tfp(tt) === p) return null; tt.answer.params = tt.answer.params || {}; tt.answer.params.tfp = p === 80 ? null : p; delete tt.answer.params.tfx; el.style.setProperty('--tfp', p); return lbl(p); },
+    reset: tt => { if (tt.answer.params) { delete tt.answer.params.tfp; delete tt.answer.params.tfx; } } });
 }
 function hT6(t, el, fk) {
   if (layoutOf(t) !== 'T6' || (t.wordBank && t.wordBank.placement === 'right')) return;
@@ -521,6 +521,8 @@ function postSet(t, s, p, v) {
   if (p === 'frame.fit' && c.frame) { c.frame.ox = c.frame.oy = c.frame.zoom = null; }
   if (p === 'frame.h' && v != null) { c.frame = c.frame || {}; if (!c.frame.fit) c.frame.fit = 'width'; }
   if (p === 'dir') { L.cols = null; L.split = null; }
+  if (p === '@imgPct' && v != null) L.imgFit = null;   // v115: kéo kích thước thì tắt Fit ô
+  if (p === '@imgFit' && !v) L.imgFit = null;
   if (p.startsWith('cw.')) {
     if (v == null) L.cw = null;
     else { const cw = t7cw(t).slice(), i = +p.slice(3); cw[i] = clampN(v, 10, 80); const rest = 100 - cw[i], oth = [0, 1, 2].filter(j => j !== i), sum = oth.reduce((a, j) => a + (L.cw && L.cw[j] != null ? L.cw[j] : T7CW[j]), 0); oth.forEach(j => { cw[j] = Math.round((L.cw && L.cw[j] != null && j !== i ? L.cw[j] : T7CW[j]) / sum * rest * 10) / 10; }); L.cw = cw; }
@@ -574,7 +576,7 @@ function applyScope(scope) {
 // Container có chỉnh tay không (chấm xanh trên cây)
 function ovOf(t, s) {
   const k = kindOf(t, s), L = t.layout;
-  if (k === 'task') return L.task !== 'auto' || ['split', 'cols', 'dir', 'align', 'valign', 'width', 'cw', 'rowH', 'whoW', 'colGap', 'break', 'table', 'num', 'order'].some(x => L[x] != null) || !!t.spacing.preset || Object.keys(t.spacing.overrides).length > 0;
+  if (k === 'task') return L.task !== 'auto' || ['split', 'cols', 'dir', 'align', 'valign', 'width', 'cw', 'rowH', 'whoW', 'colGap', 'break', 'table', 'num', 'order', 'imgPct', 'imgFit'].some(x => L[x] != null) || !!t.spacing.preset || Object.keys(t.spacing.overrides).length > 0;
   if (k === 'frame') return Object.keys(L.frame || {}).length > 0;
   if (k === 'gt') { const x = gtOf(t, s.item) || {}; return x.size != null || x.align != null || x.frame != null || x.w != null || x.cols != null; }
   if (k === 'cimgs') return cellKeys(t, 'cimg').some(x => Object.keys(cellFr(t, x)).length);
@@ -827,7 +829,8 @@ actions.zoomOut = () => { zoom = Math.max(.3, Math.round((scaleNow() - .1) * 10)
 actions.zoomFit = () => { zoom = null; draw(); };
 actions.present = () => {   // GĐ1a: mở trình chiếu trên các trang đang dàn
   const pv = useUi.getState().pageView; if (!pv) return; const r = sheetSlots(ws);
-  publish({ show: { title: ws.title, pages: pv.pages.map(p => p.html), slots: r.slots, key: r.key, start: sel.type !== 'sheet' ? sel.id : null } });
+  const notes = Object.fromEntries((ws.tasks || []).map(t => [t.id, taskSlots(t).notes]));
+  publish({ show: { title: ws.title, pages: pv.pages.map(p => p.html), slots: r.slots, key: r.key, notes, start: sel.type !== 'sheet' ? sel.id : null } });
 };
 actions.toggleGuides = () => { guides = !guides; publish({ guides }); draw(); if (sel.type === 'sheet') renderInspector(); };
 // Hộp Xem JSON / Xuất MD là React (src/ui/Dialogs.tsx)
@@ -1901,7 +1904,7 @@ function cimSet(t, m) { (t.content.rows || []).forEach(r => { r.head = m === 'no
 function tblo(t, v) { const [k, x] = v.split(':'), o = t.layout.table = Object.assign({}, t.layout.table || {});
   if (k === 'nm') { o.nm = x; delete o.num; } else if (k === 'tk') { tkAll(t, x === '1'); } else if (k === 'im') { cimSet(t, x); } else if (k === 'one') { if (x === '1') { o.one = true; tkOne(t); } else delete o.one; } else if (k === 'fr') { o.fr = x === '1' ? 'zebra' : 'none'; if (x === '1') o.fc = false; } else o[k] = x === '1';
   return { head: 'Hàng tiêu đề cột', fh: 'Tô nền hàng tiêu đề', fr: 'Tô hàng xen kẽ', rowHead: 'Cột tiêu đề hàng', nm: 'Số thứ tự', tk: 'Hiện ô tích trước chữ', one: 'Một ô đúng mỗi hàng', im: 'Ảnh trong bảng' }[k] + ': ' + (k === 'nm' ? { out: 'ngoài bảng', in: 'trong cột đầu', off: 'tắt' }[x] : k === 'im' ? { none: 'không', first: 'cột đầu', all: 'mọi ô có chữ' }[x] : x === '1' ? 'bật' : 'tắt'); }
-const Q_ACTS = ['tn', 'q', 'hasans', 'qst', 'labs', 'tfrow', 'ruling', 'qarr', 'q2'];
+const Q_ACTS = ['tn', 'q', 'hasans', 'qst', 'labs', 'tfrow', 'ruling', 'qarr', 'q2', 'strictc'];
 Q_ACTS.forEach(a => { extraActs[a] = (b, v) => { let msg = null; commit(w => { msg = qCmd(curT(w), a, v); }, null, () => { if (msg) toast(msg); }); }; });
 
 // ---- Khối (G): thêm / xóa thống nhất ----
@@ -1997,6 +2000,11 @@ treeEl.addEventListener('click', e => {
   if (act === 'tbimg') return commit(w => cimToggle(T(w), +b.dataset.i, b.dataset.j));   // v99
   if (act === 'tbok') { const i = +b.dataset.i, j = +b.dataset.j; return commit(w => { const t = T(w), r = t.content.rows[i], x = r && r.cells[j]; if (!x || !x.tick) return; if (x.ok) delete x.ok; else { if ((t.layout.table || {}).one) r.cells.forEach(y => { if (y && y.tick) delete y.ok; }); x.ok = true; } }); }   // v98
   if (act === 'tblo') { let m = null; return commit(w => { m = tblo(T(w), v); }, null, () => toast(m)); }   // v96
+  if (act === 'sugadd' || act === 'sugno' || act === 'sugall') {   // v116 gợi ý cách viết khác
+    const one = (t, i, k, g) => { const x = its(t)[i]; if (!x) return; if (act === 'sugno') { x.sugNo = (x.sugNo || []).concat(`${k}:${g}`); return; } const p = k.split('.'), cur = p[2] === 'keyg' ? (keyGaps(x)[+p[3]] || '') : String(x.key ?? ''); applyField(t, k, cur.trim() ? `${cur.trim()} / ${g}` : g); };
+    if (act === 'sugall') { let n = 0; return commit(w => { const t = T(w); allSug(t).forEach(([i, k, , g]) => { one(t, i, k, g); n++; }); }, null, () => toast(`Đã thêm ${n} cách viết khác`)); }
+    return commit(w => one(T(w), +b.dataset.i, b.dataset.k, v), act === 'sugno' ? 'Đã bỏ gợi ý' : `Đã thêm cách viết: ${v}`);
+  }
   if (act === 'pshuf') return commit(w => { const c = T(w).content; if (v) c.shuffle = true; else delete c.shuffle; });
   if (act === 'preshuf') return commit(w => { const c = T(w).content; c.shufSeed = (c.shufSeed || 0) + 1; });
   if (act === 'pickopt') { const i = +b.dataset.i, g = +b.dataset.g, j = +b.dataset.j; return commit(w => { const x = its(T(w))[i]; if (x) pkToggle(x, g, j); }); }

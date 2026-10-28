@@ -864,3 +864,40 @@ Kế hoạch `docs/TUONG_TAC/KE_HOACH_GD1B.md`. Trong trình chiếu, phiếu **
 - **Bàn phím:** đang gõ thì phím tắt trình chiếu và WS Editor không chạy; Tab / Shift+Tab sang ô gõ kế / trước; Enter chấm rồi sang ô kế.
 - Kiểm thử: `tests/gd1b/test_lambai.py` (82 mục C1–C5, so màu với 3 bài làm mẫu `shared/fixtures/mau-du-dang`), `tests/gd1b/quet_lambai.py` (25 phiếu + `tests/gd1b/mau-noi-o.md`: mọi chỗ máy chấm làm đúng bằng thao tác thật, mọi chỗ khác làm thử được). `tests/gd1a/test_chieu.py` còn 72 mục (bấm chỗ trả lời giờ là làm bài).
 
+
+## 44. Sửa lỗi chấm và nối (v113, 28/10/2026)
+Kế hoạch `docs/KE_HOACH_SUA_SAU_KIEM_THU.md` đợt 1 (kết quả thử tay phiên 13).
+- **Nối theo mã, không theo chữ:** mỗi hàng vế phải trên trang mang `data-opt` = mã phương án (`.mr[data-opt]`, chỉ là thuộc tính, không đổi hình). Hiện đáp án và làm bài tìm hàng theo mã, nên hai vế phải trùng chữ (T19 "yes / yes") không lẫn. Ô nối viết chữ cũng theo mã.
+- **Dấu câu:** đáp án (hoặc bài làm) chỉ gồm dấu câu thì so **cả dấu** (`?` ≠ `.`); câu chữ vẫn bỏ dấu thừa hai đầu như cũ (`shared/src/normalize.ts`, `punctOnly`).
+- **Đúng/Sai:** đáp án `T/F`, `Đúng/Sai`, `Y/N`, `R/W`… khớp nhãn theo chữ cái đầu (True/False, Yes/No, Right/Wrong). Hàm chung `tfIndex()` trong `core/model.js` (slots.js và ô ví dụ A6 cùng dùng).
+- **Gõ dài:** ô gõ dài ra tới hết bề ngang khung chứa, quá nữa thì xuống dòng (ô đổi sang textarea `vwwrap`), không tràn khỏi trang.
+- **Chỗ chưa có đáp án:** nhãn cam **✎ Chấm tay** (hoặc "Chấm tay n chỗ", "Chỉ xem") ở góc Task khi chiếu; rê chuột / bấm xem lý do (danh sách `notes` của `taskSlots`). Chỉ có khi chiếu, không in.
+
+## 45. Chấm tay và trạng thái đáp án (v114, 28/10/2026)
+- **Chấm tay khi chiếu:** chỗ chấm tay đã có bài làm hiện hai nút nhỏ ✓ / ✗; bấm là chấm, dấu ✓ / ✗ đã chấm bấm lại để chấm lại; sửa bài làm thì chấm lại từ đầu. Không lưu. "Đúng x/y" cộng cả chỗ chấm tay đã chấm (chú thích ghi "kể cả n chỗ chấm tay"). Viết tự do có bài mẫu: vẫn có ✓ / ✗, dấu ✎ vẫn mở bài mẫu.
+- **Đáp án theo phần đang xem:** nút Đáp án / phím A bật tắt đáp án **trang hoặc Task đang xem**; Shift+A cả phiếu; sang Task khác không tự hiện. ✓ đầu Task, Space như cũ.
+- **Đáp án hiện vì làm sai** (công tắc "Sai thì hiện đáp án" hoặc bấm ✗) gắn với lần làm đó: sửa thành đúng hoặc xóa bài thì tự ẩn; đáp án bật bằng A thì giữ. Đây là nguyên nhân "lúc hiện lúc không" của phiên 13; test ngẫu nhiên 70 bước so với mô hình (`tests/sau_kiem_thu/test_dot2.py`).
+- (v117) Dấu và nút làm bài giống hệt lần vẽ trước thì giữ phần tử cũ: trước đây vẽ lại giữa lúc nhấn và nhả chuột (ví dụ thanh công cụ hiện lại) làm cú bấm ✓ / ✗ rơi mất.
+
+## 46. Chỉnh giao diện nhỏ (v115, 28/10/2026)
+- Gõ vào chỗ trống bài đọc: ẩn nhãn (1) (2) của ô đang gõ. Ô tick: đúng / sai bằng màu dấu tick + chữ, bỏ khung xanh đỏ.
+- **Bài nối:** khoảng 2 mm giữa chữ vế trái / vế phải và chấm nối (đổi hình trang soạn, đã đổi chuẩn 120).
+- **Đúng/Sai theo tỉ lệ:** mọi kiểu T/F (dòng riêng và cùng hàng) chia cột câu / cột T/F theo tỉ lệ, mặc định 80/20; tay kéo đổi tỉ lệ bước 5% (50–90). Tham số mới `answer.params.tfp` thay `tfx` (cách lề phải). Đổi hình trang soạn, đã đổi chuẩn.
+- **Ảnh đồng đều (Nhìn ảnh viết, Chọn ảnh):** mặc định theo số ảnh trên hàng: 2 ảnh 60 mm, 3 ảnh 45, 4 ảnh 36, 5 ảnh 30; thanh **Kích thước ảnh** 50–150% cho cả khối (`layout.imgPct`); **Ảnh vừa ô** khít bề ngang ô (`layout.imgFit`); ảnh đã chỉnh tay giữ nguyên. MD: `Kích thước ảnh: 80%`, `Ảnh vừa ô: có`. Đổi hình trang soạn, đã đổi chuẩn.
+- **Trình chiếu:** nút Xóa nét có chữ, mở hai lựa chọn "Xóa nét trang / Task này" và "Xóa hết nét vẽ"; Ctrl + lăn chuột (và chụm hai ngón) phóng theo đầu chuột; nút Vừa về 100%; Shift + kéo = đường thẳng đỏ, nét vừa, vẫn ở con trỏ; Từng Task mặc định rộng 80% màn hình, nút **Mặc định ↔ Vừa** (thấy trọn Task); ↓ / ↑ sang ô gõ kế / trước.
+
+## 47. Chấm thông minh hơn (v116, 28/10/2026)
+- **Viết tắt chuẩn:** máy chấm đổi cả bài làm và đáp án về dạng đầy đủ theo `docs/TUONG_TAC/BANG_VIET_TAT_CHUAN.md` (`CONTRACTIONS` trong `shared/src/normalize.ts`) rồi mới so: `I'm` = `I am`. Không đoán `'s` sở hữu, `'s` = is, `'d` = would. Công tắc theo Task **Phân biệt viết tắt** (mặc định tắt) ở mục Câu hỏi; bật thì `isn't` ≠ `is not` (khóa chấm `strictContr`). MD `Phân biệt viết tắt: có`.
+- **Chip gợi ý cách viết khác** (cách A): dưới ô đáp án ở cột trái hiện chip `+ color`, `+ He's gone`, `+ 10`…; bấm chip thêm ` / …` vào đáp án, bấm × bỏ gợi ý (không hỏi lại, lưu ở `sugNo`); Task có ≥ 3 gợi ý có nút "Nhận tất cả gợi ý (n)". Quy tắc cố định, không AI: Anh / Mỹ, số ↔ chữ, thứ tự, `'s`/`'d` = has / had, `name is`, gạch nối (`shared/src/suggest.ts`, `core/sug.js`).
+- **Ô chữ tìm từ:** máy tìm vị trí từng từ của khung từ trong lưới (8 hướng); mỗi từ tìm được là một chỗ trả lời `find` (đáp án `"r,c-r,c"`). Hiện đáp án = khung bo góc quanh từ; làm bài = kéo từ chữ đầu tới chữ cuối (xuôi hay ngược đều được), đúng thì khung xanh, từ không có trong khung từ thì báo. Lưới bị cắt sang mảnh sau vẫn vẽ được (v117).
+- **Prompt PDF → MD:** quy tắc 26 (bảng chọn ghi `[x]` cho ô đúng), 27 (Phân biệt viết tắt). Bản lưu `prompt/PROMPT_PDF_SANG_MD_v116.txt` (thư mục dự án).
+
+## 48. Trình chiếu: 2 trang, Cuộn, đèn pin, ghi chú (v117, 28/10/2026)
+- **1 trang / 2 trang** (Cả trang): nút ▯ / ▯▯; hai trang cạnh nhau vừa màn hình, lật 2 trang mỗi lần, thanh ghi "Trang 1–2/9". Đáp án A, nét vẽ, che, làm bài áp cho cả hai trang đang xem; nét ở lề trang gắn với đúng trang (`page#i`).
+- **Trang / Cuộn** (Cả trang): Cuộn = mọi trang xếp dọc liền, cuộn tự do, thanh ghi trang đang chiếm phần trên màn hình; lật (←/→, PageUp/Down) = cuộn mượt tới đầu trang kế. Dùng chung với 2 trang (hai trang một hàng).
+- **Nút 🔍 ở góc mỗi Task** (bên trái ✓ / ⟲, chỉ ở Cả trang): mở Từng Task đúng Task đó.
+- **Đèn pin** (phím L / nút 🔦): màn tối 92%, vòng sáng theo chuột (cảm ứng: chạm kéo), lăn chuột đổi cỡ vòng sáng 60–600 px, bấm xuyên qua được, Esc tắt.
+- **Bảng trắng chế độ Text** (nút T): bấm đâu gõ đó; nền kẻ dòng thì dòng chữ ngồi trên dòng kẻ gần nhất (dòng kẻ 57 px), nền kẻ ô thì vào góc ô (36 px); Ctrl+Z, Xóa bảng, tẩy áp cả chữ.
+- **Hộp Note:** bấm đúp trên phiếu (ở con trỏ, không trúng chỗ trả lời / nút / ô chữ) mở hộp ghi chú vàng tại chỗ; gõ, hoặc 🎤 nói (nhận giọng nói của trình duyệt, ngôn ngữ theo trình duyệt; không có thì ẩn nút); tự giãn theo chữ; – thu gọn thành nhãn 📝, × xóa; hộp trống bỏ đi khi rời. Gắn với Task (hoặc trang) như nét vẽ, lưu trên máy theo phiếu + dấu nội dung (`wsShow.note:`), sửa phiếu thì bỏ.
+- Lăn chuột không Ctrl: trình chiếu tự cuộn vùng chiếu (Chromium có lúc không cuộn khi đầu chuột nằm trên chữ của trang đã phóng).
+- Mã: `Presenter.tsx`, `Note.tsx`, `Tools.tsx` (Board), `ink.ts` (`loadNotes` / `saveNotes`), `viewer.css`. Kiểm thử `tests/sau_kiem_thu/test_dot1.py` … `test_dot5.py`.

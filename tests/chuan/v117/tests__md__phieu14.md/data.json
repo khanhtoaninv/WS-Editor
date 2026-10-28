@@ -1,0 +1,458 @@
+{
+ "title": "WS-Imp-0-6-9",
+ "tasks": [
+  {
+   "id": "t1",
+   "typeId": "match",
+   "typeName": "Nối cặp",
+   "title": "LISTEN AND CHOOSE THE CORRECT ANSWER",
+   "instruction": "You will hear Marcus talking to his Aunt Paula about a school trip. What problems did he have on his trip?",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "pair": {
+       "l": {
+        "text": "coach station"
+       },
+       "r": {
+        "text": "A. too small"
+       }
+      },
+      "id": "q1"
+     },
+     {
+      "pair": {
+       "l": {
+        "text": "museum"
+       },
+       "r": {
+        "text": "B. expensive"
+       }
+      },
+      "id": "q2"
+     },
+     {
+      "pair": {
+       "l": {
+        "text": "café"
+       },
+       "r": {
+        "text": "C. too hot"
+       }
+      },
+      "id": "q3"
+     },
+     {
+      "pair": {
+       "l": {
+        "text": "shop"
+       },
+       "r": {
+        "text": "D. not clean"
+       }
+      },
+      "id": "q4"
+     },
+     {
+      "pair": {
+       "l": {
+        "text": "car park"
+       },
+       "r": {
+        "text": "E. too far"
+       }
+      },
+      "id": "q5"
+     },
+     {
+      "pair": {
+       "r": {
+        "text": "F. very cold"
+       }
+      },
+      "id": "q6"
+     },
+     {
+      "pair": {
+       "r": {
+        "text": "G. crowded"
+       }
+      },
+      "id": "q7"
+     },
+     {
+      "pair": {
+       "r": {
+        "text": "H. boring"
+       }
+      },
+      "id": "q8"
+     }
+    ],
+    "heads": [
+     "PLACES",
+     "PROBLEMS"
+    ]
+   },
+   "answer": {
+    "kind": "match",
+    "attach": "item",
+    "layout": "A7",
+    "params": {
+     "mid": "box"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 1
+  },
+  {
+   "id": "t2",
+   "typeId": "choose-abc",
+   "typeName": "Câu hỏi · khoanh A/B/C",
+   "title": "PHONETICS",
+   "instruction": "A. Choose the word which has the underlined part pronounced differently from the others.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "",
+      "opts": [
+       "<u>sch</u>ool",
+       "<u>ch</u>air",
+       "<u>ch</u>emistry",
+       "<u>ch</u>aracter"
+      ],
+      "id": "q1"
+     },
+     {
+      "text": "",
+      "opts": [
+       "<u>s</u>erious",
+       "<u>s</u>ymptom",
+       "<u>s</u>ugar",
+       "<u>s</u>auce"
+      ],
+      "id": "q2"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4",
+    "params": {
+     "dir": "auto"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "a",
+   "number": 2
+  },
+  {
+   "id": "t3",
+   "typeId": "choose-abc",
+   "typeName": "Câu hỏi · khoanh A/B/C",
+   "title": "Word stress",
+   "instruction": "B. Choose the word that has different stress from others.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "",
+      "opts": [
+       "complete",
+       "detective",
+       "gather",
+       "event"
+      ],
+      "id": "q1"
+     },
+     {
+      "text": "",
+      "opts": [
+       "mixture",
+       "allow",
+       "affect",
+       "disease"
+      ],
+      "id": "q2"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4",
+    "params": {
+     "dir": "auto"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": "join",
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "b",
+   "number": 2
+  },
+  {
+   "id": "t4",
+   "typeId": "true-false",
+   "typeName": "Bài đọc · Đúng/Sai",
+   "title": "READ THE STORY AND WRITE TRUE (T) OR FALSE (F)",
+   "instruction": "",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "Dave was fat and slow until he was forty five.",
+      "id": "q1"
+     },
+     {
+      "text": "As soon as Dave had trouble in breathing and walking, he went to see a doctor.",
+      "id": "q2"
+     },
+     {
+      "text": "Dave was afraid he was ill.",
+      "id": "q3"
+     },
+     {
+      "text": "The young doctor thought Dave was going to die soon.",
+      "id": "q4"
+     },
+     {
+      "text": "He wanted to see another doctor, first.",
+      "id": "q5"
+     },
+     {
+      "text": "Dave did not trust the young doctor.",
+      "id": "q6"
+     }
+    ],
+    "lead": {
+     "kind": "passage",
+     "text": "When Dave was young, he played a lot of games, and he was thin and strong, but when he was forty-five, he began to get fat and slow. He was not able to breathe as well as before, and when he walked rather fast, his heart beat painfully.\n\nHe did not do anything about this for a long time, but finally he became anxious and went to see a doctor, and the doctor sent him to a hospital. Another young doctor examined him there and said, \" I don't want to mislead you, Mr. Dave. You are very ill, and I believe that you are unlikely to live much longer. Would you like me to arrange for anybody to come and see you before you die?\n\nDave thought for a few seconds and then he answered, \"I'd like another doctor to come and see me\"."
+    }
+   },
+   "answer": {
+    "kind": "tf",
+    "attach": "item",
+    "layout": "A6",
+    "params": {
+     "row": true
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 3
+  },
+  {
+   "id": "t5",
+   "typeId": "choose-abc",
+   "typeName": "Câu hỏi · khoanh A/B/C",
+   "title": "CHOOSE THE CORRECT ANSWER",
+   "instruction": "",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "She is staying ___ her uncle and aunt’s house.",
+      "opts": [
+       "at",
+       "in",
+       "with",
+       "on"
+      ],
+      "id": "q1"
+     },
+     {
+      "text": "Their trip to Da Lat ___ wonderful.",
+      "opts": [
+       "was",
+       "were",
+       "are",
+       "is"
+      ],
+      "id": "q2"
+     },
+     {
+      "text": "There is ___ meat in the box.",
+      "opts": [
+       "any",
+       "a few",
+       "a little",
+       "many"
+      ],
+      "id": "q3"
+     },
+     {
+      "text": "Don’t forget ___your teeth before going to bed.",
+      "opts": [
+       "brush",
+       "to brush",
+       "brushing",
+       "not to brush"
+      ],
+      "id": "q4"
+     },
+     {
+      "text": "You ___ stay at home when you are sick.",
+      "opts": [
+       "had better",
+       "should",
+       "mustn’t",
+       "A and B"
+      ],
+      "id": "q5"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4",
+    "params": {
+     "dir": "auto"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 4
+  }
+ ],
+ "id": "(id)",
+ "age": "7-9",
+ "page": {
+  "size": "A4",
+  "marginMm": {
+   "top": 14,
+   "right": 14,
+   "bottom": 14,
+   "left": 14
+  }
+ },
+ "spacing": {
+  "preset": "compact",
+  "overrides": {}
+ },
+ "flow": "cont",
+ "schema": "ws-editor/0.3"
+}

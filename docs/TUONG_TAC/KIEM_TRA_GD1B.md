@@ -28,3 +28,13 @@ Mở `ws-editor.html`, nạp `tests/gd0/mau-du-dang.md` (hoặc phiếu thật c
 17. Che (H): bấm tấm che chỉ hé câu; câu đã hé thì bấm phương án là làm bài.
 18. Phóng to, Từng Task, lật trang: bài làm vẫn đúng chỗ, không mất.
 19. Đóng trình chiếu rồi mở lại: bài làm đã xóa (không lưu). Phiếu soạn không bị thêm gì.
+
+## Thêm từ v113 – v117 (28/10/2026), dùng phiếu `tests/gd0/phieu-kiem-thu-tay.md`
+20. T19 (hai vế phải "yes"): nối và hiện đáp án đúng hàng.
+21. T05 dấu câu: gõ `.` thay cho `?` bị chấm sai.
+22. T15 (đáp án T/F, nhãn True/False): chấm đúng.
+23. Gõ thật dài vào một chỗ trống: chữ xuống dòng, không tràn khỏi trang.
+24. T07, T20, T30: góc Task có nhãn **✎ Chấm tay**; làm xong có ✓ / ✗ nhỏ để chấm, "Đúng x/y" cộng theo.
+25. T06 viết tắt: gõ `I am` cho đáp án `I'm` là đúng. Bật "Phân biệt viết tắt" ở Task thì sai.
+26. T26 tìm từ: kéo từ chữ đầu tới chữ cuối của CAT / DOG / FISH, khung xanh; phím A hiện khung quanh các từ.
+27. Bật "Sai thì hiện đáp án", làm sai rồi sửa đúng: đáp án tự ẩn.

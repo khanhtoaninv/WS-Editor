@@ -4,7 +4,7 @@
 
 Mỗi phiếu: `data.json` (dữ liệu sau nạp, id tự sinh thay bằng `(id)`), `xuat.md` (MD xuất ra), `hinh_<biến thể>.json` (mỗi trang, mỗi phần tử có class / ảnh: vị trí, kích thước ở 100 %, chữ trực tiếp), `trangN.png` (ảnh từng trang, biến thể gốc).
 
-- Tạo lại (chỉ khi người dùng đồng ý đổi chuẩn): `python3 tests/chuan/chuan.py tao ws-editor-prototype.html tests/chuan/v108`
+- Tạo lại (chỉ khi người dùng đồng ý đổi chuẩn): `python3 tests/chuan/chuan.py tao ws-editor-prototype.html tests/chuan/v117`
 - So một bản mới: `python3 tests/chuan/chuan.py so <bản mới.html>` → `ALL OK` khi khớp 120/120.
 
 Ảnh cho phép lệch ≤ 0,05 % điểm ảnh (khử răng cưa); hình học, dữ liệu, MD phải khớp tuyệt đối.

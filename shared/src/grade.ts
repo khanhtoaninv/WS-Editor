@@ -16,13 +16,17 @@ export function gradeSlot(slot: Slot, k: KeyEntry | undefined, v: AnswerValue | 
   const ok = (st: SlotStatus, sc: number): SlotResult => ({ status: st, score: sc, max });
   switch (k.type) {
     case 'text': case 'text-long': case 'cell': {
-      const o = { caseSensitive: k.caseSensitive, ignorePunct: k.ignorePunct };
+      const o = { caseSensitive: k.caseSensitive, ignorePunct: k.ignorePunct, strictContr: k.strictContr };
       return (k.accept || []).some(a => sameText(v, a, o)) ? ok('correct', max) : ok('wrong', 0);
     }
     case 'choice-one': case 'match':
       return String(v) === String(k.correct) ? ok('correct', max) : ok('wrong', 0);
     case 'tf':
       return sameText(v, k.correct) ? ok('correct', max) : ok('wrong', 0);
+    case 'find': {   // v116 tìm từ: hai đầu từ, kéo chiều nào cũng được
+      const ends = (x: unknown) => String(x ?? '').split('-').map(p => p.trim()).sort().join('-');
+      return ends(v) === ends(k.correct) ? ok('correct', max) : ok('wrong', 0);
+    }
     case 'choice-many': {
       const want = new Set(([] as string[]).concat(k.correct ?? []).map(String));
       const got = new Set(([] as string[]).concat(v as string | string[]).map(String));

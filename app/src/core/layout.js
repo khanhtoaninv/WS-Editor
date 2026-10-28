@@ -1,6 +1,6 @@
 // src/core/layout.js — tách nguyên văn từ v106 (app/scripts/tach-core.mjs). Không dùng trạng thái giao diện (chọn, cột trái, hoàn tác).
 import { ws } from './state.js';
-import { AGE, GAPLAB, GAPP, PK_STAR, PRESETS, QN, SCHEMA, SIZES, ck, clone, gapCount, isGridTbl, its, keyParts, migTask, pkGroups, pkSrc, qDerived } from './model.js';
+import { tfIndex, AGE, GAPLAB, GAPP, PK_STAR, PRESETS, QN, SCHEMA, SIZES, ck, clone, gapCount, isGridTbl, its, keyParts, migTask, pkGroups, pkSrc, qDerived } from './model.js';
 
 /* ================= Hằng số & chính sách ================= */
 export const MM = 96 / 25.4;                 // px trên mỗi mm (CSS)
@@ -229,6 +229,20 @@ export function fitOf(t) { return t.image ? (frOf(t).fit || null) : null; }
 
 export const IW8 = [25, 60, 40];
 
+// v115 ảnh theo câu (Lưới item ảnh trên, Chọn ảnh): rộng mặc định theo số ảnh trên hàng (2 = 60, 3 = 45, 4 = 36, 5 = 30 mm,
+// trang 182 mm, khe 6 mm), nhân thanh kéo % của cả khối; Fit ô = ảnh và dòng viết khít bề ngang ô. Ảnh chỉnh tay (frame.w) giữ nguyên.
+export const IMW = { 1: 60, 2: 60, 3: 45, 4: 36, 5: 30 };
+export function imgRowN(t) {
+  if (ck(t) !== 'items' || layoutOf(t) !== 'T5') return 0;
+  if (t.content.variant === 'multi') return Math.min(3, Math.max(1, ...its(t).map(x => (x.imgs || []).length)));
+  return cellDirOf(t) === 'row' ? 0 : colsOf(t);
+}
+export function imgW(t) {
+  const n = imgRowN(t); if (!n) return null;
+  if (t.layout.imgFit) return 'none';
+  return +((IMW[n] ?? Math.round(182 / n - 6)) * (t.layout.imgPct || 100) / 100).toFixed(1) + 'mm';
+}
+
 // T5: mỗi ảnh (và mỗi ô chữ ở Ảnh trái) là một container, cấu hình riêng ở layout.cells[khóa]
 export const cellCfg = (t, k) => (t.layout.cells && t.layout.cells[k]) || {};
 
@@ -389,7 +403,7 @@ export function exFill(t, item, h) {
   if (A === 'A3') { const ch = [...String(item.key).trim().replace(/\s+/g, '')]; let j = 0; return h.replace(/<i><\/i>/g, () => `<i>${ch[j] ? `<span class="exk">${esc(ch[j++])}</span>` : (j++, '')}</i>`); }
   if (A === 'A4') { const ix = exPicks(t, item, item.opts || []); let n = -1; return !ix.length ? h : h.replace(/<span class="opt">/g, m => (ix.includes(++n) ? '<span class="opt pk">' : m)); }
   if (A === 'A5') return h.replace('class="a a5"', 'class="a a5 pk"');
-  if (A === 'A6') { const L = String(item.key).trim().toLowerCase(), al = { true: 't', false: 'f', 'đúng': 't', 'sai': 'f', yes: 'yes', no: 'no' }[L] || L; return h.replace(/<span>([^<]*)<\/span>/g, (m, x) => (x.toLowerCase() === al || x.toLowerCase() === L) ? `<span class="pk">${x}</span>` : m); }
+  if (A === 'A6') { const xs = [...h.matchAll(/<span>([^<]*)<\/span>/g)].map(m => m[1]), j = tfIndex(xs, item.key); let n = -1; return h.replace(/<span>([^<]*)<\/span>/g, (m, x) => ++n === j ? `<span class="pk">${x}</span>` : m); }   // v113: khớp như máy chấm (T với True…)
   return h;
 }
 
@@ -565,11 +579,12 @@ export function renderTask(t, frag, mt) {
   if (lay.width && t6w) style += `;--cw:${lay.width}`;
   if (lay.rowH && L === 'T7') style += `;--mrh:${lay.rowH}mm`;
   if (lay.whoW) style += `;--who:${lay.whoW}mm`;
-  if (t.answer.layout === 'A6' && (t.answer.params || {}).row && (t.answer.params || {}).tfx) style += `;--tfx:${t.answer.params.tfx}mm`;   // v101: T / F cách lề phải
+  if (t.answer.layout === 'A6' && (t.answer.params || {}).row && (t.answer.params || {}).tfp) style += `;--tfp:${t.answer.params.tfp}`;   // v115: T / F cùng hàng căn theo tỉ lệ câu / T-F (thay "cách lề phải" v101)
   if (lay.colGap != null && L === 'T5') style += `;--cg:${lay.colGap}mm`;
+  const imw = imgW(t); if (imw) style += `;--imw:${imw}`;
   if (mt) style += `;margin-top:${mt}mm`;
   const at = [fitOf(t) ? `data-fit="${fitOf(t)}"` : '', alignOf(t) ? `data-ia="${alignOf(t)}"` : '',
-    L === 'T5' && lay.align && cellDirOf(t) !== 'row' ? `data-ca="${lay.align}"` : '', frameH(t) ? 'data-ih="1"' : '', lay.num === 'off' ? 'data-nonum="1"' : '',
+    L === 'T5' && lay.align && cellDirOf(t) !== 'row' ? `data-ca="${lay.align}"` : '', frameH(t) ? 'data-ih="1"' : '', imw === 'none' ? 'data-imfit="1"' : '', lay.num === 'off' ? 'data-nonum="1"' : '',
     lay.valign && cellDirOf(t) !== 'row' ? `data-va="${lay.valign}"` : '', fr.valign && isColI(t) ? `data-iv="${fr.valign}"` : '',
     lay.width && t6w ? 'data-w2="1"' : '', lay.align && (t6w || L === 'T8') ? `data-al2="${lay.align}"` : '', lay.qbold ? 'data-qb="1"' : '', lay.mbd === 'on' && ck(t) === 'pairs' ? 'data-mbd="1"' : '', t.answer.layout === 'A4' && t.answer.attach === 'item' && ['center', 'bottom'].includes((t.answer.params || {}).qv) ? `data-qv="${t.answer.params.qv}"` : '', t.answer.layout === 'A6' && (t.answer.params || {}).row ? `data-tfr="1" data-tfv="${(t.answer.params || {}).rowv || 'center'}"` : '', taOf(t) !== 'left' ? `data-ta="${taOf(t)}"` : ''].filter(Boolean).join(' ');   // v86: data-qb = chữ câu hỏi đậm
   const g0 = cont ? '' : isJoined(t) ? (t.instruction ? `<div class="g0 jn" data-node="${t.id}:G0"><div class="g0t"><span class="ins">${er(t.instruction)}</span></div></div>` : '') : `<div class="g0" data-node="${t.id}:G0"><span class="num">${t.number}</span><div class="g0t"><span class="ttl">${esc(t.title)}</span>${t.audio ? `<span class="trk">${esc(t.audio)}</span>` : ''}<span class="ins">${er(t.instruction)}</span></div>${qrHtml(t)}</div>`;
@@ -601,14 +616,30 @@ export const g3row = (t, q) => `<div class="q g3t"><span class="ino" style="visi
 export const leadIntro = t => t.content.lead && t.content.lead.kind === 'text' && leadText(t) ? `<div class="dl intro">${er(leadText(t))}</div>` : '';
 
 // Khung từ (G4): chữ rời / danh sách, hoặc ảnh (v81: lưới ô cùng cỡ, nhãn A B C, chú thích dưới ảnh). Không trộn chữ và ảnh.
+// v116 ô chữ tìm từ (Q11 lưới chữ cái, không phải ô chữ giải đố): vị trí từng từ của khung từ trong lưới, tìm 8 hướng.
+// Trả [{ w, at: "hàng,cột-hàng,cột" | null }] hoặc null nếu Task không phải tìm từ. hàng = thứ tự hàng nội dung, cột = thứ tự ô.
+export function wsFind(t) {
+  if (ck(t) !== 'table' || !isGridTbl(t) || tblOpts(t).cross || !t.wordBank || t.wordBank.kind === 'image' || !(t.wordBank.words || []).length) return null;
+  const g = (t.content.rows || []).map(r => (r.cells || []).map(v => typeof v === 'string' ? v.trim().toUpperCase() : ''));
+  if (!g.length || !g.every(r => r.every(v => v.length <= 1)) || !g.some(r => r.some(Boolean))) return null;
+  const D = [[0, 1], [1, 0], [1, 1], [-1, 1], [0, -1], [-1, 0], [-1, -1], [1, -1]], at = (r, c) => (g[r] || [])[c];
+  return t.wordBank.words.map(w => {
+    const W = String(w).replace(/[^\p{L}]/gu, '').toUpperCase(), n = W.length; if (n < 2) return { w, at: null };
+    for (let r = 0; r < g.length; r++) for (let c = 0; c < g[r].length; c++) for (const [dr, dc] of D)
+      if ([...W].every((ch, k) => at(r + dr * k, c + dc * k) === ch)) return { w, at: `${r},${c}-${r + dr * (n - 1)},${c + dc * (n - 1)}` };
+    return { w, at: null };
+  });
+}
+
 export function g4Html(t) {
+  const wsf = wsFind(t), fa = i => wsf && wsf[i] && wsf[i].at ? slotAt(`${t.id}.find.${i + 1}`) : '';   // v116: từ cần tìm mang mã chỗ trả lời
   const wb = t.wordBank, id = t.id, lab = i => !wb || wb.label === 'none' ? '' : (wb.label === 'upper' ? 'ABCDEFGHIJ' : 'abcdefghij')[i] + '.';
   const wbst = wb.placement !== 'right' && wb.w ? ` style="width:${wb.w}%;justify-self:${JS[wb.align || 'center']}"` : '';
   if (wb.kind === 'image') { const n = wb.words.length, lb = wb.label === 'none' ? '' : wb.label === 'upper' ? 'ABCDEFGHIJ' : 'abcdefghij', wc = wb.cols || Math.max(1, Math.min(n, wb.placement === 'right' ? 1 : 5));
     return `<div class="g4 wimg" data-node="${id}:G4" style="--wc:${wc}${wb.placement !== 'right' && wb.w ? `;width:${wb.w}%;justify-self:${JS[wb.align || 'center']}` : ''}">${wb.words.map((w, i) => `<div class="wim">${lb ? `<b>${lb[i] || ''}</b>` : ''}${ownFit(t, 'B.' + i, pic(w || 'ảnh', '', srcOf(t, 'B.' + i), { slot: 'B.' + i, ar: wb.ar || '1/1' }), wb.frame)}${w && wb.cap !== false ? `<span>${er(w)}</span>` : ''}</div>`).join('')}</div>`; }
   return wb.style === 'list'
-    ? `<div class="g4 wlist" data-node="${id}:G4"${wbst}>${wb.words.map((w, i) => `<div class="wi">${lab(i) ? `<i>${lab(i)}</i>` : ''}<span>${er(w)}</span></div>`).join('')}</div>`
-    : `<div class="g4" data-node="${id}:G4"${wbst}>${wb.words.map(w => `<span>${er(w)}</span>`).join('')}</div>`;
+    ? `<div class="g4 wlist" data-node="${id}:G4"${wbst}>${wb.words.map((w, i) => `<div class="wi">${lab(i) ? `<i>${lab(i)}</i>` : ''}<span${fa(i)}>${er(w)}</span></div>`).join('')}</div>`
+    : `<div class="g4" data-node="${id}:G4"${wbst}>${wb.words.map((w, i) => `<span${fa(i)}>${er(w)}</span>`).join('')}</div>`;
 }
 
 // Khung từ đặt dưới (v81): nằm cuối Task, chỉ ở mảnh cuối khi Task bị cắt trang
@@ -647,6 +678,7 @@ export function body0n(t, L, frag, first) {
     const hasBlank = c.rows.some(r => r.cells.some(x => x === ''));
     const rhmm = o.minH ?? TBL_ROW_MM;
     const tkey = !!(t.layout.table || {}).key;   // v98: bản giáo viên: ô tích đúng có ✓ và tô nền
+    const wsg = !!wsFind(t);   // v116: ô tìm từ mang tọa độ (data-rc) để trình chiếu kéo chọn từ
     const cellHtml = (v, sk) => typeof v === 'string' ? (v.includes('\n') ? `<span class="tml">${v.split('\n').filter(l => l.trim()).map(l => `<span>${er(l)}</span>`).join('')}</span>` : er(v)) : v && v.ans != null ? ((t.layout.table || {}).key ? `<span class="tka">${er(v.ans)}</span>` : '') : v && v.tick ? (v.text ? `<span class="tkc"><span class="a a5${tkey && v.ok ? ' pk' : ''}"></span><span>${er(v.text)}</span></span>` : `<span class="a a5${tkey && v.ok ? ' pk' : ''}"></span>`) : v && v.img ? (v.text ? `<span class="cix">${sk ? tpic(t, sk, v.img, 'sm') : pic(v.img, 'sm')}<span>${er(v.text)}</span></span>` : (sk ? tpic(t, sk, v.img, 'sm') : pic(v.img, 'sm'))) : '';
     const rowsOut = [];
     if (showHead) rowsOut.push({ head: true, cells: (rh ? [c.corner || ''] : []).concat(c.cols) });
@@ -665,7 +697,7 @@ export function body0n(t, L, frag, first) {
         let bd = isRH && v && typeof v === 'object' ? `<span class="rhx">${sk ? tpic(t, sk, v.img, 'sm') : pic(v.img, 'sm')}<span>${esc(v.text || '')}</span></span>` : cellHtml(v, sk);
         if (tsl && v && v.tick) bd = bd.replace(/(<span class="a a5[^"]*")/, `$1${slotAt(tsl)}`);
         if (o.nm === 'in' && ci2 === 0 && !r.head) bd = `<span class="nin"><span class="ino">${r.i + 1}</span><span class="nib">${bd}</span></span>`;
-        return `<div class="${r.head ? 'th' : 'tc'}${isRH ? ' rh' : ''}${cc}" data-rk="${rk}"${rst} ${r.head ? '' : `data-node="${id}:G2"`}${tsl && !(v && v.tick) ? slotAt(tsl) : ''}>${bd}</div>`;
+        return `<div class="${r.head ? 'th' : 'tc'}${isRH ? ' rh' : ''}${cc}" data-rk="${rk}"${rst} ${r.head ? '' : `data-node="${id}:G2"`}${wsg && !r.head && !isRH ? ` data-rc="${r.i},${ci2 - (rh ? 1 : 0)}"` : ''}${tsl && !(v && v.tick) ? slotAt(tsl) : ''}>${bd}</div>`;
       }).join('');
     }).join('');
     return `<div class="body b1">${withBank(`<div class="g2 tg" data-node="${id}:G2" data-ln="${o.lines}" data-al="${o.align}" style="--tcols:${tpl};--nmw:${o.num ? 'var(--gut)' : '0px'};--rh:${rhmm}mm;--ta:${ta}${o.rows === 'equal' && nBody ? `;grid-template-rows:${showHead ? 'auto ' : ''}repeat(${nBody},1fr)` : ''}">${out}</div>`)}</div>`;
@@ -687,7 +719,7 @@ export function body0n(t, L, frag, first) {
       const lx = Ls[i], l = lx && lx.pair.l, rx = Rs[pm[i]], r = rx && rx.pair.r, it = { id: (lx || rx).id };
       rows += `<div class="ml" data-node="${id}:G2">${l ? inoN(t, c.items.indexOf(lx)) : ''}${l ? (l.img ? tpic(t, '@' + lx.id, l.img, 'sm') : `<span>${er(l.text)}</span>`) : ''}</div>` +
         mdH(l, r, it) +
-        `<div class="mr" data-node="${id}:G2">${r ? `<span>${er(r.text)}</span>` : ''}</div>`;
+        `<div class="mr" data-node="${id}:G2"${r ? ` data-opt="${rx.id}"` : ''}>${r ? `<span>${er(r.text)}</span>` : ''}</div>`;
     }
     return `<div class="body b1">${withBank(`<div class="mrows">${rows}</div>`).replace('<div class="wbwrap"', '<div class="wbwrap wbm"')}</div>`;
   }
@@ -699,7 +731,7 @@ export function body0n(t, L, frag, first) {
       const pr = c.items[i].pair || {}, l = pr.l, r = pr.r, it = { id: c.items[i].id };
       rows += `<div class="ml" data-node="${id}:G2">${l ? inoN(t, i) : ''}${l ? (l.img ? tpic(t, '@' + c.items[i].id, l.img, 'sm') : `<span>${er(l.text)}</span>`) : ''}</div>` +
         mdH(l, r, it) +
-        `<div class="mr" data-node="${id}:G2">${r ? `<span>${er(r.text)}</span>` : ''}</div>`;
+        `<div class="mr" data-node="${id}:G2"${r ? ` data-opt="${c.items[i].id}"` : ''}>${r ? `<span>${er(r.text)}</span>` : ''}</div>`;
     }
     return `<div class="body b1">${withBank(`<div class="mrows">${rows}</div>`).replace('<div class="wbwrap"', '<div class="wbwrap wbm"')}</div>`;   // v85: Khung từ (G4) cũng hiện ở dạng nối (đặt bên phải: cột riêng, không dùng --tpl của 3 cột nối)
   }

@@ -4,16 +4,16 @@
 // · "<task>.leadc.<n>" (chọn {a|b} trong bài đọc) · "<task>.cell.<hàng>.<cột>" (ô bảng / ô chữ). Bài nối: "<task>.<item vế trái>".
 // Không đoán: câu thiếu đáp án thì chuyển chấm tay và ghi cảnh báo; dạng chưa hỗ trợ thì ghi "chỉ xem".
 import { QN, ck, gapCount, isFreeW, isGridTbl, its, keyParts, pkGroups, pkSrc, qDerived } from './model.js';
-import { crossCell, exPicks, keyGaps, leadText, nlab, qnum, tblOpts } from './layout.js';
+import { crossCell, exPicks, keyGaps, leadText, nlab, qnum, tblOpts, wsFind } from './layout.js';
 import { gapN } from './answers.js';
+import { tfIndex } from './model.js';
+export { tfIndex };
 
 // Đáp án chữ: nhiều đáp án đúng cho một chỗ viết cách nhau " / " (có dấu cách hai bên): "isn't / is not"
 export const altSplit = s => String(s ?? '').split(/\s+\/\s+/).map(x => x.trim()).filter(Boolean);
 const LET = 'abcdefgh';
 const optsOf = list => list.map((o, i) => ({ id: LET[i] || String(i), text: String(o).replace(/<[^>]+>|\u0003/g, '').replace(/^\s*\*(?!\*)/, '').trim() }));
 const imgOpts = list => list.map((o, i) => ({ id: LET[i] || String(i), img: String(o) }));
-const TF_ALIAS = { true: 't', false: 'f', 'đúng': 't', sai: 'f', yes: 'yes', no: 'no', right: 'right', wrong: 'wrong' };
-
 function taskSlots0(t) {
   const slots = [], key = {}, notes = [], miss = [], k = ck(t), a = t.answer || {}, p = a.params || {}, q = qDerived(t) || t.q || null, tid = t.id;
   const add = (id, label, interaction, k0, extra = {}) => {
@@ -23,7 +23,7 @@ function taskSlots0(t) {
     else key[id] = Object.assign({ type: interaction, score: 1 }, k0);
     slots.push(s);
   };
-  const textKey = v => { const acc = altSplit(v); return acc.length ? { accept: acc } : null; };
+  const textKey = v => { const acc = altSplit(v); return acc.length ? Object.assign({ accept: acc }, p.strictContr ? { strictContr: true } : {}) : null; };   // v116: công tắc Phân biệt viết tắt theo Task
   const choiceKey = (opts, idx) => !idx.length ? null : idx.length > 1 ? { type: 'choice-many', correct: idx.map(i => opts[i].id).sort() } : { correct: opts[idx[0]].id };
   let dn = 0;   // hội thoại: chỗ trống đánh số (1) (2)… liên tục qua các lượt, như trên phiếu
   const lab = (i, n, many) => k === 'dialogue' ? `(${++dn})` : `${nlab(t, qnum(t, i))}${many ? '.' + n : ''}`;
@@ -38,7 +38,11 @@ function taskSlots0(t) {
       (c.rows || []).forEach((r, ri) => (r.cells || []).forEach((v, ci) => { const x = crossCell(v); if (x.k === 'ans' || x.k === 'empty') add(`${tid}.cell.${r.id}.${ci}`, `ô ${ri + 1}-${ci + 1}`, 'cell', x.k === 'ans' ? { accept: [x.ch] } : null, { item: r.id, maxLength: 1 }); }));
       return { slots, key, notes, miss };
     }
-    const grid = isGridTbl(t);
+    const grid = isGridTbl(t), wf = wsFind(t);
+    if (wf) {   // v116 tìm từ: mỗi từ của khung từ một chỗ, đáp án = hai đầu từ trong lưới
+      wf.forEach((x, j) => { if (x.at) add(`${tid}.find.${j + 1}`, String(x.w), 'find', { correct: x.at }); else notes.push(`từ "${x.w}" không thấy trong lưới (tìm 8 hướng): bỏ qua`); });
+      return { slots, key, notes, miss };
+    }
     (c.rows || []).forEach((r, ri) => {
       // v98 bảng chọn đáp án: các ô tích của một hàng = một chỗ chọn (Một ô đúng mỗi hàng → chọn một, không thì chọn nhiều)
       const tk = (r.cells || []).map((v, ci) => [v, ci]).filter(([v]) => v && typeof v === 'object' && v.tick);
@@ -112,7 +116,7 @@ function taskSlots0(t) {
     }
     if (a.kind === 'tf') {
       const labs = Array.isArray(p.labs) && p.labs.length >= 2 ? p.labs.slice(0, 3) : ['T', 'F'], opts = labs.map(l => ({ id: String(l), text: String(l) }));
-      const L = String(x.key ?? '').trim().toLowerCase(), al = TF_ALIAS[L] || L, j = labs.findIndex(l => { const v = String(l).toLowerCase(); return v === al || v === L; });
+      const L = String(x.key ?? '').trim().toLowerCase(), j = L ? tfIndex(labs, L) : -1;
       add(base, lab(i), 'tf', L ? (j >= 0 ? { correct: opts[j].id } : null) : null, { item: x.id, options: opts });
       if (L && j < 0) notes.push(`câu ${lab(i)}: đáp án "${x.key}" không khớp nhãn ${labs.join('/')}`);
       return;

@@ -77,6 +77,8 @@ export function migTask(t) {
   if (l.cellDir) n.dir = l.cellDir;
   if (l.cellAlign) n.align = l.cellAlign;
   if (l.order) n.order = l.order;   // v81: câu hỏi trước bài đọc
+  if (l.imgPct != null) n.imgPct = l.imgPct;   // v115: kích thước ảnh theo câu (% cả khối)
+  if (l.imgFit) n.imgFit = l.imgFit;           // v115: ảnh vừa ô
   Object.keys(F01).forEach(k => { if (l[k] != null) n.frame[F01[k]] = l[k]; });
   if (t.image && t.image.scale != null) { if (t.image.scale !== 100 && n.frame.scale == null) n.frame.scale = t.image.scale; delete t.image.scale; }
   if (n.cells) Object.values(n.cells).forEach(c => { const f = c.frame || {}; Object.keys(F01).forEach(k => { if (c[k] != null) f[F01[k]] = c[k]; delete c[k]; }); if (c.ratio != null) c.split = c.ratio; delete c.ratio; if (Object.keys(f).length) c.frame = f; });
@@ -428,3 +430,14 @@ export function qDerived(t) {
 export function qTidy(t) { if (t.q && (!QN[t.q] || qDerived(t) === t.q || (qDerived(t) && t.answer.kind !== 'none'))) delete t.q; }
 
 tidy = (f => t => { f(t); qTidy(t); })(tidy);
+
+// T/F: chỉ số nhãn ứng với đáp án (dùng cho máy chấm và câu ví dụ in sẵn)
+const TF_ALIAS = { true: 't', false: 'f', 'đúng': 't', sai: 'f', yes: 'yes', no: 'no', right: 'right', wrong: 'wrong' };
+// v113: đáp án T/F ghi khác nhãn (T với True/False, Đúng với Yes/No…): khớp theo nghĩa đúng / sai, rồi theo chữ cái đầu của nhãn
+const TF_POS = ['t', 'true', 'đúng', 'đ', 'd', 'y', 'yes', 'r', 'right', 'correct', '✓'], TF_NEG = ['f', 'false', 'sai', 's', 'n', 'no', 'w', 'wrong', 'incorrect', '✗'];
+export function tfIndex(labs, key) {
+  const L = String(key ?? '').trim().toLowerCase().replace(/[.)]$/, ''), al = TF_ALIAS[L] || L, lw = labs.map(l => String(l).trim().toLowerCase());
+  let j = lw.findIndex(v => v === al || v === L); if (j >= 0) return j;
+  for (const side of [TF_POS, TF_NEG]) if (side.includes(L)) { j = lw.findIndex(v => side.includes(v)); if (j >= 0) return j; }
+  const one = lw.filter(v => v[0] === L[0]); return L.length === 1 && one.length === 1 ? lw.indexOf(one[0]) : -1;
+}

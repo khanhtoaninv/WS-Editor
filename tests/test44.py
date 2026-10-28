@@ -46,15 +46,15 @@ with sync_playwright() as p:
     # T/F
     t4=pg.evaluate("ws.tasks[3].id")
     pg.evaluate("sel={type:'group',id:ws.tasks[3].id,g:'G3',item:null}; renderInspector()"); pg.wait_for_timeout(400)
-    chk('Task 4: có nút Căn dọc và ô T/F cách lề phải', pg.locator('[data-p=rowv]').count()>=3 and pg.locator('[data-pv=tfx]').count()==1)
+    chk('Task 4: có nút Căn dọc và thanh Tỉ lệ câu / T-F (v115)', pg.locator('[data-p=rowv]').count()>=3 and pg.locator('[data-pr=tfp]').count()==1)
     cen=lambda: pg.evaluate("""(()=>{const t=document.querySelector('.task[data-tfr]'); const q=t.querySelector('.q'); const a=q.querySelector('.a6').getBoundingClientRect(), n=q.querySelector('.ino').getBoundingClientRect(), x=q.querySelector('.qt').getBoundingClientRect(); return [Math.round(n.top-a.top), Math.round(n.bottom-a.bottom), Math.round(x.top-a.top)]})()""")
     for v in ('top','bottom','center'):
         pg.locator(f'[data-p=rowv][data-v={v}]').first.click(); pg.wait_for_timeout(400)
         chk(f'Căn dọc {v}: dataset', pg.evaluate("document.querySelector('.task[data-tfr]').dataset.tfv")==v)
     x0=pg.evaluate("document.querySelector('.task[data-tfr] .a6').getBoundingClientRect().right")
-    pg.locator('[data-pv=tfx]').first.fill('40'); pg.locator('[data-pv=tfx]').first.press('Tab'); pg.wait_for_timeout(400)
+    pg.evaluate("(()=>{const i=document.querySelector('[data-pr=tfp]'); i.value=60; i.dispatchEvent(new Event('input',{bubbles:true})); i.dispatchEvent(new Event('change',{bubbles:true}))})()"); pg.wait_for_timeout(400)
     x1=pg.evaluate("document.querySelector('.task[data-tfr] .a6').getBoundingClientRect().right")
-    chk('T/F cách lề phải 40 mm: ô T/F dịch trái', x0-x1>100, (x0,x1))
+    chk('T/F tỉ lệ 60 / 40: ô T/F dịch trái', x0-x1>30, (x0,x1))
     chk('0 lỗi console', not errs, errs)
     pg.evaluate("document.querySelector('.task[data-tfr]').scrollIntoView()"); pg.screenshot(path='/home/claude/logs/v101_tf.png')
 print('ALL OK' if ok else 'SOME FAIL')

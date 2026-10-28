@@ -14214,7 +14214,7 @@ function TopBar() {
 							padding: "1px 7px",
 							marginLeft: 4
 						},
-						children: "v112"
+						children: "v117"
 					}),
 					" ",
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", {
@@ -14556,6 +14556,7 @@ var model_exports = /* @__PURE__ */ __exportAll({
 	recipeMatch: () => recipeMatch,
 	sigOk: () => sigOk,
 	sv: () => sv,
+	tfIndex: () => tfIndex,
 	tidy: () => tidy,
 	toForm: () => toForm
 });
@@ -14762,6 +14763,8 @@ function migTask(t) {
 	if (l.cellDir) n.dir = l.cellDir;
 	if (l.cellAlign) n.align = l.cellAlign;
 	if (l.order) n.order = l.order;
+	if (l.imgPct != null) n.imgPct = l.imgPct;
+	if (l.imgFit) n.imgFit = l.imgFit;
 	Object.keys(F01).forEach((k) => {
 		if (l[k] != null) n.frame[F01[k]] = l[k];
 	});
@@ -15987,6 +15990,52 @@ tidy = ((f) => (t) => {
 	f(t);
 	qTidy(t);
 })(tidy);
+var TF_ALIAS = {
+	true: "t",
+	false: "f",
+	"đúng": "t",
+	sai: "f",
+	yes: "yes",
+	no: "no",
+	right: "right",
+	wrong: "wrong"
+};
+var TF_POS = [
+	"t",
+	"true",
+	"đúng",
+	"đ",
+	"d",
+	"y",
+	"yes",
+	"r",
+	"right",
+	"correct",
+	"✓"
+];
+var TF_NEG = [
+	"f",
+	"false",
+	"sai",
+	"s",
+	"n",
+	"no",
+	"w",
+	"wrong",
+	"incorrect",
+	"✗"
+];
+function tfIndex(labs, key) {
+	const L = String(key ?? "").trim().toLowerCase().replace(/[.)]$/, ""), al = TF_ALIAS[L] || L, lw = labs.map((l) => String(l).trim().toLowerCase());
+	let j = lw.findIndex((v) => v === al || v === L);
+	if (j >= 0) return j;
+	for (const side of [TF_POS, TF_NEG]) if (side.includes(L)) {
+		j = lw.findIndex((v) => side.includes(v));
+		if (j >= 0) return j;
+	}
+	const one = lw.filter((v) => v[0] === L[0]);
+	return L.length === 1 && one.length === 1 ? lw.indexOf(one[0]) : -1;
+}
 try {
 	Object.defineProperty(window, "AGE", {
 		configurable: true,
@@ -16347,6 +16396,30 @@ try {
 		get: () => qTidy
 	});
 } catch (_) {}
+try {
+	Object.defineProperty(window, "TF_ALIAS", {
+		configurable: true,
+		get: () => TF_ALIAS
+	});
+} catch (_) {}
+try {
+	Object.defineProperty(window, "TF_POS", {
+		configurable: true,
+		get: () => TF_POS
+	});
+} catch (_) {}
+try {
+	Object.defineProperty(window, "TF_NEG", {
+		configurable: true,
+		get: () => TF_NEG
+	});
+} catch (_) {}
+try {
+	Object.defineProperty(window, "tfIndex", {
+		configurable: true,
+		get: () => tfIndex
+	});
+} catch (_) {}
 // src/core/layout.js
 var layout_exports = /* @__PURE__ */ __exportAll({
 	A2MM: () => A2MM$1,
@@ -16356,6 +16429,7 @@ var layout_exports = /* @__PURE__ */ __exportAll({
 	CONTENT_H: () => 262,
 	FSZ: () => FSZ$1,
 	G1_TOP: () => G1_TOP,
+	IMW: () => IMW,
 	IW8: () => IW8$1,
 	JS: () => JS,
 	MM: () => MM,
@@ -16418,7 +16492,9 @@ var layout_exports = /* @__PURE__ */ __exportAll({
 	gtKeys: () => gtKeys$1,
 	gtN: () => gtN$1,
 	imgArOf: () => imgArOf$2,
+	imgRowN: () => imgRowN$1,
 	imgStyle: () => imgStyle,
+	imgW: () => imgW,
 	inheritedSpacing: () => inheritedSpacing$1,
 	inlChoice: () => inlChoice,
 	ino: () => ino,
@@ -16449,7 +16525,7 @@ var layout_exports = /* @__PURE__ */ __exportAll({
 	pic: () => pic,
 	pkB: () => pkB,
 	pkPre: () => pkPre,
-	place: () => place,
+	place: () => place$1,
 	q2end: () => q2end,
 	qFirst: () => qFirst,
 	qOf: () => qOf$3,
@@ -16481,6 +16557,7 @@ var layout_exports = /* @__PURE__ */ __exportAll({
 	tplOf: () => tplOf,
 	units: () => units$1,
 	withMarks: () => withMarks,
+	wsFind: () => wsFind,
 	xOfKey: () => xOfKey
 });
 var MM = 96 / 25.4;
@@ -17640,6 +17717,24 @@ var IW8$1 = [
 	60,
 	40
 ];
+var IMW = {
+	1: 60,
+	2: 60,
+	3: 45,
+	4: 36,
+	5: 30
+};
+function imgRowN$1(t) {
+	if (ck$3(t) !== "items" || layoutOf$1(t) !== "T5") return 0;
+	if (t.content.variant === "multi") return Math.min(3, Math.max(1, ...its$2(t).map((x) => (x.imgs || []).length)));
+	return cellDirOf$1(t) === "row" ? 0 : colsOf$1(t);
+}
+function imgW(t) {
+	const n = imgRowN$1(t);
+	if (!n) return null;
+	if (t.layout.imgFit) return "none";
+	return +((IMW[n] ?? Math.round(182 / n - 6)) * (t.layout.imgPct || 100) / 100).toFixed(1) + "mm";
+}
 var cellCfg$1 = (t, k) => t.layout.cells && t.layout.cells[k] || {};
 var cellFr = (t, k) => cellCfg$1(t, k).frame || {};
 var cellSplit = (cc) => Math.min(50, Math.max(15, cc.split ?? 25));
@@ -17905,15 +18000,9 @@ function exFill(t, item, h) {
 	}
 	if (A === "A5") return h.replace("class=\"a a5\"", "class=\"a a5 pk\"");
 	if (A === "A6") {
-		const L = String(item.key).trim().toLowerCase(), al = {
-			true: "t",
-			false: "f",
-			"đúng": "t",
-			"sai": "f",
-			yes: "yes",
-			no: "no"
-		}[L] || L;
-		return h.replace(/<span>([^<]*)<\/span>/g, (m, x) => x.toLowerCase() === al || x.toLowerCase() === L ? `<span class="pk">${x}</span>` : m);
+		const j = tfIndex([...h.matchAll(/<span>([^<]*)<\/span>/g)].map((m) => m[1]), item.key);
+		let n = -1;
+		return h.replace(/<span>([^<]*)<\/span>/g, (m, x) => ++n === j ? `<span class="pk">${x}</span>` : m);
 	}
 	return h;
 }
@@ -18183,14 +18272,17 @@ function renderTask(t, frag, mt) {
 	if (lay.width && t6w) style += `;--cw:${lay.width}`;
 	if (lay.rowH && L === "T7") style += `;--mrh:${lay.rowH}mm`;
 	if (lay.whoW) style += `;--who:${lay.whoW}mm`;
-	if (t.answer.layout === "A6" && (t.answer.params || {}).row && (t.answer.params || {}).tfx) style += `;--tfx:${t.answer.params.tfx}mm`;
+	if (t.answer.layout === "A6" && (t.answer.params || {}).row && (t.answer.params || {}).tfp) style += `;--tfp:${t.answer.params.tfp}`;
 	if (lay.colGap != null && L === "T5") style += `;--cg:${lay.colGap}mm`;
+	const imw = imgW(t);
+	if (imw) style += `;--imw:${imw}`;
 	if (mt) style += `;margin-top:${mt}mm`;
 	const at = [
 		fitOf$1(t) ? `data-fit="${fitOf$1(t)}"` : "",
 		alignOf(t) ? `data-ia="${alignOf(t)}"` : "",
 		L === "T5" && lay.align && cellDirOf$1(t) !== "row" ? `data-ca="${lay.align}"` : "",
 		frameH$1(t) ? "data-ih=\"1\"" : "",
+		imw === "none" ? "data-imfit=\"1\"" : "",
 		lay.num === "off" ? "data-nonum=\"1\"" : "",
 		lay.valign && cellDirOf$1(t) !== "row" ? `data-va="${lay.valign}"` : "",
 		fr.valign && isColI$1(t) ? `data-iv="${fr.valign}"` : "",
@@ -18230,7 +18322,38 @@ var inoN = (t, i) => {
 var qwho = (q) => q && q.who != null ? `<b class="qwho">${esc(q.who)}:</b>` : "";
 var g3row = (t, q) => `<div class="q g3t"><span class="ino" style="visibility:hidden" aria-hidden="true">0</span><div class="qb"><div class="qt">${er(q.text || "")}</div></div></div>`;
 var leadIntro = (t) => t.content.lead && t.content.lead.kind === "text" && leadText(t) ? `<div class="dl intro">${er(leadText(t))}</div>` : "";
+function wsFind(t) {
+	if (ck$3(t) !== "table" || !isGridTbl(t) || tblOpts$2(t).cross || !t.wordBank || t.wordBank.kind === "image" || !(t.wordBank.words || []).length) return null;
+	const g = (t.content.rows || []).map((r) => (r.cells || []).map((v) => typeof v === "string" ? v.trim().toUpperCase() : ""));
+	if (!g.length || !g.every((r) => r.every((v) => v.length <= 1)) || !g.some((r) => r.some(Boolean))) return null;
+	const D = [
+		[0, 1],
+		[1, 0],
+		[1, 1],
+		[-1, 1],
+		[0, -1],
+		[-1, 0],
+		[-1, -1],
+		[1, -1]
+	], at = (r, c) => (g[r] || [])[c];
+	return t.wordBank.words.map((w) => {
+		const W = String(w).replace(/[^\p{L}]/gu, "").toUpperCase(), n = W.length;
+		if (n < 2) return {
+			w,
+			at: null
+		};
+		for (let r = 0; r < g.length; r++) for (let c = 0; c < g[r].length; c++) for (const [dr, dc] of D) if ([...W].every((ch, k) => at(r + dr * k, c + dc * k) === ch)) return {
+			w,
+			at: `${r},${c}-${r + dr * (n - 1)},${c + dc * (n - 1)}`
+		};
+		return {
+			w,
+			at: null
+		};
+	});
+}
 function g4Html(t) {
+	const wsf = wsFind(t), fa = (i) => wsf && wsf[i] && wsf[i].at ? slotAt(`${t.id}.find.${i + 1}`) : "";
 	const wb = t.wordBank, id = t.id, lab = (i) => !wb || wb.label === "none" ? "" : (wb.label === "upper" ? "ABCDEFGHIJ" : "abcdefghij")[i] + ".";
 	const wbst = wb.placement !== "right" && wb.w ? ` style="width:${wb.w}%;justify-self:${JS[wb.align || "center"]}"` : "";
 	if (wb.kind === "image") {
@@ -18240,7 +18363,7 @@ function g4Html(t) {
 			ar: wb.ar || "1/1"
 		}), wb.frame)}${w && wb.cap !== false ? `<span>${er(w)}</span>` : ""}</div>`).join("")}</div>`;
 	}
-	return wb.style === "list" ? `<div class="g4 wlist" data-node="${id}:G4"${wbst}>${wb.words.map((w, i) => `<div class="wi">${lab(i) ? `<i>${lab(i)}</i>` : ""}<span>${er(w)}</span></div>`).join("")}</div>` : `<div class="g4" data-node="${id}:G4"${wbst}>${wb.words.map((w) => `<span>${er(w)}</span>`).join("")}</div>`;
+	return wb.style === "list" ? `<div class="g4 wlist" data-node="${id}:G4"${wbst}>${wb.words.map((w, i) => `<div class="wi">${lab(i) ? `<i>${lab(i)}</i>` : ""}<span${fa(i)}>${er(w)}</span></div>`).join("")}</div>` : `<div class="g4" data-node="${id}:G4"${wbst}>${wb.words.map((w, i) => `<span${fa(i)}>${er(w)}</span>`).join("")}</div>`;
 }
 function body(t, L, frag, first, last) {
 	const h = body0(t, L, frag, first), wb = t.wordBank;
@@ -18291,6 +18414,7 @@ function body0n(t, L, frag, first) {
 		c.rows.some((r) => r.cells.some((x) => x === ""));
 		const rhmm = o.minH ?? 12;
 		const tkey = !!(t.layout.table || {}).key;
+		const wsg = !!wsFind(t);
 		const cellHtml = (v, sk) => typeof v === "string" ? v.includes("\n") ? `<span class="tml">${v.split("\n").filter((l) => l.trim()).map((l) => `<span>${er(l)}</span>`).join("")}</span>` : er(v) : v && v.ans != null ? (t.layout.table || {}).key ? `<span class="tka">${er(v.ans)}</span>` : "" : v && v.tick ? v.text ? `<span class="tkc"><span class="a a5${tkey && v.ok ? " pk" : ""}"></span><span>${er(v.text)}</span></span>` : `<span class="a a5${tkey && v.ok ? " pk" : ""}"></span>` : v && v.img ? v.text ? `<span class="cix">${sk ? tpic(t, sk, v.img, "sm") : pic(v.img, "sm")}<span>${er(v.text)}</span></span>` : sk ? tpic(t, sk, v.img, "sm") : pic(v.img, "sm") : "";
 		const rowsOut = [];
 		if (showHead) rowsOut.push({
@@ -18318,7 +18442,7 @@ function body0n(t, L, frag, first) {
 				let bd = isRH && v && typeof v === "object" ? `<span class="rhx">${sk ? tpic(t, sk, v.img, "sm") : pic(v.img, "sm")}<span>${esc(v.text || "")}</span></span>` : cellHtml(v, sk);
 				if (tsl && v && v.tick) bd = bd.replace(/(<span class="a a5[^"]*")/, `$1${slotAt(tsl)}`);
 				if (o.nm === "in" && ci2 === 0 && !r.head) bd = `<span class="nin"><span class="ino">${r.i + 1}</span><span class="nib">${bd}</span></span>`;
-				return `<div class="${r.head ? "th" : "tc"}${isRH ? " rh" : ""}${cc}" data-rk="${rk}"${rst} ${r.head ? "" : `data-node="${id}:G2"`}${tsl && !(v && v.tick) ? slotAt(tsl) : ""}>${bd}</div>`;
+				return `<div class="${r.head ? "th" : "tc"}${isRH ? " rh" : ""}${cc}" data-rk="${rk}"${rst} ${r.head ? "" : `data-node="${id}:G2"`}${wsg && !r.head && !isRH ? ` data-rc="${r.i},${ci2 - (rh ? 1 : 0)}"` : ""}${tsl && !(v && v.tick) ? slotAt(tsl) : ""}>${bd}</div>`;
 			}).join("");
 		}).join("");
 		return `<div class="body b1">${withBank(`<div class="g2 tg" data-node="${id}:G2" data-ln="${o.lines}" data-al="${o.align}" style="--tcols:${tpl};--nmw:${o.num ? "var(--gut)" : "0px"};--rh:${rhmm}mm;--ta:${ta}${o.rows === "equal" && nBody ? `;grid-template-rows:${showHead ? "auto " : ""}repeat(${nBody},1fr)` : ""}">${out}</div>`)}</div>`;
@@ -18338,7 +18462,7 @@ function body0n(t, L, frag, first) {
 		let rows = hd;
 		for (let i = 0; i < n; i++) {
 			const lx = Ls[i], l = lx && lx.pair.l, rx = Rs[pm[i]], r = rx && rx.pair.r, it = { id: (lx || rx).id };
-			rows += `<div class="ml" data-node="${id}:G2">${l ? inoN(t, c.items.indexOf(lx)) : ""}${l ? l.img ? tpic(t, "@" + lx.id, l.img, "sm") : `<span>${er(l.text)}</span>` : ""}</div>` + mdH(l, r, it) + `<div class="mr" data-node="${id}:G2">${r ? `<span>${er(r.text)}</span>` : ""}</div>`;
+			rows += `<div class="ml" data-node="${id}:G2">${l ? inoN(t, c.items.indexOf(lx)) : ""}${l ? l.img ? tpic(t, "@" + lx.id, l.img, "sm") : `<span>${er(l.text)}</span>` : ""}</div>` + mdH(l, r, it) + `<div class="mr" data-node="${id}:G2"${r ? ` data-opt="${rx.id}"` : ""}>${r ? `<span>${er(r.text)}</span>` : ""}</div>`;
 		}
 		return `<div class="body b1">${withBank(`<div class="mrows">${rows}</div>`).replace("<div class=\"wbwrap\"", "<div class=\"wbwrap wbm\"")}</div>`;
 	}
@@ -18348,7 +18472,7 @@ function body0n(t, L, frag, first) {
 		let rows = hd;
 		for (let i = 0; i < n; i++) {
 			const pr = c.items[i].pair || {}, l = pr.l, r = pr.r, it = { id: c.items[i].id };
-			rows += `<div class="ml" data-node="${id}:G2">${l ? inoN(t, i) : ""}${l ? l.img ? tpic(t, "@" + c.items[i].id, l.img, "sm") : `<span>${er(l.text)}</span>` : ""}</div>` + mdH(l, r, it) + `<div class="mr" data-node="${id}:G2">${r ? `<span>${er(r.text)}</span>` : ""}</div>`;
+			rows += `<div class="ml" data-node="${id}:G2">${l ? inoN(t, i) : ""}${l ? l.img ? tpic(t, "@" + c.items[i].id, l.img, "sm") : `<span>${er(l.text)}</span>` : ""}</div>` + mdH(l, r, it) + `<div class="mr" data-node="${id}:G2"${r ? ` data-opt="${c.items[i].id}"` : ""}>${r ? `<span>${er(r.text)}</span>` : ""}</div>`;
 		}
 		return `<div class="body b1">${withBank(`<div class="mrows">${rows}</div>`).replace("<div class=\"wbwrap\"", "<div class=\"wbwrap wbm\"")}</div>`;
 	}
@@ -18383,7 +18507,7 @@ function body0n(t, L, frag, first) {
 		const block = t.answer.attach === "block";
 		const g2 = `${leadIntro(t)}<div class="g2 list" data-node="${id}:G2">${qs.map(([q, i]) => q.gt ? g3row(t, q) : `<div class="q">${inoT(t, i)}<div class="qb"><div class="qt">${qwho(q)}${qtext(t, q)}</div>${t.answer.attach === "item" ? ans(t, q) : ""}</div></div>`).join("")}</div>`;
 		const g3 = block ? `<div class="g3 list" data-node="${id}:G3" style="--cols:1">${qs.map(([q, i]) => q.gt ? "" : `<div class="q">${inoT(t, i)}<div class="qb">${ans(t, q)}</div></div>`).join("")}</div>` : "";
-		return place(L, g1, withBank(g2) + g3);
+		return place$1(L, g1, withBank(g2) + g3);
 	}
 	if (k === "passage") {
 		const cut = passCut(t, L), PP = cut ? passageParas(t).length : 0;
@@ -18401,11 +18525,11 @@ function body0n(t, L, frag, first) {
 		if (L === "T8" && !first) return `<div class="body b1">${g3}</div>`;
 		if (L === "T8" && g1) return `<div class="body b1">${g4}<div class="wrapbox">${g1}${g2}</div>${g3}</div>`;
 		if (L === "T4") return `<div class="body b1">${g1}${g4}<div class="tbl tbl2" style="align-items:start"><div class="c2">${g2}</div><div>${g3}</div></div></div>`;
-		return place(L, g1, t.layout.order === "qfirst" ? g3 + withBank(g2) : withBank(g2) + g3);
+		return place$1(L, g1, t.layout.order === "qfirst" ? g3 + withBank(g2) : withBank(g2) + g3);
 	}
 	return "";
 }
-function place(L, g1, main) {
+function place$1(L, g1, main) {
 	if (!g1 || L === "T1" || L === "T6") return `<div class="body b1">${g1}${main}</div>`;
 	if (L === "T2") return `<div class="body b2"><div class="col colL colI">${g1}</div><div class="col">${main}</div></div>`;
 	if (L === "T3") return `<div class="body b3"><div class="col colL">${main}</div><div class="col colI">${g1}</div></div>`;
@@ -18899,6 +19023,24 @@ try {
 	});
 } catch (_) {}
 try {
+	Object.defineProperty(window, "IMW", {
+		configurable: true,
+		get: () => IMW
+	});
+} catch (_) {}
+try {
+	Object.defineProperty(window, "imgRowN", {
+		configurable: true,
+		get: () => imgRowN$1
+	});
+} catch (_) {}
+try {
+	Object.defineProperty(window, "imgW", {
+		configurable: true,
+		get: () => imgW
+	});
+} catch (_) {}
+try {
 	Object.defineProperty(window, "cellCfg", {
 		configurable: true,
 		get: () => cellCfg$1
@@ -19355,6 +19497,12 @@ try {
 	});
 } catch (_) {}
 try {
+	Object.defineProperty(window, "wsFind", {
+		configurable: true,
+		get: () => wsFind
+	});
+} catch (_) {}
+try {
 	Object.defineProperty(window, "g4Html", {
 		configurable: true,
 		get: () => g4Html
@@ -19393,7 +19541,7 @@ try {
 try {
 	Object.defineProperty(window, "place", {
 		configurable: true,
-		get: () => place
+		get: () => place$1
 	});
 } catch (_) {}
 try {
@@ -20362,7 +20510,7 @@ function readJson(raw) {
 		tasks
 	};
 }
-var MD_FIELD = /^\s*(hướng dẫn|instruction|track|audio|mẫu|trả lời|answer type|dòng viết|khung từ ảnh|khung từ|đáp án chỗ trống|gap answers|words?|word bank|ảnh chung|ảnh|image|lời dẫn|intro|ghi chú|lưu ý|note|dạng|bố cục|vị trí khung từ|dòng kẻ|thứ tự|khối chữ trên|khối chữ dưới|khối chữ|khối ảnh trên|khối ảnh dưới|khối ảnh|điểm trên ảnh|chữ câu hỏi|số câu|căn lề chữ|xáo vế phải|viền hai vế|tiêu đề cột|chỗ nối)\s*:\s*(.*)$/i;
+var MD_FIELD = /^\s*(hướng dẫn|instruction|track|audio|mẫu|trả lời|answer type|dòng viết|khung từ ảnh|khung từ|đáp án chỗ trống|gap answers|words?|word bank|ảnh chung|ảnh|image|lời dẫn|intro|ghi chú|lưu ý|note|dạng|bố cục|vị trí khung từ|dòng kẻ|thứ tự|khối chữ trên|khối chữ dưới|khối chữ|khối ảnh trên|khối ảnh dưới|khối ảnh|điểm trên ảnh|chữ câu hỏi|số câu|căn lề chữ|xáo vế phải|viền hai vế|tiêu đề cột|chỗ nối|kích thước ảnh|ảnh vừa ô|phân biệt viết tắt)\s*:\s*(.*)$/i;
 var MD_FKEY = {
 	"hướng dẫn": "instruction",
 	instruction: "instruction",
@@ -20405,7 +20553,10 @@ var MD_FKEY = {
 	"xáo vế phải": "shuf",
 	"viền hai vế": "mbd",
 	"tiêu đề cột": "heads",
-	"chỗ nối": "mid"
+	"chỗ nối": "mid",
+	"kích thước ảnh": "imgPct",
+	"ảnh vừa ô": "imgFit",
+	"phân biệt viết tắt": "strictc"
 };
 var MD_FORM = {
 	"điền từ": "Q1",
@@ -21158,6 +21309,21 @@ function mdTask(b, keys) {
 		else if (/^(không|none)/i.test(F.mid.trim())) t.answer.params.mid = "none";
 		else if (!/^(chấm|dot)/i.test(F.mid.trim())) notes.push(`không hiểu "Chỗ nối: ${F.mid}" (chấm / ô viết chữ / không)`);
 	}
+	if (F.strictc) {
+		if (/^(có|bật|yes|on)$/i.test(F.strictc)) t.answer.params.strictContr = true;
+		else if (!/^(không|tắt|no|off)$/i.test(F.strictc)) notes.push(`không hiểu "Phân biệt viết tắt: ${F.strictc}" (có / không)`);
+	}
+	if (F.imgPct) {
+		const m = /^(\d{2,3})\s*%?$/.exec(F.imgPct.trim());
+		if (!imgRowN$1(t)) notes.push("“Kích thước ảnh” chỉ dùng cho bài có ảnh theo câu (nhìn ảnh viết, chọn ảnh)");
+		else if (m && +m[1] >= 50 && +m[1] <= 150) t.layout.imgPct = +m[1];
+		else notes.push(`không hiểu "Kích thước ảnh: ${F.imgPct}" (50% – 150%)`);
+	}
+	if (F.imgFit) {
+		if (!imgRowN$1(t)) notes.push("“Ảnh vừa ô” chỉ dùng cho bài có ảnh theo câu");
+		else if (/^(có|bật|yes|on)$/i.test(F.imgFit)) t.layout.imgFit = true;
+		else if (!/^(không|tắt|no|off)$/i.test(F.imgFit)) notes.push(`không hiểu "Ảnh vừa ô: ${F.imgFit}" (có / không)`);
+	}
 	if (F.mbd) {
 		if (ck$3(t) !== "pairs") notes.push("“Viền hai vế” chỉ dùng cho bài nối");
 		else if (/^(có|bật|yes|on)$/i.test(F.mbd)) t.layout.mbd = "on";
@@ -21235,6 +21401,9 @@ function taskToMd(t, asPart) {
 	if (taOf$1(t) !== "left") o.push("Căn lề chữ: " + TA$1.find((y) => y[0] === taOf$1(t))[1].toLowerCase());
 	if (k === "pairs" && c.shuffle) o.push("Xáo vế phải: có");
 	if (k === "pairs" && t.layout.mbd === "on") o.push("Viền hai vế: có");
+	if ((a.params || {}).strictContr) o.push("Phân biệt viết tắt: có");
+	if (imgRowN$1(t) && t.layout.imgFit) o.push("Ảnh vừa ô: có");
+	else if (imgRowN$1(t) && t.layout.imgPct && t.layout.imgPct !== 100) o.push(`Kích thước ảnh: ${t.layout.imgPct}%`);
 	if (k === "pairs" && c.heads && c.heads.some(Boolean)) o.push("Tiêu đề cột: " + c.heads.join(" | "));
 	if (k === "pairs" && (a.params || {}).mid === "box") o.push("Chỗ nối: ô viết chữ");
 	else if (k === "pairs" && (a.params || {}).mid === "none") o.push("Chỗ nối: không");
@@ -21734,6 +21903,11 @@ function qCmd(t, act, v) {
 		else if (k === "ln") q2set(t, { lines: c.lines + +x });
 		const n = q2cfg$1(t);
 		return `Q2: ${n.start === "end" ? "từ cuối câu" : "dòng dưới"} · ${n.len === "fill" ? "hết dòng" : n.mm + " mm"} · ${n.lines} hàng`;
+	}
+	if (act === "strictc") {
+		if (v === "1") t.answer.params.strictContr = true;
+		else delete t.answer.params.strictContr;
+		return v === "1" ? "Phân biệt viết tắt: I'm ≠ I am" : "Không phân biệt viết tắt: I'm = I am";
 	}
 	if (act === "tfrow") {
 		if (v === "1") t.answer.params.row = true;
@@ -22835,6 +23009,21 @@ function qOpts(t, side) {
 			})]
 		})]
 	}, "ha"));
+	if (ha && (["word", "sentence"].includes(t.answer.kind) || ck$2(t) === "passage" && gapCount$1(leadText(t) || "") || tbl && !(t.layout.table || {}).cross)) h.push(/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "field",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Phân biệt viết tắt" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "seg",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				...A("strictc", "0"),
+				className: p.strictContr ? "" : "on",
+				children: "Không (I'm = I am)"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				...A("strictc", "1"),
+				className: p.strictContr ? "on" : "",
+				children: "Có"
+			})]
+		})]
+	}, "sc"));
 	if (st.length > 1) h.push(/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "field",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Cách trả lời" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -22965,7 +23154,7 @@ function qOpts(t, side) {
 	return h;
 }
 // src/ui/insp/panels.tsx
-var { A2MM, FSZ, IW8, T7CW, TA, TBL_DEF, TBL_ROW_MM, a2cfg, a4autoDef, cellCfg, cellDirOf, colsDefault, colsOf, colsRange, fitOf, fontPt, frOf, frameH, g1bFr, gtKeys, gtN, inheritedSpacing, isColI, layoutOf, qOf: qOf$1, ratioOf, rmeta, sheetSpacing, sizeKey, spacingOf, taOf, tblOpts: tblOpts$1 } = layout_exports;
+var { A2MM, FSZ, IW8, imgRowN, T7CW, TA, TBL_DEF, TBL_ROW_MM, a2cfg, a4autoDef, cellCfg, cellDirOf, colsDefault, colsOf, colsRange, fitOf, fontPt, frOf, frameH, g1bFr, gtKeys, gtN, inheritedSpacing, isColI, layoutOf, qOf: qOf$1, ratioOf, rmeta, sheetSpacing, sizeKey, spacingOf, taOf, tblOpts: tblOpts$1 } = layout_exports;
 var { AGE, FONTS, GT_SIZE, PRESETS, QN: QN$1, SIZES, ck: ck$1, its: its$1 } = model_exports;
 var { PRESET_NAME } = md_exports;
 var W$1 = () => ws;
@@ -23009,6 +23198,14 @@ function taskParts(t, sl) {
 		for (let c = cr[0]; c <= cr[1]; c++) opts.push([c, c]);
 		size.push(fSeg("cols", "Số cột", lay.cols, opts, Math.min(cr[1], Math.max(cr[0], colsDefault(t, Lt)))));
 	}
+	if (imgRowN(t)) size.push(fRange("@imgPct", "Kích thước ảnh (cả khối)", lay.imgPct, {
+		min: 50,
+		max: 150,
+		step: 5,
+		def: 100,
+		fmt: pct,
+		fmtKey: "zoom"
+	}), fSeg("@imgFit", "Vừa ô", lay.imgFit ? true : false, [[false, "Theo số ảnh trên hàng"], [true, "Fit ô"]], false, { hint: `Mặc định ${imgRowN(t)} ảnh trên hàng: rộng ${IMW[imgRowN(t)] ?? Math.round(182 / imgRowN(t) - 6)} mm. Fit ô: ảnh và dòng viết khít bề ngang ô. Ảnh chỉnh độ rộng riêng thì giữ nguyên.` }));
 	if (Lt === "T5" && !row && colsOf(t) > 1) size.push(fNum("colGap", "Khoảng cách giữa các cột", lay.colGap, {
 		min: 2,
 		max: 20,
@@ -23561,12 +23758,13 @@ function answerPanel(t, sl, key) {
 		["top", "Trên"],
 		["center", "Giữa"],
 		["bottom", "Dưới"]
-	], "center", { hint: "Áp cho mọi câu của Task: số câu, chữ câu và ô T / F." }), fNum("tfx", "T / F cách lề phải", p.tfx, {
-		min: 0,
-		max: 140,
-		step: 1,
-		unit: "mm",
-		def: 0
+	], "center", { hint: "Áp cho mọi câu của Task: số câu, chữ câu và ô T / F." }), fRange("tfp", "Tỉ lệ câu / T-F", p.tfp, {
+		min: 50,
+		max: 90,
+		step: 5,
+		def: 80,
+		fmt: splitFmt,
+		fmtKey: "split"
 	}));
 	if (!key) content.push(/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 		className: "hint",
@@ -24073,6 +24271,337 @@ function Inspector() {
 	const rev = useUi((s) => s.inspRev);
 	return rev ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Fragment, { children: inspView() }, rev) : null;
 }
+// ../shared/src/normalize.ts
+var PRON = [
+	"i",
+	"you",
+	"we",
+	"they",
+	"he",
+	"she",
+	"it"
+];
+var CONTRACTIONS = {
+	"i'm": "i am",
+	"you're": "you are",
+	"we're": "we are",
+	"they're": "they are",
+	"isn't": "is not",
+	"aren't": "are not",
+	"wasn't": "was not",
+	"weren't": "were not",
+	"don't": "do not",
+	"doesn't": "does not",
+	"didn't": "did not",
+	"haven't": "have not",
+	"hasn't": "has not",
+	"hadn't": "had not",
+	"can't": "cannot",
+	"couldn't": "could not",
+	"won't": "will not",
+	"wouldn't": "would not",
+	"shouldn't": "should not",
+	"mustn't": "must not",
+	"needn't": "need not",
+	"shan't": "shall not",
+	"let's": "let us",
+	...Object.fromEntries([
+		"he",
+		"she",
+		"it",
+		"that",
+		"there",
+		"here",
+		"what",
+		"who",
+		"where",
+		"when",
+		"how",
+		"why"
+	].map((w) => [`${w}'s`, `${w} is`])),
+	...Object.fromEntries([
+		...PRON,
+		"who",
+		"that",
+		"there"
+	].map((w) => [`${w}'ll`, `${w} will`])),
+	...Object.fromEntries([
+		"i",
+		"you",
+		"we",
+		"they"
+	].map((w) => [`${w}'ve`, `${w} have`])),
+	...Object.fromEntries([
+		"i",
+		"you",
+		"he",
+		"she",
+		"we",
+		"they"
+	].map((w) => [`${w}'d`, `${w} would`]))
+};
+var CONTR_RE = new RegExp(`(^|[^a-z'])(${Object.keys(CONTRACTIONS).map((k) => k.replace(/'/g, "'")).join("|")})(?![a-z'])`, "gi");
+function expandContr(x) {
+	return x.replace(CONTR_RE, (_m, pre, w) => {
+		const f = CONTRACTIONS[w.toLowerCase()];
+		return pre + (w[0] !== w[0].toLowerCase() ? f[0].toUpperCase() + f.slice(1) : f);
+	}).replace(/\b([Cc])an not\b/g, "$1annot");
+}
+var EDGE_PUNCT = /^[\s.,!?;:]+|[\s.,!?;:]+$/g;
+function normalize(s, o = {}) {
+	let x = String(s ?? "").normalize("NFC");
+	if (!o.caseSensitive) x = x.toLowerCase();
+	x = x.replace(/[‘’ʼ`´]/g, "'").replace(/[“”„]/g, "\"");
+	if (!o.strictContr) x = expandContr(x);
+	x = x.replace(/[-‐-―−]/g, " ");
+	if (o.ignorePunct) x = x.replace(/[.,!?;:"()]/g, " ");
+	x = x.replace(/\s+/g, " ").trim();
+	x = x.replace(EDGE_PUNCT, "");
+	return x.replace(/\s+/g, " ").trim();
+}
+var PUNCT_ONLY = /^[\s.,!?;:'"()…‘’ʼ`´“”„\-‐-―−]+$/;
+var punctOf = (s) => String(s ?? "").normalize("NFC").replace(/[‘’ʼ`´]/g, "'").replace(/[“”„]/g, "\"").replace(/[‐-―−]/g, "-").replace(/…/g, "...").replace(/\s+/g, "");
+var punctOnly = (s) => PUNCT_ONLY.test(String(s ?? ""));
+function sameText(a, b, o = {}) {
+	if (punctOnly(a) || punctOnly(b)) return punctOf(a) === punctOf(b);
+	return normalize(a, o) === normalize(b, o);
+}
+// ../shared/src/suggest.ts
+var PAIRS = [
+	["colour", "color"],
+	["colours", "colors"],
+	["favourite", "favorite"],
+	["centre", "center"],
+	["theatre", "theater"],
+	["metre", "meter"],
+	["grey", "gray"],
+	["neighbour", "neighbor"],
+	["honour", "honor"],
+	["travelling", "traveling"],
+	["travelled", "traveled"],
+	["organise", "organize"],
+	["realise", "realize"],
+	["programme", "program"],
+	["mum", "mom"],
+	["maths", "math"],
+	["jewellery", "jewelry"],
+	["cheque", "check"],
+	["pyjamas", "pajamas"],
+	["ok", "okay"],
+	["tv", "television"],
+	["photo", "photograph"],
+	["bike", "bicycle"],
+	["fridge", "refrigerator"],
+	["phone", "telephone"],
+	["plane", "aeroplane"]
+];
+var NUM = [
+	"zero",
+	"one",
+	"two",
+	"three",
+	"four",
+	"five",
+	"six",
+	"seven",
+	"eight",
+	"nine",
+	"ten",
+	"eleven",
+	"twelve",
+	"thirteen",
+	"fourteen",
+	"fifteen",
+	"sixteen",
+	"seventeen",
+	"eighteen",
+	"nineteen",
+	"twenty"
+];
+var ORD = [
+	"",
+	"first",
+	"second",
+	"third",
+	"fourth",
+	"fifth",
+	"sixth",
+	"seventh",
+	"eighth",
+	"ninth",
+	"tenth"
+];
+var sfx = (n) => n % 10 === 1 && n !== 11 ? "st" : n % 10 === 2 && n !== 12 ? "nd" : n % 10 === 3 && n !== 13 ? "rd" : "th";
+var WORDS = [
+	...PAIRS,
+	...NUM.map((w, i) => [w, String(i)]),
+	...ORD.slice(1).map((w, i) => [w, `${i + 1}${sfx(i + 1)}`])
+];
+var RULES = [
+	[/\b(he|she|it|who|what|where|that|there)['’]s\b/gi, "$1 has"],
+	[/\b(i|you|he|she|we|they)['’]d\b/gi, "$1 had"],
+	[/\b(he|she|it|who|what|that|there) has\b/gi, "$1's"],
+	[/\b(i|you|he|she|we|they) had\b/gi, "$1'd"],
+	[/\bname is\b/gi, "name's"],
+	[/\bname['’]s\b/gi, "name is"]
+];
+var cap = (src, w) => src[0] !== src[0].toLowerCase() ? w[0].toUpperCase() + w.slice(1) : w;
+function variants(a) {
+	const out = [];
+	for (const [x, y] of WORDS) for (const [p, q] of [[x, y], [y, x]]) {
+		const re = new RegExp(`(^|[^\\p{L}\\p{N}])(${p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})(?![\\p{L}\\p{N}])`, "giu");
+		if (re.test(a)) out.push(a.replace(re, (_m, pre, w) => pre + cap(w, q)));
+	}
+	for (const [re, to] of RULES) {
+		re.lastIndex = 0;
+		if (re.test(a)) {
+			re.lastIndex = 0;
+			out.push(a.replace(re, to));
+		}
+	}
+	if (/\p{L}-\p{L}/u.test(a)) out.push(a.replace(/(\p{L})-(\p{L})/gu, "$1$2"));
+	return out;
+}
+function suggest(key, no = []) {
+	const alts = String(key ?? "").split(/\s+\/\s+/).map((x) => x.trim()).filter(Boolean), out = [];
+	for (const a of alts) for (const v of variants(a)) {
+		if (alts.some((b) => sameText(b, v)) || out.some((b) => sameText(b, v)) || no.some((b) => b === v)) continue;
+		out.push(v);
+	}
+	return out.slice(0, 4);
+}
+// src/core/answers.js
+function itemKeys0(t) {
+	const k = ck$3(t);
+	if (k === "table" || k === "empty") return [];
+	if (k === "dialogue") return its$2(t).filter((x) => (x.text || "").includes("___")).map((x) => x.id);
+	if (k === "pairs") return its$2(t).filter((x) => x.pair && x.pair.l).map((x) => x.id);
+	return its$2(t).map((x) => x.id);
+}
+function itemKeys(t) {
+	const g = new Set(its$2(t).filter((x) => x.gt).map((x) => x.id));
+	return itemKeys0(t).filter((id) => !g.has(id));
+}
+function optsOfKey(t, x) {
+	if (x.imgs) return x.imgs;
+	if (x.opts) return x.opts;
+	if (t.answer.layout === "A6") return [...ans0(t, x).matchAll(/<span>([^<]*)<\/span>/g)].map((m) => m[1]);
+	return [];
+}
+var gapN = (x) => (pkSrc$1(x).match(/___/g) || []).length;
+function needKey(t, x) {
+	if (!x || x.gt) return false;
+	const k = ck$3(t), a = t.answer;
+	if ([
+		"table",
+		"empty",
+		"trace"
+	].includes(k) || ["none", "trace"].includes(a.kind) || isFreeW(t)) return false;
+	if (k === "pairs") return !!(x.pair && x.pair.l && x.pair.r);
+	if (k === "dialogue") return !!x.ex || /___|\{[^{}|]+\|/.test(x.text || "");
+	return true;
+}
+function hasKey(t, x) {
+	if (ck$3(t) === "pairs") return !!t.content.shuffle;
+	if (!x.opts && !x.imgs && gapN(x) > 1) {
+		const g = keyGaps$1(x);
+		return Array.from({ length: gapN(x) }, (_, j) => g[j] || "").every(Boolean);
+	}
+	const gs = x.opts || x.imgs ? [] : pkGroups$1(x);
+	if (gs.length) return gs.every((g) => g.some((o) => o.ok)) || String(x.key ?? "").trim() !== "";
+	const op = optsOfKey(t, x);
+	if ((x.opts || x.imgs || t.answer.layout === "A6") && op.length > 1) return exPicks$1(t, x, op).length > 0;
+	return String(x.key ?? "").trim() !== "";
+}
+function keyState(t) {
+	const need = [], miss = [];
+	its$2(t).forEach((x, i) => {
+		if (needKey(t, x)) {
+			need.push(i);
+			if (!hasKey(t, x)) miss.push(i);
+		}
+	});
+	return {
+		need,
+		miss
+	};
+}
+try {
+	Object.defineProperty(window, "itemKeys0", {
+		configurable: true,
+		get: () => itemKeys0
+	});
+} catch (_) {}
+try {
+	Object.defineProperty(window, "itemKeys", {
+		configurable: true,
+		get: () => itemKeys
+	});
+} catch (_) {}
+try {
+	Object.defineProperty(window, "optsOfKey", {
+		configurable: true,
+		get: () => optsOfKey
+	});
+} catch (_) {}
+try {
+	Object.defineProperty(window, "gapN", {
+		configurable: true,
+		get: () => gapN
+	});
+} catch (_) {}
+try {
+	Object.defineProperty(window, "needKey", {
+		configurable: true,
+		get: () => needKey
+	});
+} catch (_) {}
+try {
+	Object.defineProperty(window, "hasKey", {
+		configurable: true,
+		get: () => hasKey
+	});
+} catch (_) {}
+try {
+	Object.defineProperty(window, "keyState", {
+		configurable: true,
+		get: () => keyState
+	});
+} catch (_) {}
+// src/core/sug.js
+var sugOf = (t, x, k, v) => (t.answer.params || {}).strictContr ? [] : suggest(String(v ?? ""), (x.sugNo || []).filter((y) => y.startsWith(k + ":")).map((y) => y.slice(k.length + 1)));
+function allSug(t) {
+	if (!["word", "sentence"].includes(t.answer.kind)) return [];
+	const out = [];
+	its$2(t).forEach((x, i) => {
+		if (!x || x.gt || x.pair || x.opts || x.imgs) return;
+		if (gapN(x) > 1) keyGaps$1(x).forEach((v, j) => sugOf(t, x, `it.${i}.keyg.${j}`, v).forEach((g) => out.push([
+			i,
+			`it.${i}.keyg.${j}`,
+			v,
+			g
+		])));
+		else sugOf(t, x, `it.${i}.key`, x.key).forEach((g) => out.push([
+			i,
+			`it.${i}.key`,
+			x.key,
+			g
+		]));
+	});
+	return out;
+}
+try {
+	Object.defineProperty(window, "sugOf", {
+		configurable: true,
+		get: () => sugOf
+	});
+} catch (_) {}
+try {
+	Object.defineProperty(window, "allSug", {
+		configurable: true,
+		get: () => allSug
+	});
+} catch (_) {}
 // src/ui/tree/Tree.tsx
 var { AR_OPTS, exPick, exPicks, fixedImg, imgArOf, keyGaps, qOf, qnum, qrInner, qrUrl, srcOf, tblAr, tblOpts } = layout_exports;
 var { QN, ck, gapCount, its, pkGroups, pkSrc } = model_exports;
@@ -24080,6 +24609,35 @@ var { TN, brOut, crossLines, fmtCell, tnOf } = md_exports;
 var W = () => ws;
 var ABC = "abcdefgh";
 var abc = (j) => ABC[j] || j + 1;
+function Sug({ t, x, i, k, v }) {
+	const g = sugOf(t, x, k, v);
+	if (!g.length) return null;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+		className: "esug",
+		title: "Gợi ý cách viết khác (máy chấm chỉ nhận khi bạn thêm vào)",
+		children: g.map((y) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+			className: "sgc",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				type: "button",
+				"data-eact": "sugadd",
+				"data-i": i,
+				"data-k": k,
+				"data-v": y,
+				children: `+ ${y}`
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				type: "button",
+				className: "sgx",
+				"data-eact": "sugno",
+				"data-i": i,
+				"data-k": k,
+				"data-v": y,
+				title: "Bỏ gợi ý này",
+				"aria-label": `Bỏ gợi ý ${y}`,
+				children: "×"
+			})]
+		}, y))
+	});
+}
 function eIn(k, v, ph, o = {}) {
 	return o.area ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
 		"data-k": k,
@@ -24642,17 +25200,37 @@ function edItems(t) {
 							})]
 						}, j) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
 							className: "kg",
-							children: [lb, E(`it.${i}.keyg.${j}`, v, "đáp án", { label: `Đáp án chỗ trống ${j + 1} câu ${i + 1}` })]
+							children: [
+								lb,
+								E(`it.${i}.keyg.${j}`, v, "đáp án", { label: `Đáp án chỗ trống ${j + 1} câu ${i + 1}` }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sug, {
+									t,
+									x,
+									i,
+									k: `it.${i}.keyg.${j}`,
+									v
+								})
+							]
 						}, j);
 					})
 				})]
 			}, "key"));
 		} else if (need && !x.pair && !(x.imgs && a.layout === "A5") && !x.opts && !(a.layout === "A6" && L.optsOfKey(t, x).length > 1)) f.push(/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "er2",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: "elb",
-				children: "Đáp án"
-			}), E(`it.${i}.key`, x.key || "", "đáp án đúng", { label: `Đáp án đúng câu ${i + 1}` })]
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "elb",
+					children: "Đáp án"
+				}),
+				E(`it.${i}.key`, x.key || "", "đáp án đúng", { label: `Đáp án đúng câu ${i + 1}` }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sug, {
+					t,
+					x,
+					i,
+					k: `it.${i}.key`,
+					v: x.key
+				})
+			]
 		}, "key"));
 		const al = L.ansLabel(x);
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -24749,6 +25327,12 @@ function edItems(t) {
 					"data-eact": "add",
 					children: `+ Thêm ${noun}`
 				}),
+				allSug(t).length >= 3 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "btn",
+					"data-eact": "sugall",
+					title: "Thêm mọi gợi ý cách viết khác của Task này vào đáp án",
+					children: `Nhận tất cả gợi ý (${allSug(t).length})`
+				}) : null,
 				exOk && ["questions", "dialogue"].includes(k) ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 					className: "btn",
 					"data-eact": "gtiadd",
@@ -26278,21 +26862,6 @@ function GenDlg() {
 		})
 	});
 }
-// ../shared/src/normalize.ts
-var EDGE_PUNCT = /^[\s.,!?;:]+|[\s.,!?;:]+$/g;
-function normalize(s, o = {}) {
-	let x = String(s ?? "").normalize("NFC");
-	if (!o.caseSensitive) x = x.toLowerCase();
-	x = x.replace(/[‘’ʼ`´]/g, "'").replace(/[“”„]/g, "\"");
-	x = x.replace(/[-‐-―−]/g, " ");
-	if (o.ignorePunct) x = x.replace(/[.,!?;:"()]/g, " ");
-	x = x.replace(/\s+/g, " ").trim();
-	x = x.replace(EDGE_PUNCT, "");
-	return x.replace(/\s+/g, " ").trim();
-}
-function sameText(a, b, o = {}) {
-	return normalize(a, o) === normalize(b, o);
-}
 // ../shared/src/grade.ts
 var isBlank = (v) => v == null || (Array.isArray(v) ? v.length === 0 : String(v).trim() === "");
 function gradeSlot(slot, k, v) {
@@ -26329,13 +26898,18 @@ function gradeSlot(slot, k, v) {
 		case "cell": {
 			const o = {
 				caseSensitive: k.caseSensitive,
-				ignorePunct: k.ignorePunct
+				ignorePunct: k.ignorePunct,
+				strictContr: k.strictContr
 			};
 			return (k.accept || []).some((a) => sameText(v, a, o)) ? ok("correct", max) : ok("wrong", 0);
 		}
 		case "choice-one":
 		case "match": return String(v) === String(k.correct) ? ok("correct", max) : ok("wrong", 0);
 		case "tf": return sameText(v, k.correct) ? ok("correct", max) : ok("wrong", 0);
+		case "find": {
+			const ends = (x) => String(x ?? "").split("-").map((p) => p.trim()).sort().join("-");
+			return ends(v) === ends(k.correct) ? ok("correct", max) : ok("wrong", 0);
+		}
 		case "choice-many": {
 			const want = new Set([].concat(k.correct ?? []).map(String));
 			const got = new Set([].concat(v).map(String));
@@ -26401,7 +26975,6 @@ function prep(d) {
 }
 // src/viewer/answers.ts
 var SEL$1 = (id) => `[data-ans="${CSS.escape(id)}"]`;
-var norm = (s) => s.replace(/\s+/g, " ").trim().toLowerCase();
 function ansText(k) {
 	if (!k) return null;
 	if (k.accept && k.accept.length) return k.accept[0];
@@ -26460,11 +27033,31 @@ function lineBetween(sec, a, b, cls = "vline") {
 	sec.appendChild(svg);
 	return svg;
 }
-function rightRow(sec, text) {
-	const t = norm(text);
-	if (!t) return null;
-	const rows = [...sec.querySelectorAll(".mr:not(.mh)")], tx = (m) => norm(m.textContent || "");
-	const mr = rows.find((m) => tx(m) === t) || rows.find((m) => /[\s.)]$/.test(tx(m).slice(0, -t.length)) && tx(m).endsWith(t)) || rows.find((m) => tx(m).endsWith(t));
+function capsule(sec, a, b, cls) {
+	sec = a.closest("section.task") || sec;
+	const r = sec.getBoundingClientRect(), k = r.width / sec.offsetWidth || 1;
+	const c = (e) => {
+		const q = e.getBoundingClientRect();
+		return [(q.left + q.width / 2 - r.left) / k, (q.top + q.height / 2 - r.top) / k];
+	};
+	const [x1, y1] = c(a), [x2, y2] = c(b), h = Math.min(a.offsetHeight, a.offsetWidth) * .82, len = Math.hypot(x2 - x1, y2 - y1), ang = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+	const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	svg.setAttribute("class", cls);
+	svg.innerHTML = `<rect x="${x1 - h / 2}" y="${y1 - h / 2}" width="${len + h}" height="${h}" rx="${h / 2}" transform="rotate(${ang} ${x1} ${y1})" />`;
+	sec.appendChild(svg);
+	return svg;
+}
+var rcCell = (sec, x) => {
+	if (!x) return null;
+	return (sec.closest(".vsurf") || sec.parentElement || sec).querySelector(`section.task[data-task="${CSS.escape(sec.dataset.task || "")}"] [data-rc="${CSS.escape(x)}"]`);
+};
+var rcEnds = (sec, v) => {
+	const [a, b] = String(v).split("-");
+	return [rcCell(sec, a), rcCell(sec, b)];
+};
+function rightRow(sec, opt) {
+	if (!opt) return null;
+	const mr = sec.querySelector(`.mr[data-opt="${CSS.escape(opt)}"]`);
 	if (!mr) return null;
 	const md = mr.previousElementSibling, dots = md ? md.querySelectorAll(":scope > .a7:not([data-ans])") : null;
 	return {
@@ -26475,16 +27068,13 @@ function rightRow(sec, text) {
 }
 var rowLabel = (mr) => ((mr.textContent || "").match(/^\s*([A-Za-z0-9]{1,2})[.)]\s/) || [])[1] || "";
 function optOfRow(s, mr) {
-	const x = norm(mr.textContent || "");
-	return (s.options || []).filter((o) => {
-		const t = norm(String(o.text ?? ""));
-		return t && (x === t || x.endsWith(t));
-	}).sort((a, b) => String(b.text).length - String(a.text).length)[0] || null;
+	const id = mr.dataset.opt;
+	return id && (s.options || []).find((o) => o.id === id) || null;
 }
 function showMatch(root, s, els, cid) {
 	const o = (s.options || []).find((x) => x.id === cid);
 	if (!o) return;
-	const left = els[0], sec = left.closest("section.task") || root, r = rightRow(sec, String(o.text ?? ""));
+	const left = els[0], sec = left.closest("section.task") || root, r = rightRow(sec, o.id);
 	if (left.classList.contains("mbx")) {
 		putText(left, r?.letter || String(o.text ?? ""));
 		return;
@@ -26499,6 +27089,12 @@ function showSlot(root, s, key) {
 	if (!k) return;
 	if (s.interaction === "match") {
 		if (typeof k.correct === "string") showMatch(root, s, els, k.correct);
+		return;
+	}
+	if (s.interaction === "find") {
+		const sec = els[0].closest("section.task"), [a, b] = sec ? rcEnds(sec, String(k.correct)) : [null, null];
+		if (sec && a && b) capsule(sec, a, b, "vline vcap");
+		mark(els[0]);
 		return;
 	}
 	if (k.correct != null) {
@@ -26585,6 +27181,32 @@ function saveInk(name, hash, ink) {
 		else localStorage.setItem(LS(name), JSON.stringify({
 			hash,
 			ink
+		}));
+		return true;
+	} catch (_) {
+		return false;
+	}
+}
+var LN = (name) => "wsShow.note:" + name;
+function loadNotes(name, hash) {
+	try {
+		const o = JSON.parse(localStorage.getItem(LN(name)) || "null");
+		return o && o.hash === hash && o.notes && typeof o.notes === "object" ? o.notes : {};
+	} catch (_) {
+		return {};
+	}
+}
+function saveNotes(name, hash, notes) {
+	try {
+		const keep = {};
+		for (const [k, a] of Object.entries(notes)) {
+			const b = a.filter((n) => n.t.trim());
+			if (b.length) keep[k] = b;
+		}
+		if (!Object.keys(keep).length) localStorage.removeItem(LN(name));
+		else localStorage.setItem(LN(name), JSON.stringify({
+			hash,
+			notes: keep
 		}));
 		return true;
 	} catch (_) {
@@ -26727,8 +27349,26 @@ function Timer({ onClose }) {
 		]
 	});
 }
+function snapText(bg, x, y) {
+	if (bg === "lines") return [Math.round(x), Math.max(0, Math.round((y - 55) / 57)) * 57 + 10];
+	if (bg === "grid") return [Math.floor(x / 36) * 36 + 2, Math.floor(y / 36) * 36];
+	return [Math.round(x), Math.max(0, Math.round(y - 22))];
+}
 function Board({ st, setSt, color, width, onClose }) {
 	const [tool, setTool] = (0, import_react.useState)("pen");
+	const [fresh, setFresh] = (0, import_react.useState)(null);
+	const texts = st.texts || [];
+	const snap = () => ({
+		strokes: st.strokes,
+		texts
+	});
+	const setText = (id, t) => setSt({
+		...st,
+		texts: t === null ? texts.filter((x) => x.id !== id) : texts.map((x) => x.id === id ? {
+			...x,
+			t
+		} : x)
+	});
 	const [live, setLive] = (0, import_react.useState)(null);
 	const cur = (0, import_react.useRef)(null), hist = (0, import_react.useRef)([]);
 	const pt = (e) => {
@@ -26737,18 +27377,44 @@ function Board({ st, setSt, color, width, onClose }) {
 	};
 	const erase = (p) => {
 		const keep = st.strokes.filter((s) => !hit(s, p, 14));
-		if (keep.length === st.strokes.length) return;
+		const surf = document.getElementById("boardSurf"), sr = surf?.getBoundingClientRect();
+		const kt = texts.filter((x) => {
+			const el = surf?.querySelector(`[data-bt="${x.id}"]`);
+			if (!el || !sr) return true;
+			const r = el.getBoundingClientRect(), px = p[0] + sr.left, py = p[1] + sr.top;
+			return !(px >= r.left - 6 && px <= r.right + 6 && py >= r.top && py <= r.bottom);
+		});
+		if (keep.length === st.strokes.length && kt.length === texts.length) return;
 		if (!cur.current.erased) {
 			cur.current.erased = true;
-			hist.current.push(st.strokes);
+			hist.current.push(snap());
 		}
 		setSt({
 			...st,
-			strokes: keep
+			strokes: keep,
+			texts: kt
 		});
 	};
 	const down = (e) => {
 		if (e.pointerType === "mouse" && e.button !== 0) return;
+		if (tool === "text") {
+			if (e.target.closest(".vbtx")) return;
+			e.preventDefault();
+			const [x, y] = snapText(st.bg, ...pt(e)), id = "b" + Date.now().toString(36);
+			hist.current.push(snap());
+			setSt({
+				...st,
+				texts: [...texts, {
+					id,
+					x,
+					y,
+					t: "",
+					c: color
+				}]
+			});
+			setFresh(id);
+			return;
+		}
 		e.currentTarget.setPointerCapture(e.pointerId);
 		const p = pt(e);
 		if (tool === "eraser") {
@@ -26797,7 +27463,7 @@ function Board({ st, setSt, color, width, onClose }) {
 		cur.current = null;
 		setLive(null);
 		if (c && c.s) {
-			hist.current.push(st.strokes);
+			hist.current.push(snap());
 			setSt({
 				...st,
 				strokes: [...st.strokes, c.s]
@@ -26808,11 +27474,17 @@ function Board({ st, setSt, color, width, onClose }) {
 		const p = hist.current.pop();
 		if (p) setSt({
 			...st,
-			strokes: p
+			...p
 		});
 	};
 	(0, import_react.useEffect)(() => {
+		if (!fresh) return;
+		document.querySelector(`#boardSurf [data-bt="${fresh}"]`)?.focus();
+		setFresh(null);
+	}, [fresh]);
+	(0, import_react.useEffect)(() => {
 		const k = (e) => {
+			if (e.target?.classList?.contains("vbtx")) return;
 			if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
 				e.preventDefault();
 				e.stopPropagation();
@@ -26826,18 +27498,40 @@ function Board({ st, setSt, color, width, onClose }) {
 		className: "vboard",
 		role: "dialog",
 		"aria-label": "Bảng trắng",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			className: "vbsurf bg-" + st.bg,
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "vbsurf bg-" + st.bg + (tool === "text" ? " txt" : ""),
 			id: "boardSurf",
 			onPointerDown: down,
 			onPointerMove: move,
 			onPointerUp: up,
 			onPointerCancel: up,
-			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", { children: [...st.strokes, ...live ? [live] : []].map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", { children: [...st.strokes, ...live ? [live] : []].map((s, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
 				d: pathOf(s),
 				stroke: s.c,
 				strokeWidth: s.w
-			}, i)) })
+			}, i)) }), texts.map((x) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+				className: "vbtx",
+				"data-bt": x.id,
+				value: x.t,
+				rows: 1,
+				spellCheck: false,
+				style: {
+					left: x.x,
+					top: x.y,
+					color: x.c
+				},
+				onChange: (e) => setText(x.id, e.target.value),
+				onPointerDown: (e) => {
+					if (tool === "text") e.stopPropagation();
+				},
+				onKeyDown: (e) => {
+					e.stopPropagation();
+					if (e.key === "Escape") e.target.blur();
+				},
+				onBlur: () => {
+					if (!x.t.trim()) setText(x.id, null);
+				}
+			}, x.id))]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "vbtools",
 			children: [
@@ -26858,6 +27552,13 @@ function Board({ st, setSt, color, width, onClose }) {
 					onClick: () => setTool("eraser"),
 					title: "Tẩy",
 					children: "⌫"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "vb" + (tool === "text" ? " on" : ""),
+					id: "boardText",
+					onClick: () => setTool("text"),
+					title: "Gõ chữ: bấm đâu gõ đó, chữ tự dóng vào dòng kẻ / ô gần nhất",
+					children: "T"
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
 					className: "vsel",
@@ -26892,11 +27593,12 @@ function Board({ st, setSt, color, width, onClose }) {
 					className: "vb",
 					id: "boardClear",
 					onClick: () => {
-						if (st.strokes.length) {
-							hist.current.push(st.strokes);
+						if (st.strokes.length || texts.length) {
+							hist.current.push(snap());
 							setSt({
 								...st,
-								strokes: []
+								strokes: [],
+								texts: []
 							});
 						}
 					},
@@ -26927,6 +27629,7 @@ function kindOf$1(s, els) {
 		case "choice-many":
 		case "tf": return "pick";
 		case "match": return els[0].classList.contains("mbx") ? "type" : "link";
+		case "find": return "find";
 		default: return null;
 	}
 }
@@ -26938,7 +27641,7 @@ var picked = (v) => v == null || v === "" ? [] : [].concat(v);
 function shown(s, els, v) {
 	if (v == null) return "";
 	if (s.interaction === "match") {
-		const o = (s.options || []).find((x) => x.id === v), sec = els[0]?.closest("section.task"), r = o && sec ? rightRow(sec, String(o.text ?? "")) : null;
+		const o = (s.options || []).find((x) => x.id === v), sec = els[0]?.closest("section.task"), r = o && sec ? rightRow(sec, o.id) : null;
 		return r ? rowLetters(sec).get(r.mr) || String(v) : String(v);
 	}
 	return Array.isArray(v) ? v.join(", ") : String(v);
@@ -26987,51 +27690,134 @@ var CLS = [
 	"vwt",
 	"vwr"
 ];
-function badge(el, id, st, tap) {
+var pool = null;
+function place(parent, el) {
+	const h = el.outerHTML, old = pool && [...parent.children].find((c) => pool.has(c) && c.outerHTML === h);
+	if (old) pool.delete(old);
+	else parent.appendChild(el);
+}
+function badge(el, id, st, tap, mj = false) {
 	const d = ST[st];
 	if (!d || el.classList.contains("xc")) return;
 	const b = document.createElement("em");
-	b.className = "vwm " + d[0] + (tap ? " tap" : "");
+	b.className = "vwm " + d[0] + (mj ? " tap mj" : tap ? " tap" : "");
 	b.dataset.vw = id;
 	b.textContent = d[1];
-	b.title = st === "pending" && tap ? "Chấm tay: bấm để xem bài mẫu" : d[2];
+	b.title = mj ? `Chấm tay: ${d[2].split(":")[0].toLowerCase()}. Bấm để chấm lại` : st === "pending" && tap ? "Chấm tay: bấm để xem bài mẫu" : d[2];
 	el.classList.add("vwr");
-	el.appendChild(b);
+	place(el, b);
+	if (st === "pending") manButtons(el, id);
+}
+function makeInput(id, hooks, tag, cls) {
+	const el = document.createElement(tag);
+	el.className = "vwi" + cls;
+	el.dataset.for = id;
+	el.spellcheck = false;
+	el.autocomplete = "off";
+	if (tag === "input") el.type = "text";
+	el.setAttribute("aria-label", "Trả lời");
+	el.addEventListener("input", (e) => hooks.current.input(id, el, e));
+	el.addEventListener("keydown", (e) => hooks.current.key(id, el, e));
+	el.addEventListener("blur", () => hooks.current.blur(id, el));
+	return el;
 }
 function ensureInput(host, id, hooks) {
 	let el = host.querySelector(":scope > .vwi");
 	if (el) return el;
 	const multi = host.classList.contains("a1");
-	el = document.createElement(multi ? "textarea" : "input");
-	el.className = "vwi" + (host.classList.contains("xc") ? " vwx" : "");
-	el.dataset.for = id;
-	el.spellcheck = false;
-	el.autocomplete = "off";
-	if (!multi) el.type = "text";
+	el = makeInput(id, hooks, multi ? "textarea" : "input", host.classList.contains("xc") ? " vwx" : "");
 	if (multi) el.dataset.ml = String(Math.max(1, host.querySelectorAll(":scope > .ln").length));
-	el.setAttribute("aria-label", "Trả lời");
-	el.addEventListener("input", (e) => hooks.current.input(id, el, e));
-	el.addEventListener("keydown", (e) => hooks.current.key(id, el, e));
-	el.addEventListener("blur", () => hooks.current.blur(id, el));
 	host.appendChild(el);
 	return el;
 }
+var cv = null;
+var textW = (el, t) => {
+	cv = cv || document.createElement("canvas").getContext("2d");
+	if (!cv) return 0;
+	cv.font = getComputedStyle(el).font;
+	return Math.max(0, ...t.split("\n").map((l) => cv.measureText(l).width));
+};
+function blockOf(h) {
+	for (let e = h.parentElement; e; e = e.parentElement) {
+		if (!getComputedStyle(e).display.startsWith("inline")) return e;
+		if (e.matches("section.task")) return e;
+	}
+	return null;
+}
+function fitInput(el, id, hooks) {
+	const h = el.parentElement;
+	if (!h || el.dataset.ml || el.classList.contains("vwx")) return el;
+	h.style.minWidth = "";
+	h.style.minHeight = "";
+	if (!el.value) return el;
+	const b = blockOf(h), cs = b ? getComputedStyle(b) : null, avail = b && cs ? b.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 4 : Infinity;
+	const need = textW(el, el.value) + 12;
+	if (need <= el.clientWidth + 1) return el;
+	if (need <= avail) {
+		h.style.minWidth = need + "px";
+		return el;
+	}
+	h.style.minWidth = avail + "px";
+	let t = el;
+	if (el.tagName === "INPUT") {
+		const a = makeInput(id, hooks, "textarea", " vwwrap"), pos = el.selectionStart ?? el.value.length, foc = document.activeElement === el;
+		a.value = el.value;
+		el.replaceWith(a);
+		if (foc) {
+			a.focus();
+			a.setSelectionRange(pos, pos);
+		}
+		t = a;
+	}
+	t.style.height = "auto";
+	h.style.minHeight = t.scrollHeight + "px";
+	t.style.height = "";
+	return t;
+}
+function manButtons(el, id) {
+	const g = document.createElement("span");
+	g.className = "vmkg";
+	for (const [v, t, ti] of [[
+		"ok",
+		"✓",
+		"Chấm tay: đúng"
+	], [
+		"no",
+		"✗",
+		"Chấm tay: sai"
+	]]) {
+		const b = document.createElement("button");
+		b.className = "vmk " + v;
+		b.dataset.mk = id;
+		b.dataset.v = v;
+		b.tabIndex = -1;
+		b.textContent = t;
+		b.title = ti;
+		g.appendChild(b);
+	}
+	el.classList.add("vwr");
+	place(el, g);
+}
 function applyWork(root, slots, w, hooks) {
-	root.querySelectorAll(".vwm, .vwgo, svg.vwl").forEach((e) => e.remove());
+	root.querySelectorAll("svg.vwl, svg.vwfd").forEach((e) => e.remove());
+	pool = new Set(root.querySelectorAll(".vwm, .vwgo, .vmkg"));
 	root.querySelectorAll("." + CLS.join(", .")).forEach((e) => e.classList.remove(...CLS));
 	for (const s of slots) {
 		const els = elsOf(root, s.id), kind = kindOf$1(s, els);
 		if (!kind) continue;
 		const v = w.ans[s.id], r = w.res[s.id], st = r ? ST[r.status] : void 0, k = w.key[s.id];
-		const tap = !!r && (r.status === "wrong" || r.status === "partial" || r.status === "pending" && !!k?.sample);
+		const mj = !!w.man?.[s.id] && !!r, tap = !!r && !mj && (r.status === "wrong" || r.status === "partial" || r.status === "pending" && !!k?.sample);
 		if (kind === "type") {
 			const host = els[0], inp = ensureInput(host, s.id, hooks), txt = shown(s, els, v);
 			host.classList.add("vwh");
-			if (document.activeElement !== inp && inp.value !== txt) inp.value = txt;
+			if (document.activeElement !== inp && inp.value !== txt) {
+				inp.value = txt;
+				fitInput(inp, s.id, hooks);
+			}
 			if (inp.value) host.classList.add("vwf");
 			if (st) {
 				host.classList.add(st[0]);
-				badge(host, s.id, r.status, tap);
+				badge(host, s.id, r.status, tap, mj);
 			}
 			continue;
 		}
@@ -27042,7 +27828,7 @@ function applyWork(root, slots, w, hooks) {
 				if (opts[j].classList.contains("a5")) opts[j].classList.add("vwt");
 				if (st) opts[j].classList.add(st[0]);
 			});
-			if (st && sel.length) badge(opts[sel[sel.length - 1]], s.id, r.status, tap);
+			if (st && sel.length) badge(opts[sel[sel.length - 1]], s.id, r.status, tap, mj);
 			if (!r && sel.length && needsGo(s, w.key)) {
 				const at = opts[sel[sel.length - 1]].closest(SEL(s.id)) || els[0], b = document.createElement("button");
 				b.className = "vwgo";
@@ -27051,14 +27837,26 @@ function applyWork(root, slots, w, hooks) {
 				b.textContent = "Chấm";
 				b.title = "Chấm câu này (Enter)";
 				at.classList.add("vwr");
-				at.appendChild(b);
+				place(at, b);
 			}
+			continue;
+		}
+		if (kind === "find") {
+			const sec = els[0].closest("section.task");
+			if (!sec || v == null || !st) continue;
+			const [a, b] = rcEnds(sec, String(v));
+			if (a && b) {
+				const g = capsule(sec, a, b, "vwfd " + st[0].slice(3));
+				g.dataset.vw = s.id;
+			}
+			els[0].classList.add(st[0]);
+			badge(els[0], s.id, r.status, tap, mj);
 			continue;
 		}
 		const left = els[0], sec = left.closest("section.task");
 		if (!sec) continue;
 		if (w.pend && "id" in w.pend && w.pend.id === s.id) left.classList.add("vw-pend");
-		const o = v != null ? (s.options || []).find((x) => x.id === v) : void 0, rr = o ? rightRow(sec, String(o.text ?? "")) : null;
+		const o = v != null ? (s.options || []).find((x) => x.id === v) : void 0, rr = o ? rightRow(sec, o.id) : null;
 		if (rr && rr.dot) {
 			const svg = lineBetween(sec, left, rr.dot, "vwl " + (st ? st[0].slice(3) : "sel"));
 			svg.dataset.vw = s.id;
@@ -27066,13 +27864,15 @@ function applyWork(root, slots, w, hooks) {
 			hitL.setAttribute("class", "hit");
 			svg.appendChild(hitL);
 			[left, rr.dot].forEach((d) => d.classList.add(st ? st[0] : "vw-sel"));
-			if (st) badge(left, s.id, r.status, tap);
+			if (st) badge(left, s.id, r.status, tap, mj);
 		}
 	}
 	if (w.pend && "row" in w.pend) {
 		const p = w.pend, sec = root.querySelector(`section.task[data-task="${CSS.escape(p.task)}"]`), rr = sec ? rightRow(sec, p.row) : null;
 		if (rr) (rr.dot || rr.mr).classList.add("vw-pend");
 	}
+	pool.forEach((e) => e.remove());
+	pool = null;
 }
 function nextCell(el, d) {
 	const g = el.parentElement;
@@ -27083,6 +27883,116 @@ function nextCell(el, d) {
 	const c = kids[j];
 	return c && c.classList.contains("xc") ? c : null;
 }
+// src/viewer/Note.tsx
+function NoteBox({ n, x, y, focus, sr, onFocused, onChange, onDelete }) {
+	const ta = (0, import_react.useRef)(null), rec = (0, import_react.useRef)(null);
+	const [mic, setMic] = (0, import_react.useState)(false);
+	(0, import_react.useEffect)(() => {
+		if (focus && ta.current) {
+			ta.current.focus();
+			onFocused();
+		}
+	}, [focus]);
+	(0, import_react.useEffect)(() => () => rec.current?.stop(), []);
+	const listen = () => {
+		if (mic) {
+			rec.current?.stop();
+			return;
+		}
+		const W = window, C = W.SpeechRecognition || W.webkitSpeechRecognition;
+		if (!C) return;
+		const r = new C();
+		r.lang = navigator.language || "vi-VN";
+		r.continuous = true;
+		r.interimResults = false;
+		let base = ta.current ? ta.current.value : n.t;
+		r.onresult = (e) => {
+			for (let i = e.resultIndex; i < e.results.length; i++) if (e.results[i].isFinal) {
+				base = (base ? base.replace(/\s*$/, " ") : "") + e.results[i][0].transcript.trim();
+				onChange({ t: base });
+			}
+		};
+		r.onend = () => {
+			setMic(false);
+			rec.current = null;
+		};
+		r.onerror = () => {
+			setMic(false);
+			rec.current = null;
+		};
+		try {
+			r.start();
+			rec.current = r;
+			setMic(true);
+		} catch (_) {}
+	};
+	const stop = (e) => e.stopPropagation();
+	if (n.c) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+		className: "vnt vntc",
+		style: {
+			left: x,
+			top: y
+		},
+		title: n.t || "Ghi chú",
+		onClick: (e) => {
+			stop(e);
+			onChange({ c: false });
+		},
+		onDoubleClick: stop,
+		children: ["📝 ", n.t ? n.t.slice(0, 18) + (n.t.length > 18 ? "…" : "") : ""]
+	});
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "vnt",
+		style: {
+			left: x,
+			top: y
+		},
+		onClick: stop,
+		onDoubleClick: stop,
+		onPointerDown: stop,
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "vnth",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "📝 Ghi chú" }),
+				sr ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "vntb" + (mic ? " on" : ""),
+					onClick: listen,
+					title: mic ? "Dừng nghe" : "Nói để ghi (nhận giọng nói của trình duyệt)",
+					"aria-label": "Nói",
+					children: "🎤"
+				}) : null,
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "vntb",
+					onClick: () => onChange({ c: true }),
+					title: "Thu gọn",
+					"aria-label": "Thu gọn",
+					children: "–"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "vntb",
+					onClick: onDelete,
+					title: "Xóa ghi chú",
+					"aria-label": "Xóa ghi chú",
+					children: "×"
+				})
+			]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+			ref: ta,
+			className: "vntt",
+			value: n.t,
+			placeholder: "Gõ ghi chú…",
+			rows: 1,
+			onChange: (e) => onChange({ t: e.target.value }),
+			onKeyDown: (e) => {
+				e.stopPropagation();
+				if (e.key === "Escape") e.target.blur();
+			},
+			onBlur: (e) => {
+				if (!n.t.trim() && !mic && !(e.relatedTarget && e.currentTarget.parentElement.contains(e.relatedTarget))) onDelete();
+			}
+		})]
+	});
+}
 // src/viewer/Presenter.tsx
 var PX = 96 / 25.4;
 var PAGE_W = 210 * PX;
@@ -27091,8 +28001,10 @@ var TASK_PAD = 8;
 var TASK_W = 198 * PX;
 var GAP = 24;
 var READ = 1.5;
+var TASK_DEF = .8;
 var Z_MIN = .5;
 var Z_MAX = 6;
+var PGAP = 8 * PX;
 var INK_TOOLS = [
 	"pen",
 	"hl",
@@ -27112,8 +28024,18 @@ function Presenter({ data, onClose }) {
 	const startT = Math.max(0, P.tasks.findIndex((t) => t.id === data.start));
 	const [mode, setMode] = (0, import_react.useState)("page");
 	const [pi, setPi] = (0, import_react.useState)(() => data.start && P.pageOf[data.start] != null ? P.pageOf[data.start] : 0);
+	const [two, setTwo] = (0, import_react.useState)(false), [scroll, setScroll] = (0, import_react.useState)(false);
+	const cols = two ? 2 : 1, row = Math.floor(pi / cols), nRows = Math.ceil(nP / cols);
+	const rows = mode === "page" ? scroll ? Array.from({ length: nRows }, (_, r) => r) : [row] : [];
+	const shownPages = rows.flatMap((r) => Array.from({ length: cols }, (_, c) => r * cols + c)).filter((i) => i < nP);
+	const rowPages = Array.from({ length: cols }, (_, c) => row * cols + c).filter((i) => i < nP);
+	const [torch, setTorch] = (0, import_react.useState)(false), [tpos, setTpos] = (0, import_react.useState)({
+		x: window.innerWidth / 2,
+		y: window.innerHeight / 2
+	}), [trad, setTrad] = (0, import_react.useState)(150);
 	const [ti, setTi] = (0, import_react.useState)(startT);
 	const [z, setZ] = (0, import_react.useState)(1);
+	const [tfit, setTfit] = (0, import_react.useState)("def");
 	const [tool, setTool] = (0, import_react.useState)("pointer");
 	const [bar, setBar] = (0, import_react.useState)(true);
 	const [vp, setVp] = (0, import_react.useState)({
@@ -27129,16 +28051,39 @@ function Presenter({ data, onClose }) {
 	const [shown, setShown] = (0, import_react.useState)(() => /* @__PURE__ */ new Set());
 	const order = (0, import_react.useRef)([]);
 	const [clickAns, setClickAns] = (0, import_react.useState)(false);
-	const toggle = (ids) => setShown((old) => {
-		const n = new Set(old), on = ids.some((i) => !n.has(i));
-		ids.forEach((i) => on ? n.add(i) : n.delete(i));
-		if (on) order.current.push(...ids.filter((i) => !old.has(i)));
-		return n;
-	});
-	const allOn = shown.size > 0 && shown.size >= ansIds.size;
+	const toggle = (ids) => {
+		ids.forEach((i) => revealed.current.delete(i));
+		setShown((old) => {
+			const n = new Set(old), on = ids.some((i) => !n.has(i));
+			ids.forEach((i) => on ? n.add(i) : n.delete(i));
+			if (on) order.current.push(...ids.filter((i) => !old.has(i)));
+			return n;
+		});
+	};
+	const viewIds = (0, import_react.useMemo)(() => {
+		const h = mode === "page" ? rowPages.map((i) => P.pages[i]).join("") : P.tasks[ti] ? P.tasks[ti].frags.map((f) => f.html).join("") : "", out = /* @__PURE__ */ new Set();
+		for (const m of h.matchAll(/data-ans="([^"]+)"/g)) {
+			const id = m[1].replace(/&quot;/g, "\"").replace(/&amp;/g, "&");
+			if (ansIds.has(id)) out.add(id);
+		}
+		return [...out];
+	}, [
+		mode,
+		pi,
+		ti,
+		P,
+		ansIds,
+		cols
+	]);
+	const allOn = viewIds.length > 0 && viewIds.every((i) => shown.has(i));
 	const toggleAll = () => {
 		order.current = [];
-		setShown(allOn ? /* @__PURE__ */ new Set() : new Set(ansIds));
+		toggle(viewIds);
+	};
+	const toggleSheet = () => {
+		order.current = [];
+		revealed.current.clear();
+		setShown(shown.size >= ansIds.size ? /* @__PURE__ */ new Set() : new Set(ansIds));
 	};
 	const nextAns = () => {
 		const id = surfRef.current ? slotsInView(surfRef.current).find((i) => ansIds.has(i) && !shown.has(i)) : void 0;
@@ -27164,17 +28109,28 @@ function Presenter({ data, onClose }) {
 	const [pend, setPend] = (0, import_react.useState)(null);
 	const [reveal, setReveal] = (0, import_react.useState)(false);
 	const [, bump] = (0, import_react.useReducer)((x) => x + 1, 0);
+	const [man, setMan] = (0, import_react.useState)({});
 	const res = {};
 	done.forEach((id) => {
-		if (slotBy[id]) res[id] = gradeSlot(slotBy[id], data.key[id], ans.current[id]);
+		if (!slotBy[id]) return;
+		let r = gradeSlot(slotBy[id], data.key[id], ans.current[id]);
+		if (r.status === "pending" && man[id]) r = {
+			status: man[id] === "ok" ? "correct" : "wrong",
+			score: man[id] === "ok" ? r.max : 0,
+			max: r.max
+		};
+		res[id] = r;
 	});
 	const autoIds = (0, import_react.useMemo)(() => data.slots.filter((x) => {
 		const k = data.key[x.id];
 		return k && (k.grading ?? x.grading) === "auto" && (k.correct != null || k.accept && k.accept.length);
 	}).map((x) => x.id), [data]);
-	const nOk = autoIds.filter((i) => res[i] && res[i].status === "correct").length;
+	const manDone = Object.keys(man).filter((i) => res[i]);
+	const nOk = autoIds.filter((i) => res[i] && res[i].status === "correct").length + manDone.filter((i) => man[i] === "ok").length, nAll = autoIds.length + manDone.length;
+	const revealed = (0, import_react.useRef)(/* @__PURE__ */ new Set());
 	const anyWork = Object.values(ans.current).some((v) => !isBlank(v));
 	const commit = (id, v) => {
+		const same = done.has(id) && JSON.stringify(ans.current[id]) === JSON.stringify(v);
 		ans.current[id] = v;
 		const blank = isBlank(v);
 		setDone((o) => {
@@ -27183,7 +28139,25 @@ function Presenter({ data, onClose }) {
 			else n.add(id);
 			return n;
 		});
-		if (!blank && reveal && slotBy[id] && ["wrong", "partial"].includes(gradeSlot(slotBy[id], data.key[id], v).status) && ansIds.has(id)) setShown((o) => new Set(o).add(id));
+		if (same) return;
+		if (man[id]) setMan((o) => {
+			const n = { ...o };
+			delete n[id];
+			return n;
+		});
+		const bad = !blank && reveal && slotBy[id] && ["wrong", "partial"].includes(gradeSlot(slotBy[id], data.key[id], v).status) && ansIds.has(id);
+		if (revealed.current.has(id) && !bad) {
+			revealed.current.delete(id);
+			setShown((o) => {
+				const n = new Set(o);
+				n.delete(id);
+				return n;
+			});
+		}
+		if (bad && !shown.has(id)) {
+			revealed.current.add(id);
+			setShown((o) => new Set(o).add(id));
+		}
 	};
 	const draft = (id, v) => {
 		ans.current[id] = v;
@@ -27207,6 +28181,12 @@ function Presenter({ data, onClose }) {
 		setShown((o) => {
 			const n = new Set(o);
 			ids.forEach((i) => n.delete(i));
+			return n;
+		});
+		ids.forEach((i) => revealed.current.delete(i));
+		setMan((o) => {
+			const n = { ...o };
+			ids.forEach((i) => delete n[i]);
 			return n;
 		});
 		setPend(null);
@@ -27240,11 +28220,7 @@ function Presenter({ data, onClose }) {
 				return;
 			}
 			draft(id, el.value);
-			if (el.tagName === "INPUT") {
-				const h = el.parentElement;
-				h.style.minWidth = "";
-				if (el.scrollWidth > el.clientWidth + 1) h.style.minWidth = el.scrollWidth + 6 + "px";
-			}
+			fitInput(el, id, hooks);
 		},
 		key: (id, el, e) => {
 			e.stopPropagation();
@@ -27265,6 +28241,12 @@ function Presenter({ data, onClose }) {
 				e.preventDefault();
 				hooks.current.blur(id, el);
 				focusNext(el, 1);
+				return;
+			}
+			if ((e.key === "ArrowDown" || e.key === "ArrowUp") && !xw && !(+(el.dataset.ml || 1) > 1)) {
+				e.preventDefault();
+				hooks.current.blur(id, el);
+				focusNext(el, e.key === "ArrowDown" ? 1 : -1);
 				return;
 			}
 			if (xw && s) {
@@ -27360,8 +28342,10 @@ function Presenter({ data, onClose }) {
 		});
 		return () => ro.disconnect();
 	}, []);
-	const W0 = mode === "page" ? PAGE_W : TASK_W, H0 = mode === "page" ? PAGE_H : taskH;
-	const fit = mode === "page" ? Math.min((vp.w - GAP) / PAGE_W, (vp.h - GAP) / PAGE_H) : Math.min((vp.w - GAP) / TASK_W, Math.max((vp.h - GAP) / taskH, READ));
+	const RW = cols * PAGE_W + (cols - 1) * PGAP, RH = 1152.755905511811;
+	const W0 = mode === "page" ? RW : TASK_W, H0 = mode === "page" ? rows.length * RH - PGAP : taskH;
+	const wfit = (vp.w - GAP) / TASK_W, hfit = (vp.h - GAP) / taskH;
+	const fit = mode === "page" ? Math.min((vp.w - GAP) / RW, (vp.h - GAP) / PAGE_H) : tfit === "fit" ? Math.min(wfit, hfit) : Math.min(TASK_DEF * wfit, Math.max(hfit, READ));
 	const s = Math.max(.05, fit * z);
 	const taskHtml = mode === "task" && P.tasks[ti] ? P.tasks[ti].frags.map((f) => f.html).join("") : "";
 	(0, import_react.useLayoutEffect)(() => {
@@ -27378,7 +28362,8 @@ function Presenter({ data, onClose }) {
 			res,
 			pend,
 			shownIds: shown,
-			key: data.key
+			key: data.key,
+			man
 		}, hooks);
 		root.querySelectorAll("section.task[data-frag=\"0\"]").forEach((sec) => {
 			const id = sec.dataset.task, ids = data.slots.filter((x) => x.task === id && ansIds.has(x.id)).map((x) => x.id);
@@ -27414,6 +28399,40 @@ function Presenter({ data, onClose }) {
 				sec.appendChild(b);
 			}
 		});
+		root.querySelectorAll("section.task[data-frag=\"0\"]").forEach((sec) => {
+			let b = sec.querySelector(":scope > .vzt");
+			if (mode !== "page") {
+				b?.remove();
+				return;
+			}
+			if (!b) {
+				b = document.createElement("button");
+				b.className = "vzt";
+				b.dataset.vz = sec.dataset.task;
+				b.tabIndex = -1;
+				b.title = "Xem riêng Task này (Từng Task)";
+				b.textContent = "🔍";
+				sec.appendChild(b);
+			}
+			b.style.right = 1 + 9 * sec.querySelectorAll(":scope > .vtk, :scope > .vrs").length + "mm";
+		});
+		root.querySelectorAll("section.task[data-frag=\"0\"]").forEach((sec) => {
+			const id = sec.dataset.task, man = data.slots.filter((x) => x.task === id && (data.key[x.id]?.grading ?? x.grading) === "manual"), nt = data.notes?.[id] || [], any = data.slots.some((x) => x.task === id);
+			let b = sec.querySelector(":scope > .vmn");
+			const txt = man.length ? `✎ Chấm tay${man.length < data.slots.filter((x) => x.task === id).length ? ` ${man.length} chỗ` : ""}` : !any && nt.length ? "Chỉ xem" : "";
+			if (!txt) {
+				b?.remove();
+				return;
+			}
+			if (!b) {
+				b = document.createElement("span");
+				b.className = "vmn";
+				sec.appendChild(b);
+			}
+			b.textContent = txt;
+			b.title = (nt.length ? nt.join("\n") : "Chưa có đáp án: giáo viên tự chấm") + "\n(chỉ hiện khi chiếu, không in ra phiếu)";
+			b.style.right = 1 + 9 * sec.querySelectorAll(":scope > .vtk, :scope > .vrs, :scope > .vzt").length + "mm";
+		});
 		root.querySelectorAll(".vcv").forEach((e) => e.remove());
 		root.querySelectorAll("[data-vu]").forEach((e) => {
 			e.removeAttribute("data-vu");
@@ -27440,13 +28459,13 @@ function Presenter({ data, onClose }) {
 				h: r.height / k
 			};
 		});
-		if (mode === "page") an.push({
-			key: `page#${pi}`,
-			x: 0,
-			y: 0,
+		if (mode === "page") shownPages.forEach((i, k) => an.push({
+			key: `page#${i}`,
+			x: k % cols * 823.9370078740158,
+			y: rows.indexOf(Math.floor(i / cols)) * RH,
 			w: PAGE_W,
 			h: PAGE_H
-		});
+		}));
 		if (JSON.stringify(an.map((a) => [
 			a.key,
 			Math.round(a.x),
@@ -27464,14 +28483,14 @@ function Presenter({ data, onClose }) {
 	(0, import_react.useLayoutEffect)(() => {
 		const st = stageRef.current, p = pendScroll.current;
 		if (keep.current) {
-			const k = keep.current;
+			const k = keep.current, bx = st.querySelector(".vbox");
 			keep.current = null;
-			st.scrollLeft = k.fx * st.scrollWidth - st.clientWidth / 2;
-			st.scrollTop = k.fy * st.scrollHeight - st.clientHeight / 2;
+			st.scrollLeft = bx.offsetLeft + k.ux * s - k.ax;
+			st.scrollTop = bx.offsetTop + k.uy * s - k.ay;
 			return;
 		}
 		if (p === "top") {
-			st.scrollTop = 0;
+			st.scrollTop = mode === "page" && scroll ? rowTop(row) : 0;
 			st.scrollLeft = (st.scrollWidth - st.clientWidth) / 2;
 		} else if (p && p !== "keep") {
 			st.scrollLeft = p.x;
@@ -27483,20 +28502,42 @@ function Presenter({ data, onClose }) {
 		pi,
 		ti,
 		s,
-		taskH
+		taskH,
+		tfit,
+		two,
+		scroll
 	]);
-	const zoomTo = (0, import_react.useCallback)((nz) => {
-		const st = stageRef.current;
+	function rowTop(r) {
+		const bx = stageRef.current?.querySelector(".vbox");
+		return (bx ? bx.offsetTop : 0) + r * RH * s;
+	}
+	const onStageScroll = () => {
+		if (mode !== "page" || !scroll) return;
+		const st = stageRef.current, r = Math.max(0, Math.min(nRows - 1, Math.floor((st.scrollTop - rowTop(0) + st.clientHeight * .4) / (RH * s))));
+		if (r !== row) setPi(r * cols);
+	};
+	const zoomTo = (0, import_react.useCallback)((nz, at) => {
+		const st = stageRef.current, r = st.getBoundingClientRect(), b = surfRef.current.getBoundingClientRect(), sc = b.width / surfRef.current.offsetWidth || 1;
+		const ax = at ? at.x - r.left : st.clientWidth / 2, ay = at ? at.y - r.top : st.clientHeight / 2;
 		keep.current = {
-			fx: (st.scrollLeft + st.clientWidth / 2) / st.scrollWidth,
-			fy: (st.scrollTop + st.clientHeight / 2) / st.scrollHeight
+			ux: (r.left + ax - b.left) / sc,
+			uy: (r.top + ay - b.top) / sc,
+			ax,
+			ay
 		};
 		setZ(Math.min(Z_MAX, Math.max(Z_MIN, Math.round(nz * 100) / 100)));
 	}, []);
 	const zoomFit = (0, import_react.useCallback)(() => {
 		pendScroll.current = "top";
 		setZ(1);
+		setTfit("def");
 	}, []);
+	const zoomBtn = () => {
+		pendScroll.current = "top";
+		if (mode === "task" && z === 1 && tfit === "def") setTfit("fit");
+		else setTfit("def");
+		setZ(1);
+	};
 	const go = (0, import_react.useCallback)((d, clicker = false) => {
 		const st = stageRef.current;
 		if (clicker && clickAns) {
@@ -27506,6 +28547,15 @@ function Presenter({ data, onClose }) {
 			}
 		}
 		if (mode === "page") {
+			if (scroll) {
+				const r = Math.max(0, Math.min(nRows - 1, row + d));
+				st.scrollTo({
+					top: rowTop(r),
+					behavior: "smooth"
+				});
+				setPi(r * cols);
+				return;
+			}
 			if (z > 1) {
 				const max = st.scrollHeight - st.clientHeight;
 				if (d > 0 && st.scrollTop < max - 4) {
@@ -27517,8 +28567,8 @@ function Presenter({ data, onClose }) {
 					return;
 				}
 			}
-			const np = Math.min(nP - 1, Math.max(0, pi + d));
-			if (np !== pi) {
+			const np = Math.min(nRows - 1, Math.max(0, row + d)) * cols;
+			if (np !== row * cols) {
 				pendScroll.current = "top";
 				setPi(np);
 			}
@@ -27547,7 +28597,10 @@ function Presenter({ data, onClose }) {
 		z,
 		clickAns,
 		shown,
-		ansIds
+		ansIds,
+		cols,
+		scroll,
+		s
 	]);
 	const toMode = (0, import_react.useCallback)((m) => {
 		if (m === mode) return;
@@ -27564,6 +28617,14 @@ function Presenter({ data, onClose }) {
 		ti,
 		P
 	]);
+	const openTask = (id) => {
+		const i = P.tasks.findIndex((t) => t.id === id);
+		if (i < 0) return;
+		pendScroll.current = "top";
+		setZ(1);
+		setTi(i);
+		setMode("task");
+	};
 	const goTask = (i) => {
 		pendScroll.current = "top";
 		setZ(1);
@@ -27661,8 +28722,10 @@ function Presenter({ data, onClose }) {
 					break;
 				case "a":
 				case "A":
-					if (!e.ctrlKey && !e.metaKey) toggleAll();
-					else used = false;
+					if (!e.ctrlKey && !e.metaKey) {
+						if (e.shiftKey) toggleSheet();
+						else toggleAll();
+					} else used = false;
 					break;
 				case "Home":
 					if (mode === "page") {
@@ -27703,6 +28766,10 @@ function Presenter({ data, onClose }) {
 				case "H":
 					toggleCover();
 					break;
+				case "l":
+				case "L":
+					setTorch(!torch);
+					break;
 				case "g":
 				case "G":
 					setTimer(!timer);
@@ -27718,7 +28785,8 @@ function Presenter({ data, onClose }) {
 					} else used = false;
 					break;
 				case "Escape":
-					if (pend) setPend(null);
+					if (torch) setTorch(false);
+					else if (pend) setPend(null);
 					else if (pic) setPic(null);
 					else if (tool !== "pointer") setTool("pointer");
 					else if (z !== 1) zoomFit();
@@ -27737,17 +28805,85 @@ function Presenter({ data, onClose }) {
 	});
 	(0, import_react.useEffect)(() => {
 		const st = stageRef.current, w = (e) => {
-			if (!e.ctrlKey) return;
+			if (torch && !e.ctrlKey) {
+				e.preventDefault();
+				setTrad((r) => Math.max(60, Math.min(600, Math.round(r * (e.deltaY < 0 ? 1.12 : 1 / 1.12)))));
+				return;
+			}
+			if (!e.ctrlKey) {
+				const k = e.deltaMode === 1 ? 40 : e.deltaMode === 2 ? st.clientHeight : 1, dy = e.shiftKey && !e.deltaX ? e.deltaY : 0;
+				e.preventDefault();
+				st.scrollBy({
+					left: (e.deltaX + dy) * k,
+					top: (dy ? 0 : e.deltaY) * k
+				});
+				return;
+			}
 			e.preventDefault();
-			zoomTo(z * (e.deltaY < 0 ? 1.12 : 1 / 1.12));
+			zoomTo(z * (e.deltaY < 0 ? 1.12 : 1 / 1.12), {
+				x: e.clientX,
+				y: e.clientY
+			});
 		};
 		st.addEventListener("wheel", w, { passive: false });
 		return () => st.removeEventListener("wheel", w);
-	}, [z, zoomTo]);
+	}, [
+		z,
+		zoomTo,
+		torch
+	]);
 	const touches = (0, import_react.useRef)(/* @__PURE__ */ new Map()), pinch0 = (0, import_react.useRef)(null);
 	const dist = () => {
 		const [a, b] = [...touches.current.values()];
 		return Math.hypot(a.x - b.x, a.y - b.y);
+	};
+	const fd = (0, import_react.useRef)(null);
+	const findDown = (e) => {
+		if (tool !== "pointer" || e.ctrlKey || e.metaKey || e.shiftKey || e.pointerType === "mouse" && e.button !== 0) return false;
+		const c = e.target.closest("[data-rc]"), sec = c?.closest("section.task");
+		if (!c || !sec || !data.slots.some((x) => x.task === sec.dataset.task && x.interaction === "find")) return false;
+		e.preventDefault();
+		stageRef.current.setPointerCapture(e.pointerId);
+		fd.current = {
+			sec,
+			a: c,
+			b: c,
+			svg: capsule(sec, c, c, "vfl")
+		};
+		return true;
+	};
+	const findMove = (e) => {
+		const d = fd.current;
+		if (!d) return false;
+		const c = document.elementFromPoint(e.clientX, e.clientY)?.closest("[data-rc]");
+		if (c && c !== d.b && c.closest("section.task")?.dataset.task === d.sec.dataset.task) {
+			d.b = c;
+			d.svg?.remove();
+			d.svg = capsule(d.sec, d.a, c, "vfl");
+		}
+		return true;
+	};
+	const findUp = () => {
+		const d = fd.current;
+		if (!d) return false;
+		fd.current = null;
+		d.svg?.remove();
+		drew.current = Date.now();
+		const [r1, c1] = d.a.dataset.rc.split(",").map(Number), [r2, c2] = d.b.dataset.rc.split(",").map(Number), dr = r2 - r1, dc = c2 - c1;
+		if (!dr && !dc || dr && dc && Math.abs(dr) !== Math.abs(dc)) {
+			if (dr || dc) flash("Kéo theo hàng ngang, cột dọc hoặc đường chéo");
+			return true;
+		}
+		const n = Math.max(Math.abs(dr), Math.abs(dc)) + 1, sr = Math.sign(dr), sc = Math.sign(dc);
+		const got = Array.from({ length: n }, (_, k) => rcCell(d.sec, `${r1 + sr * k},${c1 + sc * k}`)?.textContent?.trim().toUpperCase() || "").join("");
+		const W = (w) => w.replace(/[^\p{L}]/gu, "").toUpperCase();
+		const sl = data.slots.find((x) => x.task === d.sec.dataset.task && x.interaction === "find" && [got, [...got].reverse().join("")].includes(W(x.label)));
+		if (!sl) {
+			flash(`"${got}" không có trong khung từ`);
+			return true;
+		}
+		commit(sl.id, `${d.a.dataset.rc}-${d.b.dataset.rc}`);
+		return true;
 	};
 	const onRectDown = (e) => {
 		e.target.setPointerCapture(e.pointerId);
@@ -27790,7 +28926,8 @@ function Presenter({ data, onClose }) {
 	const anchorAt = (p) => {
 		const ins = (a) => p[0] >= a.x && p[0] <= a.x + a.w && p[1] >= a.y && p[1] <= a.y + a.h;
 		const secs = anchors.filter((a) => !a.key.startsWith("page#"));
-		return secs.find(ins) || anchors.find((a) => a.key.startsWith("page#")) || secs.reduce((m, a) => {
+		const pgs = anchors.filter((a) => a.key.startsWith("page#"));
+		return secs.find(ins) || pgs.find(ins) || pgs[0] || secs.reduce((m, a) => {
 			const d = Math.abs(p[1] - Math.min(Math.max(p[1], a.y), a.y + a.h));
 			return !m || d < Math.abs(p[1] - Math.min(Math.max(p[1], m.y), m.y + m.h)) ? a : m;
 		}, null);
@@ -27839,10 +28976,11 @@ function Presenter({ data, onClose }) {
 			eraseAt(p);
 			return true;
 		}
+		const qline = !!quick && t === "line", c = t === "hl" ? HL : qline ? COLORS[0][0] : color, w0 = qline ? WIDTHS[1][0] : width;
 		const st = {
 			t,
-			c: t === "hl" ? HL : color,
-			w: Math.round((t === "hl" ? width * 4 : width) / s * 10) / 10,
+			c,
+			w: Math.round((t === "hl" ? w0 * 4 : w0) / s * 10) / 10,
 			pts: [local(a, p)]
 		};
 		drawing.current = {
@@ -27900,16 +29038,70 @@ function Presenter({ data, onClose }) {
 		return true;
 	};
 	const clearInk = () => {
+		setClr(false);
 		if (!hasInk) return;
 		setInk({});
-		flash("Đã xóa nét vẽ. Bấm ↶ để hoàn tác.");
+		flash("Đã xóa hết nét vẽ. Bấm ↶ để hoàn tác.");
+	};
+	const viewInk = anchors.some((a) => (ink[a.key] || []).length);
+	const clearView = () => {
+		setClr(false);
+		if (!viewInk) return;
+		const n = { ...ink };
+		anchors.forEach((a) => {
+			delete n[a.key];
+		});
+		setInk(n);
+		flash(`Đã xóa nét ${mode === "page" ? "trang" : "Task"} này. Bấm ↶ để hoàn tác.`);
+	};
+	const [clr, setClr] = (0, import_react.useState)(false);
+	const [notes, setNotes] = (0, import_react.useState)(() => loadNotes(store, P.hash));
+	const [newNote, setNewNote] = (0, import_react.useState)(null);
+	(0, import_react.useEffect)(() => {
+		saveNotes(store, P.hash, notes);
+	}, [notes]);
+	const putNote = (key, id, n) => setNotes((o) => {
+		const arr = (o[key] || []).flatMap((x) => x.id !== id ? [x] : n ? [{
+			...x,
+			...n
+		}] : []), out = {
+			...o,
+			[key]: arr
+		};
+		if (!arr.length) delete out[key];
+		return out;
+	});
+	const onSurfDbl = (e) => {
+		if (tool !== "pointer") return;
+		if (e.target.closest("[data-ans], .vwi, button, .vnt, .vmn, .vcv, .mrows, [data-rc]")) return;
+		const b = surfRef.current.getBoundingClientRect(), p = [(e.clientX - b.left) / s, (e.clientY - b.top) / s], a = anchorAt(p);
+		if (!a) return;
+		const id = "n" + Date.now().toString(36), L = local(a, p);
+		window.getSelection()?.removeAllRanges();
+		setNotes((o) => ({
+			...o,
+			[a.key]: [...o[a.key] || [], {
+				id,
+				x: L[0],
+				y: L[1],
+				t: "",
+				c: false
+			}]
+		}));
+		setNewNote(id);
 	};
 	const inkTool = INK_TOOLS.includes(tool);
 	const drew = (0, import_react.useRef)(0);
 	const onSurfClick = (e) => {
 		if (tool !== "pointer" || Date.now() - drew.current < 300) return;
 		const tg = e.target, tb = tg.closest(".vtk");
-		if (tg.closest(".vwi")) return;
+		if (tg.closest(".vwi, .vnt")) return;
+		const zt = tg.closest(".vzt");
+		if (zt) {
+			openTask(zt.dataset.vz);
+			e.stopPropagation();
+			return;
+		}
 		if (cover) {
 			const u = tg.closest("[data-vu]");
 			if (u && (tg.closest(".vcv") || !tg.closest("[data-ans]"))) {
@@ -27941,9 +29133,30 @@ function Presenter({ data, onClose }) {
 		}
 	};
 	const workClick = (tg) => {
+		const mk = tg.closest(".vmk");
+		if (mk) {
+			const id = mk.dataset.mk, v = mk.dataset.v;
+			setMan((o) => ({
+				...o,
+				[id]: v
+			}));
+			return true;
+		}
+		const mj = tg.closest(".vwm.mj");
+		if (mj) {
+			const id = mj.dataset.vw;
+			setMan((o) => {
+				const n = { ...o };
+				delete n[id];
+				return n;
+			});
+			return true;
+		}
 		const m = tg.closest(".vwm.tap");
 		if (m) {
-			toggle([m.dataset.vw]);
+			const id = m.dataset.vw, on = !shown.has(id);
+			toggle([id]);
+			if (on) revealed.current.add(id);
 			return true;
 		}
 		const g = tg.closest(".vwgo");
@@ -27991,7 +29204,7 @@ function Presenter({ data, onClose }) {
 			}
 			if (kind === "link") {
 				if (pend && "row" in pend) {
-					const sec = el.closest("section.task"), mrow = sec && [...sec.querySelectorAll(".mr:not(.mh)")].find((x) => x.textContent === pend.row);
+					const sec = el.closest("section.task"), mrow = sec && sec.dataset.task === pend.task ? sec.querySelector(`.mr[data-opt="${CSS.escape(pend.row)}"]`) : null;
 					const o = mrow ? optOfRow(s, mrow) : null;
 					setPend(null);
 					if (o) link(id, o.id);
@@ -28005,12 +29218,13 @@ function Presenter({ data, onClose }) {
 		if (mr) {
 			const sec = mr.closest("section.task");
 			if (pend && "id" in pend) {
-				const s = slotBy[pend.id], o = s ? optOfRow(s, mr) : null;
+				const s = slotBy[pend.id], o = s && s.task === sec.dataset.task ? optOfRow(s, mr) : null;
 				setPend(null);
 				if (o) link(pend.id, o.id);
 				return true;
 			}
-			const row = mr.textContent || "";
+			const row = mr.dataset.opt || "";
+			if (!row) return true;
 			setPend(pend && "row" in pend && pend.row === row ? null : {
 				task: sec.dataset.task,
 				row
@@ -28032,23 +29246,32 @@ function Presenter({ data, onClose }) {
 		});
 		commit(id, opt);
 	};
-	const cur = mode === "page" ? `Trang ${pi + 1}/${nP}` : P.tasks[ti] ? `Task ${P.tasks[ti].num} · ${ti + 1}/${nT}` : "";
-	const html = mode === "page" ? P.pages[pi] || "" : taskHtml;
-	const surf = (0, import_react.useMemo)(() => ({ __html: html }), [html]);
+	const cur = mode === "page" ? `Trang ${rowPages.length > 1 ? `${rowPages[0] + 1}–${rowPages[rowPages.length - 1] + 1}` : rowPages[0] + 1}/${nP}` : P.tasks[ti] ? `Task ${P.tasks[ti].num} · ${ti + 1}/${nT}` : "";
+	const pageHtml = (0, import_react.useMemo)(() => P.pages.map((h) => ({ __html: h })), [P]);
+	const surf = (0, import_react.useMemo)(() => ({ __html: taskHtml }), [taskHtml]);
+	const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		id: "wsShow",
 		className: "show" + (bar ? "" : " nobar") + (board ? " boarding" : ""),
 		role: "dialog",
 		"aria-label": "Trình chiếu phiếu",
-		onPointerMove: poke,
+		onPointerMove: (e) => {
+			poke();
+			if (torch) setTpos({
+				x: e.clientX,
+				y: e.clientY
+			});
+		},
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "vstage" + (inkTool ? " inking" : ""),
 				ref: stageRef,
 				"data-mode": mode,
 				"data-tool": tool,
+				"data-scroll": mode === "page" && scroll ? "1" : void 0,
+				onScroll: onStageScroll,
 				onPointerDown: (e) => {
-					if (inkDown(e)) return;
+					if (inkDown(e) || findDown(e)) return;
 					if (e.pointerType === "touch") {
 						touches.current.set(e.pointerId, {
 							x: e.clientX,
@@ -28061,17 +29284,23 @@ function Presenter({ data, onClose }) {
 					}
 				},
 				onPointerMove: (e) => {
-					if (inkMove(e)) return;
+					if (inkMove(e) || findMove(e)) return;
 					if (touches.current.has(e.pointerId)) {
 						touches.current.set(e.pointerId, {
 							x: e.clientX,
 							y: e.clientY
 						});
-						if (pinch0.current && touches.current.size === 2) zoomTo(pinch0.current.z * dist() / pinch0.current.d);
+						if (pinch0.current && touches.current.size === 2) {
+							const [a, b] = [...touches.current.values()];
+							zoomTo(pinch0.current.z * dist() / pinch0.current.d, {
+								x: (a.x + b.x) / 2,
+								y: (a.y + b.y) / 2
+							});
+						}
 					}
 				},
 				onPointerUp: (e) => {
-					if (inkUp()) return;
+					if (inkUp() || findUp()) return;
 					touches.current.delete(e.pointerId);
 					if (touches.current.size < 2) pinch0.current = null;
 				},
@@ -28089,40 +29318,71 @@ function Presenter({ data, onClose }) {
 							height: H0 * s
 						},
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "vsurf paper " + (mode === "page" ? "vpage" : "vtask"),
+							className: "vsurf " + (mode === "page" ? "vpages" : "paper vtask"),
 							ref: surfRef,
-							style: { transform: `scale(${s})` },
+							style: {
+								transform: `scale(${s})`,
+								...mode === "page" ? {
+									width: W0,
+									height: H0
+								} : {}
+							},
 							onClick: onSurfClick,
-							children: [mode === "page" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "flow",
-								dangerouslySetInnerHTML: surf
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "pfoot",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: data.title }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: `Trang ${pi + 1}/${nP}` })]
-							})] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "vflow",
-								style: { padding: `${TASK_PAD}mm` },
-								dangerouslySetInnerHTML: surf
-							}), inkHidden ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "vink",
-								"aria-hidden": "true",
-								children: anchors.map((a) => {
-									const arr = ink[a.key] || [], lv = live && live.key === a.key ? [live.s] : [];
-									return arr.length || lv.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-										style: {
-											left: a.x,
-											top: a.y,
-											width: a.w,
-											height: a.h
-										},
-										children: [...arr, ...lv].map((st, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-											d: pathOf(st),
-											stroke: st.c,
-											strokeWidth: st.w
-										}, i))
-									}, a.key) : null;
+							onDoubleClick: onSurfDbl,
+							children: [
+								mode === "page" ? shownPages.map((i, k) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "vpage paper",
+									"data-pg": i,
+									style: {
+										left: k % cols * 823.9370078740158,
+										top: rows.indexOf(Math.floor(i / cols)) * RH
+									},
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "flow",
+										dangerouslySetInnerHTML: pageHtml[i]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "pfoot",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: data.title }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: `Trang ${i + 1}/${nP}` })]
+									})]
+								}, i)) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "vflow",
+									style: { padding: `${TASK_PAD}mm` },
+									dangerouslySetInnerHTML: surf
+								}),
+								inkHidden ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "vink",
+									"aria-hidden": "true",
+									children: anchors.map((a) => {
+										const arr = ink[a.key] || [], lv = live && live.key === a.key ? [live.s] : [];
+										return arr.length || lv.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+											style: {
+												left: a.x,
+												top: a.y,
+												width: a.w,
+												height: a.h
+											},
+											children: [...arr, ...lv].map((st, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+												d: pathOf(st),
+												stroke: st.c,
+												strokeWidth: st.w
+											}, i))
+										}, a.key) : null;
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "vnotes",
+									children: anchors.map((a) => (notes[a.key] || []).map((n) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(NoteBox, {
+										n,
+										x: a.x + n.x,
+										y: a.y + n.y,
+										focus: newNote === n.id,
+										sr: !!SR,
+										onFocused: () => setNewNote(null),
+										onChange: (v) => putNote(a.key, n.id, v),
+										onDelete: () => putNote(a.key, n.id, null)
+									}, n.id)))
 								})
-							})]
+							]
 						})
 					})
 				})
@@ -28227,15 +29487,31 @@ function Presenter({ data, onClose }) {
 						"aria-label": "Làm lại",
 						children: "↷"
 					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-						className: "vb",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						className: "vb vbt" + (clr ? " on" : ""),
 						id: "inkClear",
-						onClick: clearInk,
+						onClick: () => setClr(!clr),
 						disabled: !hasInk,
-						title: "Xóa hết nét vẽ (hoàn tác được)",
-						"aria-label": "Xóa hết",
-						children: "🗑"
+						title: "Xóa nét vẽ (hoàn tác được)",
+						"aria-label": "Xóa nét vẽ",
+						children: ["🗑", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", { children: "Xóa" })]
 					}),
+					clr ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "vclr",
+						role: "menu",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							className: "vb",
+							id: "inkClearView",
+							onClick: clearView,
+							disabled: !viewInk,
+							children: `Xóa nét ${mode === "page" ? "trang" : "Task"} này`
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							className: "vb",
+							id: "inkClearAll",
+							onClick: clearInk,
+							children: "Xóa hết nét vẽ"
+						})]
+					}) : null,
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						className: "vb" + (inkHidden ? " on" : ""),
 						onClick: () => setInkHidden(!inkHidden),
@@ -28246,6 +29522,12 @@ function Presenter({ data, onClose }) {
 					})
 				]
 			}),
+			torch ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "vtorch",
+				id: "torch",
+				"aria-hidden": "true",
+				style: { background: `radial-gradient(circle ${trad}px at ${tpos.x}px ${tpos.y}px, transparent 0 ${trad - 2}px, rgba(0,0,0,.92) ${trad}px)` }
+			}) : null,
 			board ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Board, {
 				st: boardSt,
 				setSt: setBoardSt,
@@ -28319,6 +29601,33 @@ function Presenter({ data, onClose }) {
 									children: " Từng Task"
 								})]
 							}),
+							mode === "page" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								className: "vb" + (two ? " on" : ""),
+								id: "showTwo",
+								onClick: () => {
+									pendScroll.current = "top";
+									setZ(1);
+									setTwo(!two);
+								},
+								title: "Xem 1 trang / 2 trang cạnh nhau",
+								children: [two ? "▯▯" : "▯", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "vt vt2",
+									children: two ? " 2 trang" : " 1 trang"
+								})]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								className: "vb" + (scroll ? " on" : ""),
+								id: "showScroll",
+								onClick: () => {
+									pendScroll.current = "top";
+									setZ(1);
+									setScroll(!scroll);
+								},
+								title: "Trang: lật từng trang · Cuộn: mọi trang xếp dọc liền, cuộn tự do",
+								children: ["⇕", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "vt vt2",
+									children: scroll ? " Cuộn" : " Trang"
+								})]
+							})] }) : null,
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
 								className: "vsel",
 								"aria-label": "Đi tới Task",
@@ -28350,10 +29659,10 @@ function Presenter({ data, onClose }) {
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 								className: "vb",
-								onClick: zoomFit,
-								title: "Vừa màn hình (0)",
+								onClick: zoomBtn,
+								title: mode === "task" ? "Từng Task: Mặc định (Task rộng 80% màn hình) ↔ Vừa (thấy trọn Task). Đang phóng thì về Mặc định (0)" : "Về 100%: vừa màn hình (0)",
 								id: "showZoom",
-								children: z === 1 ? "Vừa" : `${Math.round(z * 100)}%`
+								children: z !== 1 ? `${Math.round(z * 100)}%` : mode === "task" && tfit === "def" ? "Mặc định" : "Vừa"
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 								className: "vb",
@@ -28397,6 +29706,16 @@ function Presenter({ data, onClose }) {
 								})]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								className: "vb" + (torch ? " on" : ""),
+								id: "showTorch",
+								onClick: () => setTorch(!torch),
+								title: "Đèn pin: tối màn hình, chỉ sáng quanh chuột (L). Lăn chuột đổi cỡ vòng sáng, Esc tắt",
+								children: ["🔦", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "vt vt2",
+									children: " Đèn pin"
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								className: "vb" + (cover ? " on" : ""),
 								id: "showCover",
 								onClick: toggleCover,
@@ -28424,7 +29743,7 @@ function Presenter({ data, onClose }) {
 								className: "vb" + (allOn ? " on" : ""),
 								id: "showAns",
 								onClick: toggleAll,
-								title: `Hiện / ẩn đáp án cả phiếu (A) · Space: hiện lần lượt, Shift+Space: ẩn lại · nút ✓ đầu Task: hiện Task đó${noKey ? ` · ${noKey} chỗ chưa có đáp án` : ""}`,
+								title: `Hiện / ẩn đáp án phần đang xem (A; Shift+A: cả phiếu) · Space: hiện lần lượt, Shift+Space: ẩn lại · nút ✓ đầu Task: hiện Task đó${noKey ? ` · ${noKey} chỗ chưa có đáp án` : ""}`,
 								children: ["✓", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "vt",
 									children: " Đáp án"
@@ -28450,11 +29769,11 @@ function Presenter({ data, onClose }) {
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "vgrp",
 						children: [
-							autoIds.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							nAll ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 								className: "vscore",
 								id: "workScore",
-								title: "Số chỗ làm đúng / số chỗ máy chấm được. Bấm vào chỗ trả lời để làm thử",
-								children: `Đúng ${nOk}/${autoIds.length}`
+								title: "Số chỗ làm đúng / số chỗ máy chấm được" + (manDone.length ? ` (kể cả ${manDone.length} chỗ chấm tay)` : "") + ". Bấm vào chỗ trả lời để làm thử",
+								children: `Đúng ${nOk}/${nAll}`
 							}) : null,
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								className: "vb" + (reveal ? " on" : ""),
@@ -28546,104 +29865,6 @@ Object.assign(window, {
 	LW_KEY,
 	lwMax
 });
-// src/core/answers.js
-function itemKeys0(t) {
-	const k = ck$3(t);
-	if (k === "table" || k === "empty") return [];
-	if (k === "dialogue") return its$2(t).filter((x) => (x.text || "").includes("___")).map((x) => x.id);
-	if (k === "pairs") return its$2(t).filter((x) => x.pair && x.pair.l).map((x) => x.id);
-	return its$2(t).map((x) => x.id);
-}
-function itemKeys(t) {
-	const g = new Set(its$2(t).filter((x) => x.gt).map((x) => x.id));
-	return itemKeys0(t).filter((id) => !g.has(id));
-}
-function optsOfKey(t, x) {
-	if (x.imgs) return x.imgs;
-	if (x.opts) return x.opts;
-	if (t.answer.layout === "A6") return [...ans0(t, x).matchAll(/<span>([^<]*)<\/span>/g)].map((m) => m[1]);
-	return [];
-}
-var gapN = (x) => (pkSrc$1(x).match(/___/g) || []).length;
-function needKey(t, x) {
-	if (!x || x.gt) return false;
-	const k = ck$3(t), a = t.answer;
-	if ([
-		"table",
-		"empty",
-		"trace"
-	].includes(k) || ["none", "trace"].includes(a.kind) || isFreeW(t)) return false;
-	if (k === "pairs") return !!(x.pair && x.pair.l && x.pair.r);
-	if (k === "dialogue") return !!x.ex || /___|\{[^{}|]+\|/.test(x.text || "");
-	return true;
-}
-function hasKey(t, x) {
-	if (ck$3(t) === "pairs") return !!t.content.shuffle;
-	if (!x.opts && !x.imgs && gapN(x) > 1) {
-		const g = keyGaps$1(x);
-		return Array.from({ length: gapN(x) }, (_, j) => g[j] || "").every(Boolean);
-	}
-	const gs = x.opts || x.imgs ? [] : pkGroups$1(x);
-	if (gs.length) return gs.every((g) => g.some((o) => o.ok)) || String(x.key ?? "").trim() !== "";
-	const op = optsOfKey(t, x);
-	if ((x.opts || x.imgs || t.answer.layout === "A6") && op.length > 1) return exPicks$1(t, x, op).length > 0;
-	return String(x.key ?? "").trim() !== "";
-}
-function keyState(t) {
-	const need = [], miss = [];
-	its$2(t).forEach((x, i) => {
-		if (needKey(t, x)) {
-			need.push(i);
-			if (!hasKey(t, x)) miss.push(i);
-		}
-	});
-	return {
-		need,
-		miss
-	};
-}
-try {
-	Object.defineProperty(window, "itemKeys0", {
-		configurable: true,
-		get: () => itemKeys0
-	});
-} catch (_) {}
-try {
-	Object.defineProperty(window, "itemKeys", {
-		configurable: true,
-		get: () => itemKeys
-	});
-} catch (_) {}
-try {
-	Object.defineProperty(window, "optsOfKey", {
-		configurable: true,
-		get: () => optsOfKey
-	});
-} catch (_) {}
-try {
-	Object.defineProperty(window, "gapN", {
-		configurable: true,
-		get: () => gapN
-	});
-} catch (_) {}
-try {
-	Object.defineProperty(window, "needKey", {
-		configurable: true,
-		get: () => needKey
-	});
-} catch (_) {}
-try {
-	Object.defineProperty(window, "hasKey", {
-		configurable: true,
-		get: () => hasKey
-	});
-} catch (_) {}
-try {
-	Object.defineProperty(window, "keyState", {
-		configurable: true,
-		get: () => keyState
-	});
-} catch (_) {}
 // src/core/slots.js
 var altSplit = (s) => String(s ?? "").split(/\s+\/\s+/).map((x) => x.trim()).filter(Boolean);
 var LET = "abcdefgh";
@@ -28655,16 +29876,6 @@ var imgOpts = (list) => list.map((o, i) => ({
 	id: LET[i] || String(i),
 	img: String(o)
 }));
-var TF_ALIAS = {
-	true: "t",
-	false: "f",
-	"đúng": "t",
-	sai: "f",
-	yes: "yes",
-	no: "no",
-	right: "right",
-	wrong: "wrong"
-};
 function taskSlots0(t) {
 	const slots = [], key = {}, notes = [], miss = [], k = ck$3(t), a = t.answer || {}, p = a.params || {}, q = qDerived(t) || t.q || null, tid = t.id;
 	const add = (id, label, interaction, k0, extra = {}) => {
@@ -28698,7 +29909,7 @@ function taskSlots0(t) {
 	};
 	const textKey = (v) => {
 		const acc = altSplit(v);
-		return acc.length ? { accept: acc } : null;
+		return acc.length ? Object.assign({ accept: acc }, p.strictContr ? { strictContr: true } : {}) : null;
 	};
 	const choiceKey = (opts, idx) => !idx.length ? null : idx.length > 1 ? {
 		type: "choice-many",
@@ -28738,7 +29949,19 @@ function taskSlots0(t) {
 				miss
 			};
 		}
-		const grid = isGridTbl(t);
+		const grid = isGridTbl(t), wf = wsFind(t);
+		if (wf) {
+			wf.forEach((x, j) => {
+				if (x.at) add(`${tid}.find.${j + 1}`, String(x.w), "find", { correct: x.at });
+				else notes.push(`từ "${x.w}" không thấy trong lưới (tìm 8 hướng): bỏ qua`);
+			});
+			return {
+				slots,
+				key,
+				notes,
+				miss
+			};
+		}
 		(c.rows || []).forEach((r, ri) => {
 			const tk = (r.cells || []).map((v, ci) => [v, ci]).filter(([v]) => v && typeof v === "object" && v.tick);
 			if (tk.length) {
@@ -28873,10 +30096,7 @@ function taskSlots0(t) {
 				id: String(l),
 				text: String(l)
 			}));
-			const L = String(x.key ?? "").trim().toLowerCase(), al = TF_ALIAS[L] || L, j = labs.findIndex((l) => {
-				const v = String(l).toLowerCase();
-				return v === al || v === L;
-			});
+			const L = String(x.key ?? "").trim().toLowerCase(), j = L ? tfIndex(labs, L) : -1;
 			add(base, lab(i), "tf", L ? j >= 0 ? { correct: opts[j].id } : null : null, {
 				item: x.id,
 				options: opts
@@ -28965,12 +30185,6 @@ try {
 	Object.defineProperty(window, "imgOpts", {
 		configurable: true,
 		get: () => imgOpts
-	});
-} catch (_) {}
-try {
-	Object.defineProperty(window, "TF_ALIAS", {
-		configurable: true,
-		get: () => TF_ALIAS
 	});
 } catch (_) {}
 try {
@@ -29443,34 +30657,34 @@ function hTF(t, el, fk) {
 	if (t.answer.layout !== "A6" || !(t.answer.params || {}).row) return;
 	const bs = [...el.querySelectorAll(".qb > .a6")];
 	if (!bs.length) return;
-	const a = bs[0], last = bs[bs.length - 1], qb = a.parentElement, tfx = (tt) => (tt.answer.params || {}).tfx || 0;
-	const pct = () => {
-		const q = qb.getBoundingClientRect(), r = a.getBoundingClientRect();
-		return q.width ? Math.round((r.left - q.left) / q.width * 100) : 0;
-	}, lbl = (mm) => `câu ${pct()} / T-F ${100 - pct()} · cách lề phải ${mm} mm`;
+	const a = bs[0], last = bs[bs.length - 1], qb = a.parentElement, qt = qb.querySelector(":scope > .qt"), tfp = (tt) => (tt.answer.params || {}).tfp || 80, lbl = (p) => `câu ${p} / T-F ${100 - p}`;
 	mkH(el, "splitter", {
 		for: fk,
-		param: "tfx",
-		title: "Kéo để đưa cột T / F lại gần câu (bước 1 mm).",
+		param: "tfp",
+		title: "Kéo để đổi tỉ lệ câu / cột T-F (bước 5%).",
 		place: (tr, s) => {
-			const r = relR(a.getBoundingClientRect(), tr, s), l = relR(last.getBoundingClientRect(), tr, s);
+			const r = relR((qt || a).getBoundingClientRect(), tr, s), l = relR(last.getBoundingClientRect(), tr, s);
 			return {
-				left: r.left - 2 * MM,
-				top: r.top - 1 * MM,
-				height: l.bottom - r.top + 2 * MM,
-				tip: lbl(tfx(curTask(t)))
+				left: qt ? r.right + 2 * MM : r.left - 2 * MM,
+				top: relR(a.getBoundingClientRect(), tr, s).top - 1 * MM,
+				height: l.bottom - relR(a.getBoundingClientRect(), tr, s).top + 2 * MM,
+				tip: lbl(tfp(curTask(t)))
 			};
 		},
-		move: (ev, c) => {
-			const q = qb.getBoundingClientRect(), aw = a.getBoundingClientRect().width, mm = clampN(Math.round((q.right - ev.clientX - 2 * MM * c.s - aw) / c.s / MM), 0, 140), tt = curTask(t);
-			if (tfx(tt) === mm) return null;
+		move: (ev) => {
+			const q = qb.getBoundingClientRect(), p = clampN(Math.round((ev.clientX - q.left) / q.width * 20) * 5, 50, 90), tt = curTask(t);
+			if (tfp(tt) === p) return null;
 			tt.answer.params = tt.answer.params || {};
-			tt.answer.params.tfx = mm || null;
-			el.style.setProperty("--tfx", mm + "mm");
-			return lbl(mm);
+			tt.answer.params.tfp = p === 80 ? null : p;
+			delete tt.answer.params.tfx;
+			el.style.setProperty("--tfp", p);
+			return lbl(p);
 		},
 		reset: (tt) => {
-			if (tt.answer.params) delete tt.answer.params.tfx;
+			if (tt.answer.params) {
+				delete tt.answer.params.tfp;
+				delete tt.answer.params.tfx;
+			}
 		}
 	});
 }
@@ -30449,6 +31663,8 @@ function postSet(t, s, p, v) {
 		L.cols = null;
 		L.split = null;
 	}
+	if (p === "@imgPct" && v != null) L.imgFit = null;
+	if (p === "@imgFit" && !v) L.imgFit = null;
 	if (p.startsWith("cw.")) {
 		if (v == null) L.cw = null;
 		else {
@@ -30635,7 +31851,9 @@ function ovOf(t, s) {
 		"break",
 		"table",
 		"num",
-		"order"
+		"order",
+		"imgPct",
+		"imgFit"
 	].some((x) => L[x] != null) || !!t.spacing.preset || Object.keys(t.spacing.overrides).length > 0;
 	if (k === "frame") return Object.keys(L.frame || {}).length > 0;
 	if (k === "gt") {
@@ -31308,11 +32526,13 @@ actions.present = () => {
 	const pv = useUi.getState().pageView;
 	if (!pv) return;
 	const r = sheetSlots(ws);
+	const notes = Object.fromEntries((ws.tasks || []).map((t) => [t.id, taskSlots(t).notes]));
 	publish({ show: {
 		title: ws.title,
 		pages: pv.pages.map((p) => p.html),
 		slots: r.slots,
 		key: r.key,
+		notes,
 		start: sel.type !== "sheet" ? sel.id : null
 	} });
 };
@@ -34394,7 +35614,8 @@ var Q_ACTS = [
 	"tfrow",
 	"ruling",
 	"qarr",
-	"q2"
+	"q2",
+	"strictc"
 ];
 Q_ACTS.forEach((a) => {
 	extraActs[a] = (b, v) => {
@@ -34904,6 +36125,29 @@ treeEl.addEventListener("click", (e) => {
 		return commit((w) => {
 			m = tblo(T(w), v);
 		}, null, () => toast(m));
+	}
+	if (act === "sugadd" || act === "sugno" || act === "sugall") {
+		const one = (t, i, k, g) => {
+			const x = its$2(t)[i];
+			if (!x) return;
+			if (act === "sugno") {
+				x.sugNo = (x.sugNo || []).concat(`${k}:${g}`);
+				return;
+			}
+			const p = k.split("."), cur = p[2] === "keyg" ? keyGaps$1(x)[+p[3]] || "" : String(x.key ?? "");
+			applyField(t, k, cur.trim() ? `${cur.trim()} / ${g}` : g);
+		};
+		if (act === "sugall") {
+			let n = 0;
+			return commit((w) => {
+				const t = T(w);
+				allSug(t).forEach(([i, k, , g]) => {
+					one(t, i, k, g);
+					n++;
+				});
+			}, null, () => toast(`Đã thêm ${n} cách viết khác`));
+		}
+		return commit((w) => one(T(w), +b.dataset.i, b.dataset.k, v), act === "sugno" ? "Đã bỏ gợi ý" : `Đã thêm cách viết: ${v}`);
 	}
 	if (act === "pshuf") return commit((w) => {
 		const c = T(w).content;
@@ -37753,9 +38997,10 @@ dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 /* Container ảnh của ô T5 (.ci): khung riêng — Fit ngang / Fit dọc, chiều cao, zoom, lệch tâm, căn ngang */
 .ci{position:relative;min-width:0}
 .ci .pic{width:100%;min-width:0}
-.cell>.ci{width:100%;max-width:34mm}
+.cell>.ci{width:100%;max-width:var(--imw,34mm)}   /* v115: --imw theo số ảnh trên hàng (core/layout imgW) */
 .cell>.ci[data-cw],.ch>.ci[data-cw]{width:var(--cw);max-width:none}   /* v84: độ rộng ảnh theo % ô */
-.ch>.ci{width:100%;max-width:26mm}
+.ch>.ci{width:100%;max-width:var(--imw,26mm)}
+.task[data-imfit] .cell .a2,.task[data-imfit] .ch .a2{width:100% !important}
 .cell>.ci[data-fa="center"],.ch>.ci[data-fa="center"]{align-self:center}
 .cell>.ci[data-fa="right"],.ch>.ci[data-fa="right"]{align-self:flex-end}
 .cell>.ci[data-fa="left"],.ch>.ci[data-fa="left"]{align-self:flex-start}
@@ -37773,7 +39018,7 @@ dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 .itx{text-align:left}
 .choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4mm;padding-left:var(--gut)}
 .ch{display:flex;flex-direction:column;align-items:center;gap:1.5mm;min-width:0}
-.ch .pic{width:100%;max-width:26mm}
+.ch .pic{width:100%;max-width:var(--imw,26mm)}
 .list{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:var(--ig);margin-left:calc(-1 * var(--hang))}
 .q{display:flex;gap:0;align-items:flex-start;min-width:0}
 .q.tr{align-items:baseline}
@@ -37805,6 +39050,7 @@ dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 .mrows{display:grid;grid-template-columns:var(--tpl);row-gap:var(--ig);align-items:center}
 .ml,.mr{display:flex;align-items:center;gap:2mm;min-width:0}
 .ml{justify-content:flex-start}
+.mrows>.ml{padding-right:2mm}.mrows>.mr{padding-left:2mm}   /* v115: chừa khoảng giữa chữ hai vế và chấm nối (như sau "a.") */
 .ml .pic{width:21mm;flex:none}
 .mr span,.ml>span:not(.ino){border-radius:1.5mm}
 .mrows{margin-left:calc(-1 * var(--hang))}.mrows .ml>.ino{margin-right:calc(var(--ng) - 2mm)}   /* v106: số câu bài nối treo ở lề như các Task khác, chữ cột trái và tiêu đề thẳng với chữ hướng dẫn */
@@ -37892,8 +39138,8 @@ dialog .row{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 .a6{display:inline-flex;gap:3mm}
 /* v100: T F cùng hàng với câu (params.row): chữ câu bên trái, hai ô ở cuối hàng bên phải */
 .task[data-tfr] .qb{flex-direction:row;align-items:center;justify-content:space-between;gap:4mm}
-.task[data-tfr] .qb>.qt{flex:1;min-width:0}
-.task[data-tfr] .qb>.a6{flex:none;margin-right:var(--tfx,0mm)}
+.task[data-tfr] .qb>.qt{flex:0 0 calc((100% - 4mm) * var(--tfp,80) / 100);min-width:0}   /* v115: theo tỉ lệ câu / T-F (mặc định 80 / 20) */
+.task[data-tfr] .qb>.a6{flex:none;margin-left:auto;margin-right:auto}
 /* v101: Căn dọc cả khối (số câu, chữ câu, ô T/F): Trên / Giữa / Dưới */
 .task[data-tfr] .q{align-items:center}.task[data-tfr] .qb{align-items:center}
 .task[data-tfr][data-tfv=top] .q,.task[data-tfr][data-tfv=top] .qb{align-items:flex-start}
@@ -38298,6 +39544,14 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 .ino.ex{color:var(--accent)}
 .eb.xb{margin-left:4px;font-size:10px;padding:0 4px;width:auto;vertical-align:1px}
 .ef.wbth{display:flex;flex-wrap:wrap;gap:6px}.wbt{display:flex;flex-direction:column;align-items:center;width:56px;font-size:10px}.wbt small{max-width:56px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* v116 gợi ý cách viết khác dưới ô đáp án (cột trái) */
+.esug{display:flex;flex-wrap:wrap;gap:4px;flex-basis:100%;margin-top:3px}
+.kgap .kg:has(.esug),.er2:has(>.esug){flex-wrap:wrap}
+.sgc{display:inline-flex;align-items:stretch;border:1px dashed var(--accent);border-radius:12px;overflow:hidden;font-size:11px;line-height:18px}
+.sgc button{border:0;background:#f3f8ff;color:var(--accent);padding:0 7px;cursor:pointer;font:inherit}
+.sgc button:hover{background:#e3efff}
+.sgc .sgx{padding:0 6px;color:var(--muted);border-left:1px dashed var(--accent)}
+@media print{.esug{display:none}}
 /* ====== GĐ1a trình chiếu (src/viewer) ====== */
 .showfab{position:fixed;right:calc(312px + 20px + 18px);bottom:18px;z-index:50;height:40px;padding:0 18px;border-radius:20px;font-size:15px;font-weight:600;box-shadow:0 3px 12px rgba(20,30,40,.25)}
 @media print{.showfab{display:none}}
@@ -38334,6 +39588,14 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 .show .vsurf .xc>.vans,.show .vsurf .tc>.vans{bottom:auto;top:50%;transform:translateY(-50%)}
 .show .vsurf svg.vline{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none}
 .show .vsurf svg.vline line{stroke:#1565c0;stroke-width:.7mm;stroke-linecap:round}
+/* v116 tìm từ: khung bo góc quanh từ (đáp án xanh biển, bài làm xanh lá / đỏ, đang kéo xám) */
+.show .vsurf svg.vwfd,.show .vsurf svg.vfl{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:1}
+.show .vsurf svg rect{fill:none;stroke-width:.6mm}
+.show .vsurf svg.vcap rect{stroke:#1565c0;fill:rgba(21,101,192,.08)}
+.show .vsurf svg.vwfd.ok rect{stroke:#2e7d32;fill:rgba(46,125,50,.1)}
+.show .vsurf svg.vwfd.no rect{stroke:#c62828;fill:rgba(198,40,40,.08)}
+.show .vsurf svg.vfl rect{stroke:#78909c;stroke-dasharray:1.2mm .8mm;fill:rgba(120,144,156,.1)}
+.show .vsurf [data-rc]{cursor:crosshair}
 .show .vsurf .vok{outline-color:#1565c0 !important}
 .show .vsurf .opt.vok>b,.show .vsurf .opt.vok>i{outline:.6mm solid #1565c0;outline-offset:.5mm;border-radius:50%;color:#1565c0}
 .show .vsurf .a6 span.vok{box-shadow:0 0 0 .6mm #1565c0;color:#1565c0;border-radius:1.5mm}
@@ -38345,6 +39607,7 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 .show .vsurf .vtk{position:absolute;right:1mm;top:1mm;width:8mm;height:8mm;border-radius:50%;border:.35mm solid #9aa6ad;background:#fff;color:#9aa6ad;font:700 4.5mm/1 system-ui,sans-serif;cursor:pointer;opacity:.55}
 .show .vsurf .vtk:hover{opacity:1}
 .show .vsurf .vtk.on{background:#1565c0;border-color:#1565c0;color:#fff;opacity:1}
+.show .vsurf .vmn{position:absolute;right:1mm;top:2mm;height:6mm;padding:0 2mm;border-radius:3mm;background:#fff4e0;border:.3mm solid #f0b35a;color:#8a5300;font:600 3mm/5.4mm system-ui,sans-serif;white-space:nowrap;cursor:help;z-index:2}
 .show .vnote{font-size:12px;color:#f0b35a;white-space:nowrap}
 .show .vmsg{position:absolute;left:50%;top:18px;transform:translateX(-50%);z-index:40;background:rgba(0,0,0,.8);padding:8px 14px;border-radius:8px}
 /* B5 bút */
@@ -38358,6 +39621,10 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 .show .vpal.off{opacity:0;pointer-events:none}
 .show .vpal .vb{width:42px;min-width:0;padding:0;font-size:18px}
 .show .vpal .vb:disabled{opacity:.35;cursor:default}
+.show .vpal .vb.vbt{height:46px;line-height:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.show .vpal .vb.vbt small{font-size:10px}
+.show .vclr{position:absolute;left:calc(100% + 8px);bottom:40px;display:flex;flex-direction:column;gap:4px;padding:6px;border-radius:10px;background:rgba(20,21,24,.95);box-shadow:0 4px 18px rgba(0,0,0,.4)}
+.show .vclr .vb{width:auto;font-size:14px;padding:0 12px;text-align:left}
 .show .vpsep{width:28px;height:1px;background:#444a52;margin:2px 0}
 .show .vdot{width:26px;height:26px;border-radius:50%;border:2px solid #555;cursor:pointer}
 .show .vdot.on{border-color:#fff;box-shadow:0 0 0 2px #1f6feb}
@@ -38368,8 +39635,9 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 .show .vsurf .vcv{position:absolute;inset:-.6mm -1mm;z-index:2;border-radius:1.5mm;background:repeating-linear-gradient(45deg,#dfe3e8 0 2.5mm,#d3d8de 2.5mm 5mm);display:flex;align-items:center;justify-content:center;color:#5b6570;font:600 3.2mm/1 system-ui,sans-serif;cursor:pointer}
 .show .vsurf .vcv:hover{background:repeating-linear-gradient(45deg,#e8ebef 0 2.5mm,#dde1e6 2.5mm 5mm)}
 .show .vsurf [data-vu]:not(.vcov){cursor:pointer}
-@media (max-width:1700px){.show .vbar .vt{display:none}.show .vnote{display:none}}
-@media (max-width:2100px){.show .vbar .vt2{display:none}}
+@media (max-width:1700px){.show .vbar .vt{display:none}.show .vsurf .vmn{position:absolute;right:1mm;top:2mm;height:6mm;padding:0 2mm;border-radius:3mm;background:#fff4e0;border:.3mm solid #f0b35a;color:#8a5300;font:600 3mm/5.4mm system-ui,sans-serif;white-space:nowrap;cursor:help;z-index:2}
+.show .vnote{display:none}}
+@media (max-width:2100px){.show .vbar .vt2{display:none}.show .vnote{display:none}}   /* v117: nhãn "n chỗ chưa có đáp án" đã có ở góc từng Task (✎ Chấm tay) */
 @media (max-width:1100px){.show .vsel{width:110px}}
 /* B7 đồng hồ, bảng trắng */
 .show .vtimer{position:absolute;right:16px;top:16px;z-index:35;padding:10px;border-radius:14px;background:rgba(20,21,24,.94);box-shadow:0 4px 18px rgba(0,0,0,.45);display:flex;flex-direction:column;align-items:center;gap:6px}
@@ -38395,8 +39663,9 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 .show .vsurf .vwi:hover{background:rgba(31,111,235,.05)}
 .show .vsurf .vwi:focus{background:rgba(31,111,235,.08);box-shadow:0 0 0 .4mm #1f6feb}
 .show .vsurf .pgap>.vwi{font-size:1.25em}
-.show .vsurf .pgap.vwf{color:transparent}
+.show .vsurf .pgap.vwf,.show .vsurf .pgap:focus-within{color:transparent}   /* v115: đang gõ thì ẩn nhãn (1) (2) */
 .show .vsurf textarea.vwi{resize:none;text-align:left;line-height:var(--lh,8mm);padding:calc(var(--lh,8mm) * .12) 2mm 0;overflow:hidden;white-space:pre-wrap}
+.show .vsurf textarea.vwi.vwwrap{line-height:1.2;padding:0 .8mm;text-align:left;white-space:pre-wrap;word-break:break-word}
 .show .vsurf .vwx{text-transform:uppercase;font-weight:700;padding:0}
 .show .vsurf .mbx>.vwi{text-transform:uppercase;font-weight:700;padding:0}
 .show .vsurf .vwf>.vans,.show .vsurf .vwf .ln>.vans{left:.5mm;right:auto;top:auto;bottom:100%;transform:none;font-size:.8em;text-align:left}
@@ -38410,6 +39679,13 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 .show .vsurf .vw-ok>.vwi{color:#1b5e20}
 .show .vsurf .vw-no>.vwi{color:#b71c1c}
 .show .vsurf .a5.vwt{display:inline-grid;place-items:center}
+/* v115 ô tick (T10): đúng / sai thể hiện bằng màu dấu tick và chữ, không khung bao */
+.show .vsurf .opt:has(>b.bx).vw-sel,.show .vsurf .opt:has(>b.bx).vw-ok,.show .vsurf .opt:has(>b.bx).vw-no,.show .vsurf .opt:has(>b.bx).vw-part{box-shadow:none;background-color:transparent}
+.show .vsurf .opt.vw-sel>b.bx{position:relative}
+.show .vsurf .opt.vw-sel>b.bx::after{content:'✓';position:absolute;left:50%;top:50%;transform:translate(-50%,-58%);font-size:1.25em;font-weight:800;color:#455a64}
+.show .vsurf .opt.vw-ok>b.bx::after,.show .vsurf .opt.vw-ok>span{color:#2e7d32}
+.show .vsurf .opt.vw-no>b.bx::after,.show .vsurf .opt.vw-no>span{color:#c62828}
+.show .vsurf .opt.vw-ok>b.bx{border-color:#2e7d32}.show .vsurf .opt.vw-no>b.bx{border-color:#c62828}
 .show .vsurf .a5.vwt::after{content:'✓';font-weight:700;color:#455a64}
 .show .vsurf .a5.vwt.vw-ok::after{color:#2e7d32}
 .show .vsurf .a5.vwt.vw-no::after{color:#c62828}
@@ -38437,7 +39713,35 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 .show .vsurf .vrs{position:absolute;right:10mm;top:1mm;width:8mm;height:8mm;border-radius:50%;border:.35mm solid #9aa6ad;background:#fff;color:#5b6570;font:700 4.5mm/1 system-ui,sans-serif;cursor:pointer;opacity:.6}
 .show .vsurf .vrs:hover{opacity:1}
 .show .vsurf [data-ans]:not(.vwh),.show .vsurf .mrows>.ml,.show .vsurf .mrows>.mr,.show .vsurf .md .a7{cursor:pointer}
+.show .vsurf .vmkg{position:absolute;top:-2.4mm;right:2.2mm;z-index:3;display:flex;gap:.8mm}
+.show .vsurf .vmk{width:5mm;height:5mm;padding:0;border-radius:50%;border:.3mm solid #fff;font:700 3.2mm/1 system-ui,sans-serif;color:#fff;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.show .vsurf .vmk.ok{background:#2e7d32}.show .vsurf .vmk.no{background:#c62828}
+.show .vsurf .vmk:hover{transform:scale(1.15)}
 .show .vscore{padding:0 6px;font-weight:600;color:#9be39f;font-variant-numeric:tabular-nums;white-space:nowrap}
+/* v117 E1 / E3: 1 / 2 trang, Cuộn */
+.show .vsurf.vpages{background:none;box-shadow:none}
+.show .vpages>.vpage{position:absolute;background:var(--paper,#fff);color:var(--ink,#111);box-shadow:0 2px 18px rgba(0,0,0,.45)}
+/* v117 E5 nút 🔍 mở Từng Task */
+.show .vsurf .vzt{position:absolute;right:10mm;top:1mm;width:8mm;height:8mm;border-radius:50%;border:.35mm solid #9aa6ad;background:#fff;font:3.8mm/1 system-ui,sans-serif;cursor:zoom-in;opacity:.55;padding:0}
+.show .vsurf .vzt:hover{opacity:1}
+/* v117 E6 đèn pin */
+.show .vtorch{position:absolute;inset:0;z-index:28;pointer-events:none}
+/* v117 E11 hộp Note */
+.show .vnotes{position:absolute;left:0;top:0;width:0;height:0;z-index:4}
+.show .vnt{position:absolute;min-width:46mm;max-width:90mm;background:#fff8c4;border:.3mm solid #e0c64a;border-radius:2mm;box-shadow:0 1mm 3mm rgba(0,0,0,.25);color:#3d3500;font:3.6mm/1.35 system-ui,sans-serif;user-select:text}
+.show .vnth{display:flex;align-items:center;gap:1mm;padding:.8mm 1mm .8mm 2mm;border-bottom:.25mm solid #eedb7a;font-weight:600;font-size:3mm;color:#7a6a00}
+.show .vnth span{flex:1}
+.show .vntb{width:6mm;height:6mm;border:0;border-radius:1.2mm;background:transparent;color:inherit;font:inherit;font-size:3.6mm;line-height:1;cursor:pointer;padding:0}
+.show .vntb:hover{background:rgba(0,0,0,.08)}
+.show .vntb.on{background:#e53935;color:#fff}
+.show .vntt{display:block;box-sizing:border-box;width:100%;min-width:46mm;min-height:9mm;border:0;outline:none;background:transparent;resize:none;padding:1.5mm 2mm;font:inherit;color:inherit;field-sizing:content;overflow:hidden}
+.show .vnt.vntc{min-width:0;padding:.8mm 2mm;cursor:pointer;font-size:3.2mm;white-space:nowrap}
+/* v117 E10 bảng trắng chế độ Text */
+.show .vbsurf.txt{cursor:text}
+.show .vbtx{position:absolute;border:0;outline:none;background:transparent;resize:none;padding:0 2px;margin:0;font:34px/57px system-ui,sans-serif;field-sizing:content;min-width:40px;overflow:hidden;white-space:pre}
+.show .vbsurf.bg-grid .vbtx{font-size:24px;line-height:36px}
+.show .vbsurf.bg-plain .vbtx{line-height:44px}
+.show .vbtx:focus{background:rgba(31,111,235,.06);box-shadow:0 0 0 1px #9cc0ff}
 /*$vite$:1*/</style>
 </head>
 <body>

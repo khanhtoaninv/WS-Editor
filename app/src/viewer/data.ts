@@ -10,6 +10,7 @@ export type ShowData = {
   key: Key;
   start?: string | null;    // mã Task mở đầu (Task đang chọn trong WS Editor)
   store?: string;           // tên chỗ lưu nét vẽ trên máy (mặc định theo tiêu đề phiếu)
+  notes?: Record<string, string[]>;   // v113: ghi chú theo Task (chưa có đáp án → chấm tay, chỉ xem…), hiện trên Task khi chiếu
 };
 
 export type Frag = { task: string; page: number; k: number; html: string };   // k = mảnh thứ k của Task (0 = mảnh đầu)

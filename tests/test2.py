@@ -18,7 +18,11 @@ with sync_playwright() as p:
     # v84 đổi mặc định (cỡ chữ Vừa, hàng bảng 12 mm): so bố cục ở cùng thông số cũ (To, hàng 14 mm)
     OLDDEF = "(()=>{commit(w=>{w.size='l';w.spacing={preset:'normal',overrides:{}};w.tasks.forEach(t=>{if(t.content.form==='table'){t.layout.table=Object.assign({},t.layout.table);if(t.layout.table.minH==null)t.layout.table.minH=14;}});});})()"
     po.evaluate(OLDDEF); pn.evaluate(OLDDEF); po.wait_for_timeout(500); pn.wait_for_timeout(500)
+    # v115 (3.10, người dùng duyệt): ảnh theo câu đồng đều theo số ảnh trên hàng, khác v106 → so bố cục trên bản sao bỏ hai Task có ảnh theo câu (t1, t3)
+    DROP = "commit(w=>{w.tasks=w.tasks.filter(t=>!['t1','t3'].includes(t.id));})"
+    po.evaluate(DROP); pn.evaluate(DROP); po.wait_for_timeout(500); pn.wait_for_timeout(500)
     lo, ln = po.evaluate(LAY), pn.evaluate(LAY)
+    po.click('#undo'); pn.click('#undo'); po.wait_for_timeout(500); pn.wait_for_timeout(500)
     chk('bố cục phiếu giống hệt bản trước (trang, chiều cao từng Task, lỗi tràn)', lo == ln, '' if lo==ln else (lo[:200], ln[:200]))
     ids = pn.evaluate("window.__ws.ws.tasks.map(t=>t.id)")
     bad = []
@@ -86,7 +90,7 @@ with sync_playwright() as p:
     chk('cột trái chỉ có + Task và + Phiếu (không còn Dán…)', pn.locator('#tree [data-paste]').count()==0 and pn.locator('#tree [data-lib]').count()==1 and pn.locator('#tree [data-newsheet]').count()==1)
     pn.click('#tree [data-lib]'); pn.wait_for_timeout(300); pn.click('#libDlg [data-tab=src]'); pn.wait_for_timeout(200)
     chk('hộp + Task: thẻ Từ file / dán mở', pn.eval_on_selector('#libDlg','e=>e.open') and pn.is_visible('#pasteTa')); pn.click('#libClose'); pn.wait_for_timeout(200)
-    chk('kết thúc: không lỗi tràn, 11 trang (khoảng cách Vừa như bản cũ)', pn.inner_text('#diagBadge')=='Không lỗi tràn' and pn.inner_text('#pageBadge').startswith('11'))
+    chk('kết thúc: không lỗi tràn, 12 trang (v115: ảnh theo câu đồng đều làm t1, t3 cao hơn v106 → 11 thành 12 trang)', pn.inner_text('#diagBadge')=='Không lỗi tràn' and pn.inner_text('#pageBadge').startswith('12'))
     pn.click('#tree .tnode[data-sel=sheet]'); pn.wait_for_timeout(200)
     chk('Phiếu: có Nâng cao, không còn nút ↵ cũ', pn.locator('#insp details.adv').count()==1 and pn.locator('#insp .fitrow').count()==1)
     chk('hướng dẫn dài được gấp', pn.locator('#insp .hint.fold').count()>=2)

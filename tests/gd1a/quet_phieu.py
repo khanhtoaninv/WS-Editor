@@ -19,7 +19,7 @@ with sync_playwright() as p:
         if r != 'ok': print('FAIL', name, r); bad += 1; continue
         pg.wait_for_timeout(200)
         want = set(pg.evaluate("() => { const r = sheetSlots(ws); return r.slots.filter(s => { const k = r.key[s.id]; return k && (k.correct != null || (k.accept && k.accept.length) || k.sample); }).map(s => s.id); }"))
-        pg.click('#showBtn'); pg.wait_for_selector('#wsShow'); pg.keyboard.press('a')
+        pg.click('#showBtn'); pg.wait_for_selector('#wsShow'); pg.keyboard.press('Shift+A')   # v114: Shift+A = cả phiếu
         nP = pg.evaluate("() => document.querySelectorAll('#stage .page').length"); got = set()
         for i in range(nP):
             got |= set(pg.evaluate(SHOWN)); pg.keyboard.press('PageDown'); pg.wait_for_timeout(40)

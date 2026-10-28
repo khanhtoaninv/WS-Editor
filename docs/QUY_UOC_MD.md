@@ -54,6 +54,9 @@ Khoảng cách: vừa               ← tùy chọn: gọn | vừa | thoáng
 | `Dạng:` (v81) | dạng câu hỏi, một trong 12 dạng ở mục 2b; chi tiết trong ngoặc. **Nên ghi** (thay cho `Trả lời:`) | `Dạng: đúng/sai (Yes/No)` |
 | `Số câu:` (v100) | nhãn số câu: `a b c` (chữ a, b, c…), `ẩn` (không số câu), `1 2 3` (mặc định). Dùng khi PDF đánh a–h; viết các dòng là `1.`, `2.`… (không viết `a.` đầu dòng, vì app hiểu là lựa chọn) | `Số câu: a b c` |
 | `Viền hai vế:` | `có` / `không` | chỉ bài nối: khung viền quanh chữ hai vế (v103, mặc định không viền) |
+| `Phân biệt viết tắt:` | `có` / `không` | (v116) bài dạy viết tắt: máy chấm KHÔNG coi `I'm` = `I am`. Mặc định không ghi = coi tương đương theo bảng `docs/TUONG_TAC/BANG_VIET_TAT_CHUAN.md` |
+| `Kích thước ảnh:` | `50%` … `150%` | (v116, cài ở v115) ảnh theo câu (nhìn ảnh viết, chọn ảnh): nhân cỡ mặc định theo số ảnh trên hàng (2 = 60, 3 = 45, 4 = 36, 5 = 30 mm) |
+| `Ảnh vừa ô:` | `có` / `không` | (v115) ảnh và dòng viết khít bề ngang ô |
 | `Tiêu đề cột:` | `PLACES \| PROBLEMS` | chỉ bài nối (v105): tiêu đề hai cột (trái \| phải) |
 | `Chỗ nối:` | `chấm` / `ô viết chữ` / `không` | chỉ bài nối (v105): giữa hai cột là chấm nối, ô viết chữ cái hoặc không có |
 | Vế phải thừa (bài nối, v105) | `6. - F. very cold` | dòng bài nối có vế trái trống: vế gây nhiễu / vế dư ở cột phải |

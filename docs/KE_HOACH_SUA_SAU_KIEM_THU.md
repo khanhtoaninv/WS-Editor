@@ -1,6 +1,8 @@
 # Kế hoạch xử lý sau kiểm thử GĐ0 / 1a / 1b (28/10/2026)
 
 > Tổng hợp từ: `docs/KIEM_THU_GD0_1A_1B.md` (Claude kiểm), `docs/KET_QUA_KIEM_THU_TAY_2026-10-28.md` (thử tay vòng 1), `docs/KET_QUA_KIEM_THU_PHIEU_DU_DANG_2026-10-28.md` (thử tay vòng 2, phiếu 32 Task), `docs/TUONG_TAC/BANG_VIET_TAT_CHUAN.md`.
+> **Đã làm xong (phiên 14, 28/10/2026): v113 → v117, spec mục 44–48, báo cáo `docs/BAO_CAO_PHIEN_2026-10-28_phien14.md`.**
+
 > **Người dùng đã duyệt toàn bộ kế hoạch (28/10/2026) và yêu cầu phiên sau chạy MỘT MẠCH đợt 1 → 5 rồi gói bàn giao dev, không dừng hỏi từng bước.** Chỗ còn mơ hồ: chọn theo "Quyết định mặc định" (mục cuối) và ghi lại trong báo cáo. Sau mỗi đợt: chạy đủ test, commit + push `main`, tăng số bản.
 > Đã chốt với người dùng: T02 không có vấn đề; ngắt trang (G2) giữ nguyên; gợi ý cách viết khác dùng **cách A** (chip dưới ô).
 

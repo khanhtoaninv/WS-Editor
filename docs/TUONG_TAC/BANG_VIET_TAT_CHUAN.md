@@ -1,6 +1,6 @@
 # Bảng viết tắt chuẩn cho máy chấm (đề xuất, 28/10/2026)
 
-> Trạng thái: **bảng và quy tắc để duyệt, chưa cài vào code.** Dùng để giải thích cho người dùng vì sao máy chấm `I'm` = `I am`, và là danh sách gốc khi cài (`shared/src/normalize.ts`). Đổi quyết định GĐ0 "không tự mở rộng viết tắt" theo yêu cầu người dùng 28/10 (kết quả thử tay B6).
+> Trạng thái: **đã cài từ v116 (28/10/2026)**, `CONTRACTIONS` trong `shared/src/normalize.ts`; công tắc theo Task "Phân biệt viết tắt" (`strictContr`, MD `Phân biệt viết tắt: có`). Bản đề xuất ban đầu: Dùng để giải thích cho người dùng vì sao máy chấm `I'm` = `I am`, và là danh sách gốc khi cài (`shared/src/normalize.ts`). Đổi quyết định GĐ0 "không tự mở rộng viết tắt" theo yêu cầu người dùng 28/10 (kết quả thử tay B6).
 
 ## 1. Quy tắc
 1. Trước khi so, cả **bài làm** và **từng đáp án chấp nhận** đều được đổi về dạng đầy đủ (mở rộng viết tắt trong bảng dưới), rồi so như hiện nay (không phân biệt hoa thường, bỏ khoảng trắng thừa, nháy cong ’ = ', bỏ dấu câu thừa ở hai đầu). Vì hai bên cùng đổi nên `I'm` và `I am` khớp nhau theo cả hai chiều.

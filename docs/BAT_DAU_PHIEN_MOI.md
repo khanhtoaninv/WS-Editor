@@ -1,5 +1,7 @@
 # Bắt đầu phiên mới — WS Editor
 
+> **Cập nhật 28/10/2026 (cuối phiên 14): app là v117.** Đã làm hết `docs/KE_HOACH_SUA_SAU_KIEM_THU.md` đợt 1 → 5 (spec mục 44–48) và gói bàn giao dev `docs/BAN_GIAO_DEV/`. Đọc `docs/BAO_CAO_PHIEN_2026-10-28_phien14.md` mục 0. Việc tiếp: người dùng thử tay các mục mới trong `docs/TUONG_TAC/KIEM_TRA_GD1A.md` (27–35) và `KIEM_TRA_GD1B.md` (20–27); rồi GĐ2 đóng gói (`docs/TUONG_TAC/3_LO_TRINH.md`).
+
 > **Cập nhật 28/10/2026 (cuối phiên 13): app vẫn v112. Phiên tiếp theo chạy MỘT MẠCH toàn bộ `docs/KE_HOACH_SUA_SAU_KIEM_THU.md` (đợt 1 → 5 rồi gói bàn giao dev `docs/BAN_GIAO_DEV/`), người dùng đã duyệt, không dừng hỏi; chỗ mơ hồ theo mục "Quyết định mặc định" cuối file. Đọc trước: `docs/BAO_CAO_PHIEN_2026-10-28_phien13.md` mục 0.** Lệnh mở phiên: "Đọc CLAUDE.md, docs/BAO_CAO_PHIEN_2026-10-28_phien13.md mục 0 và docs/KE_HOACH_SUA_SAU_KIEM_THU.md, rồi làm một mạch hết các đợt."
 
 > **Cập nhật 28/10/2026 (cuối phiên 12): app là `ws-editor.html` v112** (React + lõi JS cũ; GĐ0, GĐ1a, GĐ1b xong). Đọc `CLAUDE.md` rồi `docs/BAO_CAO_PHIEN_2026-10-27_phien12.md` mục 0 và mục 5–6. Việc tiếp: người dùng thử tay `docs/TUONG_TAC/KIEM_TRA_GD1A.md` + `KIEM_TRA_GD1B.md` và duyệt `DUYET_GD0.md`; rồi GĐ2 đóng gói (`docs/TUONG_TAC/3_LO_TRINH.md`). **Chuyển nốt phần JS còn lại sang React / TypeScript: làm một phiên riêng SAU GĐ2, TRƯỚC 1c** (`docs/KE_HOACH_REACT.md` mục 8.5). Claude nhắc người dùng khi GĐ2 xong.

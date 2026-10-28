@@ -1,7 +1,7 @@
 // src/core/md.js — tách nguyên văn từ v106 (app/scripts/tach-core.mjs). Không dùng trạng thái giao diện (chọn, cột trái, hoàn tác).
 import { ws } from './state.js';
 import { AGE, ANS_DEF, IMP_MAX, IMP_MAX_CH, LAYOUT_DEF, QN, RECIPES, attachOpts, choiceTexts, ck, clone, ensureIds, ensureRowIds, featOf, fillSheet, fillTask, gapCount, hasChoiceMarkup, hasMarkup, isFreeW, isGridTbl, isObj, its, kindsOk, newId, normAnswer, qTidy, recipeMatch, tidy } from './model.js';
-import { A2MM, TA, a2cfg, autoLayout, crossCell, gtN, layoutOf, layoutReasons, leadText, qOf, qnum, renderTask, taOf } from './layout.js';
+import { A2MM, TA, a2cfg, autoLayout, crossCell, gtN, imgRowN, layoutOf, layoutReasons, leadText, qOf, qnum, renderTask, taOf } from './layout.js';
 // Câu nhận dòng đáp án: bỏ câu ví dụ, dòng chữ, và lượt hội thoại không có chỗ trống (GĐ0)
 const keyable = x => !x.ex && !x.gt && !(x.who != null && !/___|\{/.test(x.text || ''));
 
@@ -317,11 +317,11 @@ export function readJson(raw) {
   return { src: 'json', kind, sheet, sheetNotes, tasks };
 }
 
-export const MD_FIELD = /^\s*(hướng dẫn|instruction|track|audio|mẫu|trả lời|answer type|dòng viết|khung từ ảnh|khung từ|đáp án chỗ trống|gap answers|words?|word bank|ảnh chung|ảnh|image|lời dẫn|intro|ghi chú|lưu ý|note|dạng|bố cục|vị trí khung từ|dòng kẻ|thứ tự|khối chữ trên|khối chữ dưới|khối chữ|khối ảnh trên|khối ảnh dưới|khối ảnh|điểm trên ảnh|chữ câu hỏi|số câu|căn lề chữ|xáo vế phải|viền hai vế|tiêu đề cột|chỗ nối)\s*:\s*(.*)$/i;
+export const MD_FIELD = /^\s*(hướng dẫn|instruction|track|audio|mẫu|trả lời|answer type|dòng viết|khung từ ảnh|khung từ|đáp án chỗ trống|gap answers|words?|word bank|ảnh chung|ảnh|image|lời dẫn|intro|ghi chú|lưu ý|note|dạng|bố cục|vị trí khung từ|dòng kẻ|thứ tự|khối chữ trên|khối chữ dưới|khối chữ|khối ảnh trên|khối ảnh dưới|khối ảnh|điểm trên ảnh|chữ câu hỏi|số câu|căn lề chữ|xáo vế phải|viền hai vế|tiêu đề cột|chỗ nối|kích thước ảnh|ảnh vừa ô|phân biệt viết tắt)\s*:\s*(.*)$/i;
 
 export const MD_FKEY = { 'hướng dẫn': 'instruction', instruction: 'instruction', track: 'audio', audio: 'audio', 'mẫu': 'recipe', 'trả lời': 'kind', 'answer type': 'kind', 'dòng viết': 'lines', 'khung từ': 'bank', 'đáp án chỗ trống': 'gapkeys', 'gap answers': 'gapkeys', word: 'bank', words: 'bank', 'word bank': 'bank', 'ảnh chung': 'image', 'ảnh': 'image', image: 'image', 'lời dẫn': 'intro', intro: 'intro', 'ghi chú': 'note', 'lưu ý': 'note', note: 'note',
   'dạng': 'form', 'bố cục': 'tlay', 'khung từ ảnh': 'ibank', 'vị trí khung từ': 'bankpos', 'dòng kẻ': 'ruling', 'thứ tự': 'order', 'điểm trên ảnh': 'marks',
-  'khối chữ': 'gtT', 'khối chữ dưới': 'gtT', 'khối chữ trên': 'gtTtop', 'khối ảnh': 'gtI', 'khối ảnh dưới': 'gtI', 'khối ảnh trên': 'gtItop', 'chữ câu hỏi': 'qbold', 'số câu': 'nlab', 'căn lề chữ': 'ta', 'xáo vế phải': 'shuf', 'viền hai vế': 'mbd', 'tiêu đề cột': 'heads', 'chỗ nối': 'mid' };   // v93: MD mang chữ câu hỏi đậm, xáo vế phải bài nối
+  'khối chữ': 'gtT', 'khối chữ dưới': 'gtT', 'khối chữ trên': 'gtTtop', 'khối ảnh': 'gtI', 'khối ảnh dưới': 'gtI', 'khối ảnh trên': 'gtItop', 'chữ câu hỏi': 'qbold', 'số câu': 'nlab', 'căn lề chữ': 'ta', 'xáo vế phải': 'shuf', 'viền hai vế': 'mbd', 'tiêu đề cột': 'heads', 'chỗ nối': 'mid', 'kích thước ảnh': 'imgPct', 'ảnh vừa ô': 'imgFit', 'phân biệt viết tắt': 'strictc' };   // v93: MD mang chữ câu hỏi đậm, xáo vế phải bài nối
 
 // v81: "Dạng:" = dạng câu hỏi (Q1–Q12), ghi chi tiết trong ngoặc; "Bố cục:" = bố cục Task (4 kiểu)
 export const MD_FORM = { 'điền từ': 'Q1', 'điền chỗ trống': 'Q1', 'viết từ': 'Q1', 'viết câu': 'Q2', 'trả lời câu hỏi': 'Q2', 'chọn a/b/c': 'Q3', 'khoanh a/b/c': 'Q3', 'chọn đáp án': 'Q3', 'chọn trong câu': 'Q4', 'gạch chân': 'Q4', 'khoanh trong câu': 'Q4', 'tìm lỗi sai': 'Q4', 'đúng/sai': 'Q5', 'đúng sai': 'Q5', 'nhìn ảnh viết': 'Q6', 'chọn ảnh': 'Q7', 'tick ảnh': 'Q7', 'nối': 'Q8', 'tô chữ': 'Q9', 'bảng': 'Q10', 'lưới': 'Q11', 'ô chữ': 'Q11', 'viết tự do': 'Q12', 'viết đoạn': 'Q12' };
@@ -569,6 +569,9 @@ export function mdTask(b, keys) {
   if (F.qbold) { if (/^(đậm|bold|có)$/i.test(F.qbold)) t.layout.qbold = true; else if (!/^(thường|bình thường|normal|không)$/i.test(F.qbold)) notes.push(`không hiểu "Chữ câu hỏi: ${F.qbold}" (đậm / thường)`); }
   if (F.heads) { if (ck(t) !== 'pairs') notes.push('“Tiêu đề cột” chỉ dùng cho bài nối'); else { const h = F.heads.split('|').map(x => x.trim()); if (h.some(Boolean)) t.content.heads = [h[0] || '', h[1] || '']; } }   // v105
   if (F.mid) { if (ck(t) !== 'pairs') notes.push('“Chỗ nối” chỉ dùng cho bài nối'); else if (/^(ô|box)/i.test(F.mid.trim())) t.answer.params.mid = 'box'; else if (/^(không|none)/i.test(F.mid.trim())) t.answer.params.mid = 'none'; else if (!/^(chấm|dot)/i.test(F.mid.trim())) notes.push(`không hiểu "Chỗ nối: ${F.mid}" (chấm / ô viết chữ / không)`); }   // v105
+  if (F.strictc) { if (/^(có|bật|yes|on)$/i.test(F.strictc)) t.answer.params.strictContr = true; else if (!/^(không|tắt|no|off)$/i.test(F.strictc)) notes.push(`không hiểu "Phân biệt viết tắt: ${F.strictc}" (có / không)`); }   // v116
+  if (F.imgPct) { const m = /^(\d{2,3})\s*%?$/.exec(F.imgPct.trim()); if (!imgRowN(t)) notes.push('“Kích thước ảnh” chỉ dùng cho bài có ảnh theo câu (nhìn ảnh viết, chọn ảnh)'); else if (m && +m[1] >= 50 && +m[1] <= 150) t.layout.imgPct = +m[1]; else notes.push(`không hiểu "Kích thước ảnh: ${F.imgPct}" (50% – 150%)`); }   // v115
+  if (F.imgFit) { if (!imgRowN(t)) notes.push('“Ảnh vừa ô” chỉ dùng cho bài có ảnh theo câu'); else if (/^(có|bật|yes|on)$/i.test(F.imgFit)) t.layout.imgFit = true; else if (!/^(không|tắt|no|off)$/i.test(F.imgFit)) notes.push(`không hiểu "Ảnh vừa ô: ${F.imgFit}" (có / không)`); }
   if (F.mbd) { if (ck(t) !== 'pairs') notes.push('“Viền hai vế” chỉ dùng cho bài nối'); else if (/^(có|bật|yes|on)$/i.test(F.mbd)) t.layout.mbd = 'on'; else if (!/^(không|tắt|no|off)$/i.test(F.mbd)) notes.push(`không hiểu "Viền hai vế: ${F.mbd}" (có / không)`); }   // v103
   if (F.shuf) { if (ck(t) !== 'pairs') notes.push('“Xáo vế phải” chỉ dùng cho bài nối'); else if (/^(có|bật|yes|on)$/i.test(F.shuf)) t.content.shuffle = true; else if (/^(không|tắt|no|off)$/i.test(F.shuf)) delete t.content.shuffle; else notes.push(`không hiểu "Xáo vế phải: ${F.shuf}" (có / không)`); }
   if (/\s\|\s|\t/.test(body.join('\n')) && ck(t) === 'table') explicit = true;
@@ -602,6 +605,8 @@ export function taskToMd(t, asPart) {
   if (taOf(t) !== 'left') o.push('Căn lề chữ: ' + TA.find(y => y[0] === taOf(t))[1].toLowerCase());   // v97
   if (k === 'pairs' && c.shuffle) o.push('Xáo vế phải: có');
   if (k === 'pairs' && t.layout.mbd === 'on') o.push('Viền hai vế: có');
+  if ((a.params || {}).strictContr) o.push('Phân biệt viết tắt: có');   // v116
+  if (imgRowN(t) && t.layout.imgFit) o.push('Ảnh vừa ô: có'); else if (imgRowN(t) && t.layout.imgPct && t.layout.imgPct !== 100) o.push(`Kích thước ảnh: ${t.layout.imgPct}%`);   // v115
   if (k === 'pairs' && c.heads && c.heads.some(Boolean)) o.push('Tiêu đề cột: ' + c.heads.join(' | '));
   if (k === 'pairs' && (a.params || {}).mid === 'box') o.push('Chỗ nối: ô viết chữ'); else if (k === 'pairs' && (a.params || {}).mid === 'none') o.push('Chỗ nối: không');
   if (t.image && t.image.marks && t.image.marks.length) o.push('Điểm trên ảnh: ' + t.image.marks.map(m => `${m.x} ${m.y}`).join('; ') + (t.image.mk && t.image.mk.label === 'none' ? ' (ô trống)' : ''));
@@ -769,6 +774,7 @@ export function qCmd(t, act, v) {
   if (act === 'q2') { const [k, x] = v.split(':'), c = q2cfg(t);
     if (k === 'start') q2set(t, { start: x }); else if (k === 'len') q2set(t, { len: x }); else if (k === 'mm') q2set(t, { mm: c.mm + (+x), len: 'fixed' }); else if (k === 'ln') q2set(t, { lines: c.lines + (+x) });
     const n = q2cfg(t); return `Q2: ${n.start === 'end' ? 'từ cuối câu' : 'dòng dưới'} · ${n.len === 'fill' ? 'hết dòng' : n.mm + ' mm'} · ${n.lines} hàng`; }
+  if (act === 'strictc') { if (v === '1') t.answer.params.strictContr = true; else delete t.answer.params.strictContr; return v === '1' ? 'Phân biệt viết tắt: I\'m ≠ I am' : 'Không phân biệt viết tắt: I\'m = I am'; }   // v116
   if (act === 'tfrow') { if (v === '1') t.answer.params.row = true; else delete t.answer.params.row; return v === '1' ? 'T / F cùng hàng với câu' : 'T / F dưới câu'; }
   if (act === 'labs') { if (v === 'tf') delete t.answer.params.labs; else t.answer.params.labs = LABS[v].slice(); return 'Nhãn: ' + LABS[v].join(' / '); }
   if (act === 'ruling') { if (v === '4') t.answer.params.ruling = '4'; else delete t.answer.params.ruling; return v === '4' ? 'Dòng kẻ bốn ô li' : 'Dòng kẻ thường'; }
