@@ -41,3 +41,21 @@ with sync_playwright() as p:
     open(os.path.join(ROOT, 'samples/lop/ws-demo-lop.json'), 'w', encoding='utf-8').write(json.dumps(json.loads(out), ensure_ascii=False, indent=1))
     print('ghi xong', len(out))
     b.close()
+
+# ---- đóng gói sẵn cho nút "Nạp dữ liệu demo": gửi 2 phiếu lên một máy chủ tạm rồi chép thư mục gói vào server/demo/goi/
+import shutil, json as _j
+from chung import Server, gv_login, gui_goi
+DEMO = [('demo-unit3', 'samples/lop/ws-demo-lop.json'), ('demo-ontap', 'tests/md/mau-tron.md')]
+dest = os.path.join(ROOT, 'server', 'demo', 'goi'); shutil.rmtree(dest, ignore_errors=True)
+S = Server()
+try:
+    with sync_playwright() as p:
+        b = p.chromium.launch(); ctx = b.new_context(viewport={'width': 1366, 'height': 900}); g = ctx.new_page(); gv_login(g, S.base)
+        for did, f in DEMO:
+            before = set(os.listdir(os.path.join(S.data, 'goi')))
+            print(did, gui_goi(ctx, S.base, f))
+            new = set(os.listdir(os.path.join(S.data, 'goi'))) - before; assert len(new) == 1, new
+            src = os.path.join(S.data, 'goi', new.pop()); shutil.copytree(src, os.path.join(dest, did))
+        b.close()
+finally: S.stop()
+print('đã chép vào', dest, os.listdir(dest))

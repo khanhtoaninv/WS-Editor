@@ -1,0 +1,22 @@
+{
+ "id": "ws-demo-001@v1",
+ "sheetId": "ws-demo-001",
+ "version": 1,
+ "title": "Unit 3 · My home",
+ "taoLuc": "2026-10-28T13:15:21.270Z",
+ "contentHash": "4c063da29c9dcb121eb90cedff664e7da84ce4232b737f5a356aa485907873e8",
+ "stats": {
+  "tasks": 18,
+  "slots": 110,
+  "autoGraded": 100,
+  "manualGraded": 10,
+  "staticOnly": 1
+ },
+ "warnings": [
+  "1 câu chỉ xem (không tương tác)",
+  "Task 8 (Q1 Điền từ): 4 chỗ 1, 2, 3, 4: chưa có đáp án → chấm tay",
+  "Task 15 (Q2 Viết câu): 6 chỗ 1, 2, 3, 4, 5, 6: chưa có đáp án → chấm tay",
+  "Task 16 (Q9 Tô chữ): Tô chữ (Q9): chỉ xem, không chấm"
+ ],
+ "keyId": "lop-thu-b445fe"
+}

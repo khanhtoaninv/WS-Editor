@@ -1,0 +1,95 @@
+{
+ "format": "wsp/0",
+ "sheetId": "ws-demo-001",
+ "version": 1,
+ "title": "Unit 3 · My home",
+ "age": "7-9",
+ "pageSize": {
+  "wMm": 210,
+  "hMm": 297
+ },
+ "pages": [
+  {
+   "file": "pages/p1.html",
+   "heightMm": 297
+  },
+  {
+   "file": "pages/p2.html",
+   "heightMm": 297
+  },
+  {
+   "file": "pages/p3.html",
+   "heightMm": 297
+  },
+  {
+   "file": "pages/p4.html",
+   "heightMm": 297
+  },
+  {
+   "file": "pages/p5.html",
+   "heightMm": 297
+  },
+  {
+   "file": "pages/p6.html",
+   "heightMm": 297
+  },
+  {
+   "file": "pages/p7.html",
+   "heightMm": 297
+  },
+  {
+   "file": "pages/p8.html",
+   "heightMm": 297
+  },
+  {
+   "file": "pages/p9.html",
+   "heightMm": 297
+  },
+  {
+   "file": "pages/p10.html",
+   "heightMm": 297
+  },
+  {
+   "file": "pages/p11.html",
+   "heightMm": 297
+  }
+ ],
+ "contentHash": "4c063da29c9dcb121eb90cedff664e7da84ce4232b737f5a356aa485907873e8",
+ "keyHash": "13d2dd8193bfeb156dac3e324fcd728a3a75e454d94121bcb3720dbab16d7af3",
+ "files": {
+  "fonts/andika-latin-400-normal.woff2": "dd6bb7266c94cd2fc5d797886050e4bb17bf2375c26b3f28c8474018d8c81b73",
+  "fonts/andika-latin-700-normal.woff2": "61c90acb5f966627a0970d5742df8d9a212c2528f88caeed3cb7832234c7ee99",
+  "fonts/andika-latin-ext-400-normal.woff2": "3b5fd6ac2e3881c8a033440c2220b72c48a2af820413a7c38cd0e37d217cddaa",
+  "fonts/andika-latin-ext-700-normal.woff2": "60bde176a34bcfe68f00ae1c7bf9b3677ed4e1e8054fd396968411d9e86c5e69",
+  "fonts/andika-vietnamese-400-normal.woff2": "656c0fe2f642c68462c54dd15e3923ab3c5d6a56f73055e9b55eb3ffe740a3c1",
+  "fonts/andika-vietnamese-700-normal.woff2": "afbc6f5d03009e5267c8cccd0acfab8018cb633a9afc46bd80be97b97a3df972",
+  "key.json": "13d2dd8193bfeb156dac3e324fcd728a3a75e454d94121bcb3720dbab16d7af3",
+  "pages/p1.html": "651ca515fbcff6c37e38d97cdc73ab503444c3a8b44b7103263136b3efdaf773",
+  "pages/p10.html": "73d0d7404d353b26a550caa436a54938fc63a3be3ae5c3c82c76308dc71c7609",
+  "pages/p11.html": "157d638e5b6c764d80ef32a487af7c3b72242255c3423488f06db88837368a34",
+  "pages/p2.html": "1111551a984dfe9a7d7bbdd61bad3611ad04e4e7b383dd6c1fb1438cce04a030",
+  "pages/p3.html": "754ac2ef89afc2a30824b6e388e191f062bc990dedfd08ad2a41fd744e697a9c",
+  "pages/p4.html": "61e6f7ab1f4f6bc60537e77ed7bae71ec8df3fdc511c138b00253e429ada3327",
+  "pages/p5.html": "a4aaea8f1a401ce06f7e34b4e5502d0c955a9a4eb10b5db05088a5ea305ff304",
+  "pages/p6.html": "c7eef2edb62945b443d4c1a7211c9ae8258b457a560b8827d59ddcbf8dc6253c",
+  "pages/p7.html": "f6468d789948c581af773ab9ba884aa2b9bfa1040ebbb12ef26469628fc539f8",
+  "pages/p8.html": "047fc0ac33d2382fd61eaf41668b74276199ff9ab19d894865fab024000e8527",
+  "pages/p9.html": "469c743d06f563054ef3bcc955e2e7ef0467d491b6b1234027906f665c381c53",
+  "pages/style.css": "c56a74c0d61ef0dc90ba144eb55ed51ee8a7133acad4dc6a66e80769e6185461",
+  "slots.json": "17cb7168c29234d55608b94ecff7e5b4c05f208dece0d7f5022d6ae4e478ba5a",
+  "source.json": "0d6cbce9903b63891be97cdc8a1e6f30a37562dc8d8c171c45951f4c78952886"
+ },
+ "stats": {
+  "tasks": 18,
+  "slots": 110,
+  "autoGraded": 100,
+  "manualGraded": 10,
+  "staticOnly": 1
+ },
+ "warnings": [
+  "Task 8 (Q1 Điền từ): 4 chỗ 1, 2, 3, 4: chưa có đáp án → chấm tay",
+  "Task 15 (Q2 Viết câu): 6 chỗ 1, 2, 3, 4, 5, 6: chưa có đáp án → chấm tay",
+  "Task 16 (Q9 Tô chữ): Tô chữ (Q9): chỉ xem, không chấm"
+ ],
+ "docMode": "quirks"
+}

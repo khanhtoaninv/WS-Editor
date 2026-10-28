@@ -27,3 +27,6 @@ giáo viên theo dõi trực tiếp → Kết thúc phiên (thu bài em chưa n�
 - Giao diện: `app/src/lop/` (React, dùng lại trình xem `app/src/viewer/` với vai `student` / `review`), build ra `server/public/lop.html` (`cd app && npm run build`).
 - Tính điểm, báo cáo, nhận xét: `shared/src/grade.ts`, `shared/src/baocao.ts` (TeacherResource dùng lại được).
 - Test: `npm run test:lop` (API), `python3 tests/lop/test_lop.py` (trình duyệt), hoặc `bash tests/lop/run.sh`.
+
+## Dữ liệu demo
+Lần chạy đầu (thư mục dữ liệu trống) máy chủ tự nạp bộ demo: 2 phiếu có đáp án, lớp 4A và 5B (học sinh tên giả, có avatar), 1 phiên đã kết thúc có bài làm và chấm chữa, 1 phiên đang mở **mã LAMTHU**. Nạp lại: nút **Nạp dữ liệu demo** ở trang giáo viên. Tắt tự nạp: `LOP_KHONG_DEMO=1`. Tạo lại gói phiếu demo: `python3 tests/lop/tao_demo.py`.

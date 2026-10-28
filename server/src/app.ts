@@ -9,13 +9,15 @@ import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { randomBytes, timingSafeEqual } from 'node:crypto';
 import { networkInterfaces } from 'node:os';
-import { inspectWsp, studentView, isBlank, grade, fromB64, toB64, type Slot, type Key, type Answers, type Manifest } from '../../shared/src/index.ts';
+import { inspectWsp, AVATARS, avatarIndex, studentView, isBlank, grade, fromB64, toB64, type Slot, type Key, type Answers, type Manifest } from '../../shared/src/index.ts';
 import { Store, newId, newMa, type Phien, type Lop, type Goi, type Bai } from './store.ts';
 import { loadKhoa, trustOf, type Khoa } from './khoa.ts';
 import { HttpError, bad, parseCookies, setCookie, body, json, send, mimeOf, type Req, type Res } from './http.ts';
 import { extraRoutes } from './cham.ts';
+import { seedDemo } from './demo.ts';
 
-export type Opts = { root: string; data: string; matKhau: string; ai?: { key: string; model?: string } | null; log?: (m: string) => void };
+export { seedDemo };
+export type Opts = { demo?: boolean; root: string; data: string; matKhau: string; ai?: { key: string; model?: string } | null; log?: (m: string) => void };
 export type Ctx = Awaited<ReturnType<typeof createApp>>['ctx'];
 
 const now = () => new Date().toISOString();
@@ -23,6 +25,7 @@ const FILE_OK = /^(pages\/(p[1-9]\d*\.html|style\.css)|fonts\/[\w.-]+\.woff2|med
 
 export async function createApp(o: Opts) {
   const st = new Store(o.data), khoa: Khoa = await loadKhoa(o.data);
+  if (o.demo && !st.lop.length && !st.goi.length && !st.phien.length && existsSync(join(o.root, 'server', 'demo', 'goi'))) seedDemo(st, join(o.root, 'server', 'demo'));   // lần chạy đầu: dữ liệu trống thì nạp demo
   const gvTokens = new Set<string>();
   const log = o.log || (() => {});
   const subs = new Map<string, Set<Res>>();     // phienId → kênh giáo viên
@@ -117,6 +120,8 @@ export async function createApp(o: Opts) {
   });
   on('POST', '/api/gv/dang-xuat', (r, res) => { gvTokens.delete(r.cookies.gv); setCookie(res, 'gv', '', 0); return { ok: true }; });
   on('GET', '/api/gv/toi', r => ({ gv: isGv(r), ai: !!o.ai }));
+  // dữ liệu demo (phiếu, lớp có avatar, phiên đã chấm, phiên đang mở); nạp lại được, chỉ đụng dữ liệu có mã "demo"
+  on('POST', '/api/gv/demo', r => { needGv(r); try { const x = seedDemo(st, join(o.root, 'server', 'demo')); slotCache.clear(); return x; } catch (e) { throw new HttpError(500, (e as Error).message); } });
   on('GET', '/api/gv/dia-chi', r => {   // địa chỉ để học sinh cùng wifi vào (hiện trên màn phiên + mã QR)
     needGv(r);
     const lan = Object.values(networkInterfaces()).flat().filter(a => a && a.family === 'IPv4' && !a.internal).map(a => a!.address);
@@ -166,8 +171,12 @@ export async function createApp(o: Opts) {
     const names = a.map(x => String(x || '').trim()).filter(Boolean);
     if (names.length > 80) throw bad('tối đa 80 học sinh một lớp');
     if (new Set(names.map(n => n.toLowerCase())).size !== names.length) throw bad('có tên trùng nhau: thêm chữ để phân biệt (ví dụ An A, An B)');
-    const left = [...old];
-    return names.map(n => { const i = left.findIndex(h => h.ten === n); if (i >= 0) return left.splice(i, 1)[0]; return { id: newId('hs'), ten: n.slice(0, 60) }; });
+    const keep = names.map(n => old.findIndex(h => h.ten === n)), used = new Set<number>(keep.filter(i => i >= 0).map(i => avatarIndex(old[i].id)));
+    return names.map((n, k) => {
+      if (keep[k] >= 0) return old[keep[k]];
+      let id = newId('hs'); for (let t = 0; t < 200 && used.size < AVATARS.length && used.has(avatarIndex(id)); t++) id = newId('hs');   // em mới: chọn mã cho hình chưa dùng trong lớp
+      used.add(avatarIndex(id)); return { id, ten: n.slice(0, 60) };
+    });
   };
   on('GET', '/api/lop', r => { needGv(r); return st.lop; });
   on('POST', '/api/lop', async r => {

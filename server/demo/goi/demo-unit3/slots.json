@@ -1,0 +1,1498 @@
+[
+ {
+  "id": "t1.i1",
+  "task": "t1",
+  "label": "1",
+  "q": "Q6",
+  "interaction": "text",
+  "grading": "auto",
+  "item": "i1"
+ },
+ {
+  "id": "t1.i2",
+  "task": "t1",
+  "label": "2",
+  "q": "Q6",
+  "interaction": "text",
+  "grading": "auto",
+  "item": "i2"
+ },
+ {
+  "id": "t1.i3",
+  "task": "t1",
+  "label": "3",
+  "q": "Q6",
+  "interaction": "text",
+  "grading": "auto",
+  "item": "i3"
+ },
+ {
+  "id": "t1.i4",
+  "task": "t1",
+  "label": "4",
+  "q": "Q6",
+  "interaction": "text",
+  "grading": "auto",
+  "item": "i4"
+ },
+ {
+  "id": "t1.i5",
+  "task": "t1",
+  "label": "5",
+  "q": "Q6",
+  "interaction": "text",
+  "grading": "auto",
+  "item": "i5"
+ },
+ {
+  "id": "t1.i6",
+  "task": "t1",
+  "label": "6",
+  "q": "Q6",
+  "interaction": "text",
+  "grading": "auto",
+  "item": "i6"
+ },
+ {
+  "id": "t2.p0",
+  "task": "t2",
+  "label": "1",
+  "q": "Q8",
+  "interaction": "match",
+  "grading": "auto",
+  "item": "p0",
+  "options": [
+   {
+    "id": "p0",
+    "text": "pear"
+   },
+   {
+    "id": "p1",
+    "text": "lemon"
+   },
+   {
+    "id": "p2",
+    "text": "apple"
+   },
+   {
+    "id": "p3",
+    "text": "orange"
+   },
+   {
+    "id": "p4",
+    "text": "banana"
+   }
+  ]
+ },
+ {
+  "id": "t2.p1",
+  "task": "t2",
+  "label": "2",
+  "q": "Q8",
+  "interaction": "match",
+  "grading": "auto",
+  "item": "p1",
+  "options": [
+   {
+    "id": "p0",
+    "text": "pear"
+   },
+   {
+    "id": "p1",
+    "text": "lemon"
+   },
+   {
+    "id": "p2",
+    "text": "apple"
+   },
+   {
+    "id": "p3",
+    "text": "orange"
+   },
+   {
+    "id": "p4",
+    "text": "banana"
+   }
+  ]
+ },
+ {
+  "id": "t2.p2",
+  "task": "t2",
+  "label": "3",
+  "q": "Q8",
+  "interaction": "match",
+  "grading": "auto",
+  "item": "p2",
+  "options": [
+   {
+    "id": "p0",
+    "text": "pear"
+   },
+   {
+    "id": "p1",
+    "text": "lemon"
+   },
+   {
+    "id": "p2",
+    "text": "apple"
+   },
+   {
+    "id": "p3",
+    "text": "orange"
+   },
+   {
+    "id": "p4",
+    "text": "banana"
+   }
+  ]
+ },
+ {
+  "id": "t2.p3",
+  "task": "t2",
+  "label": "4",
+  "q": "Q8",
+  "interaction": "match",
+  "grading": "auto",
+  "item": "p3",
+  "options": [
+   {
+    "id": "p0",
+    "text": "pear"
+   },
+   {
+    "id": "p1",
+    "text": "lemon"
+   },
+   {
+    "id": "p2",
+    "text": "apple"
+   },
+   {
+    "id": "p3",
+    "text": "orange"
+   },
+   {
+    "id": "p4",
+    "text": "banana"
+   }
+  ]
+ },
+ {
+  "id": "t2.p4",
+  "task": "t2",
+  "label": "5",
+  "q": "Q8",
+  "interaction": "match",
+  "grading": "auto",
+  "item": "p4",
+  "options": [
+   {
+    "id": "p0",
+    "text": "pear"
+   },
+   {
+    "id": "p1",
+    "text": "lemon"
+   },
+   {
+    "id": "p2",
+    "text": "apple"
+   },
+   {
+    "id": "p3",
+    "text": "orange"
+   },
+   {
+    "id": "p4",
+    "text": "banana"
+   }
+  ]
+ },
+ {
+  "id": "t3.i1",
+  "task": "t3",
+  "label": "1",
+  "q": "Q7",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "i1",
+  "options": [
+   {
+    "id": "a",
+    "img": "pizza"
+   },
+   {
+    "id": "b",
+    "img": "rice"
+   },
+   {
+    "id": "c",
+    "img": "cake"
+   }
+  ]
+ },
+ {
+  "id": "t3.i2",
+  "task": "t3",
+  "label": "2",
+  "q": "Q7",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "i2",
+  "options": [
+   {
+    "id": "a",
+    "img": "on the bed"
+   },
+   {
+    "id": "b",
+    "img": "under the table"
+   },
+   {
+    "id": "c",
+    "img": "in the box"
+   }
+  ]
+ },
+ {
+  "id": "t3.i3",
+  "task": "t3",
+  "label": "3",
+  "q": "Q7",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "i3",
+  "options": [
+   {
+    "id": "a",
+    "img": "red bag"
+   },
+   {
+    "id": "b",
+    "img": "blue bag"
+   },
+   {
+    "id": "c",
+    "img": "green bag"
+   }
+  ]
+ },
+ {
+  "id": "t4.q1",
+  "task": "t4",
+  "label": "1",
+  "q": "Q3",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "q1",
+  "options": [
+   {
+    "id": "a",
+    "text": "am"
+   },
+   {
+    "id": "b",
+    "text": "is"
+   },
+   {
+    "id": "c",
+    "text": "are"
+   }
+  ]
+ },
+ {
+  "id": "t4.q2",
+  "task": "t4",
+  "label": "2",
+  "q": "Q3",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "q2",
+  "options": [
+   {
+    "id": "a",
+    "text": "is"
+   },
+   {
+    "id": "b",
+    "text": "are"
+   },
+   {
+    "id": "c",
+    "text": "be"
+   }
+  ]
+ },
+ {
+  "id": "t4.q3",
+  "task": "t4",
+  "label": "3",
+  "q": "Q3",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "q3",
+  "options": [
+   {
+    "id": "a",
+    "text": "a"
+   },
+   {
+    "id": "b",
+    "text": "an"
+   },
+   {
+    "id": "c",
+    "text": "the"
+   }
+  ]
+ },
+ {
+  "id": "t4.q4",
+  "task": "t4",
+  "label": "4",
+  "q": "Q3",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "q4",
+  "options": [
+   {
+    "id": "a",
+    "text": "is"
+   },
+   {
+    "id": "b",
+    "text": "are"
+   },
+   {
+    "id": "c",
+    "text": "am"
+   }
+  ]
+ },
+ {
+  "id": "t4.q5",
+  "task": "t4",
+  "label": "5",
+  "q": "Q3",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "q5",
+  "options": [
+   {
+    "id": "a",
+    "text": "run"
+   },
+   {
+    "id": "b",
+    "text": "runs"
+   },
+   {
+    "id": "c",
+    "text": "running"
+   }
+  ]
+ },
+ {
+  "id": "t11.q1",
+  "task": "t11",
+  "label": "1",
+  "q": "Q3",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "q1",
+  "options": [
+   {
+    "id": "a",
+    "text": "Ten"
+   },
+   {
+    "id": "b",
+    "text": "Twelve"
+   },
+   {
+    "id": "c",
+    "text": "Fourteen"
+   }
+  ]
+ },
+ {
+  "id": "t11.q2",
+  "task": "t11",
+  "label": "2",
+  "q": "Q3",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "q2",
+  "options": [
+   {
+    "id": "a",
+    "text": "They use the computer room or join the music club."
+   },
+   {
+    "id": "b",
+    "text": "They work in the school garden or play basketball."
+   },
+   {
+    "id": "c",
+    "text": "They have art lessons or go swimming."
+   }
+  ]
+ },
+ {
+  "id": "t11.q3",
+  "task": "t11",
+  "label": "3",
+  "q": "Q3",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "q3",
+  "options": [
+   {
+    "id": "a",
+    "text": "270"
+   },
+   {
+    "id": "b",
+    "text": "620"
+   },
+   {
+    "id": "c",
+    "text": "720"
+   }
+  ]
+ },
+ {
+  "id": "t11.q4",
+  "task": "t11",
+  "label": "4",
+  "q": "Q3",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "q4",
+  "options": [
+   {
+    "id": "a",
+    "text": "The science room"
+   },
+   {
+    "id": "b",
+    "text": "The computer room"
+   },
+   {
+    "id": "c",
+    "text": "The playground"
+   }
+  ]
+ },
+ {
+  "id": "t11.q5",
+  "task": "t11",
+  "label": "5",
+  "q": "Q3",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "q5",
+  "options": [
+   {
+    "id": "a",
+    "text": "Teachers teach all subjects in English."
+   },
+   {
+    "id": "b",
+    "text": "Teachers teach all subjects in Vietnamese."
+   },
+   {
+    "id": "c",
+    "text": "Teachers teach subjects in English and Vietnamese."
+   }
+  ]
+ },
+ {
+  "id": "t11.q6",
+  "task": "t11",
+  "label": "6",
+  "q": "Q3",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "q6",
+  "options": [
+   {
+    "id": "a",
+    "text": "Green World School"
+   },
+   {
+    "id": "b",
+    "text": "Pine Hill School"
+   },
+   {
+    "id": "c",
+    "text": "Kim Dong Secondary School"
+   }
+  ]
+ },
+ {
+  "id": "t12.l1",
+  "task": "t12",
+  "label": "(1)",
+  "q": "Q1",
+  "interaction": "text",
+  "grading": "auto",
+  "item": "l1"
+ },
+ {
+  "id": "t12.l3",
+  "task": "t12",
+  "label": "(2)",
+  "q": "Q1",
+  "interaction": "text",
+  "grading": "auto",
+  "item": "l3"
+ },
+ {
+  "id": "t12.l5",
+  "task": "t12",
+  "label": "(3)",
+  "q": "Q1",
+  "interaction": "text",
+  "grading": "auto",
+  "item": "l5"
+ },
+ {
+  "id": "t12.l7",
+  "task": "t12",
+  "label": "(4)",
+  "q": "Q1",
+  "interaction": "text",
+  "grading": "auto",
+  "item": "l7"
+ },
+ {
+  "id": "t12.l9",
+  "task": "t12",
+  "label": "(5)",
+  "q": "Q1",
+  "interaction": "text",
+  "grading": "auto",
+  "item": "l9"
+ },
+ {
+  "id": "t5.q1",
+  "task": "t5",
+  "label": "1",
+  "q": "Q1",
+  "interaction": "text",
+  "grading": "auto",
+  "item": "q1"
+ },
+ {
+  "id": "t5.q2",
+  "task": "t5",
+  "label": "2",
+  "q": "Q1",
+  "interaction": "text",
+  "grading": "auto",
+  "item": "q2"
+ },
+ {
+  "id": "t5.q3",
+  "task": "t5",
+  "label": "3",
+  "q": "Q1",
+  "interaction": "text",
+  "grading": "auto",
+  "item": "q3"
+ },
+ {
+  "id": "t5.q4",
+  "task": "t5",
+  "label": "4",
+  "q": "Q1",
+  "interaction": "text",
+  "grading": "auto",
+  "item": "q4"
+ },
+ {
+  "id": "t5.q5",
+  "task": "t5",
+  "label": "5",
+  "q": "Q1",
+  "interaction": "text",
+  "grading": "auto",
+  "item": "q5"
+ },
+ {
+  "id": "t13.q1",
+  "task": "t13",
+  "label": "1",
+  "q": "Q1",
+  "interaction": "text",
+  "grading": "manual",
+  "item": "q1"
+ },
+ {
+  "id": "t13.q2",
+  "task": "t13",
+  "label": "2",
+  "q": "Q1",
+  "interaction": "text",
+  "grading": "manual",
+  "item": "q2"
+ },
+ {
+  "id": "t13.q3",
+  "task": "t13",
+  "label": "3",
+  "q": "Q1",
+  "interaction": "text",
+  "grading": "manual",
+  "item": "q3"
+ },
+ {
+  "id": "t13.q4",
+  "task": "t13",
+  "label": "4",
+  "q": "Q1",
+  "interaction": "text",
+  "grading": "manual",
+  "item": "q4"
+ },
+ {
+  "id": "t15.cell.r2.0",
+  "task": "t15",
+  "label": "hàng 2 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r2"
+ },
+ {
+  "id": "t15.cell.r2.1",
+  "task": "t15",
+  "label": "hàng 2 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r2"
+ },
+ {
+  "id": "t15.cell.r2.2",
+  "task": "t15",
+  "label": "hàng 2 cột 3",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r2"
+ },
+ {
+  "id": "t15.cell.r3.0",
+  "task": "t15",
+  "label": "hàng 3 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r3"
+ },
+ {
+  "id": "t15.cell.r3.1",
+  "task": "t15",
+  "label": "hàng 3 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r3"
+ },
+ {
+  "id": "t15.cell.r3.2",
+  "task": "t15",
+  "label": "hàng 3 cột 3",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r3"
+ },
+ {
+  "id": "t15.cell.r4.0",
+  "task": "t15",
+  "label": "hàng 4 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r4"
+ },
+ {
+  "id": "t15.cell.r4.1",
+  "task": "t15",
+  "label": "hàng 4 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r4"
+ },
+ {
+  "id": "t15.cell.r4.2",
+  "task": "t15",
+  "label": "hàng 4 cột 3",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r4"
+ },
+ {
+  "id": "t16.cell.r1",
+  "task": "t16",
+  "label": "hàng 1",
+  "q": "Q10",
+  "interaction": "choice-many",
+  "grading": "auto",
+  "item": "r1",
+  "options": [
+   {
+    "id": "0",
+    "text": "Farm"
+   },
+   {
+    "id": "1",
+    "text": "Zoo"
+   },
+   {
+    "id": "2",
+    "text": "Forest"
+   }
+  ]
+ },
+ {
+  "id": "t16.cell.r2",
+  "task": "t16",
+  "label": "hàng 2",
+  "q": "Q10",
+  "interaction": "choice-many",
+  "grading": "auto",
+  "item": "r2",
+  "options": [
+   {
+    "id": "0",
+    "text": "Farm"
+   },
+   {
+    "id": "1",
+    "text": "Zoo"
+   },
+   {
+    "id": "2",
+    "text": "Forest"
+   }
+  ]
+ },
+ {
+  "id": "t16.cell.r3",
+  "task": "t16",
+  "label": "hàng 3",
+  "q": "Q10",
+  "interaction": "choice-many",
+  "grading": "auto",
+  "item": "r3",
+  "options": [
+   {
+    "id": "0",
+    "text": "Farm"
+   },
+   {
+    "id": "1",
+    "text": "Zoo"
+   },
+   {
+    "id": "2",
+    "text": "Forest"
+   }
+  ]
+ },
+ {
+  "id": "t16.cell.r4",
+  "task": "t16",
+  "label": "hàng 4",
+  "q": "Q10",
+  "interaction": "choice-many",
+  "grading": "auto",
+  "item": "r4",
+  "options": [
+   {
+    "id": "0",
+    "text": "Farm"
+   },
+   {
+    "id": "1",
+    "text": "Zoo"
+   },
+   {
+    "id": "2",
+    "text": "Forest"
+   }
+  ]
+ },
+ {
+  "id": "t16.cell.r5",
+  "task": "t16",
+  "label": "hàng 5",
+  "q": "Q10",
+  "interaction": "choice-many",
+  "grading": "auto",
+  "item": "r5",
+  "options": [
+   {
+    "id": "0",
+    "text": "Farm"
+   },
+   {
+    "id": "1",
+    "text": "Zoo"
+   },
+   {
+    "id": "2",
+    "text": "Forest"
+   }
+  ]
+ },
+ {
+  "id": "t17.cell.r2.0",
+  "task": "t17",
+  "label": "hàng 2 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r2"
+ },
+ {
+  "id": "t17.cell.r2.1",
+  "task": "t17",
+  "label": "hàng 2 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r2"
+ },
+ {
+  "id": "t17.cell.r3.0",
+  "task": "t17",
+  "label": "hàng 3 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r3"
+ },
+ {
+  "id": "t17.cell.r3.1",
+  "task": "t17",
+  "label": "hàng 3 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r3"
+ },
+ {
+  "id": "t17.cell.r4.0",
+  "task": "t17",
+  "label": "hàng 4 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r4"
+ },
+ {
+  "id": "t17.cell.r4.1",
+  "task": "t17",
+  "label": "hàng 4 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r4"
+ },
+ {
+  "id": "t17.cell.r5.0",
+  "task": "t17",
+  "label": "hàng 5 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r5"
+ },
+ {
+  "id": "t17.cell.r5.1",
+  "task": "t17",
+  "label": "hàng 5 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r5"
+ },
+ {
+  "id": "t17.cell.r6.0",
+  "task": "t17",
+  "label": "hàng 6 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r6"
+ },
+ {
+  "id": "t17.cell.r6.1",
+  "task": "t17",
+  "label": "hàng 6 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r6"
+ },
+ {
+  "id": "t17.cell.r7.0",
+  "task": "t17",
+  "label": "hàng 7 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r7"
+ },
+ {
+  "id": "t17.cell.r7.1",
+  "task": "t17",
+  "label": "hàng 7 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r7"
+ },
+ {
+  "id": "t17.cell.r8.0",
+  "task": "t17",
+  "label": "hàng 8 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r8"
+ },
+ {
+  "id": "t17.cell.r8.1",
+  "task": "t17",
+  "label": "hàng 8 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r8"
+ },
+ {
+  "id": "t17.cell.r9.0",
+  "task": "t17",
+  "label": "hàng 9 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r9"
+ },
+ {
+  "id": "t17.cell.r9.1",
+  "task": "t17",
+  "label": "hàng 9 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r9"
+ },
+ {
+  "id": "t17.cell.r10.0",
+  "task": "t17",
+  "label": "hàng 10 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r10"
+ },
+ {
+  "id": "t17.cell.r10.1",
+  "task": "t17",
+  "label": "hàng 10 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r10"
+ },
+ {
+  "id": "t17.cell.r11.0",
+  "task": "t17",
+  "label": "hàng 11 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r11"
+ },
+ {
+  "id": "t17.cell.r11.1",
+  "task": "t17",
+  "label": "hàng 11 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r11"
+ },
+ {
+  "id": "t17.cell.r12.0",
+  "task": "t17",
+  "label": "hàng 12 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r12"
+ },
+ {
+  "id": "t17.cell.r12.1",
+  "task": "t17",
+  "label": "hàng 12 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r12"
+ },
+ {
+  "id": "t17.cell.r13.0",
+  "task": "t17",
+  "label": "hàng 13 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r13"
+ },
+ {
+  "id": "t17.cell.r13.1",
+  "task": "t17",
+  "label": "hàng 13 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r13"
+ },
+ {
+  "id": "t17.cell.r14.0",
+  "task": "t17",
+  "label": "hàng 14 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r14"
+ },
+ {
+  "id": "t17.cell.r14.1",
+  "task": "t17",
+  "label": "hàng 14 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r14"
+ },
+ {
+  "id": "t17.cell.r15.0",
+  "task": "t17",
+  "label": "hàng 15 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r15"
+ },
+ {
+  "id": "t17.cell.r15.1",
+  "task": "t17",
+  "label": "hàng 15 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r15"
+ },
+ {
+  "id": "t17.cell.r16.0",
+  "task": "t17",
+  "label": "hàng 16 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r16"
+ },
+ {
+  "id": "t17.cell.r16.1",
+  "task": "t17",
+  "label": "hàng 16 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r16"
+ },
+ {
+  "id": "t17.cell.r17.0",
+  "task": "t17",
+  "label": "hàng 17 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r17"
+ },
+ {
+  "id": "t17.cell.r17.1",
+  "task": "t17",
+  "label": "hàng 17 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r17"
+ },
+ {
+  "id": "t17.cell.r18.0",
+  "task": "t17",
+  "label": "hàng 18 cột 1",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r18"
+ },
+ {
+  "id": "t17.cell.r18.1",
+  "task": "t17",
+  "label": "hàng 18 cột 2",
+  "q": "Q10",
+  "interaction": "cell",
+  "grading": "auto",
+  "item": "r18"
+ },
+ {
+  "id": "t6.q1",
+  "task": "t6",
+  "label": "1",
+  "q": "Q5",
+  "interaction": "tf",
+  "grading": "auto",
+  "item": "q1",
+  "options": [
+   {
+    "id": "T",
+    "text": "T"
+   },
+   {
+    "id": "F",
+    "text": "F"
+   }
+  ]
+ },
+ {
+  "id": "t6.q2",
+  "task": "t6",
+  "label": "2",
+  "q": "Q5",
+  "interaction": "tf",
+  "grading": "auto",
+  "item": "q2",
+  "options": [
+   {
+    "id": "T",
+    "text": "T"
+   },
+   {
+    "id": "F",
+    "text": "F"
+   }
+  ]
+ },
+ {
+  "id": "t6.q3",
+  "task": "t6",
+  "label": "3",
+  "q": "Q5",
+  "interaction": "tf",
+  "grading": "auto",
+  "item": "q3",
+  "options": [
+   {
+    "id": "T",
+    "text": "T"
+   },
+   {
+    "id": "F",
+    "text": "F"
+   }
+  ]
+ },
+ {
+  "id": "t6.q4",
+  "task": "t6",
+  "label": "4",
+  "q": "Q5",
+  "interaction": "tf",
+  "grading": "auto",
+  "item": "q4",
+  "options": [
+   {
+    "id": "T",
+    "text": "T"
+   },
+   {
+    "id": "F",
+    "text": "F"
+   }
+  ]
+ },
+ {
+  "id": "t6.q5",
+  "task": "t6",
+  "label": "5",
+  "q": "Q5",
+  "interaction": "tf",
+  "grading": "auto",
+  "item": "q5",
+  "options": [
+   {
+    "id": "T",
+    "text": "T"
+   },
+   {
+    "id": "F",
+    "text": "F"
+   }
+  ]
+ },
+ {
+  "id": "t7.q1",
+  "task": "t7",
+  "label": "1",
+  "q": "Q2",
+  "interaction": "text-long",
+  "grading": "auto",
+  "item": "q1"
+ },
+ {
+  "id": "t7.q2",
+  "task": "t7",
+  "label": "2",
+  "q": "Q2",
+  "interaction": "text-long",
+  "grading": "auto",
+  "item": "q2"
+ },
+ {
+  "id": "t7.q3",
+  "task": "t7",
+  "label": "3",
+  "q": "Q2",
+  "interaction": "text-long",
+  "grading": "auto",
+  "item": "q3"
+ },
+ {
+  "id": "t7.q4",
+  "task": "t7",
+  "label": "4",
+  "q": "Q2",
+  "interaction": "text-long",
+  "grading": "auto",
+  "item": "q4"
+ },
+ {
+  "id": "t8.q1",
+  "task": "t8",
+  "label": "1",
+  "q": "Q2",
+  "interaction": "text-long",
+  "grading": "manual",
+  "item": "q1"
+ },
+ {
+  "id": "t8.q2",
+  "task": "t8",
+  "label": "2",
+  "q": "Q2",
+  "interaction": "text-long",
+  "grading": "manual",
+  "item": "q2"
+ },
+ {
+  "id": "t8.q3",
+  "task": "t8",
+  "label": "3",
+  "q": "Q2",
+  "interaction": "text-long",
+  "grading": "manual",
+  "item": "q3"
+ },
+ {
+  "id": "t8.q4",
+  "task": "t8",
+  "label": "4",
+  "q": "Q2",
+  "interaction": "text-long",
+  "grading": "manual",
+  "item": "q4"
+ },
+ {
+  "id": "t8.q5",
+  "task": "t8",
+  "label": "5",
+  "q": "Q2",
+  "interaction": "text-long",
+  "grading": "manual",
+  "item": "q5"
+ },
+ {
+  "id": "t8.q6",
+  "task": "t8",
+  "label": "6",
+  "q": "Q2",
+  "interaction": "text-long",
+  "grading": "manual",
+  "item": "q6"
+ },
+ {
+  "id": "t18.i1.1",
+  "task": "t18",
+  "label": "1.1",
+  "q": "Q6",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "i1",
+  "options": [
+   {
+    "id": "a",
+    "text": "windy"
+   },
+   {
+    "id": "b",
+    "text": "rainy"
+   }
+  ]
+ },
+ {
+  "id": "t18.i1.2",
+  "task": "t18",
+  "label": "1.2",
+  "q": "Q6",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "i1",
+  "options": [
+   {
+    "id": "a",
+    "text": "Take"
+   },
+   {
+    "id": "b",
+    "text": "Put"
+   }
+  ]
+ },
+ {
+  "id": "t18.i1.3",
+  "task": "t18",
+  "label": "1.3",
+  "q": "Q6",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "i1",
+  "options": [
+   {
+    "id": "a",
+    "text": "on"
+   },
+   {
+    "id": "b",
+    "text": "off"
+   }
+  ]
+ },
+ {
+  "id": "t18.i1.4",
+  "task": "t18",
+  "label": "1.4",
+  "q": "Q6",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "i1",
+  "options": [
+   {
+    "id": "a",
+    "text": "shorts"
+   },
+   {
+    "id": "b",
+    "text": "umbrella"
+   }
+  ]
+ },
+ {
+  "id": "t18.i2.1",
+  "task": "t18",
+  "label": "2.1",
+  "q": "Q6",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "i2",
+  "options": [
+   {
+    "id": "a",
+    "text": "cloudy"
+   },
+   {
+    "id": "b",
+    "text": "sunny"
+   }
+  ]
+ },
+ {
+  "id": "t18.i2.2",
+  "task": "t18",
+  "label": "2.2",
+  "q": "Q6",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "i2",
+  "options": [
+   {
+    "id": "a",
+    "text": "Take"
+   },
+   {
+    "id": "b",
+    "text": "Put"
+   }
+  ]
+ },
+ {
+  "id": "t18.i2.3",
+  "task": "t18",
+  "label": "2.3",
+  "q": "Q6",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "i2",
+  "options": [
+   {
+    "id": "a",
+    "text": "off"
+   },
+   {
+    "id": "b",
+    "text": "on"
+   }
+  ]
+ },
+ {
+  "id": "t18.i2.4",
+  "task": "t18",
+  "label": "2.4",
+  "q": "Q6",
+  "interaction": "choice-one",
+  "grading": "auto",
+  "item": "i2",
+  "options": [
+   {
+    "id": "a",
+    "text": "swimming costume"
+   },
+   {
+    "id": "b",
+    "text": "coat"
+   }
+  ]
+ }
+]

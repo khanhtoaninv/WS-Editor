@@ -1,0 +1,696 @@
+{
+ "t1.i1": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "cat"
+  ]
+ },
+ "t1.i2": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "dog"
+  ]
+ },
+ "t1.i3": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "fish"
+  ]
+ },
+ "t1.i4": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "bird"
+  ]
+ },
+ "t1.i5": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "frog"
+  ]
+ },
+ "t1.i6": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "duck"
+  ]
+ },
+ "t2.p0": {
+  "type": "match",
+  "score": 1,
+  "correct": "p0"
+ },
+ "t2.p1": {
+  "type": "match",
+  "score": 1,
+  "correct": "p1"
+ },
+ "t2.p2": {
+  "type": "match",
+  "score": 1,
+  "correct": "p2"
+ },
+ "t2.p3": {
+  "type": "match",
+  "score": 1,
+  "correct": "p3"
+ },
+ "t2.p4": {
+  "type": "match",
+  "score": 1,
+  "correct": "p4"
+ },
+ "t3.i1": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "a"
+ },
+ "t3.i2": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "b"
+ },
+ "t3.i3": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "b"
+ },
+ "t4.q1": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "b"
+ },
+ "t4.q2": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "b"
+ },
+ "t4.q3": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "b"
+ },
+ "t4.q4": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "b"
+ },
+ "t4.q5": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "a"
+ },
+ "t11.q1": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "b"
+ },
+ "t11.q2": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "a"
+ },
+ "t11.q3": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "c"
+ },
+ "t11.q4": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "b"
+ },
+ "t11.q5": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "c"
+ },
+ "t11.q6": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "a"
+ },
+ "t12.l1": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "c"
+  ]
+ },
+ "t12.l3": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "a"
+  ]
+ },
+ "t12.l5": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "d"
+  ]
+ },
+ "t12.l7": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "e"
+  ]
+ },
+ "t12.l9": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "b"
+  ]
+ },
+ "t5.q1": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "kitchen"
+  ]
+ },
+ "t5.q2": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "bedroom"
+  ]
+ },
+ "t5.q3": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "garden"
+  ]
+ },
+ "t5.q4": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "bathroom"
+  ]
+ },
+ "t5.q5": {
+  "type": "text",
+  "score": 1,
+  "accept": [
+   "living room"
+  ]
+ },
+ "t13.q1": {
+  "type": "text",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t13.q2": {
+  "type": "text",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t13.q3": {
+  "type": "text",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t13.q4": {
+  "type": "text",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t15.cell.r2.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "8"
+  ]
+ },
+ "t15.cell.r2.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "dancing"
+  ]
+ },
+ "t15.cell.r2.2": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "noodles"
+  ]
+ },
+ "t15.cell.r3.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "10"
+  ]
+ },
+ "t15.cell.r3.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "swimming"
+  ]
+ },
+ "t15.cell.r3.2": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "chicken"
+  ]
+ },
+ "t15.cell.r4.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "9"
+  ]
+ },
+ "t15.cell.r4.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "reading"
+  ]
+ },
+ "t15.cell.r4.2": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "ice cream"
+  ]
+ },
+ "t16.cell.r1": {
+  "type": "choice-many",
+  "score": 1,
+  "correct": [
+   "0"
+  ]
+ },
+ "t16.cell.r2": {
+  "type": "choice-many",
+  "score": 1,
+  "correct": [
+   "1"
+  ]
+ },
+ "t16.cell.r3": {
+  "type": "choice-many",
+  "score": 1,
+  "correct": [
+   "0",
+   "2"
+  ]
+ },
+ "t16.cell.r4": {
+  "type": "choice-many",
+  "score": 1,
+  "correct": [
+   "1",
+   "2"
+  ]
+ },
+ "t16.cell.r5": {
+  "type": "choice-many",
+  "score": 1,
+  "correct": [
+   "0"
+  ]
+ },
+ "t17.cell.r2.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "saw"
+  ]
+ },
+ "t17.cell.r2.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "seen"
+  ]
+ },
+ "t17.cell.r3.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "ate"
+  ]
+ },
+ "t17.cell.r3.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "eaten"
+  ]
+ },
+ "t17.cell.r4.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "took"
+  ]
+ },
+ "t17.cell.r4.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "taken"
+  ]
+ },
+ "t17.cell.r5.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "wrote"
+  ]
+ },
+ "t17.cell.r5.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "written"
+  ]
+ },
+ "t17.cell.r6.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "bought"
+  ]
+ },
+ "t17.cell.r6.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "bought"
+  ]
+ },
+ "t17.cell.r7.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "made"
+  ]
+ },
+ "t17.cell.r7.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "made"
+  ]
+ },
+ "t17.cell.r8.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "came"
+  ]
+ },
+ "t17.cell.r8.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "come"
+  ]
+ },
+ "t17.cell.r9.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "gave"
+  ]
+ },
+ "t17.cell.r9.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "given"
+  ]
+ },
+ "t17.cell.r10.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "knew"
+  ]
+ },
+ "t17.cell.r10.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "known"
+  ]
+ },
+ "t17.cell.r11.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "drank"
+  ]
+ },
+ "t17.cell.r11.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "drunk"
+  ]
+ },
+ "t17.cell.r12.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "sang"
+  ]
+ },
+ "t17.cell.r12.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "sung"
+  ]
+ },
+ "t17.cell.r13.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "ran"
+  ]
+ },
+ "t17.cell.r13.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "run"
+  ]
+ },
+ "t17.cell.r14.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "swam"
+  ]
+ },
+ "t17.cell.r14.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "swum"
+  ]
+ },
+ "t17.cell.r15.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "slept"
+  ]
+ },
+ "t17.cell.r15.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "slept"
+  ]
+ },
+ "t17.cell.r16.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "drove"
+  ]
+ },
+ "t17.cell.r16.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "driven"
+  ]
+ },
+ "t17.cell.r17.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "read"
+  ]
+ },
+ "t17.cell.r17.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "read"
+  ]
+ },
+ "t17.cell.r18.0": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "spoke"
+  ]
+ },
+ "t17.cell.r18.1": {
+  "type": "cell",
+  "score": 1,
+  "accept": [
+   "spoken"
+  ]
+ },
+ "t6.q1": {
+  "type": "tf",
+  "score": 1,
+  "correct": "F"
+ },
+ "t6.q2": {
+  "type": "tf",
+  "score": 1,
+  "correct": "T"
+ },
+ "t6.q3": {
+  "type": "tf",
+  "score": 1,
+  "correct": "T"
+ },
+ "t6.q4": {
+  "type": "tf",
+  "score": 1,
+  "correct": "F"
+ },
+ "t6.q5": {
+  "type": "tf",
+  "score": 1,
+  "correct": "T"
+ },
+ "t7.q1": {
+  "type": "text-long",
+  "score": 1,
+  "accept": [
+   "nine",
+   "She is nine",
+   "She is nine years old"
+  ]
+ },
+ "t7.q2": {
+  "type": "text-long",
+  "score": 1,
+  "accept": [
+   "Max",
+   "His name is Max",
+   "The dog's name is Max"
+  ]
+ },
+ "t7.q3": {
+  "type": "text-long",
+  "score": 1,
+  "accept": [
+   "brown and white",
+   "Max is brown and white"
+  ]
+ },
+ "t7.q4": {
+  "type": "text-long",
+  "score": 1,
+  "accept": [
+   "in the park",
+   "They walk Max in the park"
+  ]
+ },
+ "t8.q1": {
+  "type": "text-long",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t8.q2": {
+  "type": "text-long",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t8.q3": {
+  "type": "text-long",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t8.q4": {
+  "type": "text-long",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t8.q5": {
+  "type": "text-long",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t8.q6": {
+  "type": "text-long",
+  "score": 1,
+  "grading": "manual"
+ },
+ "t18.i1.1": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "b"
+ },
+ "t18.i1.2": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "a"
+ },
+ "t18.i1.3": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "a"
+ },
+ "t18.i1.4": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "b"
+ },
+ "t18.i2.1": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "b"
+ },
+ "t18.i2.2": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "a"
+ },
+ "t18.i2.3": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "a"
+ },
+ "t18.i2.4": {
+  "type": "choice-one",
+  "score": 1,
+  "correct": "a"
+ }
+}

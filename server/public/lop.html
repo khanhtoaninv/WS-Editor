@@ -14290,6 +14290,46 @@ var sfx = (n) => n % 10 === 1 && n !== 11 ? "st" : n % 10 === 2 && n !== 12 ? "n
 })();
 new TextEncoder();
 new TextDecoder("utf-8", { fatal: true });
+// ../shared/src/avatar.ts
+var AVATARS = [
+	"🐱",
+	"🐶",
+	"🐰",
+	"🦊",
+	"🐼",
+	"🐨",
+	"🦁",
+	"🐯",
+	"🐸",
+	"🐵",
+	"🐧",
+	"🐢",
+	"🦄",
+	"🐙",
+	"🐳",
+	"🦉",
+	"🐝",
+	"🦋",
+	"🐞",
+	"🐬",
+	"🦒",
+	"🐘",
+	"🦜",
+	"🐿️"
+];
+var fnv = (s) => {
+	let h = 2166136261;
+	for (let i = 0; i < s.length; i++) {
+		h ^= s.charCodeAt(i);
+		h = Math.imul(h, 16777619);
+	}
+	return h >>> 0;
+};
+var avatarIndex = (id) => fnv(id) % AVATARS.length;
+var avatarOf = (id) => ({
+	emoji: AVATARS[avatarIndex(id)],
+	hue: (fnv("c" + id) >>> 3) % 360
+});
 // src/viewer/data.ts
 function hashOf(s) {
 	let h = 2166136261;
@@ -17337,6 +17377,21 @@ async function loadPkg(id, files, title, slots) {
 	};
 }
 var loadKey = (id) => api(`/api/goi/${encodeURIComponent(id)}/dap-an`);
+// src/lop/Av.tsx
+function Av({ id, size = 28 }) {
+	const a = avatarOf(id);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+		className: "av",
+		"aria-hidden": "true",
+		style: {
+			width: size,
+			height: size,
+			fontSize: size * .62,
+			background: `hsl(${a.hue} 70% 86%)`
+		},
+		children: a.emoji
+	});
+}
 // src/lop/Student.tsx
 function Student() {
 	const [step, setStep] = (0, import_react.useState)("dang-tai");
@@ -17454,10 +17509,13 @@ function Student() {
 		". Chờ cô / thầy chữa bài nhé."
 	] }) : null;
 	const extra = !bai ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 			className: "hsname",
 			title: bai.phien.ten,
-			children: bai.hs.ten
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Av, {
+				id: bai.hs.id,
+				size: 22
+			}), bai.hs.ten]
 		}),
 		locked ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 			className: "hssave " + saved,
@@ -17578,11 +17636,17 @@ function Student() {
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "Em là ai?" }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "hsnames",
-					children: info.hocSinh.map((h) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					children: info.hocSinh.map((h) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 						className: "lb" + (h.daVao ? " used" : ""),
 						onClick: () => join(h.id),
 						title: h.daVao ? "Tên này đã vào ở một máy" : "",
-						children: h.ten
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Av, {
+							id: h.id,
+							size: 44
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "hsn",
+							children: h.ten
+						})]
 					}, h.id))
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
@@ -17833,6 +17897,8 @@ function Cham({ phien, hs, onBack, onReport }) {
 							value: x.hs,
 							children: [
 								x.xong ? "✓ " : "",
+								avatarOf(x.hs).emoji,
+								" ",
 								x.ten,
 								x.vao ? "" : " (không vào)"
 							]
@@ -18339,10 +18405,14 @@ function BaoCao({ phien, ai, onBack, onCham }) {
 					] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", { children: c.students.map((s) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
 						"data-hs": s.hs,
 						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", { children: [s.ten, s.nop ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "chip",
-								children: s.vao ? "chưa nộp" : "không vào"
-							})] }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", { children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Av, { id: s.hs }),
+								s.ten,
+								s.nop ? null : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "chip",
+									children: s.vao ? "chưa nộp" : "không vào"
+								})
+							] }),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: s.vao ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("b", { children: [s.pct, "%"] }),
 								" ",
@@ -18468,7 +18538,14 @@ function Em({ phien, hs, ai, onBack, onCham }) {
 				]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card, {
-				title: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: ["Báo cáo · ", r.ten] }),
+				title: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Av, {
+						id: hs,
+						size: 34
+					}),
+					"Báo cáo · ",
+					r.ten
+				] }),
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "rtiles",
 					children: [
@@ -18664,7 +18741,20 @@ function Shell({ ai, onOut }) {
 	const hp = new URLSearchParams(location.hash.slice(1)), nhung = hp.has("nhung");
 	const [v, setV] = (0, import_react.useState)(() => hp.get("phien") ? { phien: hp.get("phien") } : { tab: "phien" });
 	const [show, setShow] = (0, import_react.useState)(null);
+	const [rev, setRev] = (0, import_react.useState)(0), [dmsg, setDmsg] = (0, import_react.useState)("");
 	const tab = "tab" in v ? v.tab : "phien";
+	const demo = async () => {
+		if (!confirm("Nạp dữ liệu demo: 2 phiếu có đáp án, 2 lớp tên giả có avatar, 1 phiên đã chấm, 1 phiên đang mở (mã LAMTHU).\nDữ liệu demo cũ (nếu có) sẽ được tạo lại; dữ liệu của bạn không bị đụng tới.")) return;
+		setDmsg("Đang nạp…");
+		try {
+			await api("/api/gv/demo", { json: {} });
+			setV({ tab: "phien" });
+			setRev((x) => x + 1);
+			setDmsg("Đã nạp dữ liệu demo");
+		} catch (e) {
+			setDmsg(e.message);
+		}
+	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "lopc gv" + (nhung ? " nhung" : ""),
 		children: [
@@ -18691,6 +18781,13 @@ function Shell({ ai, onOut }) {
 						}[t]
 					}, t)) }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "sp" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "lt",
+						id: "demoBtn",
+						onClick: demo,
+						title: "Tạo sẵn phiếu, lớp, học sinh (có avatar), phiên đã chấm và phiên đang mở để thử ngay",
+						children: "Nạp dữ liệu demo"
+					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", {
 						className: "lt",
 						href: "/editor",
@@ -18705,7 +18802,11 @@ function Shell({ ai, onOut }) {
 					})
 				]
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("main", { children: "phien" in v ? v.sub === "cham" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Cham, {
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", { children: [dmsg ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "lmsg",
+				id: "demoMsg",
+				children: dmsg
+			}) : null, "phien" in v ? v.sub === "cham" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Cham, {
 				phien: v.phien,
 				hs: v.hs,
 				onBack: () => setV({ phien: v.phien }),
@@ -18733,7 +18834,7 @@ function Shell({ ai, onOut }) {
 					phien: v.phien,
 					sub: "bao-cao"
 				})
-			}) : tab === "phien" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhienTab, { open: (id) => setV({ phien: id }) }) : tab === "lop" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LopTab, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(GoiTab, { preview: setShow }) }),
+			}) : tab === "phien" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PhienTab, { open: (id) => setV({ phien: id }) }) : tab === "lop" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LopTab, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(GoiTab, { preview: setShow })] }, rev),
 			show ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Presenter, {
 				data: show,
 				onClose: () => setShow(null)
@@ -18810,7 +18911,18 @@ function LopTab() {
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", { children: [l.hocSinh.length, " học sinh"] }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", {
 						className: "hint",
-						children: [l.hocSinh.slice(0, 8).map((h) => h.ten).join(", "), l.hocSinh.length > 8 ? "…" : ""]
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "avs",
+								children: l.hocSinh.slice(0, 8).map((h) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Av, {
+									id: h.id,
+									size: 26
+								}, h.id))
+							}),
+							" ",
+							l.hocSinh.slice(0, 8).map((h) => h.ten).join(", "),
+							l.hocSinh.length > 8 ? "…" : ""
+						]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", {
 						className: "r",
@@ -19258,7 +19370,7 @@ function PhienView({ id, onBack, onCham, onReport }) {
 				] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", { children: p.hocSinh.map((h) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
 					"data-hs": h.id,
 					children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: h.ten }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Av, { id: h.id }), h.ten] }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 							className: "chip " + h.trangThai,
 							children: [ST[h.trangThai], h.trangThai === "da-nop" ? ` ${fmtTime(h.nopLuc)}${h.tuNop ? " (thu khi kết thúc)" : ""}` : ""]
@@ -19609,6 +19721,9 @@ details.lcard>summary{cursor:pointer}
 /* học sinh trên điện thoại: thanh công cụ xuống dòng, nút Nộp luôn thấy */
 @media (max-width:700px){.show.role-student .vbar{flex-wrap:wrap;justify-content:center;width:calc(100vw - 12px);bottom:6px;gap:4px 6px}.show.role-student .vgrp{border-right:0;padding-right:0}.show.role-student .vsel{max-width:96px}.show .vbanner{top:6px;font-size:13px}}
 .lopc.nhung{padding:8px}
+.av{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;flex:none;line-height:1;vertical-align:middle;margin-right:6px;font-family:"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif}
+.hsnames .lb{flex-direction:column;gap:6px}.hsnames .lb .av{margin:0}
+.avs{display:inline-flex;vertical-align:middle}.avs .av{margin:0 -6px 0 0;border:2px solid var(--l-card,#fff)}
 /*$vite$:1*/</style>
 </head>
 <body>

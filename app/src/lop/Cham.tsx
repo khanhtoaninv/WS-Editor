@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Presenter } from '../viewer/Presenter';
 import { grade, type Answers, type Key, type Overrides, type Slot } from '../../../shared/src/index.ts';
 import { answerText, keyText } from '../../../shared/src/baocao.ts';
+import { avatarOf } from '../../../shared/src/index.ts';
 import { api } from './api';
 import { loadPkg, type Pkg } from './pkg';
 
@@ -86,7 +87,7 @@ export function Cham({ phien, hs, onBack, onReport }: { phien: string; hs?: stri
       <div className="chhd">
         <button className="lb ghost" onClick={() => go(-1)} aria-label="Em trước" title="Em trước">◀</button>
         <select id="chHs" value={cur} onChange={e => { flush(); setCur(e.target.value); }} aria-label="Chọn học sinh">
-          {d.hocSinh.map(x => <option key={x.hs} value={x.hs}>{x.xong ? '✓ ' : ''}{x.ten}{x.vao ? '' : ' (không vào)'}</option>)}</select>
+          {d.hocSinh.map(x => <option key={x.hs} value={x.hs}>{x.xong ? '✓ ' : ''}{avatarOf(x.hs).emoji} {x.ten}{x.vao ? '' : ' (không vào)'}</option>)}</select>
         <button className="lb ghost" id="chNext" onClick={() => go(1)} aria-label="Em sau" title="Em sau">▶</button>
         <span className="hint">{idx + 1}/{d.hocSinh.length}</span>
       </div>

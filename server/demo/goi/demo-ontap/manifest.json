@@ -1,0 +1,50 @@
+{
+ "format": "wsp/0",
+ "sheetId": "ws-mvs506ni",
+ "version": 1,
+ "title": "Unit 3 · My home – ôn tập",
+ "age": "7-9",
+ "pageSize": {
+  "wMm": 210,
+  "hMm": 297
+ },
+ "pages": [
+  {
+   "file": "pages/p1.html",
+   "heightMm": 297
+  },
+  {
+   "file": "pages/p2.html",
+   "heightMm": 297
+  },
+  {
+   "file": "pages/p3.html",
+   "heightMm": 297
+  }
+ ],
+ "contentHash": "e461a4abc23980f03169151754365e34c0c2a7fb1ba80f6c938f023dde31a934",
+ "keyHash": "2818a984fbf7eaa0181f36843a5e260a869afa774673125ea64d5fc9aaaa6b80",
+ "files": {
+  "fonts/andika-latin-400-normal.woff2": "dd6bb7266c94cd2fc5d797886050e4bb17bf2375c26b3f28c8474018d8c81b73",
+  "fonts/andika-latin-700-normal.woff2": "61c90acb5f966627a0970d5742df8d9a212c2528f88caeed3cb7832234c7ee99",
+  "fonts/andika-latin-ext-400-normal.woff2": "3b5fd6ac2e3881c8a033440c2220b72c48a2af820413a7c38cd0e37d217cddaa",
+  "fonts/andika-latin-ext-700-normal.woff2": "60bde176a34bcfe68f00ae1c7bf9b3677ed4e1e8054fd396968411d9e86c5e69",
+  "fonts/andika-vietnamese-400-normal.woff2": "656c0fe2f642c68462c54dd15e3923ab3c5d6a56f73055e9b55eb3ffe740a3c1",
+  "fonts/andika-vietnamese-700-normal.woff2": "afbc6f5d03009e5267c8cccd0acfab8018cb633a9afc46bd80be97b97a3df972",
+  "key.json": "2818a984fbf7eaa0181f36843a5e260a869afa774673125ea64d5fc9aaaa6b80",
+  "pages/p1.html": "7080f584e0e0a4ec4ea3241027b9b73e3ee17f18a1859a929ea4e5ee7f4e6a4f",
+  "pages/p2.html": "3dd0dd2315711a8834a54b6fb2885e507917e8a459851954d41921a5fe2a68e7",
+  "pages/p3.html": "515dfe24da68e85049cf690b9634432b2b63acc384b1727adec993f36ceefce1",
+  "pages/style.css": "0990ffc536f272f2420fc1f514e6eb2d0d9712110eaedff4c1972e467ed59868",
+  "slots.json": "e7e67f6d0e5848b7449d12c8498fa167257d5444d035ca902a7c6ef35c2b3579",
+  "source.json": "349a6b3a3ee8c7419a809ac5b3098e630d82bf3270e40620eb125828c91f6546"
+ },
+ "stats": {
+  "tasks": 5,
+  "slots": 16,
+  "autoGraded": 16,
+  "manualGraded": 0,
+  "staticOnly": 0
+ },
+ "docMode": "quirks"
+}

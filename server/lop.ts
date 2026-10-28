@@ -15,7 +15,7 @@ mkdirSync(DATA, { recursive: true });
 const matKhau = process.env.LOP_MAT_KHAU || '123456';
 const aiKey = process.env.ANTHROPIC_API_KEY;
 
-const { server, close } = await createApp({ root: ROOT, data: DATA, matKhau, ai: aiKey ? { key: aiKey, model: process.env.LOP_AI_MODEL } : null, log: m => console.log(new Date().toLocaleTimeString('vi-VN'), m) });
+const { server, close } = await createApp({ demo: process.env.LOP_KHONG_DEMO !== '1', root: ROOT, data: DATA, matKhau, ai: aiKey ? { key: aiKey, model: process.env.LOP_AI_MODEL } : null, log: m => console.log(new Date().toLocaleTimeString('vi-VN'), m) });
 server.on('error', (e: NodeJS.ErrnoException) => {
   if (e.code === 'EADDRINUSE') console.error(`Cổng ${PORT} đang bận (máy chủ đã chạy ở cửa sổ khác?). Đóng cửa sổ đó, hoặc chạy với cổng khác: LOP_CONG=1532 npm run lop`);
   else console.error(e); process.exit(1);

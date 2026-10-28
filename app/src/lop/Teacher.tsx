@@ -6,6 +6,7 @@ import { api, events, fmtDate, fmtTime } from './api';
 import { loadPkg, loadKey } from './pkg';
 import { Cham } from './Cham';
 import { BaoCao } from './BaoCao';
+import { Av } from './Av';
 import type { ShowData } from '../viewer/data';
 
 export type HS = { id: string; ten: string; trangThai: 'chua-vao' | 'dang-lam' | 'da-nop'; daLam: number; tong: number; nopLuc?: string; tuNop: boolean; luuLuc?: string; xongCham: boolean };
@@ -45,14 +46,20 @@ function Shell({ ai, onOut }: { ai: boolean; onOut: () => void }) {
   const hp = new URLSearchParams(location.hash.slice(1)), nhung = hp.has('nhung');
   const [v, setV] = useState<View>(() => hp.get('phien') ? { phien: hp.get('phien')! } : { tab: 'phien' });
   const [show, setShow] = useState<ShowData | null>(null);
+  const [rev, setRev] = useState(0), [dmsg, setDmsg] = useState('');
   const tab = 'tab' in v ? v.tab : 'phien';
+  const demo = async () => {
+    if (!confirm('Nạp dữ liệu demo: 2 phiếu có đáp án, 2 lớp tên giả có avatar, 1 phiên đã chấm, 1 phiên đang mở (mã LAMTHU).\nDữ liệu demo cũ (nếu có) sẽ được tạo lại; dữ liệu của bạn không bị đụng tới.')) return;
+    setDmsg('Đang nạp…'); try { await api('/api/gv/demo', { json: {} }); setV({ tab: 'phien' }); setRev(x => x + 1); setDmsg('Đã nạp dữ liệu demo'); } catch (e) { setDmsg((e as Error).message); }
+  };
   return <div className={'lopc gv' + (nhung ? ' nhung' : '')}>
     {nhung ? null : <header className="lophd">
       <b>Lớp học thử</b><span className="badge">thử nghiệm</span>
       <nav>{(['phien', 'lop', 'goi'] as const).map(t => <button key={t} className={'lt' + (tab === t ? ' on' : '')} id={'tab-' + t} onClick={() => setV({ tab: t })}>{{ phien: 'Phiên học', lop: 'Lớp', goi: 'Gói phiếu' }[t]}</button>)}</nav>
-      <span className="sp" /><a className="lt" href="/editor" target="_blank" rel="noopener">WS Editor ↗</a><button className="lt" onClick={onOut}>Đăng xuất</button>
+      <span className="sp" /><button className="lt" id="demoBtn" onClick={demo} title="Tạo sẵn phiếu, lớp, học sinh (có avatar), phiên đã chấm và phiên đang mở để thử ngay">Nạp dữ liệu demo</button><a className="lt" href="/editor" target="_blank" rel="noopener">WS Editor ↗</a><button className="lt" onClick={onOut}>Đăng xuất</button>
     </header>}
-    <main>
+    <main key={rev}>
+    {dmsg ? <p className="lmsg" id="demoMsg">{dmsg}</p> : null}
       {'phien' in v ? (v.sub === 'cham' ? <Cham phien={v.phien} hs={v.hs} onBack={() => setV({ phien: v.phien })} onReport={() => setV({ phien: v.phien, sub: 'bao-cao' })} />
         : v.sub === 'bao-cao' ? <BaoCao phien={v.phien} ai={ai} onBack={() => setV({ phien: v.phien })} onCham={hs => setV({ phien: v.phien, sub: 'cham', hs })} />
         : <PhienView id={v.phien} onBack={() => setV({ tab: 'phien' })} onCham={() => setV({ phien: v.phien, sub: 'cham' })} onReport={() => setV({ phien: v.phien, sub: 'bao-cao' })} />)
@@ -84,7 +91,7 @@ function LopTab() {
     <Card title="Lớp" right={<button className="lb pri" id="lopNew" onClick={() => setEd({ ten: '', ds: '' })}>+ Lớp mới</button>}>
       <Err m={err} />
       {list && !list.length ? <p className="hint">Chưa có lớp. Bấm "+ Lớp mới", dán danh sách tên (mỗi dòng một em) hoặc dùng lớp mẫu 12 em (tên giả).</p> : null}
-      <table className="ltbl"><tbody>{(list || []).map(l => <tr key={l.id}><td><b>{l.ten}</b></td><td>{l.hocSinh.length} học sinh</td><td className="hint">{l.hocSinh.slice(0, 8).map(h => h.ten).join(', ')}{l.hocSinh.length > 8 ? '…' : ''}</td>
+      <table className="ltbl"><tbody>{(list || []).map(l => <tr key={l.id}><td><b>{l.ten}</b></td><td>{l.hocSinh.length} học sinh</td><td className="hint"><span className="avs">{l.hocSinh.slice(0, 8).map(h => <Av key={h.id} id={h.id} size={26} />)}</span> {l.hocSinh.slice(0, 8).map(h => h.ten).join(', ')}{l.hocSinh.length > 8 ? '…' : ''}</td>
         <td className="r"><button className="lb" onClick={() => setEd({ id: l.id, ten: l.ten, ds: l.hocSinh.map(h => h.ten).join('\n') })}>Sửa</button>
           <button className="lb ghost" onClick={() => { if (confirm(`Xóa lớp ${l.ten}?`)) api(`/api/lop/${l.id}`, { method: 'DELETE' }).then(reload, e => alert(e.message)); }}>Xóa</button></td></tr>)}</tbody></table>
     </Card>
@@ -169,7 +176,7 @@ function PhienView({ id, onBack, onCham, onReport }: { id: string; onBack: () =>
       </div> : null}
       <div className="stats"><span><b>{n.vao}</b>/{p.hocSinh.length} đã vào</span><span><b>{n.nop}</b>/{p.hocSinh.length} đã nộp</span></div>
       <table className="ltbl" id="phBang"><thead><tr><th>Học sinh</th><th>Trạng thái</th><th>Đã làm</th><th></th></tr></thead>
-        <tbody>{p.hocSinh.map(h => <tr key={h.id} data-hs={h.id}><td>{h.ten}</td>
+        <tbody>{p.hocSinh.map(h => <tr key={h.id} data-hs={h.id}><td><Av id={h.id} />{h.ten}</td>
           <td><span className={'chip ' + h.trangThai}>{ST[h.trangThai]}{h.trangThai === 'da-nop' ? ` ${fmtTime(h.nopLuc)}${h.tuNop ? ' (thu khi kết thúc)' : ''}` : ''}</span>{h.xongCham ? <span className="chip ok">Đã chấm</span> : null}</td>
           <td><span className="bar"><i style={{ width: `${h.tong ? h.daLam / h.tong * 100 : 0}%` }} /></span> {h.daLam}/{h.tong}</td>
           <td className="r">{p.trangThai === 'mo' && h.trangThai !== 'chua-vao' ? <button className="lb ghost" title="Em đổi máy hoặc lỡ đóng trình duyệt ở máy khác: cho vào lại bằng tên này (bài làm giữ nguyên)" onClick={() => api(`/api/phien/${id}/mo-khoa/${h.id}`, { json: {} })}>Mở khóa</button> : null}</td></tr>)}</tbody></table>

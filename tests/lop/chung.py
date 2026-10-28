@@ -13,7 +13,7 @@ def free_port():
 class Server:
     def __init__(self, data=None, env=None):
         self.port = free_port(); self.data = data or tempfile.mkdtemp(prefix='lop-'); self.own = data is None
-        e0 = env; env = dict(os.environ, LOP_CONG=str(self.port), LOP_DU_LIEU=self.data, LOP_MAT_KHAU=MK)
+        e0 = env; env = dict(os.environ, LOP_CONG=str(self.port), LOP_DU_LIEU=self.data, LOP_MAT_KHAU=MK, LOP_KHONG_DEMO='1')
         env.pop('ANTHROPIC_API_KEY', None); env.pop('LOP_AI_URL', None); env.update(e0 or {})
         self.p = subprocess.Popen(['node', '--experimental-strip-types', '--disable-warning=ExperimentalWarning', 'server/lop.ts'], cwd=ROOT, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
         self.base = f'http://127.0.0.1:{self.port}'

@@ -2,6 +2,8 @@
 
 Chuẩn bị: bấm đúp `chay-lop.bat` (Windows) hoặc `chay-lop.command` (Mac). Cửa sổ máy chủ in mật khẩu giáo viên; trình duyệt tự mở WS Editor (nếu không, vào `http://localhost:1531/editor`).
 
+**Dữ liệu demo:** lần chạy đầu (dữ liệu trống) máy chủ tự nạp: 2 phiếu có đáp án, lớp 4A (12 em) và 5B (9 em) có avatar, 1 phiên đã kết thúc có bài làm và chấm chữa (xem Chấm chữa, Báo cáo, Insight), 1 phiên đang mở mã **LAMTHU** (vào `/hs`, chọn Xuân, Yến, Bảo, Cường hoặc Diệp để làm thử). Máy đã có dữ liệu cũ thì bấm **Nạp dữ liệu demo** ở góc trên trang giáo viên.
+
 Muốn thử nhanh có chấm tự động: ở WS Editor bấm **+ Phiếu** → chọn file `samples/lop/ws-demo-lop.json` (phiếu Unit 3 đã có đáp án: 100 chỗ máy chấm, 10 chỗ chấm tay để thử Chấm chữa).
 
 | # | Làm | Mong đợi | Kết quả |

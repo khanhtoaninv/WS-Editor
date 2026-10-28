@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import type { ClassReport, Insight, StudentReport, GroupStat } from '../../../shared/src/baocao.ts';
 import { api } from './api';
+import { Av } from './Av';
+
 import { Card } from './Teacher';
 
 type CR = ClassReport & { phien: { ten: string; lopTen: string; goiTen: string; trangThai: string } };
@@ -72,7 +74,7 @@ export function BaoCao({ phien, ai, onBack, onCham }: { phien: string; ai: boole
     </Card>
     <Card title="Học sinh">
       <table className="ltbl" id="rHs"><thead><tr><th>Học sinh</th><th>Điểm</th><th></th><th></th></tr></thead><tbody>
-        {c.students.map(s => <tr key={s.hs} data-hs={s.hs}><td>{s.ten}{s.nop ? null : <span className="chip">{s.vao ? 'chưa nộp' : 'không vào'}</span>}</td>
+        {c.students.map(s => <tr key={s.hs} data-hs={s.hs}><td><Av id={s.hs} />{s.ten}{s.nop ? null : <span className="chip">{s.vao ? 'chưa nộp' : 'không vào'}</span>}</td>
           <td>{s.vao ? <><b>{s.pct}%</b> <span className="hint">{s.score}/{s.max}</span>{s.pending ? <span className="chip warn">{s.pending} chờ chấm</span> : null}</> : '–'}</td>
           <td style={{ width: '30%' }}>{s.vao ? <span className="rbt sm"><i style={{ width: `${s.pct}%` }} /><b style={{ left: `${c.avg}%` }} /></span> : null}</td>
           <td className="r">{s.vao ? <><button className="lb" onClick={() => setHs(s.hs)}>Báo cáo em</button><button className="lb ghost" onClick={() => onCham(s.hs)}>Chấm chữa</button></> : null}</td></tr>)}</tbody></table>
@@ -93,7 +95,7 @@ function Em({ phien, hs, ai, onBack, onCham }: { phien: string; hs: string; ai: 
   const grp = (l: (GroupStat & { classPct: number })[]) => l.map(q => <Bar key={q.id} label={q.name} pct={q.pct} cls={q.classPct} />);
   return <div className="rpt" id="rEm">
     <div className="row"><button className="lb ghost" onClick={onBack}>← Báo cáo lớp</button><span className="sp" /><button className="lb" onClick={() => onCham(hs)}>Chấm chữa em này</button></div>
-    <Card title={<>Báo cáo · {r.ten}</>}>
+    <Card title={<><Av id={hs} size={34} />Báo cáo · {r.ten}</>}>
       <div className="rtiles">
         <div><b id="rEmPct">{r.pct}%</b><span>{r.score}/{r.max} điểm</span></div>
         <div><b>{r.classAvg}%</b><span>trung bình lớp</span></div>

@@ -115,3 +115,6 @@ details.lcard>summary{cursor:pointer}
 /* học sinh trên điện thoại: thanh công cụ xuống dòng, nút Nộp luôn thấy */
 @media (max-width:700px){.show.role-student .vbar{flex-wrap:wrap;justify-content:center;width:calc(100vw - 12px);bottom:6px;gap:4px 6px}.show.role-student .vgrp{border-right:0;padding-right:0}.show.role-student .vsel{max-width:96px}.show .vbanner{top:6px;font-size:13px}}
 .lopc.nhung{padding:8px}
+.av{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;flex:none;line-height:1;vertical-align:middle;margin-right:6px;font-family:"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif}
+.hsnames .lb{flex-direction:column;gap:6px}.hsnames .lb .av{margin:0}
+.avs{display:inline-flex;vertical-align:middle}.avs .av{margin:0 -6px 0 0;border:2px solid var(--l-card,#fff)}

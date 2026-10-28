@@ -5,6 +5,7 @@ import { Presenter } from '../viewer/Presenter';
 import { isBlank, type Answers, type Slot } from '../../../shared/src/index.ts';
 import { api, events, fmtTime } from './api';
 import { loadPkg, type Pkg } from './pkg';
+import { Av } from './Av';
 
 type Info = { id: string; ten: string; trangThai: string; lop?: string; hocSinh: { id: string; ten: string; daVao: boolean }[] };
 type Bai = { phien: { id: string; ten: string; trangThai: 'mo' | 'dong' }; hs: { id: string; ten: string }; goi: { id: string; title: string; pages: string[] }; slots: Slot[]; answers: Answers; nopLuc: string | null };
@@ -61,7 +62,7 @@ export function Student() {
   const banner = !bai ? null : bai.phien.trangThai !== 'mo' ? <>Phiên đã kết thúc. Bài của em đã được thu{bai.nopLuc ? ` lúc ${fmtTime(bai.nopLuc)}` : ''}.</>
     : bai.nopLuc ? <>Em đã nộp bài lúc {fmtTime(bai.nopLuc)}. Chờ cô / thầy chữa bài nhé.</> : null;
   const extra = !bai ? null : <>
-    <span className="hsname" title={bai.phien.ten}>{bai.hs.ten}</span>
+    <span className="hsname" title={bai.phien.ten}><Av id={bai.hs.id} size={22} />{bai.hs.ten}</span>
     {locked ? null : <span className={'hssave ' + saved} id="hsSave">{saved === 'dang-luu' ? 'Đang lưu…' : saved === 'loi' ? 'Chưa lưu được' : saved === 'da-luu' ? '✓ Đã lưu' : ''}</span>}
     {locked ? null : <button className="vb hsnop" id="hsNop" onClick={() => setAsk(true)}>Nộp bài</button>}
   </>;
@@ -89,7 +90,7 @@ export function Student() {
       {step === 'ten' && info ? <>
         <p className="hint">{info.ten}{info.lop ? ` · Lớp ${info.lop}` : ''}{info.trangThai !== 'mo' ? ' · phiên đã kết thúc' : ''}</p>
         <h2>Em là ai?</h2>
-        <div className="hsnames">{info.hocSinh.map(h => <button key={h.id} className={'lb' + (h.daVao ? ' used' : '')} onClick={() => join(h.id)} title={h.daVao ? 'Tên này đã vào ở một máy' : ''}>{h.ten}</button>)}</div>
+        <div className="hsnames">{info.hocSinh.map(h => <button key={h.id} className={'lb' + (h.daVao ? ' used' : '')} onClick={() => join(h.id)} title={h.daVao ? 'Tên này đã vào ở một máy' : ''}><Av id={h.id} size={44} /><span className="hsn">{h.ten}</span></button>)}</div>
         <button className="lb ghost" onClick={() => { setStep('ma'); setInfo(null); }}>← Nhập mã khác</button>
       </> : null}
       {err ? <p className="err" id="hsErr">{err}</p> : null}
