@@ -51,3 +51,8 @@ Bản `ws-editor.html` v110: đường chuẩn 120/120, giaodien 2497/2497, 49/4
 - Chưa kiểm: màn cảm ứng thật (bàn phím ảo), máy chiếu thật. Người dùng thử tay: `docs/TUONG_TAC/KIEM_TRA_GD1B.md`.
 - Việc tiếp theo: người dùng thử tay 1a + 1b; GĐ2 đóng gói (rồi 1c làm bài trên lớp).
 
+## 7. Kết quả chạy trên bản cuối (v112) và chốt về chuyển React
+- Bản `ws-editor.html` v112: đường chuẩn 120/120, giaodien 2497/2497, 49/49 test cũ + audit PROBLEMS 0, `tests/gd1a/test_chieu.py` 72/72, `tests/gd1a/quet_phieu.py` ALL OK, `tests/gd1b/test_lambai.py` 82/82, `tests/gd1b/quet_lambai.py` ALL OK (89/89 chỗ máy chấm làm đúng, 544 chỗ chưa có đáp án làm thử được), `shared` 11/11.
+- Đã đẩy lên `main` (commit 6aa862b).
+- **Chốt với người dùng (28/10):** chưa chuyển nốt JS thuần (`legacy/app.js`, `core/*.js`) sang React / TypeScript; làm một phiên riêng sau GĐ2, trước 1c. Chi tiết, thứ tự và lý do: `docs/KE_HOACH_REACT.md` mục 8.5. Claude nhắc người dùng khi GĐ2 xong.
+

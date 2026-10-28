@@ -123,3 +123,19 @@ Còn lại (không gấp, không đổi giao diện):
 ### 8.4 Lưu ý về test
 - `test34` và `test45` **chập chờn** (phụ thuộc thời gian chờ): hỏng khi máy bận, chạy lại đạt — ở cả v106 lẫn bản Vite. Khi hỏng, chạy riêng lại trước khi kết luận.
 - `tests/cmp_v80.py` cũ nạp MD có dòng tên / tuổi bằng `J.sheet` (luôn `null` với MD) nên thực ra không nạp các phiếu MD đó. `tests/chuan/chuan.py` nạp như nút "+ Phiếu".
+
+### 8.5 Khi nào chuyển nốt, và chuyển những gì (chốt 28/10/2026 với người dùng)
+**Hiện trạng:** toàn bộ giao diện là React (kể cả trình chiếu và làm thử, v111–v112). Còn lại JS thuần: `app/src/legacy/app.js` (~2100 dòng: trạng thái chọn `sel` / `multi` / `openTask` / `SECT`, xử lý bấm / gõ / kéo) và `app/src/core/*.js` (~2400 dòng: `model`, `layout`, `md`, `slots`, `answers`, `state`).
+**Vì sao chưa chuyển hết:** dàn trang đã tinh chỉnh qua hàng chục phiên, viết lại một lượt dễ lệch mà không ai biết; nên mỗi mảnh chuyển xong phải khớp v106 (chuẩn 120/120, giaodien 2497/2497). Phần còn lại không đổi gì người dùng thấy, nên xếp "không gấp".
+**Thời điểm hợp lý: sau GĐ2 (đóng gói phiếu, chuẩn `wsp/0`) và TRƯỚC 1c (làm bài trên lớp, có máy chủ + học sinh).**
+- Không làm trước GĐ2: lõi đang là nền của phiếu tương tác (`slots.js`, `layout.js`); vừa thêm tính năng vừa đổi cách viết lõi thì lỗi khó truy nguồn. GĐ2 cũng chốt lõi phải trao ra gì cho TeacherResource, chuyển TypeScript sau đó thì kiểu dữ liệu viết đúng một lần.
+- Không để sau 1c: có học sinh dùng thật thì sửa lõi rủi ro hơn nhiều.
+- **Claude nhắc người dùng khi GĐ2 xong** (đầu phiên kế tiếp, trước khi bắt đầu 1c): "đến lúc chuyển nốt, làm một phiên riêng, không trộn tính năng mới".
+**Thứ tự chuyển (mỗi bước giữ 120/120 + 2497/2497 + 49 test + test 1a / 1b / gd0, chạy từng test một):**
+1. `core/model.js` → `.ts` có kiểu (ít đụng dàn trang). Kiểu `Slot` / `Key` / `Answers` dùng chung từ `shared/`.
+2. `core/md.js`, `core/slots.js`, `core/answers.js` → `.ts`.
+3. `core/layout.js` → `.ts` (cuối cùng, nhạy nhất với dàn trang).
+4. `legacy/app.js`: chuyển trạng thái chọn và xử lý sự kiện sang kho Zustand / component, bỏ dần `L` và `data-act`; dựng lại từng phần thay vì cả cột. Bỏ cầu nối `window` (`app/scripts/cau-noi.ts`) khi test không còn cần.
+5. Cuối: bỏ `ws-editor-prototype.html` (v106) khi không còn cần đối chiếu.
+**Bẫy đã biết:** xem 8.2, 8.3b (module core không đọc DOM lúc nạp; bọc cột trong `Guard`; sự kiện `change` không nổi bọt trong test).
+
