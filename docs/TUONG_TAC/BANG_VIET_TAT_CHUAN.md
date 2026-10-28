@@ -71,3 +71,17 @@
 - Thêm vào `normalize.ts` + test trong `shared/test` (mỗi hàng bảng một ca, hai chiều).
 - Công tắc "Phân biệt viết tắt" ở cột trái (mục Câu hỏi) và trong MD; ghi vào `docs/TUONG_TAC/2_CHUAN_GOI_PHIEU.md` mục 6.2.
 - Cập nhật `DUYET_GD0.md` (Task có đáp án `doesn't / does not` không cần ghi hai cách nữa).
+
+## 5. Gợi ý cách viết khác khi nhập đáp án (đề xuất, 28/10/2026, chờ duyệt)
+Thay vì máy đoán lúc chấm, máy **gợi ý lúc soạn** và người soạn quyết.
+- **Khi nào:** ngay sau khi người soạn nhập / sửa đáp án chữ của một chỗ (ô đáp án trong khung soạn, hoặc khi nạp MD / JSON có đáp án).
+- **Hiện thế nào:** dưới ô đáp án hiện vài **chip** nhỏ, ví dụ `+ He has gone`, `+ colour`. Bấm chip = thêm vào danh sách đáp án chấp nhận (ghi ` / `). Bấm × = bỏ gợi ý đó cho chỗ này (không hỏi lại). Chip đã chọn hiện như đáp án thường.
+- **Gợi ý lấy từ đâu (quy tắc cố định, không AI, kết quả luôn như nhau):**
+  1. Viết tắt ngoài bảng mặc định: `'s` có thể là *has*, `'d` có thể là *had*; ngược lại đáp án *has / had* gợi ý dạng rút gọn.
+  2. Anh – Mỹ: colour / color, favourite / favorite, centre / center…
+  3. Số: `ten` / `10`; `first` / `1st`.
+  4. Dạng viết liền / gạch nối / cách: `ice cream`, `ice-cream`, `icecream`.
+  5. Từ đồng nghĩa hay gặp trong lớp tiểu học: `OK` / `okay`, `TV` / `television`.
+- **Không gợi ý** khi chỗ đó là bài chính tả / bài dạy viết tắt (công tắc "Phân biệt viết tắt").
+- **Lưu:** chỉ lưu đáp án chấp nhận đã chọn (như ` / ` hiện nay); gói phiếu không cần biết gợi ý. Không đổi chuẩn `wsp/0`.
+- **Sau này (tùy chọn):** AI đọc cả bài và đề xuất thêm chip; chip do AI đánh dấu riêng để người soạn biết đây là gợi ý, không phải quy tắc.
