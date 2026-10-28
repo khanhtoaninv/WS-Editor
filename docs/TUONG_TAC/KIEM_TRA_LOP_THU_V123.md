@@ -2,6 +2,8 @@
 
 Chuẩn bị: bấm đúp `chay-lop.bat` (Windows) hoặc `chay-lop.command` (Mac). Cửa sổ máy chủ in mật khẩu giáo viên; trình duyệt tự mở WS Editor (nếu không, vào `http://localhost:1531/editor`).
 
+Muốn thử nhanh có chấm tự động: ở WS Editor bấm **+ Phiếu** → chọn file `samples/lop/ws-demo-lop.json` (phiếu Unit 3 đã có đáp án: 100 chỗ máy chấm, 10 chỗ chấm tay để thử Chấm chữa).
+
 | # | Làm | Mong đợi | Kết quả |
 |---|---|---|---|
 | 1 | Mở WS Editor, nạp một phiếu có câu hỏi | Góc dưới có nút **● Live** cạnh Gói .wsp và ▶ Chiếu | |

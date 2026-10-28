@@ -900,7 +900,8 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 #liveDlg ul{margin:4px 0 0;padding-left:18px}
 #liveDlg .wspsum{background:var(--card-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:6px 0}
 #liveDlg .wspbad{background:var(--danger-soft);color:var(--danger);border-radius:8px;padding:8px 10px;margin:6px 0}
-#liveDlg .wspwarn{background:#fff7e0;color:#7a5200;border-radius:8px;padding:8px 10px;margin:6px 0;max-height:26vh;overflow:auto}
+#liveDlg .wspwarn{background:#fff7e0;color:#7a5200;border-radius:8px;padding:8px 10px;margin:6px 0}
+#liveDlg .wspwarn details{margin-top:4px;max-height:24vh;overflow:auto}
 #liveDlg .liverow{display:flex;gap:8px;align-items:flex-end;margin:8px 0}
 #liveDlg .liverow.wrap{flex-wrap:wrap}
 #liveDlg .liveform{display:flex;flex-direction:column;gap:6px;margin:8px 0}

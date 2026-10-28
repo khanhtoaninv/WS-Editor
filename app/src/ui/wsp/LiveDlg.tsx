@@ -69,8 +69,6 @@ export function LiveDlg() {
         {!srv && !busy ? <div className="wspbad" id="liveNo">Nút này chỉ chạy khi mở WS Editor từ máy chủ lớp thử (chạy chay-lop.bat rồi vào địa chỉ /editor).</div> : null}
         {c ? <div className="wspsum" id="liveSum"><b>{c.input.title}</b> · {c.input.pages.length} trang · {st!.length} chỗ trả lời ({auto} máy chấm, {st!.length - auto} chấm tay)</div> : null}
         {c && c.blockers.length ? <div className="wspbad" id="liveBlock"><b>Chưa giao được:</b><ul>{c.blockers.map(x => <li key={x}>{x}</li>)}</ul></div> : null}
-        {c && c.warnings.length ? <div className="wspwarn" id="liveWarn"><b>Cảnh báo ({c.warnings.length}):</b><ul>{c.warnings.slice(0, 8).map(x => <li key={x}>{x}</li>)}{c.warnings.length > 8 ? <li>… và {c.warnings.length - 8} cảnh báo khác</li> : null}</ul>
-          <label><input type="checkbox" id="liveSeen" checked={seen} onChange={e => setSeen(e.target.checked)} /> Tôi đã xem các cảnh báo, vẫn giao</label></div> : null}
         {srv && gv === false ? <form className="liveform" onSubmit={e => { e.preventDefault(); login(); }}>
           <label htmlFor="livePass">Mật khẩu giáo viên (in ở cửa sổ máy chủ)</label>
           <span className="liverow"><input id="livePass" type="password" value={pw} onChange={e => setPw(e.target.value)} autoFocus /><button className="btn pri" id="liveLogin">Đăng nhập</button></span></form> : null}
@@ -86,6 +84,9 @@ export function LiveDlg() {
             <label>Học sinh (mỗi dòng một tên; nên dùng tên giả hoặc viết tắt khi thử) <textarea id="liveNlDs" rows={6} value={nl.ds} onChange={e => setNl({ ...nl, ds: e.target.value })} /></label>
             <span className="liverow"><button className="btn" id="liveNlMau" onClick={() => setNl({ ten: nl.ten || 'Lớp mẫu', ds: MAU.join('\n') })}>Dùng lớp mẫu 12 em</button><span style={{ flex: 1 }} /><button className="btn pri" id="liveNlLuu" onClick={saveLop}>Lưu lớp</button></span></div> : null}
         </> : null}
+        {c && c.warnings.length ? <div className="wspwarn" id="liveWarn">
+          <label><input type="checkbox" id="liveSeen" checked={seen} onChange={e => setSeen(e.target.checked)} /> Giao dù có {c.warnings.length} cảnh báo (câu chưa có đáp án thì chấm tay)</label>
+          <details><summary>Xem cảnh báo</summary><ul>{c.warnings.slice(0, 12).map(x => <li key={x}>{x}</li>)}{c.warnings.length > 12 ? <li>… và {c.warnings.length - 12} cảnh báo khác</li> : null}</ul></details></div> : null}
         {busy ? <p className="hint" id="liveBusy">{busy}</p> : null}
         {err ? <div className="wspbad" id="liveErr">{err}</div> : null}
         <div className="liverow" style={{ justifyContent: 'flex-end' }}>

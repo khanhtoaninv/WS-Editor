@@ -31315,28 +31315,6 @@ function LiveDlg() {
 				id: "liveBlock",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Chưa giao được:" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", { children: c.blockers.map((x) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: x }, x)) })]
 			}) : null,
-			c && c.warnings.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "wspwarn",
-				id: "liveWarn",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("b", { children: [
-						"Cảnh báo (",
-						c.warnings.length,
-						"):"
-					] }),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ul", { children: [c.warnings.slice(0, 8).map((x) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: x }, x)), c.warnings.length > 8 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: [
-						"… và ",
-						c.warnings.length - 8,
-						" cảnh báo khác"
-					] }) : null] }),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-						type: "checkbox",
-						id: "liveSeen",
-						checked: seen,
-						onChange: (e) => setSeen(e.target.checked)
-					}), " Tôi đã xem các cảnh báo, vẫn giao"] })
-				]
-			}) : null,
 			srv && gv === false ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
 				className: "liveform",
 				onSubmit: (e) => {
@@ -31468,6 +31446,25 @@ function LiveDlg() {
 					]
 				}) : null
 			] }) : null,
+			c && c.warnings.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "wspwarn",
+				id: "liveWarn",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", { children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+						type: "checkbox",
+						id: "liveSeen",
+						checked: seen,
+						onChange: (e) => setSeen(e.target.checked)
+					}),
+					" Giao dù có ",
+					c.warnings.length,
+					" cảnh báo (câu chưa có đáp án thì chấm tay)"
+				] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("details", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("summary", { children: "Xem cảnh báo" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("ul", { children: [c.warnings.slice(0, 12).map((x) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: x }, x)), c.warnings.length > 12 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: [
+					"… và ",
+					c.warnings.length - 12,
+					" cảnh báo khác"
+				] }) : null] })] })]
+			}) : null,
 			busy ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "hint",
 				id: "liveBusy",
@@ -41244,7 +41241,8 @@ details.adv>summary{margin:10px 0 4px;font-weight:600}
 #liveDlg ul{margin:4px 0 0;padding-left:18px}
 #liveDlg .wspsum{background:var(--card-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:6px 0}
 #liveDlg .wspbad{background:var(--danger-soft);color:var(--danger);border-radius:8px;padding:8px 10px;margin:6px 0}
-#liveDlg .wspwarn{background:#fff7e0;color:#7a5200;border-radius:8px;padding:8px 10px;margin:6px 0;max-height:26vh;overflow:auto}
+#liveDlg .wspwarn{background:#fff7e0;color:#7a5200;border-radius:8px;padding:8px 10px;margin:6px 0}
+#liveDlg .wspwarn details{margin-top:4px;max-height:24vh;overflow:auto}
 #liveDlg .liverow{display:flex;gap:8px;align-items:flex-end;margin:8px 0}
 #liveDlg .liverow.wrap{flex-wrap:wrap}
 #liveDlg .liveform{display:flex;flex-direction:column;gap:6px;margin:8px 0}

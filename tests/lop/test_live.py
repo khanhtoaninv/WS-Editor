@@ -61,6 +61,15 @@ try:
         # 5) chỉ trang nhúng: không có thanh trên
         ok(fr.locator('.lophd').count() == 0, 'trang nhúng không có thanh trên')
         ed.click('#liveBack'); ed.wait_for_selector('#liveGo')
+        # 6) phiếu demo có đáp án: máy chấm được gần hết, cảnh báo thu gọn, giao được
+        ed.click('#liveCancel'); ed.wait_for_function("() => !document.getElementById('liveDlg').open")
+        r = ed.evaluate(LOAD, open(os.path.join(ROOT, 'samples/lop/ws-demo-lop.json'), encoding='utf-8').read()); ok(r == 'ok', 'nạp demo có đáp án ' + r)
+        ed.wait_for_timeout(400); ed.click('#liveBtn'); ed.wait_for_selector('#liveSum'); ed.wait_for_function("() => !document.getElementById('liveBusy')")
+        sm = ed.inner_text('#liveSum'); ok('100 máy chấm' in sm and '10 chấm tay' in sm, 'demo: 100 máy chấm, 10 chấm tay · ' + sm)
+        ok(ed.query_selector('#liveWarn details') is not None and not ed.is_visible('#liveWarn ul'), 'cảnh báo thu gọn, bấm mới xem')
+        ed.check('#liveSeen'); ed.wait_for_function("() => !document.getElementById('liveGo').disabled"); ed.click('#liveGo'); ed.wait_for_selector('#liveFrame')
+        ed.frame_locator('#liveFrame').locator('#phMa').wait_for(timeout=15000); ok(True, 'giao phiếu demo thành công')
+        ed.screenshot(path=f'{OUT}/live_demo.png')
         e403 = [e for e in errs if '403' in e]; ok(len(e403) == 1 and len(errs) == 1, 'editor 0 lỗi console (chỉ 1 lỗi 403 do cố ý gõ sai mật khẩu) ' + str(errs))
         hctx.close(); b.close()
 finally:
