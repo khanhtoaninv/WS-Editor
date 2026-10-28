@@ -1,7 +1,7 @@
 # Kế hoạch xử lý sau kiểm thử GĐ0 / 1a / 1b (28/10/2026)
 
 > Tổng hợp từ: `docs/KIEM_THU_GD0_1A_1B.md` (Claude kiểm), `docs/KET_QUA_KIEM_THU_TAY_2026-10-28.md` (thử tay vòng 1), `docs/KET_QUA_KIEM_THU_PHIEU_DU_DANG_2026-10-28.md` (thử tay vòng 2, phiếu 32 Task), `docs/TUONG_TAC/BANG_VIET_TAT_CHUAN.md`.
-> **Chưa làm gì.** Mỗi đợt chỉ bắt đầu khi người dùng bảo "sửa" / "làm". Đợt 1–3 là sửa lỗi và chỉnh nhỏ; đợt 4–5 là tính năng mới, phải thảo luận + hình minh họa trước.
+> **Người dùng đã duyệt toàn bộ kế hoạch (28/10/2026) và yêu cầu phiên sau chạy MỘT MẠCH đợt 1 → 5 rồi gói bàn giao dev, không dừng hỏi từng bước.** Chỗ còn mơ hồ: chọn theo "Quyết định mặc định" (mục cuối) và ghi lại trong báo cáo. Sau mỗi đợt: chạy đủ test, commit + push `main`, tăng số bản.
 > Đã chốt với người dùng: T02 không có vấn đề; ngắt trang (G2) giữ nguyên; gợi ý cách viết khác dùng **cách A** (chip dưới ô).
 
 ## Mỗi bản sửa đều phải qua
@@ -35,7 +35,7 @@
 | 3.7 | Shift + kéo = đường thẳng màu đỏ, nét vừa; thả ra về con trỏ | E4 |
 | 3.8 | Từng Task: mặc định 80% → Vừa → Mặc định | E7 |
 | 3.9 | Enter / ↓ sang ô đáp án kế, ↑ về ô trước | E8 |
-| 3.10 | Ảnh T16–T17: kích thước mặc định theo số ảnh trên hàng, nút **Fit ô**, thanh kéo kích thước cả khối. Hình minh họa `docs/TUONG_TAC/MINH_HOA_ANH_DONG_DEU.png` (chờ duyệt); đổi chuẩn 120 | Ý kiến chung phần 1 |
+| 3.10 | Ảnh T16–T17: kích thước mặc định theo số ảnh trên hàng, nút **Fit ô**, thanh kéo kích thước cả khối. Hình minh họa `docs/TUONG_TAC/MINH_HOA_ANH_DONG_DEU.png` **đã duyệt 28/10**: mặc định 2 ảnh = 60 mm, 3 = 45, 4 = 36, 5 = 30 (trang 182 mm, khe 6 mm); Fit ô = khít ô; thanh kéo % cho cả khối; ảnh đã chỉnh tay giữ nguyên. Người dùng đồng ý đổi chuẩn 120 cho phần này | Ý kiến chung phần 1 |
 
 ## Đợt 4. Chấm thông minh hơn (v116) — đã có đề xuất, chờ duyệt bảng
 | # | Việc | Nguồn |
@@ -55,3 +55,20 @@ Gói `docs/BAN_GIAO_DEV/` (mục tiêu, phạm vi, quy trình phát hành, nợ 
 - 1.1, 1.4, 3.x có thể đổi hình trang chiếu nhưng không đổi trang soạn: đường chuẩn phải vẫn 120/120; riêng 3.3, 3.4, 3.10 đổi trang soạn → xin người dùng đổi chuẩn.
 - 1.2, 1.3, 4.1 đổi cách chấm: phải cập nhật `shared/fixtures` và báo trong ghi chú thay đổi (TeacherResource sau này dùng chung).
 - 2.2 chưa có quy luật: có thể cần người dùng quay màn hình khi gặp lại.
+
+## Quyết định mặc định cho phiên chạy một mạch (đã được người dùng cho phép, 28/10)
+- **3.4 T/F:** căn theo tỉ lệ (đã chốt). Bài T/F cùng hàng chuyển sang tỉ lệ; mặc định 80/20 như A6 hiện có.
+- **3.10 ảnh:** như hình đã duyệt.
+- **4.1 viết tắt:** theo `docs/TUONG_TAC/BANG_VIET_TAT_CHUAN.md`; `name's` **không** thêm vào bảng (người soạn ghi ` / `). Công tắc "Phân biệt viết tắt" theo Task, mặc định tắt; MD `Phân biệt viết tắt: có`.
+- **4.2 chip gợi ý:** cách A (chip ngay dưới ô, thêm "Nhận tất cả" khi Task có ≥ 3 gợi ý). Quy tắc cố định, không AI.
+- **4.3 ô chữ tìm từ:** tìm 8 hướng; hiện đáp án = khung bo góc quanh từ; làm bài = kéo từ chữ đầu tới chữ cuối, đúng thì giữ khung xanh.
+- **4.4 prompt:** thêm quy tắc 26 `[x]`; lưu bản `PROMPT_PDF_SANG_MD_v116.txt` (hoặc số bản lúc đó) vào `docs/PROMPT_PDF_SANG_PHIEU.md` và thư mục dự án `prompt/`.
+- **E1 2 trang:** ở Cả trang, nút 1 trang / 2 trang (hai trang cạnh nhau, lật 2 trang mỗi lần).
+- **E3 Trang / Cuộn:** Cuộn = mọi trang xếp dọc liền, cuộn tự do; lật = cuộn tới đầu trang kế.
+- **E5:** nút 🔍 bên trái nút ✓ ở góc mỗi Task → mở Từng Task đúng Task đó.
+- **E6 đèn pin:** phím L / nút; nền đen ~92%, vòng sáng theo chuột (cảm ứng: chạm kéo), lăn chuột đổi bán kính; Esc tắt.
+- **E10 bảng trắng chế độ Text:** nút T; bấm đâu gõ đó, dòng chữ tự dóng vào dòng kẻ gần nhất (nền kẻ dòng) hoặc ô (nền kẻ ô).
+- **E11 hộp Note:** bấm đúp trên phiếu (ở con trỏ, không trúng chỗ trả lời) → hộp ghi chú tại chỗ đó; gõ hoặc nói (nhận giọng nói của trình duyệt nếu có, không có thì ẩn nút mic); tự giãn theo nội dung, thu gọn / xóa; lưu trên máy như nét vẽ (theo phiếu + dấu nội dung).
+- **2.1 chấm tay:** ✓ / ✗ nhỏ cạnh chỗ chấm tay, không lưu; Đúng x/y tính cả chỗ chấm tay đã chấm (ghi rõ "kể cả chấm tay").
+- **Bàn giao dev:** `docs/BAN_GIAO_DEV/` 4 file (tổng quan + phạm vi; quy trình phát hành và đồng bộ; nợ kỹ thuật + chuẩn bị deploy; bảng đối chiếu để trống phần dev), theo nội dung đã thống nhất trong thread 28/10.
+- Mỗi tính năng trình chiếu mới cần test Playwright trong `tests/gd1a/` hoặc `tests/gd1b/`, chụp ảnh. Cập nhật `KIEM_TRA_GD1A.md` / `KIEM_TRA_GD1B.md` và phiếu `tests/gd0/phieu-kiem-thu-tay.md` nếu cần.
