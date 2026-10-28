@@ -11,7 +11,7 @@
    - `python3 tests/chuan/chuan.py so <app.html>`: 24 phiếu × 5 biến thể = 120 lần dàn trang; so dữ liệu sau nạp, MD xuất ra, hình học từng phần tử, ảnh từng trang với chuẩn `tests/chuan/v117/` (xem file 3 mục 2 về chuẩn hiện hành).
    - `python3 tests/chuan/giaodien.py <app.html> ws-editor-prototype.html`: so DOM cột trái / phải ở 2.497 trạng thái (lệch có chủ đích từ v113: xem báo cáo phiên 14).
    - `cd shared && npm test`: máy chấm (TeacherResource phải cho cùng kết quả). Mẫu bài làm + kết quả: `shared/fixtures/`.
-   - `bash /đường/dẫn/tuyệt/đối/tests/run_all.sh <mới.html> <cũ.html>` (49 test + audit), `tests/gd1a/test_chieu.py`, `tests/gd1b/test_lambai.py`, `tests/gd1a/quet_phieu.py`, `tests/gd1b/quet_lambai.py`, `tests/sau_kiem_thu/test_dot1.py` … `test_dot5.py`.
+   - `bash /đường/dẫn/tuyệt/đối/tests/run_all.sh <mới.html> <cũ.html>` (49 test + audit), `tests/gd1a/test_chieu.py`, `tests/gd1b/test_lambai.py`, `tests/gd1a/quet_phieu.py`, `tests/gd1b/quet_lambai.py`, `tests/sau_kiem_thu/test_dot1.py` … `test_dot5.py`, `python3 tests/gd2/test_goi.py <app.html>` (xuất gói `.wsp` cho 24 phiếu, 402 kiểm tra; cần `shared/`). Khu thử nghiệm Lớp học (chỉ khi dev cần xem lại luồng): `bash tests/lop/run.sh` (API 5 test + `test_lop.py` 18 + `test_cham.py` 45, cần bản dựng `npm run build` có `server/public/lop.html`).
 3. Lệch chuẩn mà **không** có trong ghi chú thay đổi = lỗi của bản dev (hoặc báo lại cho bản mẫu nếu nghi bản mẫu sai).
 4. Bộ kiểm cần các test gọi được hàm toàn cục (`loadSheet`, `impSheetObj`, `readMd`, `sheetSlots`, `commit`, `ws`…): bản mẫu gắn mọi tên cấp cao lên `window` (`app/scripts/cau-noi.ts`). Bản dev nên giữ một **cầu nối kiểm thử** tương đương (chỉ bật ở bản kiểm thử), nếu không bộ kiểm không chạy được.
 

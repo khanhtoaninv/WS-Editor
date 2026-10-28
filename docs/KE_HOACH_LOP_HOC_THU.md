@@ -1,4 +1,4 @@
-# Kế hoạch: Lớp học thử có máy chủ (duyệt 28/10/2026, đang làm v119–v122)
+# Kế hoạch: Lớp học thử có máy chủ (duyệt 28/10/2026; **v119–v122 đã làm xong 28/10**, đang chờ người dùng thử tay)
 
 > Mục đích: khu thử nghiệm sản phẩm trước khi giao cho TeacherResource. Trải nghiệm trọn vòng một buổi học: lập lớp → mở phiên → học sinh làm bài, nộp → giáo viên kết thúc, chấm chữa → báo cáo lớp / từng em + insight. Đây là **Mốc 2 "Khu thử nghiệm Lớp học"**, tách khỏi WS Editor (Mốc 1 = WS Editor xong sau GĐ2, v118); bỏ tên "1c" (`docs/TUONG_TAC/3_LO_TRINH.md` mục 2b). Đầu ra chính ngoài bản chạy thử: **yêu cầu cho TeacherResource** rút từ lúc dùng thử.
 

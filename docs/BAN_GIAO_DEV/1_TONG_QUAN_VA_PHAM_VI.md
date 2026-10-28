@@ -1,4 +1,4 @@
-# Bàn giao dev 1: Tổng quan và phạm vi (v117, 28/10/2026)
+# Bàn giao dev 1: Tổng quan và phạm vi (v122, 28/10/2026)
 
 ## 1. Sản phẩm là gì
 **WS Editor**: công cụ để giáo viên tiếng Anh dàn trang phiếu bài tập A4 (đầu ra HTML, không in PDF trong app), rồi **chiếu phiếu** lên lớp và **làm thử** ngay trên phiếu (máy chấm đúng / sai). Sau này tích hợp vào **WS Studio**; phần phiếu tương tác sẽ dùng chung với **TeacherResource** (học sinh làm bài).
@@ -24,7 +24,11 @@ Người làm bản mẫu (product owner) là giáo viên, không lập trình. 
 - Phiếu tương tác: chỗ trả lời và khóa chấm (`app/src/core/slots.js`) theo chuẩn gói `wsp/0` (`docs/TUONG_TAC/2_CHUAN_GOI_PHIEU.md`), máy chấm dùng chung `shared/`.
 - Trình chiếu (`app/src/viewer/`): lật trang / Task, 1–2 trang, Cuộn, phóng, đáp án, bút, che / hé, đồng hồ, bảng trắng, đèn pin, ghi chú, làm thử + chấm tay.
 
-**Chưa có / ngoài phạm vi:** tài khoản, lưu trên máy chủ, chia sẻ, học sinh làm bài (GĐ1c, cần TeacherResource), điểm danh / báo cáo lớp, in PDF trong app, đa ngôn ngữ giao diện (giao diện tiếng Việt).
+**Thêm từ v118 (Mốc 1 xong):** xuất / mở gói phiếu tương tác `.wsp` (`shared/src/wsp.ts`, `zip.ts`, CLI `shared/bin/wsp.ts`; spec mục 49): ký Ed25519, mã hóa AES-GCM, khóa bọc RSA-OAEP, kiểm đủ mục 9 của `2_CHUAN_GOI_PHIEU.md` trước khi ký.
+
+**Khu thử nghiệm Lớp học (Mốc 2, v119–v122, spec mục 50–53, `server/README.md`):** máy chủ Node nhỏ (không gói npm, JSON) chạy trên máy giáo viên để thử với học sinh thật. **Không phải TeacherResource và không thay nó**; dùng để rút ra yêu cầu cho TeacherResource. Có: lớp, nhận gói `.wsp`, phiên (mã + QR), học sinh làm / tự lưu / nộp trên trình xem vai `student`, theo dõi trực tiếp, kết thúc phiên, chấm chữa (trình xem vai `review` + bảng chấm), báo cáo lớp và từng em, nhận xét theo quy tắc, Insight AI (số liệu ẩn danh, khóa ở biến môi trường). Dev TeacherResource **dùng lại** `shared/` (chấm điểm `grade.ts`, gói `wsp.ts`, báo cáo `baocao.ts`) và trình xem `app/src/viewer/`; giao diện `app/src/lop/` chỉ là bản thử để tham khảo luồng.
+
+**Chưa có / ngoài phạm vi:** tài khoản thật, lưu bền trên máy chủ công ty, nhiều giáo viên / lớp, đăng nhập học sinh, chia sẻ, in PDF trong app, đa ngôn ngữ giao diện (giao diện tiếng Việt).
 
 ## 4. Cấu trúc mã
 | Thư mục | Nội dung |
@@ -34,13 +38,14 @@ Người làm bản mẫu (product owner) là giáo viên, không lập trình. 
 | `app/src/legacy/app.js` | ~2.150 dòng điều khiển cũ (chọn, kéo, lệnh, nhập file) chưa chuyển hết sang React |
 | `app/src/ui/` | Ba cột (cột trái `tree/`, trang `stage/`, cột phải `insp/`), hộp thoại, kho `store.ts` |
 | `app/src/viewer/` | Trình chiếu + làm bài (`Presenter.tsx`, `work.ts`, `answers.ts`, `ink.ts`, `Tools.tsx`, `Note.tsx`) |
-| `shared/` | Kiểu gói `wsp/0`, chuẩn hóa chữ, chấm, gợi ý, kiểm khuôn; `npm test` (node --test). Dùng chung với TeacherResource |
+| `shared/` | Kiểu gói `wsp/0`, chuẩn hóa chữ, chấm, gợi ý, kiểm khuôn, gói `.wsp` (ZIP, ký, mã hóa), báo cáo (`baocao.ts`); `npm test` (node --test). Dùng chung với TeacherResource |
+| `server/` | Khu thử nghiệm Lớp học (Node, không gói npm), `npm run lop`; giao diện ở `app/src/lop/` build ra `server/public/lop.html` |
 | `ws-editor-prototype.html` | Bản v106 đóng băng (một file JS thuần), chỉ để so sánh |
 | `tests/` | Playwright (Python) + bộ chuẩn, xem file 2 |
 | `docs/` | Đặc tả, báo cáo từng phiên, kế hoạch |
 
 ## 5. Đọc gì trước
-1. `docs/WS_EDITOR_SPEC.md` (mục 18 trở đi là kiến trúc hiện tại; mục 44–48 = v113–v117).
+1. `docs/WS_EDITOR_SPEC.md` (mục 18 trở đi là kiến trúc hiện tại; mục 44–48 = v113–v117, 49 = v118 gói .wsp, 50–53 = v119–v122 lớp thử).
 2. `docs/TUONG_TAC/1_TONG_QUAN_KIEN_TRUC.md`, `2_CHUAN_GOI_PHIEU.md`.
 3. `docs/KE_HOACH_REACT.md` mục 8 (tiến độ chuyển React, bẫy đã gặp).
 4. File 2–4 trong thư mục này.

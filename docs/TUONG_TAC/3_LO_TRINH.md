@@ -106,6 +106,9 @@ GĐ1 và GĐ3 có thể chạy **song song** sau khi GĐ2 chốt định dạng 
 | Trang HTML hiển thị khác nhau giữa trình duyệt | Phông nhúng trong gói; thử trên Chrome, Edge, Safari (iPad), Chrome Android |
 | Phạm vi phình | GĐ5 chỉ làm khi người dùng chọn từng mục |
 
-## 11. Bước tiếp theo ngay
-1. ~~Chốt G3–G5, H1–H3~~ (đã chốt 27/10). Người dùng duyệt bản v0.1.
-2. Lập kế hoạch chi tiết GĐ0 (một trang), chờ "ok làm".
+## 11. Bước tiếp theo ngay (cập nhật 28/10/2026)
+1. ~~Chốt G3–G5, H1–H3~~; ~~GĐ0, GĐ1a, GĐ1b, GĐ2~~ (v110–v118): **Mốc 1 xong**.
+2. ~~Khu thử nghiệm Lớp học v119–v122~~ (**Mốc 2 xong phần đã định**): phiên học, chấm chữa, báo cáo lớp, báo cáo em + Insight AI.
+3. **Người dùng thử tay** (`docs/TUONG_TAC/KIEM_TRA_LOP_THU_V119.md` … `V122.md`, `KIEM_TRA_GD1A/1B.md`), thử điện thoại / máy tính bảng thật, Windows, AI thật; rồi sửa theo góp ý.
+4. Từ kết quả dùng thử viết **yêu cầu cho TeacherResource** (GĐ3–GĐ4: phiên trên lớp, chữa bài và thống kê) và cập nhật `docs/BAN_GIAO_DEV/`; xử lý nợ N12 (quirks) và N13 (khóa ký thử).
+5. Chuyển nốt phần JS còn lại sang React / TypeScript (`docs/KE_HOACH_REACT.md` mục 8.5) khi người dùng chốt.

@@ -1,9 +1,12 @@
-# Báo cáo phiên 15 (28/10/2026): GĐ2 gói .wsp (Mốc 1 xong) + Khu thử nghiệm Lớp học (Mốc 2)
+# Báo cáo phiên 15 (28/10/2026): GĐ2 gói .wsp (Mốc 1 xong) + Khu thử nghiệm Lớp học (Mốc 2, v119–v122)
 
 ## 0. BÀN GIAO (đọc đầu tiên)
-- **v118 = GĐ2 xong → Mốc 1 "WS Editor hoàn chỉnh".** Xuất / mở gói phiếu tương tác `.wsp` (spec mục 49). Người dùng cho làm liền v118 → v122, kiểm từng bước trước khi sang bước sau.
-- **Hai mốc** (`docs/TUONG_TAC/3_LO_TRINH.md` mục 2b): Mốc 1 = WS Editor (không phụ thuộc TeacherResource). Mốc 2 = Khu thử nghiệm Lớp học `server/` (v119 → v122), máy chủ nhỏ trên máy giáo viên để thử với học sinh thật trước khi TeacherResource có; kế hoạch `docs/KE_HOACH_LOP_HOC_THU.md`.
-- **Nợ kỹ thuật mới:** N12 (chế độ quirks), N13 (khóa ký thử) trong `docs/BAN_GIAO_DEV/3_NO_KY_THUAT_VA_CHUAN_BI_DEPLOY.md`.
+- **App v122, đã đẩy lên `main`** (commit cuối `cc35bd2` + commit bàn giao). Làm một mạch v118 → v122 theo lệnh người dùng, mỗi bản có bộ test đầy đủ trước khi sang bản sau, mỗi bản một commit + mục spec + file thử tay.
+- **Mốc 1 = WS Editor hoàn chỉnh** (v118, spec mục 49): xuất / mở gói `.wsp`. **Mốc 2 = Khu thử nghiệm Lớp học** `server/` (spec mục 50–53, `server/README.md`): v119 phiên học, v120 chấm chữa, v121 báo cáo lớp, v122 báo cáo từng em + Insight AI. Làm **độc lập với TeacherResource** (chỉ dùng chung `shared/` và trình xem); `docs/KE_HOACH_LOP_HOC_THU.md`, `docs/TUONG_TAC/3_LO_TRINH.md` mục 2b.
+- **Chạy:** Node ≥ 22.6, `git pull`, `npm run lop` (hoặc bấm đúp `chay-lop.command` / `chay-lop.bat`); `http://localhost:1531/gv` (mật khẩu in ở cửa sổ máy chủ), WS Editor qua máy chủ `http://localhost:1531/editor` ("Gói .wsp" → "Gửi lên lớp thử"), học sinh `/hs` hoặc QR. AI: biến môi trường `ANTHROPIC_API_KEY` (mẫu `LOP_AI_MODEL`, mặc định `claude-opus-5-5`); không khóa vẫn có nút lấy đoạn nhắc để chép.
+- **Việc tiếp (người dùng làm trước):** thử tay `docs/TUONG_TAC/KIEM_TRA_LOP_THU_V119.md`, `V120`, `V121`, `V122` (và `KIEM_TRA_GD1A.md`, `KIEM_TRA_GD1B.md` còn chờ từ trước). **Chưa kiểm:** điện thoại / máy tính bảng thật qua wifi, Windows (`chay-lop.bat`), AI thật (mới thử bằng máy chủ AI giả), mở CSV bằng Excel, báo cáo / bảng chấm trên màn hẹp, nhiều học sinh cùng lúc trên trình duyệt thật. Sau đó: sửa theo góp ý; viết yêu cầu cho TeacherResource từ lúc dùng thử và cập nhật `docs/BAN_GIAO_DEV/` (đã thêm N12–N15 ở file 3); chuyển nốt JS còn lại sang React khi người dùng chốt.
+- **Nợ mới:** N12 quirks, N13 khóa ký thử, N14 `server/` chỉ là bản thử, N15 Insight AI chưa thử AI thật (`docs/BAN_GIAO_DEV/3_…`).
+- **Cần biết khi làm tiếp:** (1) app còn chạy chế độ quirks (không doctype), trang trong gói và trang lớp thử cũng không doctype; (2) `npm run build` giờ dựng cả `server/public/lop.html`; (3) trình xem có 3 vai `show` / `student` / `review` (`ShowData.role`); (4) test lớp thử dùng cổng ngẫu nhiên + thư mục dữ liệu tạm, chạy từng test một; (5) tên giả "Nam" trùng chữ "Việt Nam" trong đoạn nhắc AI: test đã bỏ cụm đó khi dò tên.
 
 ## 1. v118 GĐ2 gói .wsp
 - Nút nổi **Gói .wsp** cạnh ▶ Chiếu; hộp gói tóm tắt, chặn (trang tràn, ảnh lỗi), cảnh báo phải tích. Ký Ed25519 + mã hóa AES-GCM, khóa bọc RSA-OAEP cho `ed` / `tr`. Mở lại gói để sửa. `shared/src/zip.ts`, `shared/src/wsp.ts`, CLI `shared/bin/wsp.ts`.

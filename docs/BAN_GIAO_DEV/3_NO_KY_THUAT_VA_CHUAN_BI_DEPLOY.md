@@ -16,6 +16,8 @@
 | N11 | Chụm hai ngón trên màn cảm ứng | Chưa thử trên máy thật | Thử trên bảng tương tác của trường |
 | N12 | App chạy chế độ quirks (không có `<!doctype>`) | Trang trong gói .wsp phải hiện cùng chế độ (`manifest.docMode = "quirks"`), nếu không dòng kẻ chỗ trống lệch 2 px; trình xem nơi nhập (TeacherResource, lớp thử) phải dựng trang không doctype | Thêm `<!doctype html>` cho app, dàn lại đường chuẩn 120, rồi xuất gói `docMode: "standards"` |
 | N13 | Chữ ký gói .wsp | Chưa có dịch vụ ký của công ty: WS Editor ký bằng khóa thử trong trình duyệt (`dev-local-…`), máy chủ lớp thử ký bằng khóa riêng của nó | Dịch vụ ký phía công ty (khóa không nằm ở trình duyệt) trước khi phát hành |
+| N14 | `server/` (lớp thử) | Chỉ là bản thử: không tài khoản, dữ liệu JSON trên máy giáo viên, một mật khẩu giáo viên, học sinh vào bằng mã phiên + chọn tên (không xác thực), SSE trong bộ nhớ, không kiểm kiểu bằng `tsc` (không có `@types/node`), chạy TS bằng `--experimental-strip-types` (Node ≥ 22.6) | Viết lại trên hạ tầng thật của TeacherResource; giữ hợp đồng API và `shared/` |
+| N15 | Insight AI (`server/src/ai.ts`) | Gọi Messages API bằng HTTP thẳng, mẫu `claude-opus-5-5` mặc định; **chưa thử với AI thật**, chỉ thử bằng máy chủ giả | Dùng SDK chính thức khi vào TeacherResource; đo chi phí / chất lượng; giữ nguyên tắc chỉ gửi số liệu ẩn danh |
 
 ## 2. Chuẩn so sánh hiện hành
 - Đường chuẩn dàn trang: `tests/chuan/v117/` (tạo lại ở v117 vì 3 thay đổi đã được người dùng duyệt: khoảng bài nối, T/F theo tỉ lệ, ảnh đồng đều). Trước đó `tests/chuan/v108/`. Chi tiết: báo cáo phiên 14 mục 3.
