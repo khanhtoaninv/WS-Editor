@@ -41,6 +41,8 @@ Mục đích: biết khi nào một version bộ file (K, S, TF, file 0) là Đ�
 
 ## 7. Lịch sử áp dụng
 - **v2.0 (29/10/2026): chưa chạy.** Tách nội dung riêng của bài ra khỏi Trình tự và Task Format (xem `BAN_GIAO_PHIEN.md` mục 4b). Bản đạt 3/4 của Haiku (v1.4) không tự chuyển sang v2.0 vì quy tắc đã khái quát; phải chạy lại. Máy kiểm đã đối chiếu: trên 4 phiếu Haiku lần 11, bản mới với cấu hình bài Daily Routines cho kết quả giống hệt bản cũ.
+- **v2.0 đã chạy trên Haiku (29/10/2026, 8 phiếu): Daily 0/4, Comparatives 0/4 đạt** (lưu ở `thu-nghiem/haiku-v2.0/`; Sonnet chưa chạy). Lỗi chung: định dạng (tiêu đề Task, Task 5), dãy đáp án, thiếu câu, đáp án tự bịa. Xem `BAN_GIAO_PHIEN.md` mục 4b.
+- **v2.1 (29/10/2026): chưa chạy.** Khung MD nằm trong Task Format; máy kiểm có thêm bước so khung (tiêu đề Task, `Dạng`, Task 5 có bảng); trong giai đoạn kiểm thử mỗi bước dùng một TF cố định.
 - v1.1 (lần 8): Haiku không đạt. v1.2 (lần 9): 0/4. v1.3 (lần 10): 2/4. **v1.4 (lần 11): 3/4 đạt** (`thu-nghiem/DANH_GIA_AI_NGOAI_LAN_11.md`).
 - **Đã chốt (29/10/2026): ngưỡng "3 trên 4" lần chạy là đạt model đích** (thay cho "cả hai phiếu"). Theo đó v1.4 đạt cho Haiku (3/4).
 - Bước 3: lesson thứ hai là Grammar khác (Comparatives, `thu-vien/lesson/grammar-movers-comparatives/`); mới có file Kiến thức bản nháp 0.1.

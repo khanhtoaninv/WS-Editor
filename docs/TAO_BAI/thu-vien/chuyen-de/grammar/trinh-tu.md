@@ -1,6 +1,6 @@
 # TRÌNH TỰ — Chuyên đề Grammar (phiếu bài tập ngữ pháp cho học sinh tiểu học)
 
-Mã chuyên đề: GRAMMAR · Phiên bản 2.0 · Trạng thái: Nháp
+Mã chuyên đề: GRAMMAR · Phiên bản 2.1 · Trạng thái: Nháp
 File này cố định cho MỌI bài ngữ pháp. Nội dung của một bài cụ thể nằm ở file Kiến thức. File này gọi các mục của Kiến thức theo TÊN mục: Mục tiêu; Cấp độ và người học; Nhân vật, bối cảnh và dữ kiện (gồm Dữ kiện chuẩn, Nhân vật theo bước, Bảng nhận biết, Dữ kiện cho bước G4, Chủ đề cá nhân); Phạm vi kiến thức; Từ vựng; Dấu hiệu bề mặt; Điểm dễ nhầm; Nhãn và thuật ngữ in trên phiếu; Kiểu tình huống mẫu; Ngôn ngữ chỉ dẫn; Giới hạn riêng của bài. Mục nào Kiến thức ghi "Không áp dụng" thì bỏ quy tắc liên quan. Mọi ví dụ trong file này lấy từ một chủ đề khác (giới từ chỉ nơi chốn) chỉ để minh họa cách áp dụng quy tắc; không chép ví dụ vào phiếu.
 
 ## 1. Quy mô phiếu
@@ -35,6 +35,8 @@ Năm bước, theo bốn mức nhận thức Recognition (nhận diện), Unders
 | 6 | G5 | TF-G5-A |
 
 Mỗi mã TF có 1 đến 3 phương án (hậu tố A, B, C). Mặc định là phiếu ở bảng trên; phương án khác chỉ dùng khi người soạn chọn rõ và Kiến thức đủ điều kiện áp dụng (điều kiện ghi ở từng TF). Mọi phương án của một bước phục vụ cùng vai trò và cùng tiêu chí kiểm định.
+
+**Giai đoạn kiểm thử:** mỗi bước chỉ dùng MỘT TF cố định, đúng bảng Phiếu mặc định, để so sánh được giữa các lần chạy và giữa các mô hình. Khung MD của từng TF nằm trong Task Format; mỗi Task chép nguyên khung của TF đã gắn ở bảng này. (Hướng sau: mỗi bước có 1–3 dạng và luật chọn dạng dựa trên nội dung Kiến thức; chưa dùng.)
 
 ### G1 — Recognition: Quan sát cấu trúc
 - Vai trò: học sinh nhận ra các cách dùng của mục tiêu trong một tình huống có nghĩa; chưa phải làm đúng sai.
@@ -91,11 +93,11 @@ Dùng đúng các nhãn và định nghĩa ở mục Nhãn và thuật ngữ in 
    - một lựa chọn đúng;
    - một lựa chọn **sai cách dùng**: cùng từ gốc, cùng nội dung, đúng ngữ pháp khi đứng riêng nhưng sai nghĩa trong tình huống, lấy từ phần Cặp dễ nhầm về cách dùng của mục Điểm dễ nhầm (ví dụ ở chủ đề khác: đáp án "in" thì lựa chọn sai cách dùng là "on", nếu cảnh cho thấy quả bóng nằm bên trong). Nếu Kiến thức ghi "Không áp dụng" cho phần này, lựa chọn thứ hai cũng là một lỗi dạng khác với lựa chọn thứ ba;
    - một lựa chọn **lỗi dạng**: cùng từ gốc, mắc đúng MỘT lỗi lấy từ phần Lỗi dạng thường gặp.
-   Không dùng cấu trúc ngoài Phạm vi kiến thức, không lỗi chính tả; lựa chọn sai không được hợp tình huống hơn lựa chọn đúng. Đáp án đúng rải đủ ba vị trí (1/2/3 hoặc A/B/C), không cùng một vị trí ba câu liền nhau, không lặp chu kỳ (không ABCABC), có ít nhất một chỗ hai câu liền cùng vị trí. Ghi trong REPORT từng câu: đáp án / lựa chọn sai cách dùng / lựa chọn lỗi dạng. Không viết hoa chữ đầu của vế khi vế đứng giữa câu. Trong `{…}`, ba vế cùng động từ hoặc từ gốc, cùng tân ngữ.
+   Không dùng cấu trúc ngoài Phạm vi kiến thức, không lỗi chính tả; lựa chọn sai không được hợp tình huống hơn lựa chọn đúng. Đáp án đúng rải đủ ba vị trí (1/2/3 hoặc A/B/C), không cùng một vị trí ba câu liền nhau, không lặp chu kỳ (không ABCABC), có ít nhất một chỗ hai câu liền cùng vị trí. Ví dụ dãy 5 câu ĐẠT: `B A C C A`, `C C A B A`. Dãy HỎNG: `A A A B A` (ba A liền), `A A A A A` (một vị trí), `A B C A B` (lặp chu kỳ), `A B A B A` (thiếu C). Viết dãy dự định trước, kiểm bằng ví dụ này, rồi mới viết câu; sau khi viết xong đếm lại dãy thật trên phiếu. Ghi trong REPORT từng câu: đáp án / lựa chọn sai cách dùng / lựa chọn lỗi dạng. Không viết hoa chữ đầu của vế khi vế đứng giữa câu. Trong `{…}`, ba vế cùng động từ hoặc từ gốc, cùng tân ngữ.
 
 8. **Câu hỏi lộ đáp án** (G2-B): tối đa 2 trong 5 câu là câu hỏi lộ đáp án (hình thức câu hỏi cho biết dạng đáp án, theo mục Câu hỏi lộ đáp án của Kiến thức). Ít nhất 3 câu hỏi không lộ. Mỗi câu không lộ phải có câu đáp trả lời đúng điều được hỏi (cấm hỏi một điều rồi đáp một điều khác). Câu tình huống đứng riêng phải thêm thông tin mới (nơi chốn, ai có mặt, lý do), không nhắc lại điều câu hỏi sắp hỏi (điều 1), không chứa dấu hiệu bề mặt của đáp án.
 
-9. **Truy nguồn dữ kiện.** Mỗi ô hoặc câu có đáp án phải truy được về một dữ kiện trong Kiến thức hoặc trong văn bản nguồn của chính Task. Không có dữ kiện thì không tạo ô (hoặc in sẵn "—" nếu Kiến thức quy định). Không bịa thông tin ngoài Kiến thức. Ví dụ ở chủ đề khác: Kiến thức chỉ nói "con mèo ở trên tủ" thì không viết "con mèo ở trên tủ trong phòng khách".
+9. **Truy nguồn dữ kiện.** Mỗi ô hoặc câu có đáp án phải truy được về một dữ kiện trong Kiến thức hoặc trong văn bản nguồn của chính Task. Không có dữ kiện thì không tạo ô (hoặc in sẵn "—" nếu Kiến thức quy định). Không bịa thông tin ngoài Kiến thức. Dạng của đáp án (khẳng định, phủ định, câu hỏi) cũng phải truy được: nếu cảnh hoặc dữ kiện không nói rõ "không" (hoặc không có từ phủ định in sẵn trong câu) thì đáp án là dạng khẳng định; không tự biến câu thành phủ định hay câu hỏi để có đáp án. Ví dụ ở chủ đề khác: Kiến thức chỉ nói "con mèo ở trên tủ" thì không viết "con mèo ở trên tủ trong phòng khách".
 
 10. **Đa dạng.** Một tình huống (nơi chốn + hoạt động hoặc vật + vị trí) xuất hiện tối đa 2 lần trên cả phiếu, tính chung G2, G3a, G3b và cả câu ví dụ số 0. Trong mỗi Task G3a, G3b không dùng cùng một khuôn câu quá 2 lần. Chủ ngữ hoặc đối tượng phân bố đủ theo Phạm vi kiến thức. Một câu hỏi mở đầu giống hệt nhau tối đa 1 lần trên cả phiếu; cùng một mẫu câu hỏi hoặc kiểu tình huống chỉ xuất hiện một lần trên cả phiếu. Giới hạn lặp của mục chính theo mục Từ vựng của Kiến thức; giới hạn riêng của bài theo mục Giới hạn riêng của bài. (AI không tự đếm đúng các giới hạn số; máy kiểm sẽ đếm. Vẫn cố làm đúng.)
 
@@ -105,6 +107,8 @@ Dùng đúng các nhãn và định nghĩa ở mục Nhãn và thuật ngữ in 
 
 13. Nhân vật và cảnh theo mục Nhân vật, bối cảnh và dữ kiện của Kiến thức; không thêm sự kiện mâu thuẫn.
 
-14. Từ vựng và cấu trúc đúng mục Từ vựng và mục Phạm vi kiến thức của Kiến thức.
+14. Từ vựng và cấu trúc đúng mục Từ vựng và mục Phạm vi kiến thức của Kiến thức. Từ nội dung ngoài hai mục đó bị cấm (kể cả dạng số nhiều hoặc dạng khác của từ không được liệt kê): thay bằng từ trong danh sách thay vì ghi vào REPORT. Mục REPORT về từ ngoài danh sách chỉ dành cho từ không thể thay.
 
 15. Mức hỗ trợ giảm dần từ G3 đến G5: G3 có đủ gợi ý; G4 có dữ kiện nhưng không cho sẵn cấu trúc; G5 có ví dụ nhưng không viết sẵn câu.
+
+16. **Tự kiểm cuối, trước khi nộp.** Làm đủ ba bước, rồi mới trả lời: (a) đếm số câu từng Task đúng bằng số quy định trong Task Format (không thiếu, không thừa); (b) đếm lại dãy đáp án Task 2 và Task 3 trên phiếu thật, so với điều 7; (c) soát từng VỊ TRÍ BẮT BUỘC: cảnh, lượt thoại, câu hỏi, lựa chọn, câu có chỗ trống không chứa dấu hiệu bề mặt. Tiêu đề Task, dòng `Hướng dẫn:` và dòng `Dạng:` phải trùng khung MD của TF.

@@ -26,57 +26,59 @@ Dạng: chọn A/B/C
 1. Tom: My dad is forty. My mum is thirty-eight.
    Mia: So your dad is ___ your mum.
    A. the oldest
-   B. more old than
-   C. older than
-2. Mia: I am nine and my brother is six.
-   Tom: So you are ___ your brother.
-   A. more old than
    B. older than
-   C. the oldest
-3. Tom: A horse, a dog and a cat are in the garden.
-   Mia: The horse is ___ of the three.
-   A. taller than
-   B. the tallest
+   C. more old than
+2. Mia: A giraffe, a horse and a cat are at the zoo.
+   Tom: The giraffe is ___ of them.
+   A. the tallest
+   B. taller than
    C. more tall
-4. Mia: A bike costs one hundred dollars. A car costs five thousand dollars.
-   Tom: So a car is ___ a bike.
+3. Mia: My bag is two kilos.
+   Tom: Mine is three kilos, so mine is ___ yours.
+   A. the heaviest
+   B. more heavy than
+   C. heavier than
+4. Mia: A ball costs two dollars. A bike costs ninety. A car costs five thousand.
+   Tom: So the car is ___ in the shop.
    A. more expensive than
-   B. the most expensive
-   C. most expensive than
-5. Tom: The plane, the car and the bike are fast.
-   Mia: The plane is ___ in the group.
-   A. faster than
-   B. more fast
-   C. the fastest
+   B. the expensivest
+   C. the most expensive
+5. Tom: My dog is two metres long.
+   Mia: Mine is one metre, so your dog is ___ mine.
+   A. longer than
+   B. the longest
+   C. more long than
 
-## Task: Circle the correct words
+## Task: Choose the correct words
 Hướng dẫn: Circle the correct words.
 Dạng: chọn trong câu
 0. Mia is nine. Tom is eight. Mia is {*older than|the oldest|more old than} Tom.
-1. A giraffe is {the tallest|more tall|*taller than} a horse.
-2. Grandma is seventy. Dad is forty. Grandma is {the older|*older than|more old} Dad.
-3. An elephant is {heavier than|*the heaviest|more heavy} of all the animals.
-4. Tom: My bag is two kilos.
-   Mia: Mine is three, so mine is {*heavier than|the heaviest|more heavy} yours.
-5. A cat is {the smallest|more small|*smaller than} a dog.
-6. Tom: My dog is on the sofa. My cat is on the chair.
-   Mia: Yes, your dog is {*bigger than|the biggest|more big} your cat.
+1. A giraffe, a horse and a cat live at the zoo. The giraffe is {more tall|*the tallest|taller than}.
+2. A dog is {the biggest|more big than|*bigger than} a cat.
+3. A horse, a dog and an elephant are on the farm. The elephant is {*the heaviest|heavier than|more heavy than}.
+4. Tom: My pencil is ten centimetres.
+   Mia: Mine is fifteen centimetres, so mine is {*longer than|the longest|more long than} yours.
+5. Dad is forty. Mum is thirty-eight. Mum is {the youngest|more young than|*younger than} Dad.
+6. Mia: A dog, a cat and a mouse are in my house.
+   Tom: Then the dog is {more big than|*the biggest|bigger than}.
 
 ## Task: Complete the sentences
 Hướng dẫn: Write the word in the right way. Use the word in ( ).
 Dạng: điền từ
-0. Sam is 125 cm. Lucy is 135 cm. Lucy is ___ (tall) Sam.
-1. Mia: My bag is two kilos.
-   Tom: My bag is three kilos. So my bag is ___ (heavy) your bag.
-2. A car is ___ (expensive) a bike.
-3. Ben is nine. Lucy is eight. Sam is seven. Ben is ___ (old) of the three.
-4. Tom: My dad is one metre eighty. My mum is one metre seventy.
+0. Mia is nine and Tom is eight. Mia is ___ (old) Tom.
+1. Tom: My dad is one metre eighty. My mum is one metre seventy.
    Mia: So your dad is ___ (tall) your mum.
-5. This book is ___ (good) that book.
+2. A car is ___ (expensive) a bike.
+3. A horse, a dog and a cat are in the garden. The horse is ___ (big).
+4. Tom: I read two books. The zoo book was fun. The school book was not fun.
+   Mia: So the zoo book is ___ (good) the school book.
+5. A monkey, an elephant and a mouse are at the zoo. The mouse is ___ (small) of them.
 
 ## Task: Tell your friend
 Hướng dẫn: Read the information. Then write sentences to answer your friend.
 Dạng: bảng
+Khối chữ trên:
+  Sports Day results
 Name | Age | Height | 50 m run
 Ben | 9 years old | 140 cm | 11 seconds
 Lucy | 8 years old | 135 cm | 10 seconds
@@ -85,8 +87,8 @@ Sam | 7 years old | 125 cm | 9 seconds
 ### Phần: Write
 Dạng: viết câu
 Dòng viết: 2
-1. Tom: "Lucy is the tallest."
-2. Mia: "Ben is faster than Sam."
+1. Tom: "Sam is the tallest."
+2. Mia: "Lucy is faster than Sam."
 
 ## Task: Now it's your turn
 Hướng dẫn: Write four sentences about you. Make sure they are true.
@@ -100,23 +102,23 @@ Dòng viết: 4
 ## Đáp án
 ### Task 2
 0. A
-1. C
-2. B
-3. B
-4. A
-5. C
+1. B
+2. A
+3. C
+4. C
+5. A
 ### Task 4
-0. taller than
-1. heavier than
+0. older than
+1. taller than
 2. more expensive than
-3. the oldest
-4. taller than
-5. better than
+3. the biggest
+4. better than
+5. the smallest
 ### Task 0
 ```
 ```text
 NOTES
-T5: Sample answers: "No, Ben is the tallest." "No, Sam is faster than Ben."
+T5: Sample answers: "No, Ben is the tallest." "No, Sam is faster than Lucy."
 T6: Accept any true sentences with correct comparatives and superlatives.
 REPORT
 1. (format sample only, written by Claude; not a model output)

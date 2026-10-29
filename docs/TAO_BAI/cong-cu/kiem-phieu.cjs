@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Máy kiểm phiếu v2.0 (nhóm A và D trong TIEU_CHI_DAT.md). Không cần thư viện.
+// Máy kiểm phiếu v2.1 (nhóm A và D trong TIEU_CHI_DAT.md). Không cần thư viện.
 // Dùng: node kiem-phieu.cjs <file phản hồi nguyên của AI> <file cấu hình của bài (kiem-cau-hinh.json)>
 // Thoát mã 1 nếu có LỖI.
 // Phần cố định theo chuyên đề Grammar (số Task, vị trí bắt buộc, số câu) viết thẳng trong file này,
@@ -60,6 +60,27 @@ I('Số Task: ' + tasks.length);
 if (tasks.length !== 6) E('Số Task phải là 6, hiện ' + tasks.length);
 const VALID = ['bảng', 'chọn A/B/C', 'chọn trong câu', 'điền từ', 'viết câu', 'viết tự do'];
 tasks.forEach((t, i) => { if (!VALID.includes(t.dang)) E('Task ' + (i + 1) + ': Dạng không hợp lệ "' + t.dang + '"'); });
+// ---- so khung với TF (v2.1): tiêu đề Task và Dạng phải trùng khung MD của Task Format (chuyên đề Grammar, phiếu mặc định) ----
+const FRAME = CFG.khungTF || [
+  { tieuDe: 'Copy the words into the table', dang: 'bảng' },
+  { tieuDe: 'Choose the correct answer', dang: 'chọn A/B/C' },
+  { tieuDe: 'Choose the correct words', dang: 'chọn trong câu' },
+  { tieuDe: 'Complete the sentences', dang: 'điền từ' },
+  { tieuDe: 'Tell your friend', dang: 'bảng' },
+  { tieuDe: "Now it's your turn", dang: 'viết tự do' }
+];
+const normT = s => s.toLowerCase().replace(/[’‘]/g, "'").replace(/[.\s]+$/g, '').trim();
+tasks.forEach((t, i) => {
+  const f = FRAME[i]; if (!f) return;
+  if (normT(t.title) !== normT(f.tieuDe)) E('Task ' + (i + 1) + ': tiêu đề "' + t.title + '" khác khung TF "' + f.tieuDe + '"');
+  if (t.dang !== f.dang) E('Task ' + (i + 1) + ': Dạng "' + t.dang + '" khác khung TF "' + f.dang + '"');
+});
+if (tasks[4]) {
+  const t5 = tasks[4].lines;
+  const hasTable = t5.some(l => /\|/.test(l) && !/^\s/.test(l));
+  if (!hasTable) E('Task 5: không có dòng bảng (a | b | c) ngay sau "Khối chữ trên:" (khung TF-G4-A); bảng không được thụt lề');
+  if (!t5.some(l => /^### Phần: Write\s*$/.test(l))) E('Task 5: thiếu "### Phần: Write" (khung TF-G4-A)');
+}
 
 // ---- đáp án ----
 const keys = {}; let cur = 0;

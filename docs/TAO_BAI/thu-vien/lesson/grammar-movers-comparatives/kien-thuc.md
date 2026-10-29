@@ -1,6 +1,6 @@
 # KIẾN THỨC — Grammar Worksheet · A1 Movers · Comparing Things (so sánh hơn và so sánh nhất)
 
-Mã lesson: GRAM-MOVERS-COMPARE-01 · Chuyên đề: Grammar · Phiên bản 0.2 · Trạng thái: Nháp (chờ người dùng duyệt)
+Mã lesson: GRAM-MOVERS-COMPARE-01 · Chuyên đề: Grammar · Phiên bản 0.3 · Trạng thái: Nháp (chờ người dùng duyệt)
 
 Quy ước: file Kiến thức chỉ có nội dung của MỘT bài học. Trình tự và Task Format của chuyên đề Grammar gọi các mục dưới đây theo TÊN mục (không theo số). Mục nào bài không cần thì ghi "Không áp dụng". Chỗ do Claude đề xuất khi chuyển bản 0.1 sang cấu trúc mới, chưa được người dùng duyệt, gắn nhãn `[ĐỀ XUẤT]`; phần còn lại giữ nguyên nội dung bản 0.1.
 
@@ -89,12 +89,13 @@ Tham chiếu: Cambridge Pre A1 Starters và A1 Movers Word Lists (2018). Chưa �
 - Từ được dùng trong phiếu: các từ liệt kê ở trên, và các từ có trong Cambridge Pre A1 Starters hoặc A1 Movers Word Lists (2018). Không dùng từ ngoài hai danh sách này. Báo cáo cuối phiếu chỉ cần liệt kê mọi từ không nằm trong danh sách liệt kê ở trên (không phải ghi Starters hay Movers). Nếu không chắc một từ thuộc cấp nào, ưu tiên thay bằng từ đã liệt kê.
 - Từ cần cho chỉ dẫn và khung Task, luôn được dùng: friend, family, brother, sister, mum, dad, someone, answer, sentence, table, picture, circle, write, read, choose, complete, look.
 - Tên nhân vật (Ben, Lucy, Sam, Tom, Mia, Grandma, Dad, Mum) và các số đo (cm, m, seconds, kg, years old) không bị giới hạn bởi danh sách trên.
-- Giới hạn lặp của mục chính: trong phần học sinh đọc và làm (không tính câu chỉ dẫn, đáp án và ghi chú), mỗi mục chính xuất hiện không quá 10 lần ở mọi dạng (taller, tallest, tall tính chung; mỗi câu chọn tính một lần theo đáp án đúng), và không quá 3 lần trong cùng một Task, trừ Task G2 và G3 được lặp tới 4 lần. Mỗi Task G2, G3a, G3b phải dùng ít nhất 4 trong 8 mục chính; các tính từ còn lại chỉ để đa dạng. Cần người dùng xác nhận 8 tính từ chính này.
+- Giới hạn lặp của mục chính: trong phần học sinh đọc và làm (không tính câu chỉ dẫn, đáp án và ghi chú), mỗi mục chính xuất hiện không quá 10 lần ở mọi dạng (taller, tallest, tall tính chung; mỗi câu chọn tính một lần theo đáp án đúng), và không quá 3 lần trong cùng một Task, trừ Task G2 và G3 được lặp tới 4 lần. Mỗi Task G2, G3a, G3b phải dùng ít nhất 4 trong 8 mục chính; các tính từ còn lại chỉ để đa dạng. Cần người dùng xác nhận 8 tính từ chính này. Tính từ old (older, oldest) rất dễ vượt trần: đếm trước khi nộp; mỗi Task G2, G3a, G3b dùng old tối đa 2 lần, khi cần thêm câu hãy dùng tall, fast, heavy, big, happy.
 - `[ĐỀ XUẤT]` Task ở bước G1 (bảng nhận biết) không tính vào giới hạn lặp, vì bảng phải nhắc lại mỗi tính từ nhiều lần theo thiết kế (mỗi tính từ có ít nhất hai câu trong văn bản nguồn và hai ô trong bảng).
 
 ## 6. Dấu hiệu bề mặt `[ĐỀ XUẤT]`
 Dấu hiệu bề mặt là chữ trong câu, ngoài chỗ chọn, cho biết đang so sánh hai hay từ ba trở lên mà không cần đọc số liệu hay hiểu tình huống: "of the three", "of all", "of the group", "in the class", "in my family", "in the world", "both", "all", "or" trong câu hỏi lựa chọn ("Who is taller, Ben or Lucy?"), "than" đứng ngoài chỗ chọn (ví dụ `Ben is {…} than Lucy`).
 - Vị trí: dấu hiệu bề mặt chỉ tính ở phần câu NGOÀI chỗ chọn hoặc lựa chọn. Bản thân dạng cần kiểm (than, the, -er, -est, more, most) nằm trong lựa chọn là hợp lệ và không tính là dấu hiệu bề mặt.
+- Vì "than" là dấu hiệu bề mặt khi đứng ngoài chỗ chọn hay chỗ trống, mọi câu chọn và điền từ phải để "than" và "the" NẰM TRONG vế chọn hoặc chỗ trống (xem mục Giới hạn riêng của bài). Ở các vị trí bắt buộc không được viết "than" hay "of the three" ở bất cứ chỗ nào ngoài chỗ chọn hoặc chỗ trống.
 
 ## 7. Điểm dễ nhầm `[ĐỀ XUẤT]`
 
@@ -122,7 +123,7 @@ So sánh hơn (hai đối tượng, đi với than) và so sánh nhất (từ ba
 - Câu hỏi lặp lại dạng có trong lựa chọn.
 
 ### 7.5 Lời nhầm của bạn (bước G4)
-Lời của bạn đúng ngữ pháp và sai so với bảng số liệu. Ví dụ: `Lucy is the tallest.`, `Ben is faster than Sam.`, `Sam is the oldest.` Không viết lời sai ngữ pháp (ví dụ "Ben is more taller").
+Lời của bạn đúng ngữ pháp và sai so với bảng số liệu. Hai kiểu lời nhầm được dùng: (a) bạn nói một người là người "nhất" nhưng người khác mới đúng (theo bảng); (b) bạn nói A hơn B ở một tính chất, nhưng bảng cho thấy B hơn A. Mỗi câu của Task G4 dùng một kiểu và một tính chất khác nhau (chiều cao hoặc tuổi; chạy nhanh). Tự nghĩ câu theo bảng số liệu: không chép lại câu nào có trong tài liệu này hay trong các tài liệu khác. Không viết lời sai ngữ pháp (ví dụ "Ben is more taller").
 
 ## 8. Nhãn và thuật ngữ in trên phiếu `[ĐỀ XUẤT]`
 | Nhãn | Định nghĩa in trên phiếu |
@@ -142,7 +143,10 @@ Không áp dụng.
 - Phần dành cho người chấm (ghi chú, đáp án mẫu) được dùng ngôn ngữ chuyên môn.
 
 ## 11. Giới hạn riêng của bài `[ĐỀ XUẤT]`
-Không áp dụng.
+- Câu chọn (chọn trong câu, chọn A/B/C): mỗi vế gồm cả "than" hoặc "the" đi kèm, ví dụ `{taller than|the tallest|more tall}`. Không để "than" hay "the" ngoài chỗ chọn.
+- Câu điền từ: mỗi câu đúng MỘT chỗ trống, gồm cả tính từ đã đổi dạng lẫn "than" hoặc "the" (đáp án như `taller than`, `the tallest`, `more expensive than`, `better than`). Không viết "than" hay "the" liền trước hoặc sau chỗ trống; không có câu hai chỗ trống (đây là ngoại lệ của mục Giới hạn riêng đối với quy tắc từ chức năng đi kèm của TF-G3b-A). Ví dụ kiểu câu: `Lucy is ___ (tall) Sam.`, không phải `Lucy is ___ (tall) than Sam.`.
+- Câu so sánh nhất ở Task chọn và điền từ phải cho biết ba đối tượng trở lên bằng cảnh hoặc dữ kiện (ví dụ cảnh liệt kê ba con vật), không dùng "of the three", "in the class" ở các vị trí bắt buộc.
+- Mỗi Task G2, G3a, G3b có ít nhất 2 câu so sánh nhất và ít nhất 2 câu so sánh hơn, để học sinh phải phân biệt hai cách dùng.
 
 ## 12. Điểm cần người dùng duyệt (xóa mục này khi chốt)
 1. Chủ đề so sánh và bộ ba Ben, Lucy, Sam; số liệu trong Dữ kiện chuẩn (tên, tuổi, chiều cao, giây).
@@ -150,4 +154,5 @@ Không áp dụng.
 3. Phạm vi: bỏ as ... as; bao gồm good/bad bất quy tắc; có thêm bất quy tắc nào (far → farther) không.
 4. 8 tính từ chính và các đơn vị cho phép.
 5. Cấp độ: có nên đặt ở Movers hay Starters+.
-6. Các mục `[ĐỀ XUẤT]`: Bảng nhận biết (cột, hàng, văn bản nguồn); Dữ kiện cho bước G4; Chủ đề cá nhân; Loại câu trong Phạm vi; Dấu hiệu bề mặt; Điểm dễ nhầm; Nhãn.
+6. Bản 0.3: than/the nằm trong chỗ chọn và chỗ trống (mục Giới hạn riêng của bài); mục Lời nhầm của bạn không còn câu mẫu; trần của old.
+7. Các mục `[ĐỀ XUẤT]`: Bảng nhận biết (cột, hàng, văn bản nguồn); Dữ kiện cho bước G4; Chủ đề cá nhân; Loại câu trong Phạm vi; Dấu hiệu bề mặt; Điểm dễ nhầm; Nhãn.
