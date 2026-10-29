@@ -4,7 +4,7 @@ Nhánh làm việc: `claude/project-thread-34uc6q` (chưa có PR, chưa gộp v�
 
 ## 0. Hiện trạng ngắn (đọc trước)
 - **Bộ file mới nhất: v1.5** (`goi-thu/v1.5/`, zip `goi-thu/goi-thu-v1.5.zip`; = v1.4 + sửa số 30% còn sót). **v1.4 đã chạy và đạt cho Haiku 5.5: 3/4 phiếu đạt** (lần 11, `thu-nghiem/DANH_GIA_AI_NGOAI_LAN_11.md`). Tiến trình: v1.2 0/4, v1.3 2/4, v1.4 3/4.
-- **Thước đo đạt:** `TIEU_CHI_DAT.md` (model đích Haiku 5.5; ngưỡng câu hiểu nghĩa 20%; 4 nhóm A nạp và đáp án, B mục tiêu dạy, C công sửa tay tối đa 3 câu, D giới hạn số tối đa 1 vi phạm). Chờ người dùng chốt: ngưỡng "3 trên 4 lần chạy là đạt".
+- **Thước đo đạt:** `TIEU_CHI_DAT.md` (model đích Haiku 5.5; ngưỡng câu hiểu nghĩa 20%; 4 nhóm A nạp và đáp án, B mục tiêu dạy, C công sửa tay tối đa 3 câu, D giới hạn số tối đa 1 vi phạm). Người dùng đã chốt ngưỡng "3 trên 4 lần chạy là đạt" (v1.4 đạt cho Haiku).
 - **Máy kiểm:** `cong-cu/kiem-phieu.cjs` (chạy `node cong-cu/kiem-phieu.cjs <file phản hồi nguyên của AI>`; không cần thư viện): bắt vị trí bắt buộc không từ thời gian, từ thời gian trong lựa chọn, dấu `*`, ba lựa chọn, dãy đáp án chu kỳ, lượt "Can", động từ, số câu mỗi Task, hàng mẫu Lucy, lời của bạn ở Task 5, chữ rác. Không bắt được: câu hai đáp án, gượng, vế khác thì thật sự (nghĩa). `cong-cu/kiem-md.cjs` kiểm nạp bằng Playwright.
 - **Bài học đã rút ra (không đổi lại):** (1) Haiku làm đúng quy tắc theo VỊ TRÍ cố định, không làm đúng quy tắc theo tỷ lệ; (2) AI không tự đếm đúng giới hạn số: dùng máy kiểm; (3) Editor coi mọi thứ sau `## Đáp án` là đáp án: khối markdown kết thúc bằng `### Task 0`, ghi chú dùng `T1:`; (4) khóa nhiều cách viết ghi bằng ` / ` (Editor hỗ trợ); (5) khi sửa số liệu ở một file, grep cả bốn file (đã bỏ sót 30% hai lần).
 - **Việc tiếp theo:** mục 5.
@@ -79,15 +79,15 @@ Ghi chú lần 5: file Flash bị cắt ở giữa Task 6, thiếu REPORT, dòng
 - **v1.5** (`goi-thu/v1.5/`, zip `goi-thu-v1.5.zip`; **bản mới nhất, chưa chạy thử**; thư viện đã đồng bộ): v1.4 chỉ sửa "Nếu không đạt 30%" thành 20% ở S5 mục 1. Lần 11 (v1.4): Haiku 3/4 đạt tiêu chí; còn lỗi nghĩa (hai đáp án, vế khác thì) cần người duyệt.
 
 ### 4c. Câu hỏi còn mở với người dùng
-1. Ngưỡng đạt: "3 trên 4 lần chạy" (đề xuất) hay "cả hai/cả bốn"?
-2. Lesson thứ hai: Reading hay Vocabulary?
+1. Duyệt file Kiến thức Comparatives (`kien-thuc.md`, mục K7).
+2. Lesson thứ ba (nếu cần): Reading hay Vocabulary?
 3. Có muốn AI tự gán nhãn Starters/Movers không (cần người dùng gửi danh sách Cambridge 2018; mạng chặn nên mình không tải được; hoặc để máy tra ở bước 4).
 4. Có duyệt sửa Editor (kết thúc đáp án ở hàng rào hoặc dòng `#`) không (mục 5, việc 6).
 5. Cách sao chép phiếu từ các giao diện: lần 8 đến 11 gửi nguyên phản hồi vẫn nạp được; vấn đề cũ coi như hết.
 
 ## 5. Việc tiếp theo
-1. **Người dùng chốt ngưỡng đạt** ở `TIEU_CHI_DAT.md` (đề xuất: 3 trên 4 lần chạy) và cho biết có chạy lại với v1.5 không (chỉ sửa số 30%, có thể bỏ qua).
-2. **Bước 3 của tiêu chí: lesson thứ hai khác loại** (Reading hoặc Vocabulary): viết ba file lesson mới (Kiến thức, Trình tự, Task Format), giữ nguyên file 0 và S5 hệ thống và máy kiểm; chạy Haiku, chấm theo `TIEU_CHI_DAT.md`. Máy kiểm hiện gắn với Grammar Movers (6 Task, 9 động từ, vị trí bắt buộc theo lesson): cần tổng quát hóa khi sang lesson khác.
+1. **Lesson thứ hai: Grammar khác = Comparatives & Superlatives (GRAM-MOVERS-COMPARE-01).** Đã có `thu-vien/lesson/grammar-movers-comparatives/kien-thuc.md` (bản nháp 0.1; mục K7 liệt kê điểm cần người dùng duyệt). Còn thiếu: Trình tự Lesson và Task Format (viết sau khi người dùng duyệt K). Giữ nguyên file 0 và S5 hệ thống; máy kiểm hiện gắn với lesson 1 (6 Task, 9 động từ, vị trí bắt buộc, từ thời gian) nên cần tổng quát hóa (tính từ chính thay động từ, bỏ kiểm từ thời gian). Sau đó chạy Haiku 4 lần, chấm theo `TIEU_CHI_DAT.md` (3 trên 4).
+2. (Tùy chọn) chạy lại Haiku với v1.5 (chỉ sửa số 30%).
 3. Khi lesson thứ hai đạt: làm hết nhóm hệ thống (5 mục trong `thu-vien/README.md`).
 4. Nghiên cứu còn thiếu: toàn văn Field 2018, Barrett 1968, Clymer 1968, Trüb 2022 (chỉ có bản tóm tắt); cơ sở học thuật cho Writing, Speaking, phát âm; ý đồ từng câu Reading/Listening.
 5. Bước 4 (kế hoạch xây hệ thống) chỉ làm khi người dùng bảo. Yêu cầu đã biết: trường mô tả ảnh và kịch bản audio, kiểm file khi nạp (máy kiểm trên), chọn TF, nhất quán khi tạo lại, bộ phiếu chuẩn để kiểm hồi quy, ước tính chi phí. Tạo lại từng Task: nếu máy kiểm báo lỗi thì tạo lại Task đó kèm thông báo lỗi. Lỗi nghĩa (hai đáp án, vế khác thì, gượng) để giáo viên duyệt.

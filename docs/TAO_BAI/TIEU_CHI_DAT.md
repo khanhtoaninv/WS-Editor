@@ -39,5 +39,5 @@ Mục đích: biết khi nào một version bộ file (K, S, TF, file 0) là Đ�
 
 ## 7. Lịch sử áp dụng
 - v1.1 (lần 8): Haiku không đạt. v1.2 (lần 9): 0/4. v1.3 (lần 10): 2/4. **v1.4 (lần 11): 3/4 đạt** (`thu-nghiem/DANH_GIA_AI_NGOAI_LAN_11.md`).
-- Đề xuất chờ chốt: ngưỡng "3 trên 4" lần chạy cho kết luận đạt model đích (thay cho "cả hai phiếu").
-- Bước 3 (lesson thứ hai khác loại) chưa làm.
+- **Đã chốt (29/10/2026): ngưỡng "3 trên 4" lần chạy là đạt model đích** (thay cho "cả hai phiếu"). Theo đó v1.4 đạt cho Haiku (3/4).
+- Bước 3: lesson thứ hai là Grammar khác (Comparatives, `thu-vien/lesson/grammar-movers-comparatives/`); mới có file Kiến thức bản nháp 0.1.
