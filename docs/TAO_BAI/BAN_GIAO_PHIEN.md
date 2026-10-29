@@ -41,7 +41,7 @@ Cách chấm: rubric `RUBRIC_KIEM_v0.md` và bốn lớp lỗi (a: theo đúng b
 | 4 | v0.6 | 6,8 | 7,0 | 7,5 | 7,8 | `DANH_GIA_AI_NGOAI_LAN_4.md`, phiếu `phieu-lan-4/` |
 | 5 | v0.7 | 6,5 (tạm) | 7,8 | 8,0 | 8,2 | `DANH_GIA_AI_NGOAI_LAN_5.md`, phiếu `phieu-lan-5/` |
 | 6 | v0.8, v0.9 | 7,0 | 7,2 | 8,2 | 8,3 | `DANH_GIA_AI_NGOAI_LAN_6.md`, phiếu `phieu-lan-6/` |
-| 7 | v1.0 | chưa chạy | | | | chờ người dùng gửi `goi-thu/goi-thu-v1.0.zip` cho ba model |
+| 7 | v1.0 | 6,8 | 6,0 (nội dung 6,8; không nạp được) | 8,3 | 8,1 | `DANH_GIA_AI_NGOAI_LAN_7.md`, phiếu `phieu-lan-7/` |
 
 Ghi chú lần 5: file Flash bị cắt ở giữa Task 6, thiếu REPORT, dòng bị dồn (nguyên nhân chưa rõ, nghi do sao chép từ giao diện chat); điểm 6,5 là tạm, nếu đủ thì khoảng 7,3.
 
@@ -58,6 +58,8 @@ Ghi chú lần 5: file Flash bị cắt ở giữa Task 6, thiếu REPORT, dòng
 - **Kết quả lần 6 (v0.9):** trung bình ba model 7,5 (v0.7: 7,4); cả bộ 8,3. Hết lỗi lần 5 đã nhắm: G4 viết sẵn câu, trợ động từ trong ngoặc, đổi chỉ dẫn Task 4, vế chọn G2 chỉ là đoạn câu; cả ba phiếu nạp được thẳng vào Editor. Còn lại: ví dụ 1e bị chép (Flash) hoặc lặp (Haiku); G2 mirror câu hỏi; Haiku có hai câu hai đáp án (Task 1 hàng They do K3.1 + TF-G1-B, Task 4 câu 5 câu trần); Sol Task 4 câu 2 chép dạng; TF-G4-A và file 0 mâu thuẫn khung viết.
 - **v1.0** (`goi-thu/v1.0/`, zip `goi-thu-v1.0.zip`; **bản mới nhất, chưa chạy thử với AI**; thư viện `thu-vien/lesson/...` bằng v1.0): K3.1 chỉ một việc chung (ăn trưa), "Grandma" của Tom và Mia, K4 liệt kê stative verbs (has, have, like, love, know, want, need) kể cả câu tình huống; S5 mới 1c (câu trần cấm), 1d (không chép dạng, viết thành mục riêng vì trước đó chỉ được nhắc), 1e viết lại (tám kiểu chỉ mô tả, một câu minh họa không được dùng lại, "Sorry, I can't" tối đa 2 lần, mỗi Task tối đa một "Can I/you ...?"), 1f cấm lượt hai người, 1g (G2-B tối đa 2 câu "What does/is ... doing?", ít nhất 3 câu không lộ thì, dãy đáp án không ABABAB), mục 8 thêm câu hỏi mở đầu và tính chung G2/G3, S4 áp nhãn Usually/Now cho bảng G4; TF-G1-B, G2-B, G3a-A, G3b-A, G4-A sửa theo; file 0: `Dạng: chọn A/B/C` cố định, tiêu đề cột G4, REPORT thêm kiểu (a)/(b), "Sorry, I can't", dãy đáp án, loại câu Task 3, mục 6 tự kiểm câu trùng ví dụ; không tính Khung từ khi đếm động từ.
 
+- **Kết quả lần 7 (v1.0):** trung bình ba model 7,0 (v0.9: 7,5); cả bộ 8,1 (v0.9: 8,3). Hết lỗi lần 6 đã nhắm: Task 1 hàng They hai đáp án, chép nguyên văn ví dụ 1e, "Sorry, I can't" lặp, chép dạng Task 4, đáp án xen kẽ. Còn lại và phát sinh: giới hạn số không tự đếm được (Sol Can ×2 ở hai Task, 4 hội thoại; Flash kiểu (3) ×3; Haiku play 5, read 6), S5 1d mâu thuẫn với câu yes/no của G2-B (lỗi do mình viết), câu hỏi không lộ thì sinh câu gượng, Flash Task 3 câu 2 hỏng và dùng "want", Haiku không đúng định dạng file 0 (không nạp được; chưa rõ có dán đủ file 0 không), REPORT của Flash và Haiku viết tiếng Việt.
+
 ### 4c. Câu hỏi còn mở với người dùng
 1. Cách sao chép phiếu từ Gemini (phiếu Flash lần 5 bị cắt và dồn dòng); v0.9 dùng khối mã nên có thể hết, chờ kết quả.
 2. Có muốn chuyển ba phiếu v0.7 đã nhận sang MD để xem trên Editor không (mình hỏi, chưa làm).
@@ -65,7 +67,7 @@ Ghi chú lần 5: file Flash bị cắt ở giữa Task 6, thiếu REPORT, dòng
 4. Mọi đề xuất sửa đã làm đến v1.0 (7 đề xuất của lần 6; đề xuất 7 là danh sách việc cho máy kiểm bước 4, ghi ở `DANH_GIA_AI_NGOAI_LAN_6.md` mục 5, chưa làm). Cách sao chép phiếu từ ba giao diện vẫn chưa rõ (file Flash lần 6 còn sót "```eof").
 
 ## 5. Việc tiếp theo
-1. Người dùng gửi gói v1.0 (`goi-thu/goi-thu-v1.0.zip`) cho ba model. Mình kiểm từng phiếu bằng `kiem-md.cjs`, chấm lần 7 theo bốn lớp lỗi và so với v0.9 (bảng ở 4a). Điều cần xem: tám kiểu (b) chỉ mô tả có hết chép và lặp không (Flash, Haiku); G2 có hết mirror không; hàng They của Task 1 còn hai đáp án không; REPORT có tự khai kiểu (a)/(b), dãy đáp án đúng không.
+1. Người dùng duyệt 7 đề xuất v1.1 ở `DANH_GIA_AI_NGOAI_LAN_7.md` mục 5 và chọn làm máy kiểm (`kiem-phieu.cjs`) trước hay sửa v1.1 trước. Mình khuyên làm máy kiểm trước: ba lần chạy liên tiếp AI không tự đếm đúng các giới hạn số.
 2. Khi bộ file đạt, làm hết nhóm hệ thống (5 mục trong `thu-vien/README.md`) và một lesson loại khác (Reading hoặc Vocabulary) để kiểm tra bộ file nạp có đủ trên loại phiếu thứ hai chưa.
 3. Nghiên cứu còn thiếu: toàn văn Field 2018, Barrett 1968, Clymer 1968, Trüb 2022 (chỉ có bản tóm tắt); cơ sở học thuật cho Writing, Speaking, phát âm; ý đồ từng câu Reading/Listening.
 4. Bước 4 (kế hoạch xây hệ thống) chỉ làm khi người dùng bảo. Yêu cầu đã biết: trường mô tả ảnh và kịch bản audio, kiểm file khi nạp, chọn TF, nhất quán khi tạo lại, bộ phiếu chuẩn để kiểm hồi quy, ước tính chi phí; máy kiểm đếm động từ (cả hai vế), từ ngoài danh sách, từ chỉ thời gian mở rộng, câu trùng ví dụ trong tài liệu, tỉ lệ tín hiệu (a)/(b), kiểm cú pháp MD (có sẵn `kiem-md.cjs`).
@@ -76,4 +78,4 @@ Trả lời tiếng Việt, ngắn, thẳng; thảo luận trước, code khi đ
 ## 7. Lệnh mở phiên mới
 "Đọc CLAUDE.md và docs/TAO_BAI/BAN_GIAO_PHIEN.md (nhánh claude/project-thread-34uc6q; mục 4a có bảng phiên bản và điểm chấm, mục 5 là việc tiếp theo), tóm tắt trạng thái ngắn rồi hỏi tôi muốn làm gì. Chưa cần làm gì cả."
 
-Trạng thái cuối phiên 29/10/2026: bộ file mới nhất là v1.0 (chưa chạy thử với AI); lần chấm gần nhất là lần 6 (v0.9, bộ file 8,3/10). Nhánh chưa có PR, chưa gộp vào `main`.
+Trạng thái cuối phiên 29/10/2026: bộ file mới nhất là v1.0; lần chấm gần nhất là lần 7 (v1.0, bộ file 8,1/10); đề xuất v1.1 chờ duyệt. Nhánh chưa có PR, chưa gộp vào `main`.
