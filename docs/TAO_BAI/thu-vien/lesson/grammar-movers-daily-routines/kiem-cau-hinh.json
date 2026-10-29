@@ -1,0 +1,30 @@
+{
+  "tenBai": "GRAM-MOVERS-DAILY-01",
+  "ghiChu": "Cấu hình máy kiểm cho bài này, lấy từ Kiến thức: mục Dấu hiệu bề mặt, Phạm vi kiến thức (mục chính), Từ vựng (giới hạn lặp), Điểm dễ nhầm, Giới hạn riêng của bài. Mục chính đếm 8 động từ (do không đếm vì thường là trợ động từ).",
+  "dauHieuBeMat": "\\b(now|right now|at the moment|today|every ?(day|morning|evening|week|saturday|sunday)|on (mondays?|tuesdays?|wednesdays?|thursdays?|fridays?|saturdays?|sundays?|weekdays|weekends?)( (mornings?|afternoons?|evenings?|nights?))?|(sunday|saturday|monday|friday) (mornings?|afternoons?|evenings?)|in the (winter|summer|spring|autumn)|every \\w+|at night|usually|always|often|sometimes|never|after (school|dinner|lunch)|before (bed|school)|in the (morning|evening|afternoon)|at the weekend|these days|listen|look|at \\d{1,2}(:\\d\\d)? ?([ap]\\.?m\\.?)?|at \\d{1,2} o'clock)\\b",
+  "dauHieuTrongLuaChon": "cam",
+  "mucChinh": {
+    "play": "\\bplay(s|ing)?\\b",
+    "read": "\\bread(s|ing)?\\b",
+    "watch": "\\bwatch(es|ing)?\\b",
+    "eat": "\\beat(s|ing)?\\b",
+    "go": "\\b(go|goes|going)\\b",
+    "ride": "\\bri(de|des|ding)\\b",
+    "swim": "\\bswim(s|ming)?\\b",
+    "draw": "\\bdraw(s|ing)?\\b"
+  },
+  "dangKiemLapThem": ["\\b(make|cook|wash|sing|help)(s|es|ing)\\b"],
+  "gioiHan": { "moiTaskLuyen": 4, "moiTaskKhac": 3, "caPhieu": 12 },
+  "phanLoaiVe": "ing\\b",
+  "cauHoiLoDapAn": "\\b(What (does|do|is|are) \\w+( \\w+)? (do|doing)\\b|What (sport )?do you do|What are you doing)",
+  "toiDaLoDapAn": 2,
+  "gioiHanRieng": [
+    { "ten": "Can I/you", "regex": "\\b[Cc]an (I|you)\\b(?!['’]t)", "moiTask": 1 },
+    { "ten": "Sorry, I can't", "regex": "Sorry, I can['’]t", "caPhieu": 2 }
+  ],
+  "hangMau": "Lucy",
+  "loiBanSai": [
+    { "regex": "\\b(plays|swims|reads|draws|watches|eats|rides|goes)\\b[^.]*\\bnow\\b", "thongBao": "lời của bạn sai ngữ pháp (hiện tại đơn với now)" },
+    { "regex": "\\b(is|are) \\w+ing\\b[^.]*\\bon (saturdays|sundays)\\b", "thongBao": "lời của bạn sai ngữ pháp (tiếp diễn với on Saturdays)" }
+  ]
+}

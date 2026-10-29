@@ -1,8 +1,9 @@
-# Bàn giao phiên: module tạo bài (cập nhật cuối phiên 29/10/2026, sau lần chấm 11)
+# Bàn giao phiên: module tạo bài (cập nhật cuối phiên 29/10/2026, sau lần chấm 11 và bản v2.0)
 
 Nhánh làm việc: `claude/project-thread-34uc6q` (chưa có PR, chưa gộp vào `main`). App WS Editor không đổi trong phiên này (vẫn v123); toàn bộ việc là tài liệu và thử nghiệm.
 
 ## 0. Hiện trạng ngắn (đọc trước)
+- **MỚI (29/10, sau lần chấm 11): bộ file v2.0 (`goi-thu/v2.0/`, chưa chạy thử).** Người dùng quyết định: **Kiến thức** theo từng bài; **Trình tự** và **Task Format (TF)** cố định cho cả chuyên đề Grammar (để thử Trình tự và TF trên nhiều bài). Model đích đổi thành **Haiku 5.5 và Sonnet 5.5**, thử chung, kết luận chọn model sau. Chưa có bài nghe (người dùng hoãn). Chi tiết ở mục 4b (v2.0) và mục 5. Các dòng dưới đây về v1.4, v1.5 vẫn đúng cho lịch sử nhưng không áp dụng cho v2.0.
 - **Bộ file mới nhất: v1.5** (`goi-thu/v1.5/`, zip `goi-thu/goi-thu-v1.5.zip`; = v1.4 + sửa số 30% còn sót). **v1.4 đã chạy và đạt cho Haiku 5.5: 3/4 phiếu đạt** (lần 11, `thu-nghiem/DANH_GIA_AI_NGOAI_LAN_11.md`). Tiến trình: v1.2 0/4, v1.3 2/4, v1.4 3/4.
 - **Thước đo đạt:** `TIEU_CHI_DAT.md` (model đích Haiku 5.5; ngưỡng câu hiểu nghĩa 20%; 4 nhóm A nạp và đáp án, B mục tiêu dạy, C công sửa tay tối đa 3 câu, D giới hạn số tối đa 1 vi phạm). Người dùng đã chốt ngưỡng "3 trên 4 lần chạy là đạt" (v1.4 đạt cho Haiku).
 - **Máy kiểm:** `cong-cu/kiem-phieu.cjs` (chạy `node cong-cu/kiem-phieu.cjs <file phản hồi nguyên của AI>`; không cần thư viện): bắt vị trí bắt buộc không từ thời gian, từ thời gian trong lựa chọn, dấu `*`, ba lựa chọn, dãy đáp án chu kỳ, lượt "Can", động từ, số câu mỗi Task, hàng mẫu Lucy, lời của bạn ở Task 5, chữ rác. Không bắt được: câu hai đáp án, gượng, vế khác thì thật sự (nghĩa). `cong-cu/kiem-md.cjs` kiểm nạp bằng Playwright.
@@ -20,7 +21,7 @@ Xây bộ file nạp chuẩn và tiêu chí đánh giá trước, đánh giá t�
 - Bước 4 kế hoạch xây hệ thống: chưa bắt đầu, chờ người dùng cho phép.
 
 ## 3. Quyết định đã chốt
-- Nhóm lesson có 3 file do người dùng soạn ngoài rồi nạp: Kiến thức, Trình tự Lesson, Task Format (TF). TF đi theo từng lesson; TF dùng chung chỉ cho bài tự do.
+- **(Đổi 29/10/2026, thay quyết định cũ "TF đi theo từng lesson")** Mỗi lesson chỉ có file Kiến thức (người dùng soạn ngoài rồi nạp). Trình tự và Task Format (TF) cố định theo chuyên đề (Grammar, sau này Listening, Reading...). Kiến thức chuẩn hóa cấu trúc mục (tên mục) chứ không chuẩn hóa nội dung (không ép mọi bài có "cặp đối lập").
 - Nhóm hệ thống (viết một lần, chưa làm hết): quy tắc viết MD cho AI, TF chung + đối chiếu dạng bài với Q1–Q12, quy tắc hình thức, rubric kiểm, phiếu mẫu đã duyệt.
 - Trình tự chung (chuyên mục × cấp độ) chỉ là tham khảo của người soạn, không lưu trong hệ thống. Trình tự gốc: Recognition, Understanding, Application, Creation; mỗi loại phiếu được tách hoặc gộp các bước.
 - Mỗi bước có 1–3 TF; máy chọn TF ít dùng gần đây; tạo lại thì giữ TF trừ khi giáo viên đổi.
@@ -54,6 +55,7 @@ Cách chấm: rubric `RUBRIC_KIEM_v0.md` và bốn lớp lỗi (a: theo đúng b
 | 10 | v1.3 | - | 2/4 đạt tiêu chí (phiếu 2 và 4; phiếu 1 và 3 bỏ qua vị trí bắt buộc) | - | - | `DANH_GIA_AI_NGOAI_LAN_10.md`, phiếu `phieu-lan-10/` |
 | 11 | v1.4 | - | **3/4 đạt tiêu chí** | - | - | `DANH_GIA_AI_NGOAI_LAN_11.md`, phiếu `phieu-lan-11/` |
 | 12 | v1.5 | chưa chạy | chưa chạy | chưa chạy | chưa chạy | = v1.4 + sửa số 30% còn sót ở S5 mục 1 |
+| 13 | v2.0 | - | chưa chạy | - | - | Trình tự + TF chung cho Grammar; hai bài thử (Daily Routines, Comparatives); model đích Haiku và Sonnet |
 
 Ghi chú lần 5: file Flash bị cắt ở giữa Task 6, thiếu REPORT, dòng bị dồn (nguyên nhân chưa rõ, nghi do sao chép từ giao diện chat); điểm 6,5 là tạm, nếu đủ thì khoảng 7,3.
 
@@ -78,6 +80,17 @@ Ghi chú lần 5: file Flash bị cắt ở giữa Task 6, thiếu REPORT, dòng
 - **v1.4** (`goi-thu/v1.4/`, zip `goi-thu-v1.4.zip`; thư viện đã đồng bộ): sửa số 30% còn sót ở file 0 (REPORT), vị trí bắt buộc ghi rõ "Listen!, Look!, Not now", mục C thêm mục 11 (đúng số câu mỗi Task, hàng mẫu Task 1 là Lucy), khóa có hai cách viết ghi bằng ` / ` (Editor hỗ trợ; v1.2 cấm nhầm). Máy kiểm: đếm số câu, hàng mẫu Lucy, bỏ cảnh báo ` / `.
 - **v1.5** (`goi-thu/v1.5/`, zip `goi-thu-v1.5.zip`; **bản mới nhất, chưa chạy thử**; thư viện đã đồng bộ): v1.4 chỉ sửa "Nếu không đạt 30%" thành 20% ở S5 mục 1. Lần 11 (v1.4): Haiku 3/4 đạt tiêu chí; còn lỗi nghĩa (hai đáp án, vế khác thì) cần người duyệt.
 
+- **v2.0** (`goi-thu/v2.0/`; zip `goi-thu-v2.0-daily-routines.zip` và `goi-thu-v2.0-comparatives.zip`; **chưa chạy thử**): tái cấu trúc, không phải sửa lỗi.
+  - Thư viện: `thu-vien/chuyen-de/grammar/trinh-tu.md` và `task-format.md` (chung), `thu-vien/lesson/<bài>/kien-thuc.md` + `kiem-cau-hinh.json` (riêng). Đã xóa `trinh-tu-lesson.md` và `task-format.md` khỏi thư mục lesson Daily Routines (xem git cho bản cũ).
+  - Mười một mục Kiến thức có tên cố định: Mục tiêu; Cấp độ và người học; Nhân vật, bối cảnh và dữ kiện (Dữ kiện chuẩn, Nhân vật theo bước, Bảng nhận biết, Dữ kiện cho bước G4, Chủ đề cá nhân); Phạm vi kiến thức; Từ vựng; Dấu hiệu bề mặt; Điểm dễ nhầm (Cặp dễ nhầm, Lỗi dạng, Mẫu câu mơ hồ, Câu hỏi lộ đáp án, Lời nhầm của bạn); Nhãn và thuật ngữ; Kiểu tình huống mẫu; Ngôn ngữ chỉ dẫn; Giới hạn riêng của bài. Mục nào bài không cần ghi "Không áp dụng".
+  - Kiểm kê quy tắc cũ thành ba loại: (1) quy tắc theo cách làm giữ nguyên (vị trí bắt buộc, ngưỡng 20%, ba lựa chọn, dãy đáp án, không chép dạng, truy nguồn, đa dạng); (2) nội dung riêng của bài chuyển sang Kiến thức (nhãn Usually/Now, danh sách từ thời gian, tám kiểu tình huống, lỗi dạng, mẫu câu mơ hồ, bảng Ben/Lucy, Can I/Sorry); (3) quy tắc sinh từ lỗi cụ thể được viết lại tổng quát (ví dụ "vế khác thì" thành "lựa chọn sai cách dùng").
+  - Ví dụ minh họa trong Trình tự và TF lấy từ chủ đề thứ ba (giới từ chỉ nơi chốn), không trùng hai bài thử. Thuật ngữ (người dùng yêu cầu): viết đủ "Kiến thức", "Trình tự"; chỉ được tắt "TF".
+  - File 0 (chỉ dẫn và định dạng đầu ra) viết lại chung: phiếu mặc định lấy từ Trình tự, mẫu MD không nhắc Usually/Now, REPORT chung. Mục tự kiểm 10 và 11 (vị trí bắt buộc, số câu) vẫn theo phiếu mặc định 6 Task.
+  - Máy kiểm `cong-cu/kiem-phieu.cjs` v2.0 nhận thêm đối số cấu hình bài; phần cố định theo chuyên đề (6 Task, vị trí bắt buộc, số câu) nằm trong mã. Đối chiếu: 4 phiếu Haiku lần 11 cho kết quả giống hệt bản cũ với cấu hình Daily Routines.
+  - Bài thử thứ hai: Comparatives, Kiến thức bản 0.2 (nháp), các mục gắn `[ĐỀ XUẤT]` do Claude soạn khi chuyển sang cấu trúc mới, chờ người dùng duyệt (mục 12 của file). Mẫu định dạng tay `thu-nghiem/mau-dau-ra-v2.0-comparatives.md` (Claude tự viết, chỉ để kiểm định dạng): máy kiểm 0 lỗi, Editor đọc được 7 Task, 0 ghi chú, 0 lỗi console. Phát hiện: giới hạn lặp mục chính xung đột với bảng nhận biết bước G1, đã đề xuất miễn trừ Task G1 (`boQuaGioiHanLapTask`).
+  - Rủi ro đã nêu: Haiku làm đúng quy tắc cụ thể hơn quy tắc trừu tượng; bản khái quát có thể tụt so với 3/4 của v1.4. Có thể phải qua vài bản.
+  - Điều chưa thử: TF-G3a-B (vị trí bắt buộc câu 3 và 5 là đề xuất mới), mức Giảm của TF-G3a-A, mọi TF phụ.
+
 ### 4c. Câu hỏi còn mở với người dùng
 1. Duyệt file Kiến thức Comparatives (`kien-thuc.md`, mục K7).
 2. Lesson thứ ba (nếu cần): Reading hay Vocabulary?
@@ -86,6 +99,7 @@ Ghi chú lần 5: file Flash bị cắt ở giữa Task 6, thiếu REPORT, dòng
 5. Cách sao chép phiếu từ các giao diện: lần 8 đến 11 gửi nguyên phản hồi vẫn nạp được; vấn đề cũ coi như hết.
 
 ## 5. Việc tiếp theo
+0. **(Mới, ưu tiên) Chạy v2.0.** Duyệt Kiến thức Comparatives (các mục `[ĐỀ XUẤT]`, mục 12 của file). Rồi chạy hai bài (Daily Routines và Comparatives) cho Haiku và Sonnet, mỗi bài mỗi model 4 lần (tổng 16 phiếu); chấm bằng `node docs/TAO_BAI/cong-cu/kiem-phieu.cjs <phiếu> docs/TAO_BAI/thu-vien/lesson/<bài>/kiem-cau-hinh.json` và tay theo `TIEU_CHI_DAT.md`, phân loại lỗi (Trình tự/TF chung hay Kiến thức). Nạp thử vào Editor bằng `kiem-md.cjs`. Các mục 1 đến 6 dưới đây là kế hoạch trước v2.0, đọc theo mục 0 khi mâu thuẫn.
 1. **Lesson thứ hai: Grammar khác = Comparatives & Superlatives (GRAM-MOVERS-COMPARE-01).** Đã có `thu-vien/lesson/grammar-movers-comparatives/kien-thuc.md` (bản nháp 0.1; mục K7 liệt kê điểm cần người dùng duyệt). Còn thiếu: Trình tự Lesson và Task Format (viết sau khi người dùng duyệt K). Giữ nguyên file 0 và S5 hệ thống; máy kiểm hiện gắn với lesson 1 (6 Task, 9 động từ, vị trí bắt buộc, từ thời gian) nên cần tổng quát hóa (tính từ chính thay động từ, bỏ kiểm từ thời gian). Sau đó chạy Haiku 4 lần, chấm theo `TIEU_CHI_DAT.md` (3 trên 4).
 2. (Tùy chọn) chạy lại Haiku với v1.5 (chỉ sửa số 30%).
 3. Khi lesson thứ hai đạt: làm hết nhóm hệ thống (5 mục trong `thu-vien/README.md`).
@@ -97,6 +111,6 @@ Ghi chú lần 5: file Flash bị cắt ở giữa Task 6, thiếu REPORT, dòng
 Trả lời tiếng Việt, ngắn, thẳng; thảo luận trước, code khi được phép; ghi mọi thông tin mới lên git để phiên sau đủ ngữ cảnh. Người dùng là giáo viên, không phải lập trình viên.
 
 ## 7. Lệnh mở phiên mới
-"Đọc CLAUDE.md và docs/TAO_BAI/BAN_GIAO_PHIEN.md (nhánh claude/project-thread-34uc6q; mục 0 là hiện trạng, mục 4a có bảng phiên bản và kết quả, mục 5 là việc tiếp theo), tóm tắt trạng thái ngắn rồi hỏi tôi muốn làm gì. Chưa cần làm gì cả. Đọc thêm docs/TAO_BAI/TIEU_CHI_DAT.md."
+"Đọc CLAUDE.md và docs/TAO_BAI/BAN_GIAO_PHIEN.md (nhánh claude/project-thread-34uc6q; mục 0 là hiện trạng, mục 4a có bảng phiên bản và kết quả, mục 4b mục v2.0, mục 5 là việc tiếp theo), tóm tắt trạng thái ngắn rồi hỏi tôi muốn làm gì. Chưa cần làm gì cả. Đọc thêm docs/TAO_BAI/TIEU_CHI_DAT.md. Từ v2.0: Kiến thức theo từng bài, Trình tự và Task Format cố định cho chuyên đề; viết đầy đủ \"Kiến thức\", \"Trình tự\", chỉ tắt \"TF\"."
 
 Trạng thái cuối phiên 29/10/2026: bộ file mới nhất là v1.5 (v1.4 đã đạt cho Haiku ở 3/4 phiếu, lần 11); máy kiểm `kiem-phieu.cjs` đã có; tiêu chí `TIEU_CHI_DAT.md` đã chốt model đích Haiku và ngưỡng 20%, chờ chốt ngưỡng 3 trên 4 và bước 3 (lesson thứ hai). Nhánh chưa có PR, chưa gộp vào `main`.

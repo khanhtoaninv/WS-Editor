@@ -2,7 +2,12 @@
 
 Trạng thái: bản nháp cấu trúc (Bước 2), 29/10/2026. Chưa file nào "Đã duyệt".
 
-## 1. Hai nhóm tài liệu
+## 0. Thay đổi cấu trúc từ v2.0 (29/10/2026, người dùng quyết định)
+- **Kiến thức** đi theo từng bài học (mỗi lesson một file `kien-thuc.md`, có cấu trúc mục cố định nhưng nội dung tự do; kèm `kiem-cau-hinh.json` cho máy kiểm).
+- **Trình tự** và **Task Format (TF)** cố định cho cả chuyên đề (hiện: Grammar), nằm ở `chuyen-de/grammar/`. Không còn Trình tự và TF riêng cho từng lesson. Đoạn dưới đây (mục 1 đến 6) mô tả cấu trúc cũ; đọc theo mục này khi mâu thuẫn.
+- Mục Chọn TF dưới đây vẫn đúng ở mức hệ thống, nhưng chỉ dẫn cho AI không còn nhắc "ít dùng gần đây".
+
+## 1. Hai nhóm tài liệu (cấu trúc cũ, trước v2.0)
 
 **Nhóm lesson** (mỗi lesson đúng 3 file, người dùng viết ở bên ngoài, admin nạp):
 | File | Nội dung | Mẫu trống |

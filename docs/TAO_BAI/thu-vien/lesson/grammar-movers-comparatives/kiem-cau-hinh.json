@@ -1,0 +1,40 @@
+{
+  "tenBai": "GRAM-MOVERS-COMPARE-01",
+  "ghiChu": "Cấu hình máy kiểm cho bài này, lấy từ Kiến thức bản 0.2 (nháp): mục Dấu hiệu bề mặt, Phạm vi kiến thức (8 tính từ chính), Từ vựng (giới hạn lặp), Điểm dễ nhầm. Tính từ dài (interesting, expensive) chỉ đếm khi đi với more/most, để tránh nhầm với dạng gốc đứng trong câu hỏi.",
+  "dauHieuBeMat": "\\b(of the (three|group|class|team)|of all|in the (class|group|world|team)|in my (family|class)|both|all|or|than)\\b",
+  "dauHieuTrongLuaChon": "cho",
+  "mucChinh": {
+    "tall": "\\b(tall|taller|tallest)\\b",
+    "big": "\\b(big|bigger|biggest)\\b",
+    "fast": "\\b(fast|faster|fastest)\\b",
+    "old": "\\b(old|older|oldest)\\b",
+    "heavy": "\\b(heavy|heavier|heaviest)\\b",
+    "happy": "\\b(happy|happier|happiest)\\b",
+    "interesting": "\\b(more|most) interesting\\b",
+    "expensive": "\\b(more|most) expensive\\b"
+  },
+  "dangKiemLapThem": [],
+  "gioiHan": {
+    "moiTaskLuyen": 4,
+    "moiTaskKhac": 3,
+    "caPhieu": 10
+  },
+  "phanLoaiVe": "\\bthe\\b",
+  "cauHoiLoDapAn": "Who is the (\\w+est|most \\w+)|Who is (\\w+er|more \\w+),? \\w+ or \\w+|Which (one )?is (more|the most) \\w+",
+  "toiDaLoDapAn": 2,
+  "gioiHanRieng": [],
+  "hangMau": "tall",
+  "loiBanSai": [
+    {
+      "regex": "\\b(more|most) \\w+(er|est)\\b",
+      "thongBao": "lời của bạn sai ngữ pháp (hai dấu so sánh)"
+    },
+    {
+      "regex": "\\b(gooder|goodest|badder|baddest)\\b",
+      "thongBao": "lời của bạn sai ngữ pháp (bất quy tắc)"
+    }
+  ],
+  "boQuaGioiHanLapTask": [
+    1
+  ]
+}
