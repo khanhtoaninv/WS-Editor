@@ -2,10 +2,15 @@
 
 Cập nhật 29/10/2026. Giai đoạn: thảo luận, chưa viết code. Làm trước: **tạo bài theo giáo trình**; bài tự do để sau.
 
-## Quy trình
-1. **Chuẩn bị.** Giáo viên chọn giáo trình → unit → lesson. Việc chọn chỉ để xác định lesson.
-2. **Duyệt tổng quan.** AI đọc dữ liệu, đề xuất danh sách Task (mục tiêu, vai trò, nội dung từng Task). Giáo viên duyệt / sửa / gen lại.
-3. **Tạo bài.** AI viết từng Task theo danh sách đã duyệt, ra MD đúng quy ước, app nạp vào WS Editor để tinh chỉnh trước khi xuất bản.
+## Quy trình (giao diện, chốt 29/10)
+Thanh ba giai đoạn luôn hiện: **① Ra đề → ② Dàn ý → ③ Biên tập**. Hình mẫu: `docs/MINH_HOA_TAO_BAI.html`.
+1. **Ra đề.** Hàng trên: chọn Giáo trình / Unit / Lesson (chọn xong thu thành dải mỏng, có "Đổi lesson"). Hàng dưới chia hai:
+   - Trái: **cấu trúc bài** do **code** dựng từ Trình tự: mỗi bước chọn ngẫu nhiên một dạng Q trong danh sách được phép (không hai bài liền nhau cùng Q). Giáo viên đổi dạng, chỉnh số câu trong giới hạn, thêm bài nếu bước cho phép, bật / tắt bước không bắt buộc, rồi duyệt.
+   - Phải: **layout sơ bộ** (Task giả theo dạng Q và số câu), cập nhật ngay, báo vượt số trang; ghi rõ là ước tính.
+2. **Dàn ý.** AI **sinh bài đầy đủ** theo cấu trúc đã duyệt (phương án b). Giáo viên xem từng bài ở dạng chữ (mục tiêu, ngữ cảnh, câu, đáp án), duyệt / sửa chữ / sinh lại kèm góp ý. Kết quả kiểm tra hiện ngay trên bài.
+3. **Biên tập.** Editor hiện tại, thêm: tạo lại Task, tạo lại phiếu theo cấu trúc, **Phiên bản** (tự lưu mỗi lần tạo / tạo lại kèm lý do, lưu tay; xem bản cũ chỉ đọc; lấy lại một Task hoặc khôi phục cả phiếu).
+
+Trình tự nên viết theo kiểu "lai": mỗi bước có vai trò, danh sách Q được phép, khoảng số câu, số bài tối đa, có bắt buộc không; cộng vài nguyên tắc chữ. (Chi tiết cấu trúc file: thảo luận riêng.)
 
 ## Dữ liệu
 ```

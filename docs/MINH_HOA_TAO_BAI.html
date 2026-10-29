@@ -66,6 +66,75 @@ textarea{width:100%;font:inherit;font-size:13px;border:1px solid var(--ln2);bord
 .flow span{display:block}
 .legend{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+/* ① Ra đề v2 */
+.rade{flex:1;display:flex;flex-direction:column;min-width:0}
+.pickbar{display:flex;align-items:center;gap:12px;padding:9px 16px;border-bottom:1px solid var(--line);background:var(--card);font-size:13px}
+.crumb{white-space:nowrap}.pk-goal{color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.picker{display:grid;grid-template-columns:1fr 1fr 1.3fr 1fr;border-bottom:1px solid var(--line);background:var(--card);height:190px}
+.picker[hidden]{display:none}
+.pcol{border-right:1px solid var(--line);overflow:auto;display:flex;flex-direction:column}
+.pcol h4{margin:0;padding:7px 14px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:1px solid var(--line)}
+.pcol .it{padding:6px 14px}.pside{padding:0 12px 10px}.pside h4{margin:0 -12px 4px}
+.rbody{flex:1;display:grid;grid-template-columns:1fr 1fr;min-height:0}
+.struct{padding:14px 16px;display:flex;flex-direction:column;gap:8px;border-right:1px solid var(--line);overflow:auto}
+.shead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.shead h3{margin:0;font-size:16px}.shead p{margin:2px 0 0;color:var(--muted);font-size:12.5px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.step.off{opacity:.55;background:var(--panel)}
+.sh{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin-bottom:6px}
+.sh b{color:var(--fg);font-size:13px}.sh .grow{flex:1}
+.row2{display:flex;align-items:center;gap:6px;padding:4px 0;border-top:1px dashed #e3e8eb}
+.row2:first-of-type{border-top:0}
+.row2 .n{width:22px;height:22px;border-radius:6px;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700;flex:none}
+select{font:inherit;font-size:13px;border:1px solid var(--ln2);border-radius:6px;padding:3px 6px;background:#fff;color:var(--fg)}
+.cnt{display:inline-flex;align-items:center;border:1px solid var(--ln2);border-radius:6px;overflow:hidden;font-size:12px}
+.cnt button{border:0;background:var(--card-2);width:22px;height:24px;cursor:pointer;font:inherit}.cnt span{padding:0 8px;min-width:46px;text-align:center}
+.lim{font-size:11px;color:var(--ink-3)}
+.addb{font-size:12px;color:var(--accent);cursor:pointer;padding:3px 0 0 28px}
+.addb.dis{color:var(--ink-3);cursor:default}
+.sfoot{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.pv{background:#dde3e7;display:flex;flex-direction:column;min-width:0}
+.pvhead{display:flex;justify-content:space-between;padding:10px 14px;font-size:13px;background:var(--panel);border-bottom:1px solid var(--line)}
+.pvhead .over{color:var(--danger);font-weight:600}
+.pages{flex:1;overflow:auto;padding:14px;display:flex;gap:14px;align-items:flex-start;justify-content:center;flex-wrap:wrap}
+.pg{width:234px;height:331px;background:#fff;border-radius:2px;box-shadow:0 2px 8px #0002;padding:14px 13px;position:relative;font:7px/1.2 Andika,sans-serif;color:#333;overflow:hidden}
+.pg .pno{position:absolute;bottom:5px;right:8px;color:#999}
+.pg.over{outline:2px solid var(--danger)}
+.ptk{margin-bottom:7px;border-radius:3px;position:relative}
+.ptk.hl{outline:1.5px solid var(--accent);outline-offset:1px}
+.pth{display:flex;align-items:center;gap:4px;margin-bottom:3px}
+.pth i{font-style:normal;background:#333;color:#fff;border-radius:2px;padding:0 3px;font-weight:700}
+.pth s{flex:1;height:4px;background:#bbb;border-radius:2px;text-decoration:none}
+.ln{height:3px;background:#d9dee2;border-radius:2px;margin:3px 0}
+.qrow{display:flex;align-items:center;gap:3px;margin:3.5px 0}
+.qrow .ln{margin:0}
+.gap{width:18px;border-bottom:1px solid #555;height:3px;flex:none}
+.wl{border-bottom:1px solid #aaa;height:7px;margin:1px 0 1px 8px}
+.ch{display:flex;gap:10px;margin:1px 0 3px 8px}.ch span{width:16px;height:3px;background:#ccc;border-radius:2px}
+.tf{display:flex;gap:2px;flex:none}.tf b{width:7px;height:7px;border:1px solid #777;border-radius:50%;font-size:5px;display:grid;place-items:center}
+.mt{display:flex;justify-content:space-between;align-items:center;margin:3px 0}.mt .ln{width:38%}.mt i{width:3px;height:3px;border-radius:50%;background:#555}
+.rd{background:#eef1f3;border-radius:3px;padding:3px 4px;margin:2px 0 4px}.rd .ln{background:#c9d0d5}
+.wbx{border:1px solid #777;border-radius:3px;height:8px;width:55%;margin:1px 0 4px}
+.imgs{display:flex;gap:4px;margin:2px 0 3px 8px}.imgs span{width:22px;height:16px;border:1px solid #bbb;border-radius:2px;background:#f2f4f5}
+.pvnote{font-size:11.5px;color:var(--muted);padding:6px 14px 10px}
+/* ② Duyệt bài */
+.rv{flex:1;display:grid;grid-template-columns:260px 1fr;min-height:0}
+.rvlist{border-right:1px solid var(--line);background:var(--card);padding:10px;display:flex;flex-direction:column;gap:6px}
+.rvh{display:flex;justify-content:space-between;font-size:13px;padding:2px 4px 6px;color:var(--muted)}.rvh b{color:var(--fg)}
+.rvi{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--line);border-radius:8px;padding:8px 9px;font-size:13px;cursor:pointer;background:var(--panel)}
+.rvi small{display:block;color:var(--muted);font-size:11px}
+.rvi.sel{border-color:var(--accent);background:var(--accent-soft)}
+.st2{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:11px;flex:none;background:var(--card-2)}
+.rvi.ok .st2{background:#dbeee0;color:#1b7f3b}.rvi.warn .st2{background:var(--warn-soft);color:var(--warn)}.rvi.wait{opacity:.7}
+.rvmain{padding:16px 22px;display:flex;flex-direction:column;gap:12px;overflow:auto}
+.rvtop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.rvtop h3{margin:2px 0 0;font-size:17px}
+.kv2{display:grid;grid-template-columns:90px 1fr;gap:4px 10px;font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:9px 12px}.kv2 b{color:var(--muted);font-weight:500}
+.txt{background:#fff;border:1px solid var(--line);border-radius:9px;padding:12px 16px;font-family:Andika,"Trebuchet MS",sans-serif;font-size:14px}
+.txt .ins{font-weight:700;margin:0 0 8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:3px 6px;border-radius:5px}
+.pair.bad{background:var(--warn-soft)}
+.key{margin:10px 0 0;padding-top:8px;border-top:1px dashed var(--line);font-family:"Be Vietnam Pro",system-ui;font-size:13px;color:var(--muted)}
+.regen2{display:flex;gap:8px;align-items:flex-end}
+.rvfoot{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin-top:auto}
 /* Biên tập */
 .ed{flex:1;display:grid;grid-template-columns:230px 1fr 280px;min-height:0}
 .ed.vopen{grid-template-columns:210px 1fr 250px 280px}
@@ -126,99 +195,69 @@ textarea{width:100%;font:inherit;font-size:13px;border:1px solid var(--ln2);bord
   </div>
 
   <!-- ① RA ĐỀ -->
-  <section class="scr" id="s1">
-    <div class="cols">
-      <div class="col"><h4>Giáo trình</h4>
-        <div class="it">Pinta English 2<span class="tag">10 unit</span></div>
-        <div class="it sel">Pinta English 3<span class="tag">12 unit</span></div>
-        <div class="it">Pinta English 4<span class="tag">12 unit</span></div>
-      </div>
-      <div class="col"><h4>Unit</h4>
-        <div class="it">Unit 3 · My house</div>
-        <div class="it">Unit 4 · Food</div>
-        <div class="it sel">Unit 5 · My weekend</div>
-        <div class="it">Unit 6 · At the zoo</div>
-        <div class="it">Unit 7 · Jobs</div>
-      </div>
-      <div class="col"><h4>Lesson</h4>
-        <div class="it"><div>Lesson 1<small>Weekend activities</small></div><span class="tag ls">Từ vựng</span></div>
-        <div class="it sel"><div>Lesson 2<small>was / were</small></div><span class="tag gr">Ngữ pháp</span></div>
-        <div class="it"><div>Lesson 3<small>Past simple: regular verbs</small></div><span class="tag gr">Ngữ pháp</span></div>
-        <div class="it"><div>Lesson 4<small>Listen: Tom's Saturday</small></div><span class="tag ls">Nghe</span></div>
-        <div class="it"><div>Lesson 5<small>Write about your weekend</small></div><span class="tag">Viết</span></div>
-      </div>
-      <div class="sum">
-        <div><div class="tag gr" style="display:inline-block">Ngữ pháp</div><h3>Lesson 2 · was / were</h3></div>
-        <div class="kv"><b>Mục tiêu</b><span>Dùng đúng was / were ở câu khẳng định, phủ định, câu hỏi Yes/No.</span>
-          <b>Từ vựng</b><span>at home, at the park, happy, tired, busy…</span>
-          <b>Dự kiến</b><span>5–6 Task · khoảng 2 trang</span></div>
-        <div class="box"><h5>Ghi chú cho AI (không bắt buộc)</h5><textarea rows="2" placeholder="Vd: lớp yếu, ít bài viết câu; chủ đề cắm trại"></textarea></div>
-        <div class="box"><h5>Phiếu đã tạo của lesson này</h5>
-          <div class="oldr"><span>Phiếu 28/10 · 6 Task</span><button class="btn sm">Mở</button></div>
-          <div class="oldr"><span>Phiếu 21/10 · 5 Task</span><button class="btn sm">Mở</button></div>
+  <section class="scr" id="s1"><div class="rade">
+    <div class="pickbar" id="pickbar">
+      <span class="crumb"><b>Pinta English 3</b> › Unit 5 · My weekend › <b>Lesson 2 · was / were</b></span>
+      <span class="tag gr">Ngữ pháp</span>
+      <span class="pk-goal">Mục tiêu: dùng đúng was / were ở câu khẳng định, phủ định, câu hỏi Yes/No.</span>
+      <button class="btn sm" id="pkOpen">Đổi lesson</button>
+    </div>
+    <div class="picker" id="picker" hidden>
+      <div class="pcol"><h4>Giáo trình</h4><div class="it">Pinta English 2</div><div class="it sel">Pinta English 3</div><div class="it">Pinta English 4</div></div>
+      <div class="pcol"><h4>Unit</h4><div class="it">Unit 4 · Food</div><div class="it sel">Unit 5 · My weekend</div><div class="it">Unit 6 · At the zoo</div></div>
+      <div class="pcol"><h4>Lesson</h4><div class="it"><span>Lesson 1 · Weekend activities</span><span class="tag ls">Từ vựng</span></div><div class="it sel"><span>Lesson 2 · was / were</span><span class="tag gr">Ngữ pháp</span></div><div class="it"><span>Lesson 3 · Past simple</span><span class="tag gr">Ngữ pháp</span></div><div class="it"><span>Lesson 4 · Tom's Saturday</span><span class="tag ls">Nghe</span></div></div>
+      <div class="pcol pside"><h4>Phiếu đã tạo của lesson</h4><div class="oldr"><span>28/10 · 6 bài</span><button class="btn sm">Mở</button></div><div class="oldr"><span>21/10 · 5 bài</span><button class="btn sm">Mở</button></div><button class="btn sm pri" id="pkClose" style="margin-top:auto">Chọn lesson này</button></div>
+    </div>
+    <div class="rbody">
+      <div class="struct">
+        <div class="shead"><div><h3>Cấu trúc bài</h3><p>Theo Trình tự <b>Ngữ pháp v7</b>. Mỗi bước đã chọn sẵn một dạng; đổi hoặc thêm nếu chưa ưng.</p></div>
+          <button class="btn sm" id="reroll">⟳ Đề xuất lại</button></div>
+        <div id="steps"></div>
+        <div class="sfoot">
+          <textarea rows="2" placeholder="Ghi chú cho AI (không bắt buộc): vd chủ đề cắm trại, lớp yếu"></textarea>
+          <button class="btn pri" data-go="2">Duyệt cấu trúc · Sinh bài →</button>
         </div>
-        <div class="grow"></div>
-        <button class="btn pri" data-go="2">Đề xuất dàn ý →</button>
+      </div>
+      <div class="pv">
+        <div class="pvhead"><b>Layout sơ bộ</b><span id="pvInfo"></span></div>
+        <div class="pages" id="pages"></div>
+        <div class="pvnote">Ước tính theo dạng bài và số câu; chữ thật dài ngắn khác nhau nên số trang có thể lệch.</div>
       </div>
     </div>
-  </section>
+  </div></section>
 
   <!-- ② DÀN Ý -->
-  <section class="scr on" id="s2">
-    <div class="outline">
-      <div class="olist">
-        <div class="banner" id="chgBanner"><span>✎</span><span class="grow"><b>Dàn ý đã sửa sau khi tạo phiếu:</b> Task 3 đổi dạng Q. Các Task khác giữ nguyên bài đã biên tập.</span>
-          <button class="btn sm pri" data-go="3">Tạo lại 1 Task đã đổi</button><button class="btn sm">Tạo lại cả phiếu…</button></div>
-        <div class="ohead"><div><h3>Dàn ý phiếu · 5 Task</h3><p>Sửa trực tiếp trên thẻ, kéo ⋮⋮ để đổi thứ tự.</p></div>
-          <div style="display:flex;gap:6px"><button class="btn">↻ Gen lại dàn ý</button><button class="btn pri" data-go="3">Tạo phiếu →</button></div></div>
-
-        <div class="tk"><div class="drag">⋮⋮</div><div class="num">1</div><div>
-          <h4>Nhận diện was / were</h4>
-          <div class="meta"><span class="chip role">Khởi động</span><span class="chip q">Q4 Chọn trong câu</span><span class="chip">6 câu</span><span class="chip">Có ảnh chung</span></div>
-          <div class="fl"><b>Mục tiêu</b>Chọn was / were theo chủ ngữ số ít / số nhiều.</div>
-          <div class="fl"><b>Nội dung</b>Tranh công viên Chủ nhật; câu mô tả người trong tranh.</div>
-        </div><div class="tkact"><button class="btn sm">Sửa</button><button class="btn sm ghost">↻ Gen lại</button></div></div>
-
-        <div class="tk"><div class="drag">⋮⋮</div><div class="num">2</div><div>
-          <h4>Điền was / were</h4>
-          <div class="meta"><span class="chip role">Luyện</span><span class="chip q">Q1 Điền từ</span><span class="chip">8 câu</span><span class="chip">Khung từ: was, were</span></div>
-          <div class="fl"><b>Mục tiêu</b>Khẳng định và phủ định (wasn't / weren't).</div>
-          <div class="fl"><b>Nội dung</b>Câu rời về cuối tuần của các bạn trong lớp.</div>
-        </div><div class="tkact"><button class="btn sm">Sửa</button><button class="btn sm ghost">↻ Gen lại</button></div></div>
-
-        <div class="tk chg"><div class="drag">⋮⋮</div><div class="num">3</div><div>
-          <h4>Câu hỏi Yes/No <span class="tag" style="background:#fdf0d5;border-color:#e9b65c;color:#b45309">đã sửa</span></h4>
-          <div class="meta"><span class="chip role">Luyện</span><span class="chip q">Q8 Nối <s style="color:#999;font-weight:400">Q3</s></span><span class="chip">6 cặp</span></div>
-          <div class="fl"><b>Mục tiêu</b>Hỏi và trả lời Was he…? / Were they…?</div>
-          <div class="fl"><b>Nội dung</b>Nối câu hỏi với câu trả lời ngắn.</div>
-        </div><div class="tkact"><button class="btn sm">Sửa</button><button class="btn sm ghost">↻ Gen lại</button></div></div>
-
-        <div class="tk"><div class="drag">⋮⋮</div><div class="num">4</div><div>
-          <h4>Đọc hiểu: Mai's Sunday</h4>
-          <div class="meta"><span class="chip role">Vận dụng</span><span class="chip q">Q5 Đúng / Sai</span><span class="chip">5 câu</span><span class="chip">Bài đọc ~70 từ</span></div>
-          <div class="fl"><b>Mục tiêu</b>Nhận ra was / were trong văn bản liền mạch.</div>
-          <div class="fl"><b>Nội dung</b>Mai kể Chủ nhật đi biển với gia đình.</div>
-        </div><div class="tkact"><button class="btn sm">Sửa</button><button class="btn sm ghost">↻ Gen lại</button></div></div>
-
-        <div class="tk"><div class="drag">⋮⋮</div><div class="num">5</div><div>
-          <h4>Viết về cuối tuần</h4>
-          <div class="meta"><span class="chip role">Vận dụng</span><span class="chip q">Q12 Viết tự do</span><span class="chip">4 dòng</span></div>
-          <div class="fl"><b>Mục tiêu</b>Viết 3–4 câu dùng was / were.</div>
-          <div class="fl"><b>Nội dung</b>Câu hỏi gợi ý: Where were you? Who was with you?</div>
-        </div><div class="tkact"><button class="btn sm">Sửa</button><button class="btn sm ghost">↻ Gen lại</button></div></div>
-
-        <div class="add">+ Thêm Task</div>
-      </div>
-      <aside class="side">
-        <div class="box"><h5>Cấu trúc phiếu</h5>
-          <div class="flow"><span style="flex:1;background:#b9a6e6"></span><span style="flex:2;background:#7fb6bd"></span><span style="flex:2;background:#0a6b75"></span></div>
-          <div class="legend" style="margin-top:8px"><span><i style="background:#b9a6e6"></i>Khởi động · 1 Task</span><span><i style="background:#7fb6bd"></i>Luyện · 2 Task</span><span><i style="background:#0a6b75"></i>Vận dụng · 2 Task</span></div></div>
-        <div class="box"><h5>Theo Trình tự</h5>Nhận diện → luyện có kiểm soát → vận dụng. <span style="color:#1b7f3b">✓ Khớp</span></div>
-        <div class="box"><h5>Ước tính</h5>29 câu · khoảng 2 trang · 25 phút</div>
-        <div class="box"><h5>Góp ý khi gen lại dàn ý</h5><textarea rows="3" placeholder="Vd: thêm 1 bài nghe, bỏ bài viết"></textarea></div>
-      </aside>
+  <section class="scr on" id="s2"><div class="rv">
+    <div class="rvlist">
+      <div class="rvh"><b>5 bài</b><span id="rvCount">3/5 đã duyệt</span></div>
+      <div class="rvi ok"><span class="st2">✓</span><div>1 · Look and choose<small>Q4 Chọn trong câu · 6 câu</small></div></div>
+      <div class="rvi ok"><span class="st2">✓</span><div>2 · Complete the sentences<small>Q1 Điền từ · 8 câu</small></div></div>
+      <div class="rvi sel warn"><span class="st2">⚠</span><div>3 · Match the questions<small>Q8 Nối · 6 cặp</small></div></div>
+      <div class="rvi ok"><span class="st2">✓</span><div>4 · Read: Mai's Sunday<small>Q5 Đúng / Sai · 5 câu</small></div></div>
+      <div class="rvi wait"><span class="st2">⏳</span><div>5 · Write about your weekend<small>Q12 Viết tự do · đang viết…</small></div></div>
+      <div class="grow"></div>
+      <button class="btn" data-go="1">← Sửa cấu trúc</button>
     </div>
-  </section>
+    <div class="rvmain">
+      <div class="rvtop"><div><div class="meta"><span class="chip role">Luyện</span><span class="chip q">Q8 Nối</span><span class="chip">6 cặp</span></div>
+        <h3>Bài 3 · Match the questions and answers.</h3></div>
+        <div style="display:flex;gap:6px"><button class="btn sm">✎ Sửa chữ</button><button class="btn sm pri">✓ Duyệt</button></div></div>
+      <div class="warnbox"><b>⚠ Kiểm tra:</b> câu 4 và câu 6 cùng ghép được với "Yes, she was." → đáp án không duy nhất.</div>
+      <div class="kv2"><b>Mục tiêu</b><span>Hỏi và trả lời Was he…? / Were they…? với câu trả lời ngắn.</span><b>Ngữ cảnh</b><span>Hỏi về các bạn trong lớp sau chuyến dã ngoại Chủ nhật.</span></div>
+      <div class="txt">
+        <p class="ins">Match the questions and answers.</p>
+        <div class="pair"><span>1. Was Ben at the picnic?</span><span>a. Yes, they were.</span></div>
+        <div class="pair"><span>2. Were Lan and Mai tired?</span><span>b. No, he wasn't. He was ill.</span></div>
+        <div class="pair"><span>3. Was the weather nice?</span><span>c. Yes, it was. It was sunny.</span></div>
+        <div class="pair bad"><span>4. Was Ms Hoa with you?</span><span>d. Yes, she was.</span></div>
+        <div class="pair"><span>5. Were you hungry?</span><span>e. Yes, I was.</span></div>
+        <div class="pair bad"><span>6. Was your sister happy?</span><span>f. Yes, she was. She loved it.</span></div>
+        <p class="key"><b>Đáp án:</b> 1-b · 2-a · 3-c · 4-d · 5-e · 6-f</p>
+      </div>
+      <div class="regen2"><textarea rows="2" placeholder="Góp ý để sinh lại bài này: vd mỗi câu trả lời chỉ ghép được một câu hỏi"></textarea><button class="btn">⟳ Sinh lại bài này</button></div>
+      <div class="rvfoot"><span>Bài chưa duyệt vẫn sang Biên tập được, giữ nhãn "chưa duyệt".</span><button class="btn pri" data-go="3">Sang Biên tập →</button></div>
+    </div>
+  </div></section>
 
   <!-- ③ BIÊN TẬP -->
   <section class="scr" id="s3">
@@ -288,10 +327,9 @@ textarea{width:100%;font:inherit;font-size:13px;border:1px solid var(--ln2);bord
 
 <div class="callout"><b>Điểm cần góp ý:</b>
 <ol>
-<li>① Ra đề: ba cột + cột tóm tắt bên phải; có danh sách "Phiếu đã tạo của lesson này" để mở lại bài cũ thay vì tạo mới.</li>
-<li>② Dàn ý: thẻ Task có vai trò, dạng Q, số câu, mục tiêu, nội dung; cột phải là cấu trúc phiếu và đối chiếu Trình tự. Dải vàng chỉ hiện khi quay lại sửa dàn ý sau khi đã có phiếu.</li>
-<li>③ Biên tập: Task hiện dần khi AI viết xong (Task 5 đang chờ); Task bị kiểm tra đánh dấu ⚠ có lý do ở cột phải; nút ↻ Tạo lại trên từng Task.</li>
-<li>Phiên bản: bảng mở bằng nút 🕘, chọn một bản để xem trước (chỉ đọc), "Lấy lại Task này" hoặc "Khôi phục cả phiếu".</li>
+<li>① Ra đề: dải chọn lesson thu gọn (bấm "Đổi lesson" để mở ba cột). Dưới trái là cấu trúc theo Trình tự: đổi dạng (menu hoặc ⟳), chỉnh số câu trong giới hạn, thêm bài nếu bước cho phép, bật / tắt bước không bắt buộc. Dưới phải là layout sơ bộ, cập nhật ngay khi đổi; vượt số trang tối đa thì viền đỏ. Bấm thử được.</li>
+<li>② Dàn ý: AI sinh bài đầy đủ theo cấu trúc đã duyệt; xem từng bài ở dạng chữ (mục tiêu, ngữ cảnh, câu, đáp án), duyệt / sửa chữ / sinh lại kèm góp ý. Chỗ kiểm tra bắt lỗi được tô vàng.</li>
+<li>③ Biên tập: như bản trước (editor hiện tại + tạo lại Task + Phiên bản).</li>
 </ol></div>
 
 <script>
@@ -303,5 +341,63 @@ document.getElementById('vBtn').onclick=()=>{ver.hidden=!ver.hidden;ed.classList
 document.getElementById('vClose').onclick=()=>{ver.hidden=true;ed.classList.remove('vopen');paper.classList.remove("vold")};
 document.getElementById('backCur').onclick=e=>{e.preventDefault();document.getElementById('vClose').click()};
 document.querySelectorAll('.it').forEach(it=>it.addEventListener('click',()=>{[...it.parentNode.children].forEach(x=>x.classList.remove('sel'));it.classList.add('sel')}));
+// ---- ① Cấu trúc + layout sơ bộ ----
+const QN={Q1:'Q1 Điền từ',Q2:'Q2 Viết câu',Q3:'Q3 Chọn A/B/C',Q4:'Q4 Chọn trong câu',Q5:'Q5 Đúng / Sai',Q7:'Q7 Chọn ảnh',Q8:'Q8 Nối',Q12:'Q12 Viết tự do'};
+const STEPS=[
+ {name:'Khởi động',allow:['Q4','Q7','Q3'],min:5,max:6,maxTasks:1},
+ {name:'Luyện có kiểm soát',allow:['Q1','Q4'],min:6,max:8,maxTasks:2,extra:'khung từ'},
+ {name:'Luyện mở rộng',allow:['Q3','Q8','Q2'],min:5,max:6,maxTasks:1,optional:true},
+ {name:'Vận dụng: đọc',allow:['Q5','Q3'],min:4,max:5,maxTasks:1,extra:'bài đọc 60–80 từ',read:true},
+ {name:'Vận dụng: viết',allow:['Q12','Q2'],min:3,max:5,maxTasks:1,unit:'dòng'}];
+let plan=STEPS.map(s=>({on:true,tasks:[{q:s.allow[0],n:s.min}]}));
+const pick=(a,not)=>{const c=a.filter(x=>x!==not);const p=c.length?c:a;return p[Math.floor(Math.random()*p.length)]};
+function reroll(){let prev=null;plan=STEPS.map((s,i)=>{const q=pick(s.allow,prev);prev=q;return{on:true,tasks:[{q,n:s.min+Math.floor(Math.random()*(s.max-s.min+1))}]}});render()}
+function render(){
+ const box=document.getElementById('steps');box.innerHTML='';let k=0;
+ STEPS.forEach((s,i)=>{const p=plan[i];const d=document.createElement('div');d.className='step'+(p.on?'':' off');
+  d.innerHTML=`<div class="sh"><b>Bước ${i+1} · ${s.name}</b>${s.extra?'<span>· '+s.extra+'</span>':''}<span class="grow"></span>${s.optional?`<label><input type="checkbox" ${p.on?'checked':''} data-tog="${i}"> dùng bước này</label>`:'<span class="lim">bắt buộc</span>'}</div>`;
+  if(p.on)p.tasks.forEach((t,j)=>{k++;const r=document.createElement('div');r.className='row2';
+   r.innerHTML=`<span class="n">${k}</span><select data-i="${i}" data-j="${j}">${s.allow.map(q=>`<option value="${q}" ${q==t.q?'selected':''}>${QN[q]}</option>`).join('')}</select>
+   <span class="cnt"><button data-c="-1" data-i="${i}" data-j="${j}">−</button><span>${t.n} ${s.unit||'câu'}</span><button data-c="1" data-i="${i}" data-j="${j}">+</button></span>
+   <span class="lim">${s.min}–${s.max}</span><span class="grow" style="flex:1"></span>
+   <button class="btn sm ghost" title="Đổi dạng ngẫu nhiên" data-rr="${i}" data-j="${j}">⟳</button>${j>0?`<button class="btn sm ghost" data-del="${i}" data-j="${j}">✕</button>`:''}`;
+   d.appendChild(r)});
+  if(p.on){const a=document.createElement('div');const can=p.tasks.length<s.maxTasks;a.className='addb'+(can?'':' dis');a.textContent=can?'+ Thêm bài ở bước này':'Bước này tối đa '+s.maxTasks+' bài';if(can)a.dataset.add=i;d.appendChild(a)}
+  box.appendChild(d)});
+ drawPages()}
+document.getElementById('steps').addEventListener('change',e=>{const t=e.target;
+ if(t.dataset.tog){plan[t.dataset.tog].on=t.checked;render();return}
+ if(t.tagName==='SELECT'){plan[t.dataset.i].tasks[t.dataset.j].q=t.value;render()}});
+document.getElementById('steps').addEventListener('click',e=>{const t=e.target.closest('[data-c],[data-rr],[data-del],[data-add]');if(!t)return;const i=+(t.dataset.i??t.dataset.rr??t.dataset.del??t.dataset.add),s=STEPS[i],p=plan[i];
+ if(t.dataset.c){const x=p.tasks[t.dataset.j];x.n=Math.max(s.min,Math.min(s.max,x.n+ +t.dataset.c))}
+ else if(t.dataset.rr!==undefined){const x=p.tasks[t.dataset.j];x.q=pick(s.allow,x.q)}
+ else if(t.dataset.del!==undefined){p.tasks.splice(t.dataset.j,1)}
+ else if(t.dataset.add!==undefined){p.tasks.push({q:pick(s.allow,p.tasks[p.tasks.length-1].q),n:s.min})}
+ render()});
+document.getElementById('reroll').onclick=reroll;
+document.getElementById('pkOpen').onclick=()=>{document.getElementById('picker').hidden=false};
+document.getElementById('pkClose').onclick=()=>{document.getElementById('picker').hidden=true};
+const L='<div class="ln" style="width:W%"></div>';const ln=w=>L.replace('W',w);
+function item(q,n,i){switch(q){
+ case'Q1':return`<div class="qrow">${ln(30)}<span class="gap"></span>${ln(25)}</div>`;
+ case'Q2':return`<div class="qrow">${ln(55)}</div><div class="wl"></div>`;
+ case'Q3':return`<div class="qrow">${ln(60)}</div><div class="ch"><span></span><span></span><span></span></div>`;
+ case'Q4':return`<div class="qrow">${ln(25)}<span style="font-size:6px">{ | }</span>${ln(30)}</div>`;
+ case'Q5':return`<div class="qrow">${ln(68)}<span class="grow" style="flex:1"></span><span class="tf"><b>T</b><b>F</b></span></div>`;
+ case'Q7':return`<div class="qrow">${ln(45)}</div><div class="imgs"><span></span><span></span><span></span></div>`;
+ case'Q8':return`<div class="mt">${ln(38)}<i></i><i></i>${ln(38)}</div>`;
+ case'Q12':return`<div class="wl" style="margin-left:0"></div>`;}}
+const H={Q1:6,Q2:13,Q3:12,Q4:6,Q5:6,Q7:24,Q8:6,Q12:9};
+function drawPages(){const tasks=[];let k=0;
+ STEPS.forEach((s,i)=>{const p=plan[i];if(!p.on)return;p.tasks.forEach(t=>{k++;let h=12+H[t.q]*t.n;let body='';
+  if(s.read){h+=40;body+=`<div class="rd">${ln(95)}${ln(90)}${ln(97)}${ln(88)}${ln(93)}${ln(60)}</div>`}
+  if(s.extra==='khung từ'&&t.q==='Q1'){h+=10;body+='<div class="wbx"></div>'}
+  if(t.q==='Q12'){h+=8;body+=`<div class="rd" style="background:#f6f7f8">${ln(70)}${ln(50)}</div>`}
+  for(let x=0;x<t.n;x++)body+=item(t.q,t.n,x);
+  tasks.push({k,h,html:`<div class="pth"><i>${k}</i><s></s></div>${body}`})})});
+ const PH=300,pages=[[]];let used=0;tasks.forEach(t=>{if(used+t.h>PH&&pages[pages.length-1].length){pages.push([]);used=0}pages[pages.length-1].push(t);used+=t.h+7});
+ const max=2;document.getElementById('pages').innerHTML=pages.map((p,i)=>`<div class="pg ${i>=max?'over':''}">${p.map(t=>`<div class="ptk">${t.html}</div>`).join('')}<span class="pno">${i+1}</span></div>`).join('');
+ const nq=tasks.length;document.getElementById('pvInfo').innerHTML=`${nq} bài · <span class="${pages.length>max?'over':''}">ước tính ${pages.length} trang${pages.length>max?' (vượt tối đa '+max+')':' / tối đa '+max}</span>`}
+reroll();
 </script>
 </body></html>
