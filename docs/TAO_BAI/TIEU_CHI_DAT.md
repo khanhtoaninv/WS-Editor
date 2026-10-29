@@ -13,7 +13,7 @@ Mục đích: biết khi nào một version bộ file (K, S, TF, file 0) là Đ�
 | A. Nạp và đáp án (bắt buộc) | Dán nguyên phản hồi vào Editor thì nạp được, đáp án khớp với khi chỉ dán khối markdown. 0 đáp án khóa sai. 0 câu hỏng (thiếu đáp án hoặc dấu `*`, chữ rác, lựa chọn sai ngữ pháp ngoài ý đồ). 0 câu có hai đáp án đúng. | Editor (`impRead`), kiểm tay từng câu |
 | B. Mục tiêu dạy | Mỗi Task G2, G3a, G3b có ít nhất **20%** số câu (người dùng chốt, trước là 30%) chỉ làm được khi hiểu nghĩa (không nhờ từ chỉ thời gian trong câu hoặc trong lựa chọn). | Đếm lại, không tin REPORT |
 | C. Công sửa tay | Không quá 3 câu phải sửa trước khi phát cho học sinh (tính cả câu gượng, câu trùng mẫu). | Đếm tay |
-| D. Giới hạn số | Không quá 1 vi phạm trong: số lần mỗi động từ, lượt "Can I/you" mỗi Task, số câu hỏi "lộ thì" ở G2-B, dãy đáp án (rải đủ vị trí, không lặp chu kỳ, không ba liền), số lựa chọn mỗi câu (đúng 3), số loại câu. | Máy kiểm `kiem-phieu.cjs` (khi chưa có: script đếm tạm + kiểm tay) |
+| D. Giới hạn số | Không quá 1 vi phạm trong: số lần mỗi động từ, lượt "Can I/you" mỗi Task, số câu hỏi "lộ thì" ở G2-B, dãy đáp án (rải đủ vị trí, không lặp chu kỳ, không ba liền), số lựa chọn mỗi câu (đúng 3), số loại câu. | Máy kiểm `cong-cu/kiem-phieu.cjs` (đã có từ 29/10: `node cong-cu/kiem-phieu.cjs <file phản hồi nguyên>`; thoát mã 1 nếu có LỖI) |
 
 ## 3. Version đạt khi
 1. Cả 2 phiếu của model đích (Haiku) đều qua A, B, C, D.
@@ -35,4 +35,4 @@ Mục đích: biết khi nào một version bộ file (K, S, TF, file 0) là Đ�
 ## 6. Đã chốt và còn mở
 - Đã chốt: model đích Haiku 5.5; ngưỡng B là 20% (S5 mục 1 trong bộ file cũng đổi từ 30% sang 20% ở v1.2).
 - Giả định cần xác nhận: các ngưỡng còn lại (3 câu sửa tay, 1 vi phạm, 2 phiếu mỗi model) giữ như đề xuất.
-- Còn mở: có làm máy kiểm `kiem-phieu.cjs` trước khi chạy lần 9 không (khuyên làm).
+- Máy kiểm đã làm (29/10): chạy trên phiếu lần 8 cho đúng các lỗi chấm tay (Sol: dãy chu kỳ; Flash: chữ rác, thiếu `*`, Can, câu lộ thì, thiếu rào; Haiku: từ thời gian trong lựa chọn, 0% Task 3 và 4). Máy kiểm bắt nhóm A (một phần) và D; B chỉ tính xấp xỉ bằng danh sách từ thời gian; C (công sửa tay) và nghĩa câu vẫn phải kiểm tay.

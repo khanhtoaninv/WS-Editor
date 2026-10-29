@@ -1,6 +1,6 @@
 # TASK FORMAT — Grammar Worksheet · A1 Movers · Daily Routines & Activities
 
-Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 1.1 · Trạng thái: Nháp
+Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 1.2 · Trạng thái: Nháp
 Quy định cách soạn từng Task. Dùng cùng file Kiến thức (K) và Trình tự Lesson (S).
 Chỉ dẫn in trên phiếu theo K6 (không dùng thuật ngữ ngữ pháp). Đáp án chấp nhận nêu rõ độ dài (một từ hay cụm).
 Mức hỗ trợ: Chuẩn (mặc định) hoặc Giảm (ít câu hơn, có câu mở đầu).
@@ -49,7 +49,7 @@ Kiểu trả lời: chọn (chọn trong lựa chọn cho sẵn), gõ (điền c
 - Kiểu trả lời: chọn một trong ba câu trả lời A, B, C.
 - Số câu: 5 và 1 ví dụ. 3 câu hỏi về thói quen, 2 câu hỏi về việc đang làm; dãy đáp án theo S5 mục 1g, 1h (dùng đủ A, B, C, không cùng một chữ ba câu liền); ghi dãy đáp án vào REPORT.
 - Cấu trúc câu: hội thoại hai lượt; người A hỏi, học sinh chọn câu đáp đúng nghĩa. Vế chọn là CÂU ĐÁP HOÀN CHỈNH (`[He plays football. / He is playing football.]`), không phải chỉ một từ giữa câu. Ba câu đáp theo S5 mục 1h: hai câu đúng ngữ pháp chỉ khác ở thì, câu thứ ba cùng nội dung nhưng mắc một lỗi dạng.
-- Quy tắc: ở ít nhất 2 câu, thêm một câu tình huống trước hội thoại để đáp án không chỉ dựa vào dạng câu hỏi; câu tình huống không chứa động từ ở dạng của câu đáp (S5 mục 1d); câu hỏi và câu đáp tự nhiên giữa hai người (không hỏi một người về chính họ bằng ngôi thứ ba); không dùng stative verbs (has, have, like, love, know, want, need), kể cả trong câu tình huống; theo S5 mục 1g: tối đa 2 câu hỏi dạng "What does X do?" hoặc "What is X doing?", ít nhất 3 câu hỏi không lộ thì, câu tình huống phải thêm thông tin mới.
+- Quy tắc: ở ít nhất 2 câu, thêm một câu tình huống trước hội thoại để đáp án không chỉ dựa vào dạng câu hỏi; câu tình huống không chứa động từ ở dạng của câu đáp (S5 mục 1d); câu hỏi và câu đáp tự nhiên giữa hai người (không hỏi một người về chính họ bằng ngôi thứ ba; áp dụng cho mọi hội thoại, kể cả G3a và G3b); không dùng stative verbs (has, have, like, love, know, want, need), kể cả trong câu tình huống; theo S5 mục 1g: tối đa 2 câu hỏi dạng "What does X do?" hoặc "What is X doing?", ít nhất 3 câu hỏi không lộ thì, câu tình huống phải thêm thông tin mới.
 - Chỉ dẫn: "Read the conversations. Circle the correct answers."
 
 ### TF-G2-C — Look and decide (có ảnh)
