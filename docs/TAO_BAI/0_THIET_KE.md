@@ -2,13 +2,15 @@
 
 Cập nhật 29/10/2026. Giai đoạn: thảo luận, chưa viết code. Làm trước: **tạo bài theo giáo trình**; bài tự do để sau.
 
-## Quy trình (giao diện, chốt 29/10)
-Thanh ba giai đoạn luôn hiện: **① Ra đề → ② Dàn ý → ③ Biên tập**. Hình mẫu: `docs/MINH_HOA_TAO_BAI.html`.
-1. **Ra đề.** Hàng trên: chọn Giáo trình / Unit / Lesson (chọn xong thu thành dải mỏng, có "Đổi lesson"). Hàng dưới chia hai:
-   - Trái: **cấu trúc bài** do **code** dựng từ Trình tự: mỗi bước chọn ngẫu nhiên một dạng Q trong danh sách được phép (không hai bài liền nhau cùng Q). Giáo viên đổi dạng, chỉnh số câu trong giới hạn, thêm bài nếu bước cho phép, bật / tắt bước không bắt buộc, rồi duyệt.
-   - Phải: **layout sơ bộ** (Task giả theo dạng Q và số câu), cập nhật ngay, báo vượt số trang; ghi rõ là ước tính.
-2. **Dàn ý.** AI **sinh bài đầy đủ** theo cấu trúc đã duyệt (phương án b). Giáo viên xem từng bài ở dạng chữ (mục tiêu, ngữ cảnh, câu, đáp án), duyệt / sửa chữ / sinh lại kèm góp ý. Kết quả kiểm tra hiện ngay trên bài.
-3. **Biên tập.** Editor hiện tại, thêm: tạo lại Task, tạo lại phiếu theo cấu trúc, **Phiên bản** (tự lưu mỗi lần tạo / tạo lại kèm lý do, lưu tay; xem bản cũ chỉ đọc; lấy lại một Task hoặc khôi phục cả phiếu).
+## Quy trình (giao diện, cập nhật 29/10 tối)
+Hai giai đoạn: **① Ra đề → ② Biên tập**. Hình mẫu: `docs/MINH_HOA_TAO_BAI.html` (màn Ra đề) và `docs/MINH_HOA_TAO_BAI_B.html` (Biên tập, vẽ trên editor v123 thật).
+1. **Ra đề.** Khung chọn Giáo trình / Unit / Lesson luôn mở (bấm tiêu đề để thu gọn). Dưới trái: **cấu trúc bài** do code dựng từ Trình tự, một khối, mỗi bước một mục, mặc định 1 bài, **+** thêm (tối đa 2 bài / bước), **✕** xóa (bước bắt buộc giữ ít nhất 1; bước không bắt buộc xóa hết = bỏ qua), đổi dạng Q trong danh sách được phép, chỉnh số câu trong giới hạn. Dưới phải: **layout sơ bộ** cập nhật ngay, báo vượt số trang (ước tính). Bấm "Duyệt cấu trúc · Sinh bài".
+2. **Biên tập.** **Editor giữ nguyên bố cục** (không sửa ba cột / inspector). Chỉ thêm:
+   - dải trên cùng: giai đoạn, **Duyệt bài n/5**, **Lịch sử phiếu**, **Xuất bản**;
+   - biểu tượng trạng thái cuối dòng Task ở cây (✓ / ⚠ / ○);
+   - **ngăn trượt** đè tạm lên inspector: khối Cả phiếu (kiểm tra + Duyệt phiếu), từng bài (Kiểm tra, mục tiêu, ngữ cảnh, đáp án, Duyệt, Lịch sử bài, Sinh lại kèm góp ý), công tắc Hiện đáp án trên trang.
+3. **Kiểm tra chất lượng:** giáo viên thấy danh sách tiêu chí đạt / chưa đạt kèm lý do (máy kiểm + AI chấm theo rubric), **không thấy điểm số**. Cả phiếu có tiêu chí riêng (phủ kiến thức, không lặp, độ khó tăng dần, số trang). Điểm số + hành vi giáo viên (duyệt ngay / sửa / sinh lại) lưu cho trang admin.
+4. **Lịch sử chỉ tạo khi bấm Duyệt.** Duyệt Task chỉ lưu Task đó; Duyệt Phiếu lưu cả phiếu. Mỗi Task và phiếu giữ **tối đa 3 lần duyệt gần nhất** để chọn lại. Sửa / sinh lại bài đã duyệt thì bài về "chưa duyệt".
 
 Trình tự nên viết theo kiểu "lai": mỗi bước có vai trò, danh sách Q được phép, khoảng số câu, số bài tối đa, có bắt buộc không; cộng vài nguyên tắc chữ. (Chi tiết cấu trúc file: thảo luận riêng.)
 

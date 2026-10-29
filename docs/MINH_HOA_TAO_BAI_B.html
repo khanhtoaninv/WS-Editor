@@ -58,6 +58,15 @@ textarea{width:100%;font:inherit;font-size:13px;border:1px solid var(--ln2);bord
 .grp{padding:4px 10px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-top:1px solid #eef1f3;background:#fcfdfd}
 .more{padding:6px 10px;border-top:1px solid #eef1f3;font-size:12px;color:var(--accent);cursor:pointer}
 .ws{margin:10px 14px 0}
+.db>*{flex:none}
+.hist{border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.hh{display:flex;justify-content:space-between;padding:7px 10px;background:#f8fafb;font-weight:600}
+.hh span{font-weight:400;font-size:12px;color:var(--muted)}
+.he{display:flex;justify-content:space-between;align-items:center;gap:6px;padding:6px 10px;border-top:1px solid #eef1f3;font-size:12.5px}
+.he small{display:block;color:var(--muted);font-size:11.5px}.he.cur{background:#eaf6ee}
+.hempty{padding:7px 10px;border-top:1px solid #eef1f3;font-size:12px;color:var(--muted)}
+.wsact{display:flex;gap:6px;padding:8px 10px;border-top:1px solid #eef1f3}.wsact .btn{flex:1}
+.dirty{font-size:12px;color:var(--warn);background:var(--warn-soft);border-radius:7px;padding:5px 8px}
 .callout{max-width:1440px;margin:0 auto 30px;padding:0 16px;font-size:13px;color:#3d4850}.callout ol{margin:4px 0 0 18px;padding:0}
 </style></head><body>
 <div class="note"><b>Hình mẫu hướng B (chưa phải app thật).</b> Nền là ảnh chụp <b>editor v123 thật</b> sau khi nạp phiếu 5 bài was / were; chỉ phần màu (dải trên cùng, biểu tượng trạng thái ở cây, ngăn bên phải) là phần thêm mới. Bấm thử: "Duyệt bài", ‹ ›, Duyệt, Hiện đáp án, Phiên bản, Xuất bản.</div>
@@ -67,7 +76,7 @@ textarea{width:100%;font:inherit;font-size:13px;border:1px solid var(--ln2);bord
     <span style="color:#9fc3c7;margin-left:8px">Pinta English 3 · Unit 5 · Lesson 2 · was / were</span>
     <span class="grow"></span>
     <button class="sb rev" id="revBtn">Duyệt bài <i id="revCnt">2/5</i></button>
-    <button class="sb" id="verBtn">🕘 Phiên bản</button>
+    <button class="sb" id="verBtn">🕘 Lịch sử phiếu</button>
     <button class="sb pub" id="pubBtn">Xuất bản</button>
     <div class="pop" id="pop" hidden><b id="popT"></b><div id="popD" style="margin-top:4px"></div>
       <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:10px"><button class="btn sm" id="popGo">Mở ngăn duyệt</button><button class="btn sm" id="popAny">Vẫn xuất bản</button></div></div>
@@ -84,13 +93,9 @@ textarea{width:100%;font:inherit;font-size:13px;border:1px solid var(--ln2);bord
       <label class="sw"><input type="checkbox" id="ansTog"><span></span>Hiện đáp án trên trang</label>
     </aside>
     <aside class="drawer closed ver" id="ver">
-      <div class="dh"><b>Phiên bản</b><button class="btn sm">+ Lưu bản này</button><button class="btn sm ghost" id="verClose">✕</button></div>
-      <div class="vi"><div class="when"><span class="k cur">Hiện tại</span>20:14</div>Đang biên tập</div>
-      <div class="vi" style="background:var(--accent-soft)"><div class="when"><span class="k auto">Tự động</span>20:09</div>Sinh lại bài 3 · góp ý <i>"dễ quá"</i>
-        <div class="vrow"><span>Bài 3 khác bản hiện tại</span><button class="btn sm">Lấy lại bài này</button></div>
-        <div class="vrow"><span></span><button class="btn sm">Khôi phục cả phiếu</button></div></div>
-      <div class="vi"><div class="when"><span class="k man">Lưu tay</span>20:02</div>"Bản gửi tổ trưởng"</div>
-      <div class="vi"><div class="when"><span class="k auto">Tự động</span>19:55</div>Sinh phiếu từ cấu trúc (5 bài)</div>
+      <div class="dh"><b>Lịch sử phiếu</b><span style="font-size:12px;color:var(--muted)">3 lần duyệt gần nhất</span><button class="btn sm ghost" id="verClose">✕</button></div>
+      <div id="phist"></div>
+      <div style="padding:10px 14px;font-size:12px;color:var(--muted)">Mỗi lần bấm <b>Duyệt phiếu</b> lưu một bản của cả phiếu (mọi bài + cài đặt dàn trang). Giữ tối đa 3 bản; duyệt lần thứ 4 thì bản cũ nhất bị bỏ.<br><br>Lịch sử từng bài nằm trong ngăn Duyệt bài.</div>
     </aside>
   </div>
 </div>
@@ -99,7 +104,8 @@ textarea{width:100%;font:inherit;font-size:13px;border:1px solid var(--ln2);bord
 <li><b>Ngăn Duyệt bài</b> trượt đè lên inspector; đóng ✕ là inspector hiện lại. Duyệt xong một bài thì tự sang bài chưa duyệt kế tiếp. Bấm biểu tượng trạng thái ở cây cũng mở ngăn đúng bài đó.</li>
 <li><b>Hiện đáp án</b> (trong ngăn): in đáp án màu cam lên trang (thử ở bài 2). Câu bị kiểm tra bắt lỗi tô vàng (bài 3).</li>
 <li><b>Kiểm tra</b>: mỗi bài có danh sách tiêu chí đạt / chưa đạt (máy kiểm + AI chấm theo rubric), tiêu chí chưa đạt mở sẵn kèm lý do, tiêu chí đạt gập lại. Không hiện điểm số. Khối <b>Cả phiếu</b> ở đầu ngăn kiểm các tiêu chí chỉ thấy khi nhìn toàn phiếu; điểm số chi tiết để dành cho trang admin.</li>
-<li><b>Phiên bản</b> dùng chung chỗ ngăn trượt; <b>Xuất bản</b> nhắc khi còn bài chưa duyệt.</li>
+<li><b>Lịch sử chỉ tạo khi bấm Duyệt</b>: mỗi bài có lịch sử riêng (tối đa 3 lần duyệt gần nhất, "Dùng bản này" chỉ đổi bài đó); phiếu có lịch sử riêng (nút <b>Duyệt phiếu</b> trong khối Cả phiếu, tối đa 3 bản, khôi phục cả phiếu). Sửa hoặc sinh lại một bài đã duyệt thì bài tự về "chưa duyệt".</li>
+<li><b>Lịch sử phiếu</b> dùng chung chỗ ngăn trượt; <b>Xuất bản</b> nhắc khi còn bài chưa duyệt.</li>
 </ol></div>
 <script>
 const T=[
@@ -123,7 +129,14 @@ function wsHTML(){const bad=WS.filter(w=>w[1]).length;
  return `<div class="ck"><div class="ckh" id="wsTg"><span>Cả phiếu</span><span class="sc ${bad?'bad':'good'}">${WS.length-bad}/${WS.length} đạt</span></div>`+
  WS.filter(w=>w[1]).map(w=>`<div class="ci f"><span class="i">⚠</span><span>${w[0]}<small>${w[1]}</small></span></div>`).join('')+
  (wsOpen?WS.filter(w=>!w[1]).map(w=>`<div class="ci p"><span class="i">✓</span><span>${w[0]}</span></div>`).join(''):'')+
- `<div class="more" id="wsMore">${wsOpen?'▴ Ẩn tiêu chí đạt':'▸ '+(WS.length-bad)+' tiêu chí đạt'}</div></div>`}
+ `<div class="more" id="wsMore">${wsOpen?'▴ Ẩn tiêu chí đạt':'▸ '+(WS.length-bad)+' tiêu chí đạt'}</div><div class="wsact"><button class="btn ok" id="wsOk">✓ Duyệt phiếu</button><button class="btn" id="wsH">🕘 Lịch sử phiếu (${PH.length}/3)</button></div></div>`}
+const H={0:[['20:05','Duyệt lần đầu']],1:[['20:11','Sửa câu 4, duyệt lại'],['20:06','Duyệt lần đầu']],2:[['20:08','Sinh lại · góp ý "dễ quá"'],['19:58','Sửa tay câu 2'],['19:56','Duyệt lần đầu']],3:[],4:[]};
+const PH=[['20:12','Duyệt phiếu · 4/5 bài đã duyệt'],['19:59','Duyệt phiếu · đổi Khoảng cách Vừa'],['19:57','Duyệt phiếu lần đầu']];
+const DIRTY={2:'Đã sinh lại sau lần duyệt 20:08 → chưa duyệt'};
+const now=()=>{const d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};
+function histHTML(i){const h=H[i];return `<div class="hist"><div class="hh">Lịch sử bài này<span>${h.length}/3 lần duyệt</span></div>`+
+ (h.length?h.map((e,k)=>`<div class="he ${k==0&&T[i].st=='ok'?'cur':''}"><span>${e[0]}<small>${e[1]}</small></span>${k==0&&T[i].st=='ok'?'<span style="font-size:11.5px;color:#1b7f3b">đang dùng</span>':'<button class="btn sm">Dùng bản này</button>'}</div>`).join(''):'<div class="hempty">Chưa duyệt lần nào. Bấm Duyệt để lưu bản đầu tiên.</div>')+'</div>'}
+function phHTML(){return PH.map((e,k)=>`<div class="he ${k==0?'cur':''}" style="padding:9px 14px"><span>${e[0]}<small>${e[1]}</small></span>${k==0?'<span style="font-size:11.5px;color:#1b7f3b">mới nhất</span>':'<span style="display:flex;gap:4px"><button class="btn sm">Xem</button><button class="btn sm">Khôi phục</button></span>'}</div>`).join('')}
 let cur=2;const $=id=>document.getElementById(id);const ICO={ok:'✓',warn:'⚠',todo:''};
 function draw(){const ok=T.filter(x=>x.st=='ok').length;$('revCnt').textContent=ok+'/5';$('okc').textContent=ok+'/5 đã duyệt';$('bar').style.width=ok*20+'%';$('pos').textContent=(cur+1)+' / 5';
  document.querySelectorAll('.sdot').forEach(d=>{const s=T[+d.dataset.i].st;d.className='sdot '+s;d.textContent=ICO[s]});
@@ -132,11 +145,12 @@ function draw(){const ok=T.filter(x=>x.st=='ok').length;$('revCnt').textContent=
  ${ckHTML(cur)}
  <div class="kv"><b>Mục tiêu</b><span>${x.goal}</span><b>Ngữ cảnh</b><span>${x.ctx}</span></div>
  <div class="keyl"><b>Đáp án:</b> ${x.key}</div>
- ${x.st=='ok'?'<button class="btn" id="un">↺ Bỏ duyệt</button>':'<button class="btn ok" id="okb">✓ Duyệt bài này</button>'}
- <div class="regen"><b>⟳ Sinh lại bài này</b><textarea rows="2" placeholder="Góp ý: vd mỗi câu trả lời chỉ ghép được một câu hỏi"></textarea><div style="font-size:12px;color:var(--muted)">Bản hiện tại được lưu vào Phiên bản trước khi thay.</div><button class="btn sm pri" style="align-self:flex-end">Sinh lại</button></div>
+ ${DIRTY[cur]&&x.st!='ok'?`<div class="dirty">${DIRTY[cur]}</div>`:''}${x.st=='ok'?'<button class="btn" disabled>✓ Đã duyệt · sửa bài thì tự về chưa duyệt</button>':'<button class="btn ok" id="okb">✓ Duyệt bài này</button>'}
+ ${histHTML(cur)}
+ <div class="regen"><b>⟳ Sinh lại bài này</b><textarea rows="2" placeholder="Góp ý: vd mỗi câu trả lời chỉ ghép được một câu hỏi"></textarea><div style="font-size:12px;color:var(--muted)">Bản chưa duyệt sẽ bị thay hẳn; các bản đã duyệt vẫn còn trong Lịch sử bài này.</div><button class="btn sm pri" style="align-self:flex-end">Sinh lại</button></div>
  <div style="font-size:12px;color:var(--muted)">Sửa chữ, dàn trang: đóng ngăn và dùng editor như bình thường.</div>`;
- $('ws').innerHTML=wsHTML();$('wsTg').onclick=$('wsMore').onclick=()=>{wsOpen=!wsOpen;draw()};document.querySelectorAll('[data-tg]').forEach(e=>e.onclick=()=>{openAll[cur]=!openAll[cur];draw()});
- const o=$('okb');if(o)o.onclick=()=>{x.st='ok';const n=T.findIndex(t=>t.st!='ok');if(n>=0)cur=n;draw()};const u=$('un');if(u)u.onclick=()=>{x.st='todo';draw()}}
+ $('ws').innerHTML=wsHTML();$('wsTg').onclick=$('wsMore').onclick=()=>{wsOpen=!wsOpen;draw()};$('wsH').onclick=()=>open('ver',true);$('wsOk').onclick=()=>{const n=T.filter(t=>t.st=='ok').length;PH.unshift([now(),'Duyệt phiếu · '+n+'/5 bài đã duyệt']);PH.length=Math.min(PH.length,3);$('phist').innerHTML=phHTML();open('ver',true);draw()};$('phist').innerHTML=phHTML();document.querySelectorAll('[data-tg]').forEach(e=>e.onclick=()=>{openAll[cur]=!openAll[cur];draw()});
+ const o=$('okb');if(o)o.onclick=()=>{x.st='ok';H[cur].unshift([now(),H[cur].length?'Duyệt lại':'Duyệt lần đầu']);H[cur]=H[cur].slice(0,3);delete DIRTY[cur];const n=T.findIndex(t=>t.st!='ok');if(n>=0)cur=n;draw()};}
 const open=(id,on)=>{['rev','ver'].forEach(k=>$(k).classList.toggle('closed',!(k==id&&on)))};
 $('revBtn').onclick=()=>open('rev',$('rev').classList.contains('closed'));$('revClose').onclick=()=>open('rev',false);
 $('verBtn').onclick=()=>open('ver',$('ver').classList.contains('closed'));$('verClose').onclick=()=>open('ver',false);
