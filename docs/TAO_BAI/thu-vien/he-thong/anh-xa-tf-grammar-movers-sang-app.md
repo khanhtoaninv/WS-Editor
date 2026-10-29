@@ -5,7 +5,7 @@ Thuộc nhóm hệ thống. Ba tài liệu lesson không nhắc tới app; file 
 | TF | Dạng Q của app | Ghi chú |
 |---|---|---|
 | TF-G1-A | Q: không chỗ trả lời (`Trả lời: không`) | học sinh tự gạch trên giấy; app chưa có gạch hai kiểu nét trên màn hình |
-| TF-G1-B | Q10 bảng, ô gõ | bài đọc đặt trước bảng (`Bài đọc:`); bộ đọc MD nhận |
+| TF-G1-B | Q10 bảng, ô gõ | bài đọc đặt trước bảng (`Bài đọc:`); bộ đọc MD nhận; ô Now của hàng They in sẵn `—` (v0.6), không phải ô gõ |
 | TF-G2-A | Q5 đúng/sai, nhãn tự đặt, `cùng hàng` | |
 | TF-G2-B | Q3 chọn A/B (hai phương án) | |
 | TF-G2-C | Q7 chọn ảnh hoặc Q5 yes/no cho câu về ảnh | cần ảnh |

@@ -1,11 +1,11 @@
 # TRÌNH TỰ LESSON — Grammar Worksheet · A1 Movers · Daily Routines & Activities
 
-Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 0.5 · Trạng thái: Nháp
+Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 0.6 · Trạng thái: Nháp
 Dùng cùng file Kiến thức (K) và file Task Format (TF) của lesson này.
 
 ## S1. Quy mô phiếu
 - Bài về nhà, học sinh tự làm, không cần ai giải thích thêm.
-- Thời lượng khoảng 25 phút; 6 Task; khoảng 30 câu có đáp án.
+- Thời lượng khoảng 25 phút; 6 Task; khoảng 25 câu có đáp án.
 - Một phiếu có một trọng tâm ngữ pháp. Mỗi bước có một vai trò khác nhau; không dùng nhiều bài cùng dạng rồi gán thành nhiều bước.
 - Không bắt buộc mỗi bước tương ứng một Task.
 
@@ -60,18 +60,23 @@ Mỗi mã TF có 1 đến 3 phương án thay thế (hậu tố A, B, C). Chọn
 |---|---|
 | Usually | what someone does again and again |
 | Now | what someone is doing at this moment |
-Chỉ dùng hai nhãn này cho hai khái niệm. Không dùng Habit, Often, Every day làm nhãn.
+Chỉ dùng hai nhãn này cho hai khái niệm. Không dùng Habit, Often, Every day làm nhãn. Mọi bảng Usually | Now trên phiếu phải có dòng tiêu đề cột, và định nghĩa in ngay trong ô tiêu đề (ví dụ `Usually (what someone does again and again)`); không để định nghĩa chỉ nằm trong ghi chú.
 
 ## S5. Quy tắc toàn phiếu
-1. Ít nhất 30% số câu có đáp án trong mỗi Task thuộc G2, G3a và G3b phải xác định được từ tình huống (câu hoặc câu trước đó nói rõ ai đang làm gì, hoặc việc lặp lại), không dựa vào từ chỉ thời gian. Báo cáo số câu và số thứ tự từng Task.
+0. **Từ chỉ thời gian** (dùng để đếm trong quy tắc 1): usually, every + từ, on + ngày, now, at the moment, today, at + giờ, how often, Look!, Listen!.
+1. Ít nhất 30% số câu có đáp án trong mỗi Task thuộc G2, G3a và G3b phải xác định được chỉ từ NGHĨA của tình huống. Một câu chỉ được tính khi cả hai điều đúng: (i) câu không chứa từ chỉ thời gian ở mục 0; (ii) câu hoặc lượt thoại liền trước KHÔNG chứa động từ ở đúng dạng của đáp án (xem 1d). Tình huống tả bằng ai ở đâu, cầm hoặc có gì (be + nơi chốn, with + đồ vật), ví dụ "Mia is in the kitchen with flour and eggs." Báo cáo số câu và số thứ tự từng Task. Nếu không đạt 30%, viết lại câu cho đạt trước khi nộp; chỉ ghi "không đạt" khi thật sự không làm được và nêu lý do.
 1b. Mỗi câu chọn hoặc điền chỉ có đúng một đáp án. Với mỗi câu, tự thử đáp án còn lại; nếu nó cũng hợp lý trong tình huống thì viết lại câu hoặc thêm thông tin vào tình huống. Không viết câu hỏi nhắc lại việc vừa được nói rõ ở câu trước. Các mẫu thường gây hai đáp án, phải tránh hoặc thêm dấu hiệu:
    - Sau một câu tả cảnh, hỏi "[Does he swim / Is he swimming]?" mà không có dấu hiệu "bây giờ" (thêm "at the moment" hoặc một chi tiết như "He is in the water").
    - "She [feeds / is feeding] it" không có dấu hiệu rõ về lúc này hay thói quen.
    - Câu nói về khả năng như "You swim very fast" (có thể hiểu là khả năng hay đang bơi).
    - Câu phủ định "She doesn't cook / isn't cooking" khi tình huống không nói rõ.
    - Câu điền một từ trong ngoặc mà ngữ cảnh chỉ gợi ý chứ không khẳng định (ví dụ chỉ có cảnh "with a fruit" rồi suy ra "isn't eating").
-   Khi một đáp án phụ thuộc cảnh trước đó, cảnh phải nói trực tiếp ai đang làm gì.
+   - Câu phủ định sau một câu tả cảnh, ví dụ "The boys are in the water. They [don't play / aren't playing] football." (cả hai đều hợp lý).
+   - Điền một động từ sau cảnh chỉ có đồ vật, ví dụ "Tom is at his desk with a book. He (read) ____ a story." và "He [draws / is drawing] a monkey" sau "at the desk with his pencils".
+   - Câu hỏi nói về người đó trực tiếp với chính người đó bằng ngôi thứ ba ("Tom: What does Mia do? Mia: I read..."), không tự nhiên.
+   Khi một đáp án phụ thuộc cảnh trước đó, cảnh phải cho biết trực tiếp vì sao đang diễn ra bây giờ, mà không dùng đúng dạng động từ của đáp án (ví dụ thêm lượt thoại "Where are you?" và câu đáp nêu nơi chốn: "I am in the kitchen.").
 1c. Câu "đang làm" dùng hiện tại đơn là sai nội dung bài; việc đang diễn ra luôn dùng am/is/are + V-ing.
+1d. Cấm "chép dạng": không viết một câu rồi bắt chọn hoặc điền lại chính câu đó (ví dụ "Mia is reading a story. She [reads / is reading] a story." hoặc "I am playing football now. I ____ football now. (play)"), vì học sinh chỉ chép dạng động từ mà không cần hiểu nghĩa. Câu chọn hoặc điền phải tự mang nghĩa; câu tình huống trước đó nói điều khác (nơi chốn, đồ vật, người cùng hội thoại), không nhắc lại động từ của đáp án.
 2. Không dùng màu để phân biệt; phiếu in đen trắng vẫn làm được.
 3. Không phụ thuộc vào ảnh hay âm thanh (phiếu này không có).
 4. Nhân vật và cảnh theo K3.1; không thêm sự kiện mâu thuẫn.

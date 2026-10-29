@@ -34,7 +34,9 @@ Lịch sử thử:
 ### 4a. Lần 3 (29/10/2026): chạy v0.5 với ba model
 Đánh giá: `thu-nghiem/DANH_GIA_AI_NGOAI_LAN_3.md`; phiếu gốc: `thu-nghiem/phieu-lan-3/`. Điểm phiếu: Flash 6,5 (v0.4: 4,5), Haiku 6,0 (6,5), Sol 6,5 (7,5). Bộ file: 7,3 (v0.4: 7). Phiếu tệ nhất tăng, tốt nhất giảm. Lỗi mới của tài liệu: ô They/Now của TF-G1-B không điền được; quy tắc 30% "không có từ thời gian" bị lách (Sol chép lại dạng động từ của câu trước, Haiku nộp dù không đạt); thiếu danh sách Cambridge trong gói; định dạng đầu ra vẫn drift. Đề xuất v0.6 ở mục 5 của file đánh giá, chờ người dùng duyệt.
 
-## 5. Việc tiếp theo
+### 4b. Bộ file v0.6 (29/10/2026, chưa chạy thử)
+Gói: `goi-thu/v0.6/` (zip `goi-thu/goi-thu-v0.6.zip`); bản thư viện cùng nội dung ở `thu-vien/lesson/grammar-movers-daily-routines/`. Sửa theo 6 đề xuất của lần 3: ô They/Now in sẵn "—" (3 ô điền ở Task 1, tiêu đề cột kèm định nghĩa bắt buộc); S5 mục 0 định nghĩa từ chỉ thời gian, mục 1 đo thêm "câu liền trước không chứa dạng động từ của đáp án", mục 1d cấm chép dạng, thêm 3 mẫu mơ hồ vào 1b; Tom/Mia cho G2–G3b; mỗi Task G2/G3a/G3b dùng ít nhất 4 trong 9 động từ chính; thêm lunch, together; AI chỉ liệt kê từ ngoài danh sách (không gán Starters/Movers); chỉ dẫn đầu ra cấm "see STIMULUS", link, tiêu đề thừa; G4 nêu rõ thời điểm "now"; G5 không cho khung câu; S1 sửa còn khoảng 25 câu. Việc kế: gửi v0.6 cho ba model, chấm lần 4.
+
 1. (Đã làm lần 3, xem 4a; chờ duyệt đề xuất v0.6.) Quy trình đánh giá theo bốn lớp: (a) theo đúng ba tài liệu không, (b) lỗi nội dung (đáp án sai, mâu thuẫn tình huống, dựa từ khóa, từ ngoài phạm vi, câu mơ hồ), (c) lỗi do tài liệu thiếu hoặc mơ hồ, (d) lỗi do AI. Nạp phiếu vào `ws-editor.html` bằng Playwright để xem dàn trang (cách: chuyển định dạng trung tính sang MD theo `anh-xa-tf-grammar-movers-sang-app.md` và `docs/QUY_UOC_MD.md`).
 2. Người dùng chưa trả lời có đồng ý đổi G2 mặc định sang TF-G2-B không; tôi đã chọn làm theo đề xuất.
 3. Khi bộ file đạt, làm hết nhóm hệ thống (5 mục) và một lesson loại khác (ví dụ Reading hoặc Vocabulary) để kiểm tra bộ file nạp có đủ trên loại phiếu thứ hai chưa.

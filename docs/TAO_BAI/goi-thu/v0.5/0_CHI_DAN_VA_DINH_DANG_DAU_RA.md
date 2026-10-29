@@ -21,7 +21,7 @@ Nội dung viết trên phiếu (chỉ dẫn, bài đọc, câu hỏi, đáp án
 
 ## B. ĐỊNH DẠNG ĐẦU RA
 
-Trả về đúng hai phần, theo thứ tự: PHIẾU rồi BÁO CÁO. Không viết gì ngoài hai phần này.
+Trả về đúng hai phần, theo thứ tự: PHIẾU rồi BÁO CÁO. Không viết gì ngoài hai phần này: không tiêu đề đầu phiếu, không lời mở hay kết, không link tải, không khối mã (```). Dòng đầu tiên là `=== TASK 1 ===`.
 
 ### B1. PHIẾU
 Dùng đúng khung sau cho mỗi Task. Giữ nguyên các tiêu đề chữ in hoa ở đầu dòng.
@@ -50,7 +50,8 @@ NOTES: <ghi chú cho người chấm, nếu cần>
 Quy ước:
 - Câu cần học sinh chọn trong hai vế: viết cả hai vế trong câu dạng `[vế A / vế B]`.
 - Chỗ trống: viết `____`.
-- Bảng: viết các hàng, các ô cách nhau bằng ` | `; ô học sinh phải điền ghi `____`. Đáp án các ô đó ghi trong ANSWER KEY theo thứ tự trái sang phải, trên xuống dưới.
+- ITEMS luôn chứa đủ từng câu hỏi (STIMULUS chỉ cho bài đọc, hội thoại nguồn, bảng dữ kiện). Không ghi "see STIMULUS".
+- Bảng: viết dòng tiêu đề cột trước (kèm định nghĩa nhãn nếu có), rồi các hàng, các ô cách nhau bằng ` | `; ô học sinh phải điền ghi `____`. Đáp án các ô đó ghi trong ANSWER KEY theo hàng, mỗi hàng một dòng, các ô cách nhau bằng ` | `.
 - Câu có nhiều chỗ trống: đáp án các chỗ trống cách nhau bằng ` / `.
 - Hội thoại chọn câu đáp (TF-G2-B): viết lượt của người hỏi, rồi lượt trả lời có vế chọn dạng `[vế A / vế B]`; ví dụ số 0 đặt trước.
 - Câu hỏi có nhãn lựa chọn (Usually / Now): ghi nhãn đáp án đúng trong ANSWER KEY.
@@ -60,8 +61,8 @@ Quy ước:
 ### B2. BÁO CÁO
 Sau phiếu, viết mục có tiêu đề `REPORT`, gồm:
 1. Bảng: số Task | mã TF | số câu có đáp án (không tính câu ví dụ) | kiểu trả lời.
-2. Với mỗi Task thuộc G2, G3a, G3b: số câu không chứa từ chỉ thời gian và số thứ tự các câu đó.
+2. Với mỗi Task thuộc G2, G3a, G3b: số câu thỏa quy tắc S5 mục 1 (không có từ chỉ thời gian theo S5 mục 0, và câu liền trước không chứa dạng động từ của đáp án) và số thứ tự các câu đó. Nếu dưới 30%, đã viết lại chưa? Chỉ để trống khi không làm được.
    Với mỗi câu chọn hoặc điền: xác nhận đã thử đáp án còn lại và nó sai.
 3. Số lần mỗi động từ chính (play, read, watch, eat, go, ride, swim, draw) xuất hiện trong phần học sinh đọc và làm (không tính chỉ dẫn, đáp án, ghi chú; trợ động từ do không tính), theo từng Task và tổng cả phiếu.
-4. Danh sách từ nào trong phiếu không nằm trong danh sách liệt kê ở K4 và K5, mỗi từ ghi có trong Starters hay Movers. Nếu không có từ nào, viết "None" sau khi đã rà từng Task.
+4. Danh sách từ trong phiếu không nằm trong danh sách liệt kê ở K4 và K5 (chỉ liệt kê từ; không cần ghi Starters hay Movers). Nếu không có từ nào, viết "None" sau khi đã rà từng Task. Không tính chỉ dẫn, tên riêng, từ chỉ ngày giờ.
 5. Mọi quy tắc trong ba tài liệu mà bạn không làm theo được hoặc thấy mâu thuẫn, kèm lý do. Nếu không có, viết "None".
