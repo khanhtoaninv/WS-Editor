@@ -1,7 +1,8 @@
 # TASK FORMAT — Grammar Worksheet · A1 Movers · Daily Routines & Activities
 
-Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 0.3 · Trạng thái: Nháp
+Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 0.4 · Trạng thái: Nháp
 Quy định cách soạn từng Task. Dùng cùng file Kiến thức (K) và Trình tự Lesson (S).
+Chỉ dẫn in trên phiếu theo K6 (không dùng thuật ngữ ngữ pháp). Đáp án chấp nhận nêu rõ độ dài (một từ hay cụm).
 Mức hỗ trợ: Chuẩn (mặc định) hoặc Giảm (ít câu hơn, có câu mở đầu).
 Kiểu trả lời: chọn (chọn trong lựa chọn cho sẵn), gõ (điền chữ), viết (viết câu), đánh dấu (gạch trên văn bản).
 
@@ -17,10 +18,10 @@ Kiểu trả lời: chọn (chọn trong lựa chọn cho sẵn), gõ (điền c
 ### TF-G1-B — Copy the verbs into the table
 - Kiểu trả lời: gõ vào bảng hai cột Usually | Now.
 - Văn bản nguồn: như TF-G1-A, đặt cạnh bảng.
-- Số ô: 2 cụm động từ cho mỗi cột, cộng một ô mẫu đã điền cho mỗi cột.
-- Quy tắc: như TF-G1-A; cụm động từ đầy đủ (ví dụ `is drawing`).
+- Số ô: 2 hàng cho mỗi cột, cộng một hàng mẫu đã điền.
+- Quy tắc: như TF-G1-A; ô điền là động từ chính có trợ động từ nếu có (ví dụ `swims`, `is drawing`), không kèm tân ngữ; mẫu và đáp án cùng độ dài. Văn bản nguồn nêu rõ dấu hiệu thứ bảy hay chủ nhật cho từng dòng, hai việc trong một hàng phải cùng người.
 - Đáp án: danh sách cụm động từ chấp nhận.
-- Chỉ dẫn: "Read about Ben and Lucy. Write the verb phrases in the table."
+- Chỉ dẫn: "Read about Ben and Lucy. Write what they do and what they are doing in the table."
 
 ## Bước G2 (Understanding)
 
@@ -41,7 +42,7 @@ Kiểu trả lời: chọn (chọn trong lựa chọn cho sẵn), gõ (điền c
 | 8 | việc lặp đều, đối tượng gia đình | có | Usually |
 - Quy tắc: ít nhất 3 trong 8 câu không chứa trạng từ thời gian (usually, every, on..., now, at the moment, today, look, listen); câu Usually là hoạt động lặp lại rõ; nhân vật là Tom, Mia và người thân; đáp án không xen kẽ đều.
 - Đáp án: duy nhất cho mỗi câu.
-- Chỉ dẫn: "Read about Tom, Mia and their family. Circle Usually (what someone regularly does) or Now (what someone is doing at this moment)."
+- Chỉ dẫn: "Read about Tom, Mia and their family. Circle Usually (what someone does again and again) or Now (what someone is doing at this moment)."
 
 ### TF-G2-B — Choose the correct answer (conversations)
 - Kiểu trả lời: chọn một trong hai câu trả lời.
@@ -74,8 +75,8 @@ Kiểu trả lời: chọn (chọn trong lựa chọn cho sẵn), gõ (điền c
 ### TF-G3b-A — Complete the sentences
 - Kiểu trả lời: gõ dạng đúng của động từ cho trong ngoặc.
 - Số câu: 5 và 1 ví dụ; có phủ định, câu hỏi, một câu có hai chỗ trống.
-- Quy tắc: mỗi câu đủ dữ kiện; nếu chủ ngữ là "They" thì nêu rõ ai; ghi các dạng rút gọn được chấp nhận (don't / do not).
-- Chỉ dẫn: "Write the correct form of the verb in brackets."
+- Quy tắc: mỗi câu đủ dữ kiện; câu cần "đang làm" phải có nói rõ trong câu trước (ví dụ ai đó ở đâu, đang nhìn gì); nếu chủ ngữ là "They" thì nêu rõ ai; ghi các dạng rút gọn được chấp nhận (don't / do not).
+- Chỉ dẫn: "Write the verb in the right way. Use the word in ( )."
 
 ### TF-G3b-B — Make questions and negatives
 - Kiểu trả lời: viết câu biến đổi từ câu khẳng định cho sẵn.
@@ -89,9 +90,10 @@ Kiểu trả lời: chọn (chọn trong lựa chọn cho sẵn), gõ (điền c
 - Kiểu trả lời: viết câu (khoảng 2 dòng mỗi câu). Dữ kiện đặt phía trên.
 - Số câu: 2. Mức Giảm: 1.
 - Kế hoạch: câu 1: nhân vật A bị hiểu sai (đang làm việc thường lệ); học sinh sửa bằng việc thường làm và việc đang làm. Câu 2: nhân vật B, dữ kiện khác để không chép nguyên câu 1.
+- Giàn giáo: bảng dữ kiện ghi cả động từ (ví dụ `play football`, `draw a picture`), không viết sẵn cả câu; mỗi câu của bạn học sinh có một khung mở đầu `Ben ____` hoặc `He ____` cho câu thứ hai.
 - Quy tắc: dữ kiện đủ và không mâu thuẫn; chỉ dẫn nêu nhiệm vụ, không cho sẵn cấu trúc câu; không hỏi trực tiếp "What does X do?" rồi để học sinh chép dữ kiện; mỗi ý một câu đơn.
 - Đáp án: mẫu 1–2 câu cho mỗi câu; chấp nhận biến thể đúng.
-- Chỉ dẫn: "Read about Ben and Lucy. Then write sentences to answer your friend. Use the correct tenses."
+- Chỉ dẫn: "Read about Ben and Lucy. Then write sentences to answer your friend."
 
 ### TF-G4-B — Complete the conversation
 - Kiểu trả lời: gõ cụm động từ vào chỗ trống trong hội thoại, dựa vào bảng dữ kiện.

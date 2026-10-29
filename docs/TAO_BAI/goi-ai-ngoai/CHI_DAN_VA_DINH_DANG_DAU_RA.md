@@ -53,12 +53,14 @@ Quy ước:
 - Bảng: viết các hàng, các ô cách nhau bằng ` | `; ô học sinh phải điền ghi `____`. Đáp án các ô đó ghi trong ANSWER KEY theo thứ tự trái sang phải, trên xuống dưới.
 - Câu có nhiều chỗ trống: đáp án các chỗ trống cách nhau bằng ` / `.
 - Câu hỏi có nhãn lựa chọn (Usually / Now): ghi nhãn đáp án đúng trong ANSWER KEY.
+- Task viết tự do không có đáp án cố định: ANSWER KEY ghi "Personal answer", và đáp án mẫu để trong NOTES.
 - Câu viết: ANSWER KEY ghi đáp án mẫu; nếu có nhiều đáp án chấp nhận, ghi các biến thể.
 
 ### B2. BÁO CÁO
 Sau phiếu, viết mục có tiêu đề `REPORT`, gồm:
 1. Bảng: số Task | mã TF | số câu có đáp án (không tính câu ví dụ) | kiểu trả lời.
-2. Với Task 2: số câu không chứa trạng từ thời gian, và số thứ tự các câu đó.
-3. Số lần mỗi động từ chính (play, read, watch, eat, go, do, ride, swim, draw) xuất hiện trong cả phiếu.
+2. Với mỗi Task thuộc G2, G3a, G3b: số câu không chứa từ chỉ thời gian và số thứ tự các câu đó.
+   Với mỗi câu chọn hoặc điền: xác nhận đã thử đáp án còn lại và nó sai.
+3. Số lần mỗi động từ chính (play, read, watch, eat, go, ride, swim, draw) xuất hiện trong phần học sinh đọc và làm (không tính đáp án, ghi chú), theo từng Task và tổng cả phiếu.
 4. Danh sách từ nào trong phiếu không nằm trong K4 và K5.
 5. Mọi quy tắc trong ba tài liệu mà bạn không làm theo được hoặc thấy mâu thuẫn, kèm lý do. Nếu không có, viết "None".

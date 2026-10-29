@@ -1,6 +1,6 @@
 # TRÌNH TỰ LESSON — Grammar Worksheet · A1 Movers · Daily Routines & Activities
 
-Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 0.3 · Trạng thái: Nháp
+Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 0.4 · Trạng thái: Nháp
 Dùng cùng file Kiến thức (K) và file Task Format (TF) của lesson này.
 
 ## S1. Quy mô phiếu
@@ -58,15 +58,15 @@ Mỗi mã TF có 1 đến 3 phương án thay thế (hậu tố A, B, C). Chọn
 ## S4. Nhãn chuẩn dùng trên phiếu
 | Nhãn | Định nghĩa in trên phiếu |
 |---|---|
-| Usually | what someone regularly does |
+| Usually | what someone does again and again |
 | Now | what someone is doing at this moment |
 Chỉ dùng hai nhãn này cho hai khái niệm. Không dùng Habit, Often, Every day làm nhãn.
 
 ## S5. Quy tắc toàn phiếu
-1. Ít nhất 30% số câu có đáp án phải xác định được từ tình huống, không dựa vào từ chỉ thời gian.
+1. Ít nhất 30% số câu có đáp án trong mỗi Task thuộc G2, G3a và G3b phải xác định được từ tình huống (câu hoặc câu trước đó nói rõ ai đang làm gì, hoặc việc lặp lại), không dựa vào từ chỉ thời gian. Báo cáo số câu và số thứ tự từng Task.
+1b. Mỗi câu chọn hoặc điền chỉ có đúng một đáp án. Với mỗi câu, tự thử đáp án còn lại; nếu nó cũng hợp lý trong tình huống thì viết lại câu hoặc thêm thông tin vào tình huống. Không viết câu hỏi nhắc lại việc vừa được nói rõ ở câu trước.
 2. Không dùng màu để phân biệt; phiếu in đen trắng vẫn làm được.
 3. Không phụ thuộc vào ảnh hay âm thanh (phiếu này không có).
 4. Nhân vật và cảnh theo K3.1; không thêm sự kiện mâu thuẫn.
 5. Từ vựng và cấu trúc đúng K4 và K5.
 6. Mức hỗ trợ giảm dần từ G3 đến G5: G3 có đủ gợi ý; G4 có dữ kiện nhưng không cho sẵn cấu trúc; G5 có ví dụ nhưng không viết sẵn câu.
-7. Mỗi Task trọn vẹn trên một trang.
