@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Minh họa tạo bài</title>
+<style>
+:root{--bg:#e9edf0;--panel:#f8fafb;--line:#d5dce1;--fg:#1b252c;--muted:#5a6872;--accent:#0a6b75;--accent-soft:#d5ecee;--warn:#b45309;--warn-soft:#fdf0d5;--danger:#c2410c;--card:#fff;--card-2:#f2f5f7;--ln2:#b9c5cd;--ink-3:#8a979f}
+*{box-sizing:border-box}
+body{margin:0;font:14px/1.45 "Be Vietnam Pro","Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--fg)}
+.note{max-width:1280px;margin:12px auto 0;padding:0 16px;color:var(--muted);font-size:13px}
+.app{max-width:1280px;margin:8px auto 24px;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;min-height:680px;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:16px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--card)}
+.brand{font-weight:700}.brand small{font-weight:400;color:var(--muted);margin-left:6px}
+.steps{display:flex;gap:4px;margin:0 auto}
+.st{display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:20px;cursor:pointer;color:var(--muted);border:1px solid transparent;user-select:none}
+.st i{font-style:normal;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--card-2);border:1px solid var(--line);font-size:12px;font-weight:700}
+.st.on{background:var(--accent-soft);color:var(--accent);font-weight:700;border-color:var(--accent)}
+.st.on i{background:var(--accent);color:#fff;border-color:var(--accent)}
+.st.done i{background:#dbeee0;color:#1b7f3b;border-color:#9fd0ac}
+.sep{align-self:center;color:var(--ln2)}
+.ctx{font-size:12px;color:var(--muted);text-align:right;line-height:1.3}
+.btn{font:inherit;font-size:13px;border-radius:7px;padding:6px 14px;border:1px solid var(--ln2);background:var(--card);color:var(--fg);cursor:pointer}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.btn.sm{padding:3px 9px;font-size:12px}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--muted)}
+.scr{display:none;flex:1}.scr.on{display:flex}
+/* Ra đề */
+.cols{display:grid;grid-template-columns:1fr 1fr 1.3fr 1.4fr;flex:1}
+.col{border-right:1px solid var(--line);display:flex;flex-direction:column;min-width:0}
+.col h4{margin:0;padding:10px 14px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);border-bottom:1px solid var(--line);background:var(--card)}
+.it{padding:9px 14px;border-bottom:1px solid #e8ecef;cursor:pointer;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.it:hover{background:#eef3f5}
+.it.sel{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent);font-weight:600}
+.it small{color:var(--muted);font-weight:400;display:block;font-size:12px}
+.tag{font-size:11px;padding:1px 7px;border-radius:10px;background:var(--card-2);border:1px solid var(--line);color:var(--muted);white-space:nowrap;font-weight:400}
+.tag.gr{background:#e6effc;border-color:#bcd0f2;color:#2f5fb0}
+.tag.ls{background:#fbe9df;border-color:#f0c4ab;color:#a8461a}
+.sum{padding:16px;display:flex;flex-direction:column;gap:12px;background:var(--card)}
+.sum h3{margin:0;font-size:17px}
+.kv{display:grid;grid-template-columns:96px 1fr;gap:4px 10px;font-size:13px}.kv b{color:var(--muted);font-weight:500}
+.box{border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:var(--panel);font-size:13px}
+.box h5{margin:0 0 6px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+textarea{width:100%;font:inherit;font-size:13px;border:1px solid var(--ln2);border-radius:7px;padding:7px 9px;resize:vertical;background:#fff}
+.oldr{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-top:1px dashed var(--line);font-size:13px}
+.oldr:first-of-type{border-top:0}
+.grow{flex:1}
+/* Dàn ý */
+.outline{flex:1;display:grid;grid-template-columns:1fr 300px}
+.olist{padding:16px 20px;overflow:auto}
+.ohead{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:12px;gap:12px}
+.ohead h3{margin:0;font-size:17px}.ohead p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.banner{background:var(--warn-soft);border:1px solid #f1d39a;border-radius:9px;padding:9px 12px;display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:13px}
+.banner .grow{color:#7a4a08}
+.tk{display:grid;grid-template-columns:28px 34px 1fr auto;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px;align-items:start}
+.tk.chg{border-color:#e9b65c;box-shadow:inset 3px 0 0 #e9a23b}
+.drag{color:var(--ink-3);cursor:grab;text-align:center;padding-top:2px;user-select:none}
+.num{width:30px;height:30px;border-radius:8px;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700}
+.tk h4{margin:0 0 4px;font-size:15px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.chip{font-size:12px;padding:2px 8px;border-radius:6px;background:var(--card-2);border:1px solid var(--line)}
+.chip.q{background:#eef6f7;border-color:#b6dade;color:var(--accent);font-weight:600}
+.chip.role{background:#f3eefc;border-color:#d6c8f2;color:#5b3fa0}
+.fl{font-size:13px;margin:2px 0}.fl b{color:var(--muted);font-weight:500;display:inline-block;width:72px}
+.tkact{display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+.add{border:1.5px dashed var(--ln2);border-radius:10px;padding:10px;text-align:center;color:var(--muted);cursor:pointer}
+.side{border-left:1px solid var(--line);background:var(--card);padding:16px;display:flex;flex-direction:column;gap:12px}
+.flow{display:flex;height:10px;border-radius:5px;overflow:hidden;border:1px solid var(--line)}
+.flow span{display:block}
+.legend{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+/* Biên tập */
+.ed{flex:1;display:grid;grid-template-columns:230px 1fr 280px;min-height:0}
+.ed.vopen{grid-template-columns:210px 1fr 250px 280px}
+.tree{border-right:1px solid var(--line);background:var(--card);padding:10px;display:flex;flex-direction:column;gap:6px}
+.tree h5{margin:2px 4px 4px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;display:flex;justify-content:space-between}
+.tn{border:1px solid var(--line);border-radius:8px;padding:7px 9px;font-size:13px;cursor:pointer;background:var(--panel)}
+.tn.sel{border-color:var(--accent);background:var(--accent-soft)}
+.tn small{display:block;color:var(--muted);font-size:11px}
+.tn .w{color:var(--warn);font-weight:700}
+.tn.gen{opacity:.75}
+.stage{overflow:auto;padding:18px;display:flex;justify-content:center;background:#dde3e7}
+.paper{width:100%;max-width:520px;align-self:flex-start;background:#fff;border-radius:3px;box-shadow:0 2px 10px #0002;padding:28px 30px;font-family:Andika,"Trebuchet MS",sans-serif;color:#1d2327;font-size:13px}
+.ph{display:flex;justify-content:space-between;border-bottom:1.5px solid #333;padding-bottom:6px;margin-bottom:14px;font-size:12px}
+.task{position:relative;border-radius:8px;padding:6px 8px;margin:0 -8px 14px;border:1.5px solid transparent}
+.task:hover{border-color:#c9d6dc}
+.task.sel{border-color:var(--accent)}
+.task .tt{font-weight:700;margin-bottom:4px}
+.task .tt span{display:inline-block;background:#1d2327;color:#fff;border-radius:4px;padding:0 6px;margin-right:6px}
+.task p{margin:3px 0}
+.wb{display:inline-flex;gap:14px;border:1.3px solid #555;border-radius:7px;padding:3px 12px;margin:2px 0 6px}
+.flag{position:absolute;right:90px;top:-10px;background:var(--warn-soft);border:1px solid #e9b65c;color:var(--warn);font:600 11px/1.2 "Be Vietnam Pro",system-ui;border-radius:10px;padding:2px 8px}
+.tools{position:absolute;right:4px;top:4px;display:none;gap:4px}
+.task:hover .tools,.task.sel .tools{display:flex}
+.tools .btn{font-family:"Be Vietnam Pro",system-ui}
+.sk{height:10px;border-radius:5px;background:linear-gradient(90deg,#eceff1,#f7f9fa,#eceff1);background-size:200% 100%;animation:sh 1.3s infinite;margin:7px 0}
+@keyframes sh{to{background-position:-200% 0}}
+.insp{border-left:1px solid var(--line);background:var(--card);padding:12px;display:flex;flex-direction:column;gap:10px;font-size:13px}
+.insp h5{margin:0;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.regen{border:1px solid var(--accent);border-radius:9px;padding:10px;background:#f4fafb;display:flex;flex-direction:column;gap:8px}
+.warnbox{border:1px solid #e9b65c;background:var(--warn-soft);border-radius:9px;padding:9px 10px;color:#7a4a08}
+.ver{border-left:1px solid var(--line);background:var(--card);display:flex;flex-direction:column}
+.ver h5{margin:0;padding:12px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.vi{padding:10px 12px;border-bottom:1px solid #e8ecef;cursor:pointer;font-size:13px}
+.vi:hover{background:#eef3f5}.vi.sel{background:var(--accent-soft)}
+.vi .when{font-size:11px;color:var(--muted)}
+.vi .why{margin-top:2px}
+.vi .k{font-size:11px;padding:1px 6px;border-radius:8px;margin-right:4px}
+.k.auto{background:#e6effc;color:#2f5fb0}.k.man{background:#dbeee0;color:#1b7f3b}.k.cur{background:var(--accent);color:#fff}
+.vprev{margin:8px 12px 12px;border:1px solid var(--line);border-radius:9px;padding:10px;background:var(--panel);font-size:12px;display:flex;flex-direction:column;gap:6px}
+.vprev .row{display:flex;justify-content:space-between;align-items:center;gap:6px;border-top:1px dashed var(--line);padding-top:5px}
+.ro{position:sticky;top:0;background:#fff3d6;border:1px solid #e9b65c;color:#7a4a08;border-radius:7px;padding:5px 10px;font:12px "Be Vietnam Pro",system-ui;margin-bottom:10px;display:none}
+.paper.vold .ro{display:block}
+.callout{max-width:1280px;margin:0 auto 30px;padding:0 16px;font-size:13px;color:var(--muted)}
+.callout ol{margin:4px 0 0 18px;padding:0}
+</style></head><body>
+
+<div class="note"><b>Hình mẫu tạo bài (chưa phải app thật).</b> Bấm ① ② ③ trên thanh trên cùng để chuyển màn. Trong các màn, nút có chú thích được bấm thử; chữ nội dung chỉ là ví dụ.</div>
+
+<div class="app">
+  <div class="top">
+    <div class="brand">WS Editor <small>Tạo bài</small></div>
+    <div class="steps">
+      <div class="st done" data-go="1"><i>1</i>Ra đề</div><span class="sep">›</span>
+      <div class="st on" data-go="2"><i>2</i>Dàn ý</div><span class="sep">›</span>
+      <div class="st" data-go="3"><i>3</i>Biên tập</div>
+    </div>
+    <div class="ctx">Pinta English 3 · Unit 5<br><b>Lesson 2: was / were</b></div>
+  </div>
+
+  <!-- ① RA ĐỀ -->
+  <section class="scr" id="s1">
+    <div class="cols">
+      <div class="col"><h4>Giáo trình</h4>
+        <div class="it">Pinta English 2<span class="tag">10 unit</span></div>
+        <div class="it sel">Pinta English 3<span class="tag">12 unit</span></div>
+        <div class="it">Pinta English 4<span class="tag">12 unit</span></div>
+      </div>
+      <div class="col"><h4>Unit</h4>
+        <div class="it">Unit 3 · My house</div>
+        <div class="it">Unit 4 · Food</div>
+        <div class="it sel">Unit 5 · My weekend</div>
+        <div class="it">Unit 6 · At the zoo</div>
+        <div class="it">Unit 7 · Jobs</div>
+      </div>
+      <div class="col"><h4>Lesson</h4>
+        <div class="it"><div>Lesson 1<small>Weekend activities</small></div><span class="tag ls">Từ vựng</span></div>
+        <div class="it sel"><div>Lesson 2<small>was / were</small></div><span class="tag gr">Ngữ pháp</span></div>
+        <div class="it"><div>Lesson 3<small>Past simple: regular verbs</small></div><span class="tag gr">Ngữ pháp</span></div>
+        <div class="it"><div>Lesson 4<small>Listen: Tom's Saturday</small></div><span class="tag ls">Nghe</span></div>
+        <div class="it"><div>Lesson 5<small>Write about your weekend</small></div><span class="tag">Viết</span></div>
+      </div>
+      <div class="sum">
+        <div><div class="tag gr" style="display:inline-block">Ngữ pháp</div><h3>Lesson 2 · was / were</h3></div>
+        <div class="kv"><b>Mục tiêu</b><span>Dùng đúng was / were ở câu khẳng định, phủ định, câu hỏi Yes/No.</span>
+          <b>Từ vựng</b><span>at home, at the park, happy, tired, busy…</span>
+          <b>Dự kiến</b><span>5–6 Task · khoảng 2 trang</span></div>
+        <div class="box"><h5>Ghi chú cho AI (không bắt buộc)</h5><textarea rows="2" placeholder="Vd: lớp yếu, ít bài viết câu; chủ đề cắm trại"></textarea></div>
+        <div class="box"><h5>Phiếu đã tạo của lesson này</h5>
+          <div class="oldr"><span>Phiếu 28/10 · 6 Task</span><button class="btn sm">Mở</button></div>
+          <div class="oldr"><span>Phiếu 21/10 · 5 Task</span><button class="btn sm">Mở</button></div>
+        </div>
+        <div class="grow"></div>
+        <button class="btn pri" data-go="2">Đề xuất dàn ý →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ② DÀN Ý -->
+  <section class="scr on" id="s2">
+    <div class="outline">
+      <div class="olist">
+        <div class="banner" id="chgBanner"><span>✎</span><span class="grow"><b>Dàn ý đã sửa sau khi tạo phiếu:</b> Task 3 đổi dạng Q. Các Task khác giữ nguyên bài đã biên tập.</span>
+          <button class="btn sm pri" data-go="3">Tạo lại 1 Task đã đổi</button><button class="btn sm">Tạo lại cả phiếu…</button></div>
+        <div class="ohead"><div><h3>Dàn ý phiếu · 5 Task</h3><p>Sửa trực tiếp trên thẻ, kéo ⋮⋮ để đổi thứ tự.</p></div>
+          <div style="display:flex;gap:6px"><button class="btn">↻ Gen lại dàn ý</button><button class="btn pri" data-go="3">Tạo phiếu →</button></div></div>
+
+        <div class="tk"><div class="drag">⋮⋮</div><div class="num">1</div><div>
+          <h4>Nhận diện was / were</h4>
+          <div class="meta"><span class="chip role">Khởi động</span><span class="chip q">Q4 Chọn trong câu</span><span class="chip">6 câu</span><span class="chip">Có ảnh chung</span></div>
+          <div class="fl"><b>Mục tiêu</b>Chọn was / were theo chủ ngữ số ít / số nhiều.</div>
+          <div class="fl"><b>Nội dung</b>Tranh công viên Chủ nhật; câu mô tả người trong tranh.</div>
+        </div><div class="tkact"><button class="btn sm">Sửa</button><button class="btn sm ghost">↻ Gen lại</button></div></div>
+
+        <div class="tk"><div class="drag">⋮⋮</div><div class="num">2</div><div>
+          <h4>Điền was / were</h4>
+          <div class="meta"><span class="chip role">Luyện</span><span class="chip q">Q1 Điền từ</span><span class="chip">8 câu</span><span class="chip">Khung từ: was, were</span></div>
+          <div class="fl"><b>Mục tiêu</b>Khẳng định và phủ định (wasn't / weren't).</div>
+          <div class="fl"><b>Nội dung</b>Câu rời về cuối tuần của các bạn trong lớp.</div>
+        </div><div class="tkact"><button class="btn sm">Sửa</button><button class="btn sm ghost">↻ Gen lại</button></div></div>
+
+        <div class="tk chg"><div class="drag">⋮⋮</div><div class="num">3</div><div>
+          <h4>Câu hỏi Yes/No <span class="tag" style="background:#fdf0d5;border-color:#e9b65c;color:#b45309">đã sửa</span></h4>
+          <div class="meta"><span class="chip role">Luyện</span><span class="chip q">Q8 Nối <s style="color:#999;font-weight:400">Q3</s></span><span class="chip">6 cặp</span></div>
+          <div class="fl"><b>Mục tiêu</b>Hỏi và trả lời Was he…? / Were they…?</div>
+          <div class="fl"><b>Nội dung</b>Nối câu hỏi với câu trả lời ngắn.</div>
+        </div><div class="tkact"><button class="btn sm">Sửa</button><button class="btn sm ghost">↻ Gen lại</button></div></div>
+
+        <div class="tk"><div class="drag">⋮⋮</div><div class="num">4</div><div>
+          <h4>Đọc hiểu: Mai's Sunday</h4>
+          <div class="meta"><span class="chip role">Vận dụng</span><span class="chip q">Q5 Đúng / Sai</span><span class="chip">5 câu</span><span class="chip">Bài đọc ~70 từ</span></div>
+          <div class="fl"><b>Mục tiêu</b>Nhận ra was / were trong văn bản liền mạch.</div>
+          <div class="fl"><b>Nội dung</b>Mai kể Chủ nhật đi biển với gia đình.</div>
+        </div><div class="tkact"><button class="btn sm">Sửa</button><button class="btn sm ghost">↻ Gen lại</button></div></div>
+
+        <div class="tk"><div class="drag">⋮⋮</div><div class="num">5</div><div>
+          <h4>Viết về cuối tuần</h4>
+          <div class="meta"><span class="chip role">Vận dụng</span><span class="chip q">Q12 Viết tự do</span><span class="chip">4 dòng</span></div>
+          <div class="fl"><b>Mục tiêu</b>Viết 3–4 câu dùng was / were.</div>
+          <div class="fl"><b>Nội dung</b>Câu hỏi gợi ý: Where were you? Who was with you?</div>
+        </div><div class="tkact"><button class="btn sm">Sửa</button><button class="btn sm ghost">↻ Gen lại</button></div></div>
+
+        <div class="add">+ Thêm Task</div>
+      </div>
+      <aside class="side">
+        <div class="box"><h5>Cấu trúc phiếu</h5>
+          <div class="flow"><span style="flex:1;background:#b9a6e6"></span><span style="flex:2;background:#7fb6bd"></span><span style="flex:2;background:#0a6b75"></span></div>
+          <div class="legend" style="margin-top:8px"><span><i style="background:#b9a6e6"></i>Khởi động · 1 Task</span><span><i style="background:#7fb6bd"></i>Luyện · 2 Task</span><span><i style="background:#0a6b75"></i>Vận dụng · 2 Task</span></div></div>
+        <div class="box"><h5>Theo Trình tự</h5>Nhận diện → luyện có kiểm soát → vận dụng. <span style="color:#1b7f3b">✓ Khớp</span></div>
+        <div class="box"><h5>Ước tính</h5>29 câu · khoảng 2 trang · 25 phút</div>
+        <div class="box"><h5>Góp ý khi gen lại dàn ý</h5><textarea rows="3" placeholder="Vd: thêm 1 bài nghe, bỏ bài viết"></textarea></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ③ BIÊN TẬP -->
+  <section class="scr" id="s3">
+    <div class="ed" id="ed">
+      <div class="tree">
+        <h5>Phiếu <span><button class="btn sm" id="vBtn">🕘 Phiên bản</button></span></h5>
+        <div class="tn">1 · Nhận diện was / were<small>Q4 · 6 câu</small></div>
+        <div class="tn">2 · Điền was / were<small>Q1 · 8 câu</small></div>
+        <div class="tn sel">3 · Câu hỏi Yes/No <span class="w">⚠</span><small>Q8 · 6 cặp</small></div>
+        <div class="tn">4 · Đọc hiểu: Mai's Sunday<small>Q5 · 5 câu</small></div>
+        <div class="tn gen">5 · Viết về cuối tuần<small>⏳ đang viết…</small></div>
+        <div class="grow"></div>
+        <button class="btn" data-go="2">← Sửa dàn ý</button>
+      </div>
+
+      <div class="stage">
+        <div class="paper" id="paper">
+          <div class="ro">Đang xem phiên bản cũ (chỉ đọc). <a href="#" id="backCur">Về bản hiện tại</a></div>
+          <div class="ph"><span>Name: ____________</span><b>Unit 5 · Lesson 2</b><span>Class: ______</span></div>
+          <div class="task"><div class="tt"><span>1</span>Look and choose.</div>
+            <p>1. The children {was | <u>were</u>} at the park.</p><p>2. Tom {<u>was</u> | were} happy.</p><p style="color:#999">…</p>
+            <div class="tools"><button class="btn sm">↻ Tạo lại</button></div></div>
+          <div class="task"><div class="tt"><span>2</span>Complete with was, were, wasn't or weren't.</div>
+            <div class="wb"><span>was</span><span>were</span><span>wasn't</span><span>weren't</span></div>
+            <p>1. My mum ______ at home on Sunday.</p><p style="color:#999">…</p>
+            <div class="tools"><button class="btn sm">↻ Tạo lại</button></div></div>
+          <div class="task sel"><div class="flag">⚠ cần xem</div><div class="tt"><span>3</span>Match the questions and answers.</div>
+            <p>1. Was Ben at school? &nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• a. Yes, they were.</p>
+            <p>2. Were they tired? &nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• b. No, he wasn't.</p><p style="color:#999">…</p>
+            <div class="tools"><button class="btn sm pri">↻ Tạo lại</button></div></div>
+          <div class="task"><div class="tt"><span>4</span>Read and circle T or F.</div>
+            <p style="font-style:italic">Last Sunday, Mai and her family were at the beach…</p><p style="color:#999">…</p>
+            <div class="tools"><button class="btn sm">↻ Tạo lại</button></div></div>
+          <div class="task"><div class="tt"><span>5</span>&nbsp;</div><div class="sk" style="width:70%"></div><div class="sk" style="width:90%"></div><div class="sk" style="width:55%"></div></div>
+        </div>
+      </div>
+
+      <div class="insp">
+        <h5>Task 3</h5>
+        <div class="warnbox"><b>⚠ Kiểm tra:</b> câu 4 và câu 6 cùng ghép được với "Yes, she was." → đáp án không duy nhất.</div>
+        <div class="regen"><b>↻ Tạo lại Task này</b>
+          <div style="font-size:12px;color:var(--muted)">Giữ dàn ý của Task 3 (Q8 Nối · 6 cặp). Bản hiện tại được lưu vào Phiên bản trước khi thay.</div>
+          <textarea rows="2" placeholder="Góp ý: vd mỗi câu trả lời chỉ ghép được một câu hỏi"></textarea>
+          <div style="display:flex;gap:6px;justify-content:flex-end"><button class="btn sm">Hủy</button><button class="btn sm pri">Tạo lại</button></div></div>
+        <div style="border-top:1px solid var(--line);padding-top:8px;color:var(--muted);font-size:12px">… các mục chỉnh dàn trang hiện có (Bố cục, Dạng câu hỏi, Khoảng cách…)</div>
+        <div class="grow"></div>
+        <button class="btn">Tạo lại cả phiếu theo dàn ý…</button>
+      </div>
+
+      <div class="ver" id="ver" hidden>
+        <h5>Phiên bản <span><button class="btn sm">+ Lưu bản này</button> <button class="btn sm ghost" id="vClose">✕</button></span></h5>
+        <div class="vi"><div class="when"><span class="k cur">Hiện tại</span>20:14 hôm nay</div><div class="why">Đang biên tập</div></div>
+        <div class="vi sel" data-old="1"><div class="when"><span class="k auto">Tự động</span>20:09</div><div class="why">Tạo lại Task 3 · góp ý <i>"dễ quá"</i></div>
+        </div>
+        <div class="vprev">
+          <b>Bản 20:09 khác bản hiện tại ở:</b>
+          <div class="row"><span>Task 3 · Q3 → Q8 (dàn ý đổi)</span><button class="btn sm">Lấy lại Task này</button></div>
+          <div class="row"><span>Task 2 · sửa tay câu 4</span><button class="btn sm">Lấy lại Task này</button></div>
+          <button class="btn sm" style="margin-top:4px">Khôi phục cả phiếu</button>
+        </div>
+        <div class="vi"><div class="when"><span class="k man">Lưu tay</span>20:02</div><div class="why">"Bản gửi tổ trưởng"</div></div>
+        <div class="vi"><div class="when"><span class="k auto">Tự động</span>19:55</div><div class="why">Tạo phiếu từ dàn ý (5 Task)</div></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="callout"><b>Điểm cần góp ý:</b>
+<ol>
+<li>① Ra đề: ba cột + cột tóm tắt bên phải; có danh sách "Phiếu đã tạo của lesson này" để mở lại bài cũ thay vì tạo mới.</li>
+<li>② Dàn ý: thẻ Task có vai trò, dạng Q, số câu, mục tiêu, nội dung; cột phải là cấu trúc phiếu và đối chiếu Trình tự. Dải vàng chỉ hiện khi quay lại sửa dàn ý sau khi đã có phiếu.</li>
+<li>③ Biên tập: Task hiện dần khi AI viết xong (Task 5 đang chờ); Task bị kiểm tra đánh dấu ⚠ có lý do ở cột phải; nút ↻ Tạo lại trên từng Task.</li>
+<li>Phiên bản: bảng mở bằng nút 🕘, chọn một bản để xem trước (chỉ đọc), "Lấy lại Task này" hoặc "Khôi phục cả phiếu".</li>
+</ol></div>
+
+<script>
+const go=n=>{document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id==='s'+n));
+  document.querySelectorAll('.st').forEach(s=>{const k=+s.dataset.go;s.classList.toggle('on',k==n);s.classList.toggle('done',k<n)});};
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+const ed=document.getElementById('ed'),ver=document.getElementById('ver'),paper=document.getElementById('paper');
+document.getElementById('vBtn').onclick=()=>{ver.hidden=!ver.hidden;ed.classList.toggle('vopen',!ver.hidden);paper.classList.toggle("vold",!ver.hidden)};
+document.getElementById('vClose').onclick=()=>{ver.hidden=true;ed.classList.remove('vopen');paper.classList.remove("vold")};
+document.getElementById('backCur').onclick=e=>{e.preventDefault();document.getElementById('vClose').click()};
+document.querySelectorAll('.it').forEach(it=>it.addEventListener('click',()=>{[...it.parentNode.children].forEach(x=>x.classList.remove('sel'));it.classList.add('sel')}));
+</script>
+</body></html>
