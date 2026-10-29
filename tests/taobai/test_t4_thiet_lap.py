@@ -1,0 +1,133 @@
+# Tạo bài v128: menu Kho phiếu / ⚙ Thiết lập (Giáo trình · Dạng phiếu · AI).
+# Cách chạy: python3 tests/taobai/test_t4_thiet_lap.py <ws-editor.html>
+#   phần 1: mở thẳng file (chỉ xem, AI ngoài) · phần 2: qua máy chủ lớp thử (nạp file, khóa AI với máy chủ AI giả, Kho phiếu)
+import sys, os, subprocess, time, tempfile, shutil, urllib.request
+from playwright.sync_api import sync_playwright
+HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(os.path.dirname(HERE)); sys.path.insert(0, HERE)
+import ai_gia
+F = 'file://' + os.path.abspath(sys.argv[1]); ok = True; OUT = '/tmp/claude-0'; os.makedirs(OUT, exist_ok=True)
+def chk(n, c, x=''):
+    global ok; print(('PASS ' if c else 'FAIL '), n, '' if c else x); ok &= bool(c)
+def confirm(pg, yes=True):
+    pg.wait_for_selector('#cfmDlg[open]', timeout=4000); pg.click('#cfmYes' if yes else '#cfmNo'); pg.wait_for_timeout(400)
+def row(path): return f'#tlScr [data-path="{path}"]'
+KT2 = 'pinta-english-3/kien-thuc/u5-l2.md'; KT1 = 'pinta-english-3/kien-thuc/u5-l1.md'
+TF = 'pinta-english-3/chuyen-de/ngu-phap/tf.md'
+
+def file_mode(pg, errs):
+    pg.goto(F); pg.wait_for_timeout(1200)
+    chk('thanh trên không xuống dòng (cao 49 px)', pg.evaluate("document.querySelector('header.top').getBoundingClientRect().height") < 55)
+    pg.click('#menuBtn'); pg.wait_for_selector('#menuPop')
+    chk('☰ Menu: Kho phiếu, ⚙ Thiết lập, Tạo bài', pg.is_visible('#khoBtn') and pg.is_visible('#tlBtn') and pg.is_visible('#menuTaoBai'))
+    pg.keyboard.press('Escape'); pg.wait_for_timeout(100)
+    chk('Esc đóng menu', pg.locator('#menuPop').count() == 0)
+    pg.click('#menuBtn'); pg.click('#tlBtn'); pg.wait_for_selector('#tlGt'); pg.wait_for_timeout(300)
+    chk('mở thẳng file: báo chỉ xem + AI ngoài', pg.is_visible('#tlFileMode') and 'AI ngoài' in pg.inner_text('#tlFileMode'))
+    chk('Giáo trình: Pinta English 3, 4 lesson, mỗi lesson có Kiến thức', pg.locator('#tlGt .tlgt[data-gt="pinta-english-3"]').count() == 1 and pg.locator('#tlGt [data-ls]').count() == 4 and pg.inner_text(row(KT2) + ' .tag.ok') == 'v1')
+    chk('mở file: không có nút Nạp / Bỏ', pg.locator('#tlScr [data-act="bo"]').count() == 0 and pg.locator('#tlNapGt').count() == 0)
+    pg.click(row(KT2) + ' [data-act="xem"]'); pg.wait_for_selector('#tlXem')
+    chk('Xem: hiện chữ file Kiến thức', 'was / were ở câu khẳng định' in pg.inner_text('#tlXem pre'))
+    pg.click('#tlXemClose')
+    pg.click('#tlScr [data-tab="dang"]'); pg.wait_for_selector('#tlDang')
+    chk('Dạng phiếu: 3 chuyên đề, Trình tự / TF Ngữ pháp v7 / v3, file chung 1–5', pg.locator('#tlDang .tlcd').count() == 3 and 'v7' in pg.inner_text('#tlDang [data-cd="ngu-phap"]') and 'v3' in pg.inner_text('#tlDang [data-cd="ngu-phap"]') and pg.locator('#tlChung [data-chung]').count() == 5)
+    pg.click('#tlScr [data-tab="ai"]'); pg.wait_for_selector('#tlAiOff')
+    chk('AI: mở file thì ô khóa không dùng được, hướng dẫn AI ngoài', 'Chép đoạn nhắc' in pg.inner_text('#tlAiOff') and pg.locator('#tlCk').count() == 0)
+    pg.screenshot(path=f'{OUT}/t4a_file_ai.png')
+    pg.click('#tlKho'); pg.wait_for_selector('#khoScr')
+    chk('Kho phiếu (mở file): báo cần máy chủ', pg.is_visible('#khoOff') and pg.locator('#tlScr').count() == 0)
+    pg.click('#khoClose'); pg.wait_for_timeout(200)
+    pg.click('#tbNew'); pg.wait_for_selector('#raDe')
+    chk('màn Ra đề có Kho phiếu / ⚙ Thiết lập', pg.is_visible('#rdKho') and pg.is_visible('#rdTl'))
+    pg.click('#rdTl'); pg.wait_for_selector('#tlScr')
+    chk('Thiết lập mở đè lên Ra đề, đóng thì về Ra đề', True)
+    pg.click('#tlClose'); pg.wait_for_timeout(200)
+    chk('… về Ra đề', pg.is_visible('#raDe') and pg.locator('#tlScr').count() == 0)
+    chk('0 lỗi console (mở file)', not errs, errs)
+
+def server_mode(pg, errs, port, d, ai_url):
+    errs.clear(); B = f'http://127.0.0.1:{port}'
+    pg.goto(B + '/editor'); pg.wait_for_timeout(1500)
+    pg.click('#menuBtn'); pg.click('#tlBtn'); pg.wait_for_selector('#tlGt'); pg.wait_for_timeout(400)
+    pg.screenshot(path=f'{OUT}/t4a_gt.png')
+    chk('qua máy chủ: không báo chỉ xem, có nút nạp', pg.locator('#tlFileMode').count() == 0 and pg.is_visible('#tlNapGt') and pg.locator('#tlNoPerm').count() == 0)
+    # nạp Kiến thức mới cho lesson 2 (thay bản v1)
+    tmp = tempfile.mkdtemp(); kt = os.path.join(tmp, 'kien-thuc-l2.md')
+    open(kt, 'w', encoding='utf-8').write('# Kiến thức · Lesson 2\nPhiên bản: 2\n\n## Mục tiêu\nMục tiêu bản 2 nạp từ Thiết lập.\n\n## Điểm kiến thức\n- was / were\n')
+    pg.set_input_files(row(KT2) + ' input[type=file]', kt); confirm(pg); pg.wait_for_timeout(600)
+    chk('nạp Kiến thức: hỏi thay, bản mới v2', pg.inner_text(row(KT2) + ' .tag.ok') == 'v2', pg.inner_text(row(KT2)))
+    old = os.listdir(os.path.join(d, 'tao-bai', '_cu', 'pinta-english-3', 'kien-thuc'))
+    chk('bản cũ giữ trên máy chủ (_cu)', len(old) == 1, old)
+    bad = os.path.join(tmp, 'anh.png'); open(bad, 'wb').write(b'\x89PNG')
+    pg.set_input_files(row(KT1) + ' input[type=file]', bad); pg.wait_for_timeout(500)
+    chk('file không phải .md / .txt: báo, không nạp', 'chỉ nhận file chữ' in pg.inner_text('#toast') and pg.inner_text(row(KT1) + ' .tag.ok') == 'v1')
+    pg.click(row(KT1) + ' [data-act="bo"]'); confirm(pg); pg.wait_for_timeout(600)
+    chk('Bỏ Kiến thức lesson 1: "chưa có", lesson báo lỗi', pg.inner_text(row(KT1) + ' .tag.tlno') == 'chưa có' and pg.locator(row(KT1) + ' .tag.tlbad').count() == 1)
+    pg.click('#tlScr [data-tab="dang"]'); pg.wait_for_selector('#tlDang')
+    tf = os.path.join(tmp, 'tf.md'); open(tf, 'w', encoding='utf-8').write(open(os.path.join(ROOT, 'server/demo/tao-bai/pinta-english-3/chuyen-de/ngu-phap/tf.md'), encoding='utf-8').read().replace('Phiên bản: 3', 'Phiên bản: 4'))
+    pg.set_input_files(row(TF) + ' input[type=file]', tf); confirm(pg); pg.wait_for_timeout(600)
+    chk('Dạng phiếu: thay TF Ngữ pháp → v4', pg.inner_text(row(TF) + ' .tag.ok') == 'v4')
+    c3 = os.path.join(tmp, 'chung3.md'); open(c3, 'w', encoding='utf-8').write('# Quy tắc hình thức\nPhiên bản: 1\n- Câu không quá 10 từ.\n')
+    pg.set_input_files('#tlChung [data-chung="3"] input[type=file]', c3); pg.wait_for_timeout(600)
+    chk('file chung 3: nạp bản riêng', 'bản đã nạp' in pg.inner_text('#tlChung [data-chung="3"]'))
+    # AI: nhập khóa + Haiku, lưu, thử kết nối (máy chủ AI giả)
+    pg.click('#tlScr [data-tab="ai"]'); pg.wait_for_selector('#tlAiState')
+    chk('AI: chưa có khóa → báo dùng AI ngoài', 'AI ngoài' in pg.inner_text('#tlAiState') and pg.is_disabled('#tlAiTest'))
+    chk('Claude: để sẵn Sonnet 5.5 / Haiku 5.5 / Model khác', pg.evaluate("[...document.querySelectorAll('#tlCm option')].map(o=>o.textContent)") == ['Claude Sonnet 5.5', 'Claude Haiku 5.5', 'Model khác…'])
+    pg.fill('#tlCk', 'sk-ant-thu-bimat-7777'); pg.select_option('#tlCm', 'claude-haiku-5-5'); pg.click('#tlAiSave'); pg.wait_for_timeout(500)
+    chk('Lưu: đang dùng Claude Haiku 5.5, ô khóa xóa trắng, chỉ hiện 4 số cuối', 'Claude Haiku 5.5' in pg.inner_text('#tlAiState') and pg.input_value('#tlCk') == '' and '…7777' in pg.get_attribute('#tlCk', 'placeholder'))
+    chk('khóa không nằm trong trang', 'bimat' not in pg.content())
+    pg.click('#tlAiTest'); pg.wait_for_selector('#tlAiThu.tlok', timeout=8000)
+    chk('Thử kết nối: ✓ (máy chủ gọi AI bằng khóa đã lưu)', 'claude-haiku-5-5' in pg.inner_text('#tlAiThu') and ai_gia.NHAN and ai_gia.NHAN[-1]['key'] == 'sk-ant-thu-bimat-7777', pg.inner_text('#tlAiThu'))
+    pg.select_option('#tlCm', '_khac'); pg.fill('#tlCmKhac', 'claude-opus-5-5'); pg.click('#tlAiSave'); pg.wait_for_timeout(400)
+    chk('Model khác: nhập tay được', 'claude-opus-5-5' in pg.inner_text('#tlAiState'))
+    pg.select_option('#tlCm', 'claude-sonnet-5-5'); pg.click('#tlAiSave'); pg.wait_for_timeout(300)
+    pg.screenshot(path=f'{OUT}/t4a_ai.png', full_page=True)
+    # Ra đề đọc ngay dữ liệu mới; lesson 1 thiếu Kiến thức → nút mở Thiết lập
+    pg.click('#tlClose'); pg.click('#tbNew'); pg.wait_for_selector('#raDe'); pg.wait_for_timeout(500)
+    pg.click('#rdLs [data-ls="u5-l2"]'); pg.wait_for_selector('#rdStruct'); pg.wait_for_timeout(300)
+    chk('Ra đề: mục tiêu từ Kiến thức v2, TF v4', 'Mục tiêu bản 2' in pg.inner_text('#rdInfo') and 'TF v4' in pg.inner_text('#rdStruct'))
+    pg.click('#rdLs [data-ls="u5-l1"]'); pg.wait_for_selector('#rdLoi')
+    chk('lesson thiếu Kiến thức: nút "Mở Thiết lập để nạp file"', pg.is_visible('#rdLoiTl'))
+    pg.click('#rdLoiTl'); pg.wait_for_selector('#tlGt')
+    chk('… mở đúng tab Giáo trình', pg.locator('#tlScr [data-tab="gt"][aria-selected="true"]').count() == 1)
+    pg.set_input_files(row(KT1) + ' input[type=file]', kt); pg.wait_for_timeout(600)
+    pg.click('#tlClose'); pg.wait_for_timeout(500)
+    if pg.locator('#rdLs').count() == 0: pg.click('#rdPickH')
+    pg.click('#rdLs [data-ls="u5-l1"]'); pg.wait_for_selector('#rdStruct, #rdLoi'); pg.wait_for_timeout(300)
+    chk('nạp lại Kiến thức lesson 1 → Ra đề đọc lại dữ liệu, hết lỗi', pg.locator('#rdLoi').count() == 0 and pg.is_visible('#rdStruct'))
+    # Kho phiếu: Sinh → Duyệt phiếu (lưu) → kho có phiếu → mở / bỏ
+    pg.click('#rdLs [data-ls="u5-l2"]'); pg.wait_for_selector('#rdStruct'); pg.click('#rdGo')
+    if pg.locator('#cfmDlg[open]').count(): confirm(pg)
+    pg.wait_for_timeout(1000); pg.click('#tbDuyet'); pg.click('#tbApproveSheet'); pg.wait_for_timeout(800)
+    pg.click('#menuBtn'); pg.click('#khoBtn'); pg.wait_for_selector('#khoList'); pg.wait_for_timeout(500)
+    chk('Kho phiếu: 1 phiếu, ghi giáo trình › unit › lesson', pg.locator('#khoList tr[data-kho]').count() == 1 and 'Pinta English 3 › Unit 5 · My weekend › Lesson 2 · was / were' in pg.inner_text('#khoList'), pg.inner_text('#khoList'))
+    pg.fill('#khoFind', 'không có'); pg.wait_for_timeout(100)
+    chk('ô tìm lọc được', pg.locator('#khoList tr[data-kho]').count() == 0)
+    pg.fill('#khoFind', 'lesson 2'); pg.wait_for_timeout(100)
+    tid = pg.evaluate("__ws.ws.id"); pg.evaluate("__ws.commit(w=>{w.title='Đổi tên tạm'})")
+    pg.click('#khoList [data-act="mo"]'); confirm(pg); pg.wait_for_timeout(800)
+    chk('Mở từ kho: thay phiếu đang mở', pg.locator('#khoScr').count() == 0 and pg.evaluate("__ws.ws.id") == tid and pg.evaluate("__ws.ws.title") != 'Đổi tên tạm')
+    pg.click('#menuBtn'); pg.click('#khoBtn'); pg.wait_for_selector('#khoList tr[data-kho]'); pg.click('#khoList [data-act="bo"]'); confirm(pg); pg.wait_for_timeout(500)
+    chk('Bỏ phiếu khỏi kho', pg.is_visible('#khoEmpty'))
+    pg.screenshot(path=f'{OUT}/t4a_kho.png')
+    shutil.rmtree(tmp)
+    chk('0 lỗi console (máy chủ)', not errs, errs)
+
+with sync_playwright() as p:
+    b = p.chromium.launch(); pg = b.new_page(viewport={'width': 1440, 'height': 900}); errs = []
+    pg.on('console', lambda m: errs.append(m.text) if m.type == 'error' and 'ERR_' not in m.text and 'font' not in m.text.lower() and 'favicon' not in m.text.lower() and '40' not in m.text else None)
+    pg.on('pageerror', lambda e: errs.append('PAGEERR ' + str(e)))
+    file_mode(pg, errs)
+    ai_url, stop_ai = ai_gia.chay(); ai_gia.dat_lai()
+    d = tempfile.mkdtemp(); port = 1597
+    env = dict(os.environ, LOP_CONG=str(port), LOP_DU_LIEU=d, LOP_KHONG_DEMO='1', LOP_AI_URL=ai_url); env.pop('ANTHROPIC_API_KEY', None)
+    sv = subprocess.Popen(['node', '--experimental-strip-types', '--disable-warning=ExperimentalWarning', 'server/lop.ts'], cwd=ROOT, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    try:
+        for _ in range(50):
+            try: urllib.request.urlopen(f'http://127.0.0.1:{port}/api/taobai/giao-trinh'); break
+            except Exception: time.sleep(0.2)
+        server_mode(pg, errs, port, d, ai_url)
+    finally:
+        sv.terminate(); sv.wait(); shutil.rmtree(d, ignore_errors=True); stop_ai()
+    b.close()
+print('ALL OK' if ok else 'SOME FAIL')

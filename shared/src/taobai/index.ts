@@ -3,3 +3,4 @@ export * from './types.ts';
 export * from './doc.ts';
 export * from './meta.ts';
 export * from './kho.ts';
+export * from './nhac.ts';

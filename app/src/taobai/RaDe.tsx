@@ -16,6 +16,10 @@ import { Q_NAME, qUnit, type QCode, type GiaoTrinh, type DataNote } from '../../
 import { moNguon, nguonThuMuc, nguonMau, type Nguon, type Lesson } from './nguon';
 import * as P from './plan';
 import { hasGen } from './gen';
+import { openThietLap } from './ThietLap';
+import { openKho } from './KhoPhieu';
+import { batDau } from './sinh';
+import { openReview } from './TaoBai';
 
 const tb = (): TbUi => useUi.getState().tb;
 const setTb = (p: Partial<TbUi>) => publish({ tb: Object.assign({}, tb(), p) });
@@ -25,8 +29,8 @@ const note = (n: DataNote) => `${n.file.split('/').slice(-2).join('/')}${n.line 
 type Sel = { gt: string; unit: string; ls: string };
 
 export function RaDe() {
-  const open = useUi(s => s.tb.rade);
-  return open ? <RaDeScreen /> : null;
+  const open = useUi(s => s.tb.rade), rev = useUi(s => s.tb.rev);
+  return open ? <RaDeScreen key={rev} /> : null;
 }
 
 function RaDeScreen() {
@@ -88,6 +92,8 @@ function RaDeScreen() {
       {src && src.mode !== 'may-chu' ? <><button className="btn sm" onClick={() => dirRef.current?.click()} title="Chọn thư mục dữ liệu giáo trình (định dạng tạm, docs/TAO_BAI/DINH_DANG_TAM.md)">Chọn thư mục dữ liệu…</button>
         {src.mode === 'thu-muc' ? <button className="btn sm ghost" onClick={async () => { const n = nguonMau(); await moNguon(n); setSrc(n); }}>Dùng bộ mẫu</button> : null}
         <input type="file" ref={dirRef} hidden multiple {...({ webkitdirectory: '' } as any)} onChange={e => chooseDir(e.target.files)} /></> : null}
+      <button className="btn sm" id="rdKho" onClick={() => openKho()}>Kho phiếu</button>
+      <button className="btn sm" id="rdTl" title="Nạp Kiến thức, Trình tự / TF, khóa AI" onClick={() => openThietLap('gt')}>⚙ Thiết lập</button>
       <button className="btn sm ghost" id="rdClose" aria-label="Đóng màn Ra đề" onClick={() => setTb({ rade: false })}>✕</button>
     </div>
     {err ? <p className="tbwarn">{err}</p> : null}
@@ -109,7 +115,8 @@ function RaDeScreen() {
       </div>}
     </section>
 
-    {les && les.loi.length ? <div className="tbwarn rdloi" id="rdLoi"><b>Chưa tạo bài được cho lesson này:</b><ul>{les.loi.map((n, i) => <li key={i}>{note(n)}</li>)}</ul></div> : null}
+    {les && les.loi.length ? <div className="tbwarn rdloi" id="rdLoi"><b>Chưa tạo bài được cho lesson này:</b><ul>{les.loi.map((n, i) => <li key={i}>{note(n)}</li>)}</ul>
+      <button className="btn sm" id="rdLoiTl" onClick={() => openThietLap(les.loi.some(n => /kien-thuc\//.test(n.file)) ? 'gt' : 'dang')}>Mở Thiết lập để nạp file</button></div> : null}
     {les && !les.loi.length && les.trinhTu ? <div className="rdmain">
       <section className="rdst" id="rdStruct">
         <div className="rdsth"><div><h3>Cấu trúc bài</h3><p className="tbmut">Theo Trình tự <b>{les.chuyenDe.ten} v{les.trinhTu.ver}</b> · TF v{les.tf?.ver}. Mỗi bước đã chọn sẵn một dạng; đổi hoặc thêm nếu chưa ưng.</p></div>
@@ -178,18 +185,18 @@ export async function sinhBai(l: Lesson, plan: P.Plan, note: string) {
     if (!all) return;
     L.commit((w2: any) => { const ids = new Set(w2.tasks.map((t: any) => t.id)); const out = m.tasks.map(t => { if (!ids.has(t.id) || ts.includes(t)) { const c = JSON.parse(JSON.stringify(t)); let i = 1; while (ids.has('t' + i)) i++; c.id = 't' + i; ids.add(c.id); return c; } return w2.tasks.find((x: any) => x.id === t.id); });
       w2.tasks = out; w2.gen = genOf(l, st, note, w2.gen); }, `Đã cập nhật cấu trúc: giữ ${m.kept} bài, ${st.length - m.kept} bài chờ sinh`);
-    setTb({ rade: false }); return;
+    setTb({ rade: false }); batDau(openReview); return;
   }
   if (w && (w.tasks || []).length && !(await askConfirm('Tạo phiếu mới từ cấu trúc này?', 'Phiếu đang mở trong editor sẽ được thay (giống “+ Phiếu”).', 'Tạo phiếu'))) return;
   const sheet = { title: `${l.unit.ten} · ${l.lesson.ten}`, age: l.giaoTrinh.tuoi || '7-9', tasks: ts, gen: genOf(l, st, note) };
-  if (L.loadSheet(sheet, `Đã tạo phiếu khung ${st.length} bài: chờ sinh nội dung`)) setTb({ rade: false, panel: null, cur: null });
+  if (L.loadSheet(sheet, `Đã tạo phiếu khung ${st.length} bài: chờ sinh nội dung`)) { setTb({ rade: false, panel: null, cur: null }); batDau(openReview); }
 }
 /** Nút "Sinh lại cả phiếu" (5.6): mọi bài thành khung mới. */
 export async function sinhLaiCaPhieu(l: Lesson, plan: P.Plan, note: string) {
   if (!(await askConfirm('Sinh lại cả phiếu?', 'Mọi bài thành khung mới (bản đã duyệt vẫn trong Lịch sử phiếu).', 'Sinh lại cả phiếu'))) return;
   const { ts, st } = frameTasks(l, plan);
   L.commit((w2: any) => { w2.tasks = ts; w2.gen = genOf(l, st, note, w2.gen); }, 'Đã dựng lại khung cả phiếu');
-  setTb({ rade: false });
+  setTb({ rade: false }); batDau(openReview);
 }
 
 // cầu cho test (tests/taobai/test_t3.py): luật cấu trúc + layout sơ bộ của một cấu trúc bất kỳ trên bộ mẫu

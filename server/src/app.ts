@@ -276,7 +276,9 @@ export async function createApp(o: Opts) {
   on('GET', '/api/hs/su-kien', (r, res) => { const { p } = hsOf(r); sse(res, chan(hsSubs, p.id)); return undefined; });
 
   extraRoutes(on, ctx, { needGv, phienOf, grade });
-  taobaiRoutes(on, { data: o.data, taobaiData: o.taobaiData });   // module Tạo bài (T3)
+  // module Tạo bài: sửa dữ liệu / thiết lập / gọi AI chỉ từ chính máy chạy máy chủ hoặc giáo viên đã đăng nhập (v128)
+  const isLocal = (r: Req) => ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(r.socket.remoteAddress || '');
+  taobaiRoutes(on, { data: o.data, taobaiData: o.taobaiData, root: o.root, quyen: r => isLocal(r) || isGv(r), log });
 
   // ---------- máy chủ ----------
   const server: Server = createServer(async (req0, res) => {

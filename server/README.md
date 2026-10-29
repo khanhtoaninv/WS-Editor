@@ -18,6 +18,8 @@ Biến môi trường (tùy chọn): `LOP_CONG` (cổng), `LOP_MAT_KHAU`, `LOP_D
 Ví dụ Mac: `ANTHROPIC_API_KEY=sk-ant-... npm run lop`. Windows (PowerShell): `$env:ANTHROPIC_API_KEY="sk-ant-..."; npm run lop`.
 Không có khóa vẫn dùng được: nút AI trả đoạn nhắc (chỉ số liệu ẩn danh) để chép sang AI khác.
 
+**Module Tạo bài** (WS Editor mở ở `/editor`, v128–v129): khóa / model AI cho **Sinh bài** đặt ở **☰ › ⚙ Thiết lập › AI** (lưu ở `<dữ liệu>/tao-bai/thiet-lap.json`, giữ kín; không đặt thì dùng `ANTHROPIC_API_KEY`). `TAOBAI_MODEL` đổi model mặc định (mặc định `claude-sonnet-5-5`), `TAOBAI_DATA` dùng thư mục dữ liệu giáo trình khác (mặc định `<dữ liệu>/tao-bai/du-lieu/`, lần đầu chép bộ mẫu `server/demo/tao-bai`). Sửa dữ liệu / thiết lập / gọi AI chỉ từ chính máy chạy máy chủ hoặc khi đã đăng nhập `/gv`. Nhật ký sinh bài: `<dữ liệu>/tao-bai/nhat-ky.jsonl`.
+
 ## Luồng
 Lớp (danh sách tên, nên dùng tên giả) → Gói phiếu (gửi từ WS Editor) → Mở phiên (mã 6 ký tự + QR) → học sinh vào, chọn tên, làm (tự lưu), nộp →
 giáo viên theo dõi trực tiếp → Kết thúc phiên (thu bài em chưa nộp) → **Chấm chữa** (v120) → **Báo cáo** lớp (v121) / từng em + nhận xét theo quy tắc + Insight AI (v122).
@@ -26,6 +28,7 @@ giáo viên theo dõi trực tiếp → Kết thúc phiên (thu bài em chưa n�
 - `lop.ts` chạy máy chủ; `src/app.ts` đường dẫn API; `src/cham.ts` chấm chữa + báo cáo + AI; `src/ai.ts` gọi Claude; `src/store.ts` lưu JSON; `src/khoa.ts` khóa ký / mở gói.
 - Giao diện: `app/src/lop/` (React, dùng lại trình xem `app/src/viewer/` với vai `student` / `review`), build ra `server/public/lop.html` (`cd app && npm run build`).
 - Tính điểm, báo cáo, nhận xét: `shared/src/grade.ts`, `shared/src/baocao.ts` (TeacherResource dùng lại được).
+- Tạo bài: `src/taobai/api.ts` (API `/api/taobai/…`), `nguon.ts` (đọc thư mục giáo trình), `luu.ts` (kho ghi được, giữ bản cũ ở `_cu/`), `thiet-lap.ts` (thiết lập + gọi AI: Claude / tương thích OpenAI).
 - Test: `npm run test:lop` (API), `python3 tests/lop/test_lop.py` (trình duyệt), hoặc `bash tests/lop/run.sh`.
 
 ## Dữ liệu demo

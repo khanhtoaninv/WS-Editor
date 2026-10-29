@@ -10,6 +10,8 @@ import { Guard } from './Guard';
 import { TaoBaiBar, TaoBaiDrawer, TbPubDlg } from '../taobai/TaoBai';
 import { TbOverlay } from '../taobai/Checks';
 import { RaDe } from '../taobai/RaDe';
+import { ThietLap } from '../taobai/ThietLap';
+import { KhoPhieu } from '../taobai/KhoPhieu';
 
 export function AppShell() {
   return (
@@ -26,6 +28,8 @@ export function AppShell() {
       <Guard name="taobai-pub"><TbPubDlg /></Guard>
       <Guard name="taobai-overlay"><TbOverlay /></Guard>
       <Guard name="taobai-rade"><RaDe /></Guard>
+      <Guard name="taobai-thietlap"><ThietLap /></Guard>
+      <Guard name="taobai-kho"><KhoPhieu /></Guard>
       <div id="measure" className="paper" aria-hidden="true" />
     </>
   );

@@ -11,7 +11,9 @@ import { fileURLToPath } from 'node:url';
 import { khoTuFile, verOf, type Kho, type GiaoTrinh, type DataNote, type ChiTietLesson, type FileChung } from '../../../shared/src/taobai/index.ts';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
-/** Thư mục dữ liệu mặc định: biến môi trường TAOBAI_DATA, không có thì bộ mẫu tạm. */
+/** Bộ dữ liệu mẫu tạm trong repo (chỉ đọc). Máy chủ chép bộ này vào thư mục dữ liệu ghi được ở lần chạy đầu (v128, luu.ts). */
+export const DEMO_DIR = join(REPO, 'server/demo/tao-bai');
+/** Thư mục dữ liệu mặc định khi đọc thẳng (test, chạy thẳng file này): biến môi trường TAOBAI_DATA, không có thì bộ mẫu tạm. */
 export const DATA_DIR = process.env.TAOBAI_DATA ? resolve(process.env.TAOBAI_DATA) : join(REPO, 'server/demo/tao-bai');
 
 /** Bộ file chung của hệ thống (đặc tả mục 3). File chưa viết: null (app báo "chưa có", không chặn T0–T3). */
@@ -25,19 +27,23 @@ export const CHUNG: { so: FileChung['so']; ten: string; file: string | null }[] 
 
 const read = (p: string): string | null => existsSync(p) && statSync(p).isFile() ? readFileSync(p, 'utf8') : null;
 
-export function docChung(root = REPO): FileChung[] {
-  return CHUNG.map(c => { const raw = c.file ? read(join(root, c.file)) : null; return { so: c.so, ten: c.ten, ver: raw == null ? '' : verOf(raw), raw }; });
+/** Bộ file chung. chungDir (v128): thư mục file chung giáo viên nạp ở Thiết lập (<so>.md); có thì dùng thay bản mặc định trong docs/. */
+export function docChung(root = REPO, chungDir?: string): (FileChung & { rieng?: boolean })[] {
+  return CHUNG.map(c => {
+    const own = chungDir ? read(join(chungDir, `${c.so}.md`)) : null, raw = own != null ? own : c.file ? read(join(root, c.file)) : null;
+    return { so: c.so, ten: c.ten, ver: raw == null ? '' : verOf(raw), raw, ...(own != null ? { rieng: true } : {}) };
+  });
 }
 
 /** Mọi file .md trong thư mục dữ liệu (tối đa 4 cấp, bỏ file / thư mục ẩn). */
 function docThuMuc(dir: string): Record<string, string> {
   const out: Record<string, string> = {};
-  const walk = (d: string, depth: number) => { for (const f of readdirSync(d)) { if (f.startsWith('.')) continue; const p = join(d, f), s = statSync(p);
+  const walk = (d: string, depth: number) => { for (const f of readdirSync(d)) { if (f.startsWith('.') || f.startsWith('_')) continue; const p = join(d, f), s = statSync(p);
     if (s.isDirectory()) { if (depth < 4) walk(p, depth + 1); } else if (/\.md$/i.test(f) && s.size < 512 * 1024) out[relative(dir, p).replace(/\\/g, '/')] = readFileSync(p, 'utf8'); } };
   walk(dir, 0); return out;
 }
 
-export function moKho(dir = DATA_DIR, root = REPO): Kho | null { return existsSync(dir) ? khoTuFile(docThuMuc(dir), docChung(root)) : null; }
+export function moKho(dir = DATA_DIR, root = REPO, chungDir?: string): Kho | null { return existsSync(dir) ? khoTuFile(docThuMuc(dir), docChung(root, chungDir)) : null; }
 
 /** Mọi giáo trình trong thư mục dữ liệu (mỗi thư mục con có giao-trinh.md là một giáo trình). */
 export function docNguon(dir = DATA_DIR): { giaoTrinh: GiaoTrinh[]; loi: DataNote[]; canhBao: DataNote[] } {

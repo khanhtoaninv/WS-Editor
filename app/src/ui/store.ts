@@ -9,7 +9,7 @@ import type { ShowData } from '../viewer/data';
 export type PageView = { rev: number; title: string; guides: [number, string, number] | null; pages: { html: string; over: boolean; free: number; fill: number }[] };
 
 // Tạo bài: panel = ngăn đè lên inspector; cur = bài đang xem trong ngăn; viewAt = đang xem lần Duyệt phiếu (giờ); ans = hiện đáp án trên trang
-export type TbUi = { panel: null | 'duyet' | 'lichsu'; cur: string | null; pub: boolean; viewAt: string | null; ans: boolean; rade: boolean };
+export type TbUi = { panel: null | 'duyet' | 'lichsu'; cur: string | null; pub: boolean; viewAt: string | null; ans: boolean; rade: boolean; tl: null | 'gt' | 'dang' | 'ai'; kho: boolean; rev: number; sv: number };
 
 export type UiState = {
   title: string;
@@ -41,7 +41,7 @@ export type UiState = {
 
 export const useUi = create<UiState>(() => ({
   title: '', age: '7-9', canUndo: false, canRedo: false, zoomLabel: 'Vừa khung', guides: false,
-  pages: null, diags: null, helpOpen: false, dataDlg: null, cfm: null, toastMsg: '', toastShow: false, imp: null, paste: null, genOpen: false, inspRev: 0, treeRev: 0, liveRev: 0, pageView: null, show: null, wspOpen: false, liveOpen: false, tb: { panel: null, cur: null, pub: false, viewAt: null, ans: false, rade: false }, codes: (() => { try { return localStorage.getItem('wsEditor.codes.v1') === '1'; } catch (_) { return false; } })(),
+  pages: null, diags: null, helpOpen: false, dataDlg: null, cfm: null, toastMsg: '', toastShow: false, imp: null, paste: null, genOpen: false, inspRev: 0, treeRev: 0, liveRev: 0, pageView: null, show: null, wspOpen: false, liveOpen: false, tb: { panel: null, cur: null, pub: false, viewAt: null, ans: false, rade: false, tl: null, kho: false, rev: 0, sv: 0 }, codes: (() => { try { return localStorage.getItem('wsEditor.codes.v1') === '1'; } catch (_) { return false; } })(),
 }));
 
 // Cập nhật đồng bộ: code cũ (và test) đọc DOM ngay sau render(), nên React phải vẽ xong trước khi publish trả về.

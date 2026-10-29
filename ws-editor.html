@@ -14118,7 +14118,11 @@ var useUi = create(() => ({
 		pub: false,
 		viewAt: null,
 		ans: false,
-		rade: false
+		rade: false,
+		tl: null,
+		kho: false,
+		rev: 0,
+		sv: 0
 	},
 	codes: (() => {
 		try {
@@ -20542,7 +20546,7 @@ var NAME = {
 };
 var norm = (s) => String(s || "").replace(/<[^>]+>|\*\*/g, " ").replace(/\{([^}]*)\}/g, (_m, g) => " " + g.replace(/\*/g, "").replace(/\|/g, " ") + " ").replace(/_{2,}/g, " qgap ").replace(/\*/g, " ").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
 var realItems = (t) => its$2(t).filter((x) => !x.ex && !x.gt);
-var textOf$1 = (x) => x.pair ? [x.pair.l?.text, x.pair.r?.text].filter(Boolean).join(" - ") : [x.text, ...x.lines || []].filter(Boolean).join(" ");
+var textOf$2 = (x) => x.pair ? [x.pair.l?.text, x.pair.r?.text].filter(Boolean).join(" - ") : [x.text, ...x.lines || []].filter(Boolean).join(" ");
 var mk = (id, ok, why, items, ids) => ({
 	id,
 	group: "may",
@@ -20607,7 +20611,7 @@ function checkTask(t) {
 	}
 	const seen = {};
 	it.forEach((x) => {
-		const k = norm(textOf$1(x));
+		const k = norm(textOf$2(x));
 		if (k.length > 3) (seen[k] = seen[k] || []).push(x);
 	});
 	const dup = Object.values(seen).filter((a) => a.length > 1).flat();
@@ -20622,10 +20626,10 @@ function checkSheet(w) {
 	if (res) out.push(mk("s_trang", res.pages.length <= max, `${res.pages.length} trang, tối đa ${max}`));
 	const where = {}, txt = {};
 	(w.tasks || []).filter((t) => t.gen).forEach((t, i) => realItems(t).forEach((x) => {
-		const k = norm(textOf$1(x));
+		const k = norm(textOf$2(x));
 		if (k.length > 8) {
 			(where[k] = where[k] || /* @__PURE__ */ new Set()).add(i + 1);
-			txt[k] = txt[k] || String(textOf$1(x)).replace(/<[^>]+>|\*\*/g, "");
+			txt[k] = txt[k] || String(textOf$2(x)).replace(/<[^>]+>|\*\*/g, "");
 		}
 	}));
 	const lap = Object.entries(where).filter(([, s]) => s.size > 1);
@@ -20655,8 +20659,8 @@ function allSheetChecks(w) {
 	return [...checkSheet(w), ...ai];
 }
 // src/taobai/Checks.tsx
-var tb$2 = () => useUi.getState().tb;
-var setTb$2 = (p) => publish({ tb: Object.assign({}, tb$2(), p) });
+var tb$4 = () => useUi.getState().tb;
+var setTb$4 = (p) => publish({ tb: Object.assign({}, tb$4(), p) });
 function List({ cs, id, title }) {
 	const [open, setOpen] = (0, import_react.useState)(false);
 	const bad = cs.filter((c) => !c.ok), good = cs.filter((c) => c.ok), grp = (g) => g === "ai" ? "AI chấm" : "Máy kiểm";
@@ -20749,7 +20753,7 @@ function AnsToggle() {
 				type: "checkbox",
 				id: "tbAnsChk",
 				checked: on,
-				onChange: (e) => setTb$2({ ans: e.target.checked })
+				onChange: (e) => setTb$4({ ans: e.target.checked })
 			}),
 			" Hiện đáp án trên trang ",
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", { children: "(màu cam, không in)" })
@@ -20774,7 +20778,7 @@ function TbOverlay() {
 			applyAnswers(root, r.slots, r.key, new Set(r.slots.map((s) => s.id)));
 		} catch (_) {}
 		if (t.panel === "duyet") for (const tk of w.tasks) {
-			if (!tk.gen) continue;
+			if (!tk.gen || tk.gen.status === "wait") continue;
 			const ids = new Set(allChecks(tk).filter((c) => !c.ok).flatMap((c) => c.ids || []));
 			if (!ids.size) continue;
 			let slots = [];
@@ -24366,7 +24370,49 @@ function verOf(src) {
 	}
 	return "?";
 }
+// ../shared/src/taobai/meta.ts
+var META = /^\s*(mục tiêu|ngữ cảnh|goal|context)\s*:\s*(.*)$/i;
+function tachMeta(src) {
+	const L = String(src || "").replace(/\r/g, "").split("\n"), out = [], notes = [];
+	let goal = "", ctx = "", tasks = 0, inAns = false;
+	for (const l of L) {
+		const t = l.trim();
+		if (/^##(?!#)\s*task\b/i.test(t)) {
+			tasks++;
+			inAns = false;
+		} else if (/^##(?!#)\s*(đáp án|answers?|answer key)\b/i.test(t)) inAns = true;
+		const m = !inAns && tasks > 0 ? META.exec(l) : null;
+		if (m) {
+			const isGoal = /mục tiêu|goal/i.test(m[1]), v = m[2].trim();
+			if ((isGoal ? goal : ctx) && v) notes.push(`có hai dòng “${m[1]}:”, giữ dòng đầu`);
+			else if (isGoal) goal = v;
+			else ctx = v;
+			continue;
+		}
+		out.push(l);
+	}
+	if (!tasks) notes.push("không có dòng “## Task: …”");
+	else if (tasks > 1) notes.push(`có ${tasks} dòng “## Task:”, mỗi lần sinh chỉ được một bài`);
+	if (tasks && !goal) notes.push("thiếu “Mục tiêu:”");
+	if (tasks && !ctx) notes.push("thiếu “Ngữ cảnh:”");
+	return {
+		md: out.join("\n"),
+		goal,
+		ctx,
+		notes,
+		tasks
+	};
+}
 // ../shared/src/taobai/kho.ts
+/** Đường dẫn chuẩn của các file một giáo trình (định dạng tạm). */
+var duongDan = {
+	giaoTrinh: (d) => `${d}/giao-trinh.md`,
+	trinhTu: (d, cd) => `${d}/chuyen-de/${cd}/trinh-tu.md`,
+	tf: (d, cd) => `${d}/chuyen-de/${cd}/tf.md`,
+	kienThuc: (d, ls) => `${d}/kien-thuc/${ls}.md`
+};
+/** Đường dẫn được phép ghi qua màn Thiết lập (chống ghi lung tung trên máy chủ). */
+var TEP_HOP_LE = /^[a-z0-9][a-z0-9-]{0,60}\/(giao-trinh\.md|chuyen-de\/[a-z0-9][a-z0-9-]{0,40}\/(trinh-tu|tf)\.md|kien-thuc\/u\d{1,2}-l\d{1,2}\.md)$/;
 /** files: đường dẫn dạng "pinta-english-3/giao-trinh.md" (thư mục con đầu tiên = một giáo trình). */
 function khoTuFile(files, chung = []) {
 	const F = {};
@@ -24420,13 +24466,128 @@ function khoTuFile(files, chung = []) {
 		if (r) r.loi.unshift(...loi.filter((n) => n.file === `${d}/giao-trinh.md` && n.msg.includes(r.lesson.ten)));
 		return r;
 	};
+	const tep = (k) => k in F ? F[k] : null;
+	const tt = (k) => ({
+		path: k,
+		ver: k in F ? verOf(F[k]) : null
+	});
+	const tongQuan = () => ({
+		loi,
+		canhBao,
+		chung,
+		giaoTrinh: giaoTrinh.map((g) => {
+			const d = dirOf[g.id], all = g.units.flatMap((u) => u.lessons);
+			return {
+				id: g.id,
+				ten: g.ten,
+				tuoi: g.tuoi,
+				file: duongDan.giaoTrinh(d),
+				chuyenDe: g.chuyenDe.map((c) => ({
+					id: c.id,
+					ten: c.ten,
+					trinhTu: tt(duongDan.trinhTu(d, c.id)),
+					tf: tt(duongDan.tf(d, c.id)),
+					soLesson: all.filter((l) => l.chuyenDe === c.id).length
+				})),
+				units: g.units.map((u) => ({
+					id: u.id,
+					ten: u.ten,
+					lessons: u.lessons.map((l) => ({
+						id: l.id,
+						ten: l.ten,
+						chuyenDe: l.chuyenDe,
+						kienThuc: tt(duongDan.kienThuc(d, l.id)),
+						...(() => {
+							const e = chiTiet(g.id, l.id)?.loi || [];
+							return {
+								loi: e.length,
+								loiMsg: e.slice(0, 6).map((n) => `${n.file.split("/").slice(-2).join("/")}${n.line ? ":" + n.line : ""} · ${n.msg}`)
+							};
+						})()
+					}))
+				}))
+			};
+		})
+	});
 	return {
 		giaoTrinh,
 		loi,
 		canhBao,
-		chiTiet
+		chiTiet,
+		tep,
+		tongQuan
 	};
 }
+// ../shared/src/taobai/nhac.ts
+var NHAC_VER = "nhac-1";
+/** Mục "## Qn …" của file chung 2 (chỉ gửi mục của dạng được giao: S2). */
+function mucQ(chung2, q) {
+	if (!chung2) return "";
+	const L = chung2.replace(/\r/g, "").split("\n"), i = L.findIndex((l) => new RegExp(`^##\\s*${q}\\b`).test(l.trim()));
+	if (i < 0) return "";
+	let j = i + 1;
+	while (j < L.length && !/^##(?!#)/.test(L[j].trim())) j++;
+	return L.slice(i, j).join("\n").trim();
+}
+var buocChu = (b) => [
+	`Bước ${b.so}: ${b.ten}`,
+	b.vaiTro && `Vai trò: ${b.vaiTro}`,
+	`Dạng được phép: ${b.q.join(", ")}`,
+	`Số câu: ${b.min === b.max ? b.min : `${b.min}–${b.max}`}`,
+	b.chiTiet && `Chi tiết: ${b.chiTiet}`,
+	b.them
+].filter(Boolean).join("\n");
+var khoi = (ten, chu) => chu.trim() ? `### ${ten}\n${chu.trim()}` : "";
+function dungNhac(v) {
+	const L = v.les, it = v.cauTruc[v.k];
+	if (!it) throw new Error(`không có bài ${v.k + 1} trong cấu trúc`);
+	const q = it.q, n = it.n, unit = qUnit(q), so = v.k + 1, tuoi = L.giaoTrinh.tuoi || "7-9";
+	const chung = (s) => L.chung.find((c) => c.so === s)?.raw || "";
+	const buoc = L.trinhTu?.buoc.find((b) => b.so === it.step);
+	const tf = (L.tf?.dang || []).filter((d) => d.q === q);
+	const system = [
+		`Bạn soạn bài tập tiếng Anh cho phiếu bài tập của học sinh ${tuoi} tuổi ở Việt Nam. Mỗi lần bạn viết ĐÚNG MỘT bài (một Task) theo yêu cầu, bằng định dạng MD của app WS Editor.`,
+		"Chỉ trả về khối MD của bài, đúng khung ở \"Quy tắc viết MD\" dưới đây: không lời chào, không giải thích, không bọc trong ```.",
+		"Câu chữ tiếng Anh phải đúng ngữ pháp, tự nhiên, hợp độ tuổi; từ vựng trong phạm vi Kiến thức của lesson. Mỗi câu có đúng một đáp án đúng.",
+		khoi("Quy tắc viết MD (file chung 1)", chung(1)),
+		khoi(`Dạng ${q} ${Q_NAME[q]} (trích file chung 2)`, mucQ(chung(2), q)),
+		khoi("Quy tắc hình thức (file chung 3)", chung(3)),
+		khoi("Phiếu mẫu đã duyệt (file chung 5)", chung(5))
+	].filter(Boolean).join("\n\n");
+	const P = [];
+	P.push(`## Phiếu\nGiáo trình: ${L.giaoTrinh.ten} · ${L.unit.ten} · ${L.lesson.ten} · chuyên đề ${L.chuyenDe.ten} · học sinh ${tuoi} tuổi`);
+	P.push(`## Kiến thức của lesson\n${(L.kienThuc?.raw || "(chưa có)").trim()}`);
+	P.push([
+		"## Trình tự của chuyên đề",
+		buoc ? `Bài này thuộc:\n${buocChu(buoc)}` : "",
+		L.trinhTu?.nguyenTac ? `Nguyên tắc chung:\n${L.trinhTu.nguyenTac}` : ""
+	].filter(Boolean).join("\n\n"));
+	P.push(tf.length ? `## Dạng bài (TF) cho ${q}\n${tf.length > 1 ? "Chọn MỘT dạng hợp với bước nhất.\n\n" : ""}${tf.map((d) => d.raw.replace(/^##\s*/, "### ")).join("\n\n")}` : `## Dạng bài (TF)\nTF chưa có dạng nào cho ${q}: viết theo mô tả dạng ${q} ở trên.`);
+	P.push(`## Cấu trúc cả phiếu (${v.cauTruc.length} bài)\n` + v.cauTruc.map((x, i) => `- Bài ${i + 1} · Bước ${x.step}${x.role ? ` (${x.role})` : ""} · ${x.q} ${Q_NAME[x.q]} · ${x.n} ${qUnit(x.q)}${i === v.k ? "  ← BÀI NÀY" : ""}`).join("\n"));
+	const da = (v.daCo || []).filter((b) => b.so !== so);
+	if (da.length) P.push(`## Các bài đã viết trong phiếu (không lặp câu, chọn ngữ cảnh khác)\n` + da.map((b) => `- Bài ${b.so} (${b.q}) “${b.title}”${b.ctx ? ` · ngữ cảnh: ${b.ctx}` : ""}${b.cau.length ? `\n  ${b.cau.slice(0, 3).join(" / ")}` : ""}`).join("\n"));
+	if (v.ghiChu && v.ghiChu.trim()) P.push(`## Ghi chú của giáo viên cho cả phiếu\n${v.ghiChu.trim()}`);
+	if (v.banHienTai) {
+		P.push(`## Bản hiện tại của bài này\n${v.banHienTai.trim()}`);
+		P.push(v.gopY && v.gopY.trim() ? `## Góp ý của giáo viên (phải làm theo)\n${v.gopY.trim()}\nViết lại bài theo góp ý; giữ đúng dạng và số ${unit}; phần góp ý không nhắc tới thì giữ như bản hiện tại nếu đã tốt.` : "## Yêu cầu sinh lại\nViết một bản MỚI khác bản hiện tại (câu và ngữ cảnh khác), vẫn đúng bước, dạng và số câu.");
+	}
+	P.push(`## BÀI CẦN VIẾT: Bài ${so} · ${q} ${Q_NAME[q]} · ${n} ${unit}\n` + [
+		`Viết Bài ${so} của phiếu: dạng ${q} (${Q_NAME[q]}), ${q === "Q12" ? `Dòng viết: ${n} (không có câu đánh số)` : `đúng ${n} câu đánh số 1–${n}`}.`,
+		buoc ? `Bài phục vụ bước "${buoc.ten}"${buoc.vaiTro ? ` (${buoc.vaiTro})` : ""}${buoc.chiTiet ? `; ${buoc.chiTiet}` : ""}.` : "",
+		tf.length ? `Tiêu đề "## Task:" dùng câu lệnh tiếng Anh theo "Hướng dẫn mẫu" của dạng TF đã chọn (sửa nhẹ cho khớp nội dung nếu cần).` : "",
+		"Ngay dưới \"## Task:\" ghi \"Mục tiêu:\" (một câu tiếng Việt) và \"Ngữ cảnh:\" (vài chữ)."
+	].filter(Boolean).join("\n"));
+	if (v.sua) P.push(`## SỬA LỖI\nBản bạn vừa viết:\n\`\`\`\n${v.sua.md.trim()}\n\`\`\`\nApp đọc bản đó thấy lỗi:\n${v.sua.loi.map((x) => `- ${x}`).join("\n")}\nViết lại TOÀN BỘ bài, sửa đúng các lỗi trên, giữ phần đã đúng. Chỉ trả về MD.`);
+	return {
+		system,
+		prompt: P.filter(Boolean).join("\n\n"),
+		ver: NHAC_VER,
+		q,
+		n
+	};
+}
+/** Chế độ AI ngoài: ghép phần hệ thống và phần yêu cầu thành một khối để chép (S25). */
+var nhacChep = (n) => `${n.system}\n\n==========\n\n${n.prompt}`;
 // ../docs/TAO_BAI/CHUNG_1_QUY_TAC_MD.md?raw
 var CHUNG_1_QUY_TAC_MD_default = "# File chung số 1 — Quy tắc viết MD khi sinh một bài\n\nPhiên bản: nháp-1 (29/10/2026, theo app v124)\n\nGửi cho AI ở **lượt sinh bài** (đặc tả `DAC_TA_TAO_BAI.md` mục 8.1), cùng file chung 2 (`1_DANG_Q.md`, mô tả 12 dạng Q). Rút từ `docs/QUY_UOC_MD.md` (quy ước đầy đủ cho mọi phiếu) và các bẫy tìm thấy ở T0 (`tests/taobai/test_q12.py`). Khác prompt đọc PDF (`docs/PROMPT_PDF_SANG_PHIEU.md`): ở đây AI **viết mới một bài** theo cấu trúc đã duyệt, không chép phiếu có sẵn.\n\n---\n\n## 1. Khung kết quả\n\nTrả về **đúng một bài**, không gì khác (không lời chào, không giải thích, không khối ``` bao ngoài):\n\n```\n## Task: <tiêu đề bài, là câu lệnh tiếng Anh cho học sinh>\nMục tiêu: <một câu tiếng Việt: bài này luyện gì>\nNgữ cảnh: <vài chữ: tình huống / nhân vật của bài>\nHướng dẫn: <chỉ khi cần thêm một câu lệnh ngoài tiêu đề>\nDạng: <đúng dạng được giao, vd \"điền từ\" hoặc \"Q1\">\n<các trường riêng của dạng: Khung từ:, Dòng viết:, Xáo vế phải:, …>\n<nội dung: Bài đọc: / các câu 1., 2., …>\n\n## Đáp án\n### Task 1\n1. …\n2. …\n```\n\n1. **Không** viết dòng tên phiếu `# …`, `Tuổi:`, `Xếp trang:`, `Khoảng cách:` (app đã có phiếu).\n2. `Mục tiêu:` và `Ngữ cảnh:` đặt **ngay dưới** dòng `## Task:`. App tách hai dòng này ra trước khi đọc bài; viết chỗ khác thì chúng thành câu hỏi.\n3. `Dạng:` **bắt buộc**, đúng dạng được giao. Không tự đổi dạng, không thêm phần (`### Phần:`), không tách thành hai bài.\n4. **Số câu đúng bằng số được giao** (Q12: số dòng viết, xem mục 3). Câu ví dụ `0.` không tính vào số câu và chỉ viết khi được yêu cầu.\n5. Đáp án luôn ở `## Đáp án` → `### Task 1` (luôn là `Task 1`), mỗi câu một dòng `n. đáp án`, trừ các dạng ghi đáp án ngay trong bài (mục 3).\n\n## 2. Viết nội dung\n\n- **Câu đánh số** `1.`, `2.`, … Không bắt đầu dòng bằng `a.`, `b.` (app hiểu là lựa chọn của câu trên). Muốn nhãn a, b, c thì vẫn viết `1.`, `2.` và thêm `Số câu: a b c`.\n- **Chỗ trống** `___` (ba gạch dưới). Câu nhiều chỗ trống: đáp án một dòng, cách nhau ` | ` (`3. was | were`).\n- **Bài đọc:** dòng `Bài đọc:` đứng riêng, đoạn văn ở các dòng **bên dưới**; tiêu đề bài đọc (nếu có) là dòng đầu, dạng `**TIÊU ĐỀ**`, rồi một dòng trống. Không viết chữ ngay sau `Bài đọc:` trên cùng dòng (app vẫn nhận nhưng ghi chú). Dòng trống giữa hai đoạn = sang đoạn mới.\n- **Hội thoại:** dòng `Hội thoại:` đứng riêng, mỗi lượt một dòng `Tên: lời`.\n- **Khung từ:** `Khung từ: was, were, wasn't, weren't` (dấu phẩy; từ có dấu phẩy thì dùng `;`).\n- **Ảnh:** chỉ là **tên mô tả để vẽ / tìm ảnh** (`[ảnh: a girl reading a book]`, `Ảnh: a family at the beach`), tiếng Anh, cụ thể, không lộ đáp án.\n- **Kiểu chữ** chỉ khi ý bài cần: `**đậm**`, `*nghiêng*`, `<u>gạch chân</u>`. **Không** gạch chân bằng `__từ__` (app hiểu là chỗ trống).\n- Không viết dòng kẻ `______` riêng, không viết `My answer: A / B / C`, không viết nhãn trống kiểu `Câu hỏi:` (app tự vẽ chỗ trả lời).\n\n## 3. Theo dạng\n\n| Dạng | Viết | Đáp án | Bẫy |\n|---|---|---|---|\n| Q1 Điền từ | `___` trong câu; `Khung từ:` nếu có | `## Đáp án` | có khung từ: đáp án phải nằm trong khung; không câu nào hai từ trong khung cùng đúng |\n| Q2 Viết câu | `Dòng viết: N`; câu không có `___` ở cuối | `## Đáp án`, một câu mẫu | **sắp xếp từ**: các từ cách nhau ` / `, **mỗi câu một số** (`1. you / did / go / where / ?`) |\n| Q3 Chọn A/B/C | lựa chọn `A. … B. … C. …` cùng dòng với câu, hoặc dòng thụt lề ngay dưới câu | `## Đáp án` (chữ cái) | đúng một phương án đúng; rải đều vị trí A/B/C |\n| Q4 Chọn trong câu | `{a\\|b}` trong câu, `*` trước vế đúng | dấu `*` (không cần `## Đáp án`) | mỗi `{…}` đúng một `*` |\n| Q5 Đúng / Sai | `Dạng: đúng/sai` (+ `(Yes/No)`, `(cùng hàng)` nếu được giao) | `## Đáp án`: `T`/`F` (hoặc đúng nhãn đã chọn: `Yes`/`No`) | câu khẳng định rõ, kiểm được bằng bài đọc / tranh |\n| Q6 Nhìn ảnh viết | mỗi câu `1. [ảnh: …]` | `## Đáp án` | mỗi ảnh chỉ một cách gọi tên; đánh vần theo ô: `Dạng: nhìn ảnh viết (ô chữ cái)` |\n| Q7 Chọn ảnh | câu hỏi rồi dòng thụt lề `A. [ảnh: …] B. [ảnh: …] C. [ảnh: …]` | `## Đáp án` (chữ cái) | các ảnh cùng loại, khác nhau nhìn thấy được khi in đen trắng |\n| Q8 Nối | `1. vế trái - vế phải` (cặp **đúng** viết cạnh nhau) + `Xáo vế phải: có`; vế thừa `n. - vế phải` | chính các cặp (app xáo khi in) | mỗi vế trái ghép được đúng một vế phải |\n| Q9 Tô chữ | mỗi dòng một từ / câu để tô | không có | |\n| Q10 Bảng | dòng đầu là tiêu đề cột, ô cách nhau ` \\| `; ô học sinh điền ghi `=đáp án` | `=đáp án` trong ô (không ghi ở `## Đáp án`) | một hàng bảng luôn trên một dòng; xuống dòng trong ô dùng `<br>` |\n| Q11 Lưới | **không sinh tự động** (AI dựng lưới dễ sai) | | |\n| Q12 Viết tự do | **không có câu đánh số**; `Dòng viết: N` (N = số được giao); câu hỏi dẫn trong `Khối chữ trên:` (các dòng thụt lề 2 dấu cách); vẽ: `Dạng: viết tự do (khung vẽ)` | không có (bỏ `## Đáp án`) | yêu cầu số từ ghi trong tiêu đề hoặc `Hướng dẫn:` |\n\n## 4. Ví dụ kết quả (Q1, 6 câu)\n\n```\n## Task: Complete with was or were.\nMục tiêu: Chọn was / were theo chủ ngữ số ít / số nhiều\nNgữ cảnh: Cuối tuần của gia đình Mai ở bãi biển\nDạng: điền từ\nKhung từ: was, were\n1. Mai ___ at the beach last Sunday.\n2. Her parents ___ there too.\n3. The weather ___ hot and sunny.\n4. The children ___ very happy.\n5. Her brother ___ in the water all morning.\n6. We ___ tired in the evening.\n\n## Đáp án\n### Task 1\n1. was\n2. were\n3. was\n4. were\n5. was\n6. were\n```\n\n## 5. Ví dụ kết quả (Q12, 5 dòng)\n\n```\n## Task: Write about your last weekend (30–40 words).\nMục tiêu: Tự viết đoạn ngắn dùng was / were\nNgữ cảnh: Cuối tuần của em\nDạng: viết tự do\nDòng viết: 5\nKhối chữ trên:\n  Where were you? Who were you with? How was the weather?\n```\n";
 // ../docs/TAO_BAI/1_DANG_Q.md?raw
@@ -24488,7 +24649,9 @@ function tuKho(k, mode, ten) {
 		lesson: async (gt, ls) => {
 			const c = k.chiTiet(gt, ls);
 			return c ? Object.assign(c, { phieu: [] }) : null;
-		}
+		},
+		tongQuan: async () => Object.assign(k.tongQuan(), { quyen: false }),
+		tep: async (p) => k.tep(p)
 	};
 }
 /** Bộ mẫu nhúng sẵn trong app. */
@@ -24545,6 +24708,11 @@ async function nguonMayChu() {
 				} catch {
 					return false;
 				}
+			},
+			tongQuan: () => goi("/api/taobai/tong-quan"),
+			tep: async (p) => {
+				const x = await fetch("/api/taobai/tep?path=" + E(p));
+				return x.ok ? (await x.json()).text : null;
 			}
 		};
 	} catch {
@@ -24558,6 +24726,26 @@ async function moNguon(force) {
 	return cache;
 }
 var nguonHienTai = () => cache;
+/** Dữ liệu trên máy chủ vừa đổi (màn Thiết lập nạp file): lần sau đọc lại. Nguồn thư mục / bộ mẫu giữ nguyên. */
+function datLaiNguon() {
+	if (!cache || cache.mode === "may-chu") cache = null;
+}
+/** Gọi API máy chủ (JSON); lỗi → Error với câu báo của máy chủ. */
+async function goi(path, o = {}) {
+	let r;
+	try {
+		r = await fetch(path, {
+			method: o.method || (o.json !== void 0 ? "POST" : "GET"),
+			headers: o.json !== void 0 ? { "content-type": "application/json" } : {},
+			body: o.json !== void 0 ? JSON.stringify(o.json) : void 0
+		});
+	} catch {
+		throw new Error("không nối được máy chủ (máy chủ đã tắt?)");
+	}
+	const j = await r.json().catch(() => ({}));
+	if (!r.ok) throw new Error(j.loi || `máy chủ báo lỗi ${r.status}`);
+	return j;
+}
 // src/taobai/plan.ts
 var plan_exports = /* @__PURE__ */ __exportAll({
 	add: () => add,
@@ -24792,6 +24980,1588 @@ function fakeSheetMd(p, tt, tf, title = "Layout sơ bộ", age = "7-9") {
 		...flat$1(p).map((x, k) => fakeTaskMd(x.q, x.n, titleOf(x.q, tf, `Bước ${steps[x.si].so} · ${steps[x.si].ten}`), steps[x.si].chiTiet, k + 1) + "\n")
 	].join("\n");
 }
+// src/taobai/ThietLap.tsx
+var tb$3 = () => useUi.getState().tb;
+var setTb$3 = (p) => publish({ tb: Object.assign({}, tb$3(), p) });
+var openThietLap = (tab = "gt") => setTb$3({
+	tl: tab,
+	kho: false
+});
+/** Dữ liệu đổi: màn Ra đề (nếu đang mở) đọc lại. */
+var doiDuLieu = () => {
+	datLaiNguon();
+	setTb$3({ rev: tb$3().rev + 1 });
+};
+var TAB = [
+	["gt", "Giáo trình"],
+	["dang", "Dạng phiếu"],
+	["ai", "AI"]
+];
+/** Đọc một file người dùng chọn thành chữ (chỉ .md / .txt, ≤ 512 KB). */
+async function docFile(f) {
+	if (!/\.(md|txt|markdown)$/i.test(f.name)) throw new Error(`“${f.name}”: chỉ nhận file chữ .md hoặc .txt`);
+	if (f.size > 524288) throw new Error(`“${f.name}” quá lớn (tối đa 512 KB)`);
+	return f.text();
+}
+/** Nút chọn file ẩn: bấm nút → hộp chọn file → cb(file). */
+function Nap({ label, onFile, id, dir, cls = "btn sm", title, disabled }) {
+	const r = (0, import_react.useRef)(null);
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+		className: cls,
+		id,
+		title,
+		disabled,
+		onClick: () => r.current?.click(),
+		children: label
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+		type: "file",
+		ref: r,
+		hidden: true,
+		accept: ".md,.txt,.markdown",
+		multiple: !!dir,
+		...dir ? { webkitdirectory: "" } : {},
+		"data-nap": id || "",
+		onChange: (e) => {
+			const f = e.target.files;
+			if (f && f.length) onFile(f);
+			e.target.value = "";
+		}
+	})] });
+}
+var Ver = ({ t }) => t.ver == null ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+	className: "tag tlno",
+	children: "chưa có"
+}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+	className: "tag ok",
+	children: t.ver === "?" ? "có (chưa ghi phiên bản)" : "v" + t.ver
+});
+function ThietLap() {
+	const tab = useUi((s) => s.tb.tl);
+	return tab ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Screen$1, { tab }) : null;
+}
+function Screen$1({ tab }) {
+	const [src, setSrc] = (0, import_react.useState)(null), [tq, setTq] = (0, import_react.useState)(null), [err, setErr] = (0, import_react.useState)("");
+	const [xem, setXem] = (0, import_react.useState)(null), [busy, setBusy] = (0, import_react.useState)(false);
+	const may = src?.mode === "may-chu", quyen = may && tq?.quyen !== false;
+	const tai = async (n) => {
+		try {
+			const s = n || await moNguon();
+			setSrc(s);
+			setTq(await s.tongQuan());
+			setErr("");
+		} catch (e) {
+			setErr(e.message);
+		}
+	};
+	(0, import_react.useEffect)(() => {
+		tai();
+	}, []);
+	/** Gọi máy chủ để sửa dữ liệu, cập nhật cây; lỗi thì báo. */
+	const sua = async (f, ok) => {
+		setBusy(true);
+		try {
+			await f();
+			doiDuLieu();
+			await tai();
+			toast(ok);
+		} catch (e) {
+			toast(e.message);
+			setErr(e.message);
+		} finally {
+			setBusy(false);
+		}
+	};
+	const napTep = async (t, ten, fl) => {
+		let text;
+		try {
+			text = await docFile(fl[0]);
+		} catch (e) {
+			toast(e.message);
+			return;
+		}
+		if (t.ver != null && !await askConfirm(`Thay ${ten}?`, `Bản đang dùng (${t.ver === "?" ? "chưa ghi phiên bản" : "v" + t.ver}) được giữ lại trên máy chủ (thư mục tao-bai/_cu). Phiếu đã tạo vẫn ghi phiên bản cũ đã dùng.`, "Thay file")) return;
+		await sua(() => goi("/api/taobai/tep", {
+			method: "PUT",
+			json: {
+				path: t.path,
+				text
+			}
+		}), `Đã nạp ${ten}`);
+	};
+	const boTep = async (t, ten) => {
+		if (!await askConfirm(`Bỏ ${ten}?`, "File được chuyển vào thư mục tao-bai/_cu trên máy chủ (không mất hẳn). Lesson / chuyên đề dùng file này sẽ không tạo bài được cho tới khi nạp lại.", "Bỏ file")) return;
+		await sua(() => goi("/api/taobai/tep?path=" + encodeURIComponent(t.path), { method: "DELETE" }), `Đã bỏ ${ten}`);
+	};
+	const xemTep = async (path) => {
+		const t = src ? await src.tep(path) : null;
+		if (t == null) toast("Chưa có file này");
+		else setXem({
+			path,
+			text: t
+		});
+	};
+	const napGiaoTrinh = async (fl) => {
+		let text;
+		try {
+			text = await docFile(fl[0]);
+		} catch (e) {
+			toast(e.message);
+			return;
+		}
+		const slug = fl[0].name.replace(/\.(md|txt|markdown)$/i, "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "giao-trinh";
+		const r = parseGiaoTrinh(text, fl[0].name, slug), gid = r.gt.id;
+		if (r.loi.length && !r.gt.units.length) {
+			toast("File không phải giao-trinh.md: " + r.loi.map((n) => n.msg).join("; "));
+			return;
+		}
+		if (!/^[a-z0-9][a-z0-9-]{0,60}$/.test(gid)) {
+			toast(`Mã giáo trình “${gid}” không hợp lệ: thêm dòng “Mã: ten-khong-dau” vào file`);
+			return;
+		}
+		const co = tq?.giaoTrinh.find((g) => g.id === gid);
+		if (co && !await askConfirm(`Thay giao-trinh.md của “${co.ten}”?`, "Danh sách unit / lesson / chuyên đề sẽ theo file mới. Bản cũ được giữ lại trên máy chủ.", "Thay file")) return;
+		await sua(() => goi("/api/taobai/tep", {
+			method: "PUT",
+			json: {
+				path: `${gid}/giao-trinh.md`,
+				text
+			}
+		}), co ? `Đã thay giao-trinh.md của ${r.gt.ten}` : `Đã thêm giáo trình ${r.gt.ten}`);
+	};
+	const napThuMuc = async (fl) => {
+		const files = {};
+		for (const f of Array.from(fl)) {
+			const p = (f.webkitRelativePath || f.name).replace(/\\/g, "/");
+			if (/\.md$/i.test(p) && f.size < 524288) files[p] = await f.text();
+		}
+		const paths = Object.keys(files), lv = paths.some((p) => /^[^/]+\/giao-trinh\.md$/i.test(p)) ? 0 : 1, out = {};
+		paths.forEach((p) => {
+			const q = p.split("/").slice(lv).join("/");
+			if (TEP_HOP_LE.test(q)) out[q] = files[p];
+		});
+		const n = Object.keys(out).length;
+		if (!n) {
+			toast("Thư mục không có file nào đúng chỗ (giao-trinh.md, chuyen-de/…/trinh-tu.md, tf.md, kien-thuc/uN-lM.md)");
+			return;
+		}
+		if (!await askConfirm(`Nạp ${n} file?`, `${Object.keys(out).slice(0, 4).join(", ")}${n > 4 ? "…" : ""}. File trùng chỗ sẽ được thay (bản cũ giữ lại trên máy chủ).`, "Nạp")) return;
+		await sua(async () => {
+			const r = await goi("/api/taobai/tep-nhieu", {
+				method: "PUT",
+				json: { files: out }
+			});
+			if (r.bo?.length) setTimeout(() => toast(`Bỏ qua ${r.bo.length} file: ${r.bo[0].why}`), 1800);
+			return r;
+		}, `Đã nạp ${n} file`);
+	};
+	const chonThuMuc = async (fl) => {
+		const n = await nguonThuMuc(fl);
+		await moNguon(n);
+		doiDuLieu();
+		tai(n);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "rade tl",
+		id: "tlScr",
+		role: "dialog",
+		"aria-label": "Thiết lập",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "radeh",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "WS Editor" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", { children: "Thiết lập" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "tltabs",
+						role: "tablist",
+						children: TAB.map(([k, n]) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							role: "tab",
+							"aria-selected": tab === k,
+							className: "tbstep" + (tab === k ? " on" : ""),
+							"data-tab": k,
+							onClick: () => setTb$3({ tl: k }),
+							children: n
+						}, k))
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "sp" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "tbmut",
+						id: "tlSrc",
+						children: src ? src.ten : "Đang đọc dữ liệu…"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "btn sm",
+						id: "tlKho",
+						onClick: () => setTb$3({
+							tl: null,
+							kho: true
+						}),
+						children: "Kho phiếu"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "btn sm ghost",
+						id: "tlClose",
+						"aria-label": "Đóng Thiết lập",
+						onClick: () => setTb$3({ tl: null }),
+						children: "✕"
+					})
+				]
+			}),
+			src && !may ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "tbwarn tlnote",
+				id: "tlFileMode",
+				children: [
+					"Đang mở thẳng file HTML (không qua máy chủ): màn này ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "chỉ xem" }),
+					" dữ liệu đang dùng. Nạp file, lưu khóa AI cần mở app qua máy chủ (",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", { children: "chay-lop.bat" }),
+					" → ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", { children: "/editor" }),
+					"). Không có máy chủ thì Sinh bài dùng ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "chế độ AI ngoài" }),
+					" (chép đoạn nhắc sang AI khác, dán kết quả về).",
+					tab !== "ai" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "tbrow",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Nap, {
+							label: "Chọn thư mục dữ liệu…",
+							dir: true,
+							onFile: chonThuMuc,
+							id: "tlChonDir"
+						}), src.mode === "thu-muc" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							className: "btn sm ghost",
+							onClick: async () => {
+								const n = nguonMau();
+								await moNguon(n);
+								doiDuLieu();
+								tai(n);
+							},
+							children: "Dùng bộ mẫu"
+						}) : null]
+					}) : null
+				]
+			}) : null,
+			may && tq && tq.quyen === false ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "tbwarn tlnote",
+				id: "tlNoPerm",
+				children: [
+					"Máy này chỉ xem được. Sửa dữ liệu / khóa AI: dùng chính máy đang chạy máy chủ, hoặc đăng nhập giáo viên ở ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", { children: "/gv" }),
+					" trước."
+				]
+			}) : null,
+			err ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "tbwarn",
+				id: "tlErr",
+				children: err
+			}) : null,
+			tq && (tq.loi.length || tq.canhBao.length) && tab !== "ai" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("details", {
+				className: "rdnotes",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("summary", { children: [
+					tq.loi.length,
+					" lỗi · ",
+					tq.canhBao.length,
+					" cảnh báo khi đọc dữ liệu"
+				] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", { children: [...tq.loi, ...tq.canhBao].map((n, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: [
+					n.file,
+					n.line ? ":" + n.line : "",
+					" · ",
+					n.msg
+				] }, i)) })]
+			}) : null,
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "tlbody" + (busy ? " busy" : ""),
+				children: [
+					tab === "gt" && tq ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabGt, {
+						tq,
+						quyen: !!quyen,
+						may,
+						xem: xemTep,
+						nap: napTep,
+						bo: boTep,
+						napGt: napGiaoTrinh,
+						napDir: napThuMuc
+					}) : null,
+					tab === "dang" && tq ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabDang, {
+						tq,
+						quyen: !!quyen,
+						may,
+						xem: xemTep,
+						nap: napTep,
+						bo: boTep,
+						sua,
+						setXem
+					}) : null,
+					tab === "ai" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TabAi, { may }) : null
+				]
+			}),
+			xem ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "tbmodal",
+				role: "dialog",
+				"aria-modal": "true",
+				"aria-label": xem.path,
+				id: "tlXem",
+				onClick: (e) => {
+					if (e.target === e.currentTarget) setXem(null);
+				},
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "tbmbox tlxem",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: xem.path }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("pre", { children: xem.text }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "tbrow end",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								className: "btn",
+								id: "tlXemClose",
+								onClick: () => setXem(null),
+								children: "Đóng"
+							})
+						})
+					]
+				})
+			}) : null
+		]
+	});
+}
+/** Một dòng file: tên · phiên bản · Xem / Nạp / Bỏ. */
+function TepRow({ t, ten, nhan, p, extra }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "tlrow",
+		"data-path": t.path,
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "tlname",
+				children: nhan
+			}),
+			extra,
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Ver, { t }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "sp" }),
+			t.ver != null ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				className: "btn sm ghost",
+				"data-act": "xem",
+				onClick: () => p.xem(t.path),
+				children: "Xem"
+			}) : null,
+			p.may ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Nap, {
+				label: t.ver == null ? "Nạp…" : "Thay…",
+				onFile: (f) => p.nap(t, ten, f),
+				disabled: !p.quyen,
+				cls: "btn sm",
+				id: void 0,
+				title: `Nạp file ${ten} (.md / .txt)`
+			}), t.ver != null ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				className: "btn sm ghost",
+				"data-act": "bo",
+				disabled: !p.quyen,
+				title: "Bỏ file (giữ bản cũ trên máy chủ)",
+				onClick: () => p.bo(t, ten),
+				children: "Bỏ"
+			}) : null] }) : null
+		]
+	});
+}
+function TabGt(p) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		className: "tlsec",
+		id: "tlGt",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "tlh",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: "Giáo trình" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "tbmut",
+					children: [
+						"Mỗi lesson một file ",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Kiến thức" }),
+						". Cây giáo trình → unit → lesson lấy từ ",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", { children: "giao-trinh.md" }),
+						" (định dạng tạm: ",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", { children: "docs/TAO_BAI/DINH_DANG_TAM.md" }),
+						")."
+					]
+				})] }), p.may ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+					className: "tbrow",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Nap, {
+						label: "＋ Nạp giao-trinh.md",
+						onFile: p.napGt,
+						id: "tlNapGt",
+						disabled: !p.quyen,
+						title: "Giáo trình mới, hoặc thay danh sách unit / lesson của giáo trình có sẵn"
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Nap, {
+						label: "Nạp cả thư mục…",
+						dir: true,
+						onFile: p.napDir,
+						id: "tlNapDir",
+						disabled: !p.quyen,
+						title: "Một thư mục giáo trình (có giao-trinh.md, chuyen-de/, kien-thuc/)"
+					})]
+				}) : null]
+			}),
+			!p.tq.giaoTrinh.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "tbmut",
+				children: "Chưa có giáo trình nào."
+			}) : null,
+			p.tq.giaoTrinh.map((g) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "tlgt",
+				"data-gt": g.id,
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "tlgth",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: g.ten }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "tbmut",
+								children: [
+									"mã ",
+									g.id,
+									g.tuoi ? ` · tuổi ${g.tuoi}` : "",
+									" · ",
+									g.chuyenDe.length,
+									" chuyên đề"
+								]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "sp" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								className: "btn sm ghost",
+								onClick: () => p.xem(g.file),
+								children: "Xem giao-trinh.md"
+							})
+						]
+					}),
+					g.units.map((u) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "tlunit",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h5", { children: u.ten }), u.lessons.map((l) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TepRow, {
+							p,
+							t: l.kienThuc,
+							ten: `Kiến thức ${l.ten}`,
+							nhan: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									"data-ls": l.id,
+									children: l.ten
+								}),
+								" ",
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "tag",
+									children: g.chuyenDe.find((c) => c.id === l.chuyenDe)?.ten || l.chuyenDe || "?"
+								})
+							] }),
+							extra: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [l.loi ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "tag tlbad",
+								title: l.loiMsg.join("\n"),
+								"data-loi": l.loi,
+								children: [l.loi, " lỗi: chưa tạo bài được"]
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "tag tlready",
+								children: "tạo bài được"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "tbmut",
+								children: "Kiến thức"
+							})] })
+						}, l.id))]
+					}, u.id)),
+					g.units.some((u) => u.lessons.some((l) => l.loi)) ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("details", {
+						className: "rdnotes",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("summary", { children: "Vì sao chưa tạo bài được" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", { children: g.units.flatMap((u) => u.lessons.filter((l) => l.loi).map((l) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: l.ten }),
+							": ",
+							l.loiMsg.join(" · ")
+						] }, l.id))) })]
+					}) : null
+				]
+			}, g.id))
+		]
+	});
+}
+function TabDang(p) {
+	const napChung = async (so, ten, fl) => {
+		let text;
+		try {
+			text = await docFile(fl[0]);
+		} catch (e) {
+			toast(e.message);
+			return;
+		}
+		await p.sua(() => goi(`/api/taobai/chung/${so}`, {
+			method: "PUT",
+			json: { text }
+		}), `Đã nạp file chung ${so} · ${ten}`);
+	};
+	const veMacDinh = async (so) => {
+		if (await askConfirm(`Dùng lại file chung ${so} mặc định?`, "Bản riêng đã nạp được giữ lại trên máy chủ (tao-bai/_cu).", "Về mặc định")) await p.sua(() => goi(`/api/taobai/chung/${so}`, { method: "DELETE" }), `File chung ${so}: dùng bản mặc định`);
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		className: "tlsec",
+		id: "tlDang",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "tlh",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: "Dạng phiếu" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "tbmut",
+					children: [
+						"Mỗi chuyên đề của một giáo trình có ",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Trình tự" }),
+						" (các bước của phiếu) và ",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "TF" }),
+						" (dạng bài, nối với dạng câu hỏi Q của app); mọi lesson cùng chuyên đề dùng chung hai file này."
+					]
+				})] })
+			}),
+			p.tq.giaoTrinh.map((g) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "tlgt",
+				"data-gt": g.id,
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "tlgth",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: g.ten }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "tbmut",
+						children: [g.chuyenDe.length, " chuyên đề"]
+					})]
+				}), g.chuyenDe.map((c) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "tlcd",
+					"data-cd": c.id,
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h5", { children: [
+							c.ten,
+							" ",
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "tbmut",
+								children: [
+									"· ",
+									c.soLesson,
+									" lesson"
+								]
+							})
+						] }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TepRow, {
+							p,
+							t: c.trinhTu,
+							ten: `Trình tự ${c.ten}`,
+							nhan: "Trình tự"
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TepRow, {
+							p,
+							t: c.tf,
+							ten: `TF ${c.ten}`,
+							nhan: "TF"
+						})
+					]
+				}, c.id))]
+			}, g.id)),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "tlgt",
+				id: "tlChung",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "tlgth",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "File dùng chung" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "tbmut",
+						children: "mọi giáo trình; gửi AI khi sinh bài (1, 2, 3, 5) và chấm (4)"
+					})]
+				}), p.tq.chung.map((c) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "tlrow",
+					"data-chung": c.so,
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+							className: "tlname",
+							children: [
+								c.so,
+								" · ",
+								c.ten
+							]
+						}),
+						c.raw == null ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "tag tlno",
+							children: "chưa có"
+						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "tag ok",
+							children: c.ver
+						}),
+						c.raw != null ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "tbmut",
+							children: c.rieng ? "bản đã nạp" : "bản mặc định"
+						}) : null,
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "sp" }),
+						c.raw != null ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							className: "btn sm ghost",
+							"data-act": "xem",
+							onClick: () => p.setXem({
+								path: `File chung ${c.so} · ${c.ten}`,
+								text: c.raw
+							}),
+							children: "Xem"
+						}) : null,
+						p.may ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Nap, {
+							label: c.raw == null ? "Nạp…" : "Thay…",
+							disabled: !p.quyen,
+							onFile: (f) => napChung(c.so, c.ten, f)
+						}), c.rieng ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							className: "btn sm ghost",
+							disabled: !p.quyen,
+							onClick: () => veMacDinh(c.so),
+							children: "Về mặc định"
+						}) : null] }) : null
+					]
+				}, c.so))]
+			})
+		]
+	});
+}
+var tenModel = (v, id) => (v?.modelClaude || []).find((m) => m.id === id)?.ten || id;
+function TabAi({ may }) {
+	const [v, setV] = (0, import_react.useState)(null), [quyen, setQuyen] = (0, import_react.useState)(true), [err, setErr] = (0, import_react.useState)("");
+	const [f, setF] = (0, import_react.useState)({
+		nhaCC: "claude",
+		ck: "",
+		cm: "",
+		khac: "",
+		ou: "",
+		ok: "",
+		om: ""
+	}), [thu, setThu] = (0, import_react.useState)("");
+	const nap = (x) => {
+		setV(x.ai);
+		setQuyen(x.quyen);
+		const std = x.ai.modelClaude.some((m) => m.id === x.ai.claude.model);
+		setF({
+			nhaCC: x.ai.nhaCC,
+			ck: "",
+			cm: std ? x.ai.claude.model : "_khac",
+			khac: std ? "" : x.ai.claude.model,
+			ou: x.ai.openai.url,
+			ok: "",
+			om: x.ai.openai.model
+		});
+	};
+	(0, import_react.useEffect)(() => {
+		if (may) goi("/api/taobai/thiet-lap").then(nap).catch((e) => setErr(e.message));
+	}, [may]);
+	if (!may) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		className: "tlsec",
+		id: "tlAi",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: "AI" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+			className: "tbwarn",
+			id: "tlAiOff",
+			children: [
+				"Ô khóa API chỉ dùng khi mở app qua máy chủ (khóa lưu ở máy chủ, không nằm trong trình duyệt). Mở thẳng file HTML thì Sinh bài dùng ",
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "chế độ AI ngoài" }),
+				": ở ngăn Duyệt bài, bấm ",
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Chép đoạn nhắc" }),
+				", dán sang AI bất kỳ, rồi dán kết quả về ô ",
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Dán kết quả" }),
+				"."
+			]
+		})]
+	});
+	if (!v) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
+		className: "tlsec",
+		id: "tlAi",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "tbmut",
+			children: err || "Đang đọc…"
+		})
+	});
+	const luu = async (body, msg) => {
+		try {
+			nap(await goi("/api/taobai/thiet-lap/ai", {
+				method: "PUT",
+				json: body
+			}));
+			setErr("");
+			setThu("");
+			toast(msg);
+		} catch (e) {
+			setErr(e.message);
+		}
+	};
+	const save = () => luu({
+		nhaCC: f.nhaCC,
+		claude: {
+			key: f.ck,
+			model: f.cm === "_khac" ? f.khac : f.cm
+		},
+		openai: {
+			url: f.ou,
+			key: f.ok,
+			model: f.om
+		}
+	}, "Đã lưu thiết lập AI");
+	const test = async () => {
+		setThu("Đang gọi thử…");
+		try {
+			const r = await goi("/api/taobai/thiet-lap/ai/thu", {
+				method: "POST",
+				json: {}
+			});
+			setThu(`✓ Nối được: ${r.model} trả lời “${r.text}” sau ${(r.ms / 1e3).toFixed(1)} giây`);
+		} catch (e) {
+			setThu("✕ " + e.message);
+		}
+	};
+	const dirty = f.ck || f.ok || f.nhaCC !== v.nhaCC || (f.cm === "_khac" ? f.khac : f.cm) !== v.claude.model || f.ou !== v.openai.url || f.om !== v.openai.model;
+	const S = (k) => (e) => setF(Object.assign({}, f, { [k]: e.target.value }));
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+		className: "tlsec",
+		id: "tlAi",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "tlh",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: "AI dùng để sinh bài" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "tbmut",
+					children: [
+						"Khóa API chỉ lưu trên máy chủ (thư mục dữ liệu, file ",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", { children: "tao-bai/thiet-lap.json" }),
+						", giữ kín); trình duyệt chỉ thấy 4 ký tự cuối."
+					]
+				})] })
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: v.san ? "tlstate ok" : "tbwarn",
+				id: "tlAiState",
+				children: v.san && v.dangDung ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+					"Đang dùng: ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: v.dangDung.nhaCC === "claude" ? tenModel(v, v.dangDung.model) : `${v.dangDung.model} (tương thích OpenAI)` }),
+					". Sinh bài gọi AI qua máy chủ."
+				] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+					"Chưa có khóa cho nhà cung cấp đang chọn: Sinh bài dùng ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "chế độ AI ngoài" }),
+					" (chép đoạn nhắc / dán kết quả)."
+				] })
+			}),
+			!quyen ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "tbwarn",
+				children: "Máy này chỉ xem được (xem ghi chú ở trên)."
+			}) : null,
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("fieldset", {
+				className: "tlfs",
+				disabled: !quyen,
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+						className: "tlradio",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+								type: "radio",
+								name: "tlncc",
+								value: "claude",
+								checked: f.nhaCC === "claude",
+								onChange: S("nhaCC")
+							}),
+							" ",
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Claude" }),
+							" (Anthropic)"
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "tlgrid" + (f.nhaCC === "claude" ? "" : " off"),
+						id: "tlClaude",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+								htmlFor: "tlCk",
+								children: "Khóa API"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "tbrow",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									id: "tlCk",
+									type: "password",
+									autoComplete: "off",
+									value: f.ck,
+									onChange: S("ck"),
+									placeholder: v.claude.coKhoa ? `đã có khóa ${v.claude.duoi}${v.claude.tuBienMoiTruong ? " (biến môi trường)" : ""} · gõ để thay` : "sk-ant-…"
+								}), v.claude.coKhoa && !v.claude.tuBienMoiTruong ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									className: "btn sm ghost",
+									id: "tlCkDel",
+									onClick: async () => {
+										if (await askConfirm("Xóa khóa Claude?", "Sinh bài sẽ chuyển sang chế độ AI ngoài cho tới khi nhập khóa mới.", "Xóa khóa")) luu({ claude: { key: null } }, "Đã xóa khóa Claude");
+									},
+									children: "Xóa khóa"
+								}) : null]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+								htmlFor: "tlCm",
+								children: "Model"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "tbrow",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+									id: "tlCm",
+									value: f.cm,
+									onChange: S("cm"),
+									children: [v.modelClaude.map((m) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+										value: m.id,
+										children: m.ten
+									}, m.id)), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+										value: "_khac",
+										children: "Model khác…"
+									})]
+								}), f.cm === "_khac" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									id: "tlCmKhac",
+									value: f.khac,
+									onChange: S("khac"),
+									placeholder: "mã model, vd claude-opus-5-5"
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "tbmut",
+									children: f.cm
+								})]
+							})
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+						className: "tlradio",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+								type: "radio",
+								name: "tlncc",
+								value: "openai",
+								checked: f.nhaCC === "openai",
+								onChange: S("nhaCC")
+							}),
+							" ",
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Tương thích OpenAI" }),
+							" ",
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "tbmut",
+								children: [
+									"(OpenAI, Gemini qua cổng OpenAI, OpenRouter, máy chủ AI riêng… có API ",
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", { children: "/chat/completions" }),
+									")"
+								]
+							})
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "tlgrid" + (f.nhaCC === "openai" ? "" : " off"),
+						id: "tlOpenai",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+								htmlFor: "tlOu",
+								children: "Địa chỉ API"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+								id: "tlOu",
+								value: f.ou,
+								onChange: S("ou"),
+								placeholder: "https://api.openai.com/v1"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+								htmlFor: "tlOk",
+								children: "Khóa API"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+								className: "tbrow",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									id: "tlOk",
+									type: "password",
+									autoComplete: "off",
+									value: f.ok,
+									onChange: S("ok"),
+									placeholder: v.openai.coKhoa ? `đã có khóa ${v.openai.duoi} · gõ để thay` : "khóa của nhà cung cấp"
+								}), v.openai.coKhoa ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									className: "btn sm ghost",
+									onClick: () => luu({ openai: { key: null } }, "Đã xóa khóa"),
+									children: "Xóa khóa"
+								}) : null]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+								htmlFor: "tlOm",
+								children: "Model"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+								id: "tlOm",
+								value: f.om,
+								onChange: S("om"),
+								placeholder: "vd gpt-5.1-mini"
+							})
+						]
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "tbrow",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								className: "btn pri",
+								id: "tlAiSave",
+								disabled: !dirty,
+								onClick: save,
+								children: "Lưu"
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								className: "btn",
+								id: "tlAiTest",
+								disabled: !!dirty || !v.san,
+								title: dirty ? "Lưu trước rồi thử" : !v.san ? "Chưa có khóa" : "Gửi một câu ngắn để xem khóa / model dùng được không",
+								onClick: test,
+								children: "Thử kết nối"
+							}),
+							thu ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								id: "tlAiThu",
+								className: thu.startsWith("✓") ? "tlok" : thu.startsWith("✕") ? "tlerr" : "tbmut",
+								children: thu
+							}) : null
+						]
+					})
+				]
+			}),
+			err ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "tbwarn",
+				id: "tlAiErr",
+				children: err
+			}) : null,
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				className: "tbmut",
+				children: [
+					"Model dùng cho ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Sinh bài" }),
+					" (và sau này AI chấm). Chọn Sonnet 5.5 hay Haiku 5.5 làm mặc định sẽ chốt sau khi thử thật (kế hoạch T6). Mỗi lượt gọi AI ghi vào nhật ký máy chủ (",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", { children: "tao-bai/nhat-ky.jsonl" }),
+					": model, số token, thời gian)."
+				]
+			})
+		]
+	});
+}
+// src/taobai/KhoPhieu.tsx
+var tb$2 = () => useUi.getState().tb;
+var setTb$2 = (p) => publish({ tb: Object.assign({}, tb$2(), p) });
+var openKho = () => setTb$2({
+	kho: true,
+	tl: null
+});
+var fmt$1 = (iso) => {
+	if (!iso) return "?";
+	const d = new Date(iso), p = (n) => String(n).padStart(2, "0");
+	return `${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`;
+};
+function KhoPhieu() {
+	return useUi((s) => s.tb.kho) ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Screen, {}) : null;
+}
+function Screen() {
+	const [may, setMay] = (0, import_react.useState)(null), [ds, setDs] = (0, import_react.useState)([]), [err, setErr] = (0, import_react.useState)(""), [q, setQ] = (0, import_react.useState)("");
+	const tai = () => goi("/api/taobai/kho-phieu").then((r) => {
+		setDs(r.phieu);
+		setErr("");
+	}).catch((e) => setErr(e.message));
+	(0, import_react.useEffect)(() => {
+		moNguon().then((n) => {
+			const m = n.mode === "may-chu";
+			setMay(m);
+			if (m) tai();
+		});
+	}, []);
+	const loc = (0, import_react.useMemo)(() => {
+		const k = q.trim().toLowerCase();
+		return k ? ds.filter((p) => [
+			p.title,
+			p.names.course,
+			p.names.unit,
+			p.names.lesson,
+			p.names.topic
+		].join(" ").toLowerCase().includes(k)) : ds;
+	}, [ds, q]);
+	const mo = async (p) => {
+		const w = await goi(`/api/taobai/phieu/${encodeURIComponent(p.gt)}/${encodeURIComponent(p.ls)}/${encodeURIComponent(p.id)}`).catch((e) => {
+			toast(e.message);
+			return null;
+		});
+		if (!w) return;
+		if (!await askConfirm("Mở phiếu từ kho?", "Phiếu đang mở trong editor sẽ được thay.", "Mở phiếu")) return;
+		if (L.loadSheet(w, `Đã mở “${p.title}”`)) setTb$2({
+			kho: false,
+			rade: false
+		});
+	};
+	const bo = async (p) => {
+		if (!await askConfirm("Bỏ phiếu khỏi kho?", `“${p.title}” (${fmt$1(p.at)}) được chuyển vào thư mục tao-bai/_cu trên máy chủ (không mất hẳn).`, "Bỏ phiếu")) return;
+		try {
+			await goi(`/api/taobai/phieu/${encodeURIComponent(p.gt)}/${encodeURIComponent(p.ls)}/${encodeURIComponent(p.id)}`, { method: "DELETE" });
+			toast("Đã bỏ phiếu khỏi kho");
+			tai();
+		} catch (e) {
+			toast(e.message);
+		}
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "rade tl",
+		id: "khoScr",
+		role: "dialog",
+		"aria-label": "Kho phiếu",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "radeh",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "WS Editor" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", { children: "Kho phiếu" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "sp" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "btn sm",
+						id: "khoTl",
+						onClick: () => setTb$2({
+							kho: false,
+							tl: "gt"
+						}),
+						children: "⚙ Thiết lập"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "btn sm ghost",
+						id: "khoClose",
+						"aria-label": "Đóng Kho phiếu",
+						onClick: () => setTb$2({ kho: false }),
+						children: "✕"
+					})
+				]
+			}),
+			may === false ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				className: "tbwarn",
+				id: "khoOff",
+				children: [
+					"Kho phiếu nằm trên máy chủ: mở app qua máy chủ (",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", { children: "chay-lop.bat" }),
+					" → ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("code", { children: "/editor" }),
+					"). Mở thẳng file HTML thì lưu phiếu bằng ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Xem JSON" }),
+					" / ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Xuất MD" }),
+					" như thường."
+				]
+			}) : null,
+			err ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "tbwarn",
+				children: err
+			}) : null,
+			may ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+				className: "tlsec",
+				id: "khoList",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "tlh",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", { children: ["Phiếu đã tạo ", /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "tbmut",
+						children: [
+							"(",
+							ds.length,
+							")"
+						]
+					})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+						className: "tbmut",
+						children: [
+							"Phiếu tạo bằng nút ",
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Tạo bài" }),
+							", lưu khi sinh xong, khi Duyệt phiếu và khi Xuất bản. Mở lại để sửa tiếp, duyệt tiếp."
+						]
+					})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+						className: "tlfind",
+						id: "khoFind",
+						placeholder: "Tìm theo tên, giáo trình, lesson…",
+						value: q,
+						onChange: (e) => setQ(e.target.value)
+					})]
+				}), !ds.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "tbmut",
+					id: "khoEmpty",
+					children: [
+						"Chưa có phiếu nào. Bấm ",
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Tạo bài" }),
+						" (cạnh + Phiếu) để tạo phiếu đầu tiên."
+					]
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("table", {
+					className: "tltab",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Lưu lúc" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Giáo trình › Unit › Lesson" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Tên phiếu" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", { children: "Bài" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {})
+					] }) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", { children: loc.map((p) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
+						"data-kho": p.id,
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+								className: "tbat",
+								children: fmt$1(p.at)
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", { children: [[
+								p.names.course || p.gt,
+								p.names.unit,
+								p.names.lesson || p.ls
+							].filter(Boolean).join(" › "), p.names.topic ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [" ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "tag",
+								children: p.names.topic
+							})] }) : null] }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", { children: p.title }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", { children: [
+								p.n,
+								" bài · ",
+								p.duyet,
+								" đã duyệt",
+								p.cho ? ` · ${p.cho} chờ sinh` : ""
+							] }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("td", {
+								className: "tbrow end",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									className: "btn sm pri",
+									"data-act": "mo",
+									onClick: () => mo(p),
+									children: "Mở"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									className: "btn sm ghost",
+									"data-act": "bo",
+									onClick: () => bo(p),
+									children: "Bỏ"
+								})]
+							})
+						]
+					}, p.gt + p.ls + p.id)) })]
+				})]
+			}) : null
+		]
+	});
+}
+var W$3 = () => ws;
+var find = (id) => (W$3()?.tasks || []).find((t) => t.id === id);
+var tick = () => {
+	const tb = useUi.getState().tb;
+	publish({ tb: Object.assign({}, tb, { sv: tb.sv + 1 }) });
+};
+var nghi = (ms) => new Promise((ok) => setTimeout(ok, ms));
+var TEN = {
+	"claude-sonnet-5-5": "Claude Sonnet 5.5",
+	"claude-haiku-5-5": "Claude Haiku 5.5"
+};
+var cd$1 = null;
+async function cheDo(force = false) {
+	if (!force && cd$1 && Date.now() - cd$1.at < 15e3) return cd$1.v;
+	const n = nguonHienTai() || await moNguon();
+	let v;
+	if (n.mode !== "may-chu") v = {
+		mode: "ngoai",
+		ten: "AI ngoài",
+		ly: "mở thẳng file HTML (không qua máy chủ)"
+	};
+	else try {
+		const r = await goi("/api/taobai/ai");
+		v = r.san && r.quyen ? {
+			mode: "may",
+			ten: TEN[r.dangDung.model] || r.dangDung.model
+		} : {
+			mode: "ngoai",
+			ten: "AI ngoài",
+			ly: !r.san ? "máy chủ chưa có khóa AI (Thiết lập › AI)" : "máy này không có quyền gọi AI qua máy chủ"
+		};
+	} catch (e) {
+		v = {
+			mode: "ngoai",
+			ten: "AI ngoài",
+			ly: e.message
+		};
+	}
+	const doi = !cd$1 || cd$1.v.mode !== v.mode || cd$1.v.ten !== v.ten;
+	cd$1 = {
+		at: Date.now(),
+		v
+	};
+	if (doi) tick();
+	return v;
+}
+var cheDoHienTai = () => cd$1?.v || null;
+/** Bỏ khối ``` bao ngoài và chữ đứng trước dòng "## Task:" đầu tiên (S13). */
+function lamSach(raw) {
+	let s = String(raw || "").replace(/\r/g, "").trim();
+	const f = /^```[\w-]*[ \t]*\n([\s\S]*?)\n```\s*$/.exec(s);
+	if (f) s = f[1].trim();
+	const i = s.search(/^##(?!#)\s*task\b/im);
+	if (i > 0) s = s.slice(i);
+	return s.replace(/\n```\s*$/, "").trim();
+}
+function docKetQua(raw, g) {
+	const md = lamSach(raw), m = tachMeta(md), loi = [], nhe = [];
+	const out = (task) => ({
+		task,
+		loi,
+		nhe,
+		goal: m.goal,
+		ctx: m.ctx,
+		md
+	});
+	if (!m.tasks) {
+		loi.push("không có dòng “## Task: …” (bài phải bắt đầu bằng dòng này)");
+		return out(null);
+	}
+	if (m.tasks > 1) loi.push(`có ${m.tasks} dòng “## Task:”: chỉ viết MỘT bài`);
+	m.notes.filter((x) => /^thiếu/.test(x)).forEach((x) => nhe.push(x));
+	const J = readMd(m.md);
+	if (J.err) {
+		loi.push("app không đọc được: " + J.err);
+		return out(null);
+	}
+	if (J.tasks.length > 1 && m.tasks === 1) loi.push("bài bị tách thành nhiều phần (dòng “### Phần:”, hoặc dòng chữ không số đứng trước câu 1): viết liền một bài");
+	const r0 = J.tasks[0];
+	if (!r0 || !r0.t) {
+		loi.push(r0 && r0.err || "app không đọc được bài");
+		return out(null);
+	}
+	const t = r0.t, q = qOf$3(t);
+	if (q !== g.q) loi.push(`sai dạng: cần ${g.q} ${Q_NAME[g.q]} (dòng “Dạng:” đúng dạng này), app đọc ra ${q} ${Q_NAME[q] || ""}`.trim());
+	else {
+		const n = countOf(t);
+		if (n !== g.n) loi.push(g.q === "Q12" ? `sai số dòng viết: cần “Dòng viết: ${g.n}”, bài có ${n}` : `sai số câu: cần đúng ${g.n} câu đánh số, bài có ${n} câu`);
+	}
+	(r0.notes || []).forEach((x) => (/^đáp án có \d+ dòng/.test(x) ? loi : nhe).push(x));
+	(J.mdNotes || []).forEach((x) => nhe.push(x));
+	if (q === g.q) {
+		const d = checkTask(Object.assign({}, t, { gen: {} })).find((c) => c.id === "dapan" && !c.ok);
+		if (d) loi.push(`thiếu đáp án: ${d.why} (ghi ở “## Đáp án” → “### Task 1”, hoặc đúng cách của dạng)`);
+	}
+	return out(t);
+}
+var textOf$1 = (x) => x.pair ? [x.pair.l?.text, x.pair.r?.text].filter(Boolean).join(" - ") : String(x.text || "").replace(/<[^>]+>|\*\*/g, "");
+/** MD một bài (gồm sửa tay), để gửi kèm khi sinh lại (S22). */
+function mdCua(t) {
+	const md = sheetToMd({
+		title: "x",
+		age: W$3()?.age || "7-9",
+		flow: "cont",
+		tasks: [JSON.parse(JSON.stringify(t))]
+	});
+	const i = md.search(/^## Task/m);
+	return (i >= 0 ? md.slice(i) : md).trim();
+}
+async function lessonOf(w) {
+	const s = w.gen?.src;
+	if (!s || !s.course || !s.lesson) throw new Error("phiếu không ghi giáo trình / lesson (không tạo từ màn Ra đề)");
+	const n = nguonHienTai() || await moNguon(), l = await n.lesson(s.course, s.lesson);
+	if (!l) throw new Error(`không còn lesson ${s.lesson} trong dữ liệu (${n.ten})`);
+	if (l.loi.length) throw new Error("dữ liệu lesson đang lỗi: " + l.loi[0].msg);
+	return l;
+}
+/** Đầu vào đoạn nhắc của bài id. Cấu trúc lấy từ các bài tạo bài hiện có (đúng thứ tự trên phiếu). */
+async function vaoNhac(id, o = {}) {
+	const w = W$3(), a = genTasks(w), k = a.findIndex((x) => x.id === id);
+	if (k < 0) throw new Error("bài này không thuộc phần tạo bài");
+	const les = await lessonOf(w), t = a[k];
+	const daCo = a.map((x, i) => ({
+		x,
+		i
+	})).filter(({ x }) => x.id !== id && x.gen.status !== "wait" && x.gen.md).map(({ x, i }) => ({
+		so: i + 1,
+		q: qOf$3(x),
+		title: x.title || "",
+		ctx: x.gen.ctx,
+		cau: its$2(x).filter((y) => !y.ex && !y.gt).slice(0, 3).map(textOf$1).filter(Boolean)
+	}));
+	return {
+		les,
+		cauTruc: a.map((x) => ({
+			step: x.gen.step,
+			role: x.gen.role || "",
+			q: x.gen.q || qOf$3(x),
+			n: x.gen.n || countOf(x)
+		})),
+		k,
+		ghiChu: w.gen.note || "",
+		daCo,
+		...o.sinhLai ? {
+			banHienTai: mdCua(t),
+			gopY: o.gopY || ""
+		} : {}
+	};
+}
+function ganKetQua(id, sig0, kq, meta) {
+	if (L.viewing) {
+		setTimeout(() => ganKetQua(id, sig0, kq, meta), 700);
+		return;
+	}
+	let sua = false;
+	const at = (/* @__PURE__ */ new Date()).toISOString();
+	L.commit((w2) => {
+		const i = w2.tasks.findIndex((x) => x.id === id);
+		if (i < 0) return;
+		const cur = w2.tasks[i], g = cur.gen;
+		if (!g) return;
+		const ghi = {
+			goal: kq.goal,
+			ctx: kq.ctx,
+			md: kq.md,
+			mdNotes: [...kq.loi.map((x) => "AI viết sai: " + x), ...kq.nhe],
+			tries: meta.tries,
+			model: meta.model,
+			nhac: meta.ver,
+			at
+		};
+		if (sigTask(cur) !== sig0) {
+			sua = true;
+			g.spare = {
+				md: kq.md,
+				at,
+				model: meta.model
+			};
+			if (g.status === "wait") g.status = "todo";
+			return;
+		}
+		if (!kq.task) {
+			Object.assign(g, ghi, { status: "todo" });
+			delete g.spare;
+			return;
+		}
+		const nt = JSON.parse(JSON.stringify(kq.task));
+		nt.id = id;
+		nt.gen = Object.assign({}, g, ghi, { status: "todo" });
+		delete nt.gen.spare;
+		delete nt.gen.loiGoi;
+		w2.tasks[i] = nt;
+	});
+	const t = find(id);
+	if (t && t.gen && !sua && kq.task) t.gen.genSig = sigTask(t);
+	if (sua) toast(`Bài ${genTasks(W$3()).findIndex((x) => x.id === id) + 1}: AI viết xong nhưng bài đang được sửa tay, chưa thay (ngăn Duyệt: “Dùng bản AI vừa viết”)`);
+}
+function ganLoi(id, msg) {
+	if (L.viewing) {
+		setTimeout(() => ganLoi(id, msg), 700);
+		return;
+	}
+	L.commit((w2) => {
+		const t = w2.tasks.find((x) => x.id === id);
+		if (t && t.gen) {
+			if (t.gen.status === "wait") t.gen.status = "todo";
+			t.gen.loiGoi = msg;
+			t.gen.mdNotes = [`Chưa sinh được: ${msg}. Bấm “Sinh lại”.`];
+		}
+	});
+}
+async function goiAi(n, meta) {
+	const body = {
+		system: n.system,
+		prompt: n.prompt,
+		loai: meta.lan && +meta.lan > 1 ? "sua" : "sinh",
+		meta: {
+			...meta,
+			nhac: n.ver
+		}
+	};
+	try {
+		return await goi("/api/taobai/ai", {
+			method: "POST",
+			json: body
+		});
+	} catch (e) {
+		if (!/429|529|quá tải/i.test(e.message)) throw e;
+		await nghi(globalThis.__tbCho ?? 4e3);
+		return goi("/api/taobai/ai", {
+			method: "POST",
+			json: body
+		});
+	}
+}
+function ghiNhatKy(e) {
+	const n = nguonHienTai();
+	if (!n || n.mode !== "may-chu") return;
+	const s = W$3()?.gen?.src || {};
+	goi("/api/taobai/nhat-ky", {
+		method: "POST",
+		json: {
+			gt: s.course,
+			ls: s.lesson,
+			phieu: W$3()?.id,
+			...e
+		}
+	}).catch(() => {});
+}
+var chay = /* @__PURE__ */ new Map();
+var hang = [];
+var seq = 0;
+var dem = {
+	ok: 0,
+	warn: 0,
+	loi: 0
+};
+var dangChay = (id) => chay.get(id) || null;
+var soDangChay = () => chay.size + hang.length;
+async function chayMot(id, o) {
+	const tok = ++seq, st = {
+		tok,
+		lan: 1
+	};
+	chay.set(id, st);
+	tick();
+	const huy = () => chay.get(id)?.tok !== tok;
+	let so = 0, base = null, nh = null;
+	try {
+		if (!find(id)?.gen) return;
+		if (find(id).gen.status !== "wait") L.commit((w2) => {
+			const x = w2.tasks.find((y) => y.id === id);
+			if (x && x.gen) {
+				x.gen.status = "wait";
+				delete x.gen.spare;
+			}
+		});
+		const sig0 = sigTask(find(id));
+		base = await vaoNhac(id, o);
+		so = base.k + 1;
+		nh = dungNhac(base);
+		let kq = null, model = "";
+		for (let lan = 1;; lan++) {
+			st.lan = lan;
+			tick();
+			const r = await goiAi(nh, {
+				bai: so,
+				q: nh.q,
+				n: nh.n,
+				lan
+			});
+			if (huy()) return;
+			model = r.model;
+			kq = docKetQua(r.text, {
+				q: nh.q,
+				n: nh.n
+			});
+			if (!kq.loi.length || lan > 2) break;
+			nh = dungNhac({
+				...base,
+				sua: {
+					md: kq.md,
+					loi: kq.loi
+				}
+			});
+		}
+		ganKetQua(id, sig0, kq, {
+			tries: st.lan,
+			model,
+			ver: nh.ver
+		});
+		if (kq.loi.length || kq.nhe.length) dem.warn++;
+		else dem.ok++;
+		ghiNhatKy({
+			ev: o.sinhLai ? "sinh-lai-xong" : "sinh-xong",
+			bai: so,
+			q: nh.q,
+			n: nh.n,
+			lan: st.lan,
+			loi: kq.loi,
+			nhe: kq.nhe.length,
+			model
+		});
+	} catch (e) {
+		if (huy()) return;
+		dem.loi++;
+		ganLoi(id, e.message);
+		ghiNhatKy({
+			ev: "sinh-loi",
+			bai: so,
+			loi: e.message
+		});
+	} finally {
+		if (!huy()) chay.delete(id);
+		tick();
+	}
+}
+function bom() {
+	while (chay.size < 3 && hang.length) {
+		const x = hang.shift();
+		chayMot(x.id, x.o).finally(() => {
+			bom();
+			if (!chay.size && !hang.length) xongHet();
+		});
+	}
+	tick();
+}
+function xongHet() {
+	const d = dem;
+	dem = {
+		ok: 0,
+		warn: 0,
+		loi: 0
+	};
+	if (!d.ok && !d.warn && !d.loi) return;
+	toast(`Sinh xong: ${d.ok} bài ○ chờ duyệt${d.warn ? ` · ${d.warn} bài ⚠ cần xem` : ""}${d.loi ? ` · ${d.loi} bài chưa sinh được` : ""}`);
+	luuMayChu();
+}
+/** Đưa các bài vào hàng chờ sinh (chế độ máy chủ). Không đưa thì: mọi bài ⏳ của phiếu. */
+function sinh(ids, o = {}) {
+	const w = W$3();
+	if (!w || !hasGen(w)) return 0;
+	const list = ids || genTasks(w).filter((t) => t.gen.status === "wait" && !chay.has(t.id)).map((t) => t.id);
+	list.forEach((id) => {
+		const k = hang.findIndex((x) => x.id === id);
+		if (k >= 0) hang.splice(k, 1);
+		if (o.sinhLai && chay.has(id)) chay.delete(id);
+		if (!chay.has(id)) hang.push({
+			id,
+			o
+		});
+	});
+	bom();
+	return list.length;
+}
+/** Dừng: bỏ hàng chờ, bỏ kết quả các lượt đang chạy (bài vẫn ⏳, bấm "Sinh" để chạy lại). */
+function dung() {
+	hang.length = 0;
+	chay.clear();
+	dem = {
+		ok: 0,
+		warn: 0,
+		loi: 0
+	};
+	tick();
+}
+/** Sau khi Sinh bài ở màn Ra đề (hoặc mở phiếu còn bài ⏳): máy chủ có khóa → chạy; không → AI ngoài, mở ngăn Duyệt ở bài đầu. */
+async function batDau(moNgan) {
+	const v = await cheDo(true), w = W$3();
+	if (!w || !hasGen(w)) return;
+	const cho = genTasks(w).filter((t) => t.gen.status === "wait");
+	if (!cho.length) return;
+	if (v.mode === "may") {
+		sinh();
+		toast(`${v.ten} đang viết ${cho.length} bài (song song 3 bài)…`);
+	} else {
+		moNgan(cho[0].id);
+		toast(`Chế độ AI ngoài (${v.ly}): ở ngăn Duyệt, chép đoạn nhắc từng bài sang AI rồi dán kết quả về`);
+	}
+}
+async function nhacNgoai(id, o = {}) {
+	return nhacChep(dungNhac({
+		...await vaoNhac(id, o),
+		...o.sua ? { sua: o.sua } : {}
+	}));
+}
+/** Nạp kết quả dán từ AI ngoài. Có lỗi phải sửa và chưa "vẫn dùng" → không ghép, trả lỗi để giáo viên gửi lại. */
+function napNgoai(id, raw, vanDung = false) {
+	const t = find(id);
+	if (!t || !t.gen) return null;
+	const kq = docKetQua(raw, {
+		q: t.gen.q || qOf$3(t),
+		n: t.gen.n || countOf(t)
+	});
+	if (kq.loi.length && !vanDung) return kq;
+	ganKetQua(id, sigTask(t), kq, {
+		tries: (t.gen.triesNgoai || 0) + 1,
+		model: "AI ngoài",
+		ver: dungNhacVer()
+	});
+	ghiNhatKy({
+		ev: "ai-ngoai",
+		bai: genTasks(W$3()).findIndex((x) => x.id === id) + 1,
+		loi: kq.loi,
+		vanDung
+	});
+	if (!genTasks(W$3()).some((x) => x.gen.status === "wait")) luuMayChu();
+	return kq;
+}
+var dungNhacVer = () => NHAC_VER;
+/** Giáo viên sửa bài khi AI đang viết: dùng bản AI đã giữ (S20). */
+function dungBanDuPhong(id) {
+	const t = find(id);
+	if (!t || !t.gen || !t.gen.spare) return;
+	const kq = docKetQua(t.gen.spare.md, {
+		q: t.gen.q || qOf$3(t),
+		n: t.gen.n || countOf(t)
+	});
+	ganKetQua(id, sigTask(t), kq, {
+		tries: t.gen.tries || 1,
+		model: t.gen.spare.model,
+		ver: dungNhacVer()
+	});
+}
+/** Phiếu tạo từ giáo trình: lưu lên máy chủ khi sinh xong / Duyệt phiếu / Xuất bản. Không có máy chủ thì thôi. */
+async function luuMayChu() {
+	const w = W$3(), s = w && w.gen && w.gen.src;
+	if (!s || !s.course || !s.lesson) return;
+	const n = nguonHienTai() || await moNguon();
+	if (!n.luuPhieu) return;
+	if (!await n.luuPhieu(s.course, s.lesson, String(w.id || "phieu").replace(/[^\w-]/g, "-").slice(0, 80), w)) toast("Chưa lưu được phiếu lên máy chủ");
+}
 // src/taobai/RaDe.tsx
 var tb$1 = () => useUi.getState().tb;
 var setTb$1 = (p) => publish({ tb: Object.assign({}, tb$1(), p) });
@@ -24801,7 +26571,8 @@ var openRaDe = () => setTb$1({
 });
 var note = (n) => `${n.file.split("/").slice(-2).join("/")}${n.line ? ":" + n.line : ""} · ${n.msg}`;
 function RaDe() {
-	return useUi((s) => s.tb.rade) ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RaDeScreen, {}) : null;
+	const open = useUi((s) => s.tb.rade), rev = useUi((s) => s.tb.rev);
+	return open ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RaDeScreen, {}, rev) : null;
 }
 function RaDeScreen() {
 	const [src, setSrc] = (0, import_react.useState)(null), [err, setErr] = (0, import_react.useState)("");
@@ -24961,6 +26732,19 @@ function RaDeScreen() {
 						})
 					] }) : null,
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "btn sm",
+						id: "rdKho",
+						onClick: () => openKho(),
+						children: "Kho phiếu"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "btn sm",
+						id: "rdTl",
+						title: "Nạp Kiến thức, Trình tự / TF, khóa AI",
+						onClick: () => openThietLap("gt"),
+						children: "⚙ Thiết lập"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						className: "btn sm ghost",
 						id: "rdClose",
 						"aria-label": "Đóng màn Ra đề",
@@ -25098,7 +26882,16 @@ function RaDeScreen() {
 			les && les.loi.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "tbwarn rdloi",
 				id: "rdLoi",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Chưa tạo bài được cho lesson này:" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", { children: les.loi.map((n, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: note(n) }, i)) })]
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Chưa tạo bài được cho lesson này:" }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", { children: les.loi.map((n, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: note(n) }, i)) }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						className: "btn sm",
+						id: "rdLoiTl",
+						onClick: () => openThietLap(les.loi.some((n) => /kien-thuc\//.test(n.file)) ? "gt" : "dang"),
+						children: "Mở Thiết lập để nạp file"
+					})
+				]
 			}) : null,
 			les && !les.loi.length && les.trinhTu ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "rdmain",
@@ -25450,6 +27243,7 @@ async function sinhBai(l, plan, note) {
 			w2.gen = genOf(l, st, note, w2.gen);
 		}, `Đã cập nhật cấu trúc: giữ ${m.kept} bài, ${st.length - m.kept} bài chờ sinh`);
 		setTb$1({ rade: false });
+		batDau(openReview);
 		return;
 	}
 	if (w && (w.tasks || []).length && !await askConfirm("Tạo phiếu mới từ cấu trúc này?", "Phiếu đang mở trong editor sẽ được thay (giống “+ Phiếu”).", "Tạo phiếu")) return;
@@ -25459,11 +27253,14 @@ async function sinhBai(l, plan, note) {
 		tasks: ts,
 		gen: genOf(l, st, note)
 	};
-	if (L.loadSheet(sheet, `Đã tạo phiếu khung ${st.length} bài: chờ sinh nội dung`)) setTb$1({
-		rade: false,
-		panel: null,
-		cur: null
-	});
+	if (L.loadSheet(sheet, `Đã tạo phiếu khung ${st.length} bài: chờ sinh nội dung`)) {
+		setTb$1({
+			rade: false,
+			panel: null,
+			cur: null
+		});
+		batDau(openReview);
+	}
 }
 /** Nút "Sinh lại cả phiếu" (5.6): mọi bài thành khung mới. */
 async function sinhLaiCaPhieu(l, plan, note) {
@@ -25474,6 +27271,7 @@ async function sinhLaiCaPhieu(l, plan, note) {
 		w2.gen = genOf(l, st, note, w2.gen);
 	}, "Đã dựng lại khung cả phiếu");
 	setTb$1({ rade: false });
+	batDau(openReview);
 }
 window.__tbTest = {
 	P: plan_exports,
@@ -25597,6 +27395,7 @@ function TaoBaiBar() {
 				title: name,
 				children: name
 			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SinhBar, {}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "sp" }),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 				className: "btn" + (t.panel === "duyet" ? " on" : ""),
@@ -25626,6 +27425,52 @@ function TaoBaiBar() {
 		]
 	});
 }
+function SinhBar() {
+	useUi((s) => s.tb.sv);
+	useUi((s) => s.treeRev);
+	const w = W$2();
+	(0, import_react.useEffect)(() => {
+		cheDo();
+	}, []);
+	const v = cheDoHienTai(), cho = genTasks(w).filter((t) => t.gen.status === "wait"), n = soDangChay();
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+		className: "tbsinh",
+		id: "tbSinhBar",
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+			className: "tbai",
+			id: "tbAiTen",
+			title: v?.ly || "AI dùng để sinh bài (Thiết lập › AI)",
+			children: v ? v.mode === "may" ? `AI: ${v.ten}` : "AI ngoài" : ""
+		}), n ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+			id: "tbSinhSt",
+			children: [
+				"⏳ AI đang viết ",
+				n,
+				" bài…"
+			]
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+			className: "btn sm",
+			id: "tbSinhDung",
+			title: "Bỏ hàng chờ; bài chưa xong vẫn ⏳",
+			onClick: dung,
+			children: "Dừng"
+		})] }) : cho.length ? v?.mode === "may" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+			className: "btn sm",
+			id: "tbSinh",
+			onClick: () => sinh(),
+			children: [
+				"Sinh ",
+				cho.length,
+				" bài đang chờ"
+			]
+		}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+			className: "btn sm",
+			id: "tbNgoai",
+			onClick: () => openReview(cho[0].id),
+			children: [cho.length, " bài chờ dán kết quả AI"]
+		}) : null]
+	});
+}
 function TbIcon({ t }) {
 	const st = stOf(t);
 	if (!st || !hasGen(W$2())) return null;
@@ -25648,8 +27493,14 @@ if (typeof document !== "undefined") document.addEventListener("click", (e) => {
 	openReview(id);
 }, true);
 function approve(id) {
-	const t = W$2().tasks.find((x) => x.id === id);
+	const w = W$2(), t = w.tasks.find((x) => x.id === id);
 	if (!t) return;
+	ghiNhatKy({
+		ev: "duyet",
+		bai: genTasks(w).indexOf(t) + 1,
+		suaTay: !!(t.gen.genSig && t.gen.genSig !== sigTask(t)),
+		model: t.gen.model || ""
+	});
 	L.commit((w2) => approveTask(w2, id), `Đã duyệt bài ${nOf(t)}`);
 	const nx = nextTodo(W$2(), id);
 	if (nx) {
@@ -25663,14 +27514,6 @@ function useVer(id, at) {
 function approveAll() {
 	L.commit((w2) => approveSheet(w2), "Đã duyệt phiếu");
 	luuMayChu();
-}
-/** Phiếu tạo từ giáo trình: lưu lên máy chủ (mục "Phiếu đã tạo" của lesson) khi Duyệt phiếu / Xuất bản. Không có máy chủ thì thôi. */
-async function luuMayChu() {
-	const w = W$2(), s = w && w.gen && w.gen.src;
-	if (!s || !s.course || !s.lesson) return;
-	const n = nguonHienTai() || await moNguon();
-	if (!n.luuPhieu) return;
-	if (!await n.luuPhieu(s.course, s.lesson, String(w.id || "phieu").replace(/[^\w-]/g, "-").slice(0, 80), w)) toast("Chưa lưu được phiếu lên máy chủ");
 }
 function startView(at) {
 	const c = viewCopy(W$2(), at);
@@ -25934,34 +27777,225 @@ function Review() {
 				children: "Chưa có. Lịch sử chỉ tạo khi bấm Duyệt."
 			})
 		}),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Sec$1, {
-			title: "⟳ Sinh lại bài này",
-			id: "tbRegen",
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SinhBox, {
+			t: cur,
+			st
+		}, cur.id),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "tbmut",
+			children: "Sửa chữ, dàn trang: đóng ngăn (✕) và dùng editor như bình thường."
+		})
+	] });
+}
+/** Chép chữ: thử cách cũ (execCommand, chạy cả khi mở thẳng file) rồi tới Clipboard API; không được thì nhắc chép tay từ ô. */
+function chep(text) {
+	const ok = () => toast("Đã chép đoạn nhắc: dán sang AI"), tay = () => toast("Chưa chép tự động được: bấm vào ô đoạn nhắc, Ctrl+A rồi Ctrl+C");
+	let done = false;
+	try {
+		const ta = document.createElement("textarea");
+		ta.value = text;
+		ta.setAttribute("readonly", "");
+		ta.style.cssText = "position:fixed;left:-9999px;top:0;opacity:0";
+		document.body.appendChild(ta);
+		ta.select();
+		done = document.execCommand("copy");
+		ta.remove();
+	} catch (_) {
+		done = false;
+	}
+	if (done) {
+		ok();
+		return;
+	}
+	try {
+		navigator.clipboard.writeText(text).then(ok, tay);
+	} catch (_) {
+		tay();
+	}
+}
+function SinhBox({ t, st }) {
+	useUi((s) => s.tb.sv);
+	const g = t.gen, run = dangChay(t.id), may = cheDoHienTai()?.mode === "may";
+	const [gopY, setGopY] = (0, import_react.useState)(""), [nhac, setNhac] = (0, import_react.useState)(""), [dan, setDan] = (0, import_react.useState)(""), [kq, setKq] = (0, import_react.useState)(null), [err, setErr] = (0, import_react.useState)("");
+	const wait = st === "wait", ngoaiMo = !may || wait && !run;
+	const layNhac = async (sua) => {
+		setErr("");
+		try {
+			const p = await nhacNgoai(t.id, wait && !sua ? {} : sua ? {
+				sua,
+				...wait ? {} : {
+					sinhLai: true,
+					gopY
+				}
+			} : {
+				sinhLai: true,
+				gopY
+			});
+			setNhac(p);
+			chep(p);
+		} catch (e) {
+			setErr(e.message);
+		}
+	};
+	const nap = (vanDung = false) => {
+		const r = napNgoai(t.id, dan, vanDung);
+		setKq(r && r.loi.length && !vanDung ? r : null);
+		if (r && (!r.loi.length || vanDung)) {
+			setDan("");
+			setNhac("");
+			toast("Đã nạp kết quả AI vào bài");
+		}
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+		run ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+			className: "tbrun",
+			id: "tbRun",
 			children: [
+				"⏳ AI đang viết bài này",
+				run.lan > 1 ? ` · gửi lại lần ${run.lan - 1}/2 để sửa lỗi` : "",
+				"…"
+			]
+		}) : null,
+		g.loiGoi && !run ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+			className: "tbwarn",
+			id: "tbLoiGoi",
+			children: ["Chưa sinh được: ", g.loiGoi]
+		}) : null,
+		g.spare ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "tbwarn",
+			id: "tbSpare",
+			children: ["AI đã viết xong khi bài đang được sửa tay nên chưa thay. ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				className: "btn sm",
+				id: "tbSpareUse",
+				onClick: () => dungBanDuPhong(t.id),
+				children: "Dùng bản AI vừa viết"
+			})]
+		}) : null,
+		g.model ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+			className: "tbmut",
+			id: "tbGenInfo",
+			children: [
+				"Viết bởi ",
+				TEN[g.model] || g.model,
+				g.tries > 1 ? ` · ${g.tries} lượt (có gửi lại sửa lỗi)` : ""
+			]
+		}) : null,
+		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Sec$1, {
+			title: wait ? "Sinh bài này" : "⟳ Sinh lại bài này",
+			id: "tbRegen",
+			children: [!wait ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+				className: "tbta",
+				id: "tbGopY",
+				rows: 2,
+				value: gopY,
+				onChange: (e) => setGopY(e.target.value),
+				placeholder: "Góp ý cho AI (không bắt buộc), vd: mỗi câu trả lời chỉ ghép được một câu hỏi"
+			}) : null, may ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "tbrow",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "btn",
+					id: "tbRegenGo",
+					disabled: !!run,
+					onClick: () => {
+						sinh([t.id], wait ? {} : {
+							sinhLai: true,
+							gopY
+						});
+						if (!wait) ghiNhatKy({
+							ev: "sinh-lai",
+							bai: nOf(t),
+							gopY
+						});
+						setGopY("");
+					},
+					children: wait ? "Sinh bài này" : "Sinh lại"
+				}), !wait ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "tbmut",
+					children: "Bản chưa duyệt bị thay hẳn; bản đã duyệt vẫn trong Lịch sử bài này."
+				}) : null]
+			}) : null]
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("details", {
+			className: "tbsec tbngoai",
+			id: "tbNgoaiBox",
+			open: ngoaiMo,
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("summary", { children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "AI ngoài" }),
+					" ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "tbmut",
+						children: "chép đoạn nhắc sang AI bất kỳ, dán kết quả về"
+					})
+				] }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "tbrow",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						className: "btn",
+						id: "tbChep",
+						onClick: () => layNhac(),
+						children: ["1 · Chép đoạn nhắc", wait ? "" : " sinh lại"]
+					}), nhac ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "tbmut",
+						children: [Math.round(nhac.length / 100) / 10, " nghìn ký tự"]
+					}) : null]
+				}),
+				nhac ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+					className: "tbta",
+					id: "tbNhac",
+					rows: 3,
+					readOnly: true,
+					value: nhac,
+					onFocus: (e) => e.target.select()
+				}) : null,
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
 					className: "tbta",
-					rows: 2,
-					placeholder: "Góp ý cho AI, vd: mỗi câu trả lời chỉ ghép được một câu hỏi",
-					disabled: true
+					id: "tbDan",
+					rows: 4,
+					value: dan,
+					onChange: (e) => setDan(e.target.value),
+					placeholder: "2 · Dán kết quả AI trả về (MD một bài, bắt đầu bằng ## Task:)"
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "tbrow",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-						className: "btn",
-						disabled: true,
-						title: "Có ở bản Sinh bài (T4)",
-						children: "Sinh lại"
+						className: "btn pri",
+						id: "tbDanGo",
+						disabled: !dan.trim(),
+						onClick: () => nap(),
+						children: "Nạp kết quả"
 					})
 				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					className: "tbmut",
-					children: "Bản chưa duyệt sẽ bị thay hẳn; các bản đã duyệt vẫn còn trong Lịch sử bài này. (Sinh bài bằng AI: giai đoạn T4.)"
-				})
+				kq ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "tbwarn",
+					id: "tbDanLoi",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "App đọc thấy lỗi:" }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", { children: kq.loi.map((x, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: x }, i)) }),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "tbrow",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								className: "btn sm",
+								id: "tbChepSua",
+								onClick: () => layNhac({
+									md: kq.md,
+									loi: kq.loi
+								}),
+								children: "Chép đoạn nhắc sửa lỗi"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								className: "btn sm ghost",
+								id: "tbDanVan",
+								onClick: () => nap(true),
+								children: "Vẫn dùng bản này"
+							})]
+						})
+					]
+				}) : null,
+				err ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "tbwarn",
+					children: err
+				}) : null
 			]
-		}),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-			className: "tbmut",
-			children: "Sửa chữ, dàn trang: đóng ngăn (✕) và dùng editor như bình thường."
 		})
 	] });
 }
@@ -26160,11 +28194,12 @@ function TopBar() {
 							padding: "1px 7px",
 							marginLeft: 4
 						},
-						children: "v127"
+						children: "v129"
 					}),
 					" ",
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", {
 						id: "wsTitle",
+						title: s.title,
 						children: s.title
 					})
 				]
@@ -26272,6 +28307,7 @@ function TopBar() {
 				onClick: () => actions.showMd(),
 				children: "Xuất MD"
 			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppMenu, {}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 				className: "btn ghost",
 				id: "helpBtn",
@@ -26286,6 +28322,69 @@ function TopBar() {
 				children: "?"
 			})
 		]
+	});
+}
+function AppMenu() {
+	const [on, setOn] = (0, import_react.useState)(false), ref = (0, import_react.useRef)(null);
+	(0, import_react.useEffect)(() => {
+		if (!on) return;
+		const f = (e) => {
+			if (ref.current && !ref.current.contains(e.target)) setOn(false);
+		};
+		const k = (e) => {
+			if (e.key === "Escape") {
+				setOn(false);
+				e.stopPropagation();
+			}
+		};
+		document.addEventListener("click", f);
+		window.addEventListener("keydown", k, true);
+		return () => {
+			document.removeEventListener("click", f);
+			window.removeEventListener("keydown", k, true);
+		};
+	}, [on]);
+	const go = (f) => () => {
+		setOn(false);
+		f();
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "menuw",
+		ref,
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+			className: "btn ghost",
+			id: "menuBtn",
+			"aria-label": "Menu",
+			"aria-haspopup": "menu",
+			"aria-expanded": on,
+			title: "Menu: Kho phiếu, Thiết lập, Tạo bài",
+			onClick: () => setOn(!on),
+			children: "☰"
+		}), on ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "menupop",
+			role: "menu",
+			id: "menuPop",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+					role: "menuitem",
+					id: "khoBtn",
+					onClick: go(openKho),
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Kho phiếu" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", { children: "phiếu đã tạo bằng Tạo bài (trên máy chủ)" })]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+					role: "menuitem",
+					id: "tlBtn",
+					onClick: go(() => openThietLap("gt")),
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "⚙ Thiết lập" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", { children: "giáo trình, Kiến thức, Trình tự / TF, file chung, AI" })]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+					role: "menuitem",
+					id: "menuTaoBai",
+					onClick: go(openRaDe),
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: "Tạo bài" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", { children: "chọn lesson, duyệt cấu trúc, sinh bài" })]
+				})
+			]
+		}) : null]
 	});
 }
 function HelpPop() {
@@ -30004,6 +32103,14 @@ function AppShell() {
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Guard, {
 			name: "taobai-rade",
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RaDe, {})
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Guard, {
+			name: "taobai-thietlap",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ThietLap, {})
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Guard, {
+			name: "taobai-kho",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(KhoPhieu, {})
 		}),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			id: "measure",
@@ -43586,7 +45693,7 @@ button{cursor:pointer}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 .app{height:100%;display:grid;grid-template-columns:var(--lw,420px) minmax(0,1fr) 312px;grid-template-rows:auto minmax(0,1fr);gap:0 20px}
-.top{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding-block:10px;border-bottom:1px solid var(--line)}
+.top{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding-block:10px;border-bottom:1px solid var(--line)}
 .brand{font-weight:600;font-size:15px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:8px}
 .brand small{font-weight:400;color:var(--muted);font-size:12px}
 .top .sp{flex:1}
@@ -44547,6 +46654,38 @@ html.tbans #stage .vok:not(.opt):not(span){color:#d9570b}
 .rdpgs .page{width:210mm;min-height:297mm;box-shadow:none;margin:0;color:#7d8a92}
 .tbdrawer,.tbmbox,.rade{text-align:left}
 .rade>*{flex-shrink:0}
+/* v128: màn Thiết lập + Kho phiếu (cùng khung với màn Ra đề) */
+.tltabs{display:flex;gap:4px;margin-left:8px}.tltabs .tbstep{border:1px solid transparent}
+.tlnote{display:flex;flex-direction:column;gap:6px}.tlnote code,.tlsec code{font-size:11.5px}
+.tlbody{display:flex;flex-direction:column;gap:12px;max-width:1100px;width:100%}.tlbody.busy{opacity:.6;pointer-events:none}
+.tlsec{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.tlsec h3{margin:0 0 2px;font-size:15px}
+.tlh{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.tlgt{border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.tlgth{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 12px;background:var(--card-2)}.tlgth .sp{flex:1}
+.tlunit h5,.tlcd h5{margin:0;padding:7px 12px 3px;font-size:12px;color:var(--muted);font-weight:600}
+.tlrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:6px 12px;border-top:1px solid var(--line);font-size:13px}.tlrow .sp{flex:1}
+.tlname{min-width:180px}
+.tag.tlno{background:var(--danger-soft);color:var(--danger)}.tag.tlbad{background:#fdf1dc;color:#9a5a00;cursor:help}.tag.tlready{background:#d7f0df;color:#1f6b3f}
+.tlxem{max-width:860px}.tlxem pre{margin:0;max-height:65vh;overflow:auto;white-space:pre-wrap;font-size:12.5px;background:var(--card-2);border-radius:6px;padding:10px}
+.tlstate.ok{margin:0;font-size:13px;color:#1f6b3f;background:#d7f0df;border-radius:6px;padding:6px 9px}
+.tlfs{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.tlradio{display:flex;align-items:center;gap:6px;font-size:13px}
+.tlgrid{display:grid;grid-template-columns:110px minmax(0,1fr);gap:6px 10px;align-items:center;margin-left:22px;font-size:13px}.tlgrid.off{opacity:.5}
+.tlgrid input,.tlgrid select,.tlfind{border:1px solid var(--line);border-radius:6px;padding:5px 8px;background:var(--panel);min-width:260px}
+.tlok{color:#1f6b3f;font-size:12.5px}.tlerr{color:var(--danger);font-size:12.5px}
+.tltab{width:100%;border-collapse:collapse;font-size:13px}.tltab th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line)}
+.tltab td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tag.tlbad{background:#3a3010;color:#f0d890}:root:not([data-theme="light"]) .tag.tlready,:root:not([data-theme="light"]) .tlstate.ok{background:#173a26;color:#9fe0b4}}
+.menuw{position:relative}
+.menupop{position:absolute;right:0;top:calc(100% + 6px);z-index:60;min-width:330px;display:flex;flex-direction:column;gap:2px;padding:5px;background:var(--panel);border:1px solid var(--line);border-radius:9px;box-shadow:0 8px 28px rgba(0,0,0,.18)}
+.menupop button{display:flex;flex-direction:column;align-items:flex-start;gap:1px;border:0;background:none;padding:7px 10px;border-radius:6px;text-align:left;color:var(--fg)}
+.menupop button:hover,.menupop button:focus-visible{background:var(--accent-soft)}.menupop small{color:var(--muted);font-size:11.5px}
+#menuBtn{padding-inline:7px}
+/* v129: trạng thái sinh bài trên dải */
+.tbsinh{display:inline-flex;align-items:center;gap:8px;flex:none;white-space:nowrap}.tbsinh .tbai{opacity:.85;font-size:12px}
+.tbrun{margin:0;font-size:12.5px;color:var(--accent);font-weight:600}
+.tbngoai summary{cursor:pointer;font-size:12.5px}.tbngoai[open]{gap:6px}.tbngoai ul{margin:4px 0;padding-left:18px}
 /* ====== GĐ1a trình chiếu (src/viewer) ====== */
 .showfab{position:fixed;right:calc(312px + 20px + 18px);bottom:18px;z-index:50;height:40px;padding:0 18px;border-radius:20px;font-size:15px;font-weight:600;box-shadow:0 3px 12px rgba(20,30,40,.25)}
 .showfab.livefab{right:calc(312px + 20px + 18px + 118px + 98px);background:var(--card,#fff);color:#c62828;font-size:14px;padding:0 14px}

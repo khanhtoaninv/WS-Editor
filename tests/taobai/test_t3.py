@@ -101,7 +101,8 @@ def run(pg, url, errs):
     chk('mỗi bài: dạng Q đúng cấu trúc, trạng thái ⏳ đang viết', all(t[0] == t[3] and t[2] == 'wait' for t in w['tg']) and pg.locator('#tree .tbic.wait').count() == len(rows), w['tg'])
     chk('số trang phiếu khung = ước tính của layout sơ bộ (cùng bộ dàn)', w['pages'] == est, [w['pages'], est])
     chk('dải trên: tên lesson', 'Unit 5 · My weekend · Lesson 2 · was / were' in pg.inner_text('#tbBar'))
-    pg.click('#tbDuyet'); pg.wait_for_timeout(150)
+    if pg.locator('#tbDrawer').count() == 0: pg.click('#tbDuyet')   # v129: chế độ AI ngoài tự mở ngăn Duyệt ở bài ⏳ đầu
+    pg.wait_for_timeout(150)
     chk('bài đang viết: nút Duyệt mờ', pg.is_disabled('#tbApprove'))
     pg.click('#tbClose')
     # quay lại Ra đề giữ cấu trúc; đổi một bài rồi Sinh bài: bài không đổi giữ nguyên
@@ -162,7 +163,8 @@ with sync_playwright() as p:
             pick_lesson(pg, 'u5-l2')
             chk('qua máy chủ: chưa có phiếu đã tạo', 'Chưa có.' in pg.inner_text('#rdInfo'))
             pg.click('#rdGo'); confirm(pg); pg.wait_for_timeout(800)
-            pg.click('#tbDuyet'); pg.click('#tbApproveSheet'); pg.wait_for_timeout(800)
+            if pg.locator('#tbDrawer').count() == 0: pg.click('#tbDuyet')
+            pg.click('#tbApproveSheet'); pg.wait_for_timeout(800)
             pg.click('#tbRaDe'); pg.wait_for_selector('#rdStruct'); pg.click('#rdPickH'); pg.wait_for_timeout(500)
             chk('Duyệt phiếu → lưu lên máy chủ, hiện ở "Phiếu đã tạo"', pg.locator('#rdInfo .rdph li').count() == 1 and 'bài' in pg.inner_text('#rdInfo .rdph'), pg.inner_text('#rdInfo'))
             pg.click('#rdInfo .rdph button'); confirm(pg); pg.wait_for_timeout(800)

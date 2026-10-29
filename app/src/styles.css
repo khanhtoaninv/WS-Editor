@@ -47,7 +47,7 @@ button{cursor:pointer}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 .app{height:100%;display:grid;grid-template-columns:var(--lw,420px) minmax(0,1fr) 312px;grid-template-rows:auto minmax(0,1fr);gap:0 20px}
-.top{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding-block:10px;border-bottom:1px solid var(--line)}
+.top{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding-block:10px;border-bottom:1px solid var(--line)}
 .brand{font-weight:600;font-size:15px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:8px}
 .brand small{font-weight:400;color:var(--muted);font-size:12px}
 .top .sp{flex:1}
@@ -1008,3 +1008,35 @@ html.tbans #stage .vok:not(.opt):not(span){color:#d9570b}
 .rdpgs .page{width:210mm;min-height:297mm;box-shadow:none;margin:0;color:#7d8a92}
 .tbdrawer,.tbmbox,.rade{text-align:left}
 .rade>*{flex-shrink:0}
+/* v128: màn Thiết lập + Kho phiếu (cùng khung với màn Ra đề) */
+.tltabs{display:flex;gap:4px;margin-left:8px}.tltabs .tbstep{border:1px solid transparent}
+.tlnote{display:flex;flex-direction:column;gap:6px}.tlnote code,.tlsec code{font-size:11.5px}
+.tlbody{display:flex;flex-direction:column;gap:12px;max-width:1100px;width:100%}.tlbody.busy{opacity:.6;pointer-events:none}
+.tlsec{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.tlsec h3{margin:0 0 2px;font-size:15px}
+.tlh{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+.tlgt{border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.tlgth{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 12px;background:var(--card-2)}.tlgth .sp{flex:1}
+.tlunit h5,.tlcd h5{margin:0;padding:7px 12px 3px;font-size:12px;color:var(--muted);font-weight:600}
+.tlrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:6px 12px;border-top:1px solid var(--line);font-size:13px}.tlrow .sp{flex:1}
+.tlname{min-width:180px}
+.tag.tlno{background:var(--danger-soft);color:var(--danger)}.tag.tlbad{background:#fdf1dc;color:#9a5a00;cursor:help}.tag.tlready{background:#d7f0df;color:#1f6b3f}
+.tlxem{max-width:860px}.tlxem pre{margin:0;max-height:65vh;overflow:auto;white-space:pre-wrap;font-size:12.5px;background:var(--card-2);border-radius:6px;padding:10px}
+.tlstate.ok{margin:0;font-size:13px;color:#1f6b3f;background:#d7f0df;border-radius:6px;padding:6px 9px}
+.tlfs{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.tlradio{display:flex;align-items:center;gap:6px;font-size:13px}
+.tlgrid{display:grid;grid-template-columns:110px minmax(0,1fr);gap:6px 10px;align-items:center;margin-left:22px;font-size:13px}.tlgrid.off{opacity:.5}
+.tlgrid input,.tlgrid select,.tlfind{border:1px solid var(--line);border-radius:6px;padding:5px 8px;background:var(--panel);min-width:260px}
+.tlok{color:#1f6b3f;font-size:12.5px}.tlerr{color:var(--danger);font-size:12.5px}
+.tltab{width:100%;border-collapse:collapse;font-size:13px}.tltab th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line)}
+.tltab td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tag.tlbad{background:#3a3010;color:#f0d890}:root:not([data-theme="light"]) .tag.tlready,:root:not([data-theme="light"]) .tlstate.ok{background:#173a26;color:#9fe0b4}}
+.menuw{position:relative}
+.menupop{position:absolute;right:0;top:calc(100% + 6px);z-index:60;min-width:330px;display:flex;flex-direction:column;gap:2px;padding:5px;background:var(--panel);border:1px solid var(--line);border-radius:9px;box-shadow:0 8px 28px rgba(0,0,0,.18)}
+.menupop button{display:flex;flex-direction:column;align-items:flex-start;gap:1px;border:0;background:none;padding:7px 10px;border-radius:6px;text-align:left;color:var(--fg)}
+.menupop button:hover,.menupop button:focus-visible{background:var(--accent-soft)}.menupop small{color:var(--muted);font-size:11.5px}
+#menuBtn{padding-inline:7px}
+/* v129: trạng thái sinh bài trên dải */
+.tbsinh{display:inline-flex;align-items:center;gap:8px;flex:none;white-space:nowrap}.tbsinh .tbai{opacity:.85;font-size:12px}
+.tbrun{margin:0;font-size:12.5px;color:var(--accent);font-weight:600}
+.tbngoai summary{cursor:pointer;font-size:12.5px}.tbngoai[open]{gap:6px}.tbngoai ul{margin:4px 0;padding-left:18px}

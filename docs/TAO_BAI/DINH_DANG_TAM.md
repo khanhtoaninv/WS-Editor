@@ -2,6 +2,8 @@
 
 29/10/2026 · v124 · **Tạm thời**, chỉ để T1–T5 có dữ liệu chạy thử. Định dạng thật chốt ở thảo luận cấu trúc file (Kiến thức / Trình tự / TF / file chung); khi đó chỉ sửa `shared/src/taobai/doc.ts` (tách chữ → dữ liệu) và `server/src/taobai/nguon.ts` (đọc thư mục), giao diện không đổi.
 
+**Từ v128** nạp / thay / bỏ file ngay trong app: **☰ › ⚙ Thiết lập** (Giáo trình: `giao-trinh.md`, Kiến thức từng lesson, cả thư mục; Dạng phiếu: Trình tự / TF từng chuyên đề, file dùng chung 1–5). Máy chủ lưu ở `<dữ liệu máy chủ>/tao-bai/du-lieu/` (lần đầu chép bộ mẫu dưới đây), bản cũ ở `tao-bai/_cu/`; chỉ ghi vào đúng các chỗ trong cây thư mục dưới đây.
+
 Bộ mẫu: `server/demo/tao-bai/` (Pinta English 3 · Unit 5 · 4 lesson / 3 chuyên đề). Xem nhanh: `node --experimental-strip-types server/src/taobai/nguon.ts`.
 
 ## Thư mục

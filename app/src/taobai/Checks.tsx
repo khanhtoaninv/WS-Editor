@@ -44,7 +44,7 @@ export function TbOverlay() {
     if (t.ans) { try { const r = sheetSlots(w); applyAnswers(root, r.slots, r.key, new Set(r.slots.map((s: any) => s.id))); } catch (_) { /* phiếu đang đổi */ } }
     if (t.panel === 'duyet') {
       for (const tk of w.tasks) {
-        if (!tk.gen) continue;
+        if (!tk.gen || tk.gen.status === 'wait') continue;   // bài đang chờ sinh (chữ xxx): không tô
         const ids = new Set(allChecks(tk).filter(c => !c.ok).flatMap(c => c.ids || [])); if (!ids.size) continue;
         let slots: any[] = []; try { slots = taskSlots(tk).slots; } catch (_) { /* */ }
         slots.filter(s => ids.has(s.item)).forEach(s => root.querySelectorAll<HTMLElement>(`[data-ans="${CSS.escape(s.id)}"]`).forEach(el => { const host = el.parentElement && !el.parentElement.matches('section.task,.flow') ? el.parentElement : el; host.classList.add('tbbad'); }));

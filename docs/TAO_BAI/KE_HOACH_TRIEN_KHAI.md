@@ -1,6 +1,6 @@
 # Kế hoạch triển khai module Tạo bài vào WS Editor
 
-Bản 1 · 29/10/2026 · theo `DAC_TA_TAO_BAI.md` bản 1. **Tiến độ (phiên 17, 29/10): T0 (v124), T1 (v125), T2 (v126), T3 (v127) xong**; số bản các giai đoạn sau dịch lên 1 vì T0 sửa bộ đọc thành một bản riêng. Báo cáo: `docs/BAO_CAO_PHIEN_2026-10-29_phien17.md`. Lệch kế hoạch: máy kiểm nằm ở `app/src/taobai/maykiem.ts` (cần mô hình phiếu của app), không ở `shared/`; T3 làm luôn phần "quay lại Ra đề rồi Sinh bài: giữ bài không đổi" (mục 5.6, kế hoạch để ở T4).
+Bản 1 · 29/10/2026 · theo `DAC_TA_TAO_BAI.md` bản 1. **Tiến độ: phiên 17 (29/10) T0 (v124), T1 (v125), T2 (v126), T3 (v127); phiên 18 (29/10) T4a Thiết lập + Kho phiếu (v128), T4 Sinh bài (v129) xong**; số bản các giai đoạn sau dịch lên 1 vì T0 sửa bộ đọc thành một bản riêng. Báo cáo: `docs/BAO_CAO_PHIEN_2026-10-29_phien17.md`. Lệch kế hoạch: máy kiểm nằm ở `app/src/taobai/maykiem.ts` (cần mô hình phiếu của app), không ở `shared/`; T3 làm luôn phần "quay lại Ra đề rồi Sinh bài: giữ bài không đổi" (mục 5.6, kế hoạch để ở T4).
 
 ## 0. Cách làm
 
@@ -65,8 +65,12 @@ T1–T2 không cần AI và không cần dữ liệu giáo trình: thử đượ
 - **Test:** tách Trình tự (đơn vị); luật ngẫu nhiên (không hai bài liền cùng Q, giới hạn +/✕); layout sơ bộ khớp số trang của phiếu thật cùng cấu trúc trong sai số ±1 trang trên bộ mẫu.
 - **Thử tay:** `KIEM_TRA_T3.md`.
 
-### T4 · Sinh bài (v128)
-- `server/src/taobai/nhac.ts`: dựng đoạn nhắc sinh một bài (mục 8.1); `server/src/taobai/sinh.ts`: gọi AI (dùng lại `ai.ts`, model theo biến `TAOBAI_MODEL`), song song tối đa 3, gửi lại đúng chỗ lỗi tối đa 2 lần.
+### T4a · Thiết lập + Kho phiếu (v128) — XONG 29/10
+Thêm theo yêu cầu người dùng 29/10 (trước khi làm Sinh bài): menu chung **Kho phiếu** + **⚙ Thiết lập** (Giáo trình: nạp Kiến thức theo lesson; Dạng phiếu: Trình tự / TF theo chuyên đề + file dùng chung; AI: khóa + model, Claude để sẵn Sonnet 5.5 / Haiku 5.5, thêm "Tương thích OpenAI"). Ô khóa chỉ dùng khi chạy qua máy chủ (khóa lưu ở máy chủ); mở file trơn → AI ngoài. Spec mục 59. Các bản sau lùi một số: T4 Sinh bài = v129, T5 = v130.
+
+### T4 · Sinh bài (v129) — XONG 29/10
+Quy tắc chi tiết: `QUY_TAC_SINH_BAI.md` (bản 1, chờ người dùng thử và góp ý theo mã S…). Lệch kế hoạch: đoạn nhắc ở `shared/src/taobai/nhac.ts` (không ở `server/`: chế độ AI ngoài trong trình duyệt cũng cần); vòng gửi lại khi lỗi chạy ở app (bộ đọc MD chỉ chạy trong trình duyệt), máy chủ chỉ làm một lượt gọi AI (`POST /api/taobai/ai`, song song ≤ 3) + nhật ký. Spec mục 60.
+- `server/src/taobai/nhac.ts`: dựng đoạn nhắc sinh một bài (mục 8.1); gọi AI (model theo Thiết lập › AI, mặc định biến `TAOBAI_MODEL`), song song tối đa 3, gửi lại đúng chỗ lỗi tối đa 2 lần.
 - App: điền từng bài khi xong (cây ⏳ → ○ / ⚠), đọc bằng `core/md.js`, máy kiểm; **Sinh lại bài này** kèm góp ý; không ghi đè bài đang gõ.
 - **Chế độ AI ngoài**: nút Chép đoạn nhắc / ô Dán kết quả cho từng bài; tự bật khi không có máy chủ hoặc khóa.
 - Quay lại Ra đề rồi Sinh bài: chỉ sinh bài đổi / mới (mục 5.6), có "Sinh lại cả phiếu".
@@ -74,7 +78,7 @@ T1–T2 không cần AI và không cần dữ liệu giáo trình: thử đượ
 - **Test:** máy chủ AI giả trả MD đúng / sai cú pháp / sai số câu / chậm / lỗi 429; Playwright luồng đầy đủ Ra đề → Sinh → Duyệt → Xuất bản; chế độ AI ngoài.
 - **Thử tay:** `KIEM_TRA_T4.md` (có phần thử với AI thật nếu đã có khóa).
 
-### T5 · AI chấm theo rubric (v129)
+### T5 · AI chấm theo rubric (v130)
 - `server/src/taobai/cham.ts`: lượt gọi riêng chấm một bài theo file chung 4 (trả JSON tiêu chí + lý do); chấm Cả phiếu (phủ kiến thức, độ khó tăng dần).
 - Gộp vào phần Kiểm tra (nhóm "AI chấm theo rubric"), nút "Chấm lại"; lưu điểm vào nhật ký (không hiện cho giáo viên).
 - Chế độ AI ngoài: đoạn nhắc chấm để chép.

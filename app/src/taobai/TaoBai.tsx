@@ -5,7 +5,7 @@
 //   TbPubDlg      hộp nhắc khi Xuất bản còn bài chưa duyệt
 // Mọi thay đổi phiếu đi qua commit() của editor (có Hoàn tác). Chỉ hiện khi phiếu có ws.gen.
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useLayoutEffect, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useState, type ReactNode } from 'react';
 import * as St from '../core/state.js';
 import { QN, its } from '../core/model.js';
 import { qOf } from '../core/layout.js';
@@ -17,8 +17,9 @@ import { toast } from '../ui/Toast';
 import { hasGen, statusOf, progress, nextTodo, changedSince, hhmm, approveTask, approveSheet, useTaskVer, usedVer, restoreSheet, viewCopy, genTasks, sheetVer, enableGen, type Stat } from './gen';
 import { TbChecks, TbSheetChecks, AnsToggle } from './Checks';
 import { openRaDe } from './RaDe';
-import { nguonHienTai, moNguon } from './nguon';
 import { allChecks, allSheetChecks } from './maykiem';
+import { luuMayChu, sinh, dung, soDangChay, dangChay, cheDo, cheDoHienTai, nhacNgoai, napNgoai, dungBanDuPhong, ghiNhatKy, GUI_LAI, TEN, type KetQua } from './sinh';
+import { sigTask } from './gen';
 const stOf = (t: any) => statusOf(t, allChecks(t));
 
 const W = (): any => St.ws;
@@ -55,11 +56,24 @@ export function TaoBaiBar() {
   const g = w.gen, p = progress(w), name = [g.src?.names?.course, g.src?.names?.unit, g.src?.names?.lesson].filter(Boolean).join(' · ') || w.title;
   return <div className="tbbar" id="tbBar" role="region" aria-label="Tạo bài">
     <span className="tbst"><button className="tbstep" id="tbRaDe" title="Quay lại màn Ra đề (cấu trúc đã duyệt hiện lại)" onClick={openRaDe}><i>1</i>Ra đề</button><span className="sep">›</span><span className="tbstep on"><i>2</i>Biên tập</span></span>
-    <span className="tbname" title={name}>{name}</span><span className="sp" />
+    <span className="tbname" title={name}>{name}</span><SinhBar /><span className="sp" />
     <button className={'btn' + (t.panel === 'duyet' ? ' on' : '')} id="tbDuyet" onClick={() => t.panel === 'duyet' ? setTb({ panel: null }) : openReview(t.cur)}>Duyệt bài <b className="tbcnt">{p.done}/{p.total}</b></button>
     <button className={'btn' + (t.panel === 'lichsu' ? ' on' : '')} id="tbLs" onClick={() => setTb({ panel: t.panel === 'lichsu' ? null : 'lichsu' })}>🕘 Lịch sử phiếu</button>
     <button className="btn pri" id="tbPub" onClick={publishSheet}>Xuất bản</button>
   </div>;
+}
+
+// ---------- trạng thái sinh bài trên dải (v129) ----------
+function SinhBar() {
+  useUi(s => s.tb.sv); useUi(s => s.treeRev); const w = W();
+  useEffect(() => { cheDo(); }, []);
+  const v = cheDoHienTai(), cho = genTasks(w).filter((t: any) => t.gen.status === 'wait'), n = soDangChay();
+  return <span className="tbsinh" id="tbSinhBar">
+    <span className="tbai" id="tbAiTen" title={v?.ly || 'AI dùng để sinh bài (Thiết lập › AI)'}>{v ? (v.mode === 'may' ? `AI: ${v.ten}` : 'AI ngoài') : ''}</span>
+    {n ? <><span id="tbSinhSt">⏳ AI đang viết {n} bài…</span><button className="btn sm" id="tbSinhDung" title="Bỏ hàng chờ; bài chưa xong vẫn ⏳" onClick={dung}>Dừng</button></>
+      : cho.length ? (v?.mode === 'may' ? <button className="btn sm" id="tbSinh" onClick={() => sinh()}>Sinh {cho.length} bài đang chờ</button>
+        : <button className="btn sm" id="tbNgoai" onClick={() => openReview(cho[0].id)}>{cho.length} bài chờ dán kết quả AI</button>) : null}
+  </span>;
 }
 
 // ---------- biểu tượng trong cây ----------
@@ -77,18 +91,13 @@ if (typeof document !== 'undefined') document.addEventListener('click', e => {
 // ---------- hành động ----------
 function approve(id: string) {
   const w = W(), t = w.tasks.find((x: any) => x.id === id); if (!t) return;
+  ghiNhatKy({ ev: 'duyet', bai: genTasks(w).indexOf(t) + 1, suaTay: !!(t.gen.genSig && t.gen.genSig !== sigTask(t)), model: t.gen.model || '' });
   L.commit((w2: any) => approveTask(w2, id), `Đã duyệt bài ${nOf(t)}`);
   const nx = nextTodo(W(), id);
   if (nx) { setTb({ cur: nx }); goTask(nx); } else toast('Mọi bài đã duyệt');
 }
 function useVer(id: string, at: string) { L.commit((w2: any) => useTaskVer(w2, id, at), `Đã dùng bản duyệt ${hhmm(at)}`); }
 function approveAll() { L.commit((w2: any) => approveSheet(w2), 'Đã duyệt phiếu'); luuMayChu(); }
-/** Phiếu tạo từ giáo trình: lưu lên máy chủ (mục "Phiếu đã tạo" của lesson) khi Duyệt phiếu / Xuất bản. Không có máy chủ thì thôi. */
-async function luuMayChu() {
-  const w = W(), s = w && w.gen && w.gen.src; if (!s || !s.course || !s.lesson) return;
-  const n = nguonHienTai() || await moNguon(); if (!n.luuPhieu) return;
-  if (!(await n.luuPhieu(s.course, s.lesson, String(w.id || 'phieu').replace(/[^\w-]/g, '-').slice(0, 80), w))) toast('Chưa lưu được phiếu lên máy chủ');
-}
 function startView(at: string) {
   const c = viewCopy(W(), at); if (!c) return;
   setTb({ viewAt: at, panel: null }); L.tbView(c);
@@ -156,12 +165,45 @@ function Review() {
     <Sec title={<>Lịch sử bài này ({(g.history || []).length}/3 lần duyệt)</>} id="tbTaskHist">
       {hist.length ? <ul className="tbhist">{hist.map((h: any) => <li key={h.at}><span className="tbat">{hhmm(h.at)}</span><span className="tbnote">{h.note}</span>{used === h.at ? <span className="tag ok">đang dùng</span> : <button className="btn sm" data-tbuse={h.at} onClick={() => useVer(cur.id, h.at)}>Dùng bản này</button>}</li>)}</ul> : <p className="tbmut">Chưa có. Lịch sử chỉ tạo khi bấm Duyệt.</p>}
     </Sec>
-    <Sec title="⟳ Sinh lại bài này" id="tbRegen">
-      <textarea className="tbta" rows={2} placeholder="Góp ý cho AI, vd: mỗi câu trả lời chỉ ghép được một câu hỏi" disabled />
-      <div className="tbrow"><button className="btn" disabled title="Có ở bản Sinh bài (T4)">Sinh lại</button></div>
-      <p className="tbmut">Bản chưa duyệt sẽ bị thay hẳn; các bản đã duyệt vẫn còn trong Lịch sử bài này. (Sinh bài bằng AI: giai đoạn T4.)</p>
-    </Sec>
+    <SinhBox key={cur.id} t={cur} st={st} />
     <p className="tbmut">Sửa chữ, dàn trang: đóng ngăn (✕) và dùng editor như bình thường.</p>
+  </>;
+}
+
+// ---------- sinh / sinh lại / AI ngoài trong ngăn Duyệt (v129) ----------
+/** Chép chữ: thử cách cũ (execCommand, chạy cả khi mở thẳng file) rồi tới Clipboard API; không được thì nhắc chép tay từ ô. */
+function chep(text: string) {
+  const ok = () => toast('Đã chép đoạn nhắc: dán sang AI'), tay = () => toast('Chưa chép tự động được: bấm vào ô đoạn nhắc, Ctrl+A rồi Ctrl+C');
+  let done = false;
+  try { const ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0'; document.body.appendChild(ta); ta.select(); done = document.execCommand('copy'); ta.remove(); } catch (_) { done = false; }
+  if (done) { ok(); return; }
+  try { navigator.clipboard.writeText(text).then(ok, tay); } catch (_) { tay(); }
+}
+function SinhBox({ t, st }: { t: any; st: Stat }) {
+  useUi(s => s.tb.sv); const g = t.gen, run = dangChay(t.id), v = cheDoHienTai(), may = v?.mode === 'may';
+  const [gopY, setGopY] = useState(''), [nhac, setNhac] = useState(''), [dan, setDan] = useState(''), [kq, setKq] = useState<KetQua | null>(null), [err, setErr] = useState('');
+  const wait = st === 'wait', ngoaiMo = !may || wait && !run;
+  const layNhac = async (sua?: { md: string; loi: string[] }) => { setErr(''); try { const p = await nhacNgoai(t.id, wait && !sua ? {} : sua ? { sua, ...(wait ? {} : { sinhLai: true, gopY }) } : { sinhLai: true, gopY }); setNhac(p); chep(p); } catch (e) { setErr((e as Error).message); } };
+  const nap = (vanDung = false) => { const r = napNgoai(t.id, dan, vanDung); setKq(r && r.loi.length && !vanDung ? r : null); if (r && (!r.loi.length || vanDung)) { setDan(''); setNhac(''); toast('Đã nạp kết quả AI vào bài'); } };
+  return <>
+    {run ? <p className="tbrun" id="tbRun">⏳ AI đang viết bài này{run.lan > 1 ? ` · gửi lại lần ${run.lan - 1}/${GUI_LAI} để sửa lỗi` : ''}…</p> : null}
+    {g.loiGoi && !run ? <p className="tbwarn" id="tbLoiGoi">Chưa sinh được: {g.loiGoi}</p> : null}
+    {g.spare ? <div className="tbwarn" id="tbSpare">AI đã viết xong khi bài đang được sửa tay nên chưa thay. <button className="btn sm" id="tbSpareUse" onClick={() => dungBanDuPhong(t.id)}>Dùng bản AI vừa viết</button></div> : null}
+    {g.model ? <p className="tbmut" id="tbGenInfo">Viết bởi {TEN[g.model] || g.model}{g.tries > 1 ? ` · ${g.tries} lượt (có gửi lại sửa lỗi)` : ''}</p> : null}
+    <Sec title={wait ? 'Sinh bài này' : '⟳ Sinh lại bài này'} id="tbRegen">
+      {!wait ? <textarea className="tbta" id="tbGopY" rows={2} value={gopY} onChange={e => setGopY(e.target.value)} placeholder="Góp ý cho AI (không bắt buộc), vd: mỗi câu trả lời chỉ ghép được một câu hỏi" /> : null}
+      {may ? <div className="tbrow"><button className="btn" id="tbRegenGo" disabled={!!run} onClick={() => { sinh([t.id], wait ? {} : { sinhLai: true, gopY }); if (!wait) ghiNhatKy({ ev: 'sinh-lai', bai: nOf(t), gopY }); setGopY(''); }}>{wait ? 'Sinh bài này' : 'Sinh lại'}</button>
+        {!wait ? <span className="tbmut">Bản chưa duyệt bị thay hẳn; bản đã duyệt vẫn trong Lịch sử bài này.</span> : null}</div> : null}
+    </Sec>
+    <details className="tbsec tbngoai" id="tbNgoaiBox" open={ngoaiMo}><summary><b>AI ngoài</b> <span className="tbmut">chép đoạn nhắc sang AI bất kỳ, dán kết quả về</span></summary>
+      <div className="tbrow"><button className="btn" id="tbChep" onClick={() => layNhac()}>1 · Chép đoạn nhắc{wait ? '' : ' sinh lại'}</button>{nhac ? <span className="tbmut">{Math.round(nhac.length / 100) / 10} nghìn ký tự</span> : null}</div>
+      {nhac ? <textarea className="tbta" id="tbNhac" rows={3} readOnly value={nhac} onFocus={e => e.target.select()} /> : null}
+      <textarea className="tbta" id="tbDan" rows={4} value={dan} onChange={e => setDan(e.target.value)} placeholder="2 · Dán kết quả AI trả về (MD một bài, bắt đầu bằng ## Task:)" />
+      <div className="tbrow"><button className="btn pri" id="tbDanGo" disabled={!dan.trim()} onClick={() => nap()}>Nạp kết quả</button></div>
+      {kq ? <div className="tbwarn" id="tbDanLoi"><b>App đọc thấy lỗi:</b><ul>{kq.loi.map((x, i) => <li key={i}>{x}</li>)}</ul>
+        <div className="tbrow"><button className="btn sm" id="tbChepSua" onClick={() => layNhac({ md: kq.md, loi: kq.loi })}>Chép đoạn nhắc sửa lỗi</button><button className="btn sm ghost" id="tbDanVan" onClick={() => nap(true)}>Vẫn dùng bản này</button></div></div> : null}
+      {err ? <p className="tbwarn">{err}</p> : null}
+    </details>
   </>;
 }
 

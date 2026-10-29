@@ -3,7 +3,7 @@
 //   - mở thẳng ws-editor.html: bộ dữ liệu mẫu nhúng sẵn (server/demo/tao-bai), hoặc thư mục dữ liệu giáo viên tự chọn;
 //     cùng logic đọc với máy chủ (shared/src/taobai/kho.ts). Chế độ này không lưu "phiếu đã tạo" (cần máy chủ).
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { khoTuFile, verOf, type Kho } from '../../../shared/src/taobai/index.ts';
+import { khoTuFile, verOf, type Kho, type TongQuan } from '../../../shared/src/taobai/index.ts';
 import type { GiaoTrinh, DataNote, ChiTietLesson, FileChung } from '../../../shared/src/taobai/types.ts';
 import chung1 from '../../../docs/TAO_BAI/CHUNG_1_QUY_TAC_MD.md?raw';
 import chung2 from '../../../docs/TAO_BAI/1_DANG_Q.md?raw';
@@ -19,6 +19,9 @@ export interface Nguon {
   lesson(gt: string, ls: string): Promise<Lesson | null>;
   moPhieu?(gt: string, ls: string, id: string): Promise<any>;
   luuPhieu?(gt: string, ls: string, id: string, w: any): Promise<boolean>;
+  /** v128 màn Thiết lập: cây giáo trình + trạng thái file; chữ một file */
+  tongQuan(): Promise<TongQuan & { quyen?: boolean }>;
+  tep(path: string): Promise<string | null>;
 }
 
 export const CHUNG_NHUNG = (): FileChung[] => [
@@ -27,7 +30,8 @@ export const CHUNG_NHUNG = (): FileChung[] => [
   { so: 3, ten: 'Quy tắc hình thức', ver: '', raw: null }, { so: 4, ten: 'Rubric chất lượng', ver: '', raw: null }, { so: 5, ten: 'Phiếu mẫu đã duyệt', ver: '', raw: null },
 ];
 function tuKho(k: Kho, mode: Nguon['mode'], ten: string): Nguon {
-  return { mode, ten, giaoTrinh: k.giaoTrinh, loi: k.loi, canhBao: k.canhBao, lesson: async (gt, ls) => { const c = k.chiTiet(gt, ls); return c ? Object.assign(c, { phieu: [] }) : null; } };
+  return { mode, ten, giaoTrinh: k.giaoTrinh, loi: k.loi, canhBao: k.canhBao, lesson: async (gt, ls) => { const c = k.chiTiet(gt, ls); return c ? Object.assign(c, { phieu: [] }) : null; },
+    tongQuan: async () => Object.assign(k.tongQuan(), { quyen: false }), tep: async p => k.tep(p) };
 }
 /** Bộ mẫu nhúng sẵn trong app. */
 export function nguonMau(): Nguon {
@@ -54,9 +58,23 @@ export async function nguonMayChu(): Promise<Nguon | null> {
     return { mode: 'may-chu', ten: 'Dữ liệu trên máy chủ', giaoTrinh: j.giaoTrinh, loi: j.loi, canhBao: j.canhBao,
       lesson: async (gt, ls) => { const x = await fetch(`/api/taobai/lesson/${E(gt)}/${E(ls)}`); return x.ok ? x.json() : null; },
       moPhieu: async (gt, ls, id) => { const x = await fetch(`/api/taobai/phieu/${E(gt)}/${E(ls)}/${E(id)}`); return x.ok ? x.json() : null; },
-      luuPhieu: async (gt, ls, id, w) => { try { const x = await fetch(`/api/taobai/phieu/${E(gt)}/${E(ls)}/${E(id)}`, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(w) }); return x.ok; } catch { return false; } } };
+      luuPhieu: async (gt, ls, id, w) => { try { const x = await fetch(`/api/taobai/phieu/${E(gt)}/${E(ls)}/${E(id)}`, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(w) }); return x.ok; } catch { return false; } },
+      tongQuan: () => goi('/api/taobai/tong-quan'),
+      tep: async p => { const x = await fetch('/api/taobai/tep?path=' + E(p)); return x.ok ? (await x.json()).text : null; } };
   } catch { return null; }
 }
 let cache: Nguon | null = null;
 export async function moNguon(force?: Nguon): Promise<Nguon> { if (force) cache = force; if (!cache) cache = (await nguonMayChu()) || nguonMau(); return cache; }
 export const nguonHienTai = () => cache;
+/** Dữ liệu trên máy chủ vừa đổi (màn Thiết lập nạp file): lần sau đọc lại. Nguồn thư mục / bộ mẫu giữ nguyên. */
+export function datLaiNguon() { if (!cache || cache.mode === 'may-chu') cache = null; }
+
+/** Gọi API máy chủ (JSON); lỗi → Error với câu báo của máy chủ. */
+export async function goi<T = any>(path: string, o: { method?: string; json?: unknown } = {}): Promise<T> {
+  let r: Response;
+  try { r = await fetch(path, { method: o.method || (o.json !== undefined ? 'POST' : 'GET'), headers: o.json !== undefined ? { 'content-type': 'application/json' } : {}, body: o.json !== undefined ? JSON.stringify(o.json) : undefined }); }
+  catch { throw new Error('không nối được máy chủ (máy chủ đã tắt?)'); }
+  const j: any = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.loi || `máy chủ báo lỗi ${r.status}`);
+  return j as T;
+}

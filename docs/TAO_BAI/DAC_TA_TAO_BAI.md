@@ -145,6 +145,8 @@ Mỗi lần sinh / chấm lưu: điểm từng tiêu chí, phiên bản Trình t
 
 ## 8. Sinh bài
 
+*Quy tắc chi tiết khi làm (v129): `QUY_TAC_SINH_BAI.md` (mã S1–S25). Nơi đặt khóa / model: màn Thiết lập › AI (v128, spec mục 59).*
+
 ### 8.1 Luồng
 1. "Sinh bài": app tạo phiếu mới, mỗi bài một Task có G0 (tiêu đề tạm theo bước) và dạng Q đã chọn, trạng thái ⏳.
 2. Gửi yêu cầu sinh **từng bài** (song song tối đa 3), mỗi yêu cầu gồm: file chung 1, 2, 3, 5 (mẫu khớp chuyên đề + độ tuổi), Kiến thức, Trình tự, TF, **toàn bộ cấu trúc** (để AI biết bài mình nằm đâu, tránh lặp), vị trí bài, ghi chú giáo viên, góp ý (khi sinh lại), tóm tắt các bài đã có (tránh lặp câu).
@@ -209,5 +211,6 @@ task.gen = {
 2. Tiêu chí chưa đạt có chặn nút Duyệt không? *Mặc định: không, chỉ cảnh báo.*
 3. Duyệt phiếu có cần mọi bài đã duyệt? *Mặc định: không, nhắc số bài chưa duyệt.*
 4. Đích "Xuất bản" thật là gì (gói .wsp, TeacherResource, kho phiếu)? *Mặc định: Duyệt phiếu + mở hộp Gói .wsp.*
-5. Có cần chạy module khi mở file HTML không máy chủ? *Mặc định: chỉ chế độ AI ngoài.*
+5. Có cần chạy module khi mở file HTML không máy chủ? *Đã chốt 29/10: chỉ chế độ AI ngoài; ô khóa API (Thiết lập › AI) chỉ dùng khi chạy qua máy chủ.*
 6. Cấu trúc file Kiến thức / Trình tự / TF / file chung: *thảo luận riêng.*
+7. Các câu hỏi về quy tắc sinh bài (tránh lặp, lỗi nhẹ, TF nhiều dạng cùng Q, model…): `QUY_TAC_SINH_BAI.md` cuối file.

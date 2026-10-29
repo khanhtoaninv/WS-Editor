@@ -1,6 +1,7 @@
 // Chạy máy chủ Lớp học thử: npm run lop (ở thư mục gốc repo). Cần Node ≥ 22.6.
 // Biến môi trường (tùy chọn): LOP_CONG (cổng, mặc định 1531), LOP_MAT_KHAU (mật khẩu giáo viên), LOP_DU_LIEU (thư mục dữ liệu),
-// ANTHROPIC_API_KEY (bật Insight AI, v122), LOP_AI_MODEL.
+// ANTHROPIC_API_KEY (bật Insight AI, v122; Sinh bài dùng khi chưa đặt khóa ở Thiết lập › AI), LOP_AI_MODEL,
+// TAOBAI_MODEL (model Sinh bài mặc định), TAOBAI_DATA (thư mục dữ liệu giáo trình, mặc định <dữ liệu>/tao-bai/du-lieu).
 import { networkInterfaces } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
