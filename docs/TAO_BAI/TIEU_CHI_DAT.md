@@ -36,3 +36,8 @@ Mục đích: biết khi nào một version bộ file (K, S, TF, file 0) là Đ�
 - Đã chốt: model đích Haiku 5.5; ngưỡng B là 20% (S5 mục 1 trong bộ file cũng đổi từ 30% sang 20% ở v1.2).
 - Giả định cần xác nhận: các ngưỡng còn lại (3 câu sửa tay, 1 vi phạm, 2 phiếu mỗi model) giữ như đề xuất.
 - Máy kiểm đã làm (29/10): chạy trên phiếu lần 8 cho đúng các lỗi chấm tay (Sol: dãy chu kỳ; Flash: chữ rác, thiếu `*`, Can, câu lộ thì, thiếu rào; Haiku: từ thời gian trong lựa chọn, 0% Task 3 và 4). Máy kiểm bắt nhóm A (một phần) và D; B chỉ tính xấp xỉ bằng danh sách từ thời gian; C (công sửa tay) và nghĩa câu vẫn phải kiểm tay.
+
+## 7. Lịch sử áp dụng
+- v1.1 (lần 8): Haiku không đạt. v1.2 (lần 9): 0/4. v1.3 (lần 10): 2/4. **v1.4 (lần 11): 3/4 đạt** (`thu-nghiem/DANH_GIA_AI_NGOAI_LAN_11.md`).
+- Đề xuất chờ chốt: ngưỡng "3 trên 4" lần chạy cho kết luận đạt model đích (thay cho "cả hai phiếu").
+- Bước 3 (lesson thứ hai khác loại) chưa làm.

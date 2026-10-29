@@ -1,6 +1,6 @@
 # TASK FORMAT — Grammar Worksheet · A1 Movers · Daily Routines & Activities
 
-Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 1.4 · Trạng thái: Nháp
+Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 1.5 · Trạng thái: Nháp
 Quy định cách soạn từng Task. Dùng cùng file Kiến thức (K) và Trình tự Lesson (S).
 Chỉ dẫn in trên phiếu theo K6 (không dùng thuật ngữ ngữ pháp). Đáp án chấp nhận nêu rõ độ dài (một từ hay cụm).
 Mức hỗ trợ: Chuẩn (mặc định) hoặc Giảm (ít câu hơn, có câu mở đầu).

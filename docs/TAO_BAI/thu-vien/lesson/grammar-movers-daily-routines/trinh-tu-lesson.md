@@ -1,6 +1,6 @@
 # TRÌNH TỰ LESSON — Grammar Worksheet · A1 Movers · Daily Routines & Activities
 
-Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 1.4 · Trạng thái: Nháp
+Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 1.5 · Trạng thái: Nháp
 Dùng cùng file Kiến thức (K) và file Task Format (TF) của lesson này.
 
 ## S1. Quy mô phiếu
@@ -64,7 +64,7 @@ Chỉ dùng hai nhãn này cho hai khái niệm. Không dùng Habit, Often, Ever
 
 ## S5. Quy tắc toàn phiếu
 0. **Từ chỉ thời gian** (dùng để đếm trong quy tắc 1) là mọi cụm chỉ thời điểm, tần suất hoặc thói quen, không chỉ các từ sau: usually, every + từ, on + ngày, now, right now, at the moment, today, at + giờ, in the morning/afternoon/evening, after school, after dinner, before bed, in your free time, when + mệnh đề thời gian (when he comes home), how often, Look!, Listen!. Gặp cụm nào gợi thói quen hay lúc này thì tính là từ chỉ thời gian. **Từ chỉ thời gian chỉ được nằm ở câu hỏi hoặc câu dẫn, KHÔNG nằm trong lựa chọn A/B/C hoặc trong vế `{…}`** (viết "I am eating my lunch", không viết "I am eating my lunch right now").
-1. Ít nhất 20% số câu có đáp án trong mỗi Task thuộc G2, G3a và G3b phải xác định được chỉ từ NGHĨA của tình huống. Một câu chỉ được tính khi cả hai điều đúng: (i) câu không chứa từ chỉ thời gian ở mục 0; (ii) câu hoặc lượt thoại liền trước KHÔNG chứa động từ ở đúng dạng của đáp án (xem 1d). Câu "đang làm" muốn được tính phải theo mục 1e. Báo cáo số câu và số thứ tự từng Task. Nếu không đạt 30%, viết lại câu cho đạt trước khi nộp; chỉ ghi "không đạt" khi thật sự không làm được và nêu lý do.
+1. Ít nhất 20% số câu có đáp án trong mỗi Task thuộc G2, G3a và G3b phải xác định được chỉ từ NGHĨA của tình huống. Một câu chỉ được tính khi cả hai điều đúng: (i) câu không chứa từ chỉ thời gian ở mục 0; (ii) câu hoặc lượt thoại liền trước KHÔNG chứa động từ ở đúng dạng của đáp án (xem 1d). Câu "đang làm" muốn được tính phải theo mục 1e. Báo cáo số câu và số thứ tự từng Task. Nếu không đạt 20%, viết lại câu cho đạt trước khi nộp; chỉ ghi "không đạt" khi thật sự không làm được và nêu lý do.
 1b. Mỗi câu chọn hoặc điền chỉ có đúng một đáp án. Với mỗi câu, tự thử cả hai đáp án còn lại; nếu một trong hai cũng hợp lý trong tình huống thì viết lại câu hoặc thêm thông tin vào tình huống. Không viết câu hỏi nhắc lại việc vừa được nói rõ ở câu trước. Các mẫu thường gây hai đáp án, phải tránh hoặc thêm dấu hiệu:
    - Sau một câu tả cảnh, hỏi "[Does he swim / Is he swimming]?" mà không có dấu hiệu "bây giờ" (thêm "at the moment" hoặc làm theo mục 1e).
    - "She [feeds / is feeding] it" không có dấu hiệu rõ về lúc này hay thói quen.

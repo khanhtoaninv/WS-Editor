@@ -57,7 +57,7 @@ ansTxt.split('\n').forEach(l => {
 // khóa dạng "a / b" là cú pháp đáp án chấp nhận hợp lệ của Editor (docs/TUONG_TAC/2_CHUAN_GOI_PHIEU.md), không cảnh báo
 
 // ---- từ chỉ thời gian ----
-const TIME = /\b(now|right now|at the moment|today|every ?(day|morning|evening|week|saturday|sunday)|on (saturdays|sundays|mondays|weekends|fridays)|usually|always|often|sometimes|never|after (school|dinner|lunch)|before (bed|school)|in the (morning|evening|afternoon)|at the weekend|these days|listen|look|at \d{1,2}(:\d\d)? ?([ap]\.?m\.?)?|at \d{1,2} o'clock)\b/i;
+const TIME = /\b(now|right now|at the moment|today|every ?(day|morning|evening|week|saturday|sunday)|on (mondays?|tuesdays?|wednesdays?|thursdays?|fridays?|saturdays?|sundays?|weekdays|weekends?)( (mornings?|afternoons?|evenings?|nights?))?|(sunday|saturday|monday|friday) (mornings?|afternoons?|evenings?)|in the (winter|summer|spring|autumn)|every \w+|at night|usually|always|often|sometimes|never|after (school|dinner|lunch)|before (bed|school)|in the (morning|evening|afternoon)|at the weekend|these days|listen|look|at \d{1,2}(:\d\d)? ?([ap]\.?m\.?)?|at \d{1,2} o'clock)\b/i;
 const VERBS = { play: /\bplay(s|ing)?\b/gi, read: /\bread(s|ing)?\b/gi, watch: /\bwatch(es|ing)?\b/gi, eat: /\beat(s|ing)?\b/gi, go: /\b(go|goes|going)\b/gi, ride: /\bri(de|des|ding)\b/gi, swim: /\bswim(s|ming)?\b/gi, draw: /\bdraw(s|ing)?\b/gi };
 const totals = {}; Object.keys(VERBS).forEach(v => totals[v] = 0);
 const seqs = {}; const stems = [];
