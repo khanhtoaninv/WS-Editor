@@ -44,4 +44,7 @@ Cần khai thác:
 
 Ngoài phạm vi: Past Simple, Present Perfect, Future Forms, stative verbs (love, like, know, have = sở hữu...) và các cách dùng nâng cao của Present Continuous.
 
-`[ĐỀ XUẤT]` Từ vựng được phép thêm, vì 9 động từ chưa đủ cho 25 phút làm bài: động từ hoạt động quen thuộc (make, cook, sing, write, talk, sit, sleep, visit, take, look, listen, knit, teach, feed, get up), danh từ đời sống (park, garden, zoo, kitchen, sports centre, football, notebook, pancakes, ice cream, scarf, bike, school). Câu được lặp động từ nhưng không dùng một động từ quá 3 lần trong cả phiếu. Cần người dùng chốt danh sách.
+**Từ vựng được phép** (kiểm với danh sách từ Cambridge Pre A1 Starters và A1 Movers 2018, bằng đọc tự động hai file PDF, cần người dùng kiểm lại trước khi duyệt):
+- Có trong danh sách (dùng được): play, read, watch, eat, go, do, ride, swim, draw (9 động từ gốc); thêm sing, write, talk, sit, sleep, look, listen, make, wear, take, get up, feed, teach, cook; park, garden, kitchen, zoo, monkey, elephant, football, tennis, bike, guitar, ice cream, phone, window, desk, story, picture, grandma, school, breakfast, dog, sports centre, scarf, hospital, library, pancake (số ít).
+- Không thấy trong hai danh sách (nên tránh hoặc thay): **knit, visit, notebook, basket, ring (điện thoại reo), smell, card, cartoons, pancakes (số nhiều)**. Bản phiếu v2 đã dùng visit, notebook, basket, ring, smell, card; cần thay khi sinh lại.
+- Nguyên tắc: từ ngoài danh sách của cấp độ bị báo `[HT]` (Cambridge kiểm soát ngôn ngữ theo danh sách công bố). Một động từ không quá 3 lần trong cả phiếu `[CL]`.
