@@ -29,10 +29,13 @@ Lịch sử thử:
 1. Bản thử đầu (tôi tự sinh, v1, v2 trong `tests/md/sinh-thu-movers-grammar*.md`): lỗi đáp án, từ ngoài danh sách; người dùng chấm.
 2. Lần 1 với AI ngoài (v0.4, một model): `thu-nghiem/DANH_GIA_AI_NGOAI_LAN_1.md` (hai file người dùng gửi trùng nhau).
 3. Lần 2 (v0.4, ba model GPT 6.1 Sol 7,5, Claude 5.5 Haiku 6,5, Gemini 3.8 Flash 4,5): `thu-nghiem/DANH_GIA_AI_NGOAI_LAN_2.md`. Bộ file chấm 7/10. Lỗi chung: TF-G2-A lộ đáp án qua dạng động từ; câu mơ hồ có hai đáp án; phạm vi đếm động từ không rõ; thiếu nhân vật cho 3 hàng Task 1; AI tự đếm lệch.
-4. **v0.5** đã sửa theo lần 2: G2 mặc định TF-G2-B (TF-G2-A thành phương án phụ), liệt kê mẫu câu mơ hồ, Task 1 cố định ba hàng (Lucy mẫu, Ben, They), từ vựng mở theo Cambridge Starters/Movers, đếm động từ không tính chỉ dẫn và trợ động từ, NOTES và REPORT bằng tiếng Anh. **Chưa chạy thử v0.5 với AI nào.**
+4. **v0.5** đã sửa theo lần 2 (đã chạy thử lần 3 với Flash, Haiku, Sol, xem mục 4a): G2 mặc định TF-G2-B (TF-G2-A thành phương án phụ), liệt kê mẫu câu mơ hồ, Task 1 cố định ba hàng (Lucy mẫu, Ben, They), từ vựng mở theo Cambridge Starters/Movers, đếm động từ không tính chỉ dẫn và trợ động từ, NOTES và REPORT bằng tiếng Anh. **Chưa chạy thử v0.5 với AI nào.**
+
+### 4a. Lần 3 (29/10/2026): chạy v0.5 với ba model
+Đánh giá: `thu-nghiem/DANH_GIA_AI_NGOAI_LAN_3.md`; phiếu gốc: `thu-nghiem/phieu-lan-3/`. Điểm phiếu: Flash 6,5 (v0.4: 4,5), Haiku 6,0 (6,5), Sol 6,5 (7,5). Bộ file: 7,3 (v0.4: 7). Phiếu tệ nhất tăng, tốt nhất giảm. Lỗi mới của tài liệu: ô They/Now của TF-G1-B không điền được; quy tắc 30% "không có từ thời gian" bị lách (Sol chép lại dạng động từ của câu trước, Haiku nộp dù không đạt); thiếu danh sách Cambridge trong gói; định dạng đầu ra vẫn drift. Đề xuất v0.6 ở mục 5 của file đánh giá, chờ người dùng duyệt.
 
 ## 5. Việc tiếp theo
-1. Người dùng gửi v0.5 cho vài AI (gói trên), mang phiếu về; đánh giá theo bốn lớp: (a) theo đúng ba tài liệu không, (b) lỗi nội dung (đáp án sai, mâu thuẫn tình huống, dựa từ khóa, từ ngoài phạm vi, câu mơ hồ), (c) lỗi do tài liệu thiếu hoặc mơ hồ, (d) lỗi do AI. Nạp phiếu vào `ws-editor.html` bằng Playwright để xem dàn trang (cách: chuyển định dạng trung tính sang MD theo `anh-xa-tf-grammar-movers-sang-app.md` và `docs/QUY_UOC_MD.md`).
+1. (Đã làm lần 3, xem 4a; chờ duyệt đề xuất v0.6.) Quy trình đánh giá theo bốn lớp: (a) theo đúng ba tài liệu không, (b) lỗi nội dung (đáp án sai, mâu thuẫn tình huống, dựa từ khóa, từ ngoài phạm vi, câu mơ hồ), (c) lỗi do tài liệu thiếu hoặc mơ hồ, (d) lỗi do AI. Nạp phiếu vào `ws-editor.html` bằng Playwright để xem dàn trang (cách: chuyển định dạng trung tính sang MD theo `anh-xa-tf-grammar-movers-sang-app.md` và `docs/QUY_UOC_MD.md`).
 2. Người dùng chưa trả lời có đồng ý đổi G2 mặc định sang TF-G2-B không; tôi đã chọn làm theo đề xuất.
 3. Khi bộ file đạt, làm hết nhóm hệ thống (5 mục) và một lesson loại khác (ví dụ Reading hoặc Vocabulary) để kiểm tra bộ file nạp có đủ trên loại phiếu thứ hai chưa.
 4. Nghiên cứu còn thiếu: toàn văn Field 2018, Barrett 1968, Clymer 1968, Trüb 2022 (chỉ có bản tóm tắt); cơ sở học thuật cho Writing, Speaking, phát âm; ý đồ từng câu Reading/Listening.
