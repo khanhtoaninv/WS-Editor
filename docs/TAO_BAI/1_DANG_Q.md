@@ -1,6 +1,6 @@
 # File chung số 2 — 12 dạng câu hỏi (Q) của WS Editor
 
-Bản nháp 29/10/2026, theo app v123 (`docs/QUY_UOC_MD.md` mục 2, 2b, 4, 5).
+Bản nháp 29/10/2026, theo app v123 (`docs/QUY_UOC_MD.md` mục 2, 2b, 4, 5). **Rà lại ở T0 (v124)**: mọi ví dụ dưới đây nạp đúng dạng Q (`tests/taobai/test_q12.py`); quy tắc viết khi sinh bài ở file chung 1 `CHUNG_1_QUY_TAC_MD.md`.
 Dùng cho hai việc: (1) người viết **TF** tra để chọn `Dạng app:` cho mỗi dạng bài; (2) AI đọc ở bước đề xuất danh sách Task và bước sinh bài.
 
 Cách ghi trong TF:
@@ -61,6 +61,7 @@ Thành phần dùng chung cho mọi Q (không phải dạng riêng): `Khung từ
   1. you / did / go / where / yesterday / ?
   ```
 - **Lưu ý khi sinh:** đáp án mẫu là một câu; nếu có nhiều cách đúng thì ghi cách chuẩn nhất. Không viết `___` cuối câu (app tự vẽ dòng).
+- **Sắp xếp từ:** các từ cách nhau ` / `, mỗi câu một số. (Trước v124, câu `2. was / at / I / home` đứng ngay sau một câu kết thúc bằng `?` bị app gộp thành lựa chọn của câu trên rồi mất hẳn; đã sửa.)
 
 ## Q3 Chọn A/B/C
 - **Trên phiếu:** lựa chọn dưới câu, nhãn mặc định `a. b. c.`.
@@ -100,7 +101,7 @@ Thành phần dùng chung cho mọi Q (không phải dạng riêng): `Khung từ
 ## Q6 Nhìn ảnh viết
 - **Trên phiếu:** mỗi câu một ảnh `[ảnh: tên]`, chỗ viết dưới ảnh.
 - **Hợp với:** viết từ vựng theo tranh, mô tả tranh bằng một câu.
-- **Tùy chọn:** `Kích thước ảnh: 50%–150%`, `Ảnh vừa ô: có`.
+- **Tùy chọn:** `Kích thước ảnh: 50%–150%`, `Ảnh vừa ô: có`; `(ô chữ cái)` = viết từ theo ô (đánh vần theo tranh). Câu có `[ảnh: …]` mà ghi `Dạng: điền từ (ô chữ cái)` thì app vẫn hiểu là Q6.
 - **Ví dụ:**
   ```
   Dạng: nhìn ảnh viết
@@ -167,7 +168,8 @@ Thành phần dùng chung cho mọi Q (không phải dạng riêng): `Khung từ
   Khối chữ trên:
     Where did you go? Who did you go with? What did you do?
   ```
-- **Lưu ý khi sinh:** gợi ý bằng câu hỏi dẫn trong `Khối chữ trên:`; số dòng hợp với số từ yêu cầu.
+- **Lưu ý khi sinh:** gợi ý bằng câu hỏi dẫn trong `Khối chữ trên:`; số dòng hợp với số từ yêu cầu. Không có câu đánh số, không có `## Đáp án`.
+- App nhận đúng Q12 từ v123; v124 sửa nhãn trong cây (trước ghi nhầm "Câu hỏi · viết câu", nay "Viết tự do" / "Khung vẽ tự do").
 
 ---
 

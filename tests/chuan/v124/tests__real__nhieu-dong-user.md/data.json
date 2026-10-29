@@ -1,0 +1,158 @@
+{
+ "title": "Phiếu mới",
+ "tasks": [
+  {
+   "id": "t1",
+   "typeId": "choose-abc",
+   "typeName": "Câu hỏi · khoanh A/B/C",
+   "title": "Conversation",
+   "instruction": "",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "Thank you very much.\n‘ ___ ’",
+      "opts": [
+       "Are you worried?",
+       "You’re welcome.",
+       "Not all.",
+       "Nothing."
+      ],
+      "id": "q1"
+     },
+     {
+      "text": "Jim: ‘What about collecting used paper, bottles and plastic bags every day?’\nHa and Mai: ‘ ___ ’",
+      "opts": [
+       "Because they can pollute the environment.",
+       "How come? Who can do that?",
+       "That’s a very good idea. Let’s do that.",
+       "What about this weekend?"
+      ],
+      "id": "q2"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4",
+    "params": {
+     "dir": "auto"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 1
+  },
+  {
+   "id": "t2",
+   "typeId": "gap-fill",
+   "typeName": "Câu hỏi · điền chỗ trống",
+   "title": "Rewrite the sentences",
+   "instruction": "Rewrite the sentences without changing their meaning using the given words.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "He no longer has long hair and a thick moustache.\nHe used to ___ .",
+      "id": "q1"
+     },
+     {
+      "text": "She hasn’t been to Paris before.\nThis is the ___ ?",
+      "id": "q2"
+     },
+     {
+      "text": "Mary told me not to forget my tennis racket.\nMary said, “ ___”.",
+      "id": "q3"
+     },
+     {
+      "text": "She couldn’t come to class because of illness.\nAs she ___ .",
+      "id": "q4"
+     },
+     {
+      "text": "We have run out of tea.\nThere is ___ .",
+      "id": "q5"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "word",
+    "attach": "inline",
+    "layout": "A2",
+    "params": {
+     "lenMode": "fill",
+     "lines": 1,
+     "start": "inline"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 2
+  }
+ ],
+ "id": "(id)",
+ "age": "7-9",
+ "page": {
+  "size": "A4",
+  "marginMm": {
+   "top": 14,
+   "right": 14,
+   "bottom": 14,
+   "left": 14
+  }
+ },
+ "spacing": {
+  "preset": "compact",
+  "overrides": {}
+ },
+ "flow": "cont",
+ "schema": "ws-editor/0.3"
+}

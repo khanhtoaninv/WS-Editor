@@ -14218,7 +14218,7 @@ function TopBar() {
 							padding: "1px 7px",
 							marginLeft: 4
 						},
-						children: "v123"
+						children: "v124"
 					}),
 					" ",
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", {
@@ -20017,7 +20017,12 @@ function descOf(t) {
 		table: "Bảng"
 	}[k];
 	if (k === "empty") p.push(c.list === false ? "Chỉ có ảnh" : "Chưa có câu");
-	else p.push(base || "Câu hỏi");
+	else if (k === "questions" && isFreeW(t)) {
+		p.push((a.params || {}).frame === "box" ? "Khung vẽ tự do" : "Viết tự do");
+		if (t.image) p.push("ảnh chung");
+		if ((t.extras || []).length) p.push("khối tự do");
+		return p.join(" · ");
+	} else p.push(base || "Câu hỏi");
 	if (k === "table") p.push({
 		text: "ô có chữ",
 		blank: "ô trống để viết",
@@ -20418,7 +20423,7 @@ function parseTask(raw, force, pre) {
 			});
 			return;
 		}
-		if (items.length && /^[^/]{1,25}(\s\/\s[^/]{1,25}){1,4}$/.test(x) && !x.includes("___") && !items[items.length - 1].opts && /\?$|___/.test(items[items.length - 1].text || "")) {
+		if (items.length && !NUM_RE.test(x0.trim()) && /^[^/]{1,25}(\s\/\s[^/]{1,25}){1,4}$/.test(x) && !x.includes("___") && !items[items.length - 1].opts && /\?$|___/.test(items[items.length - 1].text || "")) {
 			items[items.length - 1].opts = x.split(/\s\/\s/).map((y) => y.trim());
 			return;
 		}
@@ -20954,7 +20959,7 @@ function readMd(raw) {
 	});
 	for (let bi = 0; bi < blocks.length; bi++) {
 		const b = blocks[bi];
-		if (b.lines.some((l) => MD_SECT.test(l.trim()))) continue;
+		if (b.lines.some((l) => MD_SECT.test(l.trim()) || /^\s*(bài đọc|passage|hội thoại|dialogue)\s*:/i.test(l))) continue;
 		const nz = b.lines.map((l, i) => [l, i]).filter((x) => x[0].trim());
 		for (let k = 1; k < nz.length - 1; k++) {
 			const [l, i] = nz[k], t = l.trim();
@@ -21087,6 +21092,16 @@ function mdTask(b, keys) {
 				if (sec.passage.length && sec.passage[sec.passage.length - 1] !== "") sec.passage.push("");
 			} else mode = null;
 			return;
+		}
+		const si = !mode && /^\s*(bài đọc|passage|hội thoại|dialogue)\s*:\s*(\S.*)$/i.exec(t);
+		if (si) {
+			const dl = /hội thoại|dialogue/i.test(si[1]);
+			if (!dl || /^[^:]{1,40}:\s*\S/.test(si[2])) {
+				mode = dl ? "dialogue" : "passage";
+				sec[mode].push(si[2].trim());
+				notes.push(`“${si[1]}:” có chữ ngay sau dấu hai chấm: dùng làm dòng đầu của ${dl ? "hội thoại" : "bài đọc"} (nên viết xuống dòng dưới)`);
+				return;
+			}
 		}
 		const s = MD_SECT.exec(t);
 		if (s) {
@@ -30792,7 +30807,7 @@ function saveVersion(id, v, hash) {
 	put(K_VER, m);
 }
 // src/ui/wsp/seal.ts
-var VER = "WS Editor v123";
+var VER = "WS Editor v124";
 var fname = (t) => (t || "phieu").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").replace(/[^\w-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "phieu";
 async function sealCollected(c, srv) {
 	const b0 = await buildFiles(c.input), h = b0.manifest.contentHash + b0.manifest.keyHash;

@@ -6096,7 +6096,7 @@ function parseTask(raw, force, pre) {
     let im = null; const mi = /^\[ảnh:\s*([^\]]+)\]\s*/i.exec(x); if (mi) { im = mi[1].trim(); x = x.slice(mi[0].length); }
     const push = o => { if (im) o.img = im; items.push(o); };
     const so = splitOptsLine(x); if (so && (so[0] || (pre && so[1].length >= 2))) { push({ text: so[0], opts: so[1] }); return; }   // MD: câu chỉ có lựa chọn (không có thân câu) vẫn là một câu
-    if (items.length && /^[^/]{1,25}(\s\/\s[^/]{1,25}){1,4}$/.test(x) && !x.includes('___') && !items[items.length - 1].opts && /\?$|___/.test(items[items.length - 1].text || '')) { items[items.length - 1].opts = x.split(/\s\/\s/).map(y => y.trim()); return; }
+    if (items.length && !NUM_RE.test(x0.trim()) && /^[^/]{1,25}(\s\/\s[^/]{1,25}){1,4}$/.test(x) && !x.includes('___') && !items[items.length - 1].opts && /\?$|___/.test(items[items.length - 1].text || '')) { items[items.length - 1].opts = x.split(/\s\/\s/).map(y => y.trim()); return; }
     push({ text: x });
   });
   // người nói

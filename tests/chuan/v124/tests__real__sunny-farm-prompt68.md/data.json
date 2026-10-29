@@ -1,0 +1,550 @@
+{
+ "title": "A Visit to Sunny Farm",
+ "age": "7-9",
+ "tasks": [
+  {
+   "id": "t1",
+   "typeId": "choose-abc",
+   "typeName": "Bài đọc · tick lựa chọn",
+   "title": "Before you read",
+   "instruction": "Look at the title. Tick TWO things you think might be in the story. These are predictions, not right or wrong answers. Now read the story. My goal: I can understand a short story, find details, make simple inferences and use information from a text.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "",
+      "opts": [
+       "farm animals",
+       "a school bus",
+       "a football match",
+       "a spaceship"
+      ],
+      "id": "q1"
+     }
+    ],
+    "lead": {
+     "kind": "passage",
+     "text": "On Saturday, Max and his class visited Sunny Farm. They went there by bus. First, they fed the goats and watched two baby rabbits. Max wanted to see the horses, but the horses were in another field. At twelve o'clock, the children sat under a big tree for lunch. Lily opened her bag, but her lunchbox was empty. She had left her sandwich at home. Max gave her half of his cheese sandwich. Lily smiled and said, 'Thank you!' After lunch, it began to rain. The teacher took everyone into a small barn. They listened to the rain and drew pictures of the animals. When the rain stopped, they went home. Max's favourite part of the trip was feeding the goats."
+    }
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4",
+    "params": {
+     "dir": "auto",
+     "lab": "box"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 1
+  },
+  {
+   "id": "t2",
+   "typeId": "choose-abc",
+   "typeName": "Câu hỏi · khoanh A/B/C",
+   "title": "Get the main idea",
+   "instruction": "Choose the BEST summary of the whole story.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "",
+      "opts": [
+       "Max visited a farm with his class. They saw animals, shared lunch and stayed inside when it rained.",
+       "Max stayed at school, played football and helped his teacher.",
+       "Max went shopping with Lily and bought food for the animals."
+      ],
+      "id": "q1"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4",
+    "params": {
+     "dir": "auto"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 2
+  },
+  {
+   "id": "t3",
+   "typeId": "answer-q",
+   "typeName": "Câu hỏi · viết câu",
+   "title": "Find the details",
+   "instruction": "Read again and answer with one word or a short phrase.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "How did the class travel to the farm?",
+      "id": "q1"
+     },
+     {
+      "text": "Which animals did the children feed?",
+      "id": "q2"
+     },
+     {
+      "text": "What time did they have lunch?",
+      "id": "q3"
+     },
+     {
+      "text": "Where were the horses?",
+      "id": "q4"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "sentence",
+    "attach": "item",
+    "layout": "A1",
+    "params": {
+     "lines": 1
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 3
+  },
+  {
+   "id": "t4",
+   "typeId": "choose-abc",
+   "typeName": "Câu hỏi · khoanh A/B/C",
+   "title": "Think and infer",
+   "instruction": "Choose the best answer. Use clues from the story.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "Why did Lily smile when Max gave her food?",
+      "opts": [
+       "She was happy that Max helped her.",
+       "She did not like cheese.",
+       "She wanted to go home."
+      ],
+      "id": "q1"
+     },
+     {
+      "text": "What can you say about Max?",
+      "opts": [
+       "He was unkind.",
+       "He was helpful.",
+       "He was afraid of rabbits."
+      ],
+      "id": "q2"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4",
+    "params": {
+     "dir": "auto"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "a",
+   "number": 4
+  },
+  {
+   "id": "t5",
+   "typeId": "answer-q",
+   "typeName": "Câu hỏi · viết câu",
+   "title": "Story clue",
+   "instruction": "",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "Which part of the story helped you answer Question 2?",
+      "id": "q1"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "sentence",
+    "attach": "item",
+    "layout": "A1",
+    "params": {
+     "lines": 1
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": "join",
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "b",
+   "number": 4
+  },
+  {
+   "id": "t6",
+   "typeId": "gap-fill",
+   "typeName": "Câu hỏi · điền chỗ trống",
+   "title": "Put the story in order",
+   "instruction": "Write numbers 1–4 to show the order of these events.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "___ The children drew pictures in a barn.",
+      "id": "q1"
+     },
+     {
+      "text": "___ Max shared his sandwich with Lily.",
+      "id": "q2"
+     },
+     {
+      "text": "___ The class fed the goats.",
+      "id": "q3"
+     },
+     {
+      "text": "___ The children went home.",
+      "id": "q4"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "word",
+    "attach": "inline",
+    "layout": "A2",
+    "params": {
+     "lenMode": "fill",
+     "lines": 1,
+     "start": "inline"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 5
+  },
+  {
+   "id": "t7",
+   "typeId": "choose-abc",
+   "typeName": "Câu hỏi · tick lựa chọn",
+   "title": "Your response",
+   "instruction": "Which activity from the farm visit would YOU most like to do? Tick one and finish the sentence.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "",
+      "opts": [
+       "Feed goats",
+       "Watch rabbits",
+       "Draw animals"
+      ],
+      "id": "q1"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4",
+    "params": {
+     "dir": "auto",
+     "lab": "box"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "a",
+   "number": 6
+  },
+  {
+   "id": "t8",
+   "typeId": "gap-fill",
+   "typeName": "Câu hỏi · điền chỗ trống",
+   "title": "Finish the sentence",
+   "instruction": "",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "I would like to ___ because ___.",
+      "id": "q1"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "word",
+    "attach": "inline",
+    "layout": "A2",
+    "params": {
+     "lenMode": "fill",
+     "lines": 1,
+     "start": "inline"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": "join",
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "b",
+   "number": 6
+  },
+  {
+   "id": "t9",
+   "typeId": "choose-abc",
+   "typeName": "Câu hỏi · tick lựa chọn",
+   "title": "Self-check",
+   "instruction": "",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "",
+      "opts": [
+       "I used the story to answer Tasks 2–5.",
+       "I checked my answers."
+      ],
+      "id": "q1"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4",
+    "params": {
+     "dir": "auto",
+     "lab": "box"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": "join",
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "c",
+   "number": 6
+  }
+ ],
+ "id": "(id)",
+ "page": {
+  "size": "A4",
+  "marginMm": {
+   "top": 14,
+   "right": 14,
+   "bottom": 14,
+   "left": 14
+  }
+ },
+ "spacing": {
+  "preset": "compact",
+  "overrides": {}
+ },
+ "flow": "cont",
+ "schema": "ws-editor/0.3"
+}

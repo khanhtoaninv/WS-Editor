@@ -1,0 +1,481 @@
+{
+ "title": "Phiếu thử cú pháp v81",
+ "age": "7-9",
+ "tasks": [
+  {
+   "id": "t1",
+   "typeId": "gap-fill",
+   "typeName": "Câu hỏi · điền chỗ trống · ảnh chung",
+   "title": "Look and write",
+   "instruction": "Look at the pictures. Write the words.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "This is a ___ .",
+      "id": "q1",
+      "ex": true,
+      "key": "book"
+     },
+     {
+      "text": "I have a ___ .",
+      "id": "q2",
+      "key": "pen"
+     },
+     {
+      "id": "q3",
+      "gt": true,
+      "text": "Part B: in the living room"
+     },
+     {
+      "text": "She has a ___ .",
+      "id": "q4",
+      "key": "bag"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "word",
+    "attach": "inline",
+    "layout": "A2",
+    "params": {
+     "lenMode": "fill",
+     "lines": 1,
+     "start": "inline"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "image": {
+    "label": "phòng ngủ",
+    "size": "medium",
+    "two": true,
+    "label2": "phòng khách"
+   },
+   "audio": null,
+   "part": "",
+   "number": 1
+  },
+  {
+   "id": "t2",
+   "typeId": "true-false",
+   "typeName": "Bài đọc · Đúng/Sai",
+   "title": "Read and answer",
+   "instruction": "",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "Tom lives in a big house.",
+      "id": "q1",
+      "key": "No"
+     },
+     {
+      "text": "Max is a dog.",
+      "id": "q2",
+      "key": "Yes"
+     }
+    ],
+    "lead": {
+     "kind": "passage",
+     "text": "A. Tom lives in a small house near the park.\n\nB. He has a dog called Max. Max is brown."
+    }
+   },
+   "answer": {
+    "kind": "tf",
+    "attach": "item",
+    "layout": "A6",
+    "params": {
+     "labs": [
+      "Yes",
+      "No"
+     ]
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null,
+    "order": "qfirst"
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 2
+  },
+  {
+   "id": "t3",
+   "typeId": "custom",
+   "typeName": "Câu hỏi · chọn trong câu {a|b}",
+   "title": "Find the mistake",
+   "instruction": "",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "She <u>go</u> to <u>school</u> every <u>day</u> by <u>bus</u>.",
+      "id": "q1"
+     },
+     {
+      "text": "They <u>is</u> my <u>best</u> friends <u>at</u> <u>school</u>.",
+      "id": "q2"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "inline",
+    "layout": "A4",
+    "params": {
+     "dir": "auto",
+     "ulab": true
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 3
+  },
+  {
+   "id": "t4",
+   "typeId": "answer-q",
+   "typeName": "Khung vẽ tự do",
+   "title": "Draw your room",
+   "instruction": "Draw your bedroom.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "id": "q1",
+      "text": ""
+     }
+    ]
+   },
+   "answer": {
+    "kind": "sentence",
+    "attach": "item",
+    "layout": "A1",
+    "params": {
+     "lines": 8,
+     "frame": "box"
+    }
+   },
+   "layout": {
+    "num": "off",
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 4
+  },
+  {
+   "id": "t5",
+   "typeId": "answer-q",
+   "typeName": "Câu hỏi · viết câu",
+   "title": "Write the words",
+   "instruction": "",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "id": "q1",
+      "text": "cat"
+     },
+     {
+      "id": "q2",
+      "text": "dog"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "sentence",
+    "attach": "item",
+    "layout": "A1",
+    "params": {
+     "lines": 1,
+     "ruling": "4"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 5
+  },
+  {
+   "id": "t6",
+   "typeId": "gap-fill",
+   "typeName": "Câu hỏi · điền chỗ trống · khung từ",
+   "title": "Choose the fruit",
+   "instruction": "",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "I like ___ .",
+      "id": "q1"
+     },
+     {
+      "text": "She likes ___ .",
+      "id": "q2"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "word",
+    "attach": "inline",
+    "layout": "A2",
+    "params": {
+     "lenMode": "fill",
+     "lines": 1,
+     "start": "inline"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "wordBank": {
+    "words": [
+     "apple",
+     "banana",
+     "cherry"
+    ],
+    "placement": "bottom",
+    "style": "chips",
+    "label": "lower",
+    "kind": "image"
+   },
+   "extras": [
+    {
+     "id": "x1",
+     "kind": "text",
+     "pos": "bottom",
+     "text": "Remember: use capital letters.\nLook at the pictures first."
+    },
+    {
+     "id": "x2",
+     "kind": "image",
+     "pos": "top",
+     "label": "bản đồ khu vườn"
+    }
+   ],
+   "audio": null,
+   "part": "",
+   "number": 6
+  },
+  {
+   "id": "t7",
+   "typeId": "answer-q",
+   "typeName": "Câu hỏi · viết câu · ảnh chung",
+   "title": "Look at the town",
+   "instruction": "",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "What is number 1?",
+      "id": "q1"
+     },
+     {
+      "text": "What is number 2?",
+      "id": "q2"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "sentence",
+    "attach": "item",
+    "layout": "A1",
+    "params": {
+     "lines": 1
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "T2",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "image": {
+    "label": "thành phố",
+    "size": "medium",
+    "marks": [
+     {
+      "x": 20,
+      "y": 30
+     },
+     {
+      "x": 50,
+      "y": 60
+     }
+    ],
+    "mk": {
+     "label": "none"
+    }
+   },
+   "audio": null,
+   "part": "",
+   "number": 7
+  }
+ ],
+ "id": "(id)",
+ "page": {
+  "size": "A4",
+  "marginMm": {
+   "top": 14,
+   "right": 14,
+   "bottom": 14,
+   "left": 14
+  }
+ },
+ "spacing": {
+  "preset": "compact",
+  "overrides": {}
+ },
+ "flow": "cont",
+ "schema": "ws-editor/0.3"
+}

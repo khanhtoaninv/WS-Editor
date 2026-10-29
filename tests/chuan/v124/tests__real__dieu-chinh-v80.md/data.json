@@ -1,0 +1,321 @@
+{
+ "title": "Điều chỉnh v80",
+ "tasks": [
+  {
+   "id": "t1",
+   "typeId": "gap-fill",
+   "typeName": "Câu hỏi · điền chỗ trống",
+   "title": "Word formation",
+   "instruction": "Write the correct form of the word in brackets.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "We are trying to have (an) ___ world. (**POLLUTE**)",
+      "id": "q1"
+     },
+     {
+      "text": "The *old* man <u>walked slowly</u> to the **<u>park</u>** every day ___.",
+      "id": "q2"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "word",
+    "attach": "inline",
+    "layout": "A2",
+    "params": {
+     "lenMode": "fill",
+     "lines": 1,
+     "start": "inline"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 1
+  },
+  {
+   "id": "t2",
+   "typeId": "choose-abc",
+   "typeName": "Câu hỏi · khoanh A/B/C",
+   "title": "Synonyms and antonyms",
+   "instruction": "Mark the letter A, B, C or D on your answer sheet to indicate the word(s) CLOSEST in meaning to the underlined word(s) in each of the following questions.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "Acupuncture <u>originated</u> in China and has been used as a traditional medicine for thousands of years.",
+      "opts": [
+       "began",
+       "created",
+       "developed",
+       "introduced"
+      ],
+      "id": "q1"
+     },
+     {
+      "text": "There is no evidence at this time that acupuncture can treat cancer itself.",
+      "opts": [
+       "clue",
+       "data",
+       "proof",
+       "sign"
+      ],
+      "id": "q2"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4",
+    "params": {
+     "dir": "auto"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "a",
+   "number": 2
+  },
+  {
+   "id": "t3",
+   "typeId": "choose-abc",
+   "typeName": "Câu hỏi · khoanh A/B/C",
+   "title": "Choose the correct answer.",
+   "instruction": "Mark the letter A, B, C or D indicate the word(s) OPPOSITE in meaning to the underlined word(s) in each of the following questions.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "The gender gap in primary education has been eliminated.",
+      "opts": [
+       "variety",
+       "inconsistency",
+       "difference",
+       "similarity"
+      ],
+      "id": "q1"
+     },
+     {
+      "text": "The United Kingdom has made remarkable progress in gender equality.",
+      "opts": [
+       "insignificant",
+       "impressive",
+       "notable",
+       "famous"
+      ],
+      "id": "q2"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4",
+    "params": {
+     "dir": "auto"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": "join",
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "b",
+   "number": 2
+  },
+  {
+   "id": "t4",
+   "typeId": "choose-abc",
+   "typeName": "Câu hỏi · khoanh A/B/C",
+   "title": "Conversation",
+   "instruction": "",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "Thank you very much.\n‘ ___ ’",
+      "opts": [
+       "Are you worried?",
+       "You’re welcome.",
+       "Not all.",
+       "Nothing."
+      ],
+      "id": "q1"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "item",
+    "layout": "A4",
+    "params": {
+     "dir": "auto"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 3
+  },
+  {
+   "id": "t5",
+   "typeId": "answer-q",
+   "typeName": "Viết tự do",
+   "title": "A picnic",
+   "instruction": "Write a paragraph (about 120 – 150 words) about the topic: “A picnic” (12 pts)",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "id": "q1",
+      "text": ""
+     }
+    ]
+   },
+   "answer": {
+    "kind": "sentence",
+    "attach": "item",
+    "layout": "A1",
+    "params": {
+     "lines": 15
+    }
+   },
+   "layout": {
+    "num": "off",
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 4
+  }
+ ],
+ "id": "(id)",
+ "age": "7-9",
+ "page": {
+  "size": "A4",
+  "marginMm": {
+   "top": 14,
+   "right": 14,
+   "bottom": 14,
+   "left": 14
+  }
+ },
+ "spacing": {
+  "preset": "compact",
+  "overrides": {}
+ },
+ "flow": "cont",
+ "schema": "ws-editor/0.3"
+}

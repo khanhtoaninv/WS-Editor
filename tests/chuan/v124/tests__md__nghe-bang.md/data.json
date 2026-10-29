@@ -1,0 +1,374 @@
+{
+ "title": "Listening and reading – Unit 5",
+ "age": "10-12",
+ "flow": "cont",
+ "tasks": [
+  {
+   "id": "t1",
+   "typeId": "table",
+   "typeName": "Bảng · ô trống để viết",
+   "title": "Listen and complete the table.",
+   "instruction": "Write one or two words. There is one example.",
+   "content": {
+    "form": "table",
+    "corner": "Name",
+    "cols": [
+     "Age",
+     "Hobby"
+    ],
+    "rows": [
+     {
+      "head": "Tom",
+      "cells": [
+       "9",
+       "football"
+      ],
+      "id": "r1"
+     },
+     {
+      "head": "Lily",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r2"
+     },
+     {
+      "head": "Ben",
+      "cells": [
+       "",
+       ""
+      ],
+      "id": "r3"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "none",
+    "attach": "item",
+    "layout": null,
+    "params": {}
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": "Track 12",
+   "part": "",
+   "number": 1
+  },
+  {
+   "id": "t2",
+   "typeId": "match",
+   "typeName": "Nối cặp",
+   "title": "Match.",
+   "instruction": "Draw a line from the animal to its sound.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "pair": {
+       "l": {
+        "text": "cat"
+       },
+       "r": {
+        "text": "meow"
+       }
+      },
+      "id": "q1",
+      "key": "meow"
+     },
+     {
+      "pair": {
+       "l": {
+        "text": "dog"
+       },
+       "r": {
+        "text": "woof"
+       }
+      },
+      "id": "q2",
+      "key": "woof"
+     },
+     {
+      "pair": {
+       "l": {
+        "text": "cow"
+       },
+       "r": {
+        "text": "moo"
+       }
+      },
+      "id": "q3",
+      "key": "moo"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "match",
+    "attach": "item",
+    "layout": "A7",
+    "params": {}
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 2
+  },
+  {
+   "id": "t3",
+   "typeId": "dialogue",
+   "typeName": "Hội thoại · điền chỗ trống · lời dẫn · khung từ",
+   "title": "Complete the conversation.",
+   "instruction": "Write one letter in each gap.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "who": "Mai",
+      "text": "Hi, Ben. Do you like your new school?",
+      "id": "q1"
+     },
+     {
+      "who": "Ben",
+      "text": "___",
+      "id": "q2"
+     },
+     {
+      "who": "Mai",
+      "text": "Which school do you go to?",
+      "id": "q3"
+     },
+     {
+      "who": "Ben",
+      "text": "___",
+      "id": "q4"
+     },
+     {
+      "who": "Mai",
+      "text": "How do you get there?",
+      "id": "q5"
+     },
+     {
+      "who": "Ben",
+      "text": "___",
+      "id": "q6"
+     }
+    ],
+    "lead": {
+     "kind": "text",
+     "text": "Mai is talking to Ben about his new school."
+    }
+   },
+   "answer": {
+    "kind": "word",
+    "attach": "inline",
+    "layout": "A2",
+    "params": {
+     "lenMode": "fill",
+     "lines": 1,
+     "start": "inline"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "wordBank": {
+    "words": [
+     "Le Loi School.",
+     "I usually ride my bike.",
+     "Yes. The teachers are friendly."
+    ],
+    "placement": "right",
+    "style": "list",
+    "label": "lower"
+   },
+   "audio": null,
+   "part": "",
+   "number": 3
+  },
+  {
+   "id": "t4",
+   "typeId": "choose-inline",
+   "typeName": "Câu hỏi · chọn trong câu {a|b}",
+   "title": "Read and underline.",
+   "instruction": "Underline the correct word.",
+   "content": {
+    "form": "list",
+    "items": [
+     {
+      "text": "It’s {windy|*rainy}. Take your raincoat {*on|off}.",
+      "id": "q1"
+     },
+     {
+      "text": "It’s {cloudy|*sunny}. Put your {*swimming costume|coat} on.",
+      "id": "q2"
+     }
+    ]
+   },
+   "answer": {
+    "kind": "choice",
+    "attach": "inline",
+    "layout": "A4",
+    "params": {
+     "dir": "auto"
+    }
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": null,
+   "part": "",
+   "number": 4
+  },
+  {
+   "id": "t5",
+   "typeId": "colour-draw",
+   "typeName": "Chỉ có ảnh",
+   "title": "Listen and colour.",
+   "instruction": "Listen to the teacher. Colour the picture.",
+   "content": {
+    "form": "list",
+    "items": [],
+    "list": false
+   },
+   "answer": {
+    "kind": "none",
+    "attach": "item",
+    "layout": null,
+    "params": {}
+   },
+   "layout": {
+    "num": null,
+    "nlab": null,
+    "mbd": null,
+    "task": "auto",
+    "split": null,
+    "cols": null,
+    "dir": null,
+    "align": null,
+    "valign": null,
+    "width": null,
+    "cw": null,
+    "rowH": null,
+    "whoW": null,
+    "colGap": null,
+    "break": null,
+    "frame": {},
+    "cells": null,
+    "table": null
+   },
+   "spacing": {
+    "preset": null,
+    "overrides": {}
+   },
+   "audio": "Track 08",
+   "image": {
+    "label": "the classroom",
+    "size": "large"
+   },
+   "part": "",
+   "number": 5
+  }
+ ],
+ "id": "(id)",
+ "page": {
+  "size": "A4",
+  "marginMm": {
+   "top": 14,
+   "right": 14,
+   "bottom": 14,
+   "left": 14
+  }
+ },
+ "spacing": {
+  "preset": "compact",
+  "overrides": {}
+ },
+ "schema": "ws-editor/0.3"
+}

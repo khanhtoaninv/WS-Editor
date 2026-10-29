@@ -40,6 +40,7 @@ export function descOf(t) {
   const f = featOf(t), k = f.form, a = t.answer, c = t.content, p = [];
   const base = { questions: 'Câu hỏi', items: f.variant === 'multi' ? 'Nhiều ảnh mỗi câu' : 'Ảnh mỗi câu', pairs: 'Nối cặp', dialogue: 'Hội thoại', trace: 'Tô chữ', passage: 'Bài đọc', table: 'Bảng' }[k];
   if (k === 'empty') p.push(c.list === false ? 'Chỉ có ảnh' : 'Chưa có câu');
+  else if (k === 'questions' && isFreeW(t)) { p.push((a.params || {}).frame === 'box' ? 'Khung vẽ tự do' : 'Viết tự do'); if (t.image) p.push('ảnh chung'); if ((t.extras || []).length) p.push('khối tự do'); return p.join(' · '); }   // v124: Q12 không phải "Câu hỏi · viết câu"
   else p.push(base || 'Câu hỏi');
   if (k === 'table') p.push({ text: 'ô có chữ', blank: 'ô trống để viết', tick: 'ô tick' }[f.cells]);
   else if (k !== 'empty') {
@@ -214,7 +215,7 @@ export function parseTask(raw, force, pre) {
     let im = null; const mi = /^\[ảnh:\s*([^\]]+)\]\s*/i.exec(x); if (mi) { im = mi[1].trim(); x = x.slice(mi[0].length); }
     const push = o => { if (im) o.img = im; items.push(o); };
     const so = splitOptsLine(x); if (so && (so[0] || (pre && so[1].length >= 2))) { push({ text: so[0], opts: so[1] }); return; }   // MD: câu chỉ có lựa chọn (không có thân câu) vẫn là một câu
-    if (items.length && /^[^/]{1,25}(\s\/\s[^/]{1,25}){1,4}$/.test(x) && !x.includes('___') && !items[items.length - 1].opts && /\?$|___/.test(items[items.length - 1].text || '')) { items[items.length - 1].opts = x.split(/\s\/\s/).map(y => y.trim()); return; }
+    if (items.length && !NUM_RE.test(x0.trim()) && /^[^/]{1,25}(\s\/\s[^/]{1,25}){1,4}$/.test(x) && !x.includes('___') && !items[items.length - 1].opts && /\?$|___/.test(items[items.length - 1].text || '')) { items[items.length - 1].opts = x.split(/\s\/\s/).map(y => y.trim()); return; }
     push({ text: x });
   });
   // người nói
@@ -395,7 +396,7 @@ export function readMd(raw) {
   });
   // v80: dòng chữ không đánh số, đứng sau một dòng trống, ngay trước câu "1." (số câu bắt đầu lại) = hướng dẫn của một PHẦN mới (như "### Phần:")
   for (let bi = 0; bi < blocks.length; bi++) {
-    const b = blocks[bi]; if (b.lines.some(l => MD_SECT.test(l.trim()))) continue;
+    const b = blocks[bi]; if (b.lines.some(l => MD_SECT.test(l.trim()) || /^\s*(bài đọc|passage|hội thoại|dialogue)\s*:/i.test(l))) continue;
     const nz = b.lines.map((l, i) => [l, i]).filter(x => x[0].trim());
     for (let k = 1; k < nz.length - 1; k++) {
       const [l, i] = nz[k], t = l.trim();
@@ -461,6 +462,8 @@ export function mdTask(b, keys) {
     const t = line.trim();
     if (gx) { if (!t) { gx.lines.push(''); return; } if (/^(\s{2,}|\t)/.test(line)) { gx.lines.push(t); return; } gx = null; }      // khối chữ: các dòng thụt lề bên dưới
     if (!t) { if (mode === 'passage') { if (sec.passage.length && sec.passage[sec.passage.length - 1] !== '') sec.passage.push(''); } else mode = null; return; }
+    const si = !mode && /^\s*(bài đọc|passage|hội thoại|dialogue)\s*:\s*(\S.*)$/i.exec(t);   // v124: "Bài đọc: <chữ>" cùng dòng (AI hay viết): chữ là dòng đầu của khối, không thành câu hỏi
+    if (si) { const dl = /hội thoại|dialogue/i.test(si[1]); if (!dl || /^[^:]{1,40}:\s*\S/.test(si[2])) { mode = dl ? 'dialogue' : 'passage'; sec[mode].push(si[2].trim()); notes.push(`“${si[1]}:” có chữ ngay sau dấu hai chấm: dùng làm dòng đầu của ${dl ? 'hội thoại' : 'bài đọc'} (nên viết xuống dòng dưới)`); return; } }
     const s = MD_SECT.exec(t); if (s) { mode = /bài đọc|passage/i.test(s[1]) ? 'passage' : /hội thoại|dialogue/i.test(s[1]) ? 'dialogue' : /giải đố|crossword/i.test(s[1]) ? 'cross' : 'grid'; return; }
     const f = MD_FIELD.exec(t);
     if (f) { const k = MD_FKEY[f[1].toLowerCase()]; mode = null;

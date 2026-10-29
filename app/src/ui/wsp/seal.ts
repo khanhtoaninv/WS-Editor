@@ -3,7 +3,7 @@ import { buildFiles, checkFiles, sealWsp, type Signer } from '../../../../shared
 import type { Collected } from './collect';
 import { devSigner, edBox, serverSigner, trPub, nextVersion, saveVersion, type ServerKeys } from './keys';
 
-export const VER = 'WS Editor v123';
+export const VER = 'WS Editor v124';
 export const fname = (t: string) => (t || 'phieu').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').replace(/[^\w-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'phieu';
 
 export type Sealed = { bytes: Uint8Array; name: string; manifest: unknown; v: number; signer: Signer; hasTr: boolean };
