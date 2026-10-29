@@ -8,7 +8,9 @@ const E = m => err.push(m), W = m => warn.push(m), I = m => info.push(m);
 
 // ---- tách hai khối ----
 const lines0 = raw.split('\n');
-if (!/^```markdown\s*$/.test(lines0[0])) E('Dòng đầu tiên của phản hồi không phải ```markdown');
+const BLOCK_ONLY = !lines0.some(l => /^```/.test(l)); // file chỉ có khối 1 (không rào)
+if (BLOCK_ONLY) W('File không có rào ``` nào: coi cả file là khối 1, bỏ kiểm khối 2 và dòng đầu');
+else if (!/^```markdown\s*$/.test(lines0[0])) E('Dòng đầu tiên của phản hồi không phải ```markdown');
 let start = lines0.findIndex(l => /^```/.test(l));
 let md, rest = '';
 if (start === 0 || /^```markdown/.test(lines0[start] || '')) {
@@ -20,7 +22,7 @@ if (start === 0 || /^```markdown/.test(lines0[start] || '')) {
   md = lines0.slice(0, end < 0 ? undefined : end).join('\n');
   rest = end < 0 ? '' : lines0.slice(end).join('\n');
 }
-if (!/^```text\s*$/m.test(rest)) E('Khối 2 phải mở bằng đúng ```text (hiện: ' + ((rest.match(/^```.*$/m) || ['không có'])[0]) + ')');
+if (!BLOCK_ONLY && !/^```text\s*$/m.test(rest)) E('Khối 2 phải mở bằng đúng ```text (hiện: ' + ((rest.match(/^```.*$/m) || ['không có'])[0]) + ')');
 rest.split('\n').forEach(l => {
   if (/^Task\s*\d/i.test(l)) E('Khối 2 có dòng bắt đầu "Task <số>" (phải là T<số>:): ' + l.slice(0, 50));
   if (/^#/.test(l)) E('Khối 2 có dòng bắt đầu bằng #: ' + l.slice(0, 50));
@@ -55,7 +57,7 @@ ansTxt.split('\n').forEach(l => {
 Object.keys(keys).forEach(k => Object.values(keys[k]).forEach(v => { if (/ \/ /.test(v)) W('Task ' + k + ': khóa có "a / b" (chưa rõ editor tách): ' + v); }));
 
 // ---- từ chỉ thời gian ----
-const TIME = /\b(now|right now|at the moment|today|every ?(day|morning|evening|week|saturday|sunday)|on (saturdays|sundays|mondays|weekends|fridays)|usually|always|often|sometimes|never|after (school|dinner|lunch)|before (bed|school)|in the (morning|evening|afternoon)|at the weekend|these days|listen|look)\b/i;
+const TIME = /\b(now|right now|at the moment|today|every ?(day|morning|evening|week|saturday|sunday)|on (saturdays|sundays|mondays|weekends|fridays)|usually|always|often|sometimes|never|after (school|dinner|lunch)|before (bed|school)|in the (morning|evening|afternoon)|at the weekend|these days|listen|look|at \d{1,2}(:\d\d)? ?([ap]\.?m\.?)?|at \d{1,2} o'clock|not yet)\b/i;
 const VERBS = { play: /\bplay(s|ing)?\b/gi, read: /\bread(s|ing)?\b/gi, watch: /\bwatch(es|ing)?\b/gi, eat: /\beat(s|ing)?\b/gi, go: /\b(go|goes|going)\b/gi, ride: /\bri(de|des|ding)\b/gi, swim: /\bswim(s|ming)?\b/gi, draw: /\bdraw(s|ing)?\b/gi };
 const totals = {}; Object.keys(VERBS).forEach(v => totals[v] = 0);
 const seqs = {}; const stems = [];
@@ -82,6 +84,7 @@ tasks.forEach((t, ti) => {
       const stem = it.text.join(' ');
       it.opts.forEach(x => { if (TIME.test(x.t)) E('Task ' + n + ' câu ' + it.no + ' lựa chọn ' + x.L + ' có từ chỉ thời gian: "' + x.t + '"'); });
       const ok = it.opts.find(x => x.L === k); if (ok) out.push(stem, ok.t);
+      if (ok && it.no > 0) { const sw = new Set((stem.toLowerCase().match(/[a-z']+/g) || [])); const echo = (ok.t.toLowerCase().match(/[a-z']+/g) || []).filter(w => /^(play|read|watch|eat|go|ride|swim|draw|make|cook|wash|sing|help)(s|es|ing)$/.test(w) && sw.has(w)); if (echo.length) W('Task ' + n + ' câu ' + it.no + ': đáp án lặp lại dạng động từ có trong câu hỏi (' + echo.join(',') + ')'); }
       stems.push([n, it.no, stem]);
       it.meaning = !TIME.test(stem);
     });
@@ -115,7 +118,7 @@ tasks.forEach((t, ti) => {
       if (!K[it.no]) E('Task ' + n + ' câu ' + it.no + ': thiếu đáp án');
       const blanks = (stem.match(/___/g) || []).length; if (!blanks) E('Task ' + n + ' câu ' + it.no + ': không có ___');
       if (/____/.test(stem)) E('Task ' + n + ' câu ' + it.no + ': dùng ____ (phải ___)');
-      out.push(stem + ' ' + (K[it.no] || '')); stems.push([n, it.no, stem]);
+      out.push(stem); stems.push([n, it.no, stem]);
       it.meaning = !TIME.test(stem);
     });
   } else { out.push(L.filter(l => !/^(Hướng dẫn|Dạng|Khung từ|Dòng viết)/.test(l)).join(' ')); }
