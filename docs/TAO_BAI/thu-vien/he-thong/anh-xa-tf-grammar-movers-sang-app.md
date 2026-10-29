@@ -20,3 +20,5 @@ Thuộc nhóm hệ thống. Ba tài liệu lesson không nhắc tới app; file 
 | TF-G5c | `Trả lời: không`, khối chữ có ô tick | |
 
 Từ v0.9, định dạng đầu ra của AI đã là MD theo bảng này (xem `goi-thu/v1.0/0_CHI_DAN_VA_DINH_DANG_DAU_RA.md` mục B1.2; từ v1.0 `Dạng: chọn A/B/C` luôn viết đúng chữ này và khung viết câu G4 là `Tên … He …`), không cần chuyển tay. Lưu ý khi viết: Task có bảng dùng `Khối chữ trên:` cho chữ nguồn (không dùng `Bài đọc:`).
+
+**v1.1:** mỗi câu chọn có ba lựa chọn (`{a|*b|c}` hoặc A/B/C; TF-G2-B và TF-G3a hiểu là Q3 chọn A/B/C ba phương án); khối `markdown` kết thúc bằng `### Task 0` để bộ đọc không nuốt NOTES/REPORT vào đáp án; ghi chú dùng `T1:`, `T2:` thay `Task 1:`.

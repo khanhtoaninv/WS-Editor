@@ -1,6 +1,6 @@
 # TASK FORMAT — Grammar Worksheet · A1 Movers · Daily Routines & Activities
 
-Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 1.0 · Trạng thái: Nháp
+Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 1.1 · Trạng thái: Nháp
 Quy định cách soạn từng Task. Dùng cùng file Kiến thức (K) và Trình tự Lesson (S).
 Chỉ dẫn in trên phiếu theo K6 (không dùng thuật ngữ ngữ pháp). Đáp án chấp nhận nêu rõ độ dài (một từ hay cụm).
 Mức hỗ trợ: Chuẩn (mặc định) hoặc Giảm (ít câu hơn, có câu mở đầu).
@@ -46,9 +46,9 @@ Kiểu trả lời: chọn (chọn trong lựa chọn cho sẵn), gõ (điền c
 - Chỉ dẫn: "Read about Tom, Mia and their family. Circle Usually (what someone does again and again) or Now (what someone is doing at this moment)."
 
 ### TF-G2-B — Choose the correct answer (conversations) (phương án mặc định của G2)
-- Kiểu trả lời: chọn một trong hai câu trả lời.
-- Số câu: 5 và 1 ví dụ. 3 câu hỏi về thói quen, 2 câu hỏi về việc đang làm; dãy đáp án theo S5 mục 1g (không ABABAB, không cùng một chữ ba câu liền); ghi dãy đáp án vào REPORT.
-- Cấu trúc câu: hội thoại hai lượt; người A hỏi, học sinh chọn câu đáp đúng nghĩa. Vế chọn là CÂU ĐÁP HOÀN CHỈNH (`[He plays football. / He is playing football.]`), không phải chỉ một từ giữa câu. Hai câu đáp đều đúng ngữ pháp, chỉ khác ở thì.
+- Kiểu trả lời: chọn một trong ba câu trả lời A, B, C.
+- Số câu: 5 và 1 ví dụ. 3 câu hỏi về thói quen, 2 câu hỏi về việc đang làm; dãy đáp án theo S5 mục 1g, 1h (dùng đủ A, B, C, không cùng một chữ ba câu liền); ghi dãy đáp án vào REPORT.
+- Cấu trúc câu: hội thoại hai lượt; người A hỏi, học sinh chọn câu đáp đúng nghĩa. Vế chọn là CÂU ĐÁP HOÀN CHỈNH (`[He plays football. / He is playing football.]`), không phải chỉ một từ giữa câu. Ba câu đáp theo S5 mục 1h: hai câu đúng ngữ pháp chỉ khác ở thì, câu thứ ba cùng nội dung nhưng mắc một lỗi dạng.
 - Quy tắc: ở ít nhất 2 câu, thêm một câu tình huống trước hội thoại để đáp án không chỉ dựa vào dạng câu hỏi; câu tình huống không chứa động từ ở dạng của câu đáp (S5 mục 1d); câu hỏi và câu đáp tự nhiên giữa hai người (không hỏi một người về chính họ bằng ngôi thứ ba); không dùng stative verbs (has, have, like, love, know, want, need), kể cả trong câu tình huống; theo S5 mục 1g: tối đa 2 câu hỏi dạng "What does X do?" hoặc "What is X doing?", ít nhất 3 câu hỏi không lộ thì, câu tình huống phải thêm thông tin mới.
 - Chỉ dẫn: "Read the conversations. Circle the correct answers."
 
@@ -62,15 +62,15 @@ Kiểu trả lời: chọn (chọn trong lựa chọn cho sẵn), gõ (điền c
 ## Bước G3 (Application, có kiểm soát)
 
 ### TF-G3a-A — Choose the correct words (in the sentence)
-- Kiểu trả lời: chọn một trong hai vế ngay trong câu.
-- Số câu: 6 và 1 ví dụ. Mức Giảm: 5 và 1. Gồm: khẳng định 2 (câu đơn, không phải hội thoại), phủ định 1, câu hỏi 2, hội thoại 1. Số câu có từ hai lượt thoại trở lên tối đa 3 (câu hỏi có thể nằm trong một hội thoại ngắn); ghi số từng loại vào REPORT. Chủ ngữ đa dạng, có I và you.
-- Quy tắc: tránh các mẫu mơ hồ ở S5 mục 1b, câu hỏi không để trần (S5 mục 1c), cấm chép dạng ở S5 mục 1d, câu "đang làm" theo S5 mục 1e (không chỉ dựa vào cảnh đồ vật, không "What is X doing?" ngay trước chỗ chọn, tự viết tình huống mới), hội thoại theo mục 1f; hai lựa chọn đều đúng ngữ pháp khi đứng riêng, chỉ khác thì; mỗi câu đủ ngữ cảnh để chỉ có một đáp án đúng; ít nhất 2 câu có thêm câu tình huống thay trạng từ; đáp án đúng không luôn ở vế trái; nhân vật Tom, Mia và người thân.
+- Kiểu trả lời: chọn một trong ba vế ngay trong câu, `{vế|*vế đúng|vế}`.
+- Số câu: 6 và 1 ví dụ. Mức Giảm: 5 và 1. Gồm: khẳng định 2 (câu đơn, không phải hội thoại), phủ định 1, câu hỏi 2, hội thoại 1. Số câu có từ hai lượt thoại trở lên tối đa 4 (câu hỏi có thể nằm trong một hội thoại ngắn); ghi số từng loại vào REPORT. Chủ ngữ đa dạng, có I và you.
+- Quy tắc: tránh các mẫu mơ hồ ở S5 mục 1b, câu hỏi không để trần (S5 mục 1c), cấm chép dạng ở S5 mục 1d, câu "đang làm" theo S5 mục 1e (không chỉ dựa vào cảnh đồ vật, không "What is X doing?" ngay trước chỗ chọn, tự viết tình huống mới), hội thoại theo mục 1f; ba lựa chọn theo S5 mục 1h (hai đúng ngữ pháp chỉ khác thì, một mắc một lỗi dạng; cùng động từ và cùng tân ngữ, không viết `{is washing|is painting}`); mỗi câu đủ ngữ cảnh để chỉ có một đáp án đúng; ít nhất 2 câu có thêm câu tình huống thay trạng từ; đáp án đúng rải đủ ba vị trí; nhân vật Tom, Mia và người thân.
 - Chỉ dẫn: "Circle the correct words."
 
 ### TF-G3a-B — Choose the correct sentence
-- Kiểu trả lời: chọn một trong hai câu hoàn chỉnh khác nhau ở thì.
+- Kiểu trả lời: chọn một trong ba câu hoàn chỉnh (hai khác nhau ở thì, một mắc lỗi dạng).
 - Số câu: 5 và 1 ví dụ.
-- Quy tắc: như TF-G3a-A; mỗi lựa chọn là một câu hoàn chỉnh đúng ngữ pháp; có một câu tình huống đặt trước câu hỏi.
+- Quy tắc: như TF-G3a-A; mỗi lựa chọn là một câu hoàn chỉnh, ba lựa chọn theo S5 mục 1h; có một câu tình huống đặt trước câu hỏi.
 - Chỉ dẫn: "Choose the correct sentence."
 
 ### TF-G3b-A — Complete the sentences

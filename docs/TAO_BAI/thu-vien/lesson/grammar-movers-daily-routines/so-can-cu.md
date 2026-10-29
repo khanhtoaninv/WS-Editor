@@ -33,3 +33,6 @@ Nhãn: [HT] nguồn học thuật · [ND] quy định của người dùng · [T
 | TF-G4-B | [CL] | Dialogue Completion theo khung gốc [ND] |
 | TF-G5-A | [ND]/[TN] | yêu cầu việc em và người nhà theo góp ý v2 |
 | TF-G5-B, G5c | [CL] | |
+| S5 1c/1d/1e/1g (v1.1) | [CL] | quy tắc rút ra từ lỗi các lần 5–7 (câu hỏi để trần, chép dạng, tín hiệu "đang làm", hội thoại G2-B); không phải chuẩn bên ngoài |
+| Định dạng đầu ra: dòng `### Task 0` cuối khối, ghi chú `T1:` | [CL] | tránh bộ đọc coi dòng NOTES/REPORT là đáp án (`Task N:` ghi đè khóa) |
+| 3 lựa chọn mỗi câu (S5 1h) | [TN]/[CL] | lựa chọn thứ ba là lỗi dạng thường gặp của người học (thiếu -s, thiếu am/is/are...) [TN]; số lượng ba theo yêu cầu người dùng [CL] |

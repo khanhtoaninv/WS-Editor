@@ -475,3 +475,5 @@ Dạng: viết câu
 Task 2: No; Yes
 ```
 Xuất MD (nút **Xuất MD**) ghi đủ các trường v81 khi phiếu dùng chúng; đọc lại ra đúng phiếu (test30).
+
+**Lưu ý đáp án (v1.1 gói tạo bài):** bộ đọc coi mọi thứ sau `## Đáp án` là đáp án cho tới `## Task` kế tiếp; một dòng dạng `Task N: a; b` ghi đè khóa của Task N. Vì vậy nếu dán cả phản hồi của AI (có NOTES/REPORT) thì các dòng bắt đầu bằng `Task <số>:` sẽ làm hỏng đáp án. Gói v1.1 tránh bằng dòng `### Task 0` cuối khối và ghi chú `T1:`.

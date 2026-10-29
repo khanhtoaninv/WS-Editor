@@ -1,6 +1,6 @@
 # KIẾN THỨC — Grammar Worksheet · A1 Movers · Daily Routines & Activities
 
-Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 1.0 · Trạng thái: Nháp
+Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 1.1 · Trạng thái: Nháp
 
 ## K1. Mục tiêu
 Sau khi hoàn thành phiếu, học sinh có thể:
@@ -37,7 +37,7 @@ Sau khi hoàn thành phiếu, học sinh có thể:
 | Động từ chính | play, read, watch, eat, go, do, ride, swim, draw |
 | Chủ đề từ vựng | Daily routines, hobbies, weekend activities |
 
-Ngoài phạm vi: Past Simple, Present Perfect, Future Forms, stative verbs (has, have với nghĩa sở hữu, like, love, know, want, need...), kể cả trong câu tình huống (không viết "Tom has some bread") và các cách dùng nâng cao của Present Continuous.
+Ngoài phạm vi: Past Simple, Present Perfect, Future Forms, stative verbs (has, have với nghĩa sở hữu, like, love, know, want, need...), kể cả trong câu tình huống và câu mời (không viết "Tom has some bread", "Do you want to draw with me?") và các cách dùng nâng cao của Present Continuous.
 
 ## K5. Từ vựng
 Tham chiếu: Cambridge Pre A1 Starters và A1 Movers Word Lists (2018).
@@ -46,7 +46,7 @@ Tham chiếu: Cambridge Pre A1 Starters và A1 Movers Word Lists (2018).
 - Từ được dùng trong phiếu: các từ liệt kê ở trên, và các từ có trong Cambridge Pre A1 Starters hoặc A1 Movers Word Lists (2018). Không dùng từ ngoài hai danh sách này. Báo cáo cuối phiếu chỉ cần liệt kê mọi từ không nằm trong danh sách liệt kê ở trên (không phải ghi Starters hay Movers, vì AI không có danh sách Cambridge trong tay; việc tra do người dùng hoặc máy làm). Nếu không chắc một từ thuộc cấp nào, ưu tiên thay bằng từ đã liệt kê.
 - Từ cần cho chỉ dẫn và khung Task, luôn được dùng: friend, family, brother, sister, mum, dad, someone, answer, sentence, table, picture, circle, write, read, choose, complete.
 - Tên nhân vật (Ben, Lucy, Tom, Mia, Grandma) và từ chỉ ngày, giờ (Saturday, Sunday, a.m., p.m.) không bị giới hạn bởi danh sách trên.
-- Giới hạn lặp: trong phần học sinh đọc và làm (bài đọc, câu hỏi, lựa chọn; không tính câu chỉ dẫn, đáp án và ghi chú; động từ mệnh lệnh trong chỉ dẫn như "Read", "Write" không tính), mỗi động từ trong 9 động từ chính xuất hiện không quá 12 lần ở mọi dạng (play, plays, playing... tính chung; câu chọn `[A / B]` tính cả hai vế), và không quá 3 lần trong cùng một Task, trừ Task G2 và G3 được lặp tới 4 lần. Trợ động từ do/does/don't/doesn't không tính. Mỗi Task G2, G3a, G3b phải dùng ít nhất 4 trong 9 động từ chính (không né 9 động từ chính bằng động từ khác); các động từ thêm ở trên chỉ để đa dạng.
+- Giới hạn lặp: trong phần học sinh đọc và làm (bài đọc, câu hỏi, lựa chọn; không tính câu chỉ dẫn, đáp án và ghi chú; động từ mệnh lệnh trong chỉ dẫn như "Read", "Write" không tính), mỗi động từ trong 9 động từ chính xuất hiện không quá 12 lần ở mọi dạng (play, plays, playing... tính chung; mỗi câu chọn tính một lần theo đáp án đúng), và không quá 3 lần trong cùng một Task, trừ Task G2 và G3 được lặp tới 4 lần. Trợ động từ do/does/don't/doesn't không tính. Mỗi Task G2, G3a, G3b phải dùng ít nhất 4 trong 9 động từ chính (không né 9 động từ chính bằng động từ khác); các động từ thêm ở trên chỉ để đa dạng.
 
 ## K6. Ngôn ngữ của chỉ dẫn (đọc bởi học sinh 7–9 tuổi)
 - Câu chỉ dẫn ngắn, dùng động từ mệnh lệnh quen thuộc: read, write, circle, choose, look, tick, complete.
