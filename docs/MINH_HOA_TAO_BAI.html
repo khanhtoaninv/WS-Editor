@@ -145,6 +145,44 @@ select{font:inherit;font-size:13px;border:1px solid var(--ln2);border-radius:6px
 .key{margin:10px 0 0;padding-top:8px;border-top:1px dashed var(--line);font-family:"Be Vietnam Pro",system-ui;font-size:13px;color:var(--muted)}
 .regen2{display:flex;gap:8px;align-items:flex-end}
 .rvfoot{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin-top:auto}
+/* ② Biên tập hợp nhất */
+.tprog{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);padding:0 4px 4px}
+.tprog .bar{flex:1;height:6px;border-radius:3px;background:var(--card-2);overflow:hidden}.tprog .bar span{display:block;height:100%;background:#2f9a55}
+#tlist{display:flex;flex-direction:column;gap:6px}
+.tn{display:flex;gap:8px;align-items:flex-start}
+.tn .s{width:18px;height:18px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:10px;background:var(--card-2);border:1px solid var(--line);margin-top:1px}
+.tn.ok .s{background:#dbeee0;border-color:#9fd0ac;color:#1b7f3b}.tn.warn .s{background:var(--warn-soft);border-color:#e9b65c;color:var(--warn)}.tn.wait .s{border-style:dashed}
+.stage{flex-direction:column;align-items:center;gap:10px}
+.pbar{width:100%;max-width:520px;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.sw{display:inline-flex;align-items:center;gap:7px;cursor:pointer;user-select:none}
+.sw input{display:none}.sw span{width:32px;height:18px;border-radius:9px;background:#b9c5cd;position:relative;transition:.15s}
+.sw span::after{content:"";position:absolute;width:14px;height:14px;border-radius:50%;background:#fff;top:2px;left:2px;transition:.15s}
+.sw input:checked+span{background:#c2410c}.sw input:checked+span::after{left:16px}
+.ans{display:none;color:#c2410c;font-weight:700}
+.showans .ans{display:inline}
+.showans .a2{color:#c2410c;font-weight:700;text-decoration:none;border:1.5px solid #c2410c;border-radius:50%;padding:0 3px}
+.showans .a3{background:#c2410c;color:#fff}
+.bl{display:inline-block;min-width:60px;border-bottom:1px solid #333;text-align:center}
+.dim{color:#999}
+.mrow{display:grid;grid-template-columns:1fr 34px 1fr;gap:6px;padding:1px 4px;border-radius:4px}
+.mrow b.ans{margin-left:4px}
+.hlw{background:#fff5df}
+.tfb{float:right;display:inline-flex;gap:4px}.tfb i{font-style:normal;width:18px;height:18px;border:1px solid #555;border-radius:50%;display:inline-grid;place-items:center;font-size:11px}
+.task{cursor:pointer}
+.tabs{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.tab{flex:1;border:0;background:var(--card-2);padding:7px;font:inherit;font-size:13px;cursor:pointer;color:var(--muted)}
+.tab.on{background:var(--accent);color:#fff;font-weight:600}
+.pane{display:flex;flex-direction:column;gap:10px}.pane[hidden]{display:none}
+.pane h5{margin:0}
+.okbox{border:1px solid #9fd0ac;background:#eaf6ee;border-radius:9px;padding:8px 10px;color:#1b6b34}
+.kv3{display:grid;grid-template-columns:70px 1fr;gap:4px 8px}.kv3 b{color:var(--muted);font-weight:500}
+.keyl{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 9px;font-size:12.5px}
+.acts{display:flex;gap:6px}.acts .btn{flex:1}
+.btn.okd{background:#2f9a55;border-color:#2f9a55;color:#fff}
+.fake{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px}.fake b{font-weight:500;color:var(--muted)}
+.seg{display:inline-flex;border:1px solid var(--ln2);border-radius:6px;overflow:hidden}.seg i{font-style:normal;padding:2px 7px;font-size:12px;border-left:1px solid var(--line)}.seg i:first-child{border-left:0}.seg i.on{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.pop{position:absolute;right:24px;top:58px;width:300px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px #0003;padding:12px;font-size:13px;z-index:5}
+.app{position:relative}
 /* Biên tập */
 .ed{flex:1;display:grid;grid-template-columns:230px 1fr 280px;min-height:0}
 .ed.vopen{grid-template-columns:210px 1fr 250px 280px}
@@ -191,17 +229,16 @@ select{font:inherit;font-size:13px;border:1px solid var(--ln2);border-radius:6px
 .callout ol{margin:4px 0 0 18px;padding:0}
 </style></head><body>
 
-<div class="note"><b>Hình mẫu tạo bài (chưa phải app thật).</b> Bấm ① ② ③ trên thanh trên cùng để chuyển màn. Trong các màn, nút có chú thích được bấm thử; chữ nội dung chỉ là ví dụ.</div>
+<div class="note"><b>Hình mẫu tạo bài (chưa phải app thật).</b> Bản 3 (hợp nhất Dàn ý vào Biên tập). Bấm ① ② trên thanh trên cùng để chuyển màn. Trong các màn, nút có chú thích được bấm thử; chữ nội dung chỉ là ví dụ.</div>
 
 <div class="app">
   <div class="top">
     <div class="brand">WS Editor <small>Tạo bài</small></div>
     <div class="steps">
       <div class="st done" data-go="1"><i>1</i>Ra đề</div><span class="sep">›</span>
-      <div class="st on" data-go="2"><i>2</i>Dàn ý</div><span class="sep">›</span>
-      <div class="st" data-go="3"><i>3</i>Biên tập</div>
+      <div class="st on" data-go="2"><i>2</i>Biên tập</div>
     </div>
-    <div class="ctx">Pinta English 3 · Unit 5<br><b>Lesson 2: was / were</b></div>
+    <button class="btn pri" id="pubBtn" style="margin-left:8px;order:9">Xuất bản</button><div class="ctx">Pinta English 3 · Unit 5<br><b>Lesson 2: was / were</b></div>
   </div>
 
   <!-- ① RA ĐỀ -->
@@ -238,110 +275,82 @@ select{font:inherit;font-size:13px;border:1px solid var(--ln2);border-radius:6px
     </div>
   </div></section>
 
-  <!-- ② DÀN Ý -->
-  <section class="scr on" id="s2"><div class="rv">
-    <div class="rvlist">
-      <div class="rvh"><b>5 bài</b><span id="rvCount">3/5 đã duyệt</span></div>
-      <div class="rvi ok"><span class="st2">✓</span><div>1 · Look and choose<small>Q4 Chọn trong câu · 6 câu</small></div></div>
-      <div class="rvi ok"><span class="st2">✓</span><div>2 · Complete the sentences<small>Q1 Điền từ · 8 câu</small></div></div>
-      <div class="rvi sel warn"><span class="st2">⚠</span><div>3 · Match the questions<small>Q8 Nối · 6 cặp</small></div></div>
-      <div class="rvi ok"><span class="st2">✓</span><div>4 · Read: Mai's Sunday<small>Q5 Đúng / Sai · 5 câu</small></div></div>
-      <div class="rvi wait"><span class="st2">⏳</span><div>5 · Write about your weekend<small>Q12 Viết tự do · đang viết…</small></div></div>
-      <div class="grow"></div>
-      <button class="btn" data-go="1">← Sửa cấu trúc</button>
-    </div>
-    <div class="rvmain">
-      <div class="rvtop"><div><div class="meta"><span class="chip role">Luyện</span><span class="chip q">Q8 Nối</span><span class="chip">6 cặp</span></div>
-        <h3>Bài 3 · Match the questions and answers.</h3></div>
-        <div style="display:flex;gap:6px"><button class="btn sm">✎ Sửa chữ</button><button class="btn sm pri">✓ Duyệt</button></div></div>
-      <div class="warnbox"><b>⚠ Kiểm tra:</b> câu 4 và câu 6 cùng ghép được với "Yes, she was." → đáp án không duy nhất.</div>
-      <div class="kv2"><b>Mục tiêu</b><span>Hỏi và trả lời Was he…? / Were they…? với câu trả lời ngắn.</span><b>Ngữ cảnh</b><span>Hỏi về các bạn trong lớp sau chuyến dã ngoại Chủ nhật.</span></div>
-      <div class="txt">
-        <p class="ins">Match the questions and answers.</p>
-        <div class="pair"><span>1. Was Ben at the picnic?</span><span>a. Yes, they were.</span></div>
-        <div class="pair"><span>2. Were Lan and Mai tired?</span><span>b. No, he wasn't. He was ill.</span></div>
-        <div class="pair"><span>3. Was the weather nice?</span><span>c. Yes, it was. It was sunny.</span></div>
-        <div class="pair bad"><span>4. Was Ms Hoa with you?</span><span>d. Yes, she was.</span></div>
-        <div class="pair"><span>5. Were you hungry?</span><span>e. Yes, I was.</span></div>
-        <div class="pair bad"><span>6. Was your sister happy?</span><span>f. Yes, she was. She loved it.</span></div>
-        <p class="key"><b>Đáp án:</b> 1-b · 2-a · 3-c · 4-d · 5-e · 6-f</p>
-      </div>
-      <div class="regen2"><textarea rows="2" placeholder="Góp ý để sinh lại bài này: vd mỗi câu trả lời chỉ ghép được một câu hỏi"></textarea><button class="btn">⟳ Sinh lại bài này</button></div>
-      <div class="rvfoot"><span>Bài chưa duyệt vẫn sang Biên tập được, giữ nhãn "chưa duyệt".</span><button class="btn pri" data-go="3">Sang Biên tập →</button></div>
-    </div>
-  </div></section>
-
-  <!-- ③ BIÊN TẬP -->
-  <section class="scr" id="s3">
+  <!-- ② BIÊN TẬP (hợp nhất duyệt nội dung + dàn trang) -->
+  <section class="scr on" id="s2">
     <div class="ed" id="ed">
       <div class="tree">
-        <h5>Phiếu <span><button class="btn sm" id="vBtn">🕘 Phiên bản</button></span></h5>
-        <div class="tn">1 · Nhận diện was / were<small>Q4 · 6 câu</small></div>
-        <div class="tn">2 · Điền was / were<small>Q1 · 8 câu</small></div>
-        <div class="tn sel">3 · Câu hỏi Yes/No <span class="w">⚠</span><small>Q8 · 6 cặp</small></div>
-        <div class="tn">4 · Đọc hiểu: Mai's Sunday<small>Q5 · 5 câu</small></div>
-        <div class="tn gen">5 · Viết về cuối tuần<small>⏳ đang viết…</small></div>
+        <h5>Phiếu · 5 bài <span><button class="btn sm" id="vBtn">🕘 Phiên bản</button></span></h5>
+        <div class="tprog"><div class="bar"><span style="width:40%"></span></div><span id="tcount">2/5 đã duyệt</span></div>
+        <div id="tlist"></div>
         <div class="grow"></div>
-        <button class="btn" data-go="2">← Sửa dàn ý</button>
+        <button class="btn" data-go="1">← Sửa cấu trúc</button>
       </div>
 
       <div class="stage">
+        <div class="pbar"><label class="sw"><input type="checkbox" id="ansTog"><span></span> Hiện đáp án</label><span class="lim">Trang 1 / 2</span></div>
         <div class="paper" id="paper">
           <div class="ro">Đang xem phiên bản cũ (chỉ đọc). <a href="#" id="backCur">Về bản hiện tại</a></div>
           <div class="ph"><span>Name: ____________</span><b>Unit 5 · Lesson 2</b><span>Class: ______</span></div>
-          <div class="task"><div class="tt"><span>1</span>Look and choose.</div>
-            <p>1. The children {was | <u>were</u>} at the park.</p><p>2. Tom {<u>was</u> | were} happy.</p><p style="color:#999">…</p>
-            <div class="tools"><button class="btn sm">↻ Tạo lại</button></div></div>
-          <div class="task"><div class="tt"><span>2</span>Complete with was, were, wasn't or weren't.</div>
+          <div class="task" data-t="0"><div class="tt"><span>1</span>Look and choose.</div>
+            <p>1. The children {was | <u class="a2">were</u>} at the park.</p><p>2. Tom {<u class="a2">was</u> | were} happy.</p><p class="dim">…</p></div>
+          <div class="task" data-t="1"><div class="tt"><span>2</span>Complete with was, were, wasn't or weren't.</div>
             <div class="wb"><span>was</span><span>were</span><span>wasn't</span><span>weren't</span></div>
-            <p>1. My mum ______ at home on Sunday.</p><p style="color:#999">…</p>
-            <div class="tools"><button class="btn sm">↻ Tạo lại</button></div></div>
-          <div class="task sel"><div class="flag">⚠ cần xem</div><div class="tt"><span>3</span>Match the questions and answers.</div>
-            <p>1. Was Ben at school? &nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• a. Yes, they were.</p>
-            <p>2. Were they tired? &nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• b. No, he wasn't.</p><p style="color:#999">…</p>
-            <div class="tools"><button class="btn sm pri">↻ Tạo lại</button></div></div>
-          <div class="task"><div class="tt"><span>4</span>Read and circle T or F.</div>
-            <p style="font-style:italic">Last Sunday, Mai and her family were at the beach…</p><p style="color:#999">…</p>
-            <div class="tools"><button class="btn sm">↻ Tạo lại</button></div></div>
-          <div class="task"><div class="tt"><span>5</span>&nbsp;</div><div class="sk" style="width:70%"></div><div class="sk" style="width:90%"></div><div class="sk" style="width:55%"></div></div>
+            <p>1. My mum <span class="bl"><b class="ans">was</b></span> at home on Sunday.</p><p>2. We <span class="bl"><b class="ans">weren't</b></span> at school.</p><p class="dim">…</p></div>
+          <div class="task" data-t="2"><div class="flag">⚠ cần xem</div><div class="tt"><span>3</span>Match the questions and answers.</div>
+            <div class="mrow"><span>1. Was Ben at the picnic?</span><span>•<b class="ans">b</b></span><span>• a. Yes, they were.</span></div>
+            <div class="mrow"><span>2. Were Lan and Mai tired?</span><span>•<b class="ans">a</b></span><span>• b. No, he wasn't.</span></div>
+            <div class="mrow hlw"><span>4. Was Ms Hoa with you?</span><span>•<b class="ans">d</b></span><span>• d. Yes, she was.</span></div>
+            <div class="mrow hlw"><span>6. Was your sister happy?</span><span>•<b class="ans">f</b></span><span>• f. Yes, she was. She loved it.</span></div></div>
+          <div class="task" data-t="3"><div class="tt"><span>4</span>Read and circle T or F.</div>
+            <p style="font-style:italic">Last Sunday, Mai and her family were at the beach. The weather was hot…</p>
+            <p>1. Mai was at the zoo. <span class="tfb"><i>T</i><i class="a3">F</i></span></p><p class="dim">…</p></div>
+          <div class="task" data-t="4"><div class="tt"><span>5</span>&nbsp;</div><div class="sk" style="width:70%"></div><div class="sk" style="width:90%"></div><div class="sk" style="width:55%"></div></div>
         </div>
       </div>
 
       <div class="insp">
-        <h5>Task 3</h5>
-        <div class="warnbox"><b>⚠ Kiểm tra:</b> câu 4 và câu 6 cùng ghép được với "Yes, she was." → đáp án không duy nhất.</div>
-        <div class="regen"><b>↻ Tạo lại Task này</b>
-          <div style="font-size:12px;color:var(--muted)">Giữ dàn ý của Task 3 (Q8 Nối · 6 cặp). Bản hiện tại được lưu vào Phiên bản trước khi thay.</div>
-          <textarea rows="2" placeholder="Góp ý: vd mỗi câu trả lời chỉ ghép được một câu hỏi"></textarea>
-          <div style="display:flex;gap:6px;justify-content:flex-end"><button class="btn sm">Hủy</button><button class="btn sm pri">Tạo lại</button></div></div>
-        <div style="border-top:1px solid var(--line);padding-top:8px;color:var(--muted);font-size:12px">… các mục chỉnh dàn trang hiện có (Bố cục, Dạng câu hỏi, Khoảng cách…)</div>
-        <div class="grow"></div>
-        <button class="btn">Tạo lại cả phiếu theo dàn ý…</button>
+        <div class="tabs"><button class="tab on" data-tab="nd">Nội dung</button><button class="tab" data-tab="dt">Dàn trang</button></div>
+        <div id="pnd" class="pane"></div>
+        <div id="pdt" class="pane" hidden>
+          <h5 id="dtTitle">Task 3</h5>
+          <div class="fake"><b>Bố cục</b><span class="seg"><i class="on">Xếp dọc</i><i>Ảnh trái</i><i>Ảnh phải</i></span></div>
+          <div class="fake"><b>Dạng câu hỏi</b><span>Q8 Nối ▾</span></div>
+          <div class="fake"><b>Chỗ nối</b><span class="seg"><i class="on">Chấm</i><i>Ô viết</i><i>Không</i></span></div>
+          <div class="fake"><b>Khoảng cách</b><span class="seg"><i class="on">Gọn</i><i>Vừa</i><i>Thoáng</i></span></div>
+          <div style="color:var(--muted);font-size:12px">… các mục chỉnh dàn trang hiện có của editor</div>
+        </div>
       </div>
 
       <div class="ver" id="ver" hidden>
         <h5>Phiên bản <span><button class="btn sm">+ Lưu bản này</button> <button class="btn sm ghost" id="vClose">✕</button></span></h5>
         <div class="vi"><div class="when"><span class="k cur">Hiện tại</span>20:14 hôm nay</div><div class="why">Đang biên tập</div></div>
-        <div class="vi sel" data-old="1"><div class="when"><span class="k auto">Tự động</span>20:09</div><div class="why">Tạo lại Task 3 · góp ý <i>"dễ quá"</i></div>
-        </div>
+        <div class="vi sel"><div class="when"><span class="k auto">Tự động</span>20:09</div><div class="why">Sinh lại bài 3 · góp ý <i>"dễ quá"</i></div></div>
         <div class="vprev">
           <b>Bản 20:09 khác bản hiện tại ở:</b>
-          <div class="row"><span>Task 3 · Q3 → Q8 (dàn ý đổi)</span><button class="btn sm">Lấy lại Task này</button></div>
-          <div class="row"><span>Task 2 · sửa tay câu 4</span><button class="btn sm">Lấy lại Task này</button></div>
+          <div class="row"><span>Bài 3 · nội dung</span><button class="btn sm">Lấy lại bài này</button></div>
+          <div class="row"><span>Bài 2 · sửa tay câu 4</span><button class="btn sm">Lấy lại bài này</button></div>
           <button class="btn sm" style="margin-top:4px">Khôi phục cả phiếu</button>
         </div>
         <div class="vi"><div class="when"><span class="k man">Lưu tay</span>20:02</div><div class="why">"Bản gửi tổ trưởng"</div></div>
-        <div class="vi"><div class="when"><span class="k auto">Tự động</span>19:55</div><div class="why">Tạo phiếu từ dàn ý (5 Task)</div></div>
+        <div class="vi"><div class="when"><span class="k auto">Tự động</span>19:55</div><div class="why">Sinh phiếu từ cấu trúc (5 bài)</div></div>
       </div>
     </div>
+    <div class="pop" id="pubPop" hidden>
+      <b>Còn 3 bài chưa duyệt</b>
+      <div>Bài 3 ⚠ cần xem · Bài 4, 5 chưa duyệt.</div>
+      <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:8px"><button class="btn sm" id="pubGo">Xem bài 3</button><button class="btn sm" id="pubAny">Vẫn xuất bản</button></div>
+    </div>
   </section>
+
 </div>
 
 <div class="callout"><b>Điểm cần góp ý:</b>
 <ol>
-<li>① Ra đề: khung chọn bài luôn mở; bấm tiêu đề "Chọn bài" để thu gọn. Dưới trái là cấu trúc theo Trình tự, một khối, mỗi bước một mục, mặc định 1 bài: + thêm bài, ✕ xóa bài (bước bắt buộc giữ ít nhất 1; bước không bắt buộc xóa hết = bỏ qua), đổi dạng (menu hoặc ⟳), chỉnh số câu trong giới hạn. Dưới phải là layout sơ bộ, cập nhật ngay khi đổi; vượt số trang tối đa thì viền đỏ. Bấm thử được.</li>
-<li>② Dàn ý: AI sinh bài đầy đủ theo cấu trúc đã duyệt; xem từng bài ở dạng chữ (mục tiêu, ngữ cảnh, câu, đáp án), duyệt / sửa chữ / sinh lại kèm góp ý. Chỗ kiểm tra bắt lỗi được tô vàng.</li>
-<li>③ Biên tập: như bản trước (editor hiện tại + tạo lại Task + Phiên bản).</li>
+<li>Còn hai giai đoạn: ① Ra đề → ② Biên tập. Bấm "Duyệt cấu trúc · Sinh bài" là vào thẳng Biên tập, bài hiện dần trên trang.</li>
+<li>Cột trái: trạng thái từng bài (✓ đã duyệt, ⚠ cần xem, ○ chưa duyệt, ⏳ đang viết) và thanh tiến độ duyệt.</li>
+<li>Cột phải hai thẻ: <b>Nội dung</b> (kiểm tra, mục tiêu, ngữ cảnh, đáp án, Duyệt, Sinh lại kèm góp ý) và <b>Dàn trang</b> (công cụ hiện có). Bấm một bài trên trang hoặc trong danh sách để chọn; bấm Duyệt thì tự nhảy sang bài chưa duyệt tiếp theo.</li>
+<li>Công tắc <b>Hiện đáp án</b> trên trang: in đáp án màu cam để kiểm nhanh.</li>
+<li><b>Xuất bản</b> (góc trên phải): còn bài chưa duyệt thì nhắc. <b>🕘 Phiên bản</b> như trước.</li>
 </ol></div>
 
 <script>
@@ -410,5 +419,41 @@ function drawPages(){const tasks=[];let k=0;
  const max=2;document.getElementById('pages').innerHTML=pages.map((p,i)=>`<div class="pg ${i>=max?'over':''}">${p.map(t=>`<div class="ptk">${t.html}</div>`).join('')}<span class="pno">${i+1}</span></div>`).join('');
  const nq=tasks.length;document.getElementById('pvInfo').innerHTML=`${nq} bài · <span class="${pages.length>max?'over':''}">ước tính ${pages.length} trang${pages.length>max?' (vượt tối đa '+max+')':' / tối đa '+max}</span>`}
 reroll();
+
+// ---- ② Biên tập: trạng thái, Nội dung / Dàn trang ----
+const T=[
+ {t:'Nhận diện was / were',q:'Q4 Chọn trong câu',n:'6 câu',role:'Khởi động',st:'ok',goal:'Chọn was / were theo chủ ngữ số ít / số nhiều.',ctx:'Tranh công viên Chủ nhật.',key:'1 were · 2 was · 3 were · 4 was · 5 were · 6 was'},
+ {t:'Điền was / were',q:'Q1 Điền từ',n:'8 câu',role:'Luyện',st:'ok',goal:'Khẳng định và phủ định (wasn\'t / weren\'t).',ctx:'Cuối tuần của các bạn trong lớp.',key:'1 was · 2 weren\'t · 3 were · 4 wasn\'t · …'},
+ {t:'Câu hỏi Yes/No',q:'Q8 Nối',n:'6 cặp',role:'Luyện',st:'warn',goal:'Hỏi và trả lời Was he…? / Were they…?',ctx:'Hỏi về các bạn sau chuyến dã ngoại.',key:'1-b · 2-a · 3-c · 4-d · 5-e · 6-f',warn:'Câu 4 và câu 6 cùng ghép được với "Yes, she was." → đáp án không duy nhất.'},
+ {t:'Đọc hiểu: Mai\'s Sunday',q:'Q5 Đúng / Sai',n:'5 câu',role:'Vận dụng',st:'todo',goal:'Nhận ra was / were trong văn bản liền mạch.',ctx:'Mai kể Chủ nhật đi biển (72 từ).',key:'1 F · 2 T · 3 T · 4 F · 5 T'},
+ {t:'Viết về cuối tuần',q:'Q12 Viết tự do',n:'4 dòng',role:'Vận dụng',st:'wait'}];
+let cur=2;
+const SI={ok:'✓',warn:'⚠',todo:'',wait:'⏳'};
+function drawEd(){
+ document.getElementById('tlist').innerHTML=T.map((x,i)=>`<div class="tn ${x.st} ${i==cur?'sel':''}" data-i="${i}"><span class="s">${SI[x.st]}</span><div>${i+1} · ${x.t}<small>${x.st=='wait'?'đang viết…':x.q+' · '+x.n+(x.st=='todo'?' · chưa duyệt':'')}</small></div></div>`).join('');
+ const ok=T.filter(x=>x.st=='ok').length;document.getElementById('tcount').textContent=ok+'/5 đã duyệt';document.querySelector('.tprog .bar span').style.width=ok*20+'%';
+ document.querySelectorAll('.task').forEach(el=>el.classList.toggle('sel',+el.dataset.t==cur));
+ const x=T[cur],P=document.getElementById('pnd');document.getElementById('dtTitle').textContent='Bài '+(cur+1);
+ if(x.st=='wait'){P.innerHTML=`<h5>Bài ${cur+1}</h5><div class="keyl">⏳ AI đang viết bài này…</div>`;return}
+ P.innerHTML=`<h5>Bài ${cur+1} · ${x.t}</h5>
+  <div class="meta"><span class="chip role">${x.role}</span><span class="chip q">${x.q}</span><span class="chip">${x.n}</span></div>
+  ${x.warn?`<div class="warnbox"><b>⚠ Kiểm tra:</b> ${x.warn}</div>`:'<div class="okbox">✓ Kiểm tra tự động: không thấy lỗi</div>'}
+  <div class="kv3"><b>Mục tiêu</b><span>${x.goal}</span><b>Ngữ cảnh</b><span>${x.ctx}</span></div>
+  <div class="keyl"><b>Đáp án:</b> ${x.key}</div>
+  <div class="acts">${x.st=='ok'?'<button class="btn" data-un>↺ Bỏ duyệt</button>':'<button class="btn okd" data-ok>✓ Duyệt bài này</button>'}</div>
+  <div class="regen"><b>⟳ Sinh lại bài này</b><textarea rows="2" placeholder="Góp ý: vd mỗi câu trả lời chỉ ghép được một câu hỏi"></textarea>
+  <div style="font-size:12px;color:var(--muted)">Bản hiện tại được lưu vào Phiên bản trước khi thay.</div><button class="btn sm pri" style="align-self:flex-end">Sinh lại</button></div>
+  <div style="font-size:12px;color:var(--muted)">Sửa chữ: bấm thẳng vào chữ trên trang hoặc trong cột trái như hiện nay.</div>`}
+document.getElementById('tlist').addEventListener('click',e=>{const t=e.target.closest('.tn');if(t){cur=+t.dataset.i;drawEd()}});
+document.getElementById('paper').addEventListener('click',e=>{const t=e.target.closest('.task');if(t){cur=+t.dataset.t;drawEd()}});
+document.getElementById('pnd').addEventListener('click',e=>{if(e.target.dataset.ok!==undefined){T[cur].st='ok';delete T[cur].warn;const f=document.querySelector(`.task[data-t="${cur}"] .flag`);if(f)f.remove();document.querySelectorAll(`.task[data-t="${cur}"] .hlw`).forEach(r=>r.classList.remove('hlw'));const n=T.findIndex(x=>x.st=='todo'||x.st=='warn');if(n>=0)cur=n;drawEd()}
+ if(e.target.dataset.un!==undefined){T[cur].st='todo';drawEd()}});
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x==b));document.getElementById('pnd').hidden=b.dataset.tab!='nd';document.getElementById('pdt').hidden=b.dataset.tab!='dt'});
+document.getElementById('ansTog').onchange=e=>document.getElementById('paper').classList.toggle('showans',e.target.checked);
+const pop=document.getElementById('pubPop');
+document.getElementById('pubBtn').onclick=()=>{const n=T.filter(x=>x.st!='ok');pop.querySelector('b').textContent=n.length?'Còn '+n.length+' bài chưa duyệt':'Tất cả đã duyệt';pop.querySelector('div').textContent=n.map(x=>'Bài '+(T.indexOf(x)+1)+(x.st=='warn'?' ⚠ cần xem':x.st=='wait'?' đang viết':' chưa duyệt')).join(' · ')||'Sẵn sàng xuất bản.';pop.hidden=!pop.hidden};
+document.getElementById('pubGo').onclick=()=>{pop.hidden=true;go(2);cur=T.findIndex(x=>x.st!='ok');if(cur<0)cur=0;drawEd()};
+document.getElementById('pubAny').onclick=()=>{pop.hidden=true};
+drawEd();
 </script>
 </body></html>
