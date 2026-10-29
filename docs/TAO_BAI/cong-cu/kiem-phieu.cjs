@@ -84,7 +84,7 @@ tasks.forEach((t, ti) => {
       const stem = it.text.join(' ');
       it.opts.forEach(x => { if (TIME.test(x.t)) E('Task ' + n + ' câu ' + it.no + ' lựa chọn ' + x.L + ' có từ chỉ thời gian: "' + x.t + '"'); });
       const ok = it.opts.find(x => x.L === k); if (ok) out.push(stem, ok.t);
-      if (ok && it.no > 0) { const sw = new Set((stem.toLowerCase().match(/[a-z']+/g) || [])); const echo = (ok.t.toLowerCase().match(/[a-z']+/g) || []).filter(w => /^(play|read|watch|eat|go|ride|swim|draw|make|cook|wash|sing|help)(s|es|ing)$/.test(w) && sw.has(w)); if (echo.length) W('Task ' + n + ' câu ' + it.no + ': đáp án lặp lại dạng động từ có trong câu hỏi (' + echo.join(',') + ')'); }
+      if (ok && it.no > 0) { const sw = new Set((stem.toLowerCase().match(/[a-z']+/g) || [])); const echo = (ok.t.toLowerCase().match(/[a-z']+/g) || []).filter(w => /^(play|read|watch|eat|go|ride|swim|draw|make|cook|wash|sing|help)(s|es|ing)$/.test(w) && sw.has(w)); if (echo.length) E('Task ' + n + ' câu ' + it.no + ': đáp án lặp lại dạng động từ có trong câu hỏi (' + echo.join(',') + ')'); }
       stems.push([n, it.no, stem]);
       it.meaning = !TIME.test(stem);
     });
@@ -104,6 +104,7 @@ tasks.forEach((t, ti) => {
         if (opts.length !== 3) E('Task ' + n + ' câu ' + it.no + ': {} có ' + opts.length + ' vế, phải đúng 3: ' + g);
         const st = opts.filter(o => o.startsWith('*')).length;
         if (st !== 1) E('Task ' + n + ' câu ' + it.no + ': {} có ' + st + ' dấu *, phải đúng 1: ' + g);
+        { const ing = opts.filter(o => /ing\b/.test(o)).length; if (ing === 0 || ing === 3) E('Task ' + n + ' câu ' + it.no + ': ba vế không có cặp khác thì (cần ít nhất một vế -ing và một vế không -ing): ' + g); }
         opts.forEach(o => { if (TIME.test(o)) E('Task ' + n + ' câu ' + it.no + ' vế có từ chỉ thời gian: ' + o); });
         pos.push(opts.findIndex(o => o.startsWith('*')) + 1);
       });
@@ -121,7 +122,13 @@ tasks.forEach((t, ti) => {
       out.push(stem); stems.push([n, it.no, stem]);
       it.meaning = !TIME.test(stem);
     });
+  } else if (t.dang === 'viết câu') {
+    L.forEach(l => { const q = (l.match(/"([^"]+)"/) || [])[1]; if (!q) return;
+      if (/\b(plays|swims|reads|draws|watches|eats|rides|goes)\b[^.]*\bnow\b/i.test(q)) E('Task ' + n + ': lời của bạn sai ngữ pháp (hiện tại đơn với now): "' + q + '"');
+      if (/\b(is|are) \w+ing\b[^.]*\bon (saturdays|sundays)\b/i.test(q)) E('Task ' + n + ': lời của bạn sai ngữ pháp (tiếp diễn với on Saturdays): "' + q + '"'); });
+    out.push(L.filter(l => !/^(Hướng dẫn|Dạng|Khung từ|Dòng viết)/.test(l)).join(' '));
   } else { out.push(L.filter(l => !/^(Hướng dẫn|Dạng|Khung từ|Dòng viết)/.test(l)).join(' ')); }
+  { const MUST = { 2: [2, 4], 3: [4, 6], 4: [1, 4] }[n]; if (MUST) MUST.forEach(no => { const it = items.find(x => x.no === no); if (it && it.meaning === false) E('Task ' + n + ' câu ' + no + ': vị trí bắt buộc không có từ chỉ thời gian, nhưng câu có'); if (!it) E('Task ' + n + ' thiếu câu ' + no); }); }
   // tỷ lệ nghĩa thuần (loại câu ví dụ 0)
   if (['chọn A/B/C', 'chọn trong câu', 'điền từ'].includes(t.dang)) {
     const sc = items.filter(it => it.no > 0), mc = sc.filter(it => it.meaning).length;
