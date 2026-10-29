@@ -1,6 +1,6 @@
 # Đặc tả module Tạo bài (theo giáo trình)
 
-Bản 1 · 29/10/2026 · trạng thái: **đã thảo luận, chưa code**. Thay cho phần quy trình trong `0_THIET_KE.md` (file đó giữ làm nhật ký quyết định).
+Bản 1 · 29/10/2026 · trạng thái: **T0–T3 đã code (v124–v127, phiên 17; WS_EDITOR_SPEC mục 55–58)**, T4–T6 chưa. Thay cho phần quy trình trong `0_THIET_KE.md` (file đó giữ làm nhật ký quyết định).
 Hình mẫu: `docs/MINH_HOA_TAO_BAI.html` (màn Ra đề), `docs/MINH_HOA_TAO_BAI_B.html` (Biên tập, vẽ trên editor v123 thật).
 Kế hoạch làm: `KE_HOACH_TRIEN_KHAI.md`. Cấu trúc các file dữ liệu (Kiến thức, Trình tự, TF, file chung): **thảo luận riêng**; đặc tả này chỉ nêu app cần đọc được gì.
 

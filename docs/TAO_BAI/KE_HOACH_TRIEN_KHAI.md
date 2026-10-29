@@ -1,6 +1,6 @@
 # Kế hoạch triển khai module Tạo bài vào WS Editor
 
-Bản 1 · 29/10/2026 · theo `DAC_TA_TAO_BAI.md` bản 1. App hiện tại: **v123**. Chưa bắt đầu code.
+Bản 1 · 29/10/2026 · theo `DAC_TA_TAO_BAI.md` bản 1. **Tiến độ (phiên 17, 29/10): T0 (v124), T1 (v125), T2 (v126), T3 (v127) xong**; số bản các giai đoạn sau dịch lên 1 vì T0 sửa bộ đọc thành một bản riêng. Báo cáo: `docs/BAO_CAO_PHIEN_2026-10-29_phien17.md`. Lệch kế hoạch: máy kiểm nằm ở `app/src/taobai/maykiem.ts` (cần mô hình phiếu của app), không ở `shared/`; T3 làm luôn phần "quay lại Ra đề rồi Sinh bài: giữ bài không đổi" (mục 5.6, kế hoạch để ở T4).
 
 ## 0. Cách làm
 
@@ -34,14 +34,14 @@ T1–T2 không cần AI và không cần dữ liệu giáo trình: thử đượ
 
 ## 3. Các giai đoạn
 
-### T0 · Chuẩn bị (không đổi app)
+### T0 · Chuẩn bị (v124: chỉ sửa bộ đọc MD) — XONG 29/10
 - Bộ dữ liệu mẫu tạm `server/demo/tao-bai/` (Pinta English 3 · Unit 5: Lesson 1 Từ vựng, Lesson 2 Ngữ pháp was / were, Lesson 4 Nghe) + Trình tự / TF kiểu lai.
 - `shared/src/taobai/types.ts` (kiểu `gen`, cấu trúc, tiêu chí) và mô-đun chuyển đổi `server/src/taobai/nguon.ts`.
 - **Rà bộ đọc MD với 12 dạng Q do AI viết**: thử phiếu was / were ở hình mẫu cho thấy `Dạng: viết tự do` + `Khối chữ trên:` được nhận thành "Câu hỏi · viết câu" chứ không phải Q12. Kiểm tra lại từng Q, sửa bộ đọc hoặc quy tắc MD (file chung 1) trước khi cho AI viết.
 - Bản nháp file chung 1 (quy tắc MD cho sinh bài, rút từ `QUY_UOC_MD.md`) để T4 dùng.
 - **Xong khi:** đọc được dữ liệu mẫu bằng test; danh sách lỗi bộ đọc theo Q đã xử lý.
 
-### T1 · Duyệt bài + Lịch sử (v124)
+### T1 · Duyệt bài + Lịch sử (v125) — XONG 29/10
 - `ws.gen` / `task.gen` trong mô hình; giữ qua lưu, mở, hoàn tác; bỏ khỏi MD / `.wsp`.
 - Dải trên cùng (Duyệt bài n/N, Lịch sử phiếu, Xuất bản), biểu tượng trạng thái trong cây, **ngăn Duyệt bài** (chưa có phần Kiểm tra), **Lịch sử bài / phiếu** theo lần Duyệt (≤ 3), Dùng bản này / Xem / Khôi phục (có Hoàn tác), tự về "chưa duyệt" khi dấu nội dung khác bản duyệt.
 - Xuất bản = Duyệt phiếu + mở hộp Gói .wsp, có hộp nhắc.
@@ -49,14 +49,14 @@ T1–T2 không cần AI và không cần dữ liệu giáo trình: thử đượ
 - **Test:** Playwright: duyệt / sửa → về chưa duyệt / sửa ngược → ✓ lại / lịch sử cắt ở 3 / Dùng bản này + Hoàn tác / Khôi phục phiếu / xuất MD và `.wsp` không có `gen`; chuẩn 120/120.
 - **Thử tay:** `docs/TAO_BAI/KIEM_TRA_T1.md`.
 
-### T2 · Máy kiểm + Hiện đáp án (v125)
+### T2 · Máy kiểm + Hiện đáp án (v126) — XONG 29/10
 - `shared/src/taobai/maykiem.ts`: các tiêu chí máy (mục 6.1 đặc tả) theo từng Q; tiêu chí Cả phiếu đo được bằng code (số trang, lặp câu).
 - Phần **Kiểm tra a/b đạt** và khối **Cả phiếu** trong ngăn; chạy lại khi sửa (trễ ~0,5 s).
 - Lớp **Hiện đáp án** (màu cam) và **tô vàng** câu lỗi trên trang.
 - **Test:** đơn vị cho máy kiểm (mỗi Q một bộ đúng / sai); Playwright cho lớp đáp án trên đủ 12 Q; chuẩn 120/120 (lớp phủ tắt).
 - **Thử tay:** `KIEM_TRA_T2.md`.
 
-### T3 · Màn Ra đề (v126)
+### T3 · Màn Ra đề (v127) — XONG 29/10
 - API đọc: `/api/taobai/giao-trinh`, `/lesson/:id` (mục tiêu, chuyên đề, Trình tự đã tách bước, Q được phép, phiếu đã tạo).
 - `app/src/taobai/RaDe.tsx`: khung chọn bài (thu gọn bằng tiêu đề), cấu trúc bài (mỗi bước một mục, +/✕, ⟳, menu Q, −/+ số câu, luật ngẫu nhiên), ghi chú cho AI.
 - **Layout sơ bộ**: sinh Task giả theo Q + số câu, dàn bằng `core/layout` trong ô đo ẩn, vẽ trang thu nhỏ; báo vượt số trang.
@@ -65,7 +65,7 @@ T1–T2 không cần AI và không cần dữ liệu giáo trình: thử đượ
 - **Test:** tách Trình tự (đơn vị); luật ngẫu nhiên (không hai bài liền cùng Q, giới hạn +/✕); layout sơ bộ khớp số trang của phiếu thật cùng cấu trúc trong sai số ±1 trang trên bộ mẫu.
 - **Thử tay:** `KIEM_TRA_T3.md`.
 
-### T4 · Sinh bài (v127)
+### T4 · Sinh bài (v128)
 - `server/src/taobai/nhac.ts`: dựng đoạn nhắc sinh một bài (mục 8.1); `server/src/taobai/sinh.ts`: gọi AI (dùng lại `ai.ts`, model theo biến `TAOBAI_MODEL`), song song tối đa 3, gửi lại đúng chỗ lỗi tối đa 2 lần.
 - App: điền từng bài khi xong (cây ⏳ → ○ / ⚠), đọc bằng `core/md.js`, máy kiểm; **Sinh lại bài này** kèm góp ý; không ghi đè bài đang gõ.
 - **Chế độ AI ngoài**: nút Chép đoạn nhắc / ô Dán kết quả cho từng bài; tự bật khi không có máy chủ hoặc khóa.
@@ -74,7 +74,7 @@ T1–T2 không cần AI và không cần dữ liệu giáo trình: thử đượ
 - **Test:** máy chủ AI giả trả MD đúng / sai cú pháp / sai số câu / chậm / lỗi 429; Playwright luồng đầy đủ Ra đề → Sinh → Duyệt → Xuất bản; chế độ AI ngoài.
 - **Thử tay:** `KIEM_TRA_T4.md` (có phần thử với AI thật nếu đã có khóa).
 
-### T5 · AI chấm theo rubric (v128)
+### T5 · AI chấm theo rubric (v129)
 - `server/src/taobai/cham.ts`: lượt gọi riêng chấm một bài theo file chung 4 (trả JSON tiêu chí + lý do); chấm Cả phiếu (phủ kiến thức, độ khó tăng dần).
 - Gộp vào phần Kiểm tra (nhóm "AI chấm theo rubric"), nút "Chấm lại"; lưu điểm vào nhật ký (không hiện cho giáo viên).
 - Chế độ AI ngoài: đoạn nhắc chấm để chép.

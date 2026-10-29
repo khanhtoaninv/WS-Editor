@@ -7,17 +7,25 @@ import { Inspector } from './insp/Inspector';
 import { Tree } from './tree/Tree';
 import { Pages } from './stage/Pages';
 import { Guard } from './Guard';
+import { TaoBaiBar, TaoBaiDrawer, TbPubDlg } from '../taobai/TaoBai';
+import { TbOverlay } from '../taobai/Checks';
+import { RaDe } from '../taobai/RaDe';
 
 export function AppShell() {
   return (
     <>
+      <Guard name="taobai-bar"><TaoBaiBar /></Guard>
       <div className="app">
         <TopBar />
         <aside className="pane tree" id="tree" aria-label="Cây container"><Guard name="tree"><Tree /></Guard></aside>
         <LeftSplit />
         <main className="pane stage paper" id="stage"><Guard name="pages"><Pages /></Guard></main>
         <aside className="pane insp" id="insp" aria-label="Inspector"><Guard name="inspector"><Inspector /></Guard></aside>
+        <Guard name="taobai-drawer"><TaoBaiDrawer /></Guard>
       </div>
+      <Guard name="taobai-pub"><TbPubDlg /></Guard>
+      <Guard name="taobai-overlay"><TbOverlay /></Guard>
+      <Guard name="taobai-rade"><RaDe /></Guard>
       <div id="measure" className="paper" aria-hidden="true" />
     </>
   );

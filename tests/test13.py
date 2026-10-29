@@ -17,7 +17,7 @@ with sync_playwright() as p:
     ids = lambda: pg.evaluate("ws.tasks.map(t=>t.id)")
     # 1) cột trái: đúng 2 nút nhập
     btns = pg.eval_on_selector_all('#tree .ttools .btn','e=>e.map(x=>x.innerText.trim())')
-    chk('cột trái có đúng 2 nút: + Task, + Phiếu', btns==['+ Task','+ Phiếu'], btns)
+    chk('cột trái có đúng 2 nút nhập: + Task, + Phiếu (v127: thêm nút Tạo bài của module Tạo bài)', btns==['+ Task','+ Phiếu','Tạo bài'], btns)
     # 2) + Task: hai thẻ, mặc định Mẫu có sẵn
     pg.click('#tree [data-lib]'); pg.wait_for_timeout(300)
     tabs = pg.eval_on_selector_all('#imTabs [data-tab]','e=>e.map(x=>x.innerText+":"+x.classList.contains("on"))')

@@ -14,10 +14,11 @@ import { Store, newId, newMa, type Phien, type Lop, type Goi, type Bai } from '.
 import { loadKhoa, trustOf, type Khoa } from './khoa.ts';
 import { HttpError, bad, parseCookies, setCookie, body, json, send, mimeOf, type Req, type Res } from './http.ts';
 import { extraRoutes } from './cham.ts';
+import { taobaiRoutes } from './taobai/api.ts';
 import { seedDemo } from './demo.ts';
 
 export { seedDemo };
-export type Opts = { demo?: boolean; root: string; data: string; matKhau: string; ai?: { key: string; model?: string } | null; log?: (m: string) => void };
+export type Opts = { demo?: boolean; root: string; data: string; taobaiData?: string; matKhau: string; ai?: { key: string; model?: string } | null; log?: (m: string) => void };
 export type Ctx = Awaited<ReturnType<typeof createApp>>['ctx'];
 
 const now = () => new Date().toISOString();
@@ -275,6 +276,7 @@ export async function createApp(o: Opts) {
   on('GET', '/api/hs/su-kien', (r, res) => { const { p } = hsOf(r); sse(res, chan(hsSubs, p.id)); return undefined; });
 
   extraRoutes(on, ctx, { needGv, phienOf, grade });
+  taobaiRoutes(on, { data: o.data, taobaiData: o.taobaiData });   // module Tạo bài (T3)
 
   // ---------- máy chủ ----------
   const server: Server = createServer(async (req0, res) => {

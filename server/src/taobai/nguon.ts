@@ -1,13 +1,14 @@
 // Module Tạo bài: MÔ-ĐUN CHUYỂN ĐỔI DUY NHẤT giữa thư mục dữ liệu giáo trình trên máy chủ và kiểu dữ liệu của app
 // (docs/TAO_BAI/DAC_TA_TAO_BAI.md mục 9.2, KE_HOACH_TRIEN_KHAI.md mục 0). Định dạng file hiện là ĐỊNH DẠNG TẠM
-// (docs/TAO_BAI/DINH_DANG_TAM.md); chốt định dạng thật thì chỉ sửa file này + shared/src/taobai/doc.ts.
-//   docNguon(dir)                 → danh sách giáo trình + lỗi đọc giao-trinh.md
+// (docs/TAO_BAI/DINH_DANG_TAM.md); chốt định dạng thật thì chỉ sửa file này + shared/src/taobai/doc.ts, kho.ts.
+//   docNguon(dir)                  → danh sách giáo trình + lỗi đọc giao-trinh.md
 //   chiTietLesson(dir, gt, lesson) → Kiến thức + Trình tự (đã tách bước) + TF + file chung + lỗi / cảnh báo
+// Đọc thư mục thành bảng { đường dẫn → chữ } rồi dùng chung logic với trình duyệt (shared/src/taobai/kho.ts).
 // Chạy thẳng để xem nhanh dữ liệu: node --experimental-strip-types server/src/taobai/nguon.ts [thư mục]
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { join, resolve, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseGiaoTrinh, ghepLesson, verOf, type GiaoTrinh, type DataNote, type ChiTietLesson, type FileChung } from '../../../shared/src/taobai/index.ts';
+import { khoTuFile, verOf, type Kho, type GiaoTrinh, type DataNote, type ChiTietLesson, type FileChung } from '../../../shared/src/taobai/index.ts';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 /** Thư mục dữ liệu mặc định: biến môi trường TAOBAI_DATA, không có thì bộ mẫu tạm. */
@@ -23,43 +24,34 @@ export const CHUNG: { so: FileChung['so']; ten: string; file: string | null }[] 
 ];
 
 const read = (p: string): string | null => existsSync(p) && statSync(p).isFile() ? readFileSync(p, 'utf8') : null;
-const rel = (dir: string, p: string) => relative(dir, p).replace(/\\/g, '/');
 
 export function docChung(root = REPO): FileChung[] {
   return CHUNG.map(c => { const raw = c.file ? read(join(root, c.file)) : null; return { so: c.so, ten: c.ten, ver: raw == null ? '' : verOf(raw), raw }; });
 }
 
+/** Mọi file .md trong thư mục dữ liệu (tối đa 4 cấp, bỏ file / thư mục ẩn). */
+function docThuMuc(dir: string): Record<string, string> {
+  const out: Record<string, string> = {};
+  const walk = (d: string, depth: number) => { for (const f of readdirSync(d)) { if (f.startsWith('.')) continue; const p = join(d, f), s = statSync(p);
+    if (s.isDirectory()) { if (depth < 4) walk(p, depth + 1); } else if (/\.md$/i.test(f) && s.size < 512 * 1024) out[relative(dir, p).replace(/\\/g, '/')] = readFileSync(p, 'utf8'); } };
+  walk(dir, 0); return out;
+}
+
+export function moKho(dir = DATA_DIR, root = REPO): Kho | null { return existsSync(dir) ? khoTuFile(docThuMuc(dir), docChung(root)) : null; }
+
 /** Mọi giáo trình trong thư mục dữ liệu (mỗi thư mục con có giao-trinh.md là một giáo trình). */
 export function docNguon(dir = DATA_DIR): { giaoTrinh: GiaoTrinh[]; loi: DataNote[]; canhBao: DataNote[] } {
-  const out: GiaoTrinh[] = [], loi: DataNote[] = [], canhBao: DataNote[] = [];
-  if (!existsSync(dir)) return { giaoTrinh: [], loi: [{ file: dir, msg: 'không có thư mục dữ liệu giáo trình' }], canhBao };
-  for (const d of readdirSync(dir).sort()) {
-    const p = join(dir, d); if (!statSync(p).isDirectory()) continue;
-    const src = read(join(p, 'giao-trinh.md'));
-    if (src == null) { canhBao.push({ file: rel(dir, p), msg: 'thư mục không có giao-trinh.md: bỏ qua' }); continue; }
-    const r = parseGiaoTrinh(src, rel(dir, join(p, 'giao-trinh.md')), d);
-    if (out.some(g => g.id === r.gt.id)) { loi.push({ file: rel(dir, p), msg: `mã giáo trình “${r.gt.id}” bị trùng: bỏ qua` }); continue; }
-    (r.gt as GiaoTrinh & { _dir?: string })._dir = p;
-    out.push(r.gt); loi.push(...r.loi); canhBao.push(...r.canhBao);
-  }
-  return { giaoTrinh: out, loi, canhBao };
+  const k = moKho(dir); if (!k) return { giaoTrinh: [], loi: [{ file: dir, msg: 'không có thư mục dữ liệu giáo trình' }], canhBao: [] };
+  return { giaoTrinh: k.giaoTrinh, loi: k.loi, canhBao: k.canhBao };
 }
 
 /** Dữ liệu đủ để tạo bài cho một lesson. null = không có giáo trình / lesson đó. */
 export function chiTietLesson(dir: string, gtId: string, lessonId: string, root = REPO): ChiTietLesson | null {
-  const all = docNguon(dir), gt = all.giaoTrinh.find(g => g.id === gtId) as (GiaoTrinh & { _dir?: string }) | undefined;
-  if (!gt || !gt._dir) return null;
-  let cd = '';
-  gt.units.forEach(u => u.lessons.forEach(l => { if (l.id === lessonId) cd = l.chuyenDe; }));
-  const f = { kienThuc: join(gt._dir, 'kien-thuc', lessonId + '.md'), trinhTu: join(gt._dir, 'chuyen-de', cd || '_', 'trinh-tu.md'), tf: join(gt._dir, 'chuyen-de', cd || '_', 'tf.md') };
-  const r = ghepLesson(gt, lessonId, { kienThuc: read(f.kienThuc), trinhTu: cd ? read(f.trinhTu) : null, tf: cd ? read(f.tf) : null,
-    ten: { kienThuc: rel(dir, f.kienThuc), trinhTu: rel(dir, f.trinhTu), tf: rel(dir, f.tf) } }, docChung(root));
-  if (r) { const gl = all.loi.filter(n => n.msg.includes(r.lesson.ten)); r.loi.unshift(...gl); }   // lỗi của chính lesson này trong giao-trinh.md (vd chưa gắn chuyên đề)
-  return r;
+  const k = moKho(dir, root); return k ? k.chiTiet(gtId, lessonId) : null;
 }
 
-/** Bỏ đường dẫn nội bộ trước khi gửi danh sách giáo trình ra ngoài. */
-export const congKhai = (g: GiaoTrinh): GiaoTrinh => { const { _dir, ...x } = g as GiaoTrinh & { _dir?: string }; return x; };
+/** Danh sách giáo trình để gửi ra ngoài (không có đường dẫn máy chủ). */
+export const congKhai = (g: GiaoTrinh): GiaoTrinh => g;
 
 // ---------- chạy thẳng: in tóm tắt ----------
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

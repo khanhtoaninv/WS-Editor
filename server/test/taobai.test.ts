@@ -5,6 +5,7 @@ import { mkdtempSync, cpSync, rmSync, writeFileSync, readFileSync } from 'node:f
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { docNguon, chiTietLesson, docChung, congKhai, DATA_DIR } from '../src/taobai/nguon.ts';
+import { boot, client } from './api.test.ts';
 
 test('bộ mẫu tạm: 1 giáo trình, Unit 5, 4 lesson / 3 chuyên đề, đọc không lỗi', () => {
   const r = docNguon(DATA_DIR);
@@ -56,4 +57,24 @@ test('dữ liệu hỏng: báo lỗi đúng lesson, không cho tạo bài', () =
     assert.match(L('u5-l4'), /chuyen-de\/nghe\/tf\.md · chuyên đề Nghe chưa có TF/);
   } finally { rmSync(d, { recursive: true, force: true }); }
   assert.deepEqual(docNguon(join(d, 'khong-co')).loi.map(n => n.msg), ['không có thư mục dữ liệu giáo trình']);
+});
+
+test('API /api/taobai: giáo trình, chi tiết lesson, lưu / mở phiếu đã tạo', async () => {
+  const S = await boot();
+  try {
+    const c = client(S.base);
+    const g = (await c('/api/taobai/giao-trinh')).j;
+    assert.equal(g.giaoTrinh[0].id, 'pinta-english-3'); assert.deepEqual(g.loi, []);
+    assert.ok(!JSON.stringify(g).includes('/home') && !JSON.stringify(g).includes('_dir'), 'không lộ đường dẫn máy chủ');
+    const l = (await c('/api/taobai/lesson/pinta-english-3/u5-l2')).j;
+    assert.equal(l.chuyenDe.id, 'ngu-phap'); assert.equal(l.trinhTu.buoc.length, 5); assert.deepEqual(l.phieu, []);
+    assert.equal((await c('/api/taobai/lesson/pinta-english-3/u9-l9')).status, 404);
+    assert.equal((await c('/api/taobai/lesson/pinta-english-3/..%2F..')).status, 400);
+    assert.equal((await c('/api/taobai/phieu/pinta-english-3/u5-l2/p1', { method: 'PUT', json: { tasks: [] } })).status, 400, 'phiếu không có gen');
+    const w = { title: 'Unit 5 · Lesson 2', tasks: [{ id: 't1' }], gen: { v: 1 } };
+    assert.equal((await c('/api/taobai/phieu/pinta-english-3/u5-l2/p1', { method: 'PUT', json: w })).j.ok, true);
+    const l2 = (await c('/api/taobai/lesson/pinta-english-3/u5-l2')).j;
+    assert.deepEqual(l2.phieu.map((p: any) => [p.id, p.n, p.title]), [['p1', 1, 'Unit 5 · Lesson 2']]);
+    assert.equal((await c('/api/taobai/phieu/pinta-english-3/u5-l2/p1')).j.title, 'Unit 5 · Lesson 2');
+  } finally { await S.stop(); }
 });

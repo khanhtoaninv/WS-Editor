@@ -2,6 +2,7 @@
 import { useEffect, useLayoutEffect, useRef } from 'react';
 import { useUi, publish } from './store';
 import { actions } from './actions';
+import { enableForSheet } from '../taobai/TaoBai';
 
 const CODES_KEY = 'wsEditor.codes.v1';
 const HELP_ITEMS = ['Kéo thanh hoặc cạnh trên trang = đổi kích thước; bấm đúp = về tự động', 'Esc = lên cấp · Tab = container kế · Shift+bấm = chọn thêm',
@@ -15,7 +16,7 @@ export function TopBar() {
   useEffect(() => { const el = ageRef.current!, f = () => actions.setAge(el.value); el.addEventListener('change', f); return () => el.removeEventListener('change', f); }, []);
   return (
     <header className="top">
-      <div className="brand">WS Editor <span className="badge" id="verBadge" title="Phiên bản bản dựng này (bản dựng Vite, đang chuyển sang React)" style={{ fontSize: 11, padding: '1px 7px', marginLeft: 4 }}>v124</span> <small id="wsTitle">{s.title}</small></div>
+      <div className="brand">WS Editor <span className="badge" id="verBadge" title="Phiên bản bản dựng này (bản dựng Vite, đang chuyển sang React)" style={{ fontSize: 11, padding: '1px 7px', marginLeft: 4 }}>v127</span> <small id="wsTitle">{s.title}</small></div>
       <div className="tb">
         <label htmlFor="age" className="hint" style={{ margin: 0 }}>Độ tuổi</label>
         <select id="age" ref={ageRef}><option value="5-6">5–6</option><option value="7-9">7–9</option><option value="10-12">10–12</option></select>
@@ -55,6 +56,7 @@ export function HelpPop() {
   return (
     <div className="helppop" id="helpPop" hidden={!helpOpen} role="dialog" aria-label="Thao tác nhanh" ref={ref}>
       <b>Thao tác nhanh</b><ul>{HELP_ITEMS}</ul>
+      <button type="button" className="btn sm ghost" id="tbEnable" title="Thử Duyệt bài / Lịch sử khi chưa có AI: gắn chế độ tạo bài cho phiếu đang mở" onClick={() => { publish({ helpOpen: false }); enableForSheet(); }}>Thử chế độ tạo bài cho phiếu này</button>
       <label><input type="checkbox" id="codesChk" checked={codes} onChange={e => { const on = e.target.checked; publish({ codes: on }); try { localStorage.setItem(CODES_KEY, on ? '1' : '0'); } catch (_) {} }} /> Hiện mã kỹ thuật (T1, G0, A1…)</label>
     </div>
   );

@@ -5,6 +5,8 @@
 // chỉ thẻ mô tả, mã QR, tóm tắt các mục, tên Task và số câu có đáp án vẽ lại (ô đang gõ không mất con trỏ).
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Fragment, type ReactNode } from 'react';
+import { TbIcon } from '../../taobai/TaoBai';
+import { openRaDe } from '../../taobai/RaDe';
 import { L } from '../legacyApi';
 import { useUi } from '../store';
 import { qOpts, qPicker, s, tPicker } from '../insp/parts';
@@ -234,11 +236,11 @@ function TaskEditor({ t }: { t: any }) {
 // Cả cột trái: nút + Task / + Phiếu, nút Phiếu, danh sách Task (Task đang mở có khung soạn)
 function treeView() {
   const ws = W(), sel = L.sel;
-  return <><div className="ttools"><button className="btn pri" data-lib="1" title="Thêm Task vào cuối phiếu: từ mẫu có sẵn, hoặc từ file / dán (JSON, MD, chữ)">+ Task</button><button className="btn" data-newsheet="1" title="Tạo phiếu mới: từ file JSON / MD / chữ, hoặc phiếu trống. Thay phiếu đang mở sau khi xác nhận.">+ Phiếu</button></div>
+  return <><div className="ttools"><button className="btn pri" data-lib="1" title="Thêm Task vào cuối phiếu: từ mẫu có sẵn, hoặc từ file / dán (JSON, MD, chữ)">+ Task</button><button className="btn" data-newsheet="1" title="Tạo phiếu mới: từ file JSON / MD / chữ, hoặc phiếu trống. Thay phiếu đang mở sau khi xác nhận.">+ Phiếu</button><button className="btn" id="tbNew" title="Tạo bài theo giáo trình: chọn lesson, duyệt cấu trúc, sinh bài" onClick={openRaDe}>Tạo bài</button></div>
     <button className={`tnode ${sel.type === 'sheet' ? 'on' : ''}`} data-sel="sheet"><b>Phiếu</b><span className="tag">{`${ws.tasks.length} Task`}</span></button>
     <ul className="tks">{ws.tasks.map((t: any) => {
       const open = L.openTask === t.id, on = L.isOnSel({ type: 'task', id: t.id });
-      return <li key={t.id} className={`tk ${open ? 'open' : ''}${open && sel.type !== 'sheet' && sel.id === t.id ? ' cur' : ''}`} data-tk={t.id}><div className="tkh"><button className={`tnode ${on ? 'on' : open ? 'opn' : ''}`} data-sel="task" data-id={t.id} aria-expanded={!!(open)}><span className="chev" title={open ? 'Thu gọn Task' : 'Mở Task để soạn'}>▶</span><span className={`n${t.part ? ' pt' : ''}`}>{`${t.number}${t.part || ''}`}</span><TaskName id={t.id} />{L.hasOverride(t) ? <span className="ovmark" title="Có chỉnh tay" /> : null}</button></div>
+      return <li key={t.id} className={`tk ${open ? 'open' : ''}${open && sel.type !== 'sheet' && sel.id === t.id ? ' cur' : ''}`} data-tk={t.id}><div className="tkh"><button className={`tnode ${on ? 'on' : open ? 'opn' : ''}`} data-sel="task" data-id={t.id} aria-expanded={!!(open)}><span className="chev" title={open ? 'Thu gọn Task' : 'Mở Task để soạn'}>▶</span><span className={`n${t.part ? ' pt' : ''}`}>{`${t.number}${t.part || ''}`}</span><TaskName id={t.id} />{L.hasOverride(t) ? <span className="ovmark" title="Có chỉnh tay" /> : null}<TbIcon t={t} /></button></div>
         {open ? <div className="tkb"><TaskEditor t={t} /></div> : null}</li>;
     })}</ul></>;
 }

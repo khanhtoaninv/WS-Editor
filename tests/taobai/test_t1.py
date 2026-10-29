@@ -1,0 +1,115 @@
+# Tạo bài T1 (v125): Duyệt bài + Lịch sử theo lần Duyệt (docs/TAO_BAI/DAC_TA_TAO_BAI.md mục 5, 7).
+# Cách chạy: python3 tests/taobai/test_t1.py <ws-editor.html>
+import sys, os, json
+from playwright.sync_api import sync_playwright
+F = 'file://' + os.path.abspath(sys.argv[1]); ok = True
+def chk(n, c, x=''):
+    global ok; print(('PASS ' if c else 'FAIL '), n, '' if c else x); ok &= bool(c)
+ST = "(()=>{const w=__ws.ws;return w.tasks.map(t=>{const e=document.querySelector(`#tree [data-tk=\"${t.id}\"] .tbic`);return e?e.dataset.tbic:null})})()"
+def stat(pg): return pg.evaluate(ST)
+def edit(pg, i, txt):   # sửa tiêu đề bài i qua commit (có hoàn tác)
+    pg.evaluate("([i,x])=>__ws.commit(w=>{w.tasks[i].title=x},'sửa')", [i, txt]); pg.wait_for_timeout(150)
+with sync_playwright() as p:
+    b = p.chromium.launch(); pg = b.new_page(viewport={'width': 1440, 'height': 900}); errs = []
+    pg.on('console', lambda m: errs.append(m.text) if m.type == 'error' and 'ERR_' not in m.text and 'font' not in m.text.lower() else None)
+    pg.on('pageerror', lambda e: errs.append('PAGEERR ' + str(e)))
+    pg.goto(F); pg.wait_for_timeout(1500)
+    N = pg.evaluate("__ws.ws.tasks.length")
+    chk('phiếu thường: không dải trên, không biểu tượng, không ngăn', pg.locator('#tbBar').count() == 0 and pg.locator('.tbic').count() == 0 and pg.locator('#tbDrawer').count() == 0)
+    top0 = pg.evaluate("document.querySelector('.top').getBoundingClientRect().top"); sh0 = pg.evaluate("document.scrollingElement.scrollHeight")
+    # bật chế độ tạo bài (lệnh ẩn trong hộp "?")
+    pg.click('#helpBtn'); pg.click('#tbEnable'); pg.wait_for_timeout(300)
+    chk('bật: dải trên cùng hiện, thanh editor dịch xuống 44 px', pg.is_visible('#tbBar') and abs(pg.evaluate("document.querySelector('.top').getBoundingClientRect().top") - top0 - 44) < 1.5)
+    chk('bật: mọi Task có gen, biểu tượng ○ (hoặc ⚠ nếu máy kiểm T2 bắt lỗi ở phiếu demo)', len(stat(pg)) == N and set(stat(pg)) <= {'todo', 'warn'} and 'todo' in stat(pg), stat(pg))
+    chk('bật: Duyệt bài 0/N', pg.inner_text('#tbDuyet').replace('\n', ' ').strip() == f'Duyệt bài 0/{N}', pg.inner_text('#tbDuyet'))
+    chk('thêm dải không làm trang cao thêm (app trừ đúng 44 px)', pg.evaluate("document.scrollingElement.scrollHeight") <= sh0, [sh0, pg.evaluate("document.scrollingElement.scrollHeight")])
+    # ngăn Duyệt bài đè lên inspector
+    pg.click('#tbDuyet'); pg.wait_for_timeout(200)
+    r = pg.evaluate("(()=>{const a=document.querySelector('#tbDrawer').getBoundingClientRect(),b=document.querySelector('#insp').getBoundingClientRect();return [a.left-b.left,a.top-b.top,a.bottom-b.bottom,b.width]})()")
+    chk('ngăn đè đúng chỗ inspector (cùng mép trái, trên, dưới)', abs(r[0]) < 2 and abs(r[1]) < 2 and abs(r[2]) < 2, r)
+    chk('ngăn mở ở bài 1', pg.inner_text('#tbPos').strip() == f'1 / {N}')
+    id0 = pg.evaluate("__ws.ws.tasks[0].id")
+    chk('mở ngăn: bài 1 được chọn trên editor', pg.evaluate("__ws.sel.type==='task' && __ws.sel.id===__ws.ws.tasks[0].id"))
+    pg.click('#tbApprove'); pg.wait_for_timeout(250)
+    chk('duyệt bài 1 → ✓, ngăn sang bài chưa duyệt kế tiếp (2)', stat(pg)[0] == 'ok' and pg.inner_text('#tbPos').strip() == f'2 / {N}', [stat(pg)[:3], pg.inner_text('#tbPos')])
+    chk('Duyệt bài 1/N', f'1/{N}' in pg.inner_text('#tbDuyet'))
+    pg.evaluate("__ws.setZoom(0.7)"); pg.evaluate("__ws.render()"); pg.wait_for_timeout(300)
+    chk('dàn lại / đổi zoom: bài 1 vẫn ✓ (dấu nội dung ổn định)', stat(pg)[0] == 'ok', stat(pg)[:2])
+    # sửa → chưa duyệt, sửa ngược → ✓
+    t0 = pg.evaluate("__ws.ws.tasks[0].title")
+    edit(pg, 0, t0 + ' X')
+    chk('sửa bài đã duyệt → chưa duyệt', stat(pg)[0] in ('todo', 'warn'), stat(pg)[0])
+    pg.click('#tbPrev'); pg.wait_for_timeout(150)
+    chk('ngăn ghi "Đã sửa sau lần duyệt hh:mm → chưa duyệt"', pg.is_visible('#tbChanged') and 'chưa duyệt' in pg.inner_text('#tbChanged'))
+    edit(pg, 0, t0)
+    chk('sửa ngược về y bản duyệt → ✓ lại', stat(pg)[0] == 'ok' and pg.locator('#tbChanged').count() == 0, stat(pg)[0])
+    # hoàn tác lần duyệt
+    pg.click('#tbNext'); pg.wait_for_timeout(100); pg.click('#tbApprove'); pg.wait_for_timeout(200)
+    chk('duyệt bài 2', stat(pg)[1] == 'ok')
+    pg.click('#undo'); pg.wait_for_timeout(250)
+    chk('Hoàn tác lần duyệt bài 2 → chưa duyệt, không có lịch sử', stat(pg)[1] in ('todo', 'warn') and pg.evaluate("(__ws.ws.tasks[1].gen.history||[]).length") == 0)
+    # lịch sử bài cắt ở 3
+    for k in range(4):
+        edit(pg, 0, f'{t0} v{k}'); pg.evaluate("__ws.pick({type:'task',id:__ws.ws.tasks[0].id})")
+        pg.evaluate("document.querySelector('#tree [data-tk=\"%s\"] .tbic').click()" % id0); pg.wait_for_timeout(150)
+        pg.click('#tbApprove'); pg.wait_for_timeout(200)
+    h = pg.evaluate("__ws.ws.tasks[0].gen.history.map(x=>x.snap.title)")
+    chk('lịch sử bài giữ 3 lần duyệt gần nhất', h == [f'{t0} v1', f'{t0} v2', f'{t0} v3'], h)
+    chk('bản lưu không kèm lịch sử lồng nhau', pg.evaluate("__ws.ws.tasks[0].gen.history.every(x=>!x.snap.gen||!x.snap.gen.history)"))
+    # Dùng bản này + Hoàn tác
+    pg.evaluate("document.querySelector('#tree [data-tk=\"%s\"] .tbic').click()" % id0); pg.wait_for_timeout(150)
+    chk('Lịch sử bài này: 3 dòng, bản mới nhất "đang dùng"', pg.locator('#tbTaskHist li').count() == 3 and 'đang dùng' in pg.inner_text('#tbTaskHist li >> nth=0'))
+    edit(pg, 0, 'đang sửa dở')
+    pg.locator('#tbTaskHist [data-tbuse]').last.click(); pg.wait_for_timeout(250)
+    chk('Dùng bản này (cũ nhất v1) → nội dung v1, ✓', pg.evaluate("__ws.ws.tasks[0].title") == f'{t0} v1' and stat(pg)[0] == 'ok', [pg.evaluate("__ws.ws.tasks[0].title"), stat(pg)[0]])
+    chk('lịch sử vẫn 3 bản', pg.evaluate("__ws.ws.tasks[0].gen.history.length") == 3)
+    pg.click('#undo'); pg.wait_for_timeout(250)
+    chk('Hoàn tác "Dùng bản này" → về bản đang sửa dở, chưa duyệt', pg.evaluate("__ws.ws.tasks[0].title") == 'đang sửa dở' and stat(pg)[0] in ('todo', 'warn'))
+    # Duyệt phiếu ×4 → 3 bản; Xem (chỉ đọc); Khôi phục + Hoàn tác
+    ages = ['5-6', '7-9', '10-12', '7-9']
+    for a in ages:
+        pg.evaluate("a=>__ws.commit(w=>{w.age=a},'tuổi')", a); pg.wait_for_timeout(120)
+        pg.click('#tbApproveSheet'); pg.wait_for_timeout(200)
+    chk('lịch sử phiếu giữ 3 bản', pg.evaluate("__ws.ws.gen.history.map(x=>x.snap.age)") == ages[1:], pg.evaluate("__ws.ws.gen.history.map(x=>x.snap.age)"))
+    pg.click('#tbSheetHist'); pg.wait_for_timeout(150)
+    chk('ngăn Lịch sử phiếu: 3 dòng, dòng đầu "mới nhất"', pg.locator('#tbDrawer .tbhist li').count() == 3 and 'mới nhất' in pg.inner_text('#tbDrawer .tbhist li >> nth=0'))
+    pg.evaluate("__ws.commit(w=>{w.title='Phiếu hiện tại'},'tên')"); pg.wait_for_timeout(150)
+    pg.locator('[data-tbview]').last.click(); pg.wait_for_timeout(300)   # bản cũ nhất: tuổi 7-9
+    chk('Xem bản cũ: dải "Đang xem bản duyệt phiếu", phiếu cũ hiện', pg.is_visible('#tbViewEnd') and 'Đang xem bản duyệt phiếu' in pg.inner_text('#tbBar') and pg.evaluate("__ws.ws.age") == '7-9' and pg.evaluate("__ws.ws.title") != 'Phiếu hiện tại')
+    chk('Xem: chỉ đọc (cột trái / phải không bấm được, commit bị chặn)', pg.evaluate("getComputedStyle(document.querySelector('#tree')).pointerEvents") == 'none' and pg.evaluate("(()=>{const a=__ws.ws.age;__ws.commit(w=>{w.age='5-6'});return __ws.ws.age===a})()"))
+    chk('Xem: không có ngăn, nút Hoàn tác tắt', pg.locator('#tbDrawer').count() == 0 and pg.is_disabled('#undo'))
+    pg.click('#tbViewEnd'); pg.wait_for_timeout(300)
+    chk('Về bản hiện tại: phiếu hiện tại nguyên vẹn, hoàn tác còn', pg.evaluate("__ws.ws.title") == 'Phiếu hiện tại' and pg.evaluate("__ws.ws.age") == '7-9' and not pg.is_disabled('#undo') and pg.evaluate("getComputedStyle(document.querySelector('#tree')).pointerEvents") != 'none')
+    pg.evaluate("__ws.commit(w=>{w.age='10-12'},'tuổi')"); pg.wait_for_timeout(120)
+    pg.click('#tbLs'); pg.wait_for_timeout(150)
+    pg.locator('[data-tbrestore]').last.click(); pg.wait_for_timeout(200)
+    chk('Khôi phục hỏi xác nhận', pg.is_visible('#cfmDlg'))
+    pg.click('#cfmYes'); pg.wait_for_timeout(300)
+    chk('Khôi phục: phiếu về bản cũ (tuổi 7-9), lịch sử phiếu giữ 3 bản', pg.evaluate("__ws.ws.age") == '7-9' and pg.evaluate("__ws.ws.gen.history.length") == 3)
+    chk('Khôi phục: lịch sử từng bài giữ nguyên', pg.evaluate("__ws.ws.tasks[0].gen.history.length") == 3)
+    pg.click('#undo'); pg.wait_for_timeout(250)
+    chk('Hoàn tác khôi phục → tuổi 10-12', pg.evaluate("__ws.ws.age") == '10-12')
+    # xuất: MD không có gen, gói .wsp không có gen, JSON có gen
+    pg.click('#mdBtn'); pg.wait_for_timeout(150); md = pg.evaluate("document.getElementById('jsonOut').value"); pg.click('#closeDlg')
+    chk('Xuất MD: không có gen / lịch sử', 'gen' not in md and 'approvedHash' not in md and 'Duyệt' not in md)
+    src = pg.evaluate("JSON.stringify(__ws.wspSource().ws)")
+    chk('gói .wsp: phiếu gốc không mang gen', '"gen"' not in src and 'approvedHash' not in src)
+    chk('Xem JSON: còn gen (nguồn đầy đủ)', '"gen"' in pg.evaluate("JSON.stringify(__ws.ws)"))
+    # Xuất bản còn bài chưa duyệt → hộp nhắc → Vẫn xuất bản = Duyệt phiếu + hộp Gói .wsp
+    nh = pg.evaluate("__ws.ws.gen.history.length"); last = pg.evaluate("__ws.ws.gen.history.slice(-1)[0].at")
+    pg.click('#tbPub'); pg.wait_for_timeout(200)
+    chk('Xuất bản: hộp nhắc liệt kê bài chưa duyệt', pg.is_visible('#tbPubDlg') and 'Bài 2 chưa duyệt' in pg.inner_text('#tbPubList'), pg.inner_text('#tbPubDlg') if pg.locator('#tbPubDlg').count() else '')
+    pg.click('#tbPubOpen'); pg.wait_for_timeout(200)
+    chk('Mở ngăn duyệt → ngăn ở bài chưa duyệt đầu tiên', pg.is_visible('#tbDrawer') and pg.locator('#tbPubDlg').count() == 0 and stat(pg)[int(pg.inner_text('#tbPos').split('/')[0]) - 1] != 'ok')
+    pg.click('#tbPub'); pg.wait_for_timeout(150); pg.click('#tbPubGo'); pg.wait_for_timeout(400)
+    chk('Vẫn xuất bản → thêm một bản lịch sử phiếu + mở hộp Gói .wsp', pg.evaluate("__ws.ws.gen.history.slice(-1)[0].at") != last and pg.evaluate("document.getElementById('wspDlg').open"))
+    pg.keyboard.press('Escape'); pg.wait_for_timeout(200)
+    # đóng ngăn → inspector hiện lại
+    pg.click('#tbDuyet'); pg.wait_for_timeout(100)
+    if pg.locator('#tbDrawer').count(): pg.click('#tbClose')
+    pg.wait_for_timeout(150)
+    chk('✕ đóng ngăn → inspector hiện lại', pg.locator('#tbDrawer').count() == 0 and pg.is_visible('#insp'))
+    pg.screenshot(path='/tmp/claude-0/t1_end.png')
+    chk('0 lỗi console', not errs, errs)
+    b.close()
+print('ALL OK' if ok else 'SOME FAIL')

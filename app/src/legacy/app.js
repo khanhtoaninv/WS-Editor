@@ -5,6 +5,7 @@ import { actions } from '../ui/actions';
 import { askConfirm } from '../ui/Dialogs';
 import { toast } from '../ui/Toast';
 import { ws, setWs } from '../core/state.js';
+import { stripGen } from '../taobai/gen';
 import { AGE, AL, ANS_DEF, CELL_NAME, F01, FEAT_NAME, FONTS, FORM_NAME, GAPLAB, GAPP, GT_SIZE, IMP_MAX, IMP_MAX_CH, KIND_A, KIND_NAME, L2KIND, LAYOUT_DEF, MINS, PK_STAR, PRESETS, QN, RECIPES, SCHEMA, SIZES, alOpts, attachOpts, choiceTexts, ck, ckOf, clone, ensureIds, ensureRowIds, featOf, featVal, fillSheet, fillTask, gapCount, hasChoiceMarkup, hasMarkup, isFreeW, isGridTbl, isObj, its, keyParts, kindsOk, migTask, newId, normAnswer, pkGroups, pkMig, pkSrc, pkToggle, prune, qDerived, qTidy, recipeMatch, sigOk, sv, tidy, toForm } from '../core/model.js';
 import { gapN, hasKey, itemKeys, keyState, needKey, optsOfKey } from '../core/answers.js';
 import { sheetSlots, taskSlots } from '../core/slots.js';
@@ -24,6 +25,7 @@ setWs(clone(SAMPLE2));
 let base = clone(SAMPLE2);       // bản gốc của phiếu đang mở (để "Về kiểu đáp án ban đầu", khung từ)
 let sel = { type: 'sheet' }, multi = [];
 let hist = [], fut = [];
+let viewing = null;           // Tạo bài T1: đang xem bản Duyệt phiếu cũ (chỉ đọc)
 let zoom = null;                 // null = vừa khung
 let lastStart = null, lastCount = 0;
 let lastRes = null;
@@ -660,9 +662,9 @@ function keepG0(fn) {
   const d = a.getBoundingClientRect().top - y0; if (!d) return;
   if (!sc || sc === document.body) window.scrollBy(0, d); else sc.scrollTop += d;
 }
-function commit(fn, msg, after) { edFlush(); hist.push(clone(ws)); fut = []; fn(ws); ws.tasks.forEach(tidy); render(); if (msg) toast(msg); if (after) after(); }
-function undo() { if (!hist.length) return; fut.push(clone(ws)); setWs(hist.pop()); fixSel(); render(); toast('Đã hoàn tác'); }
-function redo() { if (!fut.length) return; hist.push(clone(ws)); setWs(fut.pop()); fixSel(); render(); toast('Đã làm lại'); }
+function commit(fn, msg, after) { if (viewing) { toast('Đang xem bản cũ (chỉ đọc): bấm “Về bản hiện tại” hoặc “Khôi phục bản này”'); return; } edFlush(); hist.push(clone(ws)); fut = []; fn(ws); ws.tasks.forEach(tidy); render(); if (msg) toast(msg); if (after) after(); }
+function undo() { if (viewing || !hist.length) return; fut.push(clone(ws)); setWs(hist.pop()); fixSel(); render(); toast('Đã hoàn tác'); }
+function redo() { if (viewing || !fut.length) return; hist.push(clone(ws)); setWs(fut.pop()); fixSel(); render(); toast('Đã làm lại'); }
 function fixSel() { if (sel.type !== 'sheet' && !ws.tasks.find(t => t.id === sel.id)) sel = { type: 'sheet' }; multi = multi.filter(s => ws.tasks.find(t => t.id === s.id)); }
 const curT = w => w.tasks.find(x => x.id === sel.id);
 // v84: đổi căn lề nội dung cả Task (lưới ô) thì khung ảnh các ô đi theo: bỏ căn riêng từng ô
@@ -836,7 +838,7 @@ actions.present = () => {   // GĐ1a: mở trình chiếu trên các trang đang
 actions.wspSource = () => {
   const pv = useUi.getState().pageView; if (!pv) return null; const r = sheetSlots(ws);
   const staticOnly = (ws.tasks || []).reduce((n, t) => n + taskSlots(t).notes.filter(m => /chỉ xem/.test(m)).length, 0);
-  return { ws: clone(ws), pages: pv.pages.map(p => p.html), over: pv.pages.filter(p => p.over).length, slots: r.slots, key: r.key, warn: r.warn, staticOnly, font: FONTS[fontKey()] };
+  return { ws: stripGen(ws), pages: pv.pages.map(p => p.html), over: pv.pages.filter(p => p.over).length, slots: r.slots, key: r.key, warn: r.warn, staticOnly, font: FONTS[fontKey()] };
 };
 actions.openSheet = (obj, msg) => loadSheet(obj, msg);
 actions.toggleGuides = () => { guides = !guides; publish({ guides }); draw(); if (sel.type === 'sheet') renderInspector(); };
@@ -946,7 +948,9 @@ function loadSheet(obj, msg) {
   try { w = fillSheet(obj, notes); } catch (e) { toast(`Không nạp được: ${e.message}. Phiếu đang mở giữ nguyên.`); return false; }
   const old = { ws, base, hist, fut, sel, multi, lastStart, openTask };
   try {
-    base = clone(w); const n = applyPresets(w); setWs(w); hist = []; fut = []; sel = { type: 'sheet' }; multi = []; lastStart = null; openTask = null; render();
+    base = clone(w); const n = applyPresets(w); setWs(w); hist = []; fut = []; sel = { type: 'sheet' }; multi = []; lastStart = null; openTask = null;
+    publish({ tb: Object.assign({}, useUi.getState().tb, { panel: null, cur: null, pub: false }) });   // Tạo bài: phiếu khác → đóng ngăn duyệt
+    render();
     toast(msg + (n ? ` · đã áp mặc định cho ${n} Task` : '') + (notes.length ? ` · đã bù: ${notes.slice(0, 3).join(', ')}${notes.length > 3 ? '…' : ''}` : ''));
     return true;
   } catch (e) {
@@ -2145,7 +2149,21 @@ function qmObj3(th, ou, ba) { const o = {}; new Set([...Object.keys(th || {}), .
 Object.defineProperties(L, Object.fromEntries(Object.entries({ SECT: () => SECT, TG_BLK: () => TG_BLK, TXB: () => TXB, ansLabel: () => ansLabel, blkAddable: () => blkAddable, cardOf: () => cardOf, cimMode: () => cimMode, crossCount: () => crossCount, fieldToggles: () => fieldToggles, fieldVal: () => fieldVal, gapLabs: () => gapLabs, gapN: () => gapN, hasOverride: () => hasOverride, isOnSel: () => isOnSel, keyState: () => keyState, needKey: () => needKey, nounOf: () => nounOf, openTask: () => openTask, optsOfKey: () => optsOfKey, secSums: () => secSums, slotName: () => slotName, slotsOf: () => slotsOf, tkCells: () => tkCells, tkHasText: () => tkHasText, tkOn: () => tkOn }).map(([k, g]) => [k, { get: g }])));   // cột trái (đọc lúc gọi: nhiều hàm bị bọc lại sau)
 Object.defineProperties(L, { sel: { get: () => sel }, multi: { get: () => multi }, markMode: { get: () => markMode }, lastRes: { get: () => lastRes }, lowRes: { get: () => lowRes } });
 Object.assign(L, { GNAME, SCOPES, SP_LABEL, ICON, TN_HINT, QHINT, QPV, HA, VA, A4DIRS, FILL_MAX, ovOf, targetsOf, kindOf, labelOf, cellKeys, cellImgMode, dirDefault, tblColPct, ansAlignDef, gtOf, gtOrder, qArr, labsKey, taskLabel, presetsGet, presetKey, fontKey });
-window.__ws = { pick: s => pick(s), get ws() { return ws; }, get res() { return lastRes; }, get renders() { return renderCount; }, get sel() { return sel; }, get multi() { return multi; }, render, setZoom(z) { zoom = z; draw(); } };
+// Tạo bài T1 (src/taobai/): xem một lần Duyệt phiếu ở chế độ chỉ đọc (phiếu hiện tại giữ nguyên, kể cả hoàn tác)
+function tbView(snap) { if (!viewing) viewing = { ws, hist, fut, sel, multi, openTask }; setWs(snap); hist = []; fut = []; sel = { type: 'sheet' }; multi = []; document.documentElement.classList.add('tbviewing'); render(); }
+function tbViewEnd() { if (!viewing) return; const v = viewing; viewing = null; setWs(v.ws); ({ hist, fut, sel, multi, openTask } = v); document.documentElement.classList.remove('tbviewing'); render(); }
+Object.defineProperties(L, { viewing: { get: () => !!viewing } });
+// Tạo bài T3: layout sơ bộ = dàn một phiếu giả bằng chính bộ dàn trang (phiếu đang mở giữ nguyên, kể cả trạng thái dàn)
+function previewPages(obj) {
+  const keep = ws, keepRes = lastRes; let w;
+  try { w = fillSheet(obj, []); } catch (e) { return { err: e.message, pages: [], over: 0 }; }
+  try { setWs(w); w.tasks.forEach(ensureRowIds); const r = paginate(); return { pages: r.pages.map(p => p.items.map((x, j) => renderTask(x.t, x.frag, j ? gapOf(x.t) : 0)).join('')), over: r.diags.length }; }
+  catch (e) { return { err: e.message, pages: [], over: 0 }; }
+  finally { setWs(keep); lastRes = keepRes; }
+}
+Object.assign(L, { previewPages, loadSheet: (o, m) => loadSheet(o, m) });
+Object.assign(L, { commit, render, tbView, tbViewEnd, pick: (s2) => pick(s2) });
+window.__ws = { commit: (fn, msg) => commit(fn, msg), wspSource: () => actions.wspSource(), get viewing() { return !!viewing; }, pick: s => pick(s), get ws() { return ws; }, get res() { return lastRes; }, get renders() { return renderCount; }, get sel() { return sel; }, get multi() { return multi; }, render, setZoom(z) { zoom = z; draw(); } };
 // Độ rộng cột trái (#lsplit): React (src/ui/LeftSplit.tsx)
 // Chờ font của phiếu tải xong rồi mới đo; font đổi sau đó thì đo lại.
 const fontsReady = document.fonts
