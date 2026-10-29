@@ -17,7 +17,7 @@ Một đến hai câu: điều gì làm phiếu thất bại nếu không đạt
 ## 3. Các bước
 Với MỖI bước (G1, G2, ...), một mục gồm:
 - **Vai trò:** học sinh làm gì ở bước này, khác các bước khác ở chỗ nào.
-- **Task:** các Task và TF dùng (mã TF trong file Task Format).
+- **Task / TF:** liệt kê **1 đến 3 TF** (mã trong file Task Format, vd TF-G2-A, TF-G2-B) cho bước này. Máy chọn một trong các TF để các phiếu cùng chủ đề không giống nhau về format. Mọi TF của một bước phải phục vụ cùng vai trò và cùng tiêu chí kiểm định bên dưới.
 - **Nội dung cần có:** loại tình huống, dữ kiện, nhân vật được dùng.
 - **Tiêu chí kiểm định:** các câu hỏi Có/Không người kiểm phải trả lời.
 

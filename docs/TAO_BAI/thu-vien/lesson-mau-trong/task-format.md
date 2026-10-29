@@ -8,7 +8,7 @@ Ngày:
 
 TF quy định CÁCH SOẠN từng Task của lesson này. Trình tự Lesson gọi tên TF theo mã (vd TF-G2). Với bài tự do, hệ thống dùng TF chung (`he-thong/02-task-format-chung/`) thay cho file này.
 
-Mỗi Task một mục `## TF-<mã>: <tên Task>` gồm:
+Mỗi Task một mục `## TF-<bước>[-A/B/C]: <tên Task>`. Một bước có thể có 1 đến 3 TF thay thế nhau (cùng vai trò, khác format); mã -A, -B, -C phân biệt. Mỗi mục gồm:
 - **Bước:** G? mà Task phục vụ.
 - **Dạng Q:** dạng của app (và chi tiết trong ngoặc, vd nhãn, cùng hàng).
 - **Số câu / độ dài:** số câu, có câu ví dụ 0 không, độ dài văn bản nguồn (từ), độ khó (mức từ và câu).

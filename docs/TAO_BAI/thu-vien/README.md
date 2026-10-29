@@ -24,6 +24,10 @@ Trình tự chung (theo chuyên mục × cấp độ) chỉ là tài liệu ngư
 | 4 | `he-thong/04-rubric-kiem.md` | tiêu chí kiểm chất lượng | `RUBRIC_KIEM_v0.md`, hai bản đánh giá |
 | 5 | `he-thong/05-phieu-mau.md` | phiếu mẫu đã duyệt (giọng, mức khó) | `tests/md/sinh-thu-movers-grammar-v2.md` |
 
+**Chọn TF:** một bước có 1 đến 3 TF. Máy chọn một TF mỗi lần sinh, ưu tiên TF ít dùng gần đây cho lesson đó (luân phiên), và giáo viên đổi sang TF khác của cùng bước ở màn duyệt dàn ý. Sinh lại một Task giữ nguyên TF đã chọn, trừ khi giáo viên đổi, để nhất quán.
+
+**Soạn ngoài, nạp vào:** người dùng soạn các file ở ngoài hệ thống. Khi nạp, hệ thống kiểm file (xem mục 5) và báo lỗi trước khi cho dùng.
+
 ## 2. Quy ước chung cho mọi file
 - Đầu mỗi file có khối thông tin: `Mã`, `Phiên bản` (số, vd 1.0), `Trạng thái` (Nháp / Đang duyệt / Đã duyệt), `Người soạn`, `Ngày`.
 - Chỉ file **Đã duyệt** mới được dùng để sinh bài thật. Sửa file thì tăng phiên bản; phiếu đã sinh ghi phiên bản các file đã dùng.
@@ -37,6 +41,14 @@ Trình tự chung (theo chuyên mục × cấp độ) chỉ là tài liệu ngư
 | Sinh một Task | Kiến thức, đoạn Trình tự Lesson của Task, mục TF của Task (lesson) hoặc mục 02 tương ứng (bài tự do), 01 (phần dạng Q đó), 03, 05, dàn ý đã duyệt, tóm tắt Task kế bên |
 | Kiểm một Task | 04, Kiến thức, Task cần kiểm |
 Phần ổn định (01, 02, 03, 05, 04) đặt lên đầu để dùng được bộ nhớ đệm prompt.
+
+## 5. Kiểm file khi nạp (yêu cầu cho hệ thống)
+- Đủ mục bắt buộc của từng loại file, có khối thông tin (mã, phiên bản, trạng thái).
+- Ba file của một lesson cùng mã lesson.
+- Mỗi bước trong Trình tự Lesson có 1 đến 3 TF, và mã TF đó có trong file Task Format.
+- Dạng Q trong TF là một trong 12 dạng hợp lệ của app.
+- Cảnh báo (không chặn): TF thiếu kế hoạch câu hỏi cho Reading/Listening; từ vựng cho phép trống; nhân vật chưa khai báo.
+Kèm một hướng dẫn soạn và checklist cho người soạn (làm ở Bước 3).
 
 ## 4. Lộ trình
 - Bước 2 (đang làm): cấu trúc này, ba mẫu trống, bộ Grammar Movers tách thành ba file.
