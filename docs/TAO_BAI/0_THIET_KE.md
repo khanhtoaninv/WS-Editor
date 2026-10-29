@@ -1,4 +1,6 @@
-# Module tạo bài — các quyết định đã chốt
+# Module tạo bài — nhật ký quyết định
+
+> **Đặc tả chính thức: `DAC_TA_TAO_BAI.md`; kế hoạch: `KE_HOACH_TRIEN_KHAI.md`.** File này chỉ giữ lịch sử các quyết định trong thảo luận 29/10.
 
 Cập nhật 29/10/2026. Giai đoạn: thảo luận, chưa viết code. Làm trước: **tạo bài theo giáo trình**; bài tự do để sau.
 
