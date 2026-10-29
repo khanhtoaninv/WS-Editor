@@ -48,6 +48,16 @@ textarea{width:100%;font:inherit;font-size:13px;border:1px solid var(--ln2);bord
 .k{font-size:11px;padding:1px 6px;border-radius:8px;margin-right:4px}.k.auto{background:#e6effc;color:#2f5fb0}.k.man{background:#dbeee0;color:#1b7f3b}.k.cur{background:var(--accent);color:#fff}
 .vrow{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-top:6px;font-size:12px}
 .pop{position:absolute;right:14px;top:50px;width:300px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px #0003;padding:12px;font-size:13px;z-index:9;color:var(--fg)}
+.ck{border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.ckh{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:#f8fafb;font-weight:600;cursor:pointer;user-select:none}
+.ckh .sc{font-weight:600;font-size:12px;padding:1px 8px;border-radius:10px}
+.sc.good{background:#dbeee0;color:#1b7f3b}.sc.bad{background:var(--warn-soft);color:var(--warn)}
+.ci{display:grid;grid-template-columns:18px 1fr;gap:6px;padding:6px 10px;border-top:1px solid #eef1f3;font-size:12.5px}
+.ci .i{font-weight:700}.ci.f{background:#fffaf0}.ci.f .i{color:var(--warn)}.ci.p .i{color:#2f9a55}
+.ci small{display:block;color:#7a4a08}
+.grp{padding:4px 10px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-top:1px solid #eef1f3;background:#fcfdfd}
+.more{padding:6px 10px;border-top:1px solid #eef1f3;font-size:12px;color:var(--accent);cursor:pointer}
+.ws{margin:10px 14px 0}
 .callout{max-width:1440px;margin:0 auto 30px;padding:0 16px;font-size:13px;color:#3d4850}.callout ol{margin:4px 0 0 18px;padding:0}
 </style></head><body>
 <div class="note"><b>Hình mẫu hướng B (chưa phải app thật).</b> Nền là ảnh chụp <b>editor v123 thật</b> sau khi nạp phiếu 5 bài was / were; chỉ phần màu (dải trên cùng, biểu tượng trạng thái ở cây, ngăn bên phải) là phần thêm mới. Bấm thử: "Duyệt bài", ‹ ›, Duyệt, Hiện đáp án, Phiên bản, Xuất bản.</div>
@@ -69,6 +79,7 @@ textarea{width:100%;font:inherit;font-size:13px;border:1px solid var(--ln2);bord
     <aside class="drawer closed" id="rev">
       <div class="dh"><b>Duyệt bài</b><button class="btn sm" id="prev">‹</button><span id="pos">3 / 5</span><button class="btn sm" id="next">›</button><button class="btn sm ghost" id="revClose" title="Đóng, về Inspector">✕</button></div>
       <div class="prog"><div class="bar"><span id="bar"></span></div><span id="okc"></span></div>
+      <div class="ws" id="ws"></div>
       <div class="db" id="db"></div>
       <label class="sw"><input type="checkbox" id="ansTog"><span></span>Hiện đáp án trên trang</label>
     </aside>
@@ -87,6 +98,7 @@ textarea{width:100%;font:inherit;font-size:13px;border:1px solid var(--ln2);bord
 <li><b>Editor giữ nguyên</b>: ba cột, thanh công cụ, inspector không đổi. Phần thêm chỉ là dải tối trên cùng (giai đoạn, Duyệt bài, Phiên bản, Xuất bản) và biểu tượng trạng thái cuối mỗi dòng Task ở cây.</li>
 <li><b>Ngăn Duyệt bài</b> trượt đè lên inspector; đóng ✕ là inspector hiện lại. Duyệt xong một bài thì tự sang bài chưa duyệt kế tiếp. Bấm biểu tượng trạng thái ở cây cũng mở ngăn đúng bài đó.</li>
 <li><b>Hiện đáp án</b> (trong ngăn): in đáp án màu cam lên trang (thử ở bài 2). Câu bị kiểm tra bắt lỗi tô vàng (bài 3).</li>
+<li><b>Kiểm tra</b>: mỗi bài có danh sách tiêu chí đạt / chưa đạt (máy kiểm + AI chấm theo rubric), tiêu chí chưa đạt mở sẵn kèm lý do, tiêu chí đạt gập lại. Không hiện điểm số. Khối <b>Cả phiếu</b> ở đầu ngăn kiểm các tiêu chí chỉ thấy khi nhìn toàn phiếu; điểm số chi tiết để dành cho trang admin.</li>
 <li><b>Phiên bản</b> dùng chung chỗ ngăn trượt; <b>Xuất bản</b> nhắc khi còn bài chưa duyệt.</li>
 </ol></div>
 <script>
@@ -94,19 +106,36 @@ const T=[
  {t:'Look and choose.',q:'Q4 Chọn trong câu',n:'6 câu',role:'Khởi động',st:'ok',goal:'Chọn was / were theo chủ ngữ số ít / số nhiều.',ctx:'Tranh công viên Chủ nhật.',key:'1 were · 2 was · 3 were · 4 was · 5 were · 6 was'},
  {t:"Complete with was, were, wasn't or weren't.",q:'Q1 Điền từ',n:'6 câu',role:'Luyện',st:'ok',goal:"Khẳng định và phủ định (wasn't / weren't).",ctx:'Cuối tuần của các bạn trong lớp.',key:"1 was · 2 weren't · 3 was · 4 were · 5 was · 6 were"},
  {t:'Match the questions and answers.',q:'Q8 Nối',n:'6 cặp',role:'Luyện',st:'warn',goal:'Hỏi và trả lời Was he…? / Were they…?',ctx:'Hỏi về các bạn sau chuyến dã ngoại.',key:'1 No, he wasn\'t · 2 Yes, they were · 3 Yes, it was · 4 Yes, she was · 5 Yes, I was · 6 Yes, she was. She loved it.',warn:'Câu 4 và câu 6 cùng ghép được với "Yes, she was." → đáp án không duy nhất.'},
- {t:'Read and circle T or F.',q:'Q5 Đúng / Sai',n:'5 câu',role:'Vận dụng',st:'todo',goal:'Nhận ra was / were trong văn bản liền mạch.',ctx:'Mai kể Chủ nhật đi biển (44 từ).',key:'1 F · 2 T · 3 T · 4 F · 5 T'},
+ {t:'Read and circle T or F.',q:'Q5 Đúng / Sai',n:'5 câu',role:'Vận dụng',st:'warn',goal:'Nhận ra was / were trong văn bản liền mạch.',ctx:'Mai kể Chủ nhật đi biển (44 từ).',key:'1 F · 2 T · 3 T · 4 F · 5 T'},
  {t:'Write about your last weekend.',q:'Q12 Viết tự do',n:'5 dòng',role:'Vận dụng',st:'todo',goal:'Viết 3–4 câu dùng was / were.',ctx:'Câu hỏi gợi ý trong khối chữ.',key:'(bài viết tự do, không có đáp án)'}];
+const M=['Đủ số câu theo cấu trúc','Mỗi câu có đúng một đáp án','Đúng dạng Q đã chọn','Không tràn trang'];
+const R=['Đúng mục tiêu của bài','Mức khó hợp độ tuổi 7–9','Câu và hướng dẫn rõ ràng','Câu chỉ cần hiểu nghĩa ≤ 20%'];
+const FAIL={2:{'Mỗi câu có đúng một đáp án':'Câu 4 và câu 6 cùng ghép được với "Yes, she was."'},3:{'Câu chỉ cần hiểu nghĩa ≤ 20%':'2/5 câu (40%) đoán được mà không cần was / were (câu 2, câu 5).'}};
+const NA={4:['Mỗi câu có đúng một đáp án']};
+const WS=[['Phủ đủ điểm kiến thức của lesson','Chưa có câu hỏi Yes/No dạng phủ định (No, they weren\'t).'],['Các bài không lặp câu / ngữ cảnh',null],['Độ khó tăng dần theo Trình tự',null],['Số trang ≤ 2 (hiện 2)',null]];
+let wsOpen=false,openAll={};
+function ckHTML(i){const f=FAIL[i]||{},na=NA[i]||[];const all=[['Máy kiểm',M],['AI chấm theo rubric',R]];let tot=0,ok=0,fails='',pass='';
+ all.forEach(([g,list])=>{let gp='',gf='';list.forEach(c=>{if(na.includes(c))return;tot++;if(f[c]&&T[i].st!='ok'){gf+=`<div class="ci f"><span class="i">⚠</span><span>${c}<small>${f[c]}</small></span></div>`}else{ok++;gp+=`<div class="ci p"><span class="i">✓</span><span>${c}</span></div>`}});
+  fails+=gf;pass+=gp?`<div class="grp">${g}</div>`+gp:''});
+ const op=openAll[i];
+ return `<div class="ck"><div class="ckh" data-tg="${i}"><span>Kiểm tra</span><span class="sc ${ok==tot?'good':'bad'}">${ok}/${tot} đạt</span></div>${fails}${op?pass:''}<div class="more" data-tg="${i}">${op?'▴ Ẩn tiêu chí đạt':'▸ '+ok+' tiêu chí đạt (bấm để xem)'}</div></div>`}
+function wsHTML(){const bad=WS.filter(w=>w[1]).length;
+ return `<div class="ck"><div class="ckh" id="wsTg"><span>Cả phiếu</span><span class="sc ${bad?'bad':'good'}">${WS.length-bad}/${WS.length} đạt</span></div>`+
+ WS.filter(w=>w[1]).map(w=>`<div class="ci f"><span class="i">⚠</span><span>${w[0]}<small>${w[1]}</small></span></div>`).join('')+
+ (wsOpen?WS.filter(w=>!w[1]).map(w=>`<div class="ci p"><span class="i">✓</span><span>${w[0]}</span></div>`).join(''):'')+
+ `<div class="more" id="wsMore">${wsOpen?'▴ Ẩn tiêu chí đạt':'▸ '+(WS.length-bad)+' tiêu chí đạt'}</div></div>`}
 let cur=2;const $=id=>document.getElementById(id);const ICO={ok:'✓',warn:'⚠',todo:''};
 function draw(){const ok=T.filter(x=>x.st=='ok').length;$('revCnt').textContent=ok+'/5';$('okc').textContent=ok+'/5 đã duyệt';$('bar').style.width=ok*20+'%';$('pos').textContent=(cur+1)+' / 5';
  document.querySelectorAll('.sdot').forEach(d=>{const s=T[+d.dataset.i].st;d.className='sdot '+s;d.textContent=ICO[s]});
  const w=T[2].st=='warn';$('hl1').hidden=$('hl2').hidden=!w;
  const x=T[cur];$('db').innerHTML=`<div><div class="meta"><span class="chip role">${x.role}</span><span class="chip q">${x.q}</span><span class="chip">${x.n}</span></div><div style="font-weight:700;margin-top:6px">Bài ${cur+1} · ${x.t}</div></div>
- ${x.warn&&x.st=='warn'?`<div class="warnbox"><b>⚠ Kiểm tra:</b> ${x.warn}</div>`:'<div class="okbox">✓ Kiểm tra tự động: không thấy lỗi</div>'}
+ ${ckHTML(cur)}
  <div class="kv"><b>Mục tiêu</b><span>${x.goal}</span><b>Ngữ cảnh</b><span>${x.ctx}</span></div>
  <div class="keyl"><b>Đáp án:</b> ${x.key}</div>
  ${x.st=='ok'?'<button class="btn" id="un">↺ Bỏ duyệt</button>':'<button class="btn ok" id="okb">✓ Duyệt bài này</button>'}
  <div class="regen"><b>⟳ Sinh lại bài này</b><textarea rows="2" placeholder="Góp ý: vd mỗi câu trả lời chỉ ghép được một câu hỏi"></textarea><div style="font-size:12px;color:var(--muted)">Bản hiện tại được lưu vào Phiên bản trước khi thay.</div><button class="btn sm pri" style="align-self:flex-end">Sinh lại</button></div>
  <div style="font-size:12px;color:var(--muted)">Sửa chữ, dàn trang: đóng ngăn và dùng editor như bình thường.</div>`;
+ $('ws').innerHTML=wsHTML();$('wsTg').onclick=$('wsMore').onclick=()=>{wsOpen=!wsOpen;draw()};document.querySelectorAll('[data-tg]').forEach(e=>e.onclick=()=>{openAll[cur]=!openAll[cur];draw()});
  const o=$('okb');if(o)o.onclick=()=>{x.st='ok';const n=T.findIndex(t=>t.st!='ok');if(n>=0)cur=n;draw()};const u=$('un');if(u)u.onclick=()=>{x.st='todo';draw()}}
 const open=(id,on)=>{['rev','ver'].forEach(k=>$(k).classList.toggle('closed',!(k==id&&on)))};
 $('revBtn').onclick=()=>open('rev',$('rev').classList.contains('closed'));$('revClose').onclick=()=>open('rev',false);
@@ -114,7 +143,7 @@ $('verBtn').onclick=()=>open('ver',$('ver').classList.contains('closed'));$('ver
 $('prev').onclick=()=>{cur=(cur+4)%5;draw()};$('next').onclick=()=>{cur=(cur+1)%5;draw()};
 document.querySelectorAll('.sdot').forEach(d=>d.onclick=()=>{cur=+d.dataset.i;open('rev',true);draw()});
 $('ansTog').onchange=e=>$('shot').classList.toggle('showans',e.target.checked);
-$('pubBtn').onclick=()=>{const n=T.filter(x=>x.st!='ok');$('popT').textContent=n.length?'Còn '+n.length+' bài chưa duyệt':'Tất cả đã duyệt';$('popD').textContent=n.map(x=>'Bài '+(T.indexOf(x)+1)+(x.st=='warn'?' ⚠ cần xem':' chưa duyệt')).join(' · ')||'Sẵn sàng xuất bản.';$('pop').hidden=!$('pop').hidden};
+$('pubBtn').onclick=()=>{const n=T.filter(x=>x.st!='ok');$('popT').textContent=n.length?'Còn '+n.length+' bài chưa duyệt':'Tất cả đã duyệt';$('popD').innerHTML=(n.map(x=>'Bài '+(T.indexOf(x)+1)+(x.st=='warn'?' ⚠ cần xem':' chưa duyệt')).join(' · ')||'Mọi bài đã duyệt.')+'<br><span style="color:#b45309">Cả phiếu: ⚠ chưa phủ câu hỏi Yes/No phủ định.</span>';$('pop').hidden=!$('pop').hidden};
 $('popGo').onclick=()=>{$('pop').hidden=true;cur=Math.max(0,T.findIndex(x=>x.st!='ok'));open('rev',true);draw()};$('popAny').onclick=()=>$('pop').hidden=true;
 const fit=()=>{const z=Math.min(1,(innerWidth-8)/1440);$('wrap').style.zoom=z};addEventListener('resize',fit);fit();
 draw();
