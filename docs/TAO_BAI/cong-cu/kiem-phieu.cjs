@@ -54,7 +54,7 @@ ansTxt.split('\n').forEach(l => {
   if ((m = l.match(/^Task\s*\d+\s*:/i))) { E('Dòng đáp án dạng "Task N:" ghi đè khóa'); return; }
   if (cur && (m = l.match(/^(\d+)\.\s*(.*)$/))) { (keys[cur] = keys[cur] || {})[+m[1]] = m[2].trim(); }
 });
-Object.keys(keys).forEach(k => Object.values(keys[k]).forEach(v => { if (/ \/ /.test(v)) W('Task ' + k + ': khóa có "a / b" (chưa rõ editor tách): ' + v); }));
+// khóa dạng "a / b" là cú pháp đáp án chấp nhận hợp lệ của Editor (docs/TUONG_TAC/2_CHUAN_GOI_PHIEU.md), không cảnh báo
 
 // ---- từ chỉ thời gian ----
 const TIME = /\b(now|right now|at the moment|today|every ?(day|morning|evening|week|saturday|sunday)|on (saturdays|sundays|mondays|weekends|fridays)|usually|always|often|sometimes|never|after (school|dinner|lunch)|before (bed|school)|in the (morning|evening|afternoon)|at the weekend|these days|listen|look|at \d{1,2}(:\d\d)? ?([ap]\.?m\.?)?|at \d{1,2} o'clock)\b/i;
@@ -129,6 +129,8 @@ tasks.forEach((t, ti) => {
     out.push(L.filter(l => !/^(Hướng dẫn|Dạng|Khung từ|Dòng viết)/.test(l)).join(' '));
   } else { out.push(L.filter(l => !/^(Hướng dẫn|Dạng|Khung từ|Dòng viết)/.test(l)).join(' ')); }
   { const MUST = { 2: [2, 4], 3: [4, 6], 4: [1, 4] }[n]; if (MUST) MUST.forEach(no => { const it = items.find(x => x.no === no); if (it && it.meaning === false) E('Task ' + n + ' câu ' + no + ': vị trí bắt buộc không có từ chỉ thời gian, nhưng câu có'); if (!it) E('Task ' + n + ' thiếu câu ' + no); }); }
+  { const need = { 2: 5, 3: 6, 4: 5 }[n]; if (need) { const cnt = items.filter(x => x.no > 0).length; if (cnt !== need) E('Task ' + n + ': có ' + cnt + ' câu đánh số 1+, cần đúng ' + need); if (!items.some(x => x.no === 0)) E('Task ' + n + ': thiếu câu ví dụ số 0'); } }
+  if (n === 1) { const rows = L.filter(l => /\|/.test(l) && !/^Name/.test(l)); const first = rows[0] || ''; if (!/^Lucy\b/.test(first.trim()) || /=/.test(first)) E('Task 1: hàng mẫu đầu phải là Lucy đã điền (không dấu =): ' + first.slice(0, 40)); }
   // tỷ lệ nghĩa thuần (loại câu ví dụ 0)
   if (['chọn A/B/C', 'chọn trong câu', 'điền từ'].includes(t.dang)) {
     const sc = items.filter(it => it.no > 0), mc = sc.filter(it => it.meaning).length;
