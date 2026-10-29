@@ -1,4 +1,4 @@
-# SỔ CĂN CỨ — GRAM-MOVERS-DAILY-01 (bản 0.3)
+# SỔ CĂN CỨ — GRAM-MOVERS-DAILY-01 (bản 0.4, cập nhật theo v1.0)
 
 Ba tài liệu của lesson được viết thuần chuyên môn để đưa vào hệ thống AI bất kỳ. File này ghi căn cứ của từng nhóm quy tắc, tách riêng để không làm nhiễu tài liệu.
 Nhãn: [HT] nguồn học thuật · [ND] quy định của người dùng · [TN] rút từ thử nghiệm · [CL] Claude suy ra, chưa có nguồn. Nguồn chi tiết: `docs/TAO_BAI/CAN_CU_HOC_THUAT_V1.md`.
@@ -16,6 +16,11 @@ Nhãn: [HT] nguồn học thuật · [ND] quy định của người dùng · [T
 | S4 nhãn Usually / Now | [ND] | theo góp ý khi đánh giá phiếu v2 |
 | S5.1 ít nhất 30% câu không dựa từ khóa | [CL] | tỉ lệ do Claude đặt; coi là giả thuyết cần kiểm |
 | S5.2, S5.4 | [TN] | |
+| S5 mục 1c (câu trần), 1d (không chép dạng) | [TN] | lần 6: Haiku Task 4 câu 5 hai đáp án; Sol Task 4 câu 2 chép lại câu hỏi |
+| S5 mục 1e (tám kiểu (b) chỉ mô tả, một câu minh họa không được dùng lại) | [TN] | lần 5 và 6: ví dụ đầy đủ bị chép nguyên (Flash 6/6) hoặc lặp (Haiku). Số tám kiểu và "ít nhất 4 kiểu" [CL] |
+| S5 mục 1g (G2-B tối đa 2 câu lộ thì, ít nhất 3 câu không lộ thì, dãy đáp án) | [TN]/[CL] | lần 6: Sol G2 mirror 4/5, Flash đáp án xen kẽ B A B A B A. Con số 2 và 3 [CL] |
+| K3.1 "Grandma" của Tom và Mia, việc chung duy nhất của Ben và Lucy; TF-G1-B không thêm việc chung | [TN] | lần 6: Haiku Task 1 hàng They có "eat" và "go" |
+| TF-G4-A khung `…`, tiêu đề cột theo S4 | [TN] | lần 6: TF và file 0 mâu thuẫn; Flash và Sol đổi nhãn cột |
 | S5.5 | [HT] | nguyên tắc kiểm soát ngôn ngữ của Cambridge YLE Handbook 2024 |
 | S5.6 mức hỗ trợ giảm dần | [CL] | khớp chuỗi kiểm soát đến tự do (Hyland 2016, nguồn thứ cấp, nói về viết) |
 | TF-G1-A, B | [TN] / [CL] | G1-B là phương án máy chấm được, [CL] |

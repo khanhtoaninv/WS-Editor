@@ -19,4 +19,4 @@ Thuộc nhóm hệ thống. Ba tài liệu lesson không nhắc tới app; file 
 | TF-G5-B | Q10 bảng rồi Q12 viết 2 câu | chưa thử trên app |
 | TF-G5c | `Trả lời: không`, khối chữ có ô tick | |
 
-Từ v0.9, định dạng đầu ra của AI đã là MD theo bảng này (xem `goi-thu/v0.9/0_CHI_DAN_VA_DINH_DANG_DAU_RA.md` mục B1.2), không cần chuyển tay. Lưu ý khi viết: Task có bảng dùng `Khối chữ trên:` cho chữ nguồn (không dùng `Bài đọc:`).
+Từ v0.9, định dạng đầu ra của AI đã là MD theo bảng này (xem `goi-thu/v1.0/0_CHI_DAN_VA_DINH_DANG_DAU_RA.md` mục B1.2; từ v1.0 `Dạng: chọn A/B/C` luôn viết đúng chữ này và khung viết câu G4 là `Tên … He …`), không cần chuyển tay. Lưu ý khi viết: Task có bảng dùng `Khối chữ trên:` cho chữ nguồn (không dùng `Bài đọc:`).

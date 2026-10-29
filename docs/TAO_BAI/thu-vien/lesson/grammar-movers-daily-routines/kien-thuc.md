@@ -1,6 +1,6 @@
 # KIẾN THỨC — Grammar Worksheet · A1 Movers · Daily Routines & Activities
 
-Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 0.9 · Trạng thái: Nháp
+Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 1.0 · Trạng thái: Nháp
 
 ## K1. Mục tiêu
 Sau khi hoàn thành phiếu, học sinh có thể:
@@ -21,9 +21,10 @@ Sau khi hoàn thành phiếu, học sinh có thể:
 ### K3.1 Nhân vật và cảnh (dùng nguyên văn để các bài nhất quán)
 - Ben và Lucy là anh em.
   - Thứ Bảy: Lucy bơi ở trung tâm thể thao lúc 9 giờ; Ben chơi bóng đá ở công viên lúc 10 giờ; cả hai ăn trưa cùng nhau lúc 12 giờ.
-  - Chủ nhật: thường đến nhà bà.
+  - Chủ nhật: thường đến nhà bà. Đây là nơi hai bạn có mặt vào Chủ nhật, dùng làm bối cảnh cho cảnh chính. KHÔNG phải việc thường làm chung của hai bạn: việc thường làm chung duy nhất là ăn trưa cùng nhau lúc 12 giờ thứ Bảy (hàng "They" của TF-G1-B).
 - Cảnh chính: Chủ nhật, 3 giờ chiều, ở nhà bà. Ben đang vẽ tranh cho bà. Lucy đang đọc truyện trong vườn. Bà đang nhìn hai bạn qua cửa sổ.
 - Các bài luyện G2, G3a, G3b (chọn từ, điền từ, nhận biết nghĩa) chỉ dùng nhân vật Tom và Mia (bạn của Ben và Lucy) và người thân của hai bạn này; không dùng Ben, Lucy, kể cả ở câu ví dụ. Lý do: các câu "đang diễn ra" không mâu thuẫn với cảnh chính. Ben và Lucy chỉ xuất hiện ở G1, G4.
+- Trong G2, G3a, G3b, "Grandma" (nếu có) là bà của Tom và Mia, khác bà của Ben và Lucy. Không viết Tom hoặc Mia "thường đến nhà bà vào Chủ nhật" (đó là thói quen của Ben và Lucy).
 - Lúc 3 giờ chiều Chủ nhật, Ben và Lucy không cùng làm một việc (Ben vẽ, Lucy đọc). Vì vậy ô "Now" của hàng "They" ở TF-G1-B không có đáp án (in sẵn "—", không chấm). Không bịa thêm việc chung.
 
 ## K4. Phạm vi kiến thức
@@ -36,7 +37,7 @@ Sau khi hoàn thành phiếu, học sinh có thể:
 | Động từ chính | play, read, watch, eat, go, do, ride, swim, draw |
 | Chủ đề từ vựng | Daily routines, hobbies, weekend activities |
 
-Ngoài phạm vi: Past Simple, Present Perfect, Future Forms, stative verbs (love, like, know, have với nghĩa sở hữu...) và các cách dùng nâng cao của Present Continuous.
+Ngoài phạm vi: Past Simple, Present Perfect, Future Forms, stative verbs (has, have với nghĩa sở hữu, like, love, know, want, need...), kể cả trong câu tình huống (không viết "Tom has some bread") và các cách dùng nâng cao của Present Continuous.
 
 ## K5. Từ vựng
 Tham chiếu: Cambridge Pre A1 Starters và A1 Movers Word Lists (2018).

@@ -1,6 +1,6 @@
 # TRÌNH TỰ LESSON — Grammar Worksheet · A1 Movers · Daily Routines & Activities
 
-Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 0.9 · Trạng thái: Nháp
+Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 1.0 · Trạng thái: Nháp
 Dùng cùng file Kiến thức (K) và file Task Format (TF) của lesson này.
 
 ## S1. Quy mô phiếu
@@ -60,7 +60,7 @@ Mỗi mã TF có 1 đến 3 phương án thay thế (hậu tố A, B, C). Chọn
 |---|---|
 | Usually | what someone does again and again |
 | Now | what someone is doing at this moment |
-Chỉ dùng hai nhãn này cho hai khái niệm. Không dùng Habit, Often, Every day làm nhãn. Mọi bảng Usually | Now trên phiếu phải có dòng tiêu đề cột, và định nghĩa in ngay trong ô tiêu đề (ví dụ `Usually (what someone does again and again)`); không để định nghĩa chỉ nằm trong ghi chú.
+Chỉ dùng hai nhãn này cho hai khái niệm. Không dùng Habit, Often, Every day làm nhãn. Mọi bảng Usually | Now trên phiếu phải có dòng tiêu đề cột, và định nghĩa in ngay trong ô tiêu đề (ví dụ `Usually (what someone does again and again)`); không để định nghĩa chỉ nằm trong ghi chú. Bảng dữ kiện ở G4 cũng dùng đúng hai nhãn này, không đổi thành "Saturdays" hay "Sunday, 3 p.m."; ngày và giờ ghi trong ô.
 
 ## S5. Quy tắc toàn phiếu
 0. **Từ chỉ thời gian** (dùng để đếm trong quy tắc 1) là mọi cụm chỉ thời điểm, tần suất hoặc thói quen, không chỉ các từ sau: usually, every + từ, on + ngày, now, right now, at the moment, today, at + giờ, in the morning/afternoon/evening, after school, after dinner, before bed, in your free time, when + mệnh đề thời gian (when he comes home), how often, Look!, Listen!. Gặp cụm nào gợi thói quen hay lúc này thì tính là từ chỉ thời gian.
@@ -75,15 +75,26 @@ Chỉ dùng hai nhãn này cho hai khái niệm. Không dùng Habit, Often, Ever
    - Câu "đang làm" chỉ dựa vào cảnh có đồ vật, ví dụ "Tom is at his desk with a book. He (read) ____ a story.", "Mia is in the kitchen with a pan. She [cooks / is cooking] lunch.", "Tom is at the park with his football. [Is Tom playing / Does Tom play] football?", "I am in the park with my bike. I [am riding / ride] my bike.". Cảnh có đồ vật không đủ để loại đáp án còn lại; phải theo mục 1e.
    - Câu hỏi nói về người đó trực tiếp với chính người đó bằng ngôi thứ ba ("Tom: What does Mia do? Mia: I read..."), không tự nhiên.
    Khi một đáp án phụ thuộc cảnh trước đó, cảnh phải cho biết trực tiếp vì sao đang diễn ra bây giờ (mục 1e).
-1e. **Câu "đang làm" ở G3a và G3b** (G2-B thì được hỏi "What is X doing?") phải có MỘT trong hai dấu hiệu: (a) "at the moment" hoặc "right now"; hoặc (b) một lượt thoại tự nhiên chỉ lúc này, không phải câu "What is/are X doing?" đặt ngay trước chỗ chọn hoặc điền (câu đó tự lộ dạng "is doing"). Cảnh có đồ vật chỉ làm nền, không được là dấu hiệu duy nhất. Ràng buộc:
+1c. **Không để câu trần.** Câu chọn hoặc điền không có từ chỉ thời gian (mục 0) và không có cảnh hoặc lượt thoại liền trước cho biết đó là thói quen hay việc đang làm thì luôn có hai đáp án; cấm. Ví dụ sai: `___ Tom ___ (eat) breakfast at home?` ("Does Tom eat" và "Is Tom eating" đều đúng). Phải thêm từ chỉ thời gian hoặc làm theo mục 1e.
+1d. **Không chép dạng.** Câu hoặc lượt thoại liền trước (kể cả câu tình huống) không chứa động từ cần chọn hoặc điền ở BẤT KỲ dạng nào (nguyên mẫu, -s, -ing). Ví dụ sai: "Dad: Does Tom swim on Sundays? Mia: No, he ___ (not swim) on Sundays." (chép lại câu hỏi); "Mia is reading. She [reads / is reading]". Câu hỏi "What does X do?" và "What is X doing?" không tính là chứa động từ của đáp án.
+1e. **Câu "đang làm"** (ở G2-B, G3a, G3b) phải có MỘT trong hai dấu hiệu: (a) "at the moment" hoặc "right now"; hoặc (b) một lượt thoại tự nhiên chỉ lúc này. Cảnh có đồ vật chỉ làm nền, không được là dấu hiệu duy nhất. Ở G3a và G3b không đặt câu "What is/are X doing?" ngay trước chỗ chọn hoặc điền (câu đó tự lộ dạng "is doing"). Ràng buộc:
    - Trong mỗi Task G3a và G3b, ít nhất một nửa số câu "đang làm" dùng (b); (a) dùng tối đa một nửa.
-   - Mẫu (b) dưới đây chỉ là MINH HỌA. Phải viết tình huống khác, không chép nguyên văn ví dụ; mỗi kiểu mẫu dùng tối đa 1 lần trên cả phiếu; cả phiếu dùng ít nhất 4 kiểu khác nhau.
-   - Các kiểu (b) dùng được: (1) từ chối vì bận: "Tom: Can I talk to Grandma? Mia: Sorry, she [cooks / is cooking] lunch."; (2) âm thanh: "Mia: Can you hear that music? Tom: Yes! I [listen / am listening] to the radio."; (3) hỏi vị trí: "Tom: Where are you, Mia? Mia: I am in the garden. I [read / am reading] a book."; (4) lời gọi: "Mum: Tom, come and eat! Tom: Sorry, I can't. I [do / am doing] my homework."; (5) nhìn thấy: "Tom: Can you see Grandma? Mia: Yes! She [feeds / is feeding] the dog."; (6) lời mời: "Mia: Can you play tennis with me? Tom: Sorry, I can't. I [ride / am riding] my bike."; (7) hỏi người vắng mặt: "Mia: Is Tom at home? Mum: Yes, but he can't come to the phone. He [watches / is watching] television."; (8) trả lời cho lời hỏi thăm: "Dad: Are you ready to go? Mia: Wait, I [eat / am eating] my lunch."
-1f. **Hội thoại có dẫn nhập** (cảnh + lượt thoại): viết thành các lượt `Tên: ...`, mỗi lượt một người nói và là lời nói thật; lời kể (cảnh) đứng riêng một dòng, không đặt trong lượt `Tên:` (không viết `Tom: Mia is at her desk...`); không dùng "X asks Y"; không đặt hai câu hỏi liên tiếp (một câu hỏi rồi lại một câu hỏi để chọn); người hỏi và người đáp ở cùng nơi hợp lý (không viết "Dad is in the park with Tom and asks Mum what Tom is doing").
+   - Tám kiểu (b) dưới đây chỉ MÔ TẢ tình huống, không có câu mẫu. Phải tự nghĩ tình huống và lời thoại mới (người, nơi chốn, việc khác nhau), không viết lại một câu quen thuộc của kiểu đó. Mỗi kiểu dùng tối đa 1 lần trên cả phiếu (tính cả G2); cả phiếu dùng ít nhất 4 kiểu khác nhau; "Sorry, I can't" tối đa 2 lần trên cả phiếu; mỗi Task tối đa 1 lượt mở đầu bằng "Can I ...?" hoặc "Can you ...?".
+     (1) Xin nói chuyện hoặc gặp một người; người được hỏi từ chối nhẹ vì người đó đang bận một việc.
+     (2) Một người nghe thấy âm thanh và hỏi nguồn; người kia cho biết ai đang làm gì.
+     (3) Một người hỏi người kia đang ở đâu; câu trả lời nêu nơi chốn rồi việc đang làm.
+     (4) Người lớn gọi trẻ làm việc khác; trẻ nói chưa làm được vì đang làm việc gì.
+     (5) Hỏi có nhìn thấy một người không; câu trả lời nêu việc người đó đang làm.
+     (6) Một lời mời chơi; lời từ chối kèm lý do là việc đang làm.
+     (7) Hỏi về người vắng mặt qua điện thoại hoặc qua người khác; người trả lời nêu việc người đó đang làm.
+     (8) Hỏi đã sẵn sàng đi chưa; câu trả lời cho biết đang dở một việc.
+   - Chỉ có MỘT câu minh họa cho cách viết một lượt (b), và câu này KHÔNG được dùng lại trên phiếu, kể cả đổi vài chữ: "Dad: Are you ready, Tom? Tom: Wait! I [eat / am eating] my lunch."
+1f. **Hội thoại có dẫn nhập** (cảnh + lượt thoại): viết thành các lượt `Tên: ...`, mỗi lượt đúng một người nói (không viết "Mia and Tom:") và là lời nói thật; lời kể (cảnh) đứng riêng một dòng, không đặt trong lượt `Tên:` (không viết `Tom: Mia is at her desk...`); không dùng "X asks Y"; không đặt hai câu hỏi liên tiếp (một câu hỏi rồi lại một câu hỏi để chọn); người hỏi và người đáp ở cùng nơi hợp lý (không viết "Dad is in the park with Tom and asks Mum what Tom is doing").
+1g. **G2-B (hội thoại chọn câu đáp):** tối đa 2 trong 5 câu có câu hỏi dạng "What does X do?" hoặc "What is X doing?" (dạng này tự lộ thì). Ít nhất 3 câu hỏi không lộ thì, ví dụ: hỏi sở thích hoặc môn yêu thích; lời mời hoặc xin phép (kiểu 1e (1), (6)); hỏi về người vắng mặt (kiểu (7)); hỏi lý do ("Why can't you come?"). Câu tình huống đứng riêng phải thêm thông tin mới (nơi chốn, ai có mặt, lý do), không nhắc lại điều câu hỏi sắp hỏi (mục 1b), không chứa từ chỉ thời gian của đáp án. Không viết hỏi người ngoài về một người đang có mặt cùng cảnh ("Tom đang ở trung tâm thể thao" rồi "Mum: What does Tom do there?"). Dãy đáp án câu 0 đến 5 không được là ABABAB hoặc BABABA và không có cùng một chữ ba câu liền nhau.
 2. Không dùng màu để phân biệt; phiếu in đen trắng vẫn làm được.
 3. Không phụ thuộc vào ảnh hay âm thanh (phiếu này không có).
 4. Nhân vật và cảnh theo K3.1; không thêm sự kiện mâu thuẫn.
 5. Từ vựng và cấu trúc đúng K4 và K5.
 6. Mức hỗ trợ giảm dần từ G3 đến G5: G3 có đủ gợi ý; G4 có dữ kiện nhưng không cho sẵn cấu trúc; G5 có ví dụ nhưng không viết sẵn câu.
 7. **Truy nguồn dữ kiện:** mỗi ô hoặc câu có đáp án phải truy được về một dữ kiện trong file Kiến thức (K3.1) hoặc trong văn bản nguồn của chính Task. Không có dữ kiện thì không tạo ô (hoặc in sẵn "—" như ô Now của hàng They). Không bịa thói quen hay sự kiện (ví dụ "Lucy reads a story on Sundays" khi K3.1 chỉ nói Lucy đang đọc truyện lúc 3 giờ chiều Chủ nhật).
-8. **Đa dạng:** một tình huống (nơi chốn + hoạt động, ví dụ "in the kitchen, cook lunch") xuất hiện tối đa 2 lần trên cả phiếu (kể cả câu ví dụ số 0); trong mỗi Task G3a, G3b không dùng cùng một khuôn câu quá 2 lần; chủ ngữ phân bố đủ (I, he/she, we/they, you, tên riêng).
+8. **Đa dạng:** một tình huống (nơi chốn + hoạt động, ví dụ "in the kitchen, cook lunch") xuất hiện tối đa 2 lần trên cả phiếu (kể cả câu ví dụ số 0); trong mỗi Task G3a, G3b không dùng cùng một khuôn câu quá 2 lần; chủ ngữ phân bố đủ (I, he/she, we/they, you, tên riêng). Một câu hỏi mở đầu giống hệt nhau (ví dụ "What is your favourite sport, Mia?") tối đa 1 lần trên cả phiếu. Một tình huống được tính chung cho G2, G3a và G3b, tính cả câu ví dụ (ví dụ "Grandma cooks lunch" ở G2 rồi lại ở G3 là hai lần).
