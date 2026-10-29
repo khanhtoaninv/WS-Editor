@@ -7,10 +7,10 @@ Nhãn: [HT] nguồn học thuật · [ND] quy định của người dùng · [T
 |---|---|---|
 | K1 mục tiêu, K2, K3, K4 (phạm vi) | [ND] | từ file Kiến thức gốc của người dùng |
 | K3.1 nhân vật, cảnh, Tom và Mia cho bài luyện | [TN] | đề xuất để tránh mâu thuẫn tình huống (lỗi ở phiếu thử v1); chờ người dùng duyệt |
-| K5 từ vựng | [HT] + kiểm tự động | danh sách Cambridge Starters/Movers 2018 đọc bằng công cụ đọc tự động; chưa kiểm tay. "Một động từ không quá 3 lần" là [CL] |
+| K5 từ vựng | [HT] + kiểm tự động, [ND] chấp nhận | danh sách Cambridge Starters/Movers 2018 đọc bằng công cụ đọc tự động; chưa kiểm tay. Người dùng chấp nhận danh sách này cho giai đoạn thử nghiệm (29/10). "Một động từ không quá 3 lần" là [CL] |
 | S1 (quy mô) | [ND] | số câu 30, 6 Task: [CL] |
 | S2 | [ND] | |
-| S3 trình tự Recognition, Understanding, Application, Creation | [ND] | người dùng cho biết 5 bước G1–G5 bắt nguồn từ bốn mức này. Việc tách Application thành hai bước là theo khung 5 bước của người dùng |
+| S3 trình tự Recognition, Understanding, Application, Creation | [ND] | người dùng cho biết 5 bước G1–G5 bắt nguồn từ bốn mức này. Tùy loại phiếu, người dùng cho phép tách hoặc gom các mức của trình tự gốc thành các bước phù hợp với đặc thù phiếu (29/10). Ở phiếu Grammar, Application tách thành hai bước G3 và G4 |
 | Tiêu chí kiểm định G1–G5 | [ND] | từ khung gốc; tiêu chí G1.2 và G1.3 thêm sau thử nghiệm [TN] |
 | S3 nhiều phương án TF mỗi bước, chọn phương án ít dùng gần đây | [ND] | |
 | S4 nhãn Usually / Now | [ND] | theo góp ý khi đánh giá phiếu v2 |
