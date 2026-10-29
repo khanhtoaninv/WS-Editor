@@ -18,3 +18,5 @@ Thuộc nhóm hệ thống. Ba tài liệu lesson không nhắc tới app; file 
 | TF-G5-A | Q12 viết tự do, `Dòng viết: 4`, `Khung từ:`, ví dụ bằng `Khối chữ trên:` | |
 | TF-G5-B | Q10 bảng rồi Q12 viết 2 câu | chưa thử trên app |
 | TF-G5c | `Trả lời: không`, khối chữ có ô tick | |
+
+Từ v0.9, định dạng đầu ra của AI đã là MD theo bảng này (xem `goi-thu/v0.9/0_CHI_DAN_VA_DINH_DANG_DAU_RA.md` mục B1.2), không cần chuyển tay. Lưu ý khi viết: Task có bảng dùng `Khối chữ trên:` cho chữ nguồn (không dùng `Bài đọc:`).
