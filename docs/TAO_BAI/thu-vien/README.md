@@ -54,3 +54,8 @@ Kèm một hướng dẫn soạn và checklist cho người soạn (làm ở Bư
 - Bước 2 (đang làm): cấu trúc này, ba mẫu trống, bộ Grammar Movers tách thành ba file.
 - Bước 3: xây 5 file hệ thống, thử trên Grammar Movers, thêm một lesson khác loại, duyệt từng file.
 - Bước 4: kế hoạch xây hệ thống.
+
+## 6. Quy tắc soạn TF (tạm, rút từ lần thử 1 đến 4)
+- Mỗi ô hoặc câu có đáp án trong TF phải truy được về một dữ kiện trong file Kiến thức hoặc văn bản nguồn của Task. TF đòi số ô vượt dữ kiện thì AI buộc phải bịa (ví dụ ô "They / Now" của Grammar Movers); khi đó bỏ ô hoặc in sẵn "—".
+- Quy tắc đo bằng chữ (ví dụ "không có từ thời gian") bị AI lách; viết điều cần đạt (đáp án suy từ nghĩa) kèm ví dụ nên và không nên, và để máy kiểm phần đếm được.
+- Ví dụ trong tài liệu phải tuân đúng quy tắc của chính tài liệu (v0.6 từng mâu thuẫn ở chỗ này và làm hai AI ra câu mơ hồ).

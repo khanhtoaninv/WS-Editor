@@ -1,6 +1,6 @@
 # TRÌNH TỰ LESSON — Grammar Worksheet · A1 Movers · Daily Routines & Activities
 
-Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 0.6 · Trạng thái: Nháp
+Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 0.7 · Trạng thái: Nháp
 Dùng cùng file Kiến thức (K) và file Task Format (TF) của lesson này.
 
 ## S1. Quy mô phiếu
@@ -63,22 +63,26 @@ Mỗi mã TF có 1 đến 3 phương án thay thế (hậu tố A, B, C). Chọn
 Chỉ dùng hai nhãn này cho hai khái niệm. Không dùng Habit, Often, Every day làm nhãn. Mọi bảng Usually | Now trên phiếu phải có dòng tiêu đề cột, và định nghĩa in ngay trong ô tiêu đề (ví dụ `Usually (what someone does again and again)`); không để định nghĩa chỉ nằm trong ghi chú.
 
 ## S5. Quy tắc toàn phiếu
-0. **Từ chỉ thời gian** (dùng để đếm trong quy tắc 1): usually, every + từ, on + ngày, now, at the moment, today, at + giờ, how often, Look!, Listen!.
-1. Ít nhất 30% số câu có đáp án trong mỗi Task thuộc G2, G3a và G3b phải xác định được chỉ từ NGHĨA của tình huống. Một câu chỉ được tính khi cả hai điều đúng: (i) câu không chứa từ chỉ thời gian ở mục 0; (ii) câu hoặc lượt thoại liền trước KHÔNG chứa động từ ở đúng dạng của đáp án (xem 1d). Tình huống tả bằng ai ở đâu, cầm hoặc có gì (be + nơi chốn, with + đồ vật), ví dụ "Mia is in the kitchen with flour and eggs." Báo cáo số câu và số thứ tự từng Task. Nếu không đạt 30%, viết lại câu cho đạt trước khi nộp; chỉ ghi "không đạt" khi thật sự không làm được và nêu lý do.
+0. **Từ chỉ thời gian** (dùng để đếm trong quy tắc 1) là mọi cụm chỉ thời điểm, tần suất hoặc thói quen, không chỉ các từ sau: usually, every + từ, on + ngày, now, right now, at the moment, today, at + giờ, in the morning/afternoon/evening, after school, after dinner, before bed, in your free time, when + mệnh đề thời gian (when he comes home), how often, Look!, Listen!. Gặp cụm nào gợi thói quen hay lúc này thì tính là từ chỉ thời gian.
+1. Ít nhất 30% số câu có đáp án trong mỗi Task thuộc G2, G3a và G3b phải xác định được chỉ từ NGHĨA của tình huống. Một câu chỉ được tính khi cả hai điều đúng: (i) câu không chứa từ chỉ thời gian ở mục 0; (ii) câu hoặc lượt thoại liền trước KHÔNG chứa động từ ở đúng dạng của đáp án (xem 1d). Câu "đang làm" muốn được tính phải theo mục 1e. Báo cáo số câu và số thứ tự từng Task. Nếu không đạt 30%, viết lại câu cho đạt trước khi nộp; chỉ ghi "không đạt" khi thật sự không làm được và nêu lý do.
 1b. Mỗi câu chọn hoặc điền chỉ có đúng một đáp án. Với mỗi câu, tự thử đáp án còn lại; nếu nó cũng hợp lý trong tình huống thì viết lại câu hoặc thêm thông tin vào tình huống. Không viết câu hỏi nhắc lại việc vừa được nói rõ ở câu trước. Các mẫu thường gây hai đáp án, phải tránh hoặc thêm dấu hiệu:
-   - Sau một câu tả cảnh, hỏi "[Does he swim / Is he swimming]?" mà không có dấu hiệu "bây giờ" (thêm "at the moment" hoặc một chi tiết như "He is in the water").
+   - Sau một câu tả cảnh, hỏi "[Does he swim / Is he swimming]?" mà không có dấu hiệu "bây giờ" (thêm "at the moment" hoặc làm theo mục 1e).
    - "She [feeds / is feeding] it" không có dấu hiệu rõ về lúc này hay thói quen.
    - Câu nói về khả năng như "You swim very fast" (có thể hiểu là khả năng hay đang bơi).
    - Câu phủ định "She doesn't cook / isn't cooking" khi tình huống không nói rõ.
    - Câu điền một từ trong ngoặc mà ngữ cảnh chỉ gợi ý chứ không khẳng định (ví dụ chỉ có cảnh "with a fruit" rồi suy ra "isn't eating").
    - Câu phủ định sau một câu tả cảnh, ví dụ "The boys are in the water. They [don't play / aren't playing] football." (cả hai đều hợp lý).
-   - Điền một động từ sau cảnh chỉ có đồ vật, ví dụ "Tom is at his desk with a book. He (read) ____ a story." và "He [draws / is drawing] a monkey" sau "at the desk with his pencils".
+   - Câu "đang làm" chỉ dựa vào cảnh có đồ vật, ví dụ "Tom is at his desk with a book. He (read) ____ a story.", "Mia is in the kitchen with a pan. She [cooks / is cooking] lunch.", "Tom is at the park with his football. [Is Tom playing / Does Tom play] football?", "I am in the park with my bike. I [am riding / ride] my bike.". Cảnh có đồ vật không đủ để loại đáp án còn lại; phải theo mục 1e.
    - Câu hỏi nói về người đó trực tiếp với chính người đó bằng ngôi thứ ba ("Tom: What does Mia do? Mia: I read..."), không tự nhiên.
-   Khi một đáp án phụ thuộc cảnh trước đó, cảnh phải cho biết trực tiếp vì sao đang diễn ra bây giờ, mà không dùng đúng dạng động từ của đáp án (ví dụ thêm lượt thoại "Where are you?" và câu đáp nêu nơi chốn: "I am in the kitchen.").
+   Khi một đáp án phụ thuộc cảnh trước đó, cảnh phải cho biết trực tiếp vì sao đang diễn ra bây giờ (mục 1e).
+1e. **Câu "đang làm" ở G3a và G3b** (G2-B thì được hỏi "What is X doing?") phải có MỘT trong hai dấu hiệu: (a) "at the moment" hoặc "right now"; hoặc (b) một lượt thoại tự nhiên chỉ lúc này, không phải câu "What is/are X doing?" đặt ngay trước chỗ chọn hoặc điền (câu đó tự lộ dạng "is doing"). Ví dụ (b) dùng được: "Tom: Where are you? Mia: Sorry, I can't talk. I [swim / am swimming] at the sports centre."; "Tom: Can I talk to Grandma? Mia: Sorry, she [cooks / is cooking] lunch."; "Mia: Can you hear that music? Tom: Yes! I [listen / am listening] to the radio." Cảnh có đồ vật chỉ làm nền, không được là dấu hiệu duy nhất.
 1c. Câu "đang làm" dùng hiện tại đơn là sai nội dung bài; việc đang diễn ra luôn dùng am/is/are + V-ing.
 1d. Cấm "chép dạng": không viết một câu rồi bắt chọn hoặc điền lại chính câu đó (ví dụ "Mia is reading a story. She [reads / is reading] a story." hoặc "I am playing football now. I ____ football now. (play)"), vì học sinh chỉ chép dạng động từ mà không cần hiểu nghĩa. Câu chọn hoặc điền phải tự mang nghĩa; câu tình huống trước đó nói điều khác (nơi chốn, đồ vật, người cùng hội thoại), không nhắc lại động từ của đáp án.
+1f. **Hội thoại có dẫn nhập** (cảnh + lượt thoại): viết thành các lượt `Tên: ...`, mỗi lượt một người nói; không dùng "X asks Y"; không đặt hai câu hỏi liên tiếp (một câu hỏi rồi lại một câu hỏi để chọn); người hỏi và người đáp ở cùng nơi hợp lý (không viết "Dad is in the park with Tom and asks Mum what Tom is doing").
 2. Không dùng màu để phân biệt; phiếu in đen trắng vẫn làm được.
 3. Không phụ thuộc vào ảnh hay âm thanh (phiếu này không có).
 4. Nhân vật và cảnh theo K3.1; không thêm sự kiện mâu thuẫn.
 5. Từ vựng và cấu trúc đúng K4 và K5.
 6. Mức hỗ trợ giảm dần từ G3 đến G5: G3 có đủ gợi ý; G4 có dữ kiện nhưng không cho sẵn cấu trúc; G5 có ví dụ nhưng không viết sẵn câu.
+7. **Truy nguồn dữ kiện:** mỗi ô hoặc câu có đáp án phải truy được về một dữ kiện trong file Kiến thức (K3.1) hoặc trong văn bản nguồn của chính Task. Không có dữ kiện thì không tạo ô (hoặc in sẵn "—" như ô Now của hàng They). Không bịa thói quen hay sự kiện (ví dụ "Lucy reads a story on Sundays" khi K3.1 chỉ nói Lucy đang đọc truyện lúc 3 giờ chiều Chủ nhật).
+8. **Đa dạng:** một tình huống (nơi chốn + hoạt động, ví dụ "in the kitchen, cook lunch") xuất hiện tối đa 2 lần trên cả phiếu; trong mỗi Task G3a, G3b không dùng cùng một khuôn câu quá 2 lần; chủ ngữ phân bố đủ (I, he/she, we/they, you, tên riêng).

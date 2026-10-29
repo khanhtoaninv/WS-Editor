@@ -1,6 +1,6 @@
 # TASK FORMAT — Grammar Worksheet · A1 Movers · Daily Routines & Activities
 
-Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 0.6 · Trạng thái: Nháp
+Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 0.7 · Trạng thái: Nháp
 Quy định cách soạn từng Task. Dùng cùng file Kiến thức (K) và Trình tự Lesson (S).
 Chỉ dẫn in trên phiếu theo K6 (không dùng thuật ngữ ngữ pháp). Đáp án chấp nhận nêu rõ độ dài (một từ hay cụm).
 Mức hỗ trợ: Chuẩn (mặc định) hoặc Giảm (ít câu hơn, có câu mở đầu).
@@ -48,7 +48,7 @@ Kiểu trả lời: chọn (chọn trong lựa chọn cho sẵn), gõ (điền c
 ### TF-G2-B — Choose the correct answer (conversations) (phương án mặc định của G2)
 - Kiểu trả lời: chọn một trong hai câu trả lời.
 - Số câu: 5 và 1 ví dụ. 3 câu hỏi về thói quen, 2 câu hỏi về việc đang làm; đáp án không xen kẽ đều.
-- Cấu trúc câu: hội thoại hai lượt; người A hỏi, học sinh chọn câu đáp đúng nghĩa. Hai câu đáp đều đúng ngữ pháp, chỉ khác ở thì.
+- Cấu trúc câu: hội thoại hai lượt; người A hỏi, học sinh chọn câu đáp đúng nghĩa. Vế chọn là CÂU ĐÁP HOÀN CHỈNH (`[He plays football. / He is playing football.]`), không phải chỉ một từ giữa câu. Hai câu đáp đều đúng ngữ pháp, chỉ khác ở thì.
 - Quy tắc: ở ít nhất 2 câu, thêm một câu tình huống trước hội thoại để đáp án không chỉ dựa vào dạng câu hỏi; câu tình huống không chứa động từ ở dạng của câu đáp (S5 mục 1d); câu hỏi và câu đáp tự nhiên giữa hai người (không hỏi một người về chính họ bằng ngôi thứ ba); không dùng stative verbs.
 - Chỉ dẫn: "Read the conversations. Circle the correct answers."
 
@@ -64,7 +64,7 @@ Kiểu trả lời: chọn (chọn trong lựa chọn cho sẵn), gõ (điền c
 ### TF-G3a-A — Choose the correct words (in the sentence)
 - Kiểu trả lời: chọn một trong hai vế ngay trong câu.
 - Số câu: 6 và 1 ví dụ. Mức Giảm: 5 và 1. Gồm: khẳng định 2, phủ định 1, câu hỏi 2, hội thoại 1. Chủ ngữ đa dạng, có I và you.
-- Quy tắc: tránh các mẫu mơ hồ ở S5 mục 1b và cấm chép dạng ở S5 mục 1d; hai lựa chọn đều đúng ngữ pháp khi đứng riêng, chỉ khác thì; mỗi câu đủ ngữ cảnh để chỉ có một đáp án đúng; ít nhất 2 câu có thêm câu tình huống thay trạng từ; đáp án đúng không luôn ở vế trái; nhân vật Tom, Mia và người thân.
+- Quy tắc: tránh các mẫu mơ hồ ở S5 mục 1b, cấm chép dạng ở S5 mục 1d, câu "đang làm" theo S5 mục 1e (không chỉ dựa vào cảnh đồ vật, không "What is X doing?" ngay trước chỗ chọn), hội thoại theo mục 1f; hai lựa chọn đều đúng ngữ pháp khi đứng riêng, chỉ khác thì; mỗi câu đủ ngữ cảnh để chỉ có một đáp án đúng; ít nhất 2 câu có thêm câu tình huống thay trạng từ; đáp án đúng không luôn ở vế trái; nhân vật Tom, Mia và người thân.
 - Chỉ dẫn: "Circle the correct words."
 
 ### TF-G3a-B — Choose the correct sentence
@@ -76,7 +76,7 @@ Kiểu trả lời: chọn (chọn trong lựa chọn cho sẵn), gõ (điền c
 ### TF-G3b-A — Complete the sentences
 - Kiểu trả lời: gõ dạng đúng của động từ cho trong ngoặc.
 - Số câu: 5 và 1 ví dụ; có phủ định, câu hỏi, một câu có hai chỗ trống.
-- Quy tắc: ngoài ra tránh các mẫu mơ hồ ở S5 mục 1b và cấm chép dạng ở S5 mục 1d (không viết câu rồi bắt điền lại chính câu đó); mỗi câu đủ dữ kiện; viết động từ cần chia trong ngoặc ngay sau chỗ trống (`He ____ (read) a story.`), câu ví dụ số 0 viết cùng khuôn (đáp án ở ANSWER KEY); câu cần "đang làm" phải có câu trước nói rõ ai ở đâu và làm với gì (ví dụ `Mia is in the kitchen with flour and eggs.`); nếu chủ ngữ là "They" thì nêu rõ ai; nhân vật Tom, Mia và người thân; ghi các dạng rút gọn được chấp nhận (don't / do not).
+- Quy tắc: ngoài ra tránh các mẫu mơ hồ ở S5 mục 1b, cấm chép dạng ở S5 mục 1d (không viết câu rồi bắt điền lại chính câu đó), câu "đang làm" theo S5 mục 1e và hội thoại theo mục 1f; mỗi câu đủ dữ kiện; viết động từ cần chia trong ngoặc ngay sau chỗ trống (`He ____ (read) a story.`), câu ví dụ số 0 viết cùng khuôn (đáp án ở ANSWER KEY); câu cần "đang làm" phải có "at the moment"/"right now" hoặc lượt thoại chỉ lúc này (S5 mục 1e), không chỉ có cảnh đồ vật; không dùng cùng một khuôn tình huống quá 2 lần, chủ ngữ đa dạng (có he/she, they hoặc we, không chỉ I); nếu chủ ngữ là "They" thì nêu rõ ai; nhân vật Tom, Mia và người thân; ghi các dạng rút gọn được chấp nhận (don't / do not).
 - Chỉ dẫn: "Write the verb in the right way. Use the word in ( )."
 
 ### TF-G3b-B — Make questions and negatives
@@ -91,7 +91,7 @@ Kiểu trả lời: chọn (chọn trong lựa chọn cho sẵn), gõ (điền c
 - Kiểu trả lời: viết câu (khoảng 2 dòng mỗi câu). Dữ kiện đặt phía trên.
 - Số câu: 2. Mức Giảm: 1.
 - Kế hoạch: câu 1: nhân vật A bị hiểu sai (đang làm việc thường lệ); học sinh sửa bằng việc thường làm và việc đang làm. Câu 2: nhân vật B, dữ kiện khác để không chép nguyên câu 1.
-- Giàn giáo: bảng dữ kiện ghi cả động từ (ví dụ `play football`, `draw a picture`), không viết sẵn cả câu; câu dẫn của bạn nêu rõ thời điểm "bây giờ" (ví dụ `It is Sunday, 3 p.m.`) để học sinh biết "now" là lúc nào; mỗi câu trả lời gồm hai khung `<Tên> ____.` và `<He hoặc She> ____.` theo nhân vật đang nói đến (Ben/He hoặc Lucy/She).
+- Giàn giáo: bảng dữ kiện ghi cả động từ (ví dụ `play football`, `draw a picture`), không viết sẵn cả câu; câu dẫn của bạn nêu rõ thời điểm "bây giờ" (ví dụ `It is Sunday, 3 p.m.`) để học sinh biết "now" là lúc nào; mỗi câu trả lời gồm hai khung `<Tên> ____.` và `<He hoặc She> ____.` theo nhân vật đang nói đến (Ben/He hoặc Lucy/She). Cả hai câu của Task cùng thời điểm "It is Sunday, 3 p.m." (không dùng ngày hay giờ khác ở câu 2); điều bạn nói sai là việc thường làm Thứ Bảy bị cho là đang diễn ra; đáp án chỉ dùng dữ kiện trong bảng (S5 mục 7).
 - Quy tắc: dữ kiện đủ và không mâu thuẫn; chỉ dẫn nêu nhiệm vụ, không cho sẵn cấu trúc câu; không hỏi trực tiếp "What does X do?" rồi để học sinh chép dữ kiện; mỗi ý một câu đơn.
 - Đáp án: mẫu 1–2 câu cho mỗi câu; chấp nhận biến thể đúng.
 - Chỉ dẫn: "Read about Ben and Lucy. Then write sentences to answer your friend."
