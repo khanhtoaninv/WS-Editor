@@ -1,6 +1,6 @@
-# Căn cứ học thuật cho khuôn các chuyên mục (bản 1)
+# Căn cứ học thuật cho khuôn các chuyên mục (bản 1.1)
 
-29/10/2026. Thay bản 0. Chỉ ghi điều trang nguồn nói rõ. Mỗi mục có: **Có căn cứ**, **Khuôn đề xuất** (do tôi suy từ căn cứ), **Chưa có căn cứ**. Phần lớn nguồn là bài tổng hợp hoặc nguồn thứ cấp, chưa phải bản gốc; ghi rõ từng chỗ. Nguồn ở cuối.
+29/10/2026. Thay bản 0; bản 1.1 bổ sung kết quả tra bản gốc (mục 10). Chỉ ghi điều trang nguồn nói rõ. Mỗi mục có: **Có căn cứ**, **Khuôn đề xuất** (do tôi suy từ căn cứ), **Chưa có căn cứ**. Phần lớn nguồn là bài tổng hợp hoặc nguồn thứ cấp, chưa phải bản gốc; ghi rõ từng chỗ. Nguồn ở cuối.
 
 Quy ước cột "Căn cứ" cho mọi quy tắc trong thư viện: `[HT]` nguồn học thuật, `[ND]` quy định của người dùng, `[TN]` rút từ thử nghiệm, `[CL]` Claude suy ra, chưa kiểm.
 
@@ -105,3 +105,25 @@ Quy ước cột "Căn cứ" cho mọi quy tắc trong thư viện: `[HT]` ngu�
 - Costley, Tavakoli, Fitzpatrick (2018), [Writing and good language teachers](https://core.ac.uk/download/334415636.pdf), bản nháp trước xuất bản.
 - Shanahan, [Synthetic phonics or systematic phonics](https://www.shanahanonliteracy.com/blog/synthetic-phonics-or-systematic-phonics-what-does-research-really-say), bài blog có tranh luận.
 - O'Brien (2021), [Ease and difficulty in L2 pronunciation teaching](https://www.frontiersin.org/articles/10.3389/fcomm.2020.626985/pdf), Frontiers in Communication 5, 626985.
+
+## 10. Cập nhật bản 1.1: kết quả tra bản gốc / nguồn tốt hơn (lượt A)
+
+**Barrett (đã làm rõ nguồn gốc, vẫn là nguồn thứ cấp).**
+- Một luận án (Dixon 1975, Oklahoma State University) cho biết: thang do T. C. Barrett đề xuất, tên đầy đủ "Taxonomy of the Cognitive and Affective Dimensions of Reading Comprehension" (1968); được Clymer trình bày trong NSSE Sixty-Seventh Yearbook (1968); Smith và Barrett (1974) dùng cho thiết kế câu hỏi và chọn tài liệu; Barrett dựa trên Bloom (1956), Sanders (1966), Letton (1958), Guszak (1967). Chú ý: bản "1976" trong bài trước là năm một bản in lại, nên trích dẫn nên ghi 1968 và Smith & Barrett 1974.
+- Mô tả năm mức khớp với bản trước, thêm: **Appreciation** là đánh giá tác động tâm lý và thẩm mỹ (phản ứng cảm xúc, đồng cảm với nhân vật, phản ứng với ngôn ngữ, hình ảnh của tác giả); luận án nói các mức tăng độ khó từ literal đến appreciation.
+- Giới hạn: vẫn chưa đọc bản gốc Barrett 1968 hay Clymer 1968; hai trang Scribd và tài liệu Oxford Owl không đọc được.
+
+**Field (2018), hai chương dành cho trẻ nhỏ (xác nhận tồn tại, chưa đọc toàn văn).**
+- Field, J. (2018). *The cognitive validity of tests of listening and speaking designed for young learners*. Trong Papp & Rixon (biên tập), *Examining Young Learners: Research and Practice in Assessing the English of School-age Learners*, Studies in Language Testing 47, Cambridge University Press, tr. 128–200.
+- Field, J. (2018). *The cognitive validity of reading and writing tests designed for young learners*. Cùng sách, tr. 202–269.
+- Phần tóm tắt cho biết: cần đối chiếu điều trẻ đến 12 tuổi làm được và chưa làm được về nhận thức (kể cả trình độ đọc viết tiếng mẹ đẻ) với đòi hỏi xử lý của nghe, nói, đọc, viết L2, rồi đối chiếu với Cambridge YLE. **Chưa đọc được nội dung chi tiết** (chỉ có tóm tắt; trang toàn văn lỗi khi tải). Đây là nguồn tốt nhất tìm được cho ý đồ câu hỏi và độ khó cho trẻ nhỏ, nên cần lấy toàn văn.
+
+**Dạy viết cho trẻ.**
+- Trüb, R. (2022). *An Empirical Study of EFL Writing at Primary School* (Vol. 9). Gunter Narr. DOI 10.24053/9783823395430. Truy cập mở trên OAPEN. Nghiên cứu thực nghiệm về năng lực viết văn bản giao tiếp của trẻ tiểu học EFL, chất lượng bài viết theo mức CEFR, thực hành dạy. Mới đọc tóm tắt; chưa có số liệu cụ thể cho khuôn Writing.
+
+**Việc còn lại để có căn cứ chắc cho Reading và Listening:**
+1. Toàn văn hai chương Field (2018) (Cambridge, Studies in Language Testing 47).
+2. Barrett (1968) hoặc Clymer (1968), hoặc Smith & Barrett (1974) cho định nghĩa gốc và ví dụ câu hỏi.
+3. Trüb (2022) toàn văn cho Writing tiểu học.
+4. Papp & Rixon (2018) các chương khác về thiết kế bài kiểm tra cho trẻ nhỏ (có thể truy cập một phần qua trích đoạn của nhà xuất bản).
+Một số tài liệu có thể cần người dùng cung cấp bản đọc được (PDF), vì nhiều nguồn trả lỗi hoặc dữ liệu nhị phân khi tải.
