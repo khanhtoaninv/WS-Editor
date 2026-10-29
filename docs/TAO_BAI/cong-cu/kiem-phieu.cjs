@@ -29,7 +29,7 @@ rest.split('\n').forEach(l => {
 });
 
 // ---- chữ rác / suy nghĩ của AI ----
-const junk = /\b(Wait|Hmm|Actually|Let me|On second thought|I need to|Oops|Correction)\b/;
+const junk = /\b(Wait, (in|let|this|that|I|actually|the)|Hmm|Actually,|Let me|On second thought|I need to|Oops|Correction)\b/;
 md.split('\n').forEach((l, i) => { if (junk.test(l)) E('Chữ rác trong phiếu: "' + l.trim().slice(0, 70) + '"'); });
 
 // ---- tách Task ----
@@ -57,7 +57,7 @@ ansTxt.split('\n').forEach(l => {
 Object.keys(keys).forEach(k => Object.values(keys[k]).forEach(v => { if (/ \/ /.test(v)) W('Task ' + k + ': khóa có "a / b" (chưa rõ editor tách): ' + v); }));
 
 // ---- từ chỉ thời gian ----
-const TIME = /\b(now|right now|at the moment|today|every ?(day|morning|evening|week|saturday|sunday)|on (saturdays|sundays|mondays|weekends|fridays)|usually|always|often|sometimes|never|after (school|dinner|lunch)|before (bed|school)|in the (morning|evening|afternoon)|at the weekend|these days|listen|look|at \d{1,2}(:\d\d)? ?([ap]\.?m\.?)?|at \d{1,2} o'clock|not yet)\b/i;
+const TIME = /\b(now|right now|at the moment|today|every ?(day|morning|evening|week|saturday|sunday)|on (saturdays|sundays|mondays|weekends|fridays)|usually|always|often|sometimes|never|after (school|dinner|lunch)|before (bed|school)|in the (morning|evening|afternoon)|at the weekend|these days|listen|look|at \d{1,2}(:\d\d)? ?([ap]\.?m\.?)?|at \d{1,2} o'clock)\b/i;
 const VERBS = { play: /\bplay(s|ing)?\b/gi, read: /\bread(s|ing)?\b/gi, watch: /\bwatch(es|ing)?\b/gi, eat: /\beat(s|ing)?\b/gi, go: /\b(go|goes|going)\b/gi, ride: /\bri(de|des|ding)\b/gi, swim: /\bswim(s|ming)?\b/gi, draw: /\bdraw(s|ing)?\b/gi };
 const totals = {}; Object.keys(VERBS).forEach(v => totals[v] = 0);
 const seqs = {}; const stems = [];
