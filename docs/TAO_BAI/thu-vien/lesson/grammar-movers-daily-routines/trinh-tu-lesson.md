@@ -1,6 +1,6 @@
 # TRÌNH TỰ LESSON — Grammar Worksheet · A1 Movers · Daily Routines & Activities
 
-Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 0.4 · Trạng thái: Nháp
+Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 0.5 · Trạng thái: Nháp
 Dùng cùng file Kiến thức (K) và file Task Format (TF) của lesson này.
 
 ## S1. Quy mô phiếu
@@ -23,7 +23,7 @@ Trình tự gốc có bốn mức nhận thức: **Recognition** (nhận diện)
 | G4 | Application (trong tình huống) | Sử dụng trong tình huống | TF-G4 |
 | G5 | Creation | Tự diễn đạt | TF-G5 |
 
-Mỗi mã TF có 1 đến 3 phương án thay thế (hậu tố A, B, C). Chọn một phương án mỗi lần tạo phiếu, ưu tiên phương án ít dùng gần đây để các phiếu cùng chủ đề không giống nhau. Mọi phương án của một bước phải phục vụ cùng vai trò và cùng tiêu chí kiểm định.
+Mỗi mã TF có 1 đến 3 phương án thay thế (hậu tố A, B, C). Chọn một phương án mỗi lần tạo phiếu (mặc định G2 là TF-G2-B, vì TF-G2-A cho sẵn dạng động từ nên học sinh có thể chọn đúng nhờ đuôi -ing hay -s, không nhờ hiểu nghĩa), ưu tiên phương án ít dùng gần đây để các phiếu cùng chủ đề không giống nhau. Mọi phương án của một bước phải phục vụ cùng vai trò và cùng tiêu chí kiểm định.
 
 ### G1 — Recognition: Quan sát cấu trúc
 - Vai trò: học sinh nhận ra hai mẫu câu trong một tình huống có nghĩa; chưa phải làm đúng sai.
@@ -37,7 +37,7 @@ Mỗi mã TF có 1 đến 3 phương án thay thế (hậu tố A, B, C). Chọn
 ### G2 — Understanding: Hiểu nghĩa và cách dùng
 - Vai trò: học sinh phân biệt điều thường làm với điều đang diễn ra bằng nghĩa.
 - Nội dung: tình huống ngắn của Tom, Mia và người thân.
-- Tiêu chí kiểm định: nếu học sinh không hiểu nghĩa thì có thể chọn đúng chỉ nhờ từ khóa hoặc đuôi -ing không? Đếm số câu thuộc loại đó.
+- Tiêu chí kiểm định: nếu học sinh không hiểu nghĩa thì có thể chọn đúng chỉ nhờ từ khóa hoặc đuôi -ing không? Đếm số câu thuộc loại đó. Với G2, hai lựa chọn phải khác nhau ở thì, còn thông tin quyết định nằm trong tình huống hoặc câu hỏi.
 
 ### G3 — Application (có kiểm soát): Luyện có kiểm soát
 - Vai trò: học sinh chọn và tạo đúng hình thức khi đã có đủ gợi ý.
@@ -64,7 +64,14 @@ Chỉ dùng hai nhãn này cho hai khái niệm. Không dùng Habit, Often, Ever
 
 ## S5. Quy tắc toàn phiếu
 1. Ít nhất 30% số câu có đáp án trong mỗi Task thuộc G2, G3a và G3b phải xác định được từ tình huống (câu hoặc câu trước đó nói rõ ai đang làm gì, hoặc việc lặp lại), không dựa vào từ chỉ thời gian. Báo cáo số câu và số thứ tự từng Task.
-1b. Mỗi câu chọn hoặc điền chỉ có đúng một đáp án. Với mỗi câu, tự thử đáp án còn lại; nếu nó cũng hợp lý trong tình huống thì viết lại câu hoặc thêm thông tin vào tình huống. Không viết câu hỏi nhắc lại việc vừa được nói rõ ở câu trước.
+1b. Mỗi câu chọn hoặc điền chỉ có đúng một đáp án. Với mỗi câu, tự thử đáp án còn lại; nếu nó cũng hợp lý trong tình huống thì viết lại câu hoặc thêm thông tin vào tình huống. Không viết câu hỏi nhắc lại việc vừa được nói rõ ở câu trước. Các mẫu thường gây hai đáp án, phải tránh hoặc thêm dấu hiệu:
+   - Sau một câu tả cảnh, hỏi "[Does he swim / Is he swimming]?" mà không có dấu hiệu "bây giờ" (thêm "at the moment" hoặc một chi tiết như "He is in the water").
+   - "She [feeds / is feeding] it" không có dấu hiệu rõ về lúc này hay thói quen.
+   - Câu nói về khả năng như "You swim very fast" (có thể hiểu là khả năng hay đang bơi).
+   - Câu phủ định "She doesn't cook / isn't cooking" khi tình huống không nói rõ.
+   - Câu điền một từ trong ngoặc mà ngữ cảnh chỉ gợi ý chứ không khẳng định (ví dụ chỉ có cảnh "with a fruit" rồi suy ra "isn't eating").
+   Khi một đáp án phụ thuộc cảnh trước đó, cảnh phải nói trực tiếp ai đang làm gì.
+1c. Câu "đang làm" dùng hiện tại đơn là sai nội dung bài; việc đang diễn ra luôn dùng am/is/are + V-ing.
 2. Không dùng màu để phân biệt; phiếu in đen trắng vẫn làm được.
 3. Không phụ thuộc vào ảnh hay âm thanh (phiếu này không có).
 4. Nhân vật và cảnh theo K3.1; không thêm sự kiện mâu thuẫn.

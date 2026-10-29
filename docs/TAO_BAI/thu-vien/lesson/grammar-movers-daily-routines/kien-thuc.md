@@ -1,6 +1,6 @@
 # KIẾN THỨC — Grammar Worksheet · A1 Movers · Daily Routines & Activities
 
-Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 0.4 · Trạng thái: Nháp
+Mã lesson: GRAM-MOVERS-DAILY-01 · Phiên bản 0.5 · Trạng thái: Nháp
 
 ## K1. Mục tiêu
 Sau khi hoàn thành phiếu, học sinh có thể:
@@ -41,8 +41,10 @@ Ngoài phạm vi: Past Simple, Present Perfect, Future Forms, stative verbs (lov
 Tham chiếu: Cambridge Pre A1 Starters và A1 Movers Word Lists (2018).
 - Được dùng thêm ngoài 9 động từ chính: sing, write, talk, sit, sleep, look, listen, make, wear, take, get up, feed, teach, cook; park, garden, kitchen, zoo, monkey, elephant, football, tennis, bike, guitar, ice cream, phone, window, desk, story, picture, grandma, school, breakfast, dog, sports centre, scarf, hospital, library, pancake (số ít).
 - Không dùng: knit, visit, notebook, basket, ring (điện thoại reo), smell, card, cartoon(s), pancakes (số nhiều).
+- Từ được dùng trong phiếu: các từ liệt kê ở trên, và các từ có trong Cambridge Pre A1 Starters hoặc A1 Movers Word Lists (2018). Không dùng từ ngoài hai danh sách này. Báo cáo cuối phiếu phải nêu mọi từ không nằm trong danh sách liệt kê ở trên, ghi rõ nó có trong Starters hay Movers.
+- Từ cần cho chỉ dẫn và khung Task, luôn được dùng: friend, family, brother, sister, mum, dad, someone, answer, sentence, table, picture, circle, write, read, choose, complete.
 - Tên nhân vật (Ben, Lucy, Tom, Mia, Grandma) và từ chỉ ngày, giờ (Saturday, Sunday, a.m., p.m.) không bị giới hạn bởi danh sách trên.
-- Giới hạn lặp: trong phần học sinh đọc và làm (bài đọc, câu hỏi, lựa chọn; không tính đáp án và ghi chú), mỗi động từ trong 9 động từ chính xuất hiện không quá 12 lần ở mọi dạng (play, plays, playing... tính chung), và không quá 3 lần trong cùng một Task, trừ Task G2 và G3 được lặp tới 4 lần. Trợ động từ do/does/don't/doesn't không tính.
+- Giới hạn lặp: trong phần học sinh đọc và làm (bài đọc, câu hỏi, lựa chọn; không tính câu chỉ dẫn, đáp án và ghi chú; động từ mệnh lệnh trong chỉ dẫn như "Read", "Write" không tính), mỗi động từ trong 9 động từ chính xuất hiện không quá 12 lần ở mọi dạng (play, plays, playing... tính chung), và không quá 3 lần trong cùng một Task, trừ Task G2 và G3 được lặp tới 4 lần. Trợ động từ do/does/don't/doesn't không tính.
 
 ## K6. Ngôn ngữ của chỉ dẫn (đọc bởi học sinh 7–9 tuổi)
 - Câu chỉ dẫn ngắn, dùng động từ mệnh lệnh quen thuộc: read, write, circle, choose, look, tick, complete.
