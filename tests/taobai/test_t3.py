@@ -7,7 +7,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(os.pat
 F = 'file://' + os.path.abspath(sys.argv[1]); SRV = '--may-chu' in sys.argv; ok = True
 def chk(n, c, x=''):
     global ok; print(('PASS ' if c else 'FAIL '), n, '' if c else x); ok &= bool(c)
-ROWS = "[...document.querySelectorAll('#rdStruct .rdrow')].map(r=>({s:+r.closest('.rdstep').dataset.step,q:r.querySelector('select').value,n:parseInt(r.querySelector('.rdnv').textContent)}))"
+ROWS = "[...document.querySelectorAll('#rdStruct .rdrow')].map(r=>({s:+r.closest('.rdstep').dataset.step,q:r.querySelector('select').value,n:+r.querySelector('.rdnum').value}))"
 STEPS = [(['Q4', 'Q7', 'Q3'], 5, 6), (['Q1', 'Q4'], 6, 8), (['Q3', 'Q8', 'Q2'], 5, 6), (['Q5', 'Q3'], 4, 5), (['Q12', 'Q2'], 3, 5)]
 def rules(rows):
     bad = []
@@ -29,7 +29,7 @@ def run(pg, url, errs):
     chk('lesson có nhãn chuyên đề', [pg.inner_text(f'#rdLs [data-ls="u5-l{i}"] .tag') for i in (1, 2, 3, 4)] == ['Từ vựng', 'Ngữ pháp', 'Ngữ pháp', 'Nghe'])
     pick_lesson(pg, 'u5-l2')
     chk('thông tin lesson: mục tiêu từ Kiến thức', 'was / were ở câu khẳng định' in pg.inner_text('#rdInfo'))
-    chk('cấu trúc: 5 bước, mỗi bước 1 bài', pg.locator('#rdStruct .rdstep').count() == 5 and len(pg.evaluate(ROWS)) == 5)
+    chk('cấu trúc: 5 bước + nhóm "Bài tự do" (trống), mỗi bước 1 bài', pg.locator('#rdStruct .rdstep').count() == 6 and 'Bài tự do' in pg.inner_text('#rdStruct .rdstep[data-step="5"]') and len(pg.evaluate(ROWS)) == 5)
     chk('ghi Trình tự / TF và phiên bản', 'Ngữ pháp v7' in pg.inner_text('#rdStruct') and 'TF v3' in pg.inner_text('#rdStruct'))
     bad = []
     for k in range(25):
@@ -40,29 +40,38 @@ def run(pg, url, errs):
     for k in range(25): seen.add(pg.evaluate(ROWS)[0]['q']); pg.click('#rdReroll'); pg.wait_for_timeout(40)
     chk('đề xuất thật sự ngẫu nhiên (bước 1 ra ≥ 2 dạng khác nhau)', len(seen) >= 2, seen)
     info = pg.inner_text('#rdPvInfo')
-    chk('layout sơ bộ: "5 bài · ước tính k trang / tối đa 2"', info.startswith('5 bài · ước tính') and 'tối đa 2' in info, info)
+    chk('layout sơ bộ: "5 bài · ước tính k trang" (không còn giới hạn trang)', info.startswith('5 bài · ước tính') and 'tối đa' not in info, info)
     np0 = pg.locator('#rdPv .rdpg').count()
     chk('layout sơ bộ vẽ trang thu nhỏ có Task thật (bộ dàn của app)', np0 >= 1 and pg.locator('#rdPv .rdpg section.task').count() >= 5, np0)
     # +/✕/−/+, bước bắt buộc / không bắt buộc
     s1 = '#rdStruct .rdstep[data-step="1"]'
     pg.click(f'{s1} .rdplus'); pg.wait_for_timeout(150)
-    chk('+ ở bước 2: 2 bài, + mờ (tối đa 2)', pg.locator(f'{s1} .rdrow').count() == 2 and pg.is_disabled(f'{s1} .rdplus'))
+    chk('+ ở bước 2: 2 bài; + vẫn bấm được (không giới hạn số bài)', pg.locator(f'{s1} .rdrow').count() == 2 and not pg.is_disabled(f'{s1} .rdplus'))
+    pg.click(f'{s1} .rdplus'); pg.wait_for_timeout(100)
+    chk('thêm tiếp được bài thứ 3 trong một bước', pg.locator(f'{s1} .rdrow').count() == 3)
+    pg.click(f'{s1} .rdrow >> nth=2 >> [data-del]'); pg.wait_for_timeout(100)
     chk('số thứ tự chung: bài mới là 3, bước 3 thành 4', pg.inner_text(f'{s1} .rdrow >> nth=1 >> .rdn') == '3' and pg.inner_text('#rdStruct .rdstep[data-step="2"] .rdn') == '4')
     chk('6 bài · layout cập nhật ngay', pg.inner_text('#rdPvInfo').startswith('6 bài'))
     s0 = '#rdStruct .rdstep[data-step="0"]'
-    chk('bước bắt buộc còn 1 bài: ✕ mờ; tối đa 1: + mờ', pg.is_disabled(f'{s0} [data-del]') and pg.is_disabled(f'{s0} .rdplus'))
+    chk('bước "bắt buộc" cũng xóa được hết (✕ không mờ)', not pg.is_disabled(f'{s0} [data-del]'))
+    pg.click(f'{s0} [data-del]'); pg.wait_for_timeout(100)
+    chk('xóa hết bước 1 → "Bỏ qua bước này"', 'Bỏ qua bước này' in pg.inner_text(s0) and pg.inner_text('#rdPvInfo').startswith('5 bài'))
+    pg.click(f'{s0} .rdplus'); pg.wait_for_timeout(100)
+    chk('+ thêm lại bài cho bước 1', pg.locator(f'{s0} .rdrow').count() == 1)
     s2 = '#rdStruct .rdstep[data-step="2"]'
     pg.click(f'{s2} [data-del]'); pg.wait_for_timeout(150)
     chk('bước không bắt buộc xóa hết = "Bỏ qua bước này"', 'Bỏ qua bước này' in pg.inner_text(s2) and pg.inner_text('#rdPvInfo').startswith('5 bài'))
     pg.click(f'{s2} .rdplus'); pg.wait_for_timeout(150)
     chk('+ thêm lại bài cho bước bỏ qua', pg.locator(f'{s2} .rdrow').count() == 1)
     r0 = f'{s0} .rdrow'
-    for _ in range(4): pg.click(f'{r0} [data-dn="-1"]') if not pg.is_disabled(f'{r0} [data-dn="-1"]') else None
-    chk('− dừng ở số câu tối thiểu (5), nút mờ', pg.evaluate(ROWS)[0]['n'] == 5 and pg.is_disabled(f'{r0} [data-dn="-1"]'))
-    pg.click(f'{r0} [data-dn="1"]'); pg.click(f'{r0} [data-dn="1"]') if not pg.is_disabled(f'{r0} [data-dn="1"]') else None
-    chk('+ dừng ở tối đa (6)', pg.evaluate(ROWS)[0]['n'] == 6 and pg.is_disabled(f'{r0} [data-dn="1"]'))
+    pg.fill(f'{r0} .rdnum', '12'); pg.wait_for_timeout(100)
+    chk('gõ thẳng số câu 12 (ngoài khoảng gợi ý 5–6), layout cập nhật', pg.evaluate(ROWS)[0]['n'] == 12)
+    for _ in range(12): pg.click(f'{r0} [data-dn="-1"]') if not pg.is_disabled(f'{r0} [data-dn="-1"]') else None
+    chk('− dừng ở 1 câu, nút mờ', pg.evaluate(ROWS)[0]['n'] == 1 and pg.is_disabled(f'{r0} [data-dn="-1"]'))
+    pg.fill(f'{r0} .rdnum', '5'); pg.wait_for_timeout(100)
     pg.select_option(f'{r0} select', 'Q3'); pg.wait_for_timeout(100)
-    chk('menu dạng chỉ có Q được phép, đổi được', pg.evaluate(f"[...document.querySelectorAll('{r0} select option')].map(o=>o.value)") == ['Q4', 'Q7', 'Q3'] and pg.evaluate(ROWS)[0]['q'] == 'Q3')
+    opts = pg.evaluate(f"[...document.querySelectorAll('{r0} select option')].map(o=>o.value)")
+    chk('menu dạng: Q theo Trình tự trước, rồi mọi dạng khác (đủ 12); đổi được', opts[:3] == ['Q4', 'Q7', 'Q3'] and sorted(opts) == sorted(f'Q{i}' for i in range(1, 13)) and pg.evaluate(ROWS)[0]['q'] == 'Q3', opts)
     q5 = pg.evaluate(ROWS)[-1]['q']; pg.click('#rdStruct .rdstep[data-step="4"] [data-rr]'); pg.wait_for_timeout(100)
     chk('⟳ trên một bài: đổi sang dạng khác', pg.evaluate(ROWS)[-1]['q'] != q5)
     # vượt số trang
@@ -75,7 +84,7 @@ def run(pg, url, errs):
                 if not pg.is_disabled(b): pg.click(b)
     pg.wait_for_timeout(200)
     nP = pg.locator('#rdPv .rdpg').count()
-    chk('cấu trúc dài: vượt tối đa → trang thừa viền đỏ, chữ đỏ', nP > 2 and pg.locator('#rdPv .rdpg.over').count() == nP - 2 and 'vượt tối đa 2' in pg.inner_text('#rdPvInfo'), [nP, pg.inner_text('#rdPvInfo')])
+    chk('cấu trúc dài: nhiều trang, không viền đỏ, không báo vượt', nP > 2 and pg.locator('#rdPv .rdpg.over').count() == 0 and 'vượt' not in pg.inner_text('#rdPvInfo'), [nP, pg.inner_text('#rdPvInfo')])
     # đổi lesson khi đã chỉnh → hỏi
     pg.click('#rdLs [data-ls="u5-l3"]'); pg.wait_for_selector('#cfmDlg[open]', timeout=3000)
     chk('đổi lesson khi đã chỉnh cấu trúc → hỏi xác nhận', 'Cấu trúc đang chỉnh sẽ mất' in pg.inner_text('#cfmMsg'))
@@ -84,7 +93,7 @@ def run(pg, url, errs):
     # lesson Nghe (bước 1 không bắt buộc), lesson Từ vựng
     pick_lesson(pg, 'u5-l4'); confirm(pg)
     pick_lesson(pg, 'u5-l4')
-    chk('lesson Nghe: 4 bước theo Trình tự Nghe', pg.locator('#rdStruct .rdstep').count() == 4 and 'Nghe v1' in pg.inner_text('#rdStruct'))
+    chk('lesson Nghe: 4 bước theo Trình tự Nghe + nhóm Bài tự do', pg.locator('#rdStruct .rdstep').count() == 5 and 'Nghe v1' in pg.inner_text('#rdStruct'))
     pick_lesson(pg, 'u5-l2')
     # thu gọn khung chọn bài
     pg.click('#rdPickH'); pg.wait_for_timeout(100)
@@ -97,7 +106,7 @@ def run(pg, url, errs):
     pg.click('#rdGo'); confirm(pg); pg.wait_for_timeout(800)
     chk('Sinh bài: đóng Ra đề, vào Biên tập', pg.locator('#raDe').count() == 0 and pg.is_visible('#tbBar'))
     w = pg.evaluate("(()=>{const w=__ws.ws;return {n:w.tasks.length,title:w.title,src:w.gen.src,st:w.gen.structure,note:w.gen.note,max:w.gen.maxPages,tg:w.tasks.map(t=>[t.gen.q,t.gen.n,t.gen.status,qOf(t)]),pages:__ws.res.pages.length}})()")
-    chk('phiếu khung: đúng số bài, cấu trúc, ghi chú, phiên bản file', w['n'] == len(rows) and [x['q'] for x in w['st']] == [r['q'] for r in rows] and w['note'] == 'chủ đề cắm trại' and w['src']['ver']['trinhTu'] == '7' and w['src']['lesson'] == 'u5-l2' and w['max'] == 2, w)
+    chk('phiếu khung: đúng số bài, cấu trúc, ghi chú, phiên bản file', w['n'] == len(rows) and [x['q'] for x in w['st']] == [r['q'] for r in rows] and w['note'] == 'chủ đề cắm trại' and w['src']['ver']['trinhTu'] == '7' and w['src']['lesson'] == 'u5-l2' and w['max'] is None, w)
     chk('mỗi bài: dạng Q đúng cấu trúc, trạng thái ⏳ đang viết', all(t[0] == t[3] and t[2] == 'wait' for t in w['tg']) and pg.locator('#tree .tbic.wait').count() == len(rows), w['tg'])
     chk('số trang phiếu khung = ước tính của layout sơ bộ (cùng bộ dàn)', w['pages'] == est, [w['pages'], est])
     chk('dải trên: tên lesson', 'Unit 5 · My weekend · Lesson 2 · was / were' in pg.inner_text('#tbBar'))

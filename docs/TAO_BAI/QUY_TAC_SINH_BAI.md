@@ -33,7 +33,7 @@ Mã: đoạn nhắc `shared/src/taobai/nhac.ts` (dùng chung cho máy chủ và 
 | Mã | Quy tắc | Vì sao |
 |---|---|---|
 | **S13** | **Làm sạch** trước khi đọc: bỏ khối ``` bao ngoài, bỏ chữ đứng trước dòng `## Task:` đầu tiên (lời chào, giải thích). Tách `Mục tiêu:` / `Ngữ cảnh:` (`tachMeta`) rồi mới đưa bộ đọc MD của app. | AI hay "lịch sự" dù đã dặn. |
-| **S14** | **Lỗi phải gửi lại** (cần sửa thì app không dùng ngay): (a) không có / nhiều hơn một `## Task:`, hoặc bài bị tách phần; (b) bộ đọc không đọc được; (c) **sai dạng Q**; (d) **sai số câu** (Q12: số dòng viết); (e) số dòng đáp án khác số câu; (f) câu **thiếu đáp án** (như máy kiểm "Mỗi câu có đáp án"). | Đặc tả 8.1 bước 4 + hai lỗi làm bài vô dụng (e, f). |
+| **S14** | **Lỗi phải gửi lại** (cần sửa thì app không dùng ngay): (a) không có / nhiều hơn một `## Task:`, hoặc bài bị tách phần; (b) bộ đọc không đọc được; (c) **sai dạng Q**; (d) ~~sai số câu~~ **bỏ từ v130** (số câu chỉ là ý muốn của giáo viên, không phải tiêu chí: xem S26); (e) số dòng đáp án khác số câu; (f) câu **thiếu đáp án** (như máy kiểm "Mỗi câu có đáp án"). | Đặc tả 8.1 bước 4 + hai lỗi làm bài vô dụng (e, f). |
 | **S15** | **Gửi lại** = đoạn nhắc cũ + "## SỬA LỖI": bản AI vừa viết + **danh sách lỗi đúng chỗ** ("sai số câu: cần đúng 6 câu đánh số, bài có 5 câu") + "viết lại toàn bộ, sửa đúng các lỗi, giữ phần đã đúng". **Tối đa 2 lần gửi lại** (3 lượt / bài). | Đặc tả 8.1. |
 | **S16** | Quá 2 lần vẫn lỗi → dùng **bản cuối đọc được** (không đọc được thì giữ khung xxx), bài ⚠ với lý do "AI viết sai: …" ở máy kiểm "MD đọc được, không lỗi". | Giáo viên vẫn có cái để sửa tay. |
 | **S17** | **Lỗi nhẹ không gửi lại**: thiếu `Mục tiêu` / `Ngữ cảnh`, các ghi chú của bộ đọc (bỏ dòng thừa, đưa lời nhắc vào hướng dẫn…) → vẫn dùng bài, hiện ở máy kiểm (⚠) để giáo viên xem. | Gửi lại vì lỗi vặt tốn lượt; có thể nâng thành lỗi phải gửi lại nếu thấy hay gặp. |
@@ -67,6 +67,17 @@ Mã: đoạn nhắc `shared/src/taobai/nhac.ts` (dùng chung cho máy chủ và 
 
 ---
 
+## H. Cấu trúc do giáo viên quyết (v130, theo ý kiến 30/10)
+
+| Mã | Quy tắc | Lý do |
+|---|---|---|
+| **S26** | **Chỉ lần đề xuất đầu tiên** theo Trình tự; sau đó giáo viên tự quyết cấu trúc và AI viết **theo đúng cấu trúc đó**. Không còn giới hạn số bài mỗi bước, "bắt buộc", khoảng số câu (nhập 1–50 câu), dạng Q (đủ 12 dạng; dạng của Trình tự xếp trước), số trang. Khoảng số câu của Trình tự chỉ hiện là "gợi ý". Số câu AI viết khác số chọn **không** bị gửi lại, **không** bị máy kiểm chấm; số trang không còn là tiêu chí. | Số câu, số bài, số trang là quyết định của giáo viên, không phải tiêu chí chất lượng nội dung. |
+| **S27** | Mỗi bài có ô **Yêu cầu riêng** (không bắt buộc), gửi cho AI ở đoạn "BÀI CẦN VIẾT" ("phải làm theo") và trong danh sách cấu trúc. Đổi yêu cầu riêng = bài đổi, được sinh lại (như đổi số câu). | Giáo viên chỉ đạo từng bài. |
+| **S28** | Nhóm **Bài tự do** cuối cấu trúc (`step` = 0): bài không thuộc bước nào; dạng Q bất kỳ, số câu bất kỳ, yêu cầu riêng nói bài viết về gì. Đoạn nhắc ghi "Đây là BÀI TỰ DO… không thuộc bước nào"; Nguyên tắc chung của Trình tự vẫn gửi. | "Task tự do nếu người dùng muốn". |
+| **S29** | Khi đoạn nhắc nêu "Dạng được phép" / "Số câu" của bước: ghi rõ đó **chỉ là gợi ý**, điều giáo viên đã chọn cho bài mới là yêu cầu. Đoạn nhắc từ `nhac-2`. | Tránh AI tự ý theo khoảng thay vì số đã chọn. |
+
+Chưa làm (chờ góp ý): kéo đổi thứ tự bài / đưa bài tự do lên giữa phiếu (hiện bài tự do ở cuối; bài thêm trong một bước thì nằm ở bước đó).
+
 ## Câu hỏi để thảo luận sau khi thử (mặc định đang dùng)
 
 1. **Tránh lặp giữa các bài** (S9): song song 3 bài thì 3 bài đầu không thấy nhau. Có nên chia ngữ cảnh trước (một lượt AI rẻ chọn 5 ngữ cảnh cho 5 bài) hay sinh lần lượt cho chắc? *Mặc định: song song, máy kiểm bắt câu lặp.*
@@ -74,5 +85,5 @@ Mã: đoạn nhắc `shared/src/taobai/nhac.ts` (dùng chung cho máy chủ và 
 3. **TF nhiều dạng cùng Q** (S6): AI tự chọn, hay app chọn trước (ngẫu nhiên / theo thứ tự) để dễ so? *Mặc định: AI chọn.*
 4. **Gửi cả phần Kiến thức** dù dài (S3②): có mục nào nên bỏ cho từng bước (vd bước Khởi động không cần "Lỗi hay gặp")? *Mặc định: gửi hết.*
 5. **Model**: Sonnet 5.5 hay Haiku 5.5 cho sinh bài (T6 so). *Mặc định trong Thiết lập: Sonnet 5.5.*
-6. Có cần **ô "Ghi chú cho AI" riêng từng bài** ở màn Ra đề (ngoài ghi chú cả phiếu và góp ý khi sinh lại)? *Mặc định: không.*
+6. ~~Ô "Ghi chú cho AI" riêng từng bài~~ → **đã có từ v130** ("Yêu cầu riêng cho bài này", S27).
 7. Số lần gửi lại (S15: 2) và thời gian chờ khi quá tải (S18: 4 giây, thử lại 1 lần) có hợp không?

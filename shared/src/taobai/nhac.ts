@@ -4,7 +4,7 @@
 // Quy tắc (mã S1…) ghi ở docs/TAO_BAI/QUY_TAC_SINH_BAI.md. Đổi đoạn nhắc thì tăng NHAC_VER và ghi vào tài liệu đó.
 import { Q_NAME, qUnit, type QCode, type ChiTietLesson, type GenStructItem, type Buoc } from './types.ts';
 
-export const NHAC_VER = 'nhac-1';
+export const NHAC_VER = 'nhac-2';
 
 /** Một bài đã viết xong trong phiếu (tóm tắt gửi kèm để AI tránh lặp: S9). */
 export interface BaiDaCo { so: number; q: string; title: string; ctx?: string; cau: string[] }
@@ -53,9 +53,9 @@ export function dungNhac(v: NhacVao): Nhac {
   const P: string[] = [];
   P.push(`## Phiếu\nGiáo trình: ${L.giaoTrinh.ten} · ${L.unit.ten} · ${L.lesson.ten} · chuyên đề ${L.chuyenDe.ten} · học sinh ${tuoi} tuổi`);
   P.push(`## Kiến thức của lesson\n${(L.kienThuc?.raw || '(chưa có)').trim()}`);
-  P.push(['## Trình tự của chuyên đề', buoc ? `Bài này thuộc:\n${buocChu(buoc)}` : '', L.trinhTu?.nguyenTac ? `Nguyên tắc chung:\n${L.trinhTu.nguyenTac}` : ''].filter(Boolean).join('\n\n'));
+  P.push(['## Trình tự của chuyên đề', buoc ? `Bài này thuộc:\n${buocChu(buoc)}\n(Số câu và dạng ở trên là điều giáo viên đã quyết cho bài này; "Dạng được phép" và "Số câu" của bước chỉ là gợi ý.)` : it.step === 0 ? 'Đây là BÀI TỰ DO do giáo viên thêm, không thuộc bước nào của Trình tự: viết theo dạng, số câu và yêu cầu riêng ở phần "BÀI CẦN VIẾT".' : '', L.trinhTu?.nguyenTac ? `Nguyên tắc chung:\n${L.trinhTu.nguyenTac}` : ''].filter(Boolean).join('\n\n'));
   P.push(tf.length ? `## Dạng bài (TF) cho ${q}\n${tf.length > 1 ? 'Chọn MỘT dạng hợp với bước nhất.\n\n' : ''}${tf.map(d => d.raw.replace(/^##\s*/, '### ')).join('\n\n')}` : `## Dạng bài (TF)\nTF chưa có dạng nào cho ${q}: viết theo mô tả dạng ${q} ở trên.`);
-  P.push(`## Cấu trúc cả phiếu (${v.cauTruc.length} bài)\n` + v.cauTruc.map((x, i) => `- Bài ${i + 1} · Bước ${x.step}${x.role ? ` (${x.role})` : ''} · ${x.q} ${Q_NAME[x.q]} · ${x.n} ${qUnit(x.q)}${i === v.k ? '  ← BÀI NÀY' : ''}`).join('\n'));
+  P.push(`## Cấu trúc cả phiếu (${v.cauTruc.length} bài)\n` + v.cauTruc.map((x, i) => `- Bài ${i + 1} · ${x.step === 0 ? 'Bài tự do' : `Bước ${x.step}${x.role ? ` (${x.role})` : ''}`} · ${x.q} ${Q_NAME[x.q]} · ${x.n} ${qUnit(x.q)}${x.yc ? ` · yêu cầu: ${x.yc}` : ''}${i === v.k ? '  ← BÀI NÀY' : ''}`).join('\n'));
   const da = (v.daCo || []).filter(b => b.so !== so);
   if (da.length) P.push(`## Các bài đã viết trong phiếu (không lặp câu, chọn ngữ cảnh khác)\n` + da.map(b => `- Bài ${b.so} (${b.q}) “${b.title}”${b.ctx ? ` · ngữ cảnh: ${b.ctx}` : ''}${b.cau.length ? `\n  ${b.cau.slice(0, 3).join(' / ')}` : ''}`).join('\n'));
   if (v.ghiChu && v.ghiChu.trim()) P.push(`## Ghi chú của giáo viên cho cả phiếu\n${v.ghiChu.trim()}`);
@@ -64,7 +64,8 @@ export function dungNhac(v: NhacVao): Nhac {
     P.push(v.gopY && v.gopY.trim() ? `## Góp ý của giáo viên (phải làm theo)\n${v.gopY.trim()}\nViết lại bài theo góp ý; giữ đúng dạng và số ${unit}; phần góp ý không nhắc tới thì giữ như bản hiện tại nếu đã tốt.` : '## Yêu cầu sinh lại\nViết một bản MỚI khác bản hiện tại (câu và ngữ cảnh khác), vẫn đúng bước, dạng và số câu.');
   }
   P.push(`## BÀI CẦN VIẾT: Bài ${so} · ${q} ${Q_NAME[q]} · ${n} ${unit}\n` + [
-    `Viết Bài ${so} của phiếu: dạng ${q} (${Q_NAME[q]}), ${q === 'Q12' ? `Dòng viết: ${n} (không có câu đánh số)` : `đúng ${n} câu đánh số 1–${n}`}.`,
+    `Viết Bài ${so} của phiếu: dạng ${q} (${Q_NAME[q]}), ${q === 'Q12' ? `Dòng viết: ${n} (không có câu đánh số)` : `${n} câu đánh số 1–${n}`} (số giáo viên đã chọn).`,
+    it.yc && it.yc.trim() ? `YÊU CẦU RIÊNG CỦA GIÁO VIÊN CHO BÀI NÀY (phải làm theo): ${it.yc.trim()}` : '',
     buoc ? `Bài phục vụ bước "${buoc.ten}"${buoc.vaiTro ? ` (${buoc.vaiTro})` : ''}${buoc.chiTiet ? `; ${buoc.chiTiet}` : ''}.` : '',
     tf.length ? `Tiêu đề "## Task:" dùng câu lệnh tiếng Anh theo "Hướng dẫn mẫu" của dạng TF đã chọn (sửa nhẹ cho khớp nội dung nếu cần).` : '',
     'Ngay dưới "## Task:" ghi "Mục tiêu:" (một câu tiếng Việt) và "Ngữ cảnh:" (vài chữ).',

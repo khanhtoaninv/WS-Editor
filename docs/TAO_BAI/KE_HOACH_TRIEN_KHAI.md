@@ -78,7 +78,7 @@ Quy tắc chi tiết: `QUY_TAC_SINH_BAI.md` (bản 1, chờ người dùng thử
 - **Test:** máy chủ AI giả trả MD đúng / sai cú pháp / sai số câu / chậm / lỗi 429; Playwright luồng đầy đủ Ra đề → Sinh → Duyệt → Xuất bản; chế độ AI ngoài.
 - **Thử tay:** `KIEM_TRA_T4.md` (có phần thử với AI thật nếu đã có khóa).
 
-### T5 · AI chấm theo rubric (v130)
+### T5 · AI chấm theo rubric (v131; v130 = giáo viên tự quyết cấu trúc, spec mục 61)
 - `server/src/taobai/cham.ts`: lượt gọi riêng chấm một bài theo file chung 4 (trả JSON tiêu chí + lý do); chấm Cả phiếu (phủ kiến thức, độ khó tăng dần).
 - Gộp vào phần Kiểm tra (nhóm "AI chấm theo rubric"), nút "Chấm lại"; lưu điểm vào nhật ký (không hiện cho giáo viên).
 - Chế độ AI ngoài: đoạn nhắc chấm để chép.

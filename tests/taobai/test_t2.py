@@ -89,7 +89,7 @@ with sync_playwright() as p:
     # đúng dạng / đủ số câu theo cấu trúc
     pg.evaluate("__ws.commit(w=>{w.tasks[6].gen.q='Q4';w.tasks[6].gen.n=5})"); pg.wait_for_timeout(200)
     open_task(pg, 6); c = pg.evaluate(CK)
-    chk('cấu trúc Q4 · 5 câu mà bài là Q3 · 2 câu → 2 tiêu chí chưa đạt', c and c['bad'] == ['dang', 'socau'] and 'cấu trúc là Q4, bài đang là Q3' in c['txt'] and 'bài có 2' in c['txt'], c)
+    chk('cấu trúc Q4 mà bài là Q3 → "Đúng dạng" chưa đạt; số câu khác cấu trúc (5 vs 2) KHÔNG bị chấm', c and c['bad'] == ['dang'] and 'cấu trúc là Q4, bài đang là Q3' in c['txt'] and 'socau' not in c['txt'] and 'Đủ số câu' not in c['txt'], c)
     # sửa → kiểm lại ngay
     pg.evaluate("__ws.commit(w=>{w.tasks[0].content.items[2].key='were'})"); pg.wait_for_timeout(200)
     open_task(pg, 0); c = pg.evaluate(CK)
@@ -100,7 +100,7 @@ with sync_playwright() as p:
     pg.evaluate("__ws.commit(w=>{w.tasks[6].content.items[0].text='Where were you yesterday?';w.gen.maxPages=1})"); pg.wait_for_timeout(250)
     c = pg.evaluate("()=>{const e=document.getElementById('tbSheetChecks');return {bad:[...e.querySelectorAll('.tbkl.bad li')].map(l=>l.dataset.ck),txt:e.innerText}}")
     pages = pg.evaluate("__ws.res.pages.length")
-    chk('Cả phiếu: câu lặp giữa bài 5 và 7 bị bắt; số trang > tối đa 1 bị bắt', 's_lap' in c['bad'] and ('s_trang' in c['bad']) == (pages > 1) and 'bài 5, 7' in c['txt'], [c, pages])
+    chk('Cả phiếu: câu lặp giữa bài 5 và 7 bị bắt; số trang không còn là tiêu chí', 's_lap' in c['bad'] and 's_trang' not in c['bad'] and 'Số trang' not in c['txt'] and 'bài 5, 7' in c['txt'], [c, pages])
     pg.click('#tbPub'); pg.wait_for_timeout(200)
     chk('Xuất bản nhắc cả tiêu chí Cả phiếu chưa đạt', pg.is_visible('#tbPubDlg') and 'Các bài không lặp câu' in pg.inner_text('#tbPubSheet'))
     pg.click('#tbPubCancel'); pg.wait_for_timeout(100)

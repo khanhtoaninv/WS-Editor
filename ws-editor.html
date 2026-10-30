@@ -20535,12 +20535,10 @@ function slotsInView(root) {
 var NAME = {
 	doc: "MD đọc được, không lỗi",
 	dang: "Đúng dạng câu hỏi",
-	socau: "Đủ số câu theo cấu trúc",
 	dapan: "Mỗi câu có đáp án",
 	duynhat: "Đáp án duy nhất",
 	trung: "Không trùng câu trong bài",
 	tran: "Không tràn trang",
-	s_trang: "Số trang trong giới hạn",
 	s_lap: "Các bài không lặp câu",
 	s_tran: "Không Task nào tràn trang"
 };
@@ -20569,10 +20567,6 @@ function checkTask(t) {
 	if (g.mdNotes && g.mdNotes.length) out.push(mk("doc", false, g.mdNotes.slice(0, 3).join(" · ")));
 	else if (g.md) out.push(mk("doc", true));
 	if (g.q) out.push(mk("dang", g.q === q, `cấu trúc là ${g.q}, bài đang là ${q}`));
-	if (g.n) {
-		const n = countOf(t);
-		out.push(mk("socau", n === g.n, `cấu trúc ${g.n} ${q === "Q12" ? "dòng" : "câu"}, bài có ${n}`));
-	}
 	const free = q === "Q12" || q === "Q9" || isFreeW(t) || t.answer?.kind === "none";
 	let r = null;
 	try {
@@ -20622,8 +20616,7 @@ function checkTask(t) {
 }
 /** Tiêu chí cả phiếu đo được bằng code. */
 function checkSheet(w) {
-	const out = [], res = L.lastRes, max = w.gen && w.gen.maxPages || 2;
-	if (res) out.push(mk("s_trang", res.pages.length <= max, `${res.pages.length} trang, tối đa ${max}`));
+	const out = [], res = L.lastRes;
 	const where = {}, txt = {};
 	(w.tasks || []).filter((t) => t.gen).forEach((t, i) => realItems(t).forEach((x) => {
 		const k = norm(textOf$2(x));
@@ -24519,7 +24512,7 @@ function khoTuFile(files, chung = []) {
 	};
 }
 // ../shared/src/taobai/nhac.ts
-var NHAC_VER = "nhac-1";
+var NHAC_VER = "nhac-2";
 /** Mục "## Qn …" của file chung 2 (chỉ gửi mục của dạng được giao: S2). */
 function mucQ(chung2, q) {
 	if (!chung2) return "";
@@ -24559,11 +24552,11 @@ function dungNhac(v) {
 	P.push(`## Kiến thức của lesson\n${(L.kienThuc?.raw || "(chưa có)").trim()}`);
 	P.push([
 		"## Trình tự của chuyên đề",
-		buoc ? `Bài này thuộc:\n${buocChu(buoc)}` : "",
+		buoc ? `Bài này thuộc:\n${buocChu(buoc)}\n(Số câu và dạng ở trên là điều giáo viên đã quyết cho bài này; "Dạng được phép" và "Số câu" của bước chỉ là gợi ý.)` : it.step === 0 ? "Đây là BÀI TỰ DO do giáo viên thêm, không thuộc bước nào của Trình tự: viết theo dạng, số câu và yêu cầu riêng ở phần \"BÀI CẦN VIẾT\"." : "",
 		L.trinhTu?.nguyenTac ? `Nguyên tắc chung:\n${L.trinhTu.nguyenTac}` : ""
 	].filter(Boolean).join("\n\n"));
 	P.push(tf.length ? `## Dạng bài (TF) cho ${q}\n${tf.length > 1 ? "Chọn MỘT dạng hợp với bước nhất.\n\n" : ""}${tf.map((d) => d.raw.replace(/^##\s*/, "### ")).join("\n\n")}` : `## Dạng bài (TF)\nTF chưa có dạng nào cho ${q}: viết theo mô tả dạng ${q} ở trên.`);
-	P.push(`## Cấu trúc cả phiếu (${v.cauTruc.length} bài)\n` + v.cauTruc.map((x, i) => `- Bài ${i + 1} · Bước ${x.step}${x.role ? ` (${x.role})` : ""} · ${x.q} ${Q_NAME[x.q]} · ${x.n} ${qUnit(x.q)}${i === v.k ? "  ← BÀI NÀY" : ""}`).join("\n"));
+	P.push(`## Cấu trúc cả phiếu (${v.cauTruc.length} bài)\n` + v.cauTruc.map((x, i) => `- Bài ${i + 1} · ${x.step === 0 ? "Bài tự do" : `Bước ${x.step}${x.role ? ` (${x.role})` : ""}`} · ${x.q} ${Q_NAME[x.q]} · ${x.n} ${qUnit(x.q)}${x.yc ? ` · yêu cầu: ${x.yc}` : ""}${i === v.k ? "  ← BÀI NÀY" : ""}`).join("\n"));
 	const da = (v.daCo || []).filter((b) => b.so !== so);
 	if (da.length) P.push(`## Các bài đã viết trong phiếu (không lặp câu, chọn ngữ cảnh khác)\n` + da.map((b) => `- Bài ${b.so} (${b.q}) “${b.title}”${b.ctx ? ` · ngữ cảnh: ${b.ctx}` : ""}${b.cau.length ? `\n  ${b.cau.slice(0, 3).join(" / ")}` : ""}`).join("\n"));
 	if (v.ghiChu && v.ghiChu.trim()) P.push(`## Ghi chú của giáo viên cho cả phiếu\n${v.ghiChu.trim()}`);
@@ -24572,7 +24565,8 @@ function dungNhac(v) {
 		P.push(v.gopY && v.gopY.trim() ? `## Góp ý của giáo viên (phải làm theo)\n${v.gopY.trim()}\nViết lại bài theo góp ý; giữ đúng dạng và số ${unit}; phần góp ý không nhắc tới thì giữ như bản hiện tại nếu đã tốt.` : "## Yêu cầu sinh lại\nViết một bản MỚI khác bản hiện tại (câu và ngữ cảnh khác), vẫn đúng bước, dạng và số câu.");
 	}
 	P.push(`## BÀI CẦN VIẾT: Bài ${so} · ${q} ${Q_NAME[q]} · ${n} ${unit}\n` + [
-		`Viết Bài ${so} của phiếu: dạng ${q} (${Q_NAME[q]}), ${q === "Q12" ? `Dòng viết: ${n} (không có câu đánh số)` : `đúng ${n} câu đánh số 1–${n}`}.`,
+		`Viết Bài ${so} của phiếu: dạng ${q} (${Q_NAME[q]}), ${q === "Q12" ? `Dòng viết: ${n} (không có câu đánh số)` : `${n} câu đánh số 1–${n}`} (số giáo viên đã chọn).`,
+		it.yc && it.yc.trim() ? `YÊU CẦU RIÊNG CỦA GIÁO VIÊN CHO BÀI NÀY (phải làm theo): ${it.yc.trim()}` : "",
 		buoc ? `Bài phục vụ bước "${buoc.ten}"${buoc.vaiTro ? ` (${buoc.vaiTro})` : ""}${buoc.chiTiet ? `; ${buoc.chiTiet}` : ""}.` : "",
 		tf.length ? `Tiêu đề "## Task:" dùng câu lệnh tiếng Anh theo "Hướng dẫn mẫu" của dạng TF đã chọn (sửa nhẹ cho khớp nội dung nếu cần).` : "",
 		"Ngay dưới \"## Task:\" ghi \"Mục tiêu:\" (một câu tiếng Việt) và \"Ngữ cảnh:\" (vài chữ)."
@@ -24748,10 +24742,14 @@ async function goi(path, o = {}) {
 }
 // src/taobai/plan.ts
 var plan_exports = /* @__PURE__ */ __exportAll({
+	ALL_Q: () => ALL_Q,
+	MAX_N: () => 50,
+	TU_DO: () => TU_DO,
 	add: () => add,
 	canAdd: () => canAdd,
 	canDel: () => canDel,
 	del: () => del,
+	ext: () => ext,
 	fakeSheetMd: () => fakeSheetMd,
 	fakeTaskMd: () => fakeTaskMd,
 	flat: () => flat$1,
@@ -24762,10 +24760,41 @@ var plan_exports = /* @__PURE__ */ __exportAll({
 	rnd: () => rnd,
 	sameAdj: () => sameAdj,
 	setN: () => setN,
+	setNTo: () => setNTo,
 	setQ: () => setQ,
+	setYc: () => setYc,
 	titleOf: () => titleOf,
 	toStructure: () => toStructure
 });
+var ALL_Q = [
+	"Q1",
+	"Q2",
+	"Q3",
+	"Q4",
+	"Q5",
+	"Q6",
+	"Q7",
+	"Q8",
+	"Q9",
+	"Q10",
+	"Q11",
+	"Q12"
+];
+/** Nhóm cuối của cấu trúc: bài tự do, không thuộc bước nào của Trình tự (step = 0). */
+var TU_DO = {
+	so: 0,
+	ten: "Bài tự do",
+	vaiTro: "",
+	q: ALL_Q,
+	min: 1,
+	max: 10,
+	batBuoc: false,
+	toiDa: 99,
+	chiTiet: "",
+	them: ""
+};
+/** Danh sách bước + nhóm bài tự do ở cuối (idempotent). */
+var ext = (steps) => steps.length && steps[steps.length - 1].so === 0 ? steps : [...steps, TU_DO];
 var rnd = () => {
 	const f = globalThis.__tbRand;
 	return typeof f === "function" ? f() : Math.random();
@@ -24792,35 +24821,33 @@ var neighbors = (p, si, ti) => {
 /** Đề xuất cấu trúc. last: dạng Q của phiếu gần nhất cùng lesson, theo bước (để ưu tiên khác đi). */
 function propose(steps, last = [], r = rnd) {
 	let prev;
-	return steps.map((b, i) => {
+	return [...steps.map((b, i) => {
 		const q = pickQ(b.q, [prev], last[i] || [], r);
 		prev = q;
 		return [{
 			q,
 			n: randN(b, r)
 		}];
-	});
+	}), []];
 }
 function reroll(p, steps, si, ti, r = rnd) {
 	const n = p.map((x) => x.map((y) => ({ ...y }))), cur = n[si][ti];
-	const nb = neighbors(n, si, ti), others = steps[si].q.filter((q) => q !== cur.q);
+	const nb = neighbors(n, si, ti), others = ext(steps)[si].q.filter((q) => q !== cur.q);
 	cur.q = others.length ? pickQ(others, nb, [], r) : cur.q;
 	return n;
 }
-var canAdd = (p, steps, si) => p[si].length < steps[si].toiDa;
-var canDel = (p, steps, si) => p[si].length > (steps[si].batBuoc ? 1 : 0);
+var canAdd = (_p, _steps, _si) => true;
+var canDel = (_p, _steps, _si) => true;
 function add(p, steps, si, r = rnd) {
-	if (!canAdd(p, steps, si)) return p;
-	const n = p.map((x) => x.map((y) => ({ ...y }))), b = steps[si], f = flat$1(n);
+	const n = p.map((x) => x.map((y) => ({ ...y }))), b = ext(steps)[si], f = flat$1(n);
 	const before = [...f].reverse().find((x) => x.si <= si)?.q, after = f.find((x) => x.si > si)?.q;
 	n[si].push({
 		q: pickQ(b.q, [before, after], [], r),
-		n: randN(b, r)
+		n: b.so === 0 ? 5 : randN(b, r)
 	});
 	return n;
 }
-function del(p, steps, si, ti) {
-	if (!canDel(p, steps, si)) return p;
+function del(p, _steps, si, ti) {
 	const n = p.map((x) => x.map((y) => ({ ...y })));
 	n[si].splice(ti, 1);
 	return n;
@@ -24830,24 +24857,49 @@ function setQ(p, si, ti, q) {
 	n[si][ti].q = q;
 	return n;
 }
-function setN(p, steps, si, ti, d) {
-	const n = p.map((x) => x.map((y) => ({ ...y }))), b = steps[si], t = n[si][ti];
-	t.n = Math.max(b.min, Math.min(b.max, t.n + d));
+var clampN$1 = (v) => Math.max(1, Math.min(50, Math.round(v) || 1));
+/** Đổi số câu: d = +1 / −1 (nút), hoặc đặt thẳng giá trị (ô gõ số). */
+function setN(p, _steps, si, ti, d) {
+	const n = p.map((x) => x.map((y) => ({ ...y }))), t = n[si][ti];
+	t.n = clampN$1(t.n + d);
+	return n;
+}
+function setNTo(p, si, ti, v) {
+	const n = p.map((x) => x.map((y) => ({ ...y })));
+	n[si][ti].n = clampN$1(v);
+	return n;
+}
+function setYc(p, si, ti, yc) {
+	const n = p.map((x) => x.map((y) => ({ ...y })));
+	if (yc.trim()) n[si][ti].yc = yc;
+	else delete n[si][ti].yc;
 	return n;
 }
 /** Cấu trúc đã duyệt (ws.gen.structure). */
-var toStructure = (p, steps) => flat$1(p).map((x) => ({
-	step: steps[x.si].so,
-	role: steps[x.si].vaiTro,
-	q: x.q,
-	n: x.n,
-	...steps[x.si].chiTiet ? { extra: steps[x.si].chiTiet } : {}
-}));
-/** Cấu trúc đã lưu → Plan (khi quay lại Ra đề). Bài có số câu ngoài khoảng hiện tại thì kẹp lại. */
+var toStructure = (p, steps) => {
+	const S = ext(steps);
+	return flat$1(p).map((x) => {
+		const yc = p[x.si][x.ti].yc;
+		return {
+			step: S[x.si].so,
+			role: S[x.si].so === 0 ? "Bài tự do" : S[x.si].vaiTro,
+			q: x.q,
+			n: x.n,
+			...S[x.si].chiTiet ? { extra: S[x.si].chiTiet } : {},
+			...yc ? { yc } : {}
+		};
+	});
+};
+/** Cấu trúc đã lưu → Plan (khi quay lại Ra đề). Giữ nguyên quyết định của giáo viên; bài thuộc bước không còn trong Trình tự rơi vào "Bài tự do". */
 function fromStructure(st, steps) {
-	return steps.map((b) => st.filter((x) => x.step === b.so).slice(0, b.toiDa).map((x) => ({
-		q: b.q.includes(x.q) ? x.q : b.q[0],
-		n: Math.max(b.min, Math.min(b.max, x.n))
+	const S = ext(steps), at = (x) => {
+		const i = S.findIndex((b) => b.so === x.step);
+		return i < 0 ? S.length - 1 : i;
+	};
+	return S.map((_b, si) => st.filter((x) => at(x) === si).map((x) => ({
+		q: x.q,
+		n: x.n,
+		...x.yc ? { yc: x.yc } : {}
 	})));
 }
 /** Hai bài liền nhau cùng Q (giáo viên tự chọn thì cho phép, chỉ để nhắc). */
@@ -24972,12 +25024,12 @@ function fakeTaskMd(q, n, title, extra = "", seed = 0) {
 }
 /** MD cả phiếu giả theo cấu trúc. */
 function fakeSheetMd(p, tt, tf, title = "Layout sơ bộ", age = "7-9") {
-	const steps = tt.buoc;
+	const steps = ext(tt.buoc);
 	return [
 		`# ${title}`,
 		`Tuổi: ${age}`,
 		"",
-		...flat$1(p).map((x, k) => fakeTaskMd(x.q, x.n, titleOf(x.q, tf, `Bước ${steps[x.si].so} · ${steps[x.si].ten}`), steps[x.si].chiTiet, k + 1) + "\n")
+		...flat$1(p).map((x, k) => fakeTaskMd(x.q, x.n, titleOf(x.q, tf, steps[x.si].so === 0 ? "Bài tự do" : `Bước ${steps[x.si].so} · ${steps[x.si].ten}`), steps[x.si].chiTiet, k + 1) + "\n")
 	].join("\n");
 }
 // src/taobai/ThietLap.tsx
@@ -26195,10 +26247,6 @@ function docKetQua(raw, g) {
 	}
 	const t = r0.t, q = qOf$3(t);
 	if (q !== g.q) loi.push(`sai dạng: cần ${g.q} ${Q_NAME[g.q]} (dòng “Dạng:” đúng dạng này), app đọc ra ${q} ${Q_NAME[q] || ""}`.trim());
-	else {
-		const n = countOf(t);
-		if (n !== g.n) loi.push(g.q === "Q12" ? `sai số dòng viết: cần “Dòng viết: ${g.n}”, bài có ${n}` : `sai số câu: cần đúng ${g.n} câu đánh số, bài có ${n} câu`);
-	}
 	(r0.notes || []).forEach((x) => (/^đáp án có \d+ dòng/.test(x) ? loi : nhe).push(x));
 	(J.mdNotes || []).forEach((x) => nhe.push(x));
 	if (q === g.q) {
@@ -26248,7 +26296,8 @@ async function vaoNhac(id, o = {}) {
 			step: x.gen.step,
 			role: x.gen.role || "",
 			q: x.gen.q || qOf$3(x),
-			n: x.gen.n || countOf(x)
+			n: x.gen.n || countOf(x),
+			...x.gen.yc ? { yc: x.gen.yc } : {}
 		})),
 		k,
 		ghiChu: w.gen.note || "",
@@ -26638,7 +26687,7 @@ function RaDeScreen() {
 		sel.ls
 	]);
 	const gt = src?.giaoTrinh.find((g) => g.id === sel.gt), unit = gt?.units.find((u) => u.id === sel.unit);
-	const steps = les?.trinhTu?.buoc || [];
+	const steps = les?.trinhTu?.buoc || [], stepsX = ext(steps);
 	const edit = (p) => {
 		setPlan(p);
 		setDirty(true);
@@ -26663,7 +26712,7 @@ function RaDeScreen() {
 		const md = fakeSheetMd(plan, les.trinhTu, les.tf, "Layout sơ bộ", les.giaoTrinh.tuoi || "7-9");
 		return L.previewPages ? L.previewPages(impSheetObj(readMd(md))) : null;
 	}, [plan, les]);
-	const nb = flat$1(plan).length, maxP = les?.trinhTu?.soTrangToiDa || 2, nP = pv ? pv.pages.length : 0;
+	const nb = flat$1(plan).length, nP = pv ? pv.pages.length : 0;
 	const sinh = async () => {
 		if (!les || !les.trinhTu || !nb) return;
 		await sinhBai(les, plan, ghiChu);
@@ -26904,7 +26953,7 @@ function RaDeScreen() {
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", { children: "Cấu trúc bài" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
 								className: "tbmut",
 								children: [
-									"Theo Trình tự ",
+									"Đề xuất ban đầu theo Trình tự ",
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("b", { children: [
 										les.chuyenDe.ten,
 										" v",
@@ -26912,7 +26961,7 @@ function RaDeScreen() {
 									] }),
 									" · TF v",
 									les.tf?.ver,
-									". Mỗi bước đã chọn sẵn một dạng; đổi hoặc thêm nếu chưa ưng."
+									". Sau đó bạn tự quyết: đổi dạng, đổi số câu, thêm / xóa bài, thêm bài tự do; AI viết theo đúng cấu trúc bạn chọn."
 								]
 							})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 								className: "btn",
@@ -26924,40 +26973,28 @@ function RaDeScreen() {
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							className: "rdsteps",
-							children: steps.map((b, si) => {
-								const ts = plan[si] || [], k0 = flat$1(plan).findIndex((x) => x.si === si);
+							children: stepsX.map((b, si) => {
+								const ts = plan[si] || [], k0 = flat$1(plan).findIndex((x) => x.si === si), tuDo = b.so === 0;
 								return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "rdstep" + (ts.length ? "" : " empty"),
+									className: "rdstep" + (ts.length ? "" : " empty") + (tuDo ? " free" : ""),
 									"data-step": si,
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "rdsh",
 											children: [
-												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("b", { children: [
-													"Bước ",
-													b.so,
-													" · ",
-													b.ten
-												] }),
-												b.chiTiet ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("b", { children: tuDo ? "Bài tự do" : `Bước ${b.so} · ${b.ten}` }),
+												tuDo ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "tbmut",
+													children: "· không thuộc bước nào của Trình tự, nằm cuối phiếu"
+												}) : b.chiTiet ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 													className: "tbmut",
 													children: ["· ", b.chiTiet]
 												}) : null,
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "sp" }),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-													className: "tbmut",
-													children: [
-														b.batBuoc ? "bắt buộc" : "không bắt buộc",
-														" · tối đa ",
-														b.toiDa,
-														" bài"
-													]
-												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 													className: "btn sm rdplus",
 													"data-add": si,
-													title: canAdd(plan, steps, si) ? "Thêm bài" : "Đã đủ số bài tối đa",
-													disabled: !canAdd(plan, steps, si),
+													title: tuDo ? "Thêm bài tự do" : "Thêm bài vào bước này",
 													onClick: () => edit(add(plan, steps, si)),
 													children: "+"
 												})
@@ -26965,7 +27002,7 @@ function RaDeScreen() {
 										}),
 										!ts.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 											className: "rdskip",
-											children: "Bỏ qua bước này · bấm + để thêm bài"
+											children: tuDo ? "Chưa có bài tự do · bấm + để thêm" : "Bỏ qua bước này · bấm + để thêm bài"
 										}) : null,
 										ts.map((t, ti) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "rdrow",
@@ -26979,14 +27016,34 @@ function RaDeScreen() {
 													value: t.q,
 													"aria-label": "Dạng câu hỏi",
 													onChange: (e) => edit(setQ(plan, si, ti, e.target.value)),
-													children: b.q.map((q) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("option", {
+													children: tuDo ? ALL_Q.map((q) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("option", {
 														value: q,
 														children: [
 															q,
 															" ",
 															Q_NAME[q]
 														]
-													}, q))
+													}, q)) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("optgroup", {
+														label: "Theo Trình tự",
+														children: b.q.map((q) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("option", {
+															value: q,
+															children: [
+																q,
+																" ",
+																Q_NAME[q]
+															]
+														}, q))
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("optgroup", {
+														label: "Dạng khác",
+														children: ALL_Q.filter((q) => !b.q.includes(q)).map((q) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("option", {
+															value: q,
+															children: [
+																q,
+																" ",
+																Q_NAME[q]
+															]
+														}, q))
+													})] })
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 													className: "rdcnt",
@@ -26995,52 +27052,63 @@ function RaDeScreen() {
 															className: "btn sm",
 															"data-dn": "-1",
 															"aria-label": "Bớt",
-															disabled: t.n <= b.min,
+															disabled: t.n <= 1,
 															onClick: () => edit(setN(plan, steps, si, ti, -1)),
 															children: "−"
 														}),
-														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+															className: "rdnum",
+															type: "number",
+															min: 1,
+															max: 50,
+															"aria-label": `Số ${qUnit(t.q)}`,
+															value: t.n,
+															onChange: (e) => {
+																const v = parseInt(e.target.value, 10);
+																if (v >= 1) edit(setNTo(plan, si, ti, v));
+															}
+														}),
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 															className: "rdnv",
-															children: [
-																t.n,
-																" ",
-																qUnit(t.q)
-															]
+															children: qUnit(t.q)
 														}),
 														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 															className: "btn sm",
 															"data-dn": "1",
 															"aria-label": "Thêm",
-															disabled: t.n >= b.max,
+															disabled: t.n >= 50,
 															onClick: () => edit(setN(plan, steps, si, ti, 1)),
 															children: "+"
 														})
 													]
 												}),
-												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												!tuDo && b.min > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 													className: "tbmut",
-													children: [
-														b.min,
-														"–",
-														b.max
-													]
-												}),
+													title: "Gợi ý của Trình tự, không bắt buộc",
+													children: ["gợi ý ", b.min === b.max ? b.min : `${b.min}–${b.max}`]
+												}) : null,
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "sp" }),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 													className: "btn sm ghost",
 													"data-rr": "1",
 													title: "Đổi dạng ngẫu nhiên",
-													disabled: b.q.length < 2,
 													onClick: () => edit(reroll(plan, steps, si, ti)),
 													children: "⟳"
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 													className: "btn sm ghost",
 													"data-del": "1",
-													disabled: !canDel(plan, steps, si),
-													title: canDel(plan, steps, si) ? "Xóa bài" : "Bước bắt buộc phải có ít nhất 1 bài",
+													title: "Xóa bài",
 													onClick: () => edit(del(plan, steps, si, ti)),
 													children: "✕"
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+													className: "rdyc",
+													type: "text",
+													"aria-label": "Yêu cầu riêng cho bài này",
+													placeholder: tuDo ? "Bạn muốn bài này viết về gì? (vd: đọc đoạn văn về gia đình, 60 từ)" : "Yêu cầu riêng cho bài này (không bắt buộc)",
+													value: t.yc || "",
+													onChange: (e) => edit(setYc(plan, si, ti, e.target.value))
 												})
 											]
 										}, ti))
@@ -27095,15 +27163,11 @@ function RaDeScreen() {
 									children: [
 										nb,
 										" bài · ",
-										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-											className: nP > maxP ? "bad" : "",
-											children: [
-												"ước tính ",
-												nP,
-												" trang",
-												nP > maxP ? ` (vượt tối đa ${maxP})` : ` / tối đa ${maxP}`
-											]
-										})
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
+											"ước tính ",
+											nP,
+											" trang"
+										] })
 									]
 								})
 							]
@@ -27111,7 +27175,7 @@ function RaDeScreen() {
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							className: "rdpages",
 							children: pv && pv.pages.map((h, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "rdpg" + (i >= maxP ? " over" : ""),
+								className: "rdpg",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 									className: "rdpgs",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -27165,6 +27229,7 @@ function frameTasks(l, plan) {
 			role: st[k].role,
 			q: st[k].q,
 			n: st[k].n,
+			...st[k].yc ? { yc: st[k].yc } : {},
 			status: "wait",
 			checks: [],
 			history: []
@@ -27199,7 +27264,6 @@ function genOf(l, st, note, old) {
 		},
 		structure: st,
 		note,
-		maxPages: l.trinhTu?.soTrangToiDa || 2,
 		sheetChecks: old?.sheetChecks || [],
 		history: old?.history || []
 	};
@@ -27210,7 +27274,7 @@ function merge(oldTasks, fresh, st) {
 	let kept = 0;
 	return {
 		tasks: st.map((x, k) => {
-			const o = oldTasks.find((t) => !used.has(t) && t.gen && t.gen.step === x.step && t.gen.q === x.q && t.gen.n === x.n);
+			const o = oldTasks.find((t) => !used.has(t) && t.gen && t.gen.step === x.step && t.gen.q === x.q && t.gen.n === x.n && (t.gen.yc || "") === (x.yc || ""));
 			if (o) {
 				used.add(o);
 				kept++;
@@ -28194,7 +28258,7 @@ function TopBar() {
 							padding: "1px 7px",
 							marginLeft: 4
 						},
-						children: "v129"
+						children: "v130"
 					}),
 					" ",
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("small", {
@@ -46644,6 +46708,8 @@ html.tbans #stage .vok:not(.opt):not(span){color:#d9570b}
 .rdsh,.rdrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.rdsh .sp,.rdrow .sp{flex:1}
 .rdn{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:5px;background:var(--accent);color:var(--panel);font-weight:600;font-size:12px}
 .rdcnt{display:inline-flex;align-items:center;gap:4px}.rdnv{min-width:54px;text-align:center}
+.rdnum{width:54px;text-align:center;border:1px solid var(--line);border-radius:6px;padding:3px 4px;font:inherit}.rdnv{min-width:0;text-align:left}
+.rdyc{flex:1 1 100%;border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit;font-size:12px}.rdstep.free{background:rgba(120,120,160,.06)}
 .rdskip{color:var(--muted);font-style:italic;font-size:12.5px}
 .rdgo{padding:8px}
 .rdpvh{display:flex;align-items:center;gap:8px}.rdpvh .bad{color:#c2410c;font-weight:600}

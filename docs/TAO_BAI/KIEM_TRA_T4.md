@@ -40,4 +40,16 @@ Mở **qua máy chủ**: bấm đúp `chay-lop.bat` (hoặc `npm run lop`) → t
 | 22 | ☰ › Kho phiếu | Phiếu vừa sinh có trong kho (tự lưu khi sinh xong); **Mở** / **Bỏ** |
 | 23 | Thử cả **Haiku 5.5** cho cùng lesson | So chất lượng (ghi lại cho T6) |
 
+## Phần 4 · Tự quyết cấu trúc (v130, không cần khóa)
+
+| # | Làm | Mong đợi |
+|---|---|---|
+| 24 | Ra đề › Lesson 2: ở một bước bấm **+** nhiều lần | Thêm bao nhiêu bài cũng được; ✕ xóa được cả bước "bắt buộc" |
+| 25 | Gõ thẳng số câu (vd 12) hoặc dùng − / + | Nhận 1–50; "gợi ý 5–6" chỉ là nhắc, không chặn |
+| 26 | Mở ô chọn dạng | Nhóm "Theo Trình tự" trước, "Dạng khác" sau: đủ 12 dạng |
+| 27 | Cuối danh sách, nhóm **Bài tự do** › **+** | Thêm bài không thuộc bước nào, chọn dạng, số câu, ghi "yêu cầu riêng" |
+| 28 | Layout sơ bộ khi phiếu dài | Chỉ ghi "ước tính k trang", không đỏ, không báo vượt |
+| 29 | Sinh bài › ngăn Duyệt › Chép đoạn nhắc | Có "YÊU CẦU RIÊNG…" của bài; bài tự do ghi "BÀI TỰ DO…"; số câu đúng số bạn chọn |
+| 30 | Dán bản AI viết thừa / thiếu câu | Không bị báo lỗi số câu, không bị gửi lại |
+
 **Góp ý cho quy tắc sinh bài**: ghi theo mã ở `QUY_TAC_SINH_BAI.md` (vd "S9: 3 bài đầu trùng ngữ cảnh", "S17: thiếu Ngữ cảnh nên gửi lại"). Nếu được, gửi kèm phiếu (Xem JSON) và vài dòng nhật ký `server/du-lieu/tao-bai/nhat-ky.jsonl` (model, token, số lượt; không có khóa).

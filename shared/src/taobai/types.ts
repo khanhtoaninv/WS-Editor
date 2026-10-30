@@ -78,7 +78,7 @@ export interface ChiTietLesson {
 // ---------- Dữ liệu gắn vào phiếu (ws.gen, task.gen) — đặc tả mục 9.1 ----------
 
 /** Một bài trong cấu trúc đã duyệt. */
-export interface GenStructItem { step: number; role: string; q: QCode; n: number; extra?: string }
+export interface GenStructItem { step: number; role: string; q: QCode; n: number; extra?: string; yc?: string }  // step 0 = bài tự do; yc = yêu cầu riêng của giáo viên
 export interface GenCheck { id: string; group: 'may' | 'ai'; ok: boolean; why?: string; items?: number[] }
 export interface GenSnap<T> { at: string; note?: string; snap: T }
 

@@ -998,6 +998,8 @@ html.tbans #stage .vok:not(.opt):not(span){color:#d9570b}
 .rdsh,.rdrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.rdsh .sp,.rdrow .sp{flex:1}
 .rdn{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:5px;background:var(--accent);color:var(--panel);font-weight:600;font-size:12px}
 .rdcnt{display:inline-flex;align-items:center;gap:4px}.rdnv{min-width:54px;text-align:center}
+.rdnum{width:54px;text-align:center;border:1px solid var(--line);border-radius:6px;padding:3px 4px;font:inherit}.rdnv{min-width:0;text-align:left}
+.rdyc{flex:1 1 100%;border:1px solid var(--line);border-radius:6px;padding:4px 8px;font:inherit;font-size:12px}.rdstep.free{background:rgba(120,120,160,.06)}
 .rdskip{color:var(--muted);font-style:italic;font-size:12.5px}
 .rdgo{padding:8px}
 .rdpvh{display:flex;align-items:center;gap:8px}.rdpvh .bad{color:#c2410c;font-weight:600}

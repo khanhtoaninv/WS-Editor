@@ -64,3 +64,7 @@ Commit: v128 + v129 **chung một commit** (hai bản viết gối nhau, cùng s
 | `npm run test:lop` (lớp thử + Tạo bài T0–T4) | 21/21 |
 | `shared` node test + kiểm kiểu | 35/35; kiểm kiểu app + shared sạch |
 | Lớp thử trình duyệt (`tests/lop/run.sh`) | test_lop 18/18, test_cham 45/45, test_demo, test_live ALL OK |
+
+
+## Bổ sung 30/10/2026 · v130 (sau thử tay đầu tiên)
+Hai góp ý của người dùng: (1) trong Thiết lập / Kho phiếu không có nút quay lại soạn bài → thêm nút "← Quay lại soạn bài" (commit 582ec4b). (2) Số câu, số bài, số trang không nên cứng: hệ thống chỉ đề xuất lần đầu, sau đó người dùng tự quyết (kể cả Task tự do), AI sinh theo; số trang bỏ hẳn → làm v130, spec mục 61, quy tắc S26–S29 (`QUY_TAC_SINH_BAI.md` phần H). T5 (AI chấm) dời sang v131.

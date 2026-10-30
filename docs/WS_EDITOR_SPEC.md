@@ -1016,3 +1016,14 @@ Quy tắc chi tiết (bản 1, Claude đề ra để thử, góp ý theo mã S1�
 - **Nhật ký** `tao-bai/nhat-ky.jsonl`: `ai` (model, token vào / ra, thời gian, bài, lượt, phiên bản đoạn nhắc), `ai-loi`, `app-sinh-xong`, `app-sinh-lai` (góp ý), `app-ai-ngoai`, `app-duyet` (có sửa tay không), `app-sinh-loi`. Không ghi khóa, không ghi đoạn nhắc.
 - Lớp tô vàng câu lỗi bỏ qua bài ⏳ (khung chữ xxx). Thanh trên: menu ☰ (Kho phiếu / ⚙ Thiết lập / Tạo bài) thay hai nút chữ của v128, khoảng cách giữa các mục 14 → 10 px: thanh vẫn một dòng ở 1440 px như v127 (đường chuẩn 120/120); phiếu tên dài vẫn làm thanh xuống dòng như trước (có sẵn từ v127).
 - Test `tests/taobai/test_t4_sinh.py` (máy chủ AI giả `ai_gia.py`: đúng / sai cú pháp / sai số câu ×3 / chậm / 429; sinh lại kèm góp ý; không ghi đè; Ra đề đổi một bài; Duyệt → Xuất bản; nhật ký; AI ngoài), `server/test/taobai-t4.test.ts` (đoạn nhắc, lượt gọi AI song song ≤ 3, lỗi 409 / 429 / 401).
+
+## 61. Tạo bài: giáo viên tự quyết cấu trúc (v130, 30/10/2026)
+
+Theo ý kiến thử tay: số câu, số bài, số trang không phải tiêu chí chất lượng; hệ thống chỉ đề xuất lần đầu, sau đó giáo viên quyết và AI sinh theo.
+- **Ra đề**: `plan.ts` bỏ giới hạn (`toiDa`, `batBuoc`, `min`–`max` của Trình tự chỉ còn là "gợi ý"). Mỗi bước thêm / xóa bài tùy ý (kể cả xóa hết); dạng Q chọn trong 12 dạng (nhóm "Theo Trình tự" trước, "Dạng khác" sau); số câu gõ thẳng hoặc − / + (1–`MAX_N`=50); ô **Yêu cầu riêng** mỗi bài (`PTask.yc`). Nhóm cuối **Bài tự do** (`TU_DO`, `step` = 0, `ext(steps)` thêm nhóm này; `Plan` có `steps.length + 1` nhóm). Layout sơ bộ: bỏ "tối đa N trang", bỏ viền đỏ trang thừa.
+- **Dữ liệu**: `GenStructItem.yc`, `task.gen.yc`; `ws.gen.maxPages` không còn ghi (phiếu cũ có thì bỏ qua). `fromStructure` không kẹp lại; bước không còn trong Trình tự rơi vào Bài tự do. `merge` coi đổi `yc` là bài đổi.
+- **Máy kiểm**: bỏ `socau` (Đủ số câu theo cấu trúc) và `s_trang` (Số trang trong giới hạn). Vẫn giữ: đúng dạng, đáp án, trùng câu, tràn trang của từng bài, không lặp giữa bài.
+- **Sinh bài**: bỏ lỗi "sai số câu / số dòng viết" khỏi các lỗi phải gửi lại (S14d). Đoạn nhắc `nhac-2`: "N câu (số giáo viên đã chọn)", "YÊU CẦU RIÊNG…", bài tự do, khoảng của bước chỉ là gợi ý. Quy tắc S26–S29 trong `docs/TAO_BAI/QUY_TAC_SINH_BAI.md`.
+- **Giao diện**: màn Thiết lập và Kho phiếu có nút "← Quay lại soạn bài" (trước chỉ có ✕).
+- **Test**: `tests/taobai/test_tu_quyet.py` (mới); `test_t2/t3/t4_sinh` sửa theo luật mới; `server/test/taobai-t4.test.ts` thêm đoạn nhắc bài tự do + yêu cầu riêng. Đường chuẩn không đổi (120/120).
+- **Chưa làm**: đổi thứ tự bài / đặt bài tự do giữa phiếu; AI chấm (T5, nay là v131).

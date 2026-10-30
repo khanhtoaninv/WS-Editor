@@ -59,7 +59,6 @@ export function docKetQua(raw: string, g: { q: QCode; n: number }): KetQua {
   const r0 = J.tasks[0]; if (!r0 || !r0.t) { loi.push((r0 && r0.err) || 'app không đọc được bài'); return out(null); }
   const t = r0.t, q = qOf(t);
   if (q !== g.q) loi.push(`sai dạng: cần ${g.q} ${Q_NAME[g.q]} (dòng “Dạng:” đúng dạng này), app đọc ra ${q} ${(Q_NAME as any)[q] || ''}`.trim());
-  else { const n = countOf(t); if (n !== g.n) loi.push(g.q === 'Q12' ? `sai số dòng viết: cần “Dòng viết: ${g.n}”, bài có ${n}` : `sai số câu: cần đúng ${g.n} câu đánh số, bài có ${n} câu`); }
   (r0.notes || []).forEach((x: string) => (/^đáp án có \d+ dòng/.test(x) ? loi : nhe).push(x));
   (J.mdNotes || []).forEach((x: string) => nhe.push(x));
   if (q === g.q) { const d = checkTask(Object.assign({}, t, { gen: {} })).find(c => c.id === 'dapan' && !c.ok); if (d) loi.push(`thiếu đáp án: ${d.why} (ghi ở “## Đáp án” → “### Task 1”, hoặc đúng cách của dạng)`); }
@@ -86,7 +85,7 @@ export async function vaoNhac(id: string, o: { gopY?: string; sinhLai?: boolean 
   const les = await lessonOf(w), t = a[k];
   const daCo: BaiDaCo[] = a.map((x: any, i: number) => ({ x, i })).filter(({ x }: any) => x.id !== id && x.gen.status !== 'wait' && x.gen.md)
     .map(({ x, i }: any) => ({ so: i + 1, q: qOf(x), title: x.title || '', ctx: x.gen.ctx, cau: its(x).filter((y: any) => !y.ex && !y.gt).slice(0, 3).map(textOf).filter(Boolean) }));
-  return { les, cauTruc: a.map((x: any) => ({ step: x.gen.step, role: x.gen.role || '', q: x.gen.q || qOf(x), n: x.gen.n || countOf(x) })), k, ghiChu: w.gen.note || '', daCo,
+  return { les, cauTruc: a.map((x: any) => ({ step: x.gen.step, role: x.gen.role || '', q: x.gen.q || qOf(x), n: x.gen.n || countOf(x), ...(x.gen.yc ? { yc: x.gen.yc } : {}) })), k, ghiChu: w.gen.note || '', daCo,
     ...(o.sinhLai ? { banHienTai: mdCua(t), gopY: o.gopY || '' } : {}) };
 }
 

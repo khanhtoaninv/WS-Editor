@@ -193,3 +193,15 @@ test('Lượt gọi AI: lỗi 429 / khóa sai → báo tiếng Việt, ghi nhậ
     const nk = readFileSync(join(data, 'tao-bai', 'nhat-ky.jsonl'), 'utf8'); assert.equal((nk.match(/"ev":"ai-loi"/g) || []).length, 2);
   } finally { delete process.env.LOP_AI_URL; await ai.close(); await close(); }
 });
+
+test('v130 giáo viên tự quyết: bài tự do (step 0), yêu cầu riêng, số câu ngoài khoảng gợi ý đều vào đoạn nhắc', () => {
+  const les = chiTietLesson(DATA_DIR, 'pinta-english-3', 'u5-l2')!;
+  const ct = [{ step: 1, role: 'nhận diện', q: 'Q4', n: 12, yc: 'chỉ dùng tên động vật' }, { step: 0, role: 'Bài tự do', q: 'Q2', n: 8, yc: 'viết về gia đình của em' }] as any;
+  const a = dungNhac({ les, cauTruc: ct, k: 0 });
+  assert.match(a.prompt, /BÀI CẦN VIẾT: Bài 1 · Q4 Chọn trong câu · 12 câu/); assert.match(a.prompt, /YÊU CẦU RIÊNG CỦA GIÁO VIÊN CHO BÀI NÀY \(phải làm theo\): chỉ dùng tên động vật/);
+  assert.match(a.prompt, /12 câu đánh số 1–12 \(số giáo viên đã chọn\)/); assert.ok(!/đúng 12 câu/.test(a.prompt), 'không còn "đúng N câu"');
+  assert.match(a.prompt, /chỉ là gợi ý/, 'khoảng của bước chỉ là gợi ý');
+  const b = dungNhac({ les, cauTruc: ct, k: 1 });
+  assert.match(b.prompt, /BÀI TỰ DO do giáo viên thêm/); assert.match(b.prompt, /- Bài 2 · Bài tự do · Q2 Viết câu · 8 câu · yêu cầu: viết về gia đình của em {2}← BÀI NÀY/);
+  assert.match(b.prompt, /YÊU CẦU RIÊNG[^\n]*viết về gia đình của em/); assert.ok(!/Bước 0/.test(b.prompt));
+});

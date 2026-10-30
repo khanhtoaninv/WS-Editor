@@ -64,7 +64,7 @@ function RaDeScreen() {
   }, [src, sel.gt, sel.ls]);
 
   const gt: GiaoTrinh | undefined = src?.giaoTrinh.find(g => g.id === sel.gt), unit = gt?.units.find(u => u.id === sel.unit);
-  const steps = les?.trinhTu?.buoc || [];
+  const steps = les?.trinhTu?.buoc || [], stepsX = P.ext(steps);
   const edit = (p: P.Plan) => { setPlan(p); setDirty(true); };
   const pick = async (s: Partial<Sel>) => {
     if (dirty && s.ls !== undefined && s.ls !== sel.ls && !(await askConfirm('Đổi lesson?', 'Cấu trúc đang chỉnh sẽ mất.', 'Đổi lesson'))) return;
@@ -78,7 +78,7 @@ function RaDeScreen() {
     const md = P.fakeSheetMd(plan, les.trinhTu, les.tf, 'Layout sơ bộ', les.giaoTrinh.tuoi || '7-9');
     return L.previewPages ? L.previewPages(impSheetObj(readMd(md))) : null;
   }, [plan, les]);
-  const nb = P.flat(plan).length, maxP = les?.trinhTu?.soTrangToiDa || 2, nP = pv ? pv.pages.length : 0;
+  const nb = P.flat(plan).length, nP = pv ? pv.pages.length : 0;
 
   const sinh = async () => {
     if (!les || !les.trinhTu || !nb) return;
@@ -119,19 +119,26 @@ function RaDeScreen() {
       <button className="btn sm" id="rdLoiTl" onClick={() => openThietLap(les.loi.some(n => /kien-thuc\//.test(n.file)) ? 'gt' : 'dang')}>Mở Thiết lập để nạp file</button></div> : null}
     {les && !les.loi.length && les.trinhTu ? <div className="rdmain">
       <section className="rdst" id="rdStruct">
-        <div className="rdsth"><div><h3>Cấu trúc bài</h3><p className="tbmut">Theo Trình tự <b>{les.chuyenDe.ten} v{les.trinhTu.ver}</b> · TF v{les.tf?.ver}. Mỗi bước đã chọn sẵn một dạng; đổi hoặc thêm nếu chưa ưng.</p></div>
+        <div className="rdsth"><div><h3>Cấu trúc bài</h3><p className="tbmut">Đề xuất ban đầu theo Trình tự <b>{les.chuyenDe.ten} v{les.trinhTu.ver}</b> · TF v{les.tf?.ver}. Sau đó bạn tự quyết: đổi dạng, đổi số câu, thêm / xóa bài, thêm bài tự do; AI viết theo đúng cấu trúc bạn chọn.</p></div>
           <button className="btn" id="rdReroll" title="Chọn lại toàn bộ dạng bài và số câu" onClick={() => edit(P.propose(steps, lastQs(les)))}>⟳ Đề xuất lại</button></div>
-        <div className="rdsteps">{steps.map((b, si) => { const ts = plan[si] || [], k0 = P.flat(plan).findIndex(x => x.si === si);
-          return <div className={'rdstep' + (ts.length ? '' : ' empty')} key={b.so} data-step={si}>
-            <div className="rdsh"><b>Bước {b.so} · {b.ten}</b>{b.chiTiet ? <span className="tbmut">· {b.chiTiet}</span> : null}<span className="sp" /><span className="tbmut">{b.batBuoc ? 'bắt buộc' : 'không bắt buộc'} · tối đa {b.toiDa} bài</span>
-              <button className="btn sm rdplus" data-add={si} title={P.canAdd(plan, steps, si) ? 'Thêm bài' : 'Đã đủ số bài tối đa'} disabled={!P.canAdd(plan, steps, si)} onClick={() => edit(P.add(plan, steps, si))}>+</button></div>
-            {!ts.length ? <div className="rdskip">Bỏ qua bước này · bấm + để thêm bài</div> : null}
+        <div className="rdsteps">{stepsX.map((b, si) => { const ts = plan[si] || [], k0 = P.flat(plan).findIndex(x => x.si === si), tuDo = b.so === 0;
+          return <div className={'rdstep' + (ts.length ? '' : ' empty') + (tuDo ? ' free' : '')} key={b.so} data-step={si}>
+            <div className="rdsh"><b>{tuDo ? 'Bài tự do' : `Bước ${b.so} · ${b.ten}`}</b>{tuDo ? <span className="tbmut">· không thuộc bước nào của Trình tự, nằm cuối phiếu</span> : b.chiTiet ? <span className="tbmut">· {b.chiTiet}</span> : null}<span className="sp" />
+              <button className="btn sm rdplus" data-add={si} title={tuDo ? 'Thêm bài tự do' : 'Thêm bài vào bước này'} onClick={() => edit(P.add(plan, steps, si))}>+</button></div>
+            {!ts.length ? <div className="rdskip">{tuDo ? 'Chưa có bài tự do · bấm + để thêm' : 'Bỏ qua bước này · bấm + để thêm bài'}</div> : null}
             {ts.map((t, ti) => <div className="rdrow" key={ti} data-row={`${si}.${ti}`}><span className="rdn">{k0 + ti + 1}</span>
-              <select value={t.q} aria-label="Dạng câu hỏi" onChange={e => edit(P.setQ(plan, si, ti, e.target.value as QCode))}>{b.q.map(q => <option key={q} value={q}>{q} {Q_NAME[q]}</option>)}</select>
-              <span className="rdcnt"><button className="btn sm" data-dn="-1" aria-label="Bớt" disabled={t.n <= b.min} onClick={() => edit(P.setN(plan, steps, si, ti, -1))}>−</button><span className="rdnv">{t.n} {qUnit(t.q)}</span><button className="btn sm" data-dn="1" aria-label="Thêm" disabled={t.n >= b.max} onClick={() => edit(P.setN(plan, steps, si, ti, 1))}>+</button></span>
-              <span className="tbmut">{b.min}–{b.max}</span><span className="sp" />
-              <button className="btn sm ghost" data-rr="1" title="Đổi dạng ngẫu nhiên" disabled={b.q.length < 2} onClick={() => edit(P.reroll(plan, steps, si, ti))}>⟳</button>
-              <button className="btn sm ghost" data-del="1" disabled={!P.canDel(plan, steps, si)} title={P.canDel(plan, steps, si) ? 'Xóa bài' : 'Bước bắt buộc phải có ít nhất 1 bài'} onClick={() => edit(P.del(plan, steps, si, ti))}>✕</button></div>)}
+              <select value={t.q} aria-label="Dạng câu hỏi" onChange={e => edit(P.setQ(plan, si, ti, e.target.value as QCode))}>
+                {tuDo ? P.ALL_Q.map(q => <option key={q} value={q}>{q} {Q_NAME[q]}</option>) : <>
+                  <optgroup label="Theo Trình tự">{b.q.map(q => <option key={q} value={q}>{q} {Q_NAME[q]}</option>)}</optgroup>
+                  <optgroup label="Dạng khác">{P.ALL_Q.filter(q => !b.q.includes(q)).map(q => <option key={q} value={q}>{q} {Q_NAME[q]}</option>)}</optgroup></>}
+              </select>
+              <span className="rdcnt"><button className="btn sm" data-dn="-1" aria-label="Bớt" disabled={t.n <= 1} onClick={() => edit(P.setN(plan, steps, si, ti, -1))}>−</button>
+                <input className="rdnum" type="number" min={1} max={P.MAX_N} aria-label={`Số ${qUnit(t.q)}`} value={t.n} onChange={e => { const v = parseInt(e.target.value, 10); if (v >= 1) edit(P.setNTo(plan, si, ti, v)); }} /><span className="rdnv">{qUnit(t.q)}</span>
+                <button className="btn sm" data-dn="1" aria-label="Thêm" disabled={t.n >= P.MAX_N} onClick={() => edit(P.setN(plan, steps, si, ti, 1))}>+</button></span>
+              {!tuDo && b.min > 0 ? <span className="tbmut" title="Gợi ý của Trình tự, không bắt buộc">gợi ý {b.min === b.max ? b.min : `${b.min}–${b.max}`}</span> : null}<span className="sp" />
+              <button className="btn sm ghost" data-rr="1" title="Đổi dạng ngẫu nhiên" onClick={() => edit(P.reroll(plan, steps, si, ti))}>⟳</button>
+              <button className="btn sm ghost" data-del="1" title="Xóa bài" onClick={() => edit(P.del(plan, steps, si, ti))}>✕</button>
+              <input className="rdyc" type="text" aria-label="Yêu cầu riêng cho bài này" placeholder={tuDo ? 'Bạn muốn bài này viết về gì? (vd: đọc đoạn văn về gia đình, 60 từ)' : 'Yêu cầu riêng cho bài này (không bắt buộc)'} value={t.yc || ''} onChange={e => edit(P.setYc(plan, si, ti, e.target.value))} /></div>)}
           </div>; })}</div>
         {P.sameAdj(plan).length ? <p className="tbmut" id="rdAdj">Bài {P.sameAdj(plan).join(', ')} cùng dạng với bài liền trước (vẫn sinh được).</p> : null}
         <textarea className="tbta" id="rdNote" rows={2} placeholder="Ghi chú cho AI (không bắt buộc): vd chủ đề cắm trại, lớp yếu" value={ghiChu} onChange={e => setGhiChu(e.target.value)} />
@@ -139,8 +146,8 @@ function RaDeScreen() {
         {back && w0.gen.src.lesson === sel.ls && w0.gen.src.course === sel.gt ? <button className="btn ghost" id="rdAll" disabled={!nb} title="Mọi bài thành khung mới, kể cả bài không đổi" onClick={() => sinhLaiCaPhieu(les, plan, ghiChu)}>Sinh lại cả phiếu…</button> : null}
       </section>
       <section className="rdpv" id="rdPv">
-        <div className="rdpvh"><b>Layout sơ bộ</b><span className="sp" /><span id="rdPvInfo">{nb} bài · <span className={nP > maxP ? 'bad' : ''}>ước tính {nP} trang{nP > maxP ? ` (vượt tối đa ${maxP})` : ` / tối đa ${maxP}`}</span></span></div>
-        <div className="rdpages">{pv && pv.pages.map((h: string, i: number) => <div className={'rdpg' + (i >= maxP ? ' over' : '')} key={i}><div className="rdpgs"><div className="page paper"><div className="flow" dangerouslySetInnerHTML={{ __html: h }} /></div></div><span className="pno">{i + 1}</span></div>)}</div>
+        <div className="rdpvh"><b>Layout sơ bộ</b><span className="sp" /><span id="rdPvInfo">{nb} bài · <span>ước tính {nP} trang</span></span></div>
+        <div className="rdpages">{pv && pv.pages.map((h: string, i: number) => <div className="rdpg" key={i}><div className="rdpgs"><div className="page paper"><div className="flow" dangerouslySetInnerHTML={{ __html: h }} /></div></div><span className="pno">{i + 1}</span></div>)}</div>
         <p className="tbmut">Ước tính theo dạng bài và số câu (chữ giả "xxx"); chữ thật dài ngắn khác nhau nên số trang có thể lệch.</p>
       </section>
     </div> : null}
@@ -163,18 +170,18 @@ async function moPhieu(src: Nguon, l: Lesson, id: string) {
 function frameTasks(l: Lesson, plan: P.Plan) {
   const md = P.fakeSheetMd(plan, l.trinhTu!, l.tf, 'x', l.giaoTrinh.tuoi || '7-9');
   const ts = impSheetObj(readMd(md)).tasks as any[], st = P.toStructure(plan, l.trinhTu!.buoc);
-  ts.forEach((t, k) => { t.gen = { step: st[k].step, role: st[k].role, q: st[k].q, n: st[k].n, status: 'wait', checks: [], history: [] }; });
+  ts.forEach((t, k) => { t.gen = { step: st[k].step, role: st[k].role, q: st[k].q, n: st[k].n, ...(st[k].yc ? { yc: st[k].yc } : {}), status: 'wait', checks: [], history: [] }; });
   return { ts, st };
 }
 function genOf(l: Lesson, st: any[], note: string, old?: any) {
   const ver = { kienThuc: l.kienThuc?.ver || '', trinhTu: l.trinhTu?.ver || '', tf: l.tf?.ver || '', chung: Object.fromEntries(l.chung.filter(c => c.raw != null).map(c => [String(c.so), c.ver])) };
   return { v: 1, src: { course: l.giaoTrinh.id, unit: l.unit.id, lesson: l.lesson.id, topic: l.chuyenDe.id, names: { course: l.giaoTrinh.ten, unit: l.unit.ten, lesson: l.lesson.ten, topic: l.chuyenDe.ten }, ver },
-    structure: st, note, maxPages: l.trinhTu?.soTrangToiDa || 2, sheetChecks: old?.sheetChecks || [], history: old?.history || [] };
+    structure: st, note, sheetChecks: old?.sheetChecks || [], history: old?.history || [] };
 }
 /** Ghép cấu trúc mới vào phiếu cũ: bài cùng bước + Q + số câu giữ nguyên (kể cả đã sửa, đã duyệt); còn lại là khung mới. */
 export function merge(oldTasks: any[], fresh: any[], st: any[]) {
   const used = new Set<any>(); let kept = 0;
-  const out = st.map((x, k) => { const o = oldTasks.find(t => !used.has(t) && t.gen && t.gen.step === x.step && t.gen.q === x.q && t.gen.n === x.n); if (o) { used.add(o); kept++; return o; } return fresh[k]; });
+  const out = st.map((x, k) => { const o = oldTasks.find(t => !used.has(t) && t.gen && t.gen.step === x.step && t.gen.q === x.q && t.gen.n === x.n && (t.gen.yc || '') === (x.yc || '')); if (o) { used.add(o); kept++; return o; } return fresh[k]; });
   return { tasks: out, kept, dropped: oldTasks.filter(t => t.gen && !used.has(t)).length };
 }
 export async function sinhBai(l: Lesson, plan: P.Plan, note: string) {

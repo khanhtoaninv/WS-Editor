@@ -10,9 +10,9 @@ import { L } from '../ui/legacyApi';
 
 export type Check = { id: string; group: 'may' | 'ai'; name: string; ok: boolean; why?: string; items?: number[]; ids?: string[] };
 export const NAME: Record<string, string> = {
-  doc: 'MD đọc được, không lỗi', dang: 'Đúng dạng câu hỏi', socau: 'Đủ số câu theo cấu trúc', dapan: 'Mỗi câu có đáp án',
+  doc: 'MD đọc được, không lỗi', dang: 'Đúng dạng câu hỏi', dapan: 'Mỗi câu có đáp án',
   duynhat: 'Đáp án duy nhất', trung: 'Không trùng câu trong bài', tran: 'Không tràn trang',
-  s_trang: 'Số trang trong giới hạn', s_lap: 'Các bài không lặp câu', s_tran: 'Không Task nào tràn trang',
+  s_lap: 'Các bài không lặp câu', s_tran: 'Không Task nào tràn trang',
 };
 // chuẩn hóa để so câu: giữ chữ các vế {a|b} và chỗ trống (hai câu khác nhau chỉ ở chỗ cần làm không được coi là trùng)
 const norm = (s: any) => String(s || '').replace(/<[^>]+>|\*\*/g, ' ').replace(/\{([^}]*)\}/g, (_m, g) => ' ' + g.replace(/\*/g, '').replace(/\|/g, ' ') + ' ').replace(/_{2,}/g, ' qgap ').replace(/\*/g, ' ').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
@@ -34,7 +34,6 @@ export function checkTask(t: any): Check[] {
   if (g.mdNotes && g.mdNotes.length) out.push(mk('doc', false, g.mdNotes.slice(0, 3).join(' · ')));
   else if (g.md) out.push(mk('doc', true));
   if (g.q) out.push(mk('dang', g.q === q, `cấu trúc là ${g.q}, bài đang là ${q}`));
-  if (g.n) { const n = countOf(t); out.push(mk('socau', n === g.n, `cấu trúc ${g.n} ${q === 'Q12' ? 'dòng' : 'câu'}, bài có ${n}`)); }
   // đáp án: chỗ trả lời không có đáp án (bài viết tự do, tô chữ: không áp dụng)
   const free = q === 'Q12' || q === 'Q9' || isFreeW(t) || t.answer?.kind === 'none';
   let r: any = null; try { r = taskSlots(t); } catch (_) { r = null; }
@@ -71,8 +70,7 @@ export function checkTask(t: any): Check[] {
 
 /** Tiêu chí cả phiếu đo được bằng code. */
 export function checkSheet(w: any): Check[] {
-  const out: Check[] = [], res = L.lastRes, max = (w.gen && w.gen.maxPages) || 2;
-  if (res) out.push(mk('s_trang', res.pages.length <= max, `${res.pages.length} trang, tối đa ${max}`));
+  const out: Check[] = [], res = L.lastRes;
   const where: Record<string, Set<number>> = {}, txt: Record<string, string> = {}, gt = (w.tasks || []).filter((t: any) => t.gen);
   gt.forEach((t: any, i: number) => realItems(t).forEach((x: any) => { const k = norm(textOf(x)); if (k.length > 8) { (where[k] = where[k] || new Set()).add(i + 1); txt[k] = txt[k] || String(textOf(x)).replace(/<[^>]+>|\*\*/g, ''); } }));
   const lap = Object.entries(where).filter(([, s]) => s.size > 1);
