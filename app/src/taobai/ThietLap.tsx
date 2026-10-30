@@ -84,7 +84,7 @@ function Screen({ tab }: { tab: NonNullable<TbUi['tl']> }) {
       <span className="tltabs" role="tablist">{TAB.map(([k, n]) => <button key={k} role="tab" aria-selected={tab === k} className={'tbstep' + (tab === k ? ' on' : '')} data-tab={k} onClick={() => setTb({ tl: k })}>{n}</button>)}</span>
       <span className="sp" /><span className="tbmut" id="tlSrc">{src ? src.ten : 'Đang đọc dữ liệu…'}</span>
       <button className="btn sm" id="tlKho" onClick={() => setTb({ tl: null, kho: true })}>Kho phiếu</button>
-      <button className="btn sm ghost" id="tlClose" aria-label="Đóng Thiết lập" onClick={() => setTb({ tl: null })}>✕</button>
+      <button className="btn sm" id="tlClose" aria-label="Quay lại soạn bài" onClick={() => setTb({ tl: null })}>← Quay lại soạn bài</button>
     </div>
     {src && !may ? <div className="tbwarn tlnote" id="tlFileMode">Đang mở thẳng file HTML (không qua máy chủ): màn này <b>chỉ xem</b> dữ liệu đang dùng. Nạp file, lưu khóa AI cần mở app qua máy chủ (<code>chay-lop.bat</code> → <code>/editor</code>). Không có máy chủ thì Sinh bài dùng <b>chế độ AI ngoài</b> (chép đoạn nhắc sang AI khác, dán kết quả về).
       {tab !== 'ai' ? <span className="tbrow"><Nap label="Chọn thư mục dữ liệu…" dir onFile={chonThuMuc} id="tlChonDir" />{src.mode === 'thu-muc' ? <button className="btn sm ghost" onClick={async () => { const n = nguonMau(); await moNguon(n); doiDuLieu(); tai(n); }}>Dùng bộ mẫu</button> : null}</span> : null}</div> : null}

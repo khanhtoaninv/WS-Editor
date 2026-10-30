@@ -34,7 +34,7 @@ function Screen() {
   return <div className="rade tl" id="khoScr" role="dialog" aria-label="Kho phiếu">
     <div className="radeh"><b>WS Editor</b><small>Kho phiếu</small><span className="sp" />
       <button className="btn sm" id="khoTl" onClick={() => setTb({ kho: false, tl: 'gt' })}>⚙ Thiết lập</button>
-      <button className="btn sm ghost" id="khoClose" aria-label="Đóng Kho phiếu" onClick={() => setTb({ kho: false })}>✕</button></div>
+      <button className="btn sm" id="khoClose" aria-label="Quay lại soạn bài" onClick={() => setTb({ kho: false })}>← Quay lại soạn bài</button></div>
     {may === false ? <p className="tbwarn" id="khoOff">Kho phiếu nằm trên máy chủ: mở app qua máy chủ (<code>chay-lop.bat</code> → <code>/editor</code>). Mở thẳng file HTML thì lưu phiếu bằng <b>Xem JSON</b> / <b>Xuất MD</b> như thường.</p> : null}
     {err ? <p className="tbwarn">{err}</p> : null}
     {may ? <section className="tlsec" id="khoList">
