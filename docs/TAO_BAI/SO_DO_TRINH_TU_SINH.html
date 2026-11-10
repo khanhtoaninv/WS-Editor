@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sơ đồ Trình tự sinh</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1d2430;--mute:#5d6878;--line:#d5dae2;
+--fix:#e4ecf7;--fixb:#7ea0d1;--filt:#fff1d6;--filtb:#e0a63a;--gen:#dcf3e3;--genb:#5eb67a;--teach:#efe3fa;--teachb:#a07ad0;--bad:#fde4e1;--badb:#e07a6e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,"Segoe UI",Roboto,Arial,sans-serif}
+main{max-width:1040px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:26px;margin:0 0 4px}
+.sub{color:var(--mute);margin:0 0 20px}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin:0 0 20px}
+h2{font-size:18px;margin:0 0 4px}
+.note{color:var(--mute);margin:0 0 16px;font-size:14px}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.tag{border:1px solid;border-radius:999px;padding:2px 10px;font-size:12.5px}
+.fix{background:var(--fix);border-color:var(--fixb)}
+.filt{background:var(--filt);border-color:var(--filtb)}
+.gen{background:var(--gen);border-color:var(--genb)}
+.teach{background:var(--teach);border-color:var(--teachb)}
+.box{border:1.5px solid;border-radius:10px;padding:8px 12px}
+.box b{display:block}
+.box small{color:var(--mute)}
+.arrow{display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:22px;padding:2px 6px}
+
+/* 1 tổng thể */
+.flow{display:grid;grid-template-columns:1fr 40px 1.1fr 40px 1fr;gap:6px;align-items:center}
+.col{display:grid;gap:8px}
+.ai{text-align:center;font-weight:600}
+.after{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+@media(max-width:760px){.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}.after{grid-template-columns:1fr}}
+
+/* 2 tám mục */
+.stack{display:grid;gap:8px}
+.row{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center;border:1.5px solid;border-radius:10px;padding:8px 12px}
+.row .n{font-weight:700;font-size:18px;text-align:center}
+.row .t b{display:block}
+.row .t small{color:var(--mute)}
+.row .k{font-size:12.5px;white-space:nowrap}
+.rule{margin-top:14px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.rule div{background:var(--bg);border:1px dashed var(--line);border-radius:8px;padding:6px 10px;font-size:14px}
+@media(max-width:760px){.rule{grid-template-columns:1fr}.row{grid-template-columns:30px 1fr}.row .k{grid-column:2}}
+
+/* 3 lọc */
+.filter{display:grid;grid-template-columns:1fr 40px 1fr 40px 1fr;gap:6px;align-items:start}
+.list{display:grid;gap:6px}
+.item{border:1px solid var(--line);border-radius:8px;padding:5px 10px;background:#fafbfc;font-size:14px}
+.item.keep{background:var(--gen);border-color:var(--genb)}
+.item.drop{color:#9aa3b0;text-decoration:line-through}
+.hd{font-weight:700;margin:0 0 6px}
+.q{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:0 6px;margin-left:4px;font-size:13px;background:#fff}
+.q.on{background:var(--gen);border-color:var(--genb);font-weight:600}
+.q.off{color:#9aa3b0;text-decoration:line-through}
+@media(max-width:760px){.filter{grid-template-columns:1fr}.filter .arrow{transform:rotate(90deg)}}
+
+/* 4 quy tắc → B */
+.map{display:grid;grid-template-columns:1.1fr 40px 1fr;gap:6px;align-items:start}
+.rl{display:grid;gap:6px}
+.rl .r{display:grid;grid-template-columns:1fr auto;gap:8px;border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:14px;background:#fafbfc}
+.rl .r i{font-style:normal;font-size:12.5px;color:var(--mute)}
+.bb{border:1.5px solid var(--genb);background:var(--gen);border-radius:10px;padding:10px 12px}
+.bb ul{margin:6px 0 0;padding-left:18px}
+.bb ul ul{margin-top:2px}
+@media(max-width:760px){.map{grid-template-columns:1fr}.map .arrow{transform:rotate(90deg)}}
+
+/* 5 luồng B1-B6 */
+.steps{display:grid;gap:8px}
+.st{display:grid;grid-template-columns:90px 1.5fr 80px 1fr 56px;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:#fafbfc}
+.st .b{font-weight:700;font-size:17px}
+.st .lv{font-size:12.5px;color:var(--mute)}
+.bar{height:10px;border-radius:5px;background:linear-gradient(90deg,#5eb67a,#e0a63a)}
+.head{display:grid;grid-template-columns:90px 1.5fr 80px 1fr 56px;gap:10px;font-size:12.5px;color:var(--mute);padding:0 12px 4px}
+.sc{margin-top:10px;display:flex;align-items:center;gap:10px;color:var(--mute);font-size:13.5px}
+.sc span{flex:1;height:2px;background:var(--line)}
+@media(max-width:760px){.st,.head{grid-template-columns:70px 1fr 56px}.head span:nth-child(3),.head span:nth-child(4),.st .cl,.st .lv2{display:none}}
+
+/* 6 vòng kiểm */
+.loop{display:grid;gap:6px;justify-items:center}
+.loop .box{width:min(560px,100%)}
+.loop .down{color:var(--mute);font-size:20px;line-height:1}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:min(560px,100%)}
+.ok{background:var(--gen);border-color:var(--genb)}
+.err{background:var(--bad);border-color:var(--badb)}
+footer{color:var(--mute);font-size:13.5px}
+</style>
+</head>
+<body>
+<main>
+<h1>Sơ đồ Trình tự sinh</h1>
+<p class="sub">Tài liệu AI nhận cùng file Kiến thức để viết một phiếu. Bài mẫu: so sánh hơn / so sánh nhất, bố cục mặc định 6 Task.</p>
+
+<div class="legend">
+  <span class="tag fix">Cố định (không đổi giữa các lần sinh)</span>
+  <span class="tag filt">Lọc theo Bố cục</span>
+  <span class="tag gen">Do app sinh ra</span>
+  <span class="tag teach">Giáo viên làm</span>
+</div>
+
+<section>
+<h2>1. Tổng thể: từ nguồn đến phiếu</h2>
+<p class="note">Kiến thức đi nguyên văn. Năm nguồn còn lại được app ghép thành "Trình tự sinh".</p>
+<div class="flow">
+  <div class="col">
+    <div class="box fix"><b>Kiến thức</b><small>mỗi lesson · bạn viết</small></div>
+    <div class="box filt"><b>Trình tự chuyên đề</b><small>cách làm · bạn viết</small></div>
+    <div class="box filt"><b>Mô tả các dạng Q</b><small>chung</small></div>
+    <div class="box fix"><b>Quy tắc định dạng MD</b><small>chung</small></div>
+    <div class="box fix"><b>Cách thức đặt câu hỏi</b><small>chung</small></div>
+    <div class="box teach"><b>Bố cục</b><small>giáo viên chỉnh ở màn Ra đề</small></div>
+  </div>
+  <div class="arrow">➜</div>
+  <div class="col">
+    <div class="box gen"><b>Trình tự sinh</b><small>8 mục, app ghép tự động theo Bố cục</small></div>
+    <div class="box fix"><b>Kiến thức</b><small>gửi nguyên văn, chỉ bỏ phần chờ duyệt</small></div>
+  </div>
+  <div class="arrow">➜</div>
+  <div class="col">
+    <div class="box ai" style="border-color:var(--line)">AI<br><small style="font-weight:400">6 Task + Báo cáo</small></div>
+  </div>
+</div>
+<div class="after">
+  <div class="box ok"><b>Task đạt</b><small>vào editor</small></div>
+  <div class="box err"><b>Task lỗi</b><small>chỉ gửi lại đúng Task đó, tối đa 2 lần</small></div>
+</div>
+</section>
+
+<section>
+<h2>2. Tám mục và vai trò từng mục</h2>
+<p class="note">Mục 1–4 nói "viết ra thế nào", mục 5 nói "chuyên đề này làm sao", mục 6–8 nói "phiếu này viết gì".</p>
+<div class="stack">
+  <div class="row fix"><div class="n">1</div><div class="t"><b>Vai trò và thông tin phiếu</b><small>bạn là ai, viết cho ai; thứ tự ưu tiên</small></div><div class="k">cố định</div></div>
+  <div class="row fix"><div class="n">2</div><div class="t"><b>Quy tắc định dạng MD</b><small>cách viết ra để app đọc được</small></div><div class="k">cố định</div></div>
+  <div class="row fix"><div class="n">3</div><div class="t"><b>Cách thức đặt câu hỏi</b><small>luật cứng của mọi câu hỏi</small></div><div class="k">cố định</div></div>
+  <div class="row filt"><div class="n">4</div><div class="t"><b>Mô tả các dạng Q</b><small>chỉ Q có trong phiếu</small></div><div class="k">lọc</div></div>
+  <div class="row filt"><div class="n">5</div><div class="t"><b>Trình tự chuyên đề Grammar</b><small>quy mô · quy tắc toàn phiếu · B1…B6, mỗi B có Q được chọn</small></div><div class="k">lọc</div></div>
+  <div class="row teach"><div class="n">6</div><div class="t"><b>Ghi chú của giáo viên</b><small>dặn riêng cho phiếu này</small></div><div class="k">giáo viên gõ</div></div>
+  <div class="row gen"><div class="n">7</div><div class="t"><b>Bố cục phiếu</b><small>Task nào, mấy câu, mức nào, các con số cụ thể</small></div><div class="k">sinh ra</div></div>
+  <div class="row gen"><div class="n">8</div><div class="t"><b>Lệnh</b><small>viết 6 Task theo Bố cục, rồi mục Báo cáo</small></div><div class="k">sinh ra</div></div>
+</div>
+<div class="rule">
+  <div><b>Cú pháp</b> mâu thuẫn → mục 2 thắng</div>
+  <div><b>Phiếu gồm gì</b> → mục 7 thắng mục 5</div>
+  <div><b>Cách viết</b> → mục 3 (cứng) trên mục 5 (chỉ thêm hoặc làm chặt)</div>
+  <div><b>Nội dung ngôn ngữ</b> → chỉ Kiến thức quyết định</div>
+</div>
+</section>
+
+<section>
+<h2>3. Logic lọc: Bố cục quyết định AI thấy gì</h2>
+<p class="note">Q hoặc B không có trong Bố cục thì không gửi. Mức độ: chỉ giữ dòng của mức được chọn.</p>
+<div class="filter">
+  <div><p class="hd">Trình tự đầy đủ</p><div class="list">
+    <div class="item">B1 <span class="q on">Q10</span><span class="q off">Q7</span></div>
+    <div class="item">B2 <span class="q on">Q3</span><span class="q off">Q4</span></div>
+    <div class="item">B3 <span class="q on">Q4</span><span class="q off">Q3</span></div>
+    <div class="item">B4 <span class="q on">Q1</span><span class="q off">Q4</span></div>
+    <div class="item">B5 <span class="q on">Q2</span><span class="q off">Q10</span></div>
+    <div class="item">B6 <span class="q on">Q12</span><span class="q off">Q2</span></div>
+  </div></div>
+  <div class="arrow">⬅</div>
+  <div><p class="hd">Bố cục (giáo viên chọn)</p><div class="list">
+    <div class="item keep">Task 1 · B1 · Q10 · Dễ</div>
+    <div class="item keep">Task 2 · B2 · Q3 · Vừa</div>
+    <div class="item keep">Task 3 · B3 · Q4 · Vừa</div>
+    <div class="item keep">Task 4 · B4 · Q1 · Vừa</div>
+    <div class="item keep">Task 5 · B5 · Q2 · Vừa</div>
+    <div class="item keep">Task 6 · B6 · Q12 · Vừa</div>
+  </div></div>
+  <div class="arrow">➜</div>
+  <div><p class="hd">Trình tự gửi AI</p><div class="list">
+    <div class="item keep">B1 → Q10 (Dễ)</div>
+    <div class="item keep">B2 → Q3 (Vừa)</div>
+    <div class="item keep">B3 → Q4 (Vừa)</div>
+    <div class="item keep">B4 → Q1 (Vừa)</div>
+    <div class="item keep">B5 → Q2 (Vừa)</div>
+    <div class="item keep">B6 → Q12 (Vừa)</div>
+  </div></div>
+</div>
+<p class="note" style="margin-top:14px">Giáo viên có thể: thêm Task cùng B · đổi Q (chỉ trong danh sách Q của B đó) · đổi số câu và mức độ · bỏ B không bắt buộc (B6). Quy tắc chỉ dành cho B đã bỏ cũng bị bỏ.</p>
+</section>
+
+<section>
+<h2>4. Bên trong mục 5: quy tắc toàn phiếu nối với từng B</h2>
+<p class="note">Mỗi quy tắc viết một lần, ghi phạm vi áp dụng; từng B chỉ tham chiếu số điều.</p>
+<div class="map">
+  <div class="rl">
+    <div class="r"><span>1 Không câu trần</span><i>B2 B3 B4</i></div>
+    <div class="r"><span>2 ≥ 20% câu xác định bằng nghĩa</span><i>B2 B3 B4 → vị trí bắt buộc ở mục 7</i></div>
+    <div class="r"><span>3 Đáp án suy từ dữ kiện</span><i>B2 B3 B4</i></div>
+    <div class="r"><span>4 Không chép dạng</span><i>B3 B4</i></div>
+    <div class="r"><span>5 Ba lựa chọn</span><i>B2 B3</i></div>
+    <div class="r"><span>6 Câu hỏi lộ ≤ 40%</span><i>B2</i></div>
+    <div class="r"><span>7 Hội thoại</span><i>B2</i></div>
+    <div class="r"><span>8–11 Đa dạng, nhãn, hỗ trợ giảm dần, truy nguồn</span><i>cả phiếu</i></div>
+  </div>
+  <div class="arrow">➜</div>
+  <div class="bb">
+    <b>B2 · Hiểu nghĩa và cách dùng</b>
+    <ul>
+      <li>Vai trò: phân biệt cách dùng bằng nghĩa</li>
+      <li>Tiêu chí kiểm định (dùng làm rubric rà soát)</li>
+      <li>Q3 Chọn A/B/C
+        <ul>
+          <li>Số câu: 5 (4–6)</li>
+          <li>Cấu trúc trình bày: tình huống + 3 lựa chọn</li>
+          <li>Nguyên tắc nội dung: theo điều 5, 6, 7</li>
+          <li>Mức độ đã chọn: Vừa</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+</section>
+
+<section>
+<h2>5. Luồng sư phạm B1 → B6 và Q được chọn</h2>
+<p class="note">Gợi ý giảm dần: học sinh càng lúc càng tự làm.</p>
+<div class="head"><span>Bước</span><span>Mức nhận thức</span><span>Q</span><span class="cl">Gợi ý</span><span>Câu</span></div>
+<div class="steps">
+  <div class="st"><span class="b">B1</span><span>Quan sát cấu trúc<br><span class="lv">Recognition</span></span><span>Q10</span><span class="cl">nhiều (bảng mẫu)</span><span>4 ô</span></div>
+  <div class="st"><span class="b">B2</span><span>Hiểu nghĩa, cách dùng<br><span class="lv">Understanding</span></span><span>Q3</span><span class="cl">ba lựa chọn</span><span>5</span></div>
+  <div class="st"><span class="b">B3</span><span>Nhận diện hình thức<br><span class="lv">Application (có kiểm soát)</span></span><span>Q4</span><span class="cl">đủ gợi ý</span><span>5</span></div>
+  <div class="st"><span class="b">B4</span><span>Tự tạo hình thức<br><span class="lv">Application (có kiểm soát)</span></span><span>Q1</span><span class="cl">còn gợi ý</span><span>5</span></div>
+  <div class="st"><span class="b">B5</span><span>Dùng trong tình huống<br><span class="lv">Application (trong tình huống)</span></span><span>Q2</span><span class="cl">dữ kiện, không khung</span><span>3</span></div>
+  <div class="st"><span class="b">B6</span><span>Tự diễn đạt<br><span class="lv">Creation</span></span><span>Q12</span><span class="cl">chỉ có ví dụ</span><span>4 dòng</span></div>
+</div>
+<div class="sc">nhiều gợi ý <span></span> ít gợi ý</div>
+<div class="bar" style="margin-top:6px"></div>
+</section>
+
+<section>
+<h2>6. Vòng kiểm tra sau khi AI trả về</h2>
+<div class="loop">
+  <div class="box fix">AI trả về</div><div class="down">↓</div>
+  <div class="box gen"><b>Làm sạch</b><small>bỏ lời chào, tách mục Báo cáo</small></div><div class="down">↓</div>
+  <div class="box gen"><b>Tách theo "## Task:"</b><small>ghép đúng chỗ nhờ dòng "Bố cục: Task k"</small></div><div class="down">↓</div>
+  <div class="box gen"><b>Kiểm từng Task so với Bố cục</b><small>đúng Q · đúng số câu · có đáp án · đúng con số đã tính (câu lộ đáp án, vị trí câu xác định bằng nghĩa) · từ ngoài phạm vi · giới hạn lặp</small></div><div class="down">↓</div>
+  <div class="two">
+    <div class="box ok"><b>Đạt</b><small>vào editor</small></div>
+    <div class="box err"><b>Lỗi</b><small>gửi lại chỉ Task đó kèm danh sách lỗi (tối đa 2 lần)</small></div>
+  </div>
+</div>
+</section>
+
+<footer>Đây là mô tả hành vi dự kiến. Bộ đọc và bộ lọc theo Bố cục chưa được viết trong app.</footer>
+</main>
+</body>
+</html>
