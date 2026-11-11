@@ -57,6 +57,13 @@ table{border-collapse:collapse;width:100%;font-size:13px;background:var(--card);
 th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
 th{background:var(--bg)}
 .note{font-size:13px;color:var(--muted);margin-top:8px}
+.fn{display:block;font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;color:var(--muted);word-break:break-all;margin-bottom:2px}
+.num{display:inline-block;min-width:22px;text-align:center;font-weight:700;font-size:12px;border-radius:6px;padding:0 5px;margin-right:4px;background:var(--card);border:1px solid var(--line)}
+.io{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);font-size:13px;display:flex;flex-direction:column;gap:4px}
+.io>div{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center}
+.io .lbl{font-weight:700;min-width:62px}
+.chip{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:1px 8px 1px 2px;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
+.chip .num{margin:0;border:none;background:var(--bg)}
 @media (max-width:640px){
   .row{grid-template-columns:1fr}
   ol.secs{columns:1}
@@ -76,17 +83,25 @@ th{background:var(--bg)}
     <span><i class="dot err"></i>Sinh lại khi lỗi</span>
   </div>
 
-  <h2>Đầu vào: các file</h2>
+  <h2>Đầu vào: các file (số thứ tự dùng trong các bước bên dưới)</h2>
   <div class="files">
-    <div class="f gv"><b>Kiến thức</b><small>mỗi lesson</small><br>mục tiêu, cấu trúc (Dùng khi, Dấu hiệu bề mặt), từ vựng, lỗi thường gặp</div>
-    <div class="f gv"><b>Trình tự</b><small>mỗi chuyên đề</small><br>bước B1–B6, Dạng Q cho phép, Mức độ, 13 quy tắc</div>
-    <div class="f gv"><b>Cấp độ + Từ vựng nền</b><small>mỗi cấp độ</small><br>5 Task, 4–6 câu, bài đọc 60–80 từ, từ Starters</div>
-    <div class="f gv"><b>Câu mẫu</b><small>mỗi Trình tự</small><br>câu Đạt / Không đạt cho từng B + Dạng Q</div>
-    <div class="f chung"><b>Mô tả Dạng Q</b><small>dùng chung</small><br>Q1–Q12 là gì, ràng buộc cứng</div>
-    <div class="f chung"><b>Quy tắc MD</b><small>dùng chung</small><br>cú pháp app đọc được</div>
-    <div class="f chung"><b>Cách thức đặt câu hỏi</b><small>dùng chung</small><br>29 điều, Haladyna và cộng sự (2002)</div>
-    <div class="f chung"><b>Rà soát</b><small>dùng chung</small><br>lệnh cho lượt AI thứ hai, bảng app tự kiểm</div>
+    <div class="f gv"><b><span class="num">1</span>Kiến thức</b><span class="fn">CAU_TRUC_KIEN_THUC.md</span><small>mỗi lesson</small><br>mục tiêu, cấu trúc (Dùng khi, Dấu hiệu bề mặt), từ vựng, lỗi thường gặp</div>
+    <div class="f gv"><b><span class="num">2</span>Trình tự</b><span class="fn">CAU_TRUC_TRINH_TU.md</span><small>mỗi chuyên đề</small><br>bước B1–B6, Dạng Q cho phép, Mức độ, 13 quy tắc</div>
+    <div class="f gv"><b><span class="num">3</span>Cấp độ</b><span class="fn">CAU_TRUC_CAP_DO.md</span><small>mỗi cấp độ</small><br>5 Task, 4–6 câu, bài đọc 60–80 từ, quy tắc từ vựng</div>
+    <div class="f gv"><b><span class="num">4</span>Từ vựng nền</b><span class="fn">TU_VUNG_NEN_STARTERS.md</span><small>mỗi cấp độ</small><br>danh sách từ Cambridge Pre A1 Starters</div>
+    <div class="f gv"><b><span class="num">5</span>Câu mẫu</b><span class="fn">CAU_TRUC_CAU_MAU.md</span><small>mỗi Trình tự</small><br>câu Đạt / Không đạt cho từng B + Dạng Q</div>
+    <div class="f chung"><b><span class="num">6</span>Mô tả Dạng Q</b><span class="fn">CAU_TRUC_MO_TA_DANG_Q.md</span><small>dùng chung</small><br>Q1–Q12 là gì, ràng buộc cứng</div>
+    <div class="f chung"><b><span class="num">7</span>Quy tắc MD</b><span class="fn">CAU_TRUC_QUY_TAC_MD.md</span><small>dùng chung</small><br>cú pháp app đọc được</div>
+    <div class="f chung"><b><span class="num">8</span>Cách thức đặt câu hỏi</b><span class="fn">CAU_TRUC_CACH_THUC_DAT_CAU_HOI.md</span><small>dùng chung</small><br>29 điều, Haladyna và cộng sự (2002)</div>
+    <div class="f chung"><b><span class="num">9</span>Rà soát</b><span class="fn">CAU_TRUC_RA_SOAT.md</span><small>dùng chung</small><br>lệnh cho lượt AI thứ hai, bảng app tự kiểm</div>
   </div>
+  <h2>Sinh ra trong quá trình</h2>
+  <div class="files">
+    <div class="f app"><b><span class="num">10</span>Bố cục</b><span class="fn">CAU_TRUC_BO_CUC.md</span><small>mỗi phiếu</small><br>app lập ở bước 2, giáo viên chỉnh, lưu cùng phiếu</div>
+    <div class="f app"><b><span class="num">11</span>Trình tự sinh</b><span class="fn">TRINH_TU_SINH_MAU.md</span><small>mỗi lần sinh</small><br>app ghép ở bước 3; file trong repo là ví dụ</div>
+    <div class="f ai"><b><span class="num">12</span>Phiếu MD + Báo cáo</b><span class="fn">(kết quả AI, chưa có file mẫu)</span><small>mỗi lần sinh</small><br>AI viết ở bước 4, sửa ở bước 5–6</div>
+  </div>
+  <p class="note">Mục lục cả bộ: <code>BO_FILE_SINH_BAI.md</code>.</p>
 
   <h2>Các bước</h2>
   <div class="flow">
@@ -95,6 +110,7 @@ th{background:var(--bg)}
       <span class="no">1</span>
       <h3>Giáo viên chọn lesson</h3>
       <p class="in">App tìm Kiến thức của lesson. Dòng <code>Cấp độ:</code> và <code>Trình tự áp dụng:</code> trong Kiến thức chỉ ra file Cấp độ và Trình tự.</p>
+      <div class="io"><div><span class="lbl">Đọc:</span><span class="chip"><span class="num">1</span>CAU_TRUC_KIEN_THUC.md</span></div></div>
     </div>
     <div class="arrow"></div>
 
@@ -109,6 +125,7 @@ th{background:var(--bg)}
         <li>số câu lộ đáp án tối đa.</li>
       </ul>
       <p class="in">Giáo viên được đổi Dạng Q, số câu, mức độ, thêm B6. Lệch quy mô Cấp độ thì app cảnh báo, không chặn.</p>
+      <div class="io"><div><span class="lbl">Đọc:</span><span class="chip"><span class="num">1</span>CAU_TRUC_KIEN_THUC.md</span><span class="chip"><span class="num">2</span>CAU_TRUC_TRINH_TU.md</span><span class="chip"><span class="num">3</span>CAU_TRUC_CAP_DO.md</span></div><div><span class="lbl">Tạo ra:</span><span class="chip"><span class="num">10</span>CAU_TRUC_BO_CUC.md</span></div></div>
     </div>
     <div class="arrow"></div>
 
@@ -134,7 +151,7 @@ th{background:var(--bg)}
         <li>Bố cục phiếu</li>
         <li>Lệnh</li>
       </ol>
-      <p class="in">Gửi cho AI: Trình tự sinh + Kiến thức (nguyên văn) + Từ vựng nền.</p>
+      <div class="io"><div><span class="lbl">Đọc:</span><span class="chip"><span class="num">10</span>CAU_TRUC_BO_CUC.md</span><span class="chip"><span class="num">2</span>CAU_TRUC_TRINH_TU.md</span><span class="chip"><span class="num">3</span>CAU_TRUC_CAP_DO.md</span><span class="chip"><span class="num">5</span>CAU_TRUC_CAU_MAU.md</span><span class="chip"><span class="num">6</span>CAU_TRUC_MO_TA_DANG_Q.md</span><span class="chip"><span class="num">7</span>CAU_TRUC_QUY_TAC_MD.md</span><span class="chip"><span class="num">8</span>CAU_TRUC_CACH_THUC_DAT_CAU_HOI.md</span></div><div><span class="lbl">Gửi AI:</span><span class="chip"><span class="num">11</span>TRINH_TU_SINH_MAU.md</span><span class="chip"><span class="num">1</span>CAU_TRUC_KIEN_THUC.md</span><span class="chip"><span class="num">4</span>TU_VUNG_NEN_STARTERS.md</span></div><div><span class="lbl">Tạo ra:</span><span class="chip"><span class="num">11</span>TRINH_TU_SINH_MAU.md</span></div></div>
     </div>
     <div class="arrow"></div>
 
@@ -148,6 +165,7 @@ th{background:var(--bg)}
         <li>vai trò từng lựa chọn;</li>
         <li>số từ bài đọc.</li>
       </ul>
+      <div class="io"><div><span class="lbl">Đọc:</span><span class="chip"><span class="num">11</span>TRINH_TU_SINH_MAU.md</span><span class="chip"><span class="num">1</span>CAU_TRUC_KIEN_THUC.md</span><span class="chip"><span class="num">4</span>TU_VUNG_NEN_STARTERS.md</span></div><div><span class="lbl">Tạo ra:</span><span class="chip"><span class="num">12</span>Phiếu MD + Báo cáo</span></div></div>
     </div>
     <div class="arrow"></div>
 
@@ -164,6 +182,7 @@ th{background:var(--bg)}
           <li>câu ở vị trí bắt buộc không có dấu hiệu bề mặt;</li>
           <li>Báo cáo đủ nhãn.</li>
         </ul>
+      <div class="io"><div><span class="lbl">Đọc:</span><span class="chip"><span class="num">12</span>Phiếu MD + Báo cáo</span><span class="chip"><span class="num">9</span>CAU_TRUC_RA_SOAT.md</span><span class="chip"><span class="num">10</span>CAU_TRUC_BO_CUC.md</span><span class="chip"><span class="num">1</span>CAU_TRUC_KIEN_THUC.md</span><span class="chip"><span class="num">3</span>CAU_TRUC_CAP_DO.md</span><span class="chip"><span class="num">4</span>TU_VUNG_NEN_STARTERS.md</span></div></div>
       </div>
       <div class="loop err" style="border-color:var(--err-b);background:var(--err)">
         <b>↺ Task sai → sinh lại ngay</b>
@@ -183,6 +202,7 @@ th{background:var(--bg)}
           <li>đối chiếu tiêu chí, ghi lỗi kèm mã (QT…, G…, R, M, K).</li>
         </ul>
         <p>App so đáp án tự làm với đáp án của phiếu.</p>
+      <div class="io"><div><span class="lbl">Đọc:</span><span class="chip"><span class="num">9</span>CAU_TRUC_RA_SOAT.md</span><span class="chip"><span class="num">12</span>Phiếu MD + Báo cáo</span><span class="chip"><span class="num">10</span>CAU_TRUC_BO_CUC.md</span><span class="chip"><span class="num">1</span>CAU_TRUC_KIEN_THUC.md</span><span class="chip"><span class="num">2</span>CAU_TRUC_TRINH_TU.md</span><span class="chip"><span class="num">5</span>CAU_TRUC_CAU_MAU.md</span><span class="chip"><span class="num">8</span>CAU_TRUC_CACH_THUC_DAT_CAU_HOI.md</span></div></div>
       </div>
       <div class="loop err" style="border-color:var(--err-b);background:var(--err)">
         <b>↺ Task có lỗi → sinh lại</b>
@@ -195,21 +215,22 @@ th{background:var(--bg)}
       <span class="no">7</span>
       <h3>Giáo viên duyệt</h3>
       <p>Xem phiếu, đọc Báo cáo và lỗi còn lại, sửa tay nếu cần, rồi đưa vào editor.</p>
+      <div class="io"><div><span class="lbl">Đọc:</span><span class="chip"><span class="num">12</span>Phiếu MD + Báo cáo</span><span class="chip"><span class="num">10</span>CAU_TRUC_BO_CUC.md</span></div></div>
     </div>
   </div>
 
   <h2>Mỗi thông tin nằm ở đâu</h2>
   <table>
     <tr><th>Câu hỏi</th><th>File trả lời</th></tr>
-    <tr><td>Câu nào đúng, câu nào sai về ngôn ngữ?</td><td>Kiến thức</td></tr>
-    <tr><td>Phiếu đi qua những bước nào, mỗi bước làm gì?</td><td>Trình tự</td></tr>
-    <tr><td>Phiếu dài bao nhiêu, dùng từ nào?</td><td>Cấp độ, Từ vựng nền</td></tr>
-    <tr><td>Câu đạt chuẩn trông ra sao?</td><td>Câu mẫu</td></tr>
-    <tr><td>Dạng bài Q1–Q12 là gì?</td><td>Mô tả Dạng Q</td></tr>
-    <tr><td>Viết ra thế nào để app đọc được?</td><td>Quy tắc MD</td></tr>
-    <tr><td>Viết câu hỏi tốt theo nguyên tắc nào?</td><td>Cách thức đặt câu hỏi</td></tr>
-    <tr><td>Phiếu này có Task nào, mấy câu, mức nào?</td><td>Bố cục</td></tr>
-    <tr><td>Kiểm tra phiếu thế nào?</td><td>Rà soát</td></tr>
+    <tr><td>Câu nào đúng, câu nào sai về ngôn ngữ?</td><td><span class="chip"><span class="num">1</span>CAU_TRUC_KIEN_THUC.md</span></td></tr>
+    <tr><td>Phiếu đi qua những bước nào, mỗi bước làm gì?</td><td><span class="chip"><span class="num">2</span>CAU_TRUC_TRINH_TU.md</span></td></tr>
+    <tr><td>Phiếu dài bao nhiêu, dùng từ nào?</td><td><span class="chip"><span class="num">3</span>CAU_TRUC_CAP_DO.md</span> <span class="chip"><span class="num">4</span>TU_VUNG_NEN_STARTERS.md</span></td></tr>
+    <tr><td>Câu đạt chuẩn trông ra sao?</td><td><span class="chip"><span class="num">5</span>CAU_TRUC_CAU_MAU.md</span></td></tr>
+    <tr><td>Dạng bài Q1–Q12 là gì?</td><td><span class="chip"><span class="num">6</span>CAU_TRUC_MO_TA_DANG_Q.md</span></td></tr>
+    <tr><td>Viết ra thế nào để app đọc được?</td><td><span class="chip"><span class="num">7</span>CAU_TRUC_QUY_TAC_MD.md</span></td></tr>
+    <tr><td>Viết câu hỏi tốt theo nguyên tắc nào?</td><td><span class="chip"><span class="num">8</span>CAU_TRUC_CACH_THUC_DAT_CAU_HOI.md</span></td></tr>
+    <tr><td>Phiếu này có Task nào, mấy câu, mức nào?</td><td><span class="chip"><span class="num">10</span>CAU_TRUC_BO_CUC.md</span></td></tr>
+    <tr><td>Kiểm tra phiếu thế nào?</td><td><span class="chip"><span class="num">9</span>CAU_TRUC_RA_SOAT.md</span></td></tr>
   </table>
   <p class="note">Chưa thử với AI thật. App chưa đọc được dạng file mới (<code>Dạng Q:</code>, <code>Bố cục: Task k</code>, <code>## Báo cáo</code>). Còn thiếu danh sách ngữ pháp Starters.</p>
 </div>
