@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luồng sinh phiếu</title>
+<style>
+:root{
+  --bg:#f6f7f9; --card:#ffffff; --ink:#1d2330; --muted:#5b6475; --line:#c9cfda;
+  --gv:#e8f1ff; --gv-b:#5b8def; --chung:#eef7ee; --chung-b:#4f9a5b;
+  --app:#fff4e5; --app-b:#d98a1f; --ai:#f3ecff; --ai-b:#8a5cd6; --err:#fdecec; --err-b:#d05252;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14171d; --card:#1d222b; --ink:#e7eaf0; --muted:#a3abba; --line:#3a4250;
+    --gv:#1b2a44; --gv-b:#7aa5f5; --chung:#1c2e20; --chung-b:#6dbb7a;
+    --app:#33281a; --app-b:#e9a54a; --ai:#2a2140; --ai-b:#a985ea; --err:#3a1f22; --err-b:#e77a7a;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14171d; --card:#1d222b; --ink:#e7eaf0; --muted:#a3abba; --line:#3a4250;
+  --gv:#1b2a44; --gv-b:#7aa5f5; --chung:#1c2e20; --chung-b:#6dbb7a;
+  --app:#33281a; --app-b:#e9a54a; --ai:#2a2140; --ai-b:#a985ea; --err:#3a1f22; --err-b:#e77a7a;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:24px;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 20px}
+h2{font-size:17px;margin:28px 0 10px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px;color:var(--muted);margin-bottom:8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.dot{width:14px;height:14px;border-radius:4px;border:2px solid}
+.gv{background:var(--gv);border-color:var(--gv-b)}
+.chung{background:var(--chung);border-color:var(--chung-b)}
+.app{background:var(--app);border-color:var(--app-b)}
+.ai{background:var(--ai);border-color:var(--ai-b)}
+.err{background:var(--err);border-color:var(--err-b)}
+.files{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.f{border-width:2px;border-style:solid;border-radius:10px;padding:8px 10px;font-size:13px}
+.f b{display:block;font-size:14px}
+.f small{color:var(--muted)}
+.flow{display:flex;flex-direction:column;align-items:stretch}
+.step{border:2px solid;border-radius:12px;padding:12px 14px;position:relative}
+.step .no{position:absolute;top:-12px;left:12px;background:var(--card);border:2px solid;border-color:inherit;border-radius:999px;font-size:12px;font-weight:700;padding:0 8px}
+.step h3{margin:4px 0 4px;font-size:16px}
+.step p{margin:2px 0;font-size:14px}
+.step .in{font-size:13px;color:var(--muted)}
+.arrow{align-self:center;width:2px;height:26px;background:var(--line);position:relative;margin:2px 0}
+.arrow:after{content:"";position:absolute;bottom:-2px;left:-5px;border:6px solid transparent;border-top-color:var(--line)}
+.row{display:grid;grid-template-columns:1fr 240px;gap:12px;align-items:stretch}
+.loop{border:2px dashed;border-radius:12px;padding:10px 12px;font-size:13px;display:flex;flex-direction:column;justify-content:center}
+.loop b{font-size:14px}
+ol.secs{margin:6px 0 0;padding-left:20px;font-size:13px;columns:2;column-gap:24px}
+ol.secs li{break-inside:avoid}
+table{border-collapse:collapse;width:100%;font-size:13px;background:var(--card);border-radius:10px;overflow:hidden}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:var(--bg)}
+.note{font-size:13px;color:var(--muted);margin-top:8px}
+@media (max-width:640px){
+  .row{grid-template-columns:1fr}
+  ol.secs{columns:1}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Luồng sinh phiếu</h1>
+  <p class="sub">Module Tạo bài, bộ file bản 2. Chuẩn: phiếu Grammar cuối Starters (5 Task, khoảng 25 phút, 4–6 câu mỗi Task, bài đọc 60–80 từ).</p>
+
+  <div class="legend">
+    <span><i class="dot gv"></i>Giáo viên viết / chỉnh</span>
+    <span><i class="dot chung"></i>File dùng chung (cố định)</span>
+    <span><i class="dot app"></i>App làm</span>
+    <span><i class="dot ai"></i>AI làm</span>
+    <span><i class="dot err"></i>Sinh lại khi lỗi</span>
+  </div>
+
+  <h2>Đầu vào: các file</h2>
+  <div class="files">
+    <div class="f gv"><b>Kiến thức</b><small>mỗi lesson</small><br>mục tiêu, cấu trúc (Dùng khi, Dấu hiệu bề mặt), từ vựng, lỗi thường gặp</div>
+    <div class="f gv"><b>Trình tự</b><small>mỗi chuyên đề</small><br>bước B1–B6, Dạng Q cho phép, Mức độ, 13 quy tắc</div>
+    <div class="f gv"><b>Cấp độ + Từ vựng nền</b><small>mỗi cấp độ</small><br>5 Task, 4–6 câu, bài đọc 60–80 từ, từ Starters</div>
+    <div class="f gv"><b>Câu mẫu</b><small>mỗi Trình tự</small><br>câu Đạt / Không đạt cho từng B + Dạng Q</div>
+    <div class="f chung"><b>Mô tả Dạng Q</b><small>dùng chung</small><br>Q1–Q12 là gì, ràng buộc cứng</div>
+    <div class="f chung"><b>Quy tắc MD</b><small>dùng chung</small><br>cú pháp app đọc được</div>
+    <div class="f chung"><b>Cách thức đặt câu hỏi</b><small>dùng chung</small><br>29 điều, Haladyna và cộng sự (2002)</div>
+    <div class="f chung"><b>Rà soát</b><small>dùng chung</small><br>lệnh cho lượt AI thứ hai, bảng app tự kiểm</div>
+  </div>
+
+  <h2>Các bước</h2>
+  <div class="flow">
+
+    <div class="step gv" style="border-color:var(--gv-b);background:var(--gv)">
+      <span class="no">1</span>
+      <h3>Giáo viên chọn lesson</h3>
+      <p class="in">App tìm Kiến thức của lesson. Dòng <code>Cấp độ:</code> và <code>Trình tự áp dụng:</code> trong Kiến thức chỉ ra file Cấp độ và Trình tự.</p>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="step app" style="border-color:var(--app-b);background:var(--app)">
+      <span class="no">2</span>
+      <h3>App lập Bố cục, giáo viên chỉnh</h3>
+      <p>Mặc định: B1–B5, mỗi bước một Task, Dạng Q đầu tiên của bước, 5 câu, mức Vừa.</p>
+      <p>App tính sẵn số liệu cho từng Task:</p>
+      <ul style="margin:4px 0 0 0;padding-left:20px;font-size:14px">
+        <li>độ dài bài đọc và phần đề;</li>
+        <li>số câu xác định bằng nghĩa tối thiểu và vị trí bắt buộc;</li>
+        <li>số câu lộ đáp án tối đa.</li>
+      </ul>
+      <p class="in">Giáo viên được đổi Dạng Q, số câu, mức độ, thêm B6. Lệch quy mô Cấp độ thì app cảnh báo, không chặn.</p>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="step app" style="border-color:var(--app-b);background:var(--app)">
+      <span class="no">3</span>
+      <h3>App ghép Trình tự sinh</h3>
+      <p>App chỉ giữ phần liên quan đến Bố cục:</p>
+      <ul style="margin:4px 0 0 0;padding-left:20px;font-size:14px">
+        <li>các B có Task;</li>
+        <li>Dạng Q được chọn;</li>
+        <li>dòng của mức độ được chọn;</li>
+        <li>quy tắc đúng phạm vi;</li>
+        <li>câu mẫu đúng B + Dạng Q.</li>
+      </ul>
+      <ol class="secs">
+        <li>Vai trò và Cấp độ</li>
+        <li>Quy tắc định dạng MD</li>
+        <li>Cách thức đặt câu hỏi</li>
+        <li>Mô tả Dạng Q dùng</li>
+        <li>Trình tự đã lọc</li>
+        <li>Câu mẫu đã lọc</li>
+        <li>Ghi chú giáo viên</li>
+        <li>Bố cục phiếu</li>
+        <li>Lệnh</li>
+      </ol>
+      <p class="in">Gửi cho AI: Trình tự sinh + Kiến thức (nguyên văn) + Từ vựng nền.</p>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="step ai" style="border-color:var(--ai-b);background:var(--ai)">
+      <span class="no">4</span>
+      <h3>AI sinh cả phiếu trong một lượt</h3>
+      <p>Mỗi Task có dòng <code>Bố cục: Task k</code>, <code>Dạng Q:</code>, các câu, <code>## Đáp án</code>. Cuối phiếu là <code>## Báo cáo</code>, gồm:</p>
+      <ul style="margin:4px 0 0 0;padding-left:20px;font-size:14px">
+        <li>vị trí các câu xác định bằng nghĩa;</li>
+        <li>mã K của từng đáp án;</li>
+        <li>vai trò từng lựa chọn;</li>
+        <li>số từ bài đọc.</li>
+      </ul>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="row">
+      <div class="step app" style="border-color:var(--app-b);background:var(--app)">
+        <span class="no">5</span>
+        <h3>App tự kiểm</h3>
+        <p>App kiểm từng Task:</p>
+        <ul style="margin:4px 0 0 0;padding-left:20px;font-size:14px">
+          <li>đủ Task, đúng Dạng Q, đúng số câu;</li>
+          <li>ba lựa chọn, vị trí đáp án rải đều;</li>
+          <li>độ dài bài đọc và phần đề;</li>
+          <li>từ ngoài Từ vựng nền;</li>
+          <li>câu ở vị trí bắt buộc không có dấu hiệu bề mặt;</li>
+          <li>Báo cáo đủ nhãn.</li>
+        </ul>
+      </div>
+      <div class="loop err" style="border-color:var(--err-b);background:var(--err)">
+        <b>↺ Task sai → sinh lại ngay</b>
+        <span>Gửi lại Task đó kèm lỗi. Tối đa 2 lần.</span>
+      </div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="row">
+      <div class="step ai" style="border-color:var(--ai-b);background:var(--ai)">
+        <span class="no">6</span>
+        <h3>AI rà soát (lượt thứ hai)</h3>
+        <p>AI nhận phiếu <b>đã bỏ đáp án</b>, không kèm Báo cáo, rồi làm ba việc:</p>
+        <ul style="margin:4px 0 0 0;padding-left:20px;font-size:14px">
+          <li>tự làm bài như học sinh;</li>
+          <li>làm như học sinh không hiểu nghĩa, chỉ nhìn dấu hiệu bề mặt;</li>
+          <li>đối chiếu tiêu chí, ghi lỗi kèm mã (QT…, G…, R, M, K).</li>
+        </ul>
+        <p>App so đáp án tự làm với đáp án của phiếu.</p>
+      </div>
+      <div class="loop err" style="border-color:var(--err-b);background:var(--err)">
+        <b>↺ Task có lỗi → sinh lại</b>
+        <span>Gửi Task cũ và danh sách lỗi, giữ câu không lỗi. Tối đa 2 lần; sau đó hiện lỗi cho giáo viên.</span>
+      </div>
+    </div>
+    <div class="arrow"></div>
+
+    <div class="step gv" style="border-color:var(--gv-b);background:var(--gv)">
+      <span class="no">7</span>
+      <h3>Giáo viên duyệt</h3>
+      <p>Xem phiếu, đọc Báo cáo và lỗi còn lại, sửa tay nếu cần, rồi đưa vào editor.</p>
+    </div>
+  </div>
+
+  <h2>Mỗi thông tin nằm ở đâu</h2>
+  <table>
+    <tr><th>Câu hỏi</th><th>File trả lời</th></tr>
+    <tr><td>Câu nào đúng, câu nào sai về ngôn ngữ?</td><td>Kiến thức</td></tr>
+    <tr><td>Phiếu đi qua những bước nào, mỗi bước làm gì?</td><td>Trình tự</td></tr>
+    <tr><td>Phiếu dài bao nhiêu, dùng từ nào?</td><td>Cấp độ, Từ vựng nền</td></tr>
+    <tr><td>Câu đạt chuẩn trông ra sao?</td><td>Câu mẫu</td></tr>
+    <tr><td>Dạng bài Q1–Q12 là gì?</td><td>Mô tả Dạng Q</td></tr>
+    <tr><td>Viết ra thế nào để app đọc được?</td><td>Quy tắc MD</td></tr>
+    <tr><td>Viết câu hỏi tốt theo nguyên tắc nào?</td><td>Cách thức đặt câu hỏi</td></tr>
+    <tr><td>Phiếu này có Task nào, mấy câu, mức nào?</td><td>Bố cục</td></tr>
+    <tr><td>Kiểm tra phiếu thế nào?</td><td>Rà soát</td></tr>
+  </table>
+  <p class="note">Chưa thử với AI thật. App chưa đọc được dạng file mới (<code>Dạng Q:</code>, <code>Bố cục: Task k</code>, <code>## Báo cáo</code>). Còn thiếu danh sách ngữ pháp Starters.</p>
+</div>
+</body>
+</html>
