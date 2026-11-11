@@ -16,7 +16,7 @@ Nguồn: Haladyna, Downing & Rodriguez (2002), Table 1. Số trong ngoặc [G..]
 ## 1. Nội dung
 1. [G1] Mỗi câu kiểm tra một nội dung và một hành vi tư duy, đúng với điều Bố cục giao cho Task.
 2. [G2] Dựa trên nội dung quan trọng của lesson; không hỏi chi tiết vụn vặt.
-3. [G3] Dùng tình huống và câu mới; không chép nguyên câu ví dụ trong Kiến thức vào câu hỏi (trừ khi Trình tự cho phép, ví dụ B1).
+3. [G3] Dùng tình huống và câu mới; không chép nguyên câu ví dụ trong Kiến thức vào câu hỏi (trừ khi Trình tự ghi `Ngoại lệ:` cho B đó).
 4. [G4] Các câu độc lập với nhau: đáp án câu này không giúp trả lời câu khác.
 5. [G5] Không hỏi quá hẹp (một chi tiết ngoài lề) hoặc quá rộng (không rõ hỏi gì).
 6. [G6] Không hỏi ý kiến cá nhân với câu có đáp án đúng.
@@ -24,7 +24,7 @@ Nguồn: Haladyna, Downing & Rodriguez (2002), Table 1. Số trong ngoặc [G..]
 8. [G8] Từ vựng đơn giản, phù hợp học sinh (theo mục Học sinh và Từ vựng được dùng của Kiến thức).
 
 ## 2. Trình bày và văn phong
-9. [G10] Trình bày các lựa chọn theo chiều dọc, không xếp ngang một dòng.
+9. [G10] Trình bày các lựa chọn theo chiều dọc, mỗi lựa chọn một dòng, không xếp ngang.
 10. [G11] Soát lại mọi câu trước khi trả về.
 11. [G12] Đúng ngữ pháp, dấu câu, viết hoa, chính tả.
 12. [G13] Giảm lượng chữ phải đọc trong mỗi câu xuống mức cần thiết.

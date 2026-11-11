@@ -8,7 +8,7 @@ Bố cục **không phải file bạn viết**. App sinh ra từ Trình tự, gi
 # Bố cục
 Phiếu: Our World 3 · Unit 5 · Lesson 2
 Chuyên đề: Grammar
-Trình tự: Grammar 2.0
+Trình tự: Grammar 2.1
 Cho phép ảnh: không
 
 ## Danh sách Task
@@ -20,14 +20,14 @@ Cho phép ảnh: không
 | 4 | B4 Tự tạo hình thức | Q1 Điền từ | 5 | Vừa |
 | 5 | B5 Dùng trong tình huống | Q2 Viết câu | 3 | Vừa |
 | 6 | B6 Tự diễn đạt | Q12 Viết tự do | 4 dòng | Vừa |
-Tổng: 22 câu có đáp án hoặc dòng viết.
+Tổng: 22 câu có đáp án (Task 1–5) và 4 dòng viết tự do (Task 6).
 
 ## Số liệu tính sẵn
-| Task | Câu lộ đáp án tối đa | Câu xác định bằng nghĩa tối thiểu | Vị trí bắt buộc |
-|---|---|---|---|
-| 2 | 2 | 1 | câu 3 |
-| 3 | không áp dụng | 1 | câu 4 |
-| 4 | không áp dụng | 1 | câu 2 |
+| Task | Độ dài câu tối đa | Câu lộ đáp án tối đa | Câu xác định bằng nghĩa tối thiểu | Vị trí bắt buộc |
+|---|---|---|---|---|
+| 2 | 12 từ | 2 | 2 | câu 2, 4 |
+| 3 | 12 từ | không áp dụng | 2 | câu 2, 4 |
+| 4 | 12 từ | không áp dụng | 2 | câu 2, 4 |
 
 ## Ghi chú của giáo viên
 Không có.
@@ -46,7 +46,7 @@ Không có.
 | Dạng Q | Dạng Q đầu tiên trong danh sách của B | đổi sang Dạng Q khác trong danh sách của B đó |
 | Số câu | mặc định của Dạng Q trong Trình tự | trong khoảng ghi ở Trình tự; ngoài khoảng thì app cảnh báo |
 | Mức độ | mặc định Vừa | Dễ / Vừa / Khó |
-| Số liệu tính sẵn | app tính từ Quy tắc toàn phiếu của Trình tự và Số câu | không (tự cập nhật khi Số câu đổi) |
+| Số liệu tính sẵn | app tính từ bảng Mức độ, Quy tắc toàn phiếu của Trình tự và Số câu | không (tự cập nhật khi Số câu hoặc Mức độ đổi) |
 | Ghi chú của giáo viên | giáo viên gõ | có |
 
 ## Cách sinh mặc định
@@ -63,18 +63,24 @@ Không có.
 - Số câu ngoài khoảng của Trình tự không bị chặn, chỉ cảnh báo.
 
 ## Số liệu tính sẵn
-Mỗi Quy tắc toàn phiếu có tỷ lệ trong Trình tự (ví dụ ≥ 20%, ≤ 40%) và phạm vi `[B…]`. App chỉ tính cho Task thuộc phạm vi:
-- **Câu xác định bằng nghĩa tối thiểu** = làm tròn lên (20% × số câu của Task).
-- **Câu lộ đáp án tối đa** = làm tròn xuống (40% × số câu của Task).
-- **Vị trí bắt buộc**: app chọn đúng số vị trí tối thiểu, rải đều trong Task, và gửi cho AI. AI phải đặt câu xác định bằng nghĩa đúng các vị trí đó.
+Tỷ lệ lấy từ bảng Mức độ của Trình tự, theo mức độ của Task. Quy tắc nào có phạm vi `[B…]` thì app chỉ tính cho Task thuộc phạm vi đó. Gọi n là số câu của Task, p là tỷ lệ:
+- **Độ dài câu tối đa** = số từ ghi ở bảng Mức độ.
+- **Câu xác định bằng nghĩa tối thiểu** k = làm tròn lên (p × n). Vừa: p = 40%, 5 câu thì k = 2.
+- **Câu lộ đáp án tối đa** = làm tròn xuống (p × n). Chỉ tính cho B2.
+- **Vị trí bắt buộc**: vị trí thứ i (i = 0 … k−1) = làm tròn lên ((i + 0,5) × n ÷ k).
+  - n = 5, k = 1 → câu 3.
+  - n = 5, k = 2 → câu 2, 4.
+  - n = 5, k = 3 → câu 1, 3, 5.
 
-Tính lại mỗi khi giáo viên đổi Số câu hoặc Dạng Q.
+  AI đặt câu xác định bằng nghĩa đúng các vị trí này. Ở vị trí khác vẫn được có thêm câu xác định bằng nghĩa.
+
+Tính lại mỗi khi giáo viên đổi Số câu, Dạng Q hoặc Mức độ.
 
 ## Cách Bố cục đi vào Trình tự sinh
 - Danh sách Task, Số liệu tính sẵn và Ghi chú của giáo viên được ghép thành mục Bố cục phiếu trong Trình tự sinh.
 - Bố cục thắng Trình tự khi mâu thuẫn về phiếu gồm Task nào, mấy câu, mức nào.
-- App lọc Trình tự theo Bố cục: chỉ giữ B có Task, chỉ giữ Dạng Q được chọn, chỉ giữ dòng của mức độ được chọn, chỉ giữ Quy tắc toàn phiếu có phạm vi chứa B còn lại.
-- Sau khi AI trả về, app kiểm từng Task so với Bố cục: đúng `Bố cục: Task k`, đúng Dạng Q, đúng Số câu, đúng Số liệu tính sẵn.
+- App lọc Trình tự theo Bố cục: chỉ giữ B có Task, chỉ giữ Dạng Q được chọn, chỉ giữ dòng của mức độ được chọn, chỉ giữ Quy tắc toàn phiếu có phạm vi chứa B còn lại. Câu mẫu cũng lọc theo cách đó: chỉ giữ khối B + Dạng Q có trong Bố cục.
+- Sau khi AI trả về, app tự kiểm, rồi chạy lượt Rà soát (xem file Rà soát). Task lỗi được sinh lại, tối đa 2 lần.
 
 ## Ví dụ chỉnh
 Giáo viên thêm một Task Q4 vào B2 và bỏ B6:

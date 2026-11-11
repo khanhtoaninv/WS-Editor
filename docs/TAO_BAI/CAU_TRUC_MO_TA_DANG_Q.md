@@ -42,7 +42,7 @@ Phiên bản: 1.0
 
 ## Q3 Chọn A/B/C
 - Học sinh làm: chọn một lựa chọn.
-- Trên phiếu: các lựa chọn dưới câu, nhãn a. b. c.
+- Trên phiếu: các lựa chọn xếp dọc dưới câu, mỗi lựa chọn một dòng; nhãn in trên phiếu là a. b. c.
 - Chấm: đúng một đáp án đúng.
 - Ràng buộc: các lựa chọn cùng loại từ, độ dài tương đối gần nhau; vị trí đáp án đúng rải đều; số lựa chọn theo quy tắc của Trình tự (mặc định 3).
 - Tham số mức độ: độ dài tình huống; độ gần nghĩa của lựa chọn sai; thông tin quyết định nằm ở đâu.
@@ -52,7 +52,7 @@ Phiên bản: 1.0
 - Học sinh làm: chọn một vế đặt ngay trong câu.
 - Trên phiếu: các vế nằm trong câu, học sinh khoanh hoặc gạch.
 - Chấm: mỗi chỗ chọn đúng một vế đúng.
-- Ràng buộc: mỗi chỗ chọn đúng một vế đúng; các vế cùng loại từ gốc. Chỉ hợp khi Kiến thức có cặp hoặc nhóm hình thức dễ nhầm.
+- Ràng buộc: mỗi chỗ chọn đúng một vế đúng; các vế cùng loại từ gốc. Chỉ hợp khi Kiến thức có cặp hoặc nhóm hình thức dễ nhầm. Ngoại lệ điều G10 (xếp dọc): các vế nằm trong câu.
 - Tham số mức độ: có câu dẫn hay không; câu dẫn có dấu hiệu bề mặt hay không; số chỗ chọn mỗi câu.
 - Không dùng khi: lesson không có cặp hình thức để chọn.
 

@@ -6,7 +6,7 @@ Một file dùng chung cho mọi chuyên đề. Nói **viết ra thế nào đ�
 
 ```
 # Quy tắc định dạng MD
-Phiên bản: 1.0
+Phiên bản: 1.1
 
 ## 1. Khung phiếu
 Trả về các Task liên tiếp theo thứ tự Bố cục, rồi mục `## Báo cáo`. Không lời chào, không giải thích, không khối ``` bao ngoài.
@@ -46,6 +46,7 @@ Trả về các Task liên tiếp theo thứ tự Bố cục, rồi mục `## B�
 12. Hội thoại: dòng `Hội thoại:` đứng riêng, mỗi lượt một dòng `Tên: lời`.
 13. Khung từ: `Khung từ: a, b, c` (dấu phẩy; từ có dấu phẩy thì dùng `;`).
 14. Ảnh: chỉ là tên mô tả để vẽ hoặc tìm ảnh (`[ảnh: a girl reading a book]`), tiếng Anh, cụ thể, không lộ đáp án.
+15. Dữ kiện dạng bảng trong Task không phải Q10 (ví dụ bảng dữ kiện của Q2): viết trong `Bài đọc:`, mỗi hàng một dòng `Tên: thông tin; thông tin`. Mỗi Task chỉ có một loại chỗ trả lời, nên không chèn bảng Q10 vào Task khác.
 
 ## 3. Mục Báo cáo
 Đặt sau Task cuối cùng. App tách mục này ra, không đưa lên phiếu.
@@ -63,7 +64,7 @@ Trả về các Task liên tiếp theo thứ tự Bố cục, rồi mục `## B�
 |---|---|---|
 | Q1 Điền từ | `___` trong câu; `Khung từ:` nếu có; tùy chọn `(ô chữ cái)` | `## Đáp án` |
 | Q2 Viết câu | `Dòng viết: N`; câu không có `___` ở cuối; sắp xếp từ: các từ cách nhau ` / `, mỗi câu một số; tùy chọn `(bốn ô li)` | `## Đáp án`, một câu mẫu |
-| Q3 Chọn A/B/C | `A. … B. … C. …` cùng dòng với câu hoặc dòng thụt lề ngay dưới câu; tùy chọn `(khoanh)`, `(ô tick)` | `## Đáp án`, chữ cái |
+| Q3 Chọn A/B/C | mỗi lựa chọn một dòng thụt lề 2 dấu cách ngay dưới câu: `A. …`, `B. …`, `C. …` (viết chữ hoa; app in thành a. b. c.); không viết cùng dòng; tùy chọn `(khoanh)`, `(ô tick)` | `## Đáp án`, chữ cái hoa |
 | Q4 Chọn trong câu | `{a\|b\|c}` trong câu, `*` trước vế đúng | dấu `*` trong câu |
 | Q5 Đúng / Sai | `Dạng Q: đúng/sai`, tùy chọn `(Yes/No)`, `(T/F/NG)`, `(cùng hàng)` | `## Đáp án`: `T`/`F` hoặc đúng nhãn đã chọn |
 | Q6 Nhìn ảnh viết | mỗi câu `1. [ảnh: …]`; tùy chọn `(ô chữ cái)` | `## Đáp án` |
@@ -78,10 +79,10 @@ Trả về các Task liên tiếp theo thứ tự Bố cục, rồi mục `## B�
     ## Task: Complete the sentences.
     Bố cục: Task 4
     Mục tiêu: Chọn từ đúng theo chủ ngữ
-    Ngữ cảnh: Cuối tuần của gia đình Mai
+    Ngữ cảnh: Cuối tuần của gia đình Hoa
     Dạng Q: điền từ
     Khung từ: is, are
-    1. Mai ___ at the beach.
+    1. Hoa ___ at the beach.
     2. Her parents ___ there too.
 
     ## Đáp án
