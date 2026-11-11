@@ -90,7 +90,21 @@ footer{color:var(--mute);font-size:13.5px}
 <body>
 <main>
 <h1>Sơ đồ Trình tự sinh</h1>
-<p class="sub">Tài liệu AI nhận cùng file Kiến thức để viết một phiếu. Bài mẫu: so sánh hơn / so sánh nhất, bố cục mặc định 6 Task.</p>
+<p class="sub">Tài liệu AI nhận cùng file Kiến thức để viết một phiếu. Phiếu mẫu: so sánh hơn / so sánh nhất, Bố cục mặc định 6 Task.</p>
+
+<section>
+<h2>0. Thuật ngữ</h2>
+<p class="note">Không còn khái niệm TF. Mỗi thuật ngữ chỉ có một nghĩa.</p>
+<div class="rule" style="margin-top:0">
+  <div><b>B (Bước)</b>: một bước trong Trình tự của chuyên đề, mã cố định B1…Bn. Kiến thức cũng gọi bước bằng mã B.</div>
+  <div><b>Task</b>: Task 1, 2, 3… trong phiếu. Số Task do Bố cục quyết định.</div>
+  <div><b>Dạng Q</b>: dạng làm bài của Task (Q1–Q12). Mỗi Task có đúng một Dạng Q.</div>
+  <div><b>Bố cục</b>: danh sách Task của phiếu: Task nào thuộc B nào, Dạng Q nào, mấy câu, mức độ nào.</div>
+</div>
+<div class="after" style="grid-template-columns:1fr">
+  <div class="box gen"><b>Quan hệ</b><small>Mỗi B có 1 hoặc nhiều Task (mặc định 1). Dạng Q của Task lấy từ danh sách Dạng Q mà B đó cho phép. Giáo viên thêm Task thì số Task đổi, số B không đổi.</small></div>
+</div>
+</section>
 
 <div class="legend">
   <span class="tag fix">Cố định (không đổi giữa các lần sinh)</span>
@@ -104,8 +118,8 @@ footer{color:var(--mute);font-size:13.5px}
 <p class="note">Kiến thức đi nguyên văn. Năm nguồn còn lại được app ghép thành "Trình tự sinh".</p>
 <div class="flow">
   <div class="col">
-    <div class="box fix"><b>Kiến thức</b><small>mỗi lesson · bạn viết</small></div>
-    <div class="box filt"><b>Trình tự chuyên đề</b><small>cách làm · bạn viết</small></div>
+    <div class="box fix"><b>Kiến thức</b><small>mỗi lesson · bạn viết · dòng đầu ghi "Trình tự áp dụng: Grammar 2.0"</small></div>
+    <div class="box filt"><b>Trình tự chuyên đề</b><small>các B, mỗi B có Dạng Q được phép · bạn viết</small></div>
     <div class="box filt"><b>Mô tả các dạng Q</b><small>chung</small></div>
     <div class="box fix"><b>Quy tắc định dạng MD</b><small>chung</small></div>
     <div class="box fix"><b>Cách thức đặt câu hỏi</b><small>chung</small></div>
@@ -134,10 +148,10 @@ footer{color:var(--mute);font-size:13.5px}
   <div class="row fix"><div class="n">1</div><div class="t"><b>Vai trò và thông tin phiếu</b><small>bạn là ai, viết cho ai; thứ tự ưu tiên</small></div><div class="k">cố định</div></div>
   <div class="row fix"><div class="n">2</div><div class="t"><b>Quy tắc định dạng MD</b><small>cách viết ra để app đọc được</small></div><div class="k">cố định</div></div>
   <div class="row fix"><div class="n">3</div><div class="t"><b>Cách thức đặt câu hỏi</b><small>luật cứng của mọi câu hỏi</small></div><div class="k">cố định</div></div>
-  <div class="row filt"><div class="n">4</div><div class="t"><b>Mô tả các dạng Q</b><small>chỉ Q có trong phiếu</small></div><div class="k">lọc</div></div>
-  <div class="row filt"><div class="n">5</div><div class="t"><b>Trình tự chuyên đề Grammar</b><small>quy mô · quy tắc toàn phiếu · B1…B6, mỗi B có Q được chọn</small></div><div class="k">lọc</div></div>
+  <div class="row filt"><div class="n">4</div><div class="t"><b>Mô tả các dạng Q</b><small>chỉ Dạng Q có trong phiếu</small></div><div class="k">lọc</div></div>
+  <div class="row filt"><div class="n">5</div><div class="t"><b>Trình tự chuyên đề Grammar</b><small>quy mô · quy tắc toàn phiếu · B1…B6, mỗi B có Dạng Q được chọn</small></div><div class="k">lọc</div></div>
   <div class="row teach"><div class="n">6</div><div class="t"><b>Ghi chú của giáo viên</b><small>dặn riêng cho phiếu này</small></div><div class="k">giáo viên gõ</div></div>
-  <div class="row gen"><div class="n">7</div><div class="t"><b>Bố cục phiếu</b><small>Task nào, mấy câu, mức nào, các con số cụ thể</small></div><div class="k">sinh ra</div></div>
+  <div class="row gen"><div class="n">7</div><div class="t"><b>Bố cục phiếu</b><small>Task nào thuộc B nào, Dạng Q nào, mấy câu, mức nào, các con số cụ thể</small></div><div class="k">sinh ra</div></div>
   <div class="row gen"><div class="n">8</div><div class="t"><b>Lệnh</b><small>viết 6 Task theo Bố cục, rồi mục Báo cáo</small></div><div class="k">sinh ra</div></div>
 </div>
 <div class="rule">
@@ -150,9 +164,9 @@ footer{color:var(--mute);font-size:13.5px}
 
 <section>
 <h2>3. Logic lọc: Bố cục quyết định AI thấy gì</h2>
-<p class="note">Q hoặc B không có trong Bố cục thì không gửi. Mức độ: chỉ giữ dòng của mức được chọn.</p>
+<p class="note">B hoặc Dạng Q không có trong Bố cục thì không gửi. Mức độ: chỉ giữ dòng của mức được chọn.</p>
 <div class="filter">
-  <div><p class="hd">Trình tự đầy đủ</p><div class="list">
+  <div><p class="hd">Trình tự đầy đủ (B + Dạng Q cho phép)</p><div class="list">
     <div class="item">B1 <span class="q on">Q10</span><span class="q off">Q7</span></div>
     <div class="item">B2 <span class="q on">Q3</span><span class="q off">Q4</span></div>
     <div class="item">B3 <span class="q on">Q4</span><span class="q off">Q3</span></div>
@@ -162,7 +176,7 @@ footer{color:var(--mute);font-size:13.5px}
   </div></div>
   <div class="arrow">⬅</div>
   <div><p class="hd">Bố cục (giáo viên chọn)</p><div class="list">
-    <div class="item keep">Task 1 · B1 · Q10 · Dễ</div>
+    <div class="item keep">Task 1 · B1 · Dạng Q10 · Dễ</div>
     <div class="item keep">Task 2 · B2 · Q3 · Vừa</div>
     <div class="item keep">Task 3 · B3 · Q4 · Vừa</div>
     <div class="item keep">Task 4 · B4 · Q1 · Vừa</div>
@@ -179,7 +193,7 @@ footer{color:var(--mute);font-size:13.5px}
     <div class="item keep">B6 → Q12 (Vừa)</div>
   </div></div>
 </div>
-<p class="note" style="margin-top:14px">Giáo viên có thể: thêm Task cùng B · đổi Q (chỉ trong danh sách Q của B đó) · đổi số câu và mức độ · bỏ B không bắt buộc (B6). Quy tắc chỉ dành cho B đã bỏ cũng bị bỏ.</p>
+<p class="note" style="margin-top:14px">Giáo viên có thể: thêm Task cho một B · đổi Dạng Q (chỉ trong danh sách Dạng Q của B đó) · đổi số câu và mức độ · bỏ B không bắt buộc (B6). Quy tắc chỉ dành cho B đã bỏ cũng bị bỏ.</p>
 </section>
 
 <section>
@@ -202,7 +216,7 @@ footer{color:var(--mute);font-size:13.5px}
     <ul>
       <li>Vai trò: phân biệt cách dùng bằng nghĩa</li>
       <li>Tiêu chí kiểm định (dùng làm rubric rà soát)</li>
-      <li>Q3 Chọn A/B/C
+      <li>Dạng Q3 Chọn A/B/C
         <ul>
           <li>Số câu: 5 (4–6)</li>
           <li>Cấu trúc trình bày: tình huống + 3 lựa chọn</li>
@@ -216,9 +230,9 @@ footer{color:var(--mute);font-size:13.5px}
 </section>
 
 <section>
-<h2>5. Luồng sư phạm B1 → B6 và Q được chọn</h2>
+<h2>5. Luồng sư phạm B1 → B6 và Dạng Q được chọn</h2>
 <p class="note">Gợi ý giảm dần: học sinh càng lúc càng tự làm.</p>
-<div class="head"><span>Bước</span><span>Mức nhận thức</span><span>Q</span><span class="cl">Gợi ý</span><span>Câu</span></div>
+<div class="head"><span>B</span><span>Mức nhận thức</span><span>Dạng Q</span><span class="cl">Gợi ý</span><span>Câu</span></div>
 <div class="steps">
   <div class="st"><span class="b">B1</span><span>Quan sát cấu trúc<br><span class="lv">Recognition</span></span><span>Q10</span><span class="cl">nhiều (bảng mẫu)</span><span>4 ô</span></div>
   <div class="st"><span class="b">B2</span><span>Hiểu nghĩa, cách dùng<br><span class="lv">Understanding</span></span><span>Q3</span><span class="cl">ba lựa chọn</span><span>5</span></div>
@@ -237,7 +251,7 @@ footer{color:var(--mute);font-size:13.5px}
   <div class="box fix">AI trả về</div><div class="down">↓</div>
   <div class="box gen"><b>Làm sạch</b><small>bỏ lời chào, tách mục Báo cáo</small></div><div class="down">↓</div>
   <div class="box gen"><b>Tách theo "## Task:"</b><small>ghép đúng chỗ nhờ dòng "Bố cục: Task k"</small></div><div class="down">↓</div>
-  <div class="box gen"><b>Kiểm từng Task so với Bố cục</b><small>đúng Q · đúng số câu · có đáp án · đúng con số đã tính (câu lộ đáp án, vị trí câu xác định bằng nghĩa) · từ ngoài phạm vi · giới hạn lặp</small></div><div class="down">↓</div>
+  <div class="box gen"><b>Kiểm từng Task so với Bố cục</b><small>đúng Dạng Q · đúng số câu · có đáp án · đúng con số đã tính (câu lộ đáp án, vị trí câu xác định bằng nghĩa) · từ ngoài phạm vi · giới hạn lặp</small></div><div class="down">↓</div>
   <div class="two">
     <div class="box ok"><b>Đạt</b><small>vào editor</small></div>
     <div class="box err"><b>Lỗi</b><small>gửi lại chỉ Task đó kèm danh sách lỗi (tối đa 2 lần)</small></div>
@@ -245,7 +259,7 @@ footer{color:var(--mute);font-size:13.5px}
 </div>
 </section>
 
-<footer>Đây là mô tả hành vi dự kiến. Bộ đọc và bộ lọc theo Bố cục chưa được viết trong app.</footer>
+<footer>Đây là mô tả hành vi dự kiến. Bộ đọc B / Task / Dạng Q và bộ lọc theo Bố cục chưa được viết trong app.</footer>
 </main>
 </body>
 </html>
