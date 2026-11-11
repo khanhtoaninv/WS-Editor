@@ -133,7 +133,7 @@ Không phải Dạng Q riêng, dùng kèm Dạng Q nào cũng được: khung t�
 | Học sinh làm, Trên phiếu | AI hiểu dạng làm bài và hình thức | AI |
 | Chấm | AI biết có cần `## Đáp án` hay không; app biết chấm được tự động hay không | AI, app |
 | Ràng buộc | luật cứng của Dạng Q, đúng ở mọi chuyên đề; Trình tự chỉ được làm chặt thêm | AI, app (kiểm tra sau khi sinh) |
-| Tham số mức độ | danh sách đòn bẩy khi Trình tự định nghĩa Dễ / Khá / Khó cho Dạng Q này | người viết Trình tự |
+| Tham số mức độ | danh sách đòn bẩy khi Trình tự định nghĩa Dễ / Vừa / Khó cho Dạng Q này | người viết Trình tự |
 | Không dùng khi | giúp người viết Trình tự chọn Dạng Q cho đúng B | người viết Trình tự |
 | Cần ảnh, Sinh tự động (bảng tóm tắt) | app lọc Dạng Q không dùng được (không có ảnh, Q11) | app |
 
