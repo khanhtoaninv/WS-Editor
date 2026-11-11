@@ -2,7 +2,8 @@
 
 Mỗi lesson có một file. AI đọc nguyên văn. File chỉ chứa nội dung của lesson này; cách làm bài nằm ở Trình tự.
 
-Phiên bản 2 có ba thay đổi để phiếu nhất quán hơn:
+Phiên bản 2 có các thay đổi sau để phiếu nhất quán hơn:
+- Có thêm dòng **Kiểu ngữ pháp** (nghĩa hoặc hình thức) ở đầu file.
 - Mỗi cấu trúc có thêm ba dòng: **Dùng khi**, **Dấu hiệu bề mặt**, **Câu hỏi lộ đáp án**.
 - Có thêm mục **Dạng câu cần phủ**.
 - **Từ vựng** là danh sách từ cụ thể.
@@ -19,6 +20,7 @@ Unit: 5
 Lesson: 2
 Chuyên đề: Grammar
 Trình tự áp dụng: Grammar 2.1
+Kiểu ngữ pháp: nghĩa
 
 ## Mục tiêu
 - M1: So sánh hai người/vật bằng tính từ ngắn (tall → taller than).
@@ -96,6 +98,7 @@ Lớp 4, trình độ A1. Câu ngắn, từ quen thuộc.
 | Mục | Bắt buộc | Dùng để |
 |---|---|---|
 | Đầu file (Giáo trình, Unit, Lesson, Chuyên đề, Trình tự áp dụng) | có | app xếp lesson vào cây, tìm đúng Trình tự, cảnh báo khi phiên bản Trình tự đã đổi |
+| Kiểu ngữ pháp | có | `nghĩa`: các hình thức khác nhau về nghĩa (so sánh hơn / nhất, hai thì). `hình thức`: đúng sai chỉ do quy tắc hình thức (a/an, is/are). App chọn tham số theo dòng này |
 | Mục tiêu | có | AI biết phiếu dạy gì. Mã M1, M2… để Báo cáo ghi Task nào phủ mục tiêu nào |
 | Học sinh | có | độ dài câu, độ khó từ |
 | Kiến thức (K1, K2…) | có | nguồn duy nhất về đúng/sai ngôn ngữ. Ví dụ trong mục này là ví dụ chuẩn |
@@ -106,7 +109,7 @@ Lớp 4, trình độ A1. Câu ngắn, từ quen thuộc.
 | Từ vựng được dùng | có | danh sách **đóng** thì app chặn từ ngoài danh sách; danh sách **mở** thì app chỉ cảnh báo |
 | Ngoài phạm vi | không | chặn AI "nâng khó" |
 | Lỗi thường gặp: Lỗi hình thức | có | nguồn cho lựa chọn "sai vì hình thức" |
-| Lỗi thường gặp: Nhầm cách dùng | có | nguồn cho lựa chọn "sai vì nghĩa" |
+| Lỗi thường gặp: Nhầm cách dùng | có | nguồn cho lựa chọn "sai vì nghĩa". Kiểu hình thức thì ghi "không có" |
 | Theo từng B | không | chỉ ghi khi lesson cần dữ liệu riêng cho một B; dùng mã B theo Trình tự |
 
 ## Nguyên tắc viết
@@ -115,5 +118,7 @@ Lớp 4, trình độ A1. Câu ngắn, từ quen thuộc.
 - Mỗi ý một dòng, câu ngắn, không giải thích dài.
 - Ví dụ chỉ ghi câu đúng. Câu sai ghi ở Lỗi thường gặp, đánh dấu `*`.
 - **Dấu hiệu bề mặt** ghi đúng chữ xuất hiện trong câu, dùng `…` cho chỗ thay đổi. Không có thì ghi "không có".
+- **Kiểu hình thức**: dòng Dùng khi ghi điều kiện hình thức (an: trước từ bắt đầu bằng âm nguyên âm); Dấu hiệu bề mặt và Câu hỏi lộ đáp án ghi "không có"; Lỗi hình thức ghi ít nhất hai lỗi khác nhau.
+- Không chắc là kiểu nào thì hỏi: đổi hình thức có làm đổi nghĩa câu không? Có thì là kiểu nghĩa.
 - Không viết cách ra câu hỏi, số câu hay mức độ. Những thứ đó thuộc Trình tự và Bố cục.
 - Không để phần "đề xuất" hoặc "chờ duyệt" trong file gửi đi. Chưa chắc thì chưa viết.

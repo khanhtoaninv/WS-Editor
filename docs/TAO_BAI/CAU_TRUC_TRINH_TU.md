@@ -5,6 +5,8 @@ Mỗi chuyên đề trong một giáo trình có một file (ví dụ Grammar). 
 So với bản 2.0, bản 2.1 có các thay đổi sau:
 - Mức độ có tham số đo được.
 - Định nghĩa dựa vào các dòng mới của Kiến thức.
+- Có hai kiểu ngữ pháp: kiểu nghĩa và kiểu hình thức, mỗi kiểu một bộ tham số.
+- Độ dài tính trên cả phần đề, không tính từng câu.
 - Quy tắc 4 và 5 được sửa.
 - B1 ghi rõ ngoại lệ với điều G3.
 - Có thêm dòng Câu mẫu.
@@ -18,7 +20,7 @@ Phiên bản: 2.1
 Câu mẫu: Câu mẫu Grammar 1.0
 
 ## Kiến thức cần có
-Bắt buộc: Mục tiêu; Học sinh; Kiến thức (mỗi K có Dùng khi, Dấu hiệu bề mặt, Câu hỏi lộ đáp án); Dạng câu cần phủ; Từ vựng được dùng; Lỗi thường gặp (Lỗi hình thức, Nhầm cách dùng).
+Bắt buộc: dòng Kiểu ngữ pháp ở đầu file; Mục tiêu; Học sinh; Kiến thức (mỗi K có Dùng khi, Dấu hiệu bề mặt, Câu hỏi lộ đáp án); Dạng câu cần phủ; Từ vựng được dùng; Lỗi thường gặp (Lỗi hình thức, Nhầm cách dùng).
 Tùy chọn: Ngoài phạm vi, Theo từng B. Thiếu mục tùy chọn thì AI tự lấy từ mục Kiến thức và Từ vựng được dùng.
 
 ## Mức độ
@@ -26,17 +28,33 @@ Ba mức: Dễ, Vừa, Khó. Mặc định của mọi B là Vừa; giáo viên 
 Tham số chung, áp cho Task thuộc B2, B3, B4 (app tính số cụ thể và ghi vào Bố cục):
 | Tham số | Dễ | Vừa | Khó |
 |---|---|---|---|
-| Độ dài câu (không tính lựa chọn) | ≤ 8 từ | ≤ 12 từ | ≤ 16 từ |
-| Câu xác định bằng nghĩa, tối thiểu | 20% | 40% | 60% |
-| Câu hỏi lộ đáp án, tối đa (chỉ B2) | 60% | 40% | 20% |
+| Độ dài phần đề, tối đa | 10 từ | 16 từ | 22 từ |
+| Câu xác định bằng nghĩa, tối thiểu (chỉ Kiểu nghĩa) | 20% | 40% | 60% |
+| Câu hỏi lộ đáp án, tối đa (chỉ Kiểu nghĩa, chỉ B2) | 60% | 40% | 20% |
+| Câu không có mẫu gần đó, tối thiểu (chỉ Kiểu hình thức) | 20% | 40% | 60% |
+
+- **Phần đề** của một câu hỏi gồm tình huống, các lượt hội thoại và câu có chỗ trống. Không tính lựa chọn, tên người nói, số câu và từ gốc trong ngoặc. Đếm theo khoảng trắng.
+- **Câu không có mẫu gần đó**: trong câu đó và câu liền trước không có hình thức nào của mục tiêu ngoài chỗ trống. Học sinh phải tự áp dụng quy tắc.
+
 Tham số riêng của từng Dạng Q ghi ở dòng Mức độ của Dạng Q đó.
+
+## Kiểu ngữ pháp
+Kiến thức ghi một trong hai kiểu ở dòng `Kiểu ngữ pháp:`.
+
+**Kiểu nghĩa.** Các hình thức khác nhau về nghĩa hoặc cách dùng, ví dụ hai thì hiện tại, so sánh hơn và so sánh nhất, can và can't. Áp dụng đủ mọi quy tắc dưới đây.
+
+**Kiểu hình thức.** Đúng sai chỉ do quy tắc hình thức, không do nghĩa, ví dụ a và an, is và are, số nhiều -s. Kiến thức ghi `Nhầm cách dùng: không có`; dòng Dùng khi ghi điều kiện hình thức (an: trước từ bắt đầu bằng âm nguyên âm). Khi đó:
+- Quy tắc 2, 6 không áp dụng. Quy tắc 2b thay vào.
+- Quy tắc 5 dùng phương án b.
+- Tiêu chí quan trọng nhất đọc là: học sinh dùng đúng nhờ **áp dụng quy tắc**, không nhờ chép một mẫu đứng gần.
+- B2 đổi Vai trò: hiểu điều kiện chọn hình thức (dòng Dùng khi). Mỗi điều kiện có ít nhất một câu.
 
 ## Quy mô
 - Bài về nhà, học sinh tự làm, khoảng 25 phút, khoảng 25 câu có đáp án (gợi ý, không cứng).
 - Một phiếu một trọng tâm: mục Mục tiêu của Kiến thức.
 
 ## Tiêu chí quan trọng nhất
-Học sinh nhận ra và dùng đúng mục tiêu nhờ **nghĩa của tình huống hoặc dữ kiện**, không chỉ nhờ một dấu hiệu bề mặt hay dạng chữ của câu hỏi.
+Học sinh nhận ra và dùng đúng mục tiêu nhờ **nghĩa của tình huống hoặc dữ kiện**, không chỉ nhờ một dấu hiệu bề mặt hay dạng chữ của câu hỏi. (Kiểu hình thức: xem mục Kiểu ngữ pháp.)
 
 ## Định nghĩa
 - Dấu hiệu bề mặt: chỉ các chữ ghi ở dòng Dấu hiệu bề mặt của Kiến thức.
@@ -46,10 +64,13 @@ Học sinh nhận ra và dùng đúng mục tiêu nhờ **nghĩa của tình hu�
 
 ## Quy tắc toàn phiếu
 1. Không câu trần. [B2 B3 B4]
-2. Số câu xác định bằng nghĩa không ít hơn số ở Bố cục, đặt đúng vị trí bắt buộc ở Bố cục; AI báo cáo số thứ tự. [B2 B3 B4]
+2. Số câu xác định bằng nghĩa không ít hơn số ở Bố cục, đặt đúng vị trí bắt buộc ở Bố cục; AI báo cáo số thứ tự. [B2 B3 B4] (Kiểu nghĩa)
+2b. Số câu không có mẫu gần đó không ít hơn số ở Bố cục, đặt đúng vị trí bắt buộc; AI báo cáo số thứ tự. [B2 B3 B4] (Kiểu hình thức)
 3. Đáp án suy từ dữ kiện nói ra trong tình huống; đồ vật làm nền không phải dữ kiện. Mỗi tình huống chỉ dùng một lần trong Task. [B2 B3 B4]
 4. Câu liền trước không chứa hình thức của đáp án. [B3 B4]
-5. Câu chọn có đúng ba lựa chọn: một đúng; một sai vì nghĩa (lấy từ Nhầm cách dùng); một sai vì hình thức (đúng một lỗi, lấy từ Lỗi hình thức). Không lỗi chính tả trừ khi Lỗi hình thức ghi lỗi chính tả. [B2 B3]
+5. Câu chọn có đúng ba lựa chọn, mỗi lựa chọn sai đúng một lỗi. Không lỗi chính tả trừ khi Lỗi hình thức ghi lỗi chính tả. [B2 B3]
+   - a. Một đúng; một sai vì nghĩa (lấy từ Nhầm cách dùng); một sai vì hình thức (lấy từ Lỗi hình thức). Lựa chọn sai vì nghĩa phải **đúng ngữ pháp khi đặt vào câu** và bị loại **bằng dữ kiện có trong câu**. Không có dữ kiện như vậy thì dùng phương án b. Ở B2, mọi câu dùng phương án a.
+   - b. Một đúng; hai sai vì hình thức, là hai lỗi khác nhau của Lỗi hình thức. Mục tiêu chỉ có hai hình thức thật (a/an, is/are) thì được dùng hai lựa chọn.
 6. Số câu hỏi lộ đáp án không vượt số ở Bố cục. [B2]
 7. Hội thoại viết thành lượt `Tên: ...`, mỗi lượt một người nói; lời kể đứng riêng một dòng; không hai câu hỏi liên tiếp. [B2]
 8. Một tình huống tối đa 2 lần trên cả phiếu. Không dùng cùng một khuôn câu quá 2 lần trong một Task. [cả phiếu]
@@ -57,7 +78,7 @@ Học sinh nhận ra và dùng đúng mục tiêu nhờ **nghĩa của tình hu�
 10. Mức hỗ trợ giảm dần từ B3 đến B6. [cả phiếu]
 11. Mỗi đáp án truy được về một K của Kiến thức; không bịa số liệu ngoài dữ kiện đã cho. [cả phiếu]
 12. Chỉ dùng chữ, làm được khi in đen trắng, trừ Dạng Q có ghi cần ảnh. [cả phiếu]
-13. Câu đạt chuẩn giống câu mẫu Đạt về cách làm, không giống về chữ; không mắc lỗi của câu mẫu Không đạt. [cả phiếu]
+13. Câu đạt chuẩn giống câu mẫu Đạt về cách làm, không giống về chữ; không mắc lỗi của câu mẫu Không đạt. Không lặp khuôn tình huống của câu mẫu (cách mở câu, loại tình huống, tên nhân vật); trong một Task, không quá 2 câu mở đầu giống nhau. [cả phiếu]
 
 ## B1: Quan sát
 - Mức nhận thức: Recognition. Bắt buộc: có. Mức độ mặc định: Vừa.
@@ -88,7 +109,7 @@ Học sinh nhận ra và dùng đúng mục tiêu nhờ **nghĩa của tình hu�
 ### Dạng Q3 Chọn A/B/C
 - Số câu: 5 (4–6).
 - Cấu trúc trình bày: mỗi câu một tình huống ngắn có một chỗ trống; ba lựa chọn xếp dọc dưới câu.
-- Nguyên tắc nội dung: theo quy tắc 1, 2, 3, 5, 6, 7; một đáp án đúng suy ra từ tình huống.
+- Nguyên tắc nội dung: theo quy tắc 1, 2 (hoặc 2b), 3, 5, 6, 7; một đáp án đúng suy ra từ tình huống.
 - Mức độ: Dễ: tình huống một câu. Vừa: tình huống hai câu hoặc hội thoại hai lượt. Khó: hội thoại ba lượt, thông tin quyết định nằm ở lượt đầu.
 
 ### Dạng Q4 Chọn trong câu
@@ -166,6 +187,7 @@ Học sinh nhận ra và dùng đúng mục tiêu nhờ **nghĩa của tình hu�
 |---|---|---|
 | Đầu file: Chuyên đề, Phiên bản, Câu mẫu | app tìm đúng Trình tự và bộ Câu mẫu đi kèm, so với dòng "Trình tự áp dụng" của Kiến thức | app |
 | Kiến thức cần có | app kiểm file Kiến thức đủ mục trước khi sinh | app |
+| Kiểu ngữ pháp | app chọn dòng tham số và quy tắc theo kiểu của Kiến thức, chỉ gửi phần đúng kiểu | app |
 | Mức độ (bảng tham số chung) | app tính số câu xác định bằng nghĩa và số câu lộ cho từng Task; app kiểm độ dài câu | app, AI |
 | Quy mô, Tiêu chí quan trọng nhất, Định nghĩa | đưa nguyên văn cho AI | AI |
 | Quy tắc toàn phiếu | mỗi quy tắc một lần, ghi phạm vi `[B…]`; B chỉ tham chiếu số quy tắc | AI, app (lọc theo B có trong Bố cục), Rà soát |
@@ -181,4 +203,4 @@ Dạng Q đầu tiên trong mỗi B là mặc định khi app sinh Bố cục.
 - Trình tự được làm khác Cách thức đặt câu hỏi ở một điều nào đó thì ghi dòng `Ngoại lệ:` kèm số điều và lý do.
 - Cú pháp MD của từng Dạng Q không viết ở đây. Cú pháp thuộc Quy tắc định dạng MD.
 - Đổi thứ tự hoặc số B thì tăng Phiên bản. Kiến thức tham chiếu mã B, nên app phải cảnh báo khi phiên bản đổi.
-- Các tham số Mức độ (8/12/16 từ, 20/40/60%) là **điểm khởi đầu, chưa thử thật**. Chỉnh sau khi sinh thử.
+- Các tham số Mức độ (10/16/22 từ, 20/40/60%) là **điểm khởi đầu, chưa thử thật**. Chỉnh sau khi sinh thử.

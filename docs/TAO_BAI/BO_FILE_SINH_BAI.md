@@ -4,7 +4,7 @@ Mỗi thông tin chỉ nằm ở một file. Muốn sửa điều gì thì sửa
 
 | File | Một file cho | Chứa | Ai viết |
 |---|---|---|---|
-| `CAU_TRUC_KIEN_THUC.md` | một lesson | mục tiêu, cấu trúc (Dùng khi, Dấu hiệu bề mặt, Câu hỏi lộ đáp án), dạng câu cần phủ, từ vựng, lỗi thường gặp | giáo viên |
+| `CAU_TRUC_KIEN_THUC.md` | một lesson | kiểu ngữ pháp (nghĩa / hình thức), mục tiêu, cấu trúc (Dùng khi, Dấu hiệu bề mặt, Câu hỏi lộ đáp án), dạng câu cần phủ, từ vựng, lỗi thường gặp | giáo viên |
 | `CAU_TRUC_TRINH_TU.md` | một chuyên đề | các bước B, Dạng Q cho phép, bảng Mức độ, quy tắc toàn phiếu, tiêu chí kiểm định | giáo viên |
 | `CAU_TRUC_CAU_MAU.md` | một Trình tự | câu Đạt và Không đạt cho từng cặp B + Dạng Q | Claude viết bản đầu, giáo viên duyệt |
 | `CAU_TRUC_MO_TA_DANG_Q.md` | dùng chung | Q1–Q12 là gì, ràng buộc cứng | cố định |
@@ -23,7 +23,7 @@ Mỗi thông tin chỉ nằm ở một file. Muốn sửa điều gì thì sửa
 6. **Giáo viên duyệt.** Giáo viên đọc phiếu và Báo cáo.
 
 ## Chưa làm
-- **Chưa thử với AI thật.** Các tham số Mức độ (8/12/16 từ, 20/40/60%) chỉ là điểm khởi đầu.
+- **Chưa thử với AI thật.** Các tham số Mức độ (10/16/22 từ phần đề, 20/40/60%) chỉ là điểm khởi đầu.
 - **App chưa đọc được dạng mới.** Bộ đọc của app chưa nhận `Dạng Q:`, `Bố cục: Task k`, `## Báo cáo`, mã K và các dòng mới của Kiến thức.
 - **Sơ đồ HTML đã cũ.** `SO_DO_TRINH_TU_SINH.html` còn ghi 8 mục và chưa có Câu mẫu, Rà soát.
 - **Các file cũ chưa xử lý.** `TRINH_TU_SINH_CHINH_THUC.md`, `MAU_TRINH_TU_SINH.md`, `1_DANG_Q.md`, `CHUNG_1_QUY_TAC_MD.md` thuộc thiết kế cũ, chờ quyết định bỏ.

@@ -53,7 +53,7 @@ Dòng bắt đầu bằng → là lời giải thích, không phải nội dung 
       A. is playing
       B. play
       C. plays
-→ Đáp án C. Dấu hiệu "every Saturday". A sai vì nghĩa, B sai vì hình thức.
+→ Đáp án C. Dấu hiệu "every Saturday". A sai vì nghĩa: đặt vào câu vẫn đúng ngữ pháp, bị loại nhờ dữ kiện "every Saturday" (quy tắc 5a). B sai vì hình thức.
 ### Không đạt
     3. Look! The children ___ in the park.
       A. are playing
@@ -63,8 +63,8 @@ Dòng bắt đầu bằng → là lời giải thích, không phải nội dung 
 
 ## B3 · Q4 Chọn trong câu · Vừa
 ### Đạt: câu xác định bằng nghĩa
-    1. Shh! Dad {talks|*is talking|is talk} on the phone.
-→ "Shh!" không nằm trong danh sách dấu hiệu, nên câu vẫn là câu xác định bằng nghĩa. Ba vế: đúng / sai vì nghĩa / sai vì hình thức.
+    1. Dad has the phone at his ear. He {talks|*is talking|is talk} to Grandma.
+→ Câu không có dấu hiệu bề mặt; học sinh phải hiểu tình huống "đang cầm điện thoại". Ba vế: đúng / sai vì nghĩa / sai vì hình thức.
 ### Đạt: câu có dấu hiệu
     2. My sister {*walks|is walking|walk} to school every day.
 ### Không đạt
@@ -74,7 +74,7 @@ Dòng bắt đầu bằng → là lời giải thích, không phải nội dung 
 
 ## B4 · Q1 Điền từ · Vừa
 ### Đạt: câu xác định bằng nghĩa
-    1. Please be quiet. Grandpa ___ (sleep).
+    1. Grandpa is in bed and his eyes are closed. He ___ (sleep).
 ### Đạt: câu có dấu hiệu
     2. He ___ (go) swimming on Sundays.
 
@@ -105,6 +105,19 @@ Dòng bắt đầu bằng → là lời giải thích, không phải nội dung 
     1. Lily ___ a book now. (read)
 → Đây là bài điền từ của B4, không phải xử lý dữ kiện để tạo câu (Tiêu chí kiểm định B5).
 
+## Kiểu hình thức · B2 · Q3 Chọn A/B/C · Vừa
+Kiến thức minh họa riêng cho khối này: is / are. Dùng khi: is với chủ ngữ số ít, are với chủ ngữ số nhiều. Nhầm cách dùng: không có. Lỗi hình thức: *the cats is; *my sister are.
+### Đạt: câu không có mẫu gần đó
+    1. My grandparents ___ in the garden.
+      A. is
+      B. are
+→ Đáp án B. Chỉ có hai hình thức thật nên dùng hai lựa chọn (quy tắc 5b). Câu và câu liền trước không có is/are nào khác, học sinh phải tự áp dụng quy tắc.
+### Không đạt
+    2. The dog is brown. The cat ___ brown too.
+      A. is
+      B. are
+→ Câu liền trước có sẵn "is" với chủ ngữ cùng loại; học sinh chỉ cần chép (quy tắc 2b, 4).
+
 ## B6 · Q12 Viết tự do · Vừa
 ### Đạt
     Khối chữ trên:
@@ -126,6 +139,7 @@ Dòng bắt đầu bằng → là lời giải thích, không phải nội dung 
 | Đầu file: Trình tự, Phiên bản | app ghép đúng bộ câu mẫu với Trình tự | app |
 | Kiến thức minh họa | để AI hiểu vì sao câu mẫu đạt hoặc không đạt; không phải Kiến thức của lesson | AI |
 | Khối `## B · Dạng Q · mức` | ví dụ cụ thể cho từng cặp B + Dạng Q | app chỉ gửi khối có trong Bố cục |
+| Kiểu hình thức | khối riêng cho điểm ngữ pháp thuần hình thức | app chỉ gửi khi Kiến thức ghi `Kiểu ngữ pháp: hình thức`; khi đó không gửi các khối Kiểu nghĩa của B2 |
 | Đạt / Không đạt | mỗi khối ít nhất một câu Đạt và một câu Không đạt. Ở B2, B3, B4 có cả câu xác định bằng nghĩa lẫn câu có dấu hiệu | AI, Rà soát |
 | Dòng → | giải thích, dẫn số quy tắc hoặc tên ràng buộc | AI, Rà soát |
 
@@ -135,5 +149,6 @@ Bộ câu mẫu thứ hai: mỗi Trình tự nên có hai bộ dùng hai điểm
 - Câu mẫu viết đúng cú pháp của Quy tắc định dạng MD, thụt lề 4 dấu cách. AI vừa thấy nội dung vừa thấy cách viết.
 - Mỗi câu Không đạt **chỉ sai một lỗi**, và dòng → gọi đúng tên lỗi.
 - Ưu tiên lỗi AI hay mắc thật. Sau mỗi lần thử thật, gặp lỗi mới thì thêm vào đây.
-- Hiện chỉ có mẫu mức Vừa và Dạng Q mặc định. Mẫu cho Dễ, Khó và Dạng Q phụ (Q7, B2 Q4, B3 Q3, B5 Q10) thêm sau khi thử thật.
+- Câu mẫu dùng nhiều kiểu tình huống khác nhau (âm thanh, hành động nhìn thấy, thời gian biểu, dữ kiện bảng) để AI không bám một khuôn.
+- Hiện chỉ có mẫu mức Vừa, Dạng Q mặc định và một khối Kiểu hình thức. Mẫu cho Dễ, Khó và Dạng Q phụ (Q7, B2 Q4, B3 Q3, B5 Q10) thêm sau khi thử thật.
 - Câu mẫu do giáo viên duyệt. Tôi (Claude) viết bản đầu; giáo viên kiểm từng câu trước khi dùng.

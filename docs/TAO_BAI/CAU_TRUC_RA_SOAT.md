@@ -23,7 +23,7 @@ Bạn là người duyệt phiếu, không phải người viết. Không viết
 Với mỗi câu có đáp án, ghi đáp án bạn chọn. Câu có hai đáp án hợp lý thì ghi cả hai.
 
 ## Bước 2: Làm bài như học sinh không hiểu nghĩa
-Với mỗi câu thuộc B2, B3, B4: chỉ nhìn dấu hiệu bề mặt (danh sách ở Kiến thức) và dạng câu hỏi, không đọc nghĩa tình huống. Câu nào vẫn chọn đúng thì ghi "đoán được".
+Với mỗi câu thuộc B2, B3, B4 (chỉ Kiểu nghĩa): chỉ nhìn dấu hiệu bề mặt (danh sách ở Kiến thức) và dạng câu hỏi, không đọc nghĩa tình huống. Câu nào vẫn chọn đúng thì ghi "đoán được".
 
 ## Bước 3: Đối chiếu tiêu chí
 Với mỗi Task, xét lần lượt:
@@ -76,8 +76,10 @@ Chạy trước lượt Rà soát. Task sai ở bước này thì sinh lại nga
 | vị trí đáp án đúng rải đều (không quá 2 câu liền cùng chữ cái; mỗi chữ cái có ít nhất một lần khi Task có từ 3 câu) | Cách thức điều 19 |
 | độ dài lựa chọn: dài nhất không quá 2 lần ngắn nhất | Cách thức điều 23 |
 | không có từ tuyệt đối trong lựa chọn (always, never, completely, absolutely); không có None/All of the above | Cách thức điều 24, 25, 27a |
-| độ dài câu không vượt mức của Mức độ | Trình tự, mục Mức độ |
-| câu ở vị trí bắt buộc không chứa dấu hiệu bề mặt nào | Trình tự quy tắc 2; Kiến thức, dòng Dấu hiệu bề mặt |
+| độ dài phần đề không vượt mức của Mức độ (đếm như định nghĩa ở Trình tự) | Trình tự, mục Mức độ |
+| câu ở vị trí bắt buộc không chứa dấu hiệu bề mặt nào; **chỉ dò phần đề**, không dò lựa chọn và đáp án; `…` trong dấu hiệu khớp tối đa 4 từ | Trình tự quy tắc 2; Kiến thức, dòng Dấu hiệu bề mặt |
+| Kiểu hình thức: câu ở vị trí bắt buộc và câu liền trước không chứa hình thức nào của mục tiêu ngoài chỗ trống | Trình tự quy tắc 2b |
+| không quá 2 câu trong một Task mở đầu bằng cùng 2 từ | Trình tự quy tắc 13 |
 | không có từ ngoài danh sách đóng (chặn); ngoài danh sách mở (cảnh báo) | Trình tự quy tắc 9; Kiến thức |
 | Báo cáo có đủ các nhãn mà Lệnh yêu cầu | Trình tự sinh, mục Lệnh |
 

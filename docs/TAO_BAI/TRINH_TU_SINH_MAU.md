@@ -175,7 +175,8 @@ Không dùng "None of the above" và "All of the above" (G25, G26).
 Phiên bản: 2.1. File này cố định cho mọi lesson Grammar; nội dung lesson ở file Kiến thức. Gọi các mục của Kiến thức bằng tên mục.
 
 ### Mức độ
-Mọi Task của phiếu này ở mức Vừa. Với Task thuộc B2, B3, B4: câu dài tối đa 12 từ (không tính lựa chọn); số câu xác định bằng nghĩa và số câu lộ đáp án theo mục 8.
+Mọi Task của phiếu này ở mức Vừa. Kiểu ngữ pháp của lesson: nghĩa. Với Task thuộc B2, B3, B4: phần đề tối đa 16 từ; số câu xác định bằng nghĩa và số câu lộ đáp án theo mục 8.
+- Phần đề của một câu hỏi gồm tình huống, các lượt hội thoại và câu có chỗ trống. Không tính lựa chọn, tên người nói, số câu và từ gốc trong ngoặc. Đếm theo khoảng trắng.
 
 ### Quy mô
 - Bài về nhà, học sinh tự làm, khoảng 25 phút, khoảng 25 câu có đáp án (gợi ý, không cứng).
@@ -195,7 +196,9 @@ Học sinh nhận ra và dùng đúng mục tiêu nhờ **nghĩa của tình hu�
 2. Số câu xác định bằng nghĩa không ít hơn số ở mục 8, đặt đúng vị trí bắt buộc ở mục 8; báo cáo số thứ tự. [B2 B3 B4]
 3. Đáp án suy từ dữ kiện nói ra trong tình huống; đồ vật làm nền không phải dữ kiện. Mỗi tình huống chỉ dùng một lần trong Task. [B2 B3 B4]
 4. Câu liền trước không chứa hình thức của đáp án. [B3 B4]
-5. Câu chọn có đúng ba lựa chọn: một đúng; một sai vì nghĩa (lấy từ Nhầm cách dùng); một sai vì hình thức (đúng một lỗi, lấy từ Lỗi hình thức). Không lỗi chính tả trừ khi Lỗi hình thức ghi lỗi chính tả. [B2 B3]
+5. Câu chọn có đúng ba lựa chọn, mỗi lựa chọn sai đúng một lỗi. Không lỗi chính tả trừ khi Lỗi hình thức ghi lỗi chính tả. [B2 B3]
+   - a. Một đúng; một sai vì nghĩa (lấy từ Nhầm cách dùng); một sai vì hình thức (lấy từ Lỗi hình thức). Lựa chọn sai vì nghĩa phải **đúng ngữ pháp khi đặt vào câu** và bị loại **bằng dữ kiện có trong câu**. Không có dữ kiện như vậy thì dùng phương án b. Ở B2, mọi câu dùng phương án a.
+   - b. Một đúng; hai sai vì hình thức, là hai lỗi khác nhau của Lỗi hình thức. Mục tiêu chỉ có hai hình thức thật (a/an, is/are) thì được dùng hai lựa chọn.
 6. Số câu hỏi lộ đáp án không vượt số ở mục 8. [B2]
 7. Hội thoại viết thành lượt `Tên: ...`, mỗi lượt một người nói; lời kể đứng riêng một dòng; không hai câu hỏi liên tiếp. [B2]
 8. Một tình huống tối đa 2 lần trên cả phiếu. Không dùng cùng một khuôn câu quá 2 lần trong một Task. [cả phiếu]
@@ -203,7 +206,7 @@ Học sinh nhận ra và dùng đúng mục tiêu nhờ **nghĩa của tình hu�
 10. Mức hỗ trợ giảm dần từ B3 đến B6. [cả phiếu]
 11. Mỗi đáp án truy được về một K của Kiến thức; không bịa số liệu ngoài dữ kiện đã cho. [cả phiếu]
 12. Chỉ dùng chữ, làm được khi in đen trắng. [cả phiếu]
-13. Câu đạt chuẩn giống câu mẫu Đạt ở mục 6 về cách làm, không giống về chữ; không mắc lỗi của câu mẫu Không đạt. [cả phiếu]
+13. Câu đạt chuẩn giống câu mẫu Đạt về cách làm, không giống về chữ; không mắc lỗi của câu mẫu Không đạt. Không lặp khuôn tình huống của câu mẫu (cách mở câu, loại tình huống, tên nhân vật); trong một Task, không quá 2 câu mở đầu giống nhau. [cả phiếu]
 
 ### B1: Quan sát
 - Mức nhận thức: Recognition.
@@ -314,7 +317,7 @@ Dòng bắt đầu bằng → là lời giải thích, không phải nội dung 
       A. is playing
       B. play
       C. plays
-→ Đáp án C. Dấu hiệu "every Saturday". A sai vì nghĩa, B sai vì hình thức.
+→ Đáp án C. Dấu hiệu "every Saturday". A sai vì nghĩa: đặt vào câu vẫn đúng ngữ pháp, bị loại nhờ dữ kiện "every Saturday" (quy tắc 5a). B sai vì hình thức.
 #### Không đạt
     3. Look! The children ___ in the park.
       A. are playing
@@ -324,8 +327,8 @@ Dòng bắt đầu bằng → là lời giải thích, không phải nội dung 
 
 ### B3 · Q4 Chọn trong câu · Vừa
 #### Đạt: câu xác định bằng nghĩa
-    1. Shh! Dad {talks|*is talking|is talk} on the phone.
-→ "Shh!" không nằm trong danh sách dấu hiệu, nên câu vẫn là câu xác định bằng nghĩa. Ba vế: đúng / sai vì nghĩa / sai vì hình thức.
+    1. Dad has the phone at his ear. He {talks|*is talking|is talk} to Grandma.
+→ Câu không có dấu hiệu bề mặt; học sinh phải hiểu tình huống "đang cầm điện thoại". Ba vế: đúng / sai vì nghĩa / sai vì hình thức.
 #### Đạt: câu có dấu hiệu
     2. My sister {*walks|is walking|walk} to school every day.
 #### Không đạt
@@ -335,7 +338,7 @@ Dòng bắt đầu bằng → là lời giải thích, không phải nội dung 
 
 ### B4 · Q1 Điền từ · Vừa
 #### Đạt: câu xác định bằng nghĩa
-    1. Please be quiet. Grandpa ___ (sleep).
+    1. Grandpa is in bed and his eyes are closed. He ___ (sleep).
 #### Đạt: câu có dấu hiệu
     2. He ___ (go) swimming on Sundays.
 
@@ -392,11 +395,11 @@ Không có.
 Tổng: 22 câu có đáp án (Task 1–5) và 4 dòng viết tự do (Task 6).
 
 Số liệu tính sẵn:
-| Task | Độ dài câu tối đa | Câu lộ đáp án tối đa | Câu xác định bằng nghĩa tối thiểu | Vị trí bắt buộc |
+| Task | Độ dài phần đề tối đa | Câu lộ đáp án tối đa | Câu xác định bằng nghĩa tối thiểu | Vị trí bắt buộc |
 |---|---|---|---|---|
-| 2 | 12 từ | 2 | 2 | câu 2, 4 |
-| 3 | 12 từ | không áp dụng | 2 | câu 2, 4 |
-| 4 | 12 từ | không áp dụng | 2 | câu 2, 4 |
+| 2 | 16 từ | 2 | 2 | câu 2, 4 |
+| 3 | 16 từ | không áp dụng | 2 | câu 2, 4 |
+| 4 | 16 từ | không áp dụng | 2 | câu 2, 4 |
 
 ## 9. LỆNH
 Viết đúng 6 Task theo mục 8, theo thứ tự, rồi mục `## Báo cáo`. Mỗi Task đúng Dạng Q, đúng số câu, đúng mức độ; đặt câu xác định bằng nghĩa đúng các vị trí bắt buộc. Nội dung ngôn ngữ lấy từ file Kiến thức đi kèm. Trước khi trả về, tự đối chiếu từng câu với Tiêu chí kiểm định của B và các câu mẫu Không đạt ở mục 6.
@@ -406,6 +409,6 @@ Mục `## Báo cáo` ghi cho từng Task:
 - Task 1–5: mã K của đáp án từng câu (`1 K1; 2 K3; …`).
 - Task 2, 3, 4: số thứ tự các câu xác định bằng nghĩa.
 - Task 2: số thứ tự các câu hỏi lộ đáp án.
-- Task 2, 3: với mỗi câu, ghi `đáp án / lựa chọn sai vì nghĩa / lựa chọn sai vì hình thức`.
+- Task 2, 3: với mỗi câu, ghi phương án của quy tắc 5 (a hoặc b) và vai trò từng lựa chọn, ví dụ `1 a: B đúng / A sai nghĩa / C sai hình thức`.
 - Task 3, 4: các dạng câu (loại câu, chủ ngữ) của mục Dạng câu cần phủ đã có trong Task.
 - Task 6: hướng chấm gợi ý, mỗi K một ý.

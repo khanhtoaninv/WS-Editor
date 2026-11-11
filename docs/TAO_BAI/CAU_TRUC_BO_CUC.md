@@ -23,11 +23,11 @@ Cho phép ảnh: không
 Tổng: 22 câu có đáp án (Task 1–5) và 4 dòng viết tự do (Task 6).
 
 ## Số liệu tính sẵn
-| Task | Độ dài câu tối đa | Câu lộ đáp án tối đa | Câu xác định bằng nghĩa tối thiểu | Vị trí bắt buộc |
+| Task | Độ dài phần đề tối đa | Câu lộ đáp án tối đa | Câu xác định bằng nghĩa tối thiểu | Vị trí bắt buộc |
 |---|---|---|---|---|
-| 2 | 12 từ | 2 | 2 | câu 2, 4 |
-| 3 | 12 từ | không áp dụng | 2 | câu 2, 4 |
-| 4 | 12 từ | không áp dụng | 2 | câu 2, 4 |
+| 2 | 16 từ | 2 | 2 | câu 2, 4 |
+| 3 | 16 từ | không áp dụng | 2 | câu 2, 4 |
+| 4 | 16 từ | không áp dụng | 2 | câu 2, 4 |
 
 ## Ghi chú của giáo viên
 Không có.
@@ -63,8 +63,8 @@ Không có.
 - Số câu ngoài khoảng của Trình tự không bị chặn, chỉ cảnh báo.
 
 ## Số liệu tính sẵn
-Tỷ lệ lấy từ bảng Mức độ của Trình tự, theo mức độ của Task. Quy tắc nào có phạm vi `[B…]` thì app chỉ tính cho Task thuộc phạm vi đó. Gọi n là số câu của Task, p là tỷ lệ:
-- **Độ dài câu tối đa** = số từ ghi ở bảng Mức độ.
+Tỷ lệ lấy từ bảng Mức độ của Trình tự, theo mức độ của Task và Kiểu ngữ pháp của Kiến thức. Kiểu hình thức thì cột "Câu xác định bằng nghĩa" đổi thành "Câu không có mẫu gần đó" và cột "Câu lộ đáp án" ghi không áp dụng. Quy tắc nào có phạm vi `[B…]` thì app chỉ tính cho Task thuộc phạm vi đó. Gọi n là số câu của Task, p là tỷ lệ:
+- **Độ dài phần đề tối đa** = số từ ghi ở bảng Mức độ.
 - **Câu xác định bằng nghĩa tối thiểu** k = làm tròn lên (p × n). Vừa: p = 40%, 5 câu thì k = 2.
 - **Câu lộ đáp án tối đa** = làm tròn xuống (p × n). Chỉ tính cho B2.
 - **Vị trí bắt buộc**: vị trí thứ i (i = 0 … k−1) = làm tròn lên ((i + 0,5) × n ÷ k).
