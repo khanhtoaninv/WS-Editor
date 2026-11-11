@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luồng sinh phiếu</title>
+<style>
+:root{
+  --bg:#f6f7f9; --card:#ffffff; --ink:#1d2330; --muted:#5b6475; --line:#c9cfda;
+  --gv:#e8f1ff; --gv-b:#5b8def; --chung:#eef7ee; --chung-b:#4f9a5b;
+  --app:#fff4e5; --app-b:#d98a1f; --ai:#f3ecff; --ai-b:#8a5cd6; --err:#fdecec; --err-b:#d05252;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14171d; --card:#1d222b; --ink:#e7eaf0; --muted:#a3abba; --line:#3a4250;
+    --gv:#1b2a44; --gv-b:#7aa5f5; --chung:#1c2e20; --chung-b:#6dbb7a;
+    --app:#33281a; --app-b:#e9a54a; --ai:#2a2140; --ai-b:#a985ea; --err:#3a1f22; --err-b:#e77a7a;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14171d; --card:#1d222b; --ink:#e7eaf0; --muted:#a3abba; --line:#3a4250;
+  --gv:#1b2a44; --gv-b:#7aa5f5; --chung:#1c2e20; --chung-b:#6dbb7a;
+  --app:#33281a; --app-b:#e9a54a; --ai:#2a2140; --ai-b:#a985ea; --err:#3a1f22; --err-b:#e77a7a;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:24px;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 20px}
+h2{font-size:17px;margin:28px 0 10px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px;color:var(--muted);margin-bottom:8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.dot{width:14px;height:14px;border-radius:4px;border:2px solid}
+.gv{background:var(--gv);border-color:var(--gv-b)}
+.chung{background:var(--chung);border-color:var(--chung-b)}
+.app{background:var(--app);border-color:var(--app-b)}
+.ai{background:var(--ai);border-color:var(--ai-b)}
+.err{background:var(--err);border-color:var(--err-b)}
+.files{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.f{border-width:2px;border-style:solid;border-radius:10px;padding:8px 10px;font-size:13px}
+.f b{display:block;font-size:14px}
+.f small{color:var(--muted)}
+.flow{display:flex;flex-direction:column;align-items:stretch}
+.step{border:2px solid;border-radius:12px;padding:12px 14px;position:relative}
+.step .no{position:absolute;top:-12px;left:12px;background:var(--card);border:2px solid;border-color:inherit;border-radius:999px;font-size:12px;font-weight:700;padding:0 8px}
+.step h3{margin:4px 0 4px;font-size:16px}
+.step p{margin:2px 0;font-size:14px}
+.step .in{font-size:13px;color:var(--muted)}
+.arrow{align-self:center;width:2px;height:26px;background:var(--line);position:relative;margin:2px 0}
+.arrow:after{content:"";position:absolute;bottom:-2px;left:-5px;border:6px solid transparent;border-top-color:var(--line)}
+.row{display:grid;grid-template-columns:1fr 240px;gap:12px;align-items:stretch}
+.loop{border:2px dashed;border-radius:12px;padding:10px 12px;font-size:13px;display:flex;flex-direction:column;justify-content:center}
+.loop b{font-size:14px}
+ol.secs{margin:6px 0 0;padding-left:20px;font-size:13px;columns:2;column-gap:24px}
+ol.secs li{break-inside:avoid}
+table{border-collapse:collapse;width:100%;font-size:13px;background:var(--card);border-radius:10px;overflow:hidden}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:var(--bg)}
+.note{font-size:13px;color:var(--muted);margin-top:8px}
+.fn{display:block;font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;color:var(--muted);word-break:break-all;margin-bottom:2px}
+.num{display:inline-block;min-width:22px;text-align:center;font-weight:700;font-size:12px;border-radius:6px;padding:0 5px;margin-right:4px;background:var(--card);border:1px solid var(--line)}
+.io{margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);font-size:13px;display:flex;flex-direction:column;gap:4px}
+.io>div{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center}
+.io .lbl{font-weight:700;min-width:62px}
+.chip{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:1px 8px 1px 2px;font:12px/1.5 ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
+.chip .num{margin:0;border:none;background:var(--bg)}
+@media (max-width:640px){
+  .row{grid-template-columns:1fr}
+  ol.secs{columns:1}
+}
+
+.part{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:26px 0 6px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:640px){.grid2{grid-template-columns:1fr}}
+.tool{background:var(--card);border-color:var(--line)}
+@media print{
+  :root{--bg:#fff;--card:#fff}
+  body{font-size:12px}
+  .wrap{max-width:none;padding:0}
+  .step,.f,.loop,table,tr{break-inside:avoid}
+  h2{break-after:avoid}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Luồng sinh phiếu</h1>
+  <p class="sub">Bộ file chạy thử với AI · chuẩn phiếu Grammar cuối Starters · lesson mẫu can / can't · 5 Task, khoảng 25 phút, mức Vừa. Số trong ô là số thứ tự file, dùng chung ở mọi chỗ.</p>
+  <div class="legend">
+    <span><i class="dot gv"></i>Giáo viên viết / làm</span>
+    <span><i class="dot chung"></i>File dùng chung (ít sửa)</span>
+    <span><i class="dot app"></i>Ghép sẵn / máy làm</span>
+    <span><i class="dot ai"></i>AI làm</span>
+    <span><i class="dot err"></i>Sửa khi có lỗi</span>
+  </div>
+
+  <div class="part">Phần A · File nguồn (thư mục nguon/, chỉ có nội dung gửi AI)</div>
+  <div class="files">
+    <div class="f gv"><b><span class="num">1</span>Kiến thức</b><span class="fn">1_KIEN_THUC_can.md</span><small>mỗi lesson</small><br>mục tiêu; K1–K3 với Dùng khi, Dấu hiệu bề mặt, Câu hỏi lộ đáp án; lỗi thường gặp</div>
+    <div class="f gv"><b><span class="num">2</span>Trình tự Grammar</b><span class="fn">2_TRINH_TU_GRAMMAR.md</span><small>mỗi chuyên đề</small><br>B1–B6, dạng cho phép, 13 quy tắc toàn phiếu, tiêu chí kiểm định</div>
+    <div class="f gv"><b><span class="num">3</span>Cấp độ Starters</b><span class="fn">3_CAP_DO_STARTERS.md</span><small>mỗi cấp độ</small><br>5 Task, 4–6 câu, bài đọc 60–80 từ, độ dài phần đề</div>
+    <div class="f gv"><b><span class="num">4</span>Từ vựng nền</b><span class="fn">4_TU_VUNG_NEN_STARTERS.md</span><small>mỗi cấp độ</small><br>danh sách từ Cambridge Pre A1 Starters</div>
+    <div class="f gv"><b><span class="num">5</span>Câu mẫu</b><span class="fn">5_CAU_MAU_GRAMMAR.md</span><small>mỗi Trình tự</small><br>câu Đạt / Không đạt cho từng B + dạng (have got)</div>
+    <div class="f gv"><b><span class="num">10</span>Bố cục phiếu</b><span class="fn">10_BO_CUC_MAU.md</span><small>mỗi phiếu</small><br>Task nào, dạng nào, mấy câu, vị trí câu bắt buộc</div>
+    <div class="f chung"><b><span class="num">6</span>Mô tả dạng</b><span class="fn">6_MO_TA_DANG_Q.md</span><small>dùng chung</small><br>Q1–Q12 là gì, ràng buộc cứng</div>
+    <div class="f chung"><b><span class="num">7</span>Quy tắc MD</b><span class="fn">7_QUY_TAC_MD.md</span><small>dùng chung</small><br>cú pháp app đọc được</div>
+    <div class="f chung"><b><span class="num">8</span>Cách thức đặt câu hỏi</b><span class="fn">8_CACH_THUC_DAT_CAU_HOI.md</span><small>dùng chung</small><br>29 điều, Haladyna và cộng sự (2002)</div>
+    <div class="f chung"><b><span class="num">9</span>Rà soát</b><span class="fn">9_RA_SOAT.md</span><small>dùng chung</small><br>lệnh cho AI duyệt phiếu</div>
+  </div>
+
+  <div class="part">Phần B · Đã ghép sẵn và công cụ</div>
+  <div class="files">
+    <div class="f app"><b><span class="num">11</span>Lệnh sinh phiếu</b><span class="fn">11_LENH_SINH_PHIEU.md</span><small>dán vào chat A</small><br>ghép từ 1–8, 10: Vai trò, Cấp độ, MD, Cách thức, Dạng, Trình tự, Câu mẫu, Bố cục, Lệnh, Kiến thức, Từ vựng</div>
+    <div class="f app"><b><span class="num">12</span>Lệnh rà soát</b><span class="fn">12_LENH_RA_SOAT.md</span><small>dán vào chat B</small><br>ghép từ 9, 2, 8, 6, 1, 10 + chỗ dán phiếu</div>
+    <div class="f app"><b><span class="num">13</span>Lệnh sửa phiếu</b><span class="fn">13_LENH_SUA_PHIEU.md</span><small>dán vào chat A</small><br>khung lệnh sửa + chỗ dán lỗi</div>
+    <div class="f tool"><b><span class="num">14</span>Trang máy kiểm</b><span class="fn">KIEM_TRA_PHIEU.html</span><small>mở bằng trình duyệt</small><br>máy kiểm; xuất bản bỏ đáp án, bản WS Editor, danh sách lỗi</div>
+    <div class="f gv"><b><span class="num">15</span>Phiếu chấm</b><span class="fn">PHIEU_CHAM_THU.md</span><small>in ra</small><br>chấm từng Task, ghi lỗi để sửa bộ file</div>
+  </div>
+  <p class="note">Sửa nội dung ở file 1–10, rồi chạy <code>python3 ghep_lenh.py</code> để tạo lại 11, 12, 13, 14.</p>
+
+  <div class="part">Phần C · Các bước tạo thử một phiếu</div>
+  <div class="flow">
+    <div class="step ai" style="border-color:var(--ai-b);background:var(--ai)"><span class="no">1</span><h3>Sinh phiếu · chat A</h3><p>Mở một cuộc trò chuyện mới, dán nguyên file 11, gửi. AI trả về 5 Task, rồi <code>## Đáp án</code>, rồi <code>## Báo cáo</code>.</p><div class="io"><div><span class="lbl">Dán vào:</span><span class="chip"><span class="num">11</span>11_LENH_SINH_PHIEU.md</span></div><div><span class="lbl">Tạo ra:</span><span class="chip"><span class="num">16</span>(kết quả chat A)</span></div></div></div>
+    <div class="arrow"></div>
+    <div class="step app" style="border-color:var(--app-b);background:var(--app)"><span class="no">2</span><h3>Máy kiểm</h3><p>Dán phiếu vào trang 14, bấm Kiểm tra. Máy kiểm số Task, số câu, dạng, ba lựa chọn, vị trí đáp án, độ dài bài đọc và phần đề, từ ngoài Starters, dấu hiệu bề mặt ở câu bắt buộc, câu tự lộ đáp án, Báo cáo.</p><p class="in">Bấm “Bản bỏ đáp án” để lấy phiếu cho bước 3.</p><div class="io"><div><span class="lbl">Dùng:</span><span class="chip"><span class="num">14</span>KIEM_TRA_PHIEU.html</span><span class="chip"><span class="num">16</span>(kết quả chat A)</span></div></div></div>
+    <div class="arrow"></div>
+    <div class="step ai" style="border-color:var(--ai-b);background:var(--ai)"><span class="no">3</span><h3>Rà soát · chat B</h3><p>Mở một cuộc trò chuyện khác. Dán file 12, thay dòng <code>&lt;&lt;DÁN PHIẾU…&gt;&gt;</code> bằng bản bỏ đáp án. AI tự làm bài, che nghĩa để tìm câu đoán được, đối chiếu tiêu chí, ghi lỗi theo mã.</p><p class="in">Giáo viên so “Đáp án tự làm” của chat B với đáp án của chat A: câu khác nhau hoặc có “hoặc” là câu có vấn đề.</p><div class="io"><div><span class="lbl">Dán vào:</span><span class="chip"><span class="num">12</span>12_LENH_RA_SOAT.md</span></div><div><span class="lbl">Tạo ra:</span><span class="chip"><span class="num">17</span>(kết quả chat B)</span></div></div></div>
+    <div class="arrow"></div>
+    <div class="row">
+      <div class="step gv" style="border-color:var(--gv-b);background:var(--gv)"><span class="no">4</span><h3>Có lỗi?</h3><p>Gom lỗi: “Danh sách lỗi” của trang 14, các lỗi Rà soát mà giáo viên đồng ý, câu lệch đáp án.</p></div>
+      <div class="loop err" style="border-color:var(--err-b);background:var(--err)"><b>↺ Sửa · chat A</b><span>Dán file 13 kèm danh sách lỗi vào lại chat A. AI trả lại toàn bộ phiếu đã sửa, rồi quay về bước 2. Tối đa 2 lần.</span><div class="io"><div><span class="lbl">Dán vào:</span><span class="chip"><span class="num">13</span>13_LENH_SUA_PHIEU.md</span></div></div></div>
+    </div>
+    <div class="arrow"></div>
+    <div class="step app" style="border-color:var(--app-b);background:var(--app)"><span class="no">5</span><h3>Xem trên WS Editor</h3><p>Trên trang 14, bấm “Bản dán vào WS Editor”. Mở WS Editor, bấm <b>+ Phiếu</b>, dán và nạp. Xem phiếu như học sinh thấy.</p><div class="io"><div><span class="lbl">Dùng:</span><span class="chip"><span class="num">14</span>KIEM_TRA_PHIEU.html</span><span class="chip"><span class="num">16</span>(kết quả chat A)</span></div></div></div>
+    <div class="arrow"></div>
+    <div class="step gv" style="border-color:var(--gv-b);background:var(--gv)"><span class="no">6</span><h3>Chấm</h3><p>Điền phiếu chấm 15 cho mỗi lần sinh. Nên sinh 3 lần, mỗi lần một chat A mới, để xem kết quả có ổn định không. Lỗi ghi rõ thuộc file nào (1, 2, 5, 7…) để sửa đúng chỗ.</p><div class="io"><div><span class="lbl">Dùng:</span><span class="chip"><span class="num">15</span>PHIEU_CHAM_THU.md</span></div></div></div>
+  </div>
+
+  <div class="part">Phần D · Mỗi thông tin nằm ở đâu</div>
+  <table>
+    <tr><th>Câu hỏi</th><th>File</th></tr>
+    <tr><td>Câu nào đúng, câu nào sai về ngôn ngữ? Dấu hiệu bề mặt nào?</td><td><span class="chip"><span class="num">1</span>1_KIEN_THUC_can.md</span></td></tr>
+    <tr><td>Phiếu đi qua những bước nào, mỗi bước làm gì, quy tắc nào?</td><td><span class="chip"><span class="num">2</span>2_TRINH_TU_GRAMMAR.md</span></td></tr>
+    <tr><td>Phiếu dài bao nhiêu, câu dài bao nhiêu?</td><td><span class="chip"><span class="num">3</span>3_CAP_DO_STARTERS.md</span></td></tr>
+    <tr><td>Được dùng từ nào?</td><td><span class="chip"><span class="num">4</span>4_TU_VUNG_NEN_STARTERS.md</span></td></tr>
+    <tr><td>Câu đạt chuẩn trông ra sao, lỗi nào hay gặp?</td><td><span class="chip"><span class="num">5</span>5_CAU_MAU_GRAMMAR.md</span></td></tr>
+    <tr><td>Dạng bài là gì, ràng buộc gì?</td><td><span class="chip"><span class="num">6</span>6_MO_TA_DANG_Q.md</span></td></tr>
+    <tr><td>Viết ra thế nào để app đọc được?</td><td><span class="chip"><span class="num">7</span>7_QUY_TAC_MD.md</span></td></tr>
+    <tr><td>Viết câu hỏi tốt theo nguyên tắc nào?</td><td><span class="chip"><span class="num">8</span>8_CACH_THUC_DAT_CAU_HOI.md</span></td></tr>
+    <tr><td>Duyệt phiếu thế nào?</td><td><span class="chip"><span class="num">9</span>9_RA_SOAT.md</span> <span class="chip"><span class="num">14</span>KIEM_TRA_PHIEU.html</span></td></tr>
+    <tr><td>Phiếu này có Task nào, mấy câu, câu bắt buộc ở đâu?</td><td><span class="chip"><span class="num">10</span>10_BO_CUC_MAU.md</span></td></tr>
+  </table>
+
+  <div class="part">Phần E · Khi đưa vào app</div>
+  <table>
+    <tr><th>Bước thử bên ngoài</th><th>App sẽ làm</th></tr>
+    <tr><td>Chạy <code>ghep_lenh.py</code> với Bố cục cố định</td><td>Lập Bố cục từ 2 và 3, giáo viên chỉnh, rồi tự ghép lệnh</td></tr>
+    <tr><td>Dán file 11 vào chat A</td><td>Gọi AI sinh phiếu</td></tr>
+    <tr><td>Trang máy kiểm 14</td><td>Kiểm ngay sau khi sinh, sinh lại Task sai</td></tr>
+    <tr><td>Chat B với file 12</td><td>Gọi AI rà soát với phiếu đã bỏ đáp án</td></tr>
+    <tr><td>Dán file 13 và danh sách lỗi</td><td>Tự gửi lỗi, tối đa 2 lần, rồi hiện lỗi còn lại cho giáo viên</td></tr>
+    <tr><td>Dán vào WS Editor</td><td>Đưa thẳng vào editor</td></tr>
+  </table>
+  <p class="note">Đã biết: app hiện bỏ mất <code>Bài đọc:</code> trong Task dạng bảng, nên bài đọc của bảng đặt trong <code>Khối chữ trên:</code>. Chưa có danh sách ngữ pháp Starters. Chưa chạy với AI thật.</p>
+</div>
+</body>
+</html>
