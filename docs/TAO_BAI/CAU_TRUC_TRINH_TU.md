@@ -2,7 +2,9 @@
 
 Mỗi chuyên đề trong một giáo trình có một file (ví dụ Grammar). File dùng chung cho mọi lesson của chuyên đề và **không chứa nội dung của lesson nào**. Mọi từ, cấu trúc, ví dụ và lỗi thường gặp đều lấy từ file Kiến thức, gọi theo tên mục.
 
-So với bản 2.0, bản 2.1 có các thay đổi sau:
+Bản 2.2 (chuẩn: phiếu Grammar cuối Starters) thêm file Cấp độ. Quy mô phiếu, độ dài bài đọc, độ dài phần đề và từ vựng nền chuyển sang file Cấp độ. Số câu mặc định của mọi Dạng Q là 5 (4–6). Bố cục mặc định có 5 Task (B1–B5).
+
+Trước đó, so với bản 2.0, bản 2.1 có các thay đổi sau:
 - Mức độ có tham số đo được.
 - Định nghĩa dựa vào các dòng mới của Kiến thức.
 - Có hai kiểu ngữ pháp: kiểu nghĩa và kiểu hình thức, mỗi kiểu một bộ tham số.
@@ -16,19 +18,19 @@ So với bản 2.0, bản 2.1 có các thay đổi sau:
 ```
 # Trình tự
 Chuyên đề: Grammar
-Phiên bản: 2.1
-Câu mẫu: Câu mẫu Grammar 1.0
+Phiên bản: 2.2
+Câu mẫu: Câu mẫu Grammar 2.0
 
 ## Kiến thức cần có
-Bắt buộc: dòng Kiểu ngữ pháp ở đầu file; Mục tiêu; Học sinh; Kiến thức (mỗi K có Dùng khi, Dấu hiệu bề mặt, Câu hỏi lộ đáp án); Dạng câu cần phủ; Từ vựng được dùng; Lỗi thường gặp (Lỗi hình thức, Nhầm cách dùng).
-Tùy chọn: Ngoài phạm vi, Theo từng B. Thiếu mục tùy chọn thì AI tự lấy từ mục Kiến thức và Từ vựng được dùng.
+Bắt buộc: dòng Cấp độ và dòng Kiểu ngữ pháp ở đầu file; Mục tiêu; Kiến thức (mỗi K có Dùng khi, Dấu hiệu bề mặt, Câu hỏi lộ đáp án); Dạng câu cần phủ; Từ vựng được dùng; Lỗi thường gặp (Lỗi hình thức, Nhầm cách dùng).
+Tùy chọn: Học sinh (khi khác file Cấp độ), Ngoài phạm vi, Theo từng B. Thiếu mục tùy chọn thì AI tự lấy từ mục Kiến thức và Từ vựng được dùng.
 
 ## Mức độ
 Ba mức: Dễ, Vừa, Khó. Mặc định của mọi B là Vừa; giáo viên đổi từng Task trong Bố cục.
+Độ dài bài đọc và độ dài phần đề: theo file Cấp độ.
 Tham số chung, áp cho Task thuộc B2, B3, B4 (app tính số cụ thể và ghi vào Bố cục):
 | Tham số | Dễ | Vừa | Khó |
 |---|---|---|---|
-| Độ dài phần đề, tối đa | 10 từ | 16 từ | 22 từ |
 | Câu xác định bằng nghĩa, tối thiểu (chỉ Kiểu nghĩa) | 20% | 40% | 60% |
 | Câu hỏi lộ đáp án, tối đa (chỉ Kiểu nghĩa, chỉ B2) | 60% | 40% | 20% |
 | Câu không có mẫu gần đó, tối thiểu (chỉ Kiểu hình thức) | 20% | 40% | 60% |
@@ -50,8 +52,9 @@ Kiến thức ghi một trong hai kiểu ở dòng `Kiểu ngữ pháp:`.
 - B2 đổi Vai trò: hiểu điều kiện chọn hình thức (dòng Dùng khi). Mỗi điều kiện có ít nhất một câu.
 
 ## Quy mô
-- Bài về nhà, học sinh tự làm, khoảng 25 phút, khoảng 25 câu có đáp án (gợi ý, không cứng).
-- Một phiếu một trọng tâm: mục Mục tiêu của Kiến thức.
+- Số Task, thời gian, số câu mỗi Task, độ dài bài đọc: theo file Cấp độ.
+- Bài về nhà, học sinh tự làm. Một phiếu một trọng tâm: mục Mục tiêu của Kiến thức.
+- Bố cục mặc định: mỗi B bắt buộc một Task (B1–B5). B6 không có mặc định; giáo viên thêm khi cần và bớt Task khác để giữ thời gian.
 
 ## Tiêu chí quan trọng nhất
 Học sinh nhận ra và dùng đúng mục tiêu nhờ **nghĩa của tình huống hoặc dữ kiện**, không chỉ nhờ một dấu hiệu bề mặt hay dạng chữ của câu hỏi. (Kiểu hình thức: xem mục Kiểu ngữ pháp.)
@@ -74,7 +77,7 @@ Học sinh nhận ra và dùng đúng mục tiêu nhờ **nghĩa của tình hu�
 6. Số câu hỏi lộ đáp án không vượt số ở Bố cục. [B2]
 7. Hội thoại viết thành lượt `Tên: ...`, mỗi lượt một người nói; lời kể đứng riêng một dòng; không hai câu hỏi liên tiếp. [B2]
 8. Một tình huống tối đa 2 lần trên cả phiếu. Không dùng cùng một khuôn câu quá 2 lần trong một Task. [cả phiếu]
-9. Từ ngoài danh sách đóng của Từ vựng được dùng: không dùng. Từ ngoài danh sách mở: chỉ dùng từ cơ bản lớp dưới. Không dùng nội dung trong Ngoài phạm vi. [cả phiếu]
+9. Chỉ dùng từ theo mục Từ vựng của file Cấp độ (Từ vựng nền, số 1–20, Từ thêm ngoài nền của Kiến thức). Mỗi Task thuộc B2–B5 dùng ít nhất 3 từ trọng tâm khác nhau. Không dùng nội dung trong Ngoài phạm vi. [cả phiếu]
 10. Mức hỗ trợ giảm dần từ B3 đến B6. [cả phiếu]
 11. Mỗi đáp án truy được về một K của Kiến thức; không bịa số liệu ngoài dữ kiện đã cho. [cả phiếu]
 12. Chỉ dùng chữ, làm được khi in đen trắng, trừ Dạng Q có ghi cần ảnh. [cả phiếu]
@@ -83,19 +86,19 @@ Học sinh nhận ra và dùng đúng mục tiêu nhờ **nghĩa của tình hu�
 ## B1: Quan sát
 - Mức nhận thức: Recognition. Bắt buộc: có. Mức độ mặc định: Vừa.
 - Vai trò: nhận ra các hình thức của mục tiêu trong một văn bản có nghĩa; chưa phải làm đúng sai.
-- Nội dung: văn bản ngắn (3–5 câu) chỉ chứa mẫu mục tiêu, dùng ví dụ của Kiến thức hoặc Theo từng B → B1.
+- Nội dung: bài đọc có độ dài theo file Cấp độ, chứa đủ các K của mục tiêu, dùng ví dụ của Kiến thức hoặc Theo từng B → B1.
 - Ngoại lệ: điều 3 [G3] của Cách thức. B1 được dùng lại câu ví dụ của Kiến thức, vì đây là bước quan sát mẫu chuẩn.
 - Tiêu chí kiểm định: nhận ra mà không phải đoán? Có từ hay cấu trúc ngoài phạm vi gây phân vân? Làm được khi in đen trắng?
 
 ### Dạng Q10 Bảng
-- Số câu: 4 ô (3–6).
+- Số câu: 5 ô (4–6).
 - Cấu trúc trình bày: văn bản nguồn đứng trên bảng (Bài đọc); bảng có dòng tiêu đề cột; hàng đầu điền sẵn làm mẫu.
 - Nguyên tắc nội dung: mỗi ô cần điền là một hình thức có thật trong văn bản nguồn; mỗi K của mục tiêu có ít nhất một ô. Task này không tính giới hạn lặp.
-- Mức độ: Dễ: văn bản 3 câu, tiêu đề cột ghi rõ hình thức cần tìm. Vừa: văn bản 4 câu, có một hình thức gần giống không thuộc bảng. Khó: văn bản 5 câu, tiêu đề cột chỉ ghi nghĩa.
+- Mức độ (độ dài bài đọc theo file Cấp độ): Dễ: tiêu đề cột ghi rõ hình thức cần tìm. Vừa: có một hình thức gần giống không thuộc bảng. Khó: tiêu đề cột chỉ ghi nghĩa, có hai hình thức gần giống.
 
 ### Dạng Q7 Chọn ảnh
 - Điều kiện dùng: chỉ khi phiếu cho phép ảnh.
-- Số câu: 4 (3–5).
+- Số câu: 5 (4–6).
 - Cấu trúc trình bày: mỗi câu một câu chữ, chọn ảnh khớp.
 - Nguyên tắc nội dung: ảnh phân biệt được bằng đúng hình thức của mục tiêu.
 - Mức độ: Dễ: 2 ảnh khác nhau rõ. Vừa: 3 ảnh, hai ảnh gần giống. Khó: 3 ảnh, khác nhau một chi tiết.
@@ -113,7 +116,7 @@ Học sinh nhận ra và dùng đúng mục tiêu nhờ **nghĩa của tình hu�
 - Mức độ: Dễ: tình huống một câu. Vừa: tình huống hai câu hoặc hội thoại hai lượt. Khó: hội thoại ba lượt, thông tin quyết định nằm ở lượt đầu.
 
 ### Dạng Q4 Chọn trong câu
-- Số câu: 5 (5–8).
+- Số câu: 5 (4–6).
 - Cấu trúc trình bày: ba vế chọn nằm ngay trong câu; có câu dẫn ngắn đứng trước.
 - Nguyên tắc nội dung: theo quy tắc 1, 2, 3, 5.
 - Mức độ: Dễ: câu dẫn một câu. Vừa: câu dẫn hai câu. Khó: câu dẫn hai câu, thông tin quyết định ở câu đầu.
@@ -125,7 +128,7 @@ Học sinh nhận ra và dùng đúng mục tiêu nhờ **nghĩa của tình hu�
 - Tiêu chí kiểm định: mỗi câu một đáp án rõ? Có vô tình đòi từ hay cấu trúc ngoài phạm vi?
 
 ### Dạng Q4 Chọn trong câu
-- Số câu: 5 (5–8).
+- Số câu: 5 (4–6).
 - Cấu trúc trình bày: ba vế chọn trong câu; câu dẫn khi cần.
 - Nguyên tắc nội dung: theo quy tắc 1, 2, 3, 4, 5.
 - Mức độ: theo bảng Mức độ chung; không thêm tham số riêng.
@@ -143,7 +146,7 @@ Học sinh nhận ra và dùng đúng mục tiêu nhờ **nghĩa của tình hu�
 - Tiêu chí kiểm định: như B3; học sinh phải tự tạo hình thức, không chỉ chọn.
 
 ### Dạng Q1 Điền từ
-- Số câu: 5 (5–8).
+- Số câu: 5 (4–6).
 - Cấu trúc trình bày: mỗi câu một chỗ trống, từ gốc cho sẵn trong ngoặc ngay sau chỗ trống.
 - Nguyên tắc nội dung: đủ dữ kiện để chỉ một đáp án đúng (quy tắc 1, 2, 3, 4); đáp án có thể gồm nhiều chữ nếu cấu trúc cần.
 - Mức độ: Dễ: từ gốc cho sẵn, chỗ trống chỉ là phần biến đổi của từ gốc, phần còn lại của cấu trúc viết sẵn. Vừa: từ gốc cho sẵn, chỗ trống gồm cả từ đi kèm của cấu trúc. Khó: từ gốc không cho sẵn, học sinh tự chọn từ theo dữ kiện.
@@ -155,13 +158,13 @@ Học sinh nhận ra và dùng đúng mục tiêu nhờ **nghĩa của tình hu�
 - Tiêu chí kiểm định: phải xử lý thông tin để tạo câu, hay chỉ làm lại bài điền từ của B4?
 
 ### Dạng Q2 Viết câu
-- Số câu: 3 (3–4).
+- Số câu: 5 (4–6).
 - Cấu trúc trình bày: bảng dữ kiện trên các câu; mỗi câu một yêu cầu, học sinh viết một câu; không cho sẵn khung câu.
 - Nguyên tắc nội dung: mỗi câu dùng một K khác nhau nếu mục tiêu có nhiều K; đáp án mẫu một câu, suy được từ bảng dữ kiện (quy tắc 11).
 - Mức độ: Dễ: yêu cầu cho sẵn đủ các từ chính cần dùng, cách nhau ` / `. Vừa: yêu cầu cho sẵn đối tượng, học sinh tự chọn từ còn lại theo dữ kiện. Khó: yêu cầu chỉ là câu hỏi, học sinh tự chọn thông tin và từ.
 
 ### Dạng Q10 Bảng
-- Số câu: 4 ô (3–6).
+- Số câu: 5 ô (4–6).
 - Cấu trúc trình bày: bảng dữ kiện, học sinh điền cột còn thiếu bằng câu hoặc cụm.
 - Nguyên tắc nội dung: mỗi ô suy từ dữ kiện cùng hàng; không có dữ kiện ngoài bảng.
 - Mức độ: Dễ: điền cụm. Vừa: điền câu ngắn. Khó: điền câu đủ, tự chọn từ theo dữ kiện.
@@ -189,7 +192,7 @@ Học sinh nhận ra và dùng đúng mục tiêu nhờ **nghĩa của tình hu�
 | Kiến thức cần có | app kiểm file Kiến thức đủ mục trước khi sinh | app |
 | Kiểu ngữ pháp | app chọn dòng tham số và quy tắc theo kiểu của Kiến thức, chỉ gửi phần đúng kiểu | app |
 | Mức độ (bảng tham số chung) | app tính số câu xác định bằng nghĩa và số câu lộ cho từng Task; app kiểm độ dài câu | app, AI |
-| Quy mô, Tiêu chí quan trọng nhất, Định nghĩa | đưa nguyên văn cho AI | AI |
+| Quy mô (trỏ sang file Cấp độ), Tiêu chí quan trọng nhất, Định nghĩa | đưa nguyên văn cho AI | AI |
 | Quy tắc toàn phiếu | mỗi quy tắc một lần, ghi phạm vi `[B…]`; B chỉ tham chiếu số quy tắc | AI, app (lọc theo B có trong Bố cục), Rà soát |
 | Mỗi B | Mức nhận thức, Bắt buộc, Mức độ mặc định, Vai trò, Nội dung, Ngoại lệ (nếu có), Tiêu chí kiểm định | app (sinh Bố cục mặc định), AI, Rà soát (Tiêu chí kiểm định) |
 | Mỗi Dạng Q trong B | Số câu (mặc định và khoảng), Cấu trúc trình bày, Nguyên tắc nội dung, Mức độ Dễ/Vừa/Khó, Điều kiện dùng (nếu có) | app (danh sách Dạng Q cho phép của B, số câu mặc định), AI |
@@ -203,4 +206,4 @@ Dạng Q đầu tiên trong mỗi B là mặc định khi app sinh Bố cục.
 - Trình tự được làm khác Cách thức đặt câu hỏi ở một điều nào đó thì ghi dòng `Ngoại lệ:` kèm số điều và lý do.
 - Cú pháp MD của từng Dạng Q không viết ở đây. Cú pháp thuộc Quy tắc định dạng MD.
 - Đổi thứ tự hoặc số B thì tăng Phiên bản. Kiến thức tham chiếu mã B, nên app phải cảnh báo khi phiên bản đổi.
-- Các tham số Mức độ (10/16/22 từ, 20/40/60%) là **điểm khởi đầu, chưa thử thật**. Chỉnh sau khi sinh thử.
+- Các tỷ lệ Mức độ (20/40/60%) là **điểm khởi đầu, chưa thử thật**. Chỉnh sau khi sinh thử.

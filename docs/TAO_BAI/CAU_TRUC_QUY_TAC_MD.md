@@ -79,11 +79,11 @@ Trả về các Task liên tiếp theo thứ tự Bố cục, rồi mục `## B�
     ## Task: Complete the sentences.
     Bố cục: Task 4
     Mục tiêu: Chọn từ đúng theo chủ ngữ
-    Ngữ cảnh: Cuối tuần của gia đình Hoa
+    Ngữ cảnh: Cuối tuần của gia đình May
     Dạng Q: điền từ
     Khung từ: is, are
-    1. Hoa ___ at the beach.
-    2. Her parents ___ there too.
+    1. May ___ at the beach.
+    2. Her brothers ___ there too.
 
     ## Đáp án
     ### Task 1

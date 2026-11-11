@@ -80,7 +80,8 @@ Chạy trước lượt Rà soát. Task sai ở bước này thì sinh lại nga
 | câu ở vị trí bắt buộc không chứa dấu hiệu bề mặt nào; **chỉ dò phần đề**, không dò lựa chọn và đáp án; `…` trong dấu hiệu khớp tối đa 4 từ | Trình tự quy tắc 2; Kiến thức, dòng Dấu hiệu bề mặt |
 | Kiểu hình thức: câu ở vị trí bắt buộc và câu liền trước không chứa hình thức nào của mục tiêu ngoài chỗ trống | Trình tự quy tắc 2b |
 | không quá 2 câu trong một Task mở đầu bằng cùng 2 từ | Trình tự quy tắc 13 |
-| không có từ ngoài danh sách đóng (chặn); ngoài danh sách mở (cảnh báo) | Trình tự quy tắc 9; Kiến thức |
+| mọi từ có trong Từ vựng nền của Cấp độ (kể cả dạng biến đổi), số 1–20 hoặc Từ thêm ngoài nền của Kiến thức; từ khác thì chặn. Mỗi Task B2–B5 có ít nhất 3 từ trọng tâm | Trình tự quy tắc 9; file Cấp độ; Kiến thức |
+| bài đọc trong khoảng của file Cấp độ (theo mức độ, lệch tối đa 5 từ, luôn trong 60–80); số Task và số câu trong khoảng của file Cấp độ (lệch thì cảnh báo) | file Cấp độ |
 | Báo cáo có đủ các nhãn mà Lệnh yêu cầu | Trình tự sinh, mục Lệnh |
 
 ## Nguyên tắc viết
