@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kiểm tra phiếu</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1d2330;--muted:#5b6475;--line:#cfd5df;--err:#c43c3c;--errbg:#fdecec;--warn:#a86a00;--warnbg:#fff4df;--ok:#2f7d3b;--okbg:#e9f6eb;--acc:#3d6fd8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171d;--card:#1d222b;--ink:#e7eaf0;--muted:#a3abba;--line:#3a4250;--err:#f08a8a;--errbg:#3a1f22;--warn:#f0b75a;--warnbg:#33281a;--ok:#7fd08b;--okbg:#1c2e20;--acc:#7aa5f5}}
+:root[data-theme="dark"]{--bg:#14171d;--card:#1d222b;--ink:#e7eaf0;--muted:#a3abba;--line:#3a4250;--err:#f08a8a;--errbg:#3a1f22;--warn:#f0b75a;--warnbg:#33281a;--ok:#7fd08b;--okbg:#1c2e20;--acc:#7aa5f5}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:22px;margin:0 0 4px}
+h2{font-size:16px;margin:22px 0 8px}
+p.sub{color:var(--muted);margin:0 0 14px}
+textarea{width:100%;font:13px/1.45 ui-monospace,Menlo,Consolas,monospace;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
+.grid{display:grid;grid-template-columns:2fr 1fr;gap:12px}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
+label{font-weight:600;font-size:13px;display:block;margin:8px 0 4px}
+button{font:inherit;border:1px solid var(--acc);background:var(--acc);color:#fff;border-radius:8px;padding:7px 14px;cursor:pointer;margin:4px 6px 4px 0}
+button.sec{background:var(--card);color:var(--acc)}
+.task{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0}
+.task h3{margin:0 0 6px;font-size:15px}
+.badge{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:1px 9px;margin-left:6px}
+.b-ok{background:var(--okbg);color:var(--ok)} .b-err{background:var(--errbg);color:var(--err)} .b-warn{background:var(--warnbg);color:var(--warn)}
+ul.msg{margin:4px 0;padding-left:18px} ul.msg li{margin:2px 0}
+li.err{color:var(--err)} li.warn{color:var(--warn)} li.info{color:var(--muted)}
+.sum{font-size:14px;margin:8px 0}
+.small{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Kiểm tra phiếu (máy kiểm)</h1>
+<p class="sub">Dán nguyên văn kết quả AI trả về. Trang này kiểm những gì máy kiểm được, rồi tạo bản bỏ đáp án cho lượt Rà soát, bản dán vào WS Editor và danh sách lỗi cho lệnh Sửa. Không gửi dữ liệu đi đâu.</p>
+
+<div class="grid">
+  <div>
+    <label for="out">Kết quả AI (phiếu + Đáp án + Báo cáo)</label>
+    <textarea id="out" rows="18" placeholder="## Task: ..."></textarea>
+  </div>
+  <div>
+    <label for="bc">Bố cục (mỗi dòng: Task | B | dạng | số câu | giới hạn)</label>
+    <textarea id="bc" rows="6">1 | B1 | bảng | 5 | bài đọc 65-75
+2 | B2 | chọn A/B/C | 5 | phần đề 12 | vị trí 2,4 | lộ 2
+3 | B3 | chọn trong câu | 5 | phần đề 12 | vị trí 2,4
+4 | B4 | điền từ | 5 | phần đề 12 | vị trí 2,4
+5 | B5 | viết câu | 5 | phần đề 12</textarea>
+    <label for="dh">Dấu hiệu bề mặt (mỗi dòng một dấu hiệu; … là chỗ thay đổi)</label>
+    <textarea id="dh" rows="3">… can …, but
+Yes, …
+No, …</textarea>
+    <label for="them">Từ thêm ngoài nền (cách nhau dấu phẩy)</label>
+    <textarea id="them" rows="1"></textarea>
+  </div>
+</div>
+<button id="run">Kiểm tra</button>
+<span class="small">Kiểm theo: Cấp độ Starters, Quy tắc MD 2.0, Trình tự Grammar 2.3.</span>
+
+<div id="res"></div>
+
+<h2>Bản tạo ra</h2>
+<button class="sec" data-k="loi">Danh sách lỗi (dán vào lệnh Sửa)</button>
+<button class="sec" data-k="rasoat">Bản bỏ đáp án (dán vào lệnh Rà soát)</button>
+<button class="sec" data-k="editor">Bản dán vào WS Editor</button>
+<textarea id="xuat" rows="12" readonly></textarea>
+<p class="small">Bấm một nút để hiện bản tương ứng, rồi chọn hết (Ctrl+A trong ô) và sao chép.</p>
+</div>
+
+<script>
+const TU_VUNG = /*TU_VUNG*/[];
+const TEN_RIENG = /*TEN_RIENG*/[];
+const SO = ['one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen','twenty'];
+const BAT_QUY_TAC = {is:'be',are:'be',am:'be',was:'be',were:'be',has:'have',had:'have',does:'do',did:'do',men:'man',women:'woman',children:'child',feet:'foot',mice:'mouse',people:'person',an:'a'};
+const TRUONG = /^(Task số|Mục tiêu|Hướng dẫn|Dạng|Dòng viết|Bài đọc|Khối chữ trên|Khối chữ|Hội thoại|Khung từ|Xáo vế phải|Số câu|Ngữ cảnh)\s*:/i;
+let HOP = new Set();
+
+function dungTap(them){
+  HOP = new Set();
+  const add = w => { w = w.toLowerCase().trim(); if (w) HOP.add(w); };
+  TU_VUNG.concat(TEN_RIENG).forEach(e => e.replace(/\(s\)/g,'').split(/[\s\/]+/).forEach(add));
+  SO.forEach(add);
+  (them||'').split(',').forEach(add);
+}
+function goc(w){
+  w = w.toLowerCase().replace(/[’]/g,"'");
+  const cands = new Set([w]);
+  let x = w;
+  if (x.endsWith("n't")) { x = x.slice(0,-3); if (x==='ca') x='can'; if (x==='wo') x='will'; cands.add(x); }
+  for (const s of ["'s","'m","'re","'ve","'ll","'d","'"]) if (x.endsWith(s)) { x = x.slice(0, -s.length); cands.add(x); }
+  const thu = [...cands];
+  for (const c of thu) {
+    if (BAT_QUY_TAC[c]) cands.add(BAT_QUY_TAC[c]);
+    if (c.endsWith('ies')) cands.add(c.slice(0,-3)+'y');
+    if (c.endsWith('es')) cands.add(c.slice(0,-2));
+    if (c.endsWith('s')) cands.add(c.slice(0,-1));
+    if (c.endsWith('ing')) { const b=c.slice(0,-3); cands.add(b); cands.add(b+'e'); if (b.length>2 && b[b.length-1]===b[b.length-2]) cands.add(b.slice(0,-1)); }
+  }
+  for (const c of cands) if (HOP.has(c)) return true;
+  return false;
+}
+function tuLa(text){
+  const bad = new Set();
+  (text.match(/[A-Za-z][A-Za-z'’]*/g)||[]).forEach(w => {
+    if (w.length===1 && !/^[aAI]$/.test(w)) return;
+    if (!goc(w)) bad.add(w);
+  });
+  return [...bad];
+}
+function coHinhThuc(text, ans){ if (!ans) return false; const e=ans.trim().replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/'/g,"['’]"); return new RegExp("(^|[^A-Za-z'’])"+e+"($|[^A-Za-z'’])","i").test(text); }
+function demTu(s){ return (s.match(/[A-Za-z][A-Za-z'’]*|\d+/g)||[]).length; }
+
+function docBoCuc(t){
+  const m = {};
+  t.split('\n').forEach(l => {
+    const p = l.split('|').map(x=>x.trim()); if (p.length<4 || !/^\d+$/.test(p[0])) return;
+    const o = {k:+p[0], b:p[1], dang:p[2].toLowerCase(), so:+p[3], pd:null, bd:null, vt:[], lo:null};
+    p.slice(4).forEach(x => {
+      let r;
+      if ((r = x.match(/phần đề\s*(\d+)/))) o.pd = +r[1];
+      if ((r = x.match(/bài đọc\s*(\d+)\s*-\s*(\d+)/))) o.bd = [+r[1], +r[2]];
+      if ((r = x.match(/vị trí\s*([\d,\s]+)/))) o.vt = r[1].split(',').map(s=>+s.trim()).filter(Boolean);
+      if ((r = x.match(/lộ\s*(\d+)/))) o.lo = +r[1];
+    });
+    m[o.k] = o;
+  });
+  return m;
+}
+function dauHieu(t){
+  return t.split('\n').map(s=>s.trim()).filter(Boolean).map(s => {
+    const parts = s.split('…').map(x=>x.trim()).filter(Boolean).map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));
+    return {raw:s, re:new RegExp('(^|[^A-Za-z])' + parts.join('[\\s\\S]{0,40}?') + '($|[^A-Za-z])', 'i')};
+  });
+}
+
+function tachPhan(src){
+  src = src.replace(/\r/g,'').replace(/^```[a-z]*\n?|```\s*$/gm,'');
+  const L = src.split('\n');
+  const tasks=[]; let cur=null, mode='task'; const dapAn={}, baoCao={}; let daK=null, bcK=null;
+  for (const l of L) {
+    if (/^##\s+Task\s*:/i.test(l)) { mode='task'; cur={tieuDe:l.replace(/^##\s+Task\s*:\s*/i,''), lines:[], raw:[l]}; tasks.push(cur); continue; }
+    if (/^##\s+Đáp án/i.test(l)) { mode='da'; continue; }
+    if (/^##\s+Báo cáo/i.test(l)) { mode='bc'; continue; }
+    if (mode==='task' && cur) { cur.lines.push(l); cur.raw.push(l); continue; }
+    if (mode==='da') { const m=l.match(/^###\s+Task\s+(\d+)/i); if (m){daK=+m[1]; dapAn[daK]=[]; continue;} const a=l.match(/^(\d+)\.\s*(.*)$/); if (a && daK!=null) dapAn[daK][+a[1]]=a[2].trim(); continue; }
+    if (mode==='bc') { const m=l.match(/^###\s+Task\s+(\d+)/i); if (m){bcK=+m[1]; baoCao[bcK]=[]; continue;} if (bcK!=null && l.trim()) baoCao[bcK].push(l.trim()); continue; }
+  }
+  return {tasks, dapAn, baoCao, L};
+}
+
+function phanTichTask(t){
+  const o = {so:null, dang:'', mucTieu:'', huongDan:'', items:[], baiDoc:[], bang:[], khoi:[], fieldsOrder:[]};
+  let i=0, inBD=false, inKhoi=false, cur=null;
+  for (const l of t.lines) {
+    const f = l.match(TRUONG);
+    if (f && !/^\s/.test(l)) {
+      const name=f[1].toLowerCase(), val=l.slice(l.indexOf(':')+1).trim();
+      o.fieldsOrder.push(name);
+      inBD = name==='bài đọc'; inKhoi = name.startsWith('khối chữ');
+      if (name==='task số') o.so = parseInt(val,10);
+      if (name==='dạng') o.dang = val.toLowerCase();
+      if (name==='mục tiêu') o.mucTieu = val;
+      if (name==='hướng dẫn') o.huongDan = val;
+      cur=null; continue;
+    }
+    if (inKhoi && /^\s{2,}\S/.test(l)) { o.khoi.push(l.trim()); continue; }
+    if (/\s\|\s/.test(l) && !/^\s*\d+\./.test(l)) { o.bang.push(l.split('|').map(x=>x.trim())); inBD=false; continue; }
+    const it = l.match(/^(\d+)\.\s+(.*)$/);
+    if (it) { inBD=false; inKhoi=false; cur={n:+it[1], text:it[2], opts:[]}; o.items.push(cur); continue; }
+    const op = l.match(/^\s+([A-C])\.\s+(.*)$/);
+    if (op && cur) { cur.opts.push({nhan:op[1], text:op[2].trim()}); continue; }
+    if (inBD && l.trim()) { o.baiDoc.push(l.trim()); continue; }
+  }
+  return o;
+}
+function phanDe(item){
+  let s = item.text.replace(/\{[^}]*\}/g,' ').replace(/\([^)]*\)/g,' ').replace(/_{2,}/g,' ');
+  return s;
+}
+function vePhai(item){ const m=item.text.match(/\{([^}]*)\}/g)||[]; return m.map(g=>g.slice(1,-1).split('|').map(x=>x.trim())); }
+
+function kiemTra(){
+  dungTap(document.getElementById('them').value);
+  const src = document.getElementById('out').value;
+  const bc = docBoCuc(document.getElementById('bc').value);
+  const DH = dauHieu(document.getElementById('dh').value);
+  const {tasks, dapAn, baoCao} = tachPhan(src);
+  const KQ = []; let tongLoi=0, tongCB=0;
+  const soTask = Object.keys(bc).length;
+  const chung = [];
+  if (!tasks.length) chung.push(['err','Không tìm thấy dòng "## Task:" nào.']);
+  if (soTask && tasks.length!==soTask) chung.push(['err',`Có ${tasks.length} Task, Bố cục giao ${soTask}.`]);
+  if (!/^##\s+Đáp án/im.test(src)) chung.push(['err','Thiếu mục "## Đáp án".']);
+  if (!/^##\s+Báo cáo/im.test(src)) chung.push(['err','Thiếu mục "## Báo cáo".']);
+
+  tasks.forEach((t, idx) => {
+    const p = phanTichTask(t); const M=[];
+    const err=(s)=>M.push(['err',s]), warn=(s)=>M.push(['warn',s]), info=(s)=>M.push(['info',s]);
+    const k = p.so ?? (idx+1);
+    if (p.so==null) err('Thiếu dòng "Task số:".');
+    else if (p.so!==idx+1) err(`"Task số: ${p.so}" nhưng đứng ở vị trí ${idx+1}.`);
+    const g = bc[k];
+    if (!p.mucTieu) warn('Thiếu dòng "Mục tiêu:".');
+    if (!p.dang) err('Thiếu dòng "Dạng:".');
+    if (g && p.dang && !p.dang.startsWith(g.dang)) err(`Dạng "${p.dang}" khác Bố cục "${g.dang}".`);
+    const ord = p.fieldsOrder.filter(x=>['task số','mục tiêu','hướng dẫn','dạng'].includes(x));
+    const want = ['task số','mục tiêu','hướng dẫn','dạng'].filter(x=>ord.includes(x));
+    if (ord.join()!==want.join()) warn('Các dòng Task số / Mục tiêu / Hướng dẫn / Dạng không đúng thứ tự.');
+    const dang = p.dang;
+    const da = (dapAn[k]||[]);
+    // số câu
+    let soCau;
+    if (dang.startsWith('bảng')) {
+      soCau = p.bang.slice(1).reduce((s,r)=>s + r.filter(c=>c.startsWith('=')).length, 0);
+      if (!p.bang.length) err('Không có bảng.');
+      if (p.bang.length>1 && p.bang[1].some(c=>c.startsWith('='))) warn('Hàng đầu sau tiêu đề có ô "=" — hàng mẫu nên điền sẵn đủ chữ.');
+      const w = p.bang[0]?.length; p.bang.forEach((r,i)=>{ if (r.length!==w) err(`Hàng ${i+1} của bảng có ${r.length} ô, tiêu đề có ${w}.`); });
+    } else soCau = p.items.length;
+    if (g && soCau!==g.so) err(`${dang.startsWith('bảng')?'Số ô cần điền':'Số câu'}: ${soCau}, Bố cục giao ${g.so}.`);
+    p.items.forEach((it,i)=>{ if (it.n!==i+1) err(`Câu đánh số ${it.n} ở vị trí ${i+1}.`); });
+    // bài đọc
+    if (g && g.bd) {
+      if (!p.baiDoc.length && p.khoi.length) p.baiDoc = p.khoi.slice();
+      const n = demTu(p.baiDoc.join(' '));
+      if (!p.baiDoc.length) err('Không có bài đọc.');
+      else if (n<g.bd[0] || n>g.bd[1]) err(`Bài đọc ${n} từ, Bố cục giao ${g.bd[0]}–${g.bd[1]}.`); else info(`Bài đọc ${n} từ.`);
+      if (dang.startsWith('bảng')) {
+        const bd = p.baiDoc.join(' ').toLowerCase();
+        p.bang.slice(1).forEach(r=>r.filter(c=>c.startsWith('=')).forEach(c=>{ const v=c.slice(1).trim().toLowerCase(); if (v && !bd.includes(v)) err(`Ô "${c.slice(1).trim()}" không chép được từ bài đọc.`); }));
+      }
+    }
+    // phần đề
+    if (g && g.pd) p.items.forEach(it=>{ const n=demTu(phanDe(it)); if (n>g.pd) err(`Câu ${it.n}: phần đề ${n} từ, tối đa ${g.pd}.`); });
+    // theo dạng
+    const traLoi = []; // đáp án dạng chữ của từng câu
+    if (dang.startsWith('chọn a/b/c')) {
+      const letters=[];
+      p.items.forEach((it,i)=>{
+        if (it.opts.length!==3) err(`Câu ${it.n}: ${it.opts.length} lựa chọn (cần 3, mỗi lựa chọn một dòng thụt lề).`);
+        if ((it.text.match(/_{3,}/g)||[]).length!==1) err(`Câu ${it.n}: cần đúng một chỗ trống ___.`);
+        const a = (da[it.n]||'').trim().toUpperCase().replace(/[^A-C]/g,'');
+        if (!a) err(`Câu ${it.n}: thiếu đáp án ở "## Đáp án".`); else letters.push(a);
+        const op = it.opts.find(o=>o.nhan===a); traLoi[i] = op?op.text:'';
+        const len = it.opts.map(o=>o.text.length); if (len.length && Math.max(...len) > 2*Math.min(...len) && Math.max(...len)-Math.min(...len) > 6) warn(`Câu ${it.n}: lựa chọn dài nhất hơn gấp đôi lựa chọn ngắn nhất.`);
+        const tx = it.opts.map(o=>o.text.toLowerCase()); if (new Set(tx).size!==tx.length) err(`Câu ${it.n}: có hai lựa chọn giống nhau.`);
+        if (a && !op) err(`Câu ${it.n}: đáp án ${a} không có trong các lựa chọn.`);
+        it.opts.forEach(o=>{ if (/\b(always|never|none of the above|all of the above)\b/i.test(o.text)) err(`Câu ${it.n}: lựa chọn "${o.text}" có từ cấm.`); });
+      });
+      for (let i=2;i<letters.length;i++) if (letters[i]===letters[i-1] && letters[i]===letters[i-2]) err(`Đáp án ba câu liền nhau cùng là ${letters[i]} (câu ${i-1}–${i+1}).`);
+      if (letters.length>=3) ['A','B','C'].forEach(c=>{ if (!letters.includes(c)) warn(`Không câu nào có đáp án ${c}.`); });
+      info('Đáp án: ' + letters.join(' '));
+    } else if (dang.startsWith('chọn trong câu')) {
+      p.items.forEach((it,i)=>{
+        const gs = vePhai(it);
+        if (gs.length!==1) err(`Câu ${it.n}: ${gs.length} chỗ chọn {…} (cần 1).`);
+        gs.forEach(v=>{ if (v.length!==3) err(`Câu ${it.n}: ${v.length} vế (cần 3).`); const tv=v.map(x=>x.replace(/^\*/,'').toLowerCase()); if (new Set(tv).size!==tv.length) err(`Câu ${it.n}: có hai vế giống nhau.`); const st=v.filter(x=>x.startsWith('*')); if (st.length!==1) err(`Câu ${it.n}: ${st.length} dấu * (cần đúng 1).`); else traLoi[i]=st[0].slice(1); });
+      });
+    } else if (dang.startsWith('điền từ')) {
+      p.items.forEach((it,i)=>{ if ((it.text.match(/_{3,}/g)||[]).length!==1) err(`Câu ${it.n}: cần đúng một chỗ trống ___.`); if (!/\([^)]+\)/.test(it.text)) warn(`Câu ${it.n}: không có từ gốc trong ngoặc.`); if (!da[it.n]) err(`Câu ${it.n}: thiếu đáp án.`); traLoi[i]=da[it.n]||''; });
+    } else if (dang.startsWith('viết câu')) {
+      if (!t.lines.some(l=>/^Dòng viết\s*:/i.test(l))) warn('Thiếu "Dòng viết: 1".');
+      if (!p.khoi.length) warn('Không có khối dữ kiện ("Khối chữ trên:").');
+      p.items.forEach(it=>{ if (!da[it.n]) err(`Câu ${it.n}: thiếu đáp án mẫu.`); if (/_{3,}/.test(it.text)) err(`Câu ${it.n}: viết câu không được có ___ (dễ thành bài điền từ).`); });
+    }
+    // vị trí bắt buộc: không dấu hiệu bề mặt
+    if (g && g.vt.length) g.vt.forEach(n=>{
+      const it = p.items[n-1]; if (!it) { err(`Không có câu ${n} (vị trí bắt buộc).`); return; }
+      const pd = phanDe(it) ; DH.forEach(d=>{ if (d.re.test(pd)) err(`Câu ${n} (vị trí bắt buộc) có dấu hiệu bề mặt "${d.raw}".`); });
+      if (/^\s*can\b/i.test(pd.trim()) && /\?/.test(pd)) warn(`Câu ${n} (vị trí bắt buộc) có vẻ là câu hỏi lộ đáp án "Can …?".`);
+      if (traLoi[n-1] && coHinhThuc(pd, traLoi[n-1])) err(`Câu ${n} (vị trí bắt buộc): phần đề có sẵn hình thức của đáp án "${traLoi[n-1]}".`);
+      if (n>1 && traLoi[n-1]) { const prev = p.items[n-2]; const pt = prev.text.replace(/\{[^}]*\}/g,' '); if (coHinhThuc(pt, traLoi[n-1])) err(`Câu ${n} (vị trí bắt buộc): câu liền trước có hình thức của đáp án "${traLoi[n-1]}".`); }
+    });
+    // quy tắc 4 cho B3, B4
+    if (g && /B[34]/.test(g.b)) p.items.forEach((it,i)=>{ if (i===0||!traLoi[i]) return; const prev=p.items[i-1]; if (coHinhThuc(prev.text.replace(/\{[^}]*\}/g,' '), traLoi[i]) && !g.vt.includes(it.n)) err(`Câu ${it.n}: câu liền trước có hình thức của đáp án "${traLoi[i]}" (quy tắc 4).`); });
+    // mở đầu giống nhau
+    const md={}; p.items.forEach(it=>{ const w=(phanDe(it).match(/[A-Za-z']+/g)||[]).slice(0,2).join(' ').toLowerCase(); if (w) md[w]=(md[w]||0)+1; });
+    Object.entries(md).forEach(([w,c])=>{ if (c>2) warn(`${c} câu mở đầu bằng "${w}" (tối đa 2).`); });
+    // từ vựng
+    const chu = [t.tieuDe, p.huongDan, ...p.baiDoc, ...p.khoi, ...p.bang.flat().map(c=>c.replace(/^=/,'')), ...p.items.map(it=>it.text.replace(/[{}|*]/g,' ')+' '+it.opts.map(o=>o.text).join(' ')), ...da.filter(Boolean)].join(' ');
+    const la = tuLa(chu); if (la.length) err('Từ ngoài Từ vựng nền: ' + la.join(', ') + '.');
+    // báo cáo
+    if (!baoCao[k]) err('Báo cáo thiếu "### Task ' + k + '".');
+    else if (g && g.vt.length) {
+      const dong = baoCao[k].find(x=>/xác định bằng nghĩa/i.test(x)) || '';
+      const so = (dong.split(':').slice(1).join(':').match(/\d+/g)||[]).map(Number);
+      if (!dong) warn('Báo cáo không ghi câu xác định bằng nghĩa.');
+      else g.vt.forEach(n=>{ if (!so.includes(n)) err(`Báo cáo không ghi câu ${n} là câu xác định bằng nghĩa (vị trí bắt buộc).`); });
+    }
+    if (g && g.lo!=null && baoCao[k]) { const dong = baoCao[k].find(x=>/lộ đáp án/i.test(x))||''; const so=(dong.split(':').slice(1).join(':').match(/\d+/g)||[]); if (so.length>g.lo) err(`Báo cáo ghi ${so.length} câu hỏi lộ đáp án, tối đa ${g.lo}.`); }
+    const nE=M.filter(x=>x[0]==='err').length, nW=M.filter(x=>x[0]==='warn').length; tongLoi+=nE; tongCB+=nW;
+    KQ.push({k, tieuDe:t.tieuDe, dang, M, nE, nW});
+  });
+  window._kq = {KQ, chung, src, tasks};
+  let h = `<h2>Kết quả</h2><p class="sum">${tasks.length} Task · <b style="color:var(--err)">${tongLoi + chung.filter(x=>x[0]==='err').length} lỗi</b> · <b style="color:var(--warn)">${tongCB} cảnh báo</b></p>`;
+  if (chung.length) h += `<div class="task"><h3>Toàn phiếu</h3><ul class="msg">${chung.map(([c,s])=>`<li class="${c}">${esc(s)}</li>`).join('')}</ul></div>`;
+  KQ.forEach(r=>{ h += `<div class="task"><h3>Task ${r.k}: ${esc(r.tieuDe)} <span class="small">(${esc(r.dang)})</span>${r.nE?`<span class="badge b-err">${r.nE} lỗi</span>`:''}${r.nW?`<span class="badge b-warn">${r.nW} cảnh báo</span>`:''}${!r.nE&&!r.nW?'<span class="badge b-ok">Đạt</span>':''}</h3><ul class="msg">${r.M.map(([c,s])=>`<li class="${c}">${esc(s)}</li>`).join('')}</ul></div>`; });
+  document.getElementById('res').innerHTML = h;
+}
+function esc(s){ return String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function xuat(kieu){
+  if (!window._kq) kiemTra();
+  const {KQ, chung, src} = window._kq; let o='';
+  const s = src.replace(/\r/g,'');
+  if (kieu==='loi') {
+    const d=[]; chung.filter(x=>x[0]==='err').forEach(x=>d.push('- Toàn phiếu: '+x[1]));
+    KQ.forEach(r=>r.M.filter(x=>x[0]!=='info').forEach(x=>d.push(`- Task ${r.k}: ${x[1]}`)));
+    o = d.length ? d.join('\n') : 'Không có lỗi máy kiểm.';
+  } else if (kieu==='rasoat') {
+    o = s.split(/^##\s+Đáp án.*$/m)[0].split(/^##\s+Báo cáo.*$/m)[0]
+      .replace(/\{([^}]*)\}/g,(m,g)=>'{'+g.replace(/\*/g,'')+'}')
+      .replace(/(^|\|)\s*=[^|\n]*/gm,(m,p)=>p+'  ')
+      .split('\n').filter(l=>!/^Mục tiêu\s*:/i.test(l)).join('\n').trim();
+  } else {
+    o = s.split(/^##\s+Báo cáo.*$/m)[0].split('\n').filter(l=>!/^(Task số|Mục tiêu)\s*:/i.test(l)).join('\n').trim();
+  }
+  document.getElementById('xuat').value = o;
+}
+document.getElementById('run').onclick = kiemTra;
+document.querySelectorAll('button[data-k]').forEach(b=>b.onclick=()=>xuat(b.dataset.k));
+</script>
+</body>
+</html>

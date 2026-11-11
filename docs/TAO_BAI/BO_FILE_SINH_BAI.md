@@ -33,3 +33,6 @@ Mỗi thông tin chỉ nằm ở một file. Muốn sửa điều gì thì sửa
 - **App chưa đọc được dạng mới.** Bộ đọc của app chưa nhận `Dạng Q:`, `Bố cục: Task k`, `## Báo cáo`, mã K và các dòng mới của Kiến thức.
 - **Sơ đồ HTML đã cũ.** `SO_DO_TRINH_TU_SINH.html` còn ghi 8 mục và chưa có Câu mẫu, Rà soát.
 - **Các file cũ chưa xử lý.** `TRINH_TU_SINH_CHINH_THUC.md`, `MAU_TRINH_TU_SINH.md`, `1_DANG_Q.md`, `CHUNG_1_QUY_TAC_MD.md` thuộc thiết kế cũ, chờ quyết định bỏ.
+
+## Bộ chạy thử với AI (11/11/2026)
+Thư mục `BO_AI_STARTERS/`: các file chỉ có nội dung gửi AI (`nguon/`), 3 lệnh đã ghép sẵn (`11_LENH_SINH_PHIEU.md`, `12_LENH_RA_SOAT.md`, `13_LENH_SUA_PHIEU.md`), trang máy kiểm `KIEM_TRA_PHIEU.html`, hướng dẫn `HUONG_DAN_THU.md` và phiếu chấm `PHIEU_CHAM_THU.md`. Lesson mẫu: can / can't. Sửa file trong `nguon/` rồi chạy `python3 ghep_lenh.py` để ghép lại.
